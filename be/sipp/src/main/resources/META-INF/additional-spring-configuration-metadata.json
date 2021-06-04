@@ -1,0 +1,14 @@
+{
+	"properties": [
+		{
+			"name": "jwt.secret",
+			"type": "java.lang.String",
+			"description": "Il valore con cui cifrare i token JWT"
+		},
+		{
+			"name": "jwt.defaultExpirationMillis",
+			"type": "java.lang.Long",
+			"description": "La durata, in millisecondi, della validita' del token'"
+		}
+	]
+}
