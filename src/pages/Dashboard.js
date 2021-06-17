@@ -191,9 +191,7 @@ function Dashboard() {
             color="inherit"
             noWrap
             className={classes.title}
-          >
-            Dashboard
-          </Typography>
+          ></Typography>
           <Grid container spacing={3}>
             {/* Chart */}
             <Grid item xs={12} md={8} lg={9}>

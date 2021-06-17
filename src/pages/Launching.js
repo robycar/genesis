@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Customers() {
+function Launching() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -155,7 +155,7 @@ function Customers() {
             noWrap
             className={classes.title}
           >
-            Customers
+            Launching
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -213,4 +213,4 @@ function Customers() {
   );
 }
 
-export default Customers;
+export default Launching;

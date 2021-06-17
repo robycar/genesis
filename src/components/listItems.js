@@ -8,9 +8,10 @@ import PeopleIcon from "@material-ui/icons/People";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import LayersIcon from "@material-ui/icons/Layers";
 import { NavLink } from "react-router-dom";
+import "../styles/App.css";
 
 export const mainListItems = (
-  <div>
+  <div className="nav-link">
     <NavLink exact to="/" activeClassName="nav-active">
       <ListItem button>
         <ListItemIcon>
@@ -55,7 +56,7 @@ export const mainListItems = (
 );
 
 export const secondaryListItems = (
-  <div>
+  <div className="nav-link">
     <NavLink exact to="/supporto" activeClassName="nav-active">
       <ListItem button>
         <ListItemIcon>

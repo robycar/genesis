@@ -1,0 +1,11 @@
+.nav-link a:link {
+  text-decoration: none;
+  color:#66788A;
+}
+.nav-link a:visited {
+  text-decoration: none;
+}
+.nav-link a:hover {
+  text-decoration: none;
+  color:#212529;
+}
