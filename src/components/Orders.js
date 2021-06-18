@@ -20,6 +20,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import Button from "@material-ui/core/Button";
 
 function createData(
   name,
@@ -258,6 +259,36 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "10px",
+    marginBottom: "10px",
+  },
+  buttonClickedBlue: {
+    backgroundColor: "#1665D8",
+    color: "primary",
+    marginLeft: "10px",
+    marginRight: "10px",
+    width: "200px",
+    height: "40px",
+  },
+
+  buttonNotClickedBlue: {
+    backgroundColor: "whute",
+    border: "1px solid #1665D8",
+    variant: "contained",
+    color: "#1665D8",
+    marginLeft: "10px",
+    marginRight: "10px",
+    width: "200px",
+    height: "40px",
+  },
+
+  buttonRight: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
 }));
 
 export default function EnhancedTable() {
@@ -324,8 +355,39 @@ export default function EnhancedTable() {
 
   return (
     <div className={classes.root}>
+      <div className={classes.buttonRight}>
+        <Button
+          className={classes.buttonClickedGreen}
+          variant="contained"
+          color="primary"
+        >
+          Load Test Suite
+        </Button>
+      </div>
+
       <EnhancedTableToolbar numSelected={selected.length} />
       <TableContainer>
+        <div className={classes.buttonContainer}>
+          <Button className={classes.buttonNotClickedBlue}>
+            Test in Running
+          </Button>
+
+          <Button className={classes.buttonNotClickedBlue}>
+            Test Caricati
+          </Button>
+
+          <Button className={classes.buttonNotClickedBlue}>
+            Test Schedulati
+          </Button>
+
+          <Button
+            className={classes.buttonClickedBlue}
+            variant="contained"
+            color="primary"
+          >
+            Test Conclusi
+          </Button>
+        </div>
         <Table
           className={classes.table}
           aria-labelledby="tableTitle"
