@@ -3,11 +3,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import PeopleIcon from "@material-ui/icons/People";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import EditIcon from "@material-ui/icons/Edit";
+import LockIcon from "@material-ui/icons/Lock";
 import BarChartIcon from "@material-ui/icons/BarChart";
-import LayersIcon from "@material-ui/icons/Layers";
 import { NavLink } from "react-router-dom";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import "../styles/App.css";
 
 export const mainListItems = (
@@ -23,7 +24,7 @@ export const mainListItems = (
     <NavLink exact to="/launching" activeClassName="nav-active">
       <ListItem button>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <PlayCircleOutlineIcon />
         </ListItemIcon>
         <ListItemText primary="Launching" />
       </ListItem>
@@ -31,7 +32,7 @@ export const mainListItems = (
     <NavLink exact to="/editing" activeClassName="nav-active">
       <ListItem button>
         <ListItemIcon>
-          <PeopleIcon />
+          <EditIcon />
         </ListItemIcon>
         <ListItemText primary="Editing" />
       </ListItem>
@@ -39,7 +40,7 @@ export const mainListItems = (
     <NavLink exact to="/amministrazione" activeClassName="nav-active">
       <ListItem button>
         <ListItemIcon>
-          <BarChartIcon />
+          <LockIcon />
         </ListItemIcon>
         <ListItemText primary="Amministrazione" />
       </ListItem>
@@ -47,7 +48,7 @@ export const mainListItems = (
     <NavLink exact to="/report" activeClassName="nav-active">
       <ListItem button>
         <ListItemIcon>
-          <LayersIcon />
+          <BarChartIcon />
         </ListItemIcon>
         <ListItemText primary="Report" />
       </ListItem>
@@ -60,7 +61,7 @@ export const secondaryListItems = (
     <NavLink exact to="/supporto" activeClassName="nav-active">
       <ListItem button>
         <ListItemIcon>
-          <LayersIcon />
+          <HelpOutlineIcon />
         </ListItemIcon>
         <ListItemText primary="Supporto" />
       </ListItem>

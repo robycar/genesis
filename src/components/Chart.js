@@ -8,7 +8,8 @@ import {
   Label,
   ResponsiveContainer,
 } from "recharts";
-import Title from "./Title";
+import Title from "../Components/Title";
+import Typography from "@material-ui/core/Typography";
 
 // Generate Sales Data
 function createData(time, amount) {

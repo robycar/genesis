@@ -19,7 +19,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "../components/listItems";
-import Chart from "../components/Chart";
+import TotalTestSuite from "../components/TotalTestSuite";
 import Deposits from "../components/Deposits";
 import Orders from "../components/Orders";
 
@@ -185,10 +185,10 @@ function Amministrazione() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Chart */}
+            {/* TotalTestSuite */}
             <Grid item xs={12} md={8} lg={9}>
               <Paper className={fixedHeightPaper}>
-                <Chart />
+                <TotalTestSuite />
               </Paper>
             </Grid>
             {/* Recent Deposits */}
