@@ -23,6 +23,10 @@ import TotalTestSuite from "../components/TotalTestSuite";
 import Deposits from "../components/Deposits";
 import Orders from "../components/Orders";
 import Navbar from "../components/Navbar";
+import NavbarItem from "../components/NavbarItem";
+import Button from "@material-ui/core/Button";
+import ButtonClicked from "../components/ButtonClicked";
+import Card from "../components/Card";
 
 function Copyright() {
   return (
@@ -117,6 +121,28 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  buttonNotClickedGreen: {
+    backgroundColor: "white",
+    border: "1px solid #47B881 ",
+    variant: "contained",
+    color: "#47B881",
+    width: "200px",
+    height: "40px",
+    marginRight: "10px",
+  },
+  containerNavbarItem: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: "20px",
+  },
+
+  bottonTest: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: "100px",
+  },
 }));
 
 function Dashboard() {
@@ -189,26 +215,32 @@ function Dashboard() {
         <div className={classes.appBarSpacer} />
 
         <Container maxWidth="lg" className={classes.container}>
-          <Typography
+          {/* <Typography
             component="h1"
             variant="h6"
             color="inherit"
             noWrap
             className={classes.title}
-          ></Typography>
+          >
+          </Typography> */}
+
+          <div className={classes.containerNavbarItem}>
+            <NavbarItem />
+            <div className={classes.bottonTest}>
+              <ButtonClicked />
+              <Button
+                className={classes.buttonNotClickedGreen}
+                variant="contained"
+                color="#47B881"
+              >
+                Test Suite
+              </Button>
+            </div>
+          </div>
+
           <Grid container spacing={3}>
-            {/* TotalTestSuite */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <TotalTestSuite />
-              </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
-              </Paper>
-            </Grid>
+            <Card />
+
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>

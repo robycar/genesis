@@ -7,7 +7,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 const useStyles = makeStyles((theme) => ({
   dashboard: {
-    fontFamily: "roboto",
     fontWeight: 500,
     fontStyle: "normal",
     fontSize: "35px",

@@ -5,10 +5,9 @@ import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import TotalTestSuite from "../Components/TotalTestSuite";
-import TotalTestCase from "../Components/TotalTestCase";
-import TotalLines from "../Components/TotalLines";
-import Table from "../Components/Table";
+import TotalTestSuite from "../components/TotalTestSuite";
+import TotalTestCase from "../components/TotalTestCase";
+import TotalLines from "../components/TotalLines";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -48,12 +47,6 @@ function Card() {
         <Grid item xs={20} md={4} lg={4}>
           <Paper className={fixedHeightPaper}>
             <TotalLines />
-          </Paper>
-        </Grid>
-        {/* Total Lines */}
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <Table />
           </Paper>
         </Grid>
       </Grid>
