@@ -22,6 +22,7 @@ import { mainListItems, secondaryListItems } from "../components/listItems";
 import TotalTestSuite from "../components/TotalTestSuite";
 import Deposits from "../components/Deposits";
 import Orders from "../components/Orders";
+import Navbar from "../components/Navbar";
 
 function Copyright() {
   return (
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
+    background: "red",
   },
   toolbarIcon: {
     display: "flex",
@@ -135,7 +137,7 @@ function Dashboard() {
         position="absolute"
         className={clsx(classes.appBar, open && classes.appBarShift)}
       >
-        <Toolbar className={classes.toolbar}>
+        {/* <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
             color="inherit"
@@ -162,7 +164,8 @@ function Dashboard() {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-        </Toolbar>
+        </Toolbar> */}
+        <Navbar />
       </AppBar>
 
       <Drawer
@@ -184,6 +187,7 @@ function Dashboard() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+
         <Container maxWidth="lg" className={classes.container}>
           <Typography
             component="h1"

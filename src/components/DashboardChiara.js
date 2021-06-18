@@ -1,15 +1,10 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
-import MenuIcon from "@material-ui/icons/Menu";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import Logo from "../assets/logoReply.png";
-import Typography from "@material-ui/core/Typography";
-
+import ButtonClicked from "../Components/ButtonClicked";
+import Button from "@material-ui/core/Button";
+import Navbar from "../Components/Navbar";
+import NavbarItem from "../Components/NavbarItem";
+import Card from "../Components/Card";
 
 const drawerWidth = 240;
 
@@ -95,51 +90,60 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     height: "50px",
   },
+
+  dashboard: {
+    fontFamily: "roboto",
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "35px",
+    color: "#66788A",
+    lineHeight: "20px",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+
+  buttonNotClickedGreen: {
+    backgroundColor: "white",
+    border: "1px solid #47B881 ",
+    variant: "contained",
+    color: "#47B881",
+    width: "200px",
+    height: "40px",
+    marginRight: "10px",
+  },
   icon: {
     color: "#47B881",
   },
 }));
 
-function Navbar() {
+function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   return (
-    <>
-      <CssBaseline />
-      <Toolbar className={classes.toolbar}>
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography
-          component="h1"
-          variant="h6"
-          color="inherit"
-          noWrap
-          className={classes.title}
-        >
-          Dashboard
-        </Typography>
-        <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-      </Toolbar>
-    </>
+    <div className={classes.root}>
+      <Navbar />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+
+        <NavbarItem />
+
+        <div className={classes.buttonContainer}>
+          <ButtonClicked />
+
+          <Button
+            className={classes.buttonNotClickedGreen}
+            variant="contained"
+            color="#47B881"
+          >
+            Test Suite
+          </Button>
+          <Card />
+        </div>
+      </main>
+    </div>
   );
 }
 
-export default Navbar;
+export default Dashboard;
