@@ -7,9 +7,10 @@ import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import Logo from "../assets/logoReply.png";
+import logo from "../assets/logoReply.png";
 import Typography from "@material-ui/core/Typography";
-
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { ButtonGroup } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -21,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 24, // keep right padding when drawer closed
     backgroundColor: "#FFFFFF",
     border: "1px solid #47B881",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   toolbarIcon: {
     display: "flex",
@@ -52,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    color: "black",
   },
   drawerPaper: {
     position: "relative",
@@ -98,6 +103,15 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     color: "#47B881",
   },
+  exit: {
+    color: "#47B881",
+    marginLeft: "50%",
+  },
+  contentToolbar: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
 }));
 
 function Navbar() {
@@ -114,7 +128,7 @@ function Navbar() {
     <>
       <CssBaseline />
       <Toolbar className={classes.toolbar}>
-        <IconButton
+        {/* <IconButton
           edge="start"
           color="inherit"
           aria-label="open drawer"
@@ -122,21 +136,29 @@ function Navbar() {
           className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
         >
           <MenuIcon />
-        </IconButton>
-        <Typography
+        </IconButton> */}
+        {/* <Typography
           component="h1"
           variant="h6"
-          color="inherit"
+          color="#0a0a0aack"
           noWrap
           className={classes.title}
         >
           Dashboard
-        </Typography>
-        <IconButton color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
+        </Typography> */}
+        <img src={logo} alt="Logo" className={classes.logo} />
+        <div className={classes.contentToolbar}>
+          <ButtonGroup>
+            <IconButton color="black">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton>
+              <ExitToAppIcon className={classes.exit} />
+            </IconButton>
+          </ButtonGroup>
+        </div>
       </Toolbar>
     </>
   );
