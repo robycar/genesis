@@ -21,7 +21,6 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
-import SearchBar from "./Search";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import ButtonClickedBlue from "../components/ButtonClickedBlue";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
@@ -187,7 +186,7 @@ const useToolbarStyles = makeStyles((theme) => ({
           backgroundColor: theme.palette.secondary.dark,
         },
   title: {
-    flex: "1 1 25%",
+    flex: "1 1 100%",
   },
 }));
 
@@ -211,26 +210,14 @@ const EnhancedTableToolbar = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
-        <>
-          <Typography
-            className={classes.title}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            Total Test Case
-          </Typography>
-          <SearchBar className={classes.searchBar} />
-          <div className={classes.buttonRight}>
-            <Button
-              className={classes.buttonClickedGreen}
-              variant="contained"
-              color="primary"
-            >
-              Load Test Suite
-            </Button>
-          </div>
-        </>
+        <Typography
+          className={classes.title}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        >
+          Nutrition
+        </Typography>
       )}
 
       {numSelected > 0 ? (
@@ -276,30 +263,12 @@ const useStyles = makeStyles((theme) => ({
     top: 20,
     width: 1,
   },
+
   buttonContainer: {
     display: "flex",
     justifyContent: "center",
     marginTop: "10px",
     marginBottom: "10px",
-  },
-  buttonClickedBlue: {
-    backgroundColor: "#1665D8",
-    color: "primary",
-    marginLeft: "10px",
-    marginRight: "10px",
-    width: "200px",
-    height: "40px",
-  },
-
-  buttonNotClickedBlue: {
-    backgroundColor: "whute",
-    border: "1px solid #1665D8",
-    variant: "contained",
-    color: "#1665D8",
-    marginLeft: "10px",
-    marginRight: "10px",
-    width: "200px",
-    height: "40px",
   },
 
   buttonRight: {
@@ -372,6 +341,10 @@ export default function EnhancedTable() {
 
   return (
     <div className={classes.root}>
+      <div className={classes.buttonRight}>
+        <ButtonClickedGreen nome="Load test Suite" />
+      </div>
+
       <EnhancedTableToolbar numSelected={selected.length} />
       <TableContainer>
         <div className={classes.buttonContainer}>

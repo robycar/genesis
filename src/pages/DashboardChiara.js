@@ -24,7 +24,7 @@ import Deposits from "../components/Deposits";
 import Orders from "../components/Orders";
 import Navbar from "../components/Navbar";
 import NavbarItem from "../components/NavbarItem";
-import Button from "@material-ui/core/Button";
+//import Button from "@material-ui/core/Button";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import Card from "../components/Card";
@@ -122,15 +122,7 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  buttonNotClickedGreen: {
-    backgroundColor: "white",
-    border: "1px solid #47B881 ",
-    variant: "contained",
-    color: "#47B881",
-    width: "200px",
-    height: "40px",
-    marginRight: "10px",
-  },
+
   containerNavbarItem: {
     display: "flex",
     flexDirection: "row",
