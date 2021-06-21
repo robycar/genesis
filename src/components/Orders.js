@@ -21,6 +21,7 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
+import SearchBar from "./Search";
 
 function createData(
   name,
@@ -182,7 +183,7 @@ const useToolbarStyles = makeStyles((theme) => ({
           backgroundColor: theme.palette.secondary.dark,
         },
   title: {
-    flex: "1 1 100%",
+    flex: "1 1 25%",
   },
 }));
 
@@ -206,14 +207,26 @@ const EnhancedTableToolbar = (props) => {
           {numSelected} selected
         </Typography>
       ) : (
-        <Typography
-          className={classes.title}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Nutrition
-        </Typography>
+        <>
+          <Typography
+            className={classes.title}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            Total Test Case
+          </Typography>
+          <SearchBar className={classes.searchBar} />
+          <div className={classes.buttonRight}>
+            <Button
+              className={classes.buttonClickedGreen}
+              variant="contained"
+              color="primary"
+            >
+              Load Test Suite
+            </Button>
+          </div>
+        </>
       )}
 
       {numSelected > 0 ? (
@@ -355,16 +368,6 @@ export default function EnhancedTable() {
 
   return (
     <div className={classes.root}>
-      <div className={classes.buttonRight}>
-        <Button
-          className={classes.buttonClickedGreen}
-          variant="contained"
-          color="primary"
-        >
-          Load Test Suite
-        </Button>
-      </div>
-
       <EnhancedTableToolbar numSelected={selected.length} />
       <TableContainer>
         <div className={classes.buttonContainer}>
