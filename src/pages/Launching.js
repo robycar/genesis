@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import Box from "@material-ui/core/Box";
@@ -16,12 +16,20 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
+import Navbar from "../components/Navbar";
+import InputBase from "@material-ui/core/InputBase";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import NavbarItemLaunch from "../components/NavbarItemLaunch";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "../components/listItems";
+import FormControl from "@material-ui/core/FormControl";
 import TotalTestSuite from "../components/TotalTestSuite";
 import Deposits from "../components/Deposits";
 import Orders from "../components/Orders";
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
 
 function Copyright() {
   return (
@@ -115,7 +123,98 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  containerNavbarItem: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: "20px",
+  },
+  generalContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "20px",
+  },
+  paperTestLeft: {
+    width: "339px",
+    height: "60px",
+    border: "1px #9EA0A5",
+    marginBottom: "20px",
+  },
+  paperTestRight: {
+    width: "339px",
+    height: "185px",
+    border: "1px #9EA0A5",
+    marginBottom: "20px",
+  },
+  paperContainer1: {
+    flexDirection: "column",
+    padding: "20px",
+  },
+  paperContainer2: {
+    flexGrow: "4",
+    flexDirection: "row",
+    backgroundColor: "yellow",
+    padding: "20px",
+    marginBottom: "20px",
+  },
+  scritta: {
+    padding: "20px",
+    fontFamily: "roboto",
+    fontSize: "26px",
+    color: "#47B881",
+    letterSpacing: "0.15px",
+    textAlign: "center",
+  },
+  testo: {
+    marginLeft: "20px",
+    marginTop: "10px",
+    marginBottom: "10px",
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    width: "300px",
+  },
+  containerSelect: {
+    marginTop: "30px",
+    marginBottom: "15px",
+  },
 }));
+
+const BootstrapInput = withStyles((theme) => ({
+  root: {
+    "label + &": {
+      marginTop: theme.spacing(3),
+    },
+  },
+  input: {
+    borderRadius: 4,
+    border: "1px solid #ced4da",
+    fontSize: 16,
+    height: "31px",
+    width: "300px",
+    marginTop: "30px",
+    padding: "10px 26px 10px 12px",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:focus": {
+      borderRadius: 4,
+      borderColor: "#80bdff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+    },
+  },
+}))(InputBase);
 
 function Launching() {
   const classes = useStyles();
@@ -126,6 +225,10 @@ function Launching() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const [test, setTest] = React.useState("");
+  const handleChange = (event) => {
+    setTest(event.target.value);
+  };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
@@ -135,35 +238,9 @@ function Launching() {
         position="absolute"
         className={clsx(classes.appBar, open && classes.appBarShift)}
       >
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-            Launching
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
+        <Navbar />
       </AppBar>
+
       <Drawer
         variant="permanent"
         classes={{
@@ -183,30 +260,104 @@ function Launching() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* TotalTestSuite */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <TotalTestSuite />
+          <div className={classes.containerNavbarItem}>
+            <NavbarItemLaunch />
+          </div>
+
+          <Paper className={classes.generalContainer} elevation={1}>
+            <Paper
+              className={classes.paperContainer1}
+              variant="outlined"
+              elevation={1}
+            >
+              <Paper className={classes.paperTestLeft}>
+                <Typography className={classes.scritta}>
+                  Test Disponibili
+                </Typography>
               </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
+              <div className={classes.containerSelect}>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">
+                    Seleziona Test Case
+                  </InputLabel>
+                  <Select
+                    className={classes.select}
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    value={test}
+                    onChange={handleChange}
+                    label="Age"
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+
+              <div>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <InputLabel id="demo-simple-select-outlined-label">
+                    Seleziona Test Suite
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    value={test}
+                    onChange={handleChange}
+                    label="Test Suite"
+                  >
+                    <MenuItem value="">
+                      <em>Nessuno</em>
+                    </MenuItem>
+                    <MenuItem value={10}>Test1</MenuItem>
+                    <MenuItem value={20}>Test2</MenuItem>
+                    <MenuItem value={30}>Test3</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+            </Paper>
+
+            <Paper className={classes.paperContainer2} elevation={2}>
+              <Paper className={classes.paperTest}>
+                <Typography className={classes.scritta}>
+                  Informazioni{" "}
+                </Typography>
+                <Typography className={classes.testo}>
+                  Chiamante= FIBRA 02154565{" "}
+                </Typography>
+                <Typography className={classes.testo}>
+                  Chiamante= FIBRA 02154565{" "}
+                </Typography>
               </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
+
+              <Paper className={classes.paperTest}>
+                <Typography className={classes.scritta}>
+                  Description{" "}
+                </Typography>
+                <Typography className={classes.testo}>
+                  Chiamata da Fibra verso Fibra . La chiamata va in connessione,
+                  chiamante e chiamato si scambiano i toni DTMF. La chiamata si
+                  chiude con abbattimento del chiamante.
+                </Typography>
               </Paper>
-            </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
+
+              <Paper className={classes.paperTest}>
+                <Typography className={classes.scritta}>
+                  Dettagli IP{" "}
+                </Typography>
+                <Typography className={classes.testo}>
+                  Dati passati da BE
+                </Typography>
+              </Paper>
+            </Paper>
+          </Paper>
+          <ButtonClickedGreen nome="Start" />
         </Container>
       </main>
     </div>
