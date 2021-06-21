@@ -212,7 +212,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          Total Test Case
         </Typography>
       )}
 
