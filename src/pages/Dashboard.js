@@ -110,8 +110,8 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
   },
   container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
   paper: {
     padding: theme.spacing(2),
@@ -136,13 +136,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: "20px",
+    marginTop: "px",
   },
 
   bottonTest: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: "100px",
+    marginTop: "0px",
   },
 }));
 
