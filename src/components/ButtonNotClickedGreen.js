@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "10px",
     marginRight: "10px",
     width: "200px",
-    height: "40px",
   },
 }));
 
@@ -18,7 +17,12 @@ function ButtonNotClickedGreen(props) {
   const classes = useStyles();
 
   return (
-    <Button className={classes.button} variant="contained" color="primary">
+    <Button
+      className={classes.button}
+      variant="contained"
+      color="primary"
+      size="large"
+    >
       {props.nome}
     </Button>
   );

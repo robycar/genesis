@@ -5,9 +5,9 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   button: {
     backgroundColor: "#47B881",
-    width: "200px",
-    height: "40px",
     marginRight: "10px",
+    marginLeft: "10px",
+    width: "200px",
   },
 }));
 
@@ -15,7 +15,12 @@ function ButtonClickedGreen(props) {
   const classes = useStyles();
 
   return (
-    <Button className={classes.button} variant="contained" color="primary">
+    <Button
+      className={classes.button}
+      variant="contained"
+      color="primary"
+      size="large"
+    >
       {props.nome}
     </Button>
   );

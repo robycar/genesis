@@ -1,12 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import LockIcon from "@material-ui/icons/Lock";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 const useStyles = makeStyles((theme) => ({
-  launch: {
+  edit: {
     fontWeight: 500,
     fontStyle: "normal",
     fontSize: "35px",
@@ -15,16 +15,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NavbarItemLaunch() {
+function NavbarItemAdmin() {
   const classes = useStyles();
 
   return (
     <ListItem>
       <ListItemIcon className={classes.listItemIcon}>
-        <PlayCircleOutlineIcon fontSize="large" />
+        <LockIcon fontSize="large" />
       </ListItemIcon>
-      <Typography className={classes.launch}> Launch </Typography>
+      <Typography className={classes.edit}> Amministrazione </Typography>
     </ListItem>
   );
 }
-export default NavbarItemLaunch;
+export default NavbarItemAdmin;
