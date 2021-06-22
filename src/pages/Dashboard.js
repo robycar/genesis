@@ -142,7 +142,7 @@ const useStyles = makeStyles((theme) => ({
   bottonTest: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     marginTop: "0px",
   },
 }));
@@ -228,10 +228,10 @@ function Dashboard() {
 
           <div className={classes.containerNavbarItem}>
             <NavbarItem />
-            <div className={classes.bottonTest}>
-              <ButtonClickedGreen nome="Test Case" />
-              <ButtonNotClickedGreen nome="Test Suite" />
-            </div>
+          </div>
+          <div className={classes.bottonTest}>
+            <ButtonClickedGreen nome="Test Case" />
+            <ButtonNotClickedGreen nome="Test Suite" />
           </div>
           <Grid container spacing={3}>
             <Card />
