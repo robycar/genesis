@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   root: {
     // width: "150%",
     // height: "200px",
-    backgroundColor: "yellow",
+    backgroundColor: "rgba(216, 216, 216, 0.1)",
     padding: "5%",
   },
   bullet: {
@@ -38,7 +38,7 @@ export default function SimpleCard(props) {
           color="textSecondary"
           gutterBottom
         >
-          Word of the Day
+          Cosa stai cercando?
         </Typography>
         <CardActions>
           <Button size="medium" startIcon={<AssignmentIcon />}>

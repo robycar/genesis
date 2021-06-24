@@ -36,12 +36,12 @@ const useStyles = makeStyles((theme) => ({
   },
   paperTop: {
     backgroundColor: "#47B881",
-    height: "25%",
+    height: "28%",
     //opacity: "25%",
   },
   paperBottom: {
     backgrounColor: "#FFFFFF",
-    height: "75%",
+    height: "72%",
     padding: "8%",
     justifyContent: "center",
     flexDirection: "column",
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textarea: {
     width: "380px",
-    height: "300px",
+    height: "260px",
     border: "1px solid rgba(0, 0, 0, 0.32)",
     marginTop: "10px",
     fontFamily: "Roboto",
@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10px",
   },
   divBottone: {
-    marginTop: "10px",
+    marginTop: "15px",
     marginLeft: "35%",
   },
 }));
