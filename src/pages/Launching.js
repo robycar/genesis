@@ -3,38 +3,19 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
+import Navbar from "../components/Navbar";
+import NavbarItemLaunch from "../components/NavbarItemLaunch";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "../components/listItems";
-import TotalTestSuite from "../components/TotalTestSuite";
-import Deposits from "../components/Deposits";
-import Orders from "../components/Orders";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import SelectBar from "../components/SelectBar";
 
 const drawerWidth = 240;
 
@@ -115,18 +96,65 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  containerNavbarItem: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: "20px",
+  },
+  generalContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "20px",
+  },
+  paperTest: {
+    border: "1px",
+    marginTop: "5px",
+    elevation: "2",
+  },
+
+  paperContainer1: {
+    flexDirection: "column",
+    padding: "20px",
+  },
+  paperContainer2: {
+    flexGrow: "4",
+    flexDirection: "row",
+    padding: "20px",
+    marginBottom: "20px",
+  },
+  scritta: {
+    padding: "20px",
+    fontFamily: "roboto",
+    fontSize: "26px",
+    color: "#47B881",
+    letterSpacing: "0.15px",
+    textAlign: "center",
+  },
+  testo: {
+    padding: "20px",
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    width: "300px",
+  },
+  containerSelect: {
+    marginTop: "30px",
+    marginBottom: "15px",
+  },
+  bottone: {
+    marginTop: "15px",
+    marginLeft: "620px",
+  },
 }));
 
 function Launching() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -135,35 +163,9 @@ function Launching() {
         position="absolute"
         className={clsx(classes.appBar, open && classes.appBarShift)}
       >
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-            Launching
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
+        <Navbar />
       </AppBar>
+
       <Drawer
         variant="permanent"
         classes={{
@@ -183,30 +185,97 @@ function Launching() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* TotalTestSuite */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                <TotalTestSuite />
+          <div className={classes.containerNavbarItem}>
+            <NavbarItemLaunch fontSize="large" />
+          </div>
+
+          <Paper className={classes.generalContainer} elevation={1}>
+            <Paper
+              className={classes.paperContainer1}
+              variant="outlined"
+              elevation={1}
+            >
+              <Paper className={classes.paperTest}>
+                <Typography className={classes.scritta}>
+                  Test Disponibili
+                </Typography>
               </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-                <Deposits />
+              <div className={classes.containerSelect}>
+                <SelectBar nome="Selezione Test Case" />
+              </div>
+
+              <div>
+                <SelectBar nome="Selezione Test Suite" />
+              </div>
+            </Paper>
+
+            <Paper
+              className={classes.paperContainer2}
+              variant="outlined"
+              elevation={1}
+            >
+              <Paper className={classes.paperTest}>
+                <Typography className={classes.scritta}>
+                  Informazioni{" "}
+                </Typography>
+                <Typography className={classes.testo}>
+                  Numero Chiamante = 01225
+                  <br /> Tipo Linea Chiamante = FIBRA <br /> Numero Chiamato
+                  <br /> Tipo Line Chiamato
+                  <br /> Numero Chiamante 2
+                  <br /> Tipo Linea Chiamante 2
+                  <br /> Numero Chiamante 3
+                </Typography>
               </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
+
+              <Paper className={classes.paperTest}>
+                <Typography className={classes.scritta}>
+                  Descrizione{" "}
+                </Typography>
+                <Typography className={classes.testo}>
+                  IP_proxy_client = 24869868 <br /> IP_proxy_client = 24869868{" "}
+                  <br /> IP_proxy_client = 24869868 <br />
+                </Typography>
               </Paper>
-            </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
+
+              <Paper className={classes.paperTest}>
+                <Typography className={classes.scritta}>
+                  Dettagli IP{" "}
+                </Typography>
+                <Typography className={classes.testo}>
+                  Informazioni fornite da BE
+                </Typography>
+              </Paper>
+              <div className={classes.bottone}>
+                <ButtonClickedGreen nome="Start" />
+              </div>
+            </Paper>
+          </Paper>
+
+          {/*          <Paper className={classes.paperTest}>
+                <Typography className={classes.scritta}>
+                  Description{" "}
+                </Typography>
+                <Typography className={classes.testo}>
+                  Chiamata da Fibra verso Fibra . La chiamata va in connessione,
+                  chiamante e chiamato si scambiano i toni DTMF. La chiamata si
+                  chiude con abbattimento del chiamante.
+                </Typography>
+              </Paper>
+
+              <Paper className={classes.paperTest}>
+                <Typography className={classes.scritta}>
+                  Dettagli IP{" "}
+                </Typography>
+                <Typography className={classes.testo}>
+                  Dati passati da BE
+                </Typography>
+              </Paper>
+            </Paper>
+          </Paper>
+      <ButtonClickedGreen nome="Start" />*/}
         </Container>
       </main>
     </div>

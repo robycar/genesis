@@ -25,7 +25,8 @@ import Orders from "../components/Orders";
 import Navbar from "../components/Navbar";
 import NavbarItem from "../components/NavbarItem";
 import Button from "@material-ui/core/Button";
-import ButtonClicked from "../components/ButtonClicked";
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import Card from "../components/Card";
 
 function Copyright() {
@@ -109,8 +110,8 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
   },
   container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
   paper: {
     padding: theme.spacing(2),
@@ -135,13 +136,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: "20px",
+    marginTop: "px",
   },
 
   bottonTest: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: "100px",
+    justifyContent: "flex-end",
+    marginTop: "0px",
   },
 }));
 
@@ -163,34 +165,6 @@ function Dashboard() {
         position="absolute"
         className={clsx(classes.appBar, open && classes.appBarShift)}
       >
-        {/* <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-            Dashboard
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar> */}
         <Navbar />
       </AppBar>
 
@@ -226,16 +200,10 @@ function Dashboard() {
 
           <div className={classes.containerNavbarItem}>
             <NavbarItem />
-            <div className={classes.bottonTest}>
-              <ButtonClicked />
-              <Button
-                className={classes.buttonNotClickedGreen}
-                variant="contained"
-                color="#47B881"
-              >
-                Test Suite
-              </Button>
-            </div>
+          </div>
+          <div className={classes.bottonTest}>
+            <ButtonClickedGreen nome="Test Case" />
+            <ButtonNotClickedGreen nome="Test Suite" />
           </div>
           <Grid container spacing={3}>
             <Card />
@@ -247,9 +215,6 @@ function Dashboard() {
               </Paper>
             </Grid>
           </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
         </Container>
       </main>
     </div>

@@ -1,33 +1,30 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItem from "@material-ui/core/ListItem";
+import DescriptionIcon from "@material-ui/icons/Description";
 
 const useStyles = makeStyles((theme) => ({
-  dashboard: {
+  documentation: {
     fontWeight: 500,
     fontStyle: "normal",
     fontSize: "35px",
     color: "#66788A",
     lineHeight: "20px",
   },
-  dashboardIcon: {
-    transform: "scale(1.8)",
-  },
 }));
 
-function NavbarItem() {
+function NavbarItemDocu() {
   const classes = useStyles();
 
   return (
     <ListItem>
       <ListItemIcon className={classes.listItemIcon}>
-        <DashboardIcon className={classes.dashboardIcon} />
+        <DescriptionIcon fontSize="large" />
       </ListItemIcon>
-      <Typography className={classes.dashboard}> Dashboard </Typography>
+      <Typography className={classes.documentation}> Documentation </Typography>
     </ListItem>
   );
 }
-export default NavbarItem;
+export default NavbarItemDocu;

@@ -11,11 +11,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../components/listItems";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import { Paper } from "@material-ui/core";
-import GestioneUtenti from "../components/GestioneUtenti";
-import NavbarItemAdmin from "../components/NavbarItemAdmin";
+import { Card, Paper } from "@material-ui/core";
+import NavbarItemDocu from "../components/NavbarItemDocu";
+import SimpleCard from "../components/SimpleCard";
+import TotalTestCase from "../components/TotalTestCase";
+import TotalTestSuite from "../components/TotalTestSuite";
 
 const drawerWidth = 240;
 
@@ -99,9 +99,25 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     marginBottom: "20px",
   },
+  generalContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: "20px",
+  },
+  cardContainer: {
+    flexDirection: "column",
+    justifyContent: "space-around",
+  },
+  card: {
+    marginTop: "10px",
+    marginBottom: "10px",
+    width: "50%",
+    backgroundColor: "yellow",
+  },
 }));
 
-function Amministrazione() {
+function Documentation() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -144,22 +160,25 @@ function Amministrazione() {
 
         <Container maxWidth="lg" className={classes.container}>
           <div className={classes.containerNavbarItem}>
-            <NavbarItemAdmin fontSize="large" />
+            <NavbarItemDocu fontSize="large" />
           </div>
         </Container>
-        <div className={classes.buttonContainer}>
-          <ButtonClickedGreen nome="UTENZE" />
 
-          <ButtonNotClickedGreen nome="RUOLI" />
-
-          <ButtonNotClickedGreen nome="AUTORIZZAZIONI" />
-        </div>
-        <Paper className={classes.paper}>
-          <GestioneUtenti />
+        <Paper className={classes.generalContainer} elevation={2}>
+          <Paper className={classes.cardContainer}>
+            <SimpleCard className={classes.card} />
+            <SimpleCard className={classes.card} />
+            <SimpleCard className={classes.card} />
+          </Paper>
+          <Paper>
+            <SimpleCard className={classes.card} />
+            <SimpleCard className={classes.card} />
+            <SimpleCard className={classes.card} />
+          </Paper>
         </Paper>
       </main>
     </div>
   );
 }
 
-export default Amministrazione;
+export default Documentation;

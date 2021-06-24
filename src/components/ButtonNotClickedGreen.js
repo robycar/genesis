@@ -3,26 +3,28 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  buttonClickedGreen: {
-    backgroundColor: "#47B881",
-    color: "primary",
-    width: "200px",
-    height: "40px",
+  button: {
+    backgroundColor: "white",
+    border: "1px solid #47B881",
+    color: "#47B881",
+    marginLeft: "10px",
     marginRight: "10px",
+    width: "200px",
   },
 }));
 
-function ButtonClicked() {
+function ButtonNotClickedGreen(props) {
   const classes = useStyles();
 
   return (
     <Button
-      className={classes.buttonClickedGreen}
+      className={classes.button}
       variant="contained"
       color="primary"
+      size="large"
     >
-      Bottone{" "}
+      {props.nome}
     </Button>
   );
 }
-export default ButtonClicked;
+export default ButtonNotClickedGreen;
