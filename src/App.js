@@ -6,6 +6,7 @@ import Launching from "./pages/Launching";
 import Report from "./pages/Report";
 import Supporto from "./pages/Supporto";
 import Documentation from "./pages/Documentation";
+import ProvaModale from "./pages/ProvaModale";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/report" exact component={Report} />
         <Route path="/supporto" exact component={Supporto} />
         <Route path="/documentation" exact component={Documentation} />
+        <Route path="/provaModale" exact component={ProvaModale} />
       </Switch>
     </BrowserRouter>
   );
