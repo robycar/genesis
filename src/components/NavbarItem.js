@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
   },
+  dashboardIcon: {
+    transform: "scale(1.8)",
+  },
 }));
 
 function NavbarItem() {
@@ -21,7 +24,7 @@ function NavbarItem() {
   return (
     <ListItem>
       <ListItemIcon className={classes.listItemIcon}>
-        <DashboardIcon />
+        <DashboardIcon className={classes.dashboardIcon} />
       </ListItemIcon>
       <Typography className={classes.dashboard}> Dashboard </Typography>
     </ListItem>
