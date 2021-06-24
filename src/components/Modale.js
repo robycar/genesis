@@ -5,6 +5,10 @@ import ButtonClickedGreen from "./ButtonClickedGreen";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import SelectBar from "./SelectBar";
 import Backdrop from "@material-ui/core/Backdrop";
+import BackupIcon from "@material-ui/icons/Backup";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -23,12 +27,50 @@ function getModalStyle() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    position: "static",
     width: 400,
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paperTop: {
+    height: "20%",
+    display: "flex",
+    alignItems: "center",
+    //opacity: "25%",
+  },
+  paperBottom: {
+    backgrounColor: "#FFFFFF",
+    justifyContent: "center",
+    flexDirection: "column",
+    marginTop: "5%",
+  },
+  divSelectBar: {
+    marginTop: "25px",
+  },
+  selectBar: {
+    width: "50%",
+    height: "100",
+    marginTop: "50px",
+  },
+  divTextarea: {
+    marginTop: "50px",
+    marginLeft: "5px",
+  },
+  intestazione: {
+    color: "#47B881",
+    marginTop: "5%",
+    marginLeft: "5%",
+    flexDirection: "row",
+  },
+  icon: {
+    size: "medium",
+    color: "#47B881",
   },
 }));
 
@@ -45,16 +87,6 @@ export default function SimpleModal() {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const body = (
-    <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Text in a modal</h2>
-      <p id="simple-modal-description">
-        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-      </p>
-      <SimpleModal />
-    </div>
-  );
 
   return (
     <div>
@@ -73,33 +105,34 @@ export default function SimpleModal() {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <Paper className={classes.paperTop}>
-              <Typography className={classes.intestazione} variant="h5">
-                Non hai trovato quello che cercavi?
-              </Typography>
-            </Paper>
-            <Paper className={classes.paperBottom}>
-              <Typography className={classes.contenuto} variant="h8">
-                Nessun problema, seleziona l'argomento e inviaci la tua
-                richiesta per avere maggiori informazioni.
-              </Typography>
-              <div className={classes.divSelectBar}>
-                <SelectBar
-                  nome="Seleziona l'argomento"
-                  classeName={classes.selectBar}
-                />
-              </div>
-              <div className={classes.divTextarea}>
-                <Typography className={classes.contenuto} variant="h11">
-                  Ascoltiamo i tuoi bisogni:
+            <Paper>
+              <div>
+                <Typography className={classes.intestazione} variant="h5">
+                  Load Test Case
                 </Typography>
               </div>
-              <div className={classes.divBottone}>
-                <ButtonClickedGreen
-                  className={classes.bottone}
-                  nome="Invia"
-                  size="small"
-                />
+
+              <div className={classes.paperBottom}>
+                <Typography variant="h8">Seleziona test Case:</Typography>
+                <div className={classes.divSelectBar}>
+                  <div className={classes.divTextarea}>
+                    <Typography className={classes.contenuto} variant="h11">
+                      Nome del Test
+                    </Typography>
+                  </div>
+                  <SelectBar
+                    nome="Nome del test"
+                    classeName={classes.selectBar}
+                  />
+                </div>
+              </div>
+              <div className={classes.divSelectBar}>
+                <div className={classes.divTextarea}>
+                  <Typography className={classes.contenuto} variant="h11">
+                    Descrizione
+                  </Typography>
+                </div>
+                <SelectBar nome="Descrizione" classeName={classes.selectBar} />
               </div>
             </Paper>
           </div>
