@@ -5,6 +5,7 @@ import Editing from "./pages/Editing";
 import Launching from "./pages/Launching";
 import Report from "./pages/Report";
 import Supporto from "./pages/Supporto";
+import Documentation from "./pages/Documentation";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/amministrazione" exact component={Amministrazione} />
         <Route path="/report" exact component={Report} />
         <Route path="/supporto" exact component={Supporto} />
+        <Route path="/documentation" exact component={Documentation} />
       </Switch>
     </BrowserRouter>
   );

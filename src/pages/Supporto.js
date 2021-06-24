@@ -1,100 +1,82 @@
 import React from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-
-const drawerWidth = 240;
+import Typography from "@material-ui/core/Typography";
+import SelectBar from "../components/SelectBar";
+import { TextareaAutosize } from "@material-ui/core";
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: "100vh",
-    overflow: "auto",
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 240,
-  },
+
+  // paper: {
+  //   padding: theme.spacing(2),
+  //   display: "flex",
+  //   overflow: "auto",
+  //   flexDirection: "column",
+  // },
+
   modal: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
   paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
+    display: "flex",
+    flexDirection: "column",
+    border: "1px solid #3F3F44",
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+    width: "500px",
+    height: "600px",
+  },
+  paperTop: {
+    backgroundColor: "#47B881",
+    height: "25%",
+    //opacity: "25%",
+  },
+  paperBottom: {
+    backgrounColor: "#FFFFFF",
+    height: "75%",
+    padding: "8%",
+    justifyContent: "center",
+    flexDirection: "column",
+  },
+  intestazione: {
+    color: "black",
+    marginTop: "35px",
+    marginLeft: "35px",
+  },
+  divSelectBar: {
+    marginTop: "25px",
+  },
+  selectBar: {
+    width: "400px",
+    height: "100",
+    marginTop: "50px",
+  },
+  divTextarea: {
+    marginTop: "50px",
+    marginLeft: "5px",
+  },
+  textarea: {
+    width: "380px",
+    height: "300px",
+    border: "1px solid rgba(0, 0, 0, 0.32)",
+    marginTop: "10px",
+    fontFamily: "Roboto",
+  },
+  bottone: {
+    size: "small",
+    marginTop: "10px",
+  },
+  divBottone: {
+    marginTop: "10px",
+    marginLeft: "35%",
   },
 }));
 
@@ -117,8 +99,6 @@ function TransitionsModal() {
           Supporto
         </button>
         <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
           className={classes.modal}
           open={open}
           onClose={handleClose}
@@ -130,10 +110,41 @@ function TransitionsModal() {
         >
           <Fade in={open}>
             <div className={classes.paper}>
-              <h2 id="transition-modal-title">Transition modal</h2>
-              <p id="transition-modal-description">
-                react-transition-group animates me.
-              </p>
+              <Paper className={classes.paperTop}>
+                <Typography className={classes.intestazione} variant="h5">
+                  Non hai trovato quello che cercavi?
+                </Typography>
+              </Paper>
+              <Paper className={classes.paperBottom}>
+                <Typography className={classes.contenuto} variant="h8">
+                  Nessun problema, seleziona l'argomento e inviaci la tua
+                  richiesta per avere maggiori informazioni.
+                </Typography>
+                <div className={classes.divSelectBar}>
+                  <SelectBar
+                    nome="Seleziona l'argomento"
+                    classeName={classes.selectBar}
+                  />
+                </div>
+                <div className={classes.divTextarea}>
+                  <Typography className={classes.contenuto} variant="h11">
+                    Ascoltiamo i tuoi bisogni:
+                  </Typography>
+                  <TextareaAutosize
+                    className={classes.textarea}
+                    aria-label="minimum height"
+                    rowsMin={10}
+                    placeholder="Inserisci il messaggio"
+                  />
+                </div>
+                <div className={classes.divBottone}>
+                  <ButtonClickedGreen
+                    className={classes.bottone}
+                    nome="invia"
+                    size="small"
+                  />
+                </div>
+              </Paper>
             </div>
           </Fade>
         </Modal>

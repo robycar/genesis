@@ -9,6 +9,7 @@ import LockIcon from "@material-ui/icons/Lock";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import { NavLink } from "react-router-dom";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/App.css";
 
 export const mainListItems = (
@@ -51,6 +52,14 @@ export const mainListItems = (
           <BarChartIcon />
         </ListItemIcon>
         <ListItemText primary="Report" />
+      </ListItem>
+    </NavLink>
+    <NavLink exact to="/documentation" activeClassName="nav-active">
+      <ListItem button>
+        <ListItemIcon>
+          <DescriptionIcon />
+        </ListItemIcon>
+        <ListItemText primary="Documentation" />
       </ListItem>
     </NavLink>
   </div>
