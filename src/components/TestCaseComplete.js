@@ -214,7 +214,7 @@ const EnhancedTableToolbar = (props) => {
             id="tableTitle"
             component="div"
           >
-            Total Test Case
+            Last 30 Test Suite Completed
           </Typography>
           <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>
@@ -302,6 +302,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  searchBar:{
+    height:"400px"
+  }
 }));
 
 export default function EnhancedTable() {
