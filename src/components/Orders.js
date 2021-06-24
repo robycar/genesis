@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -26,6 +26,8 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import ButtonClickedBlue from "../components/ButtonClickedBlue";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonNotClickedBlue from "../components/ButtonNotClickedBlue";
+import { logDOM } from "@testing-library/react";
+import "../styles/App.css";
 
 function createData(
   name,
@@ -370,18 +372,54 @@ export default function EnhancedTable() {
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const [appState, changeState] = useState({
+    activeObject: null,
+    objects: [
+      { id: 1, name: "Test Running" },
+      { id: 2, name: "Test Running" },
+      { id: 3, name: "Test Schedulati" },
+      { id: 4, name: "Test Conclusi" },
+    ],
+  });
+  function toggleActive(index) {
+    changeState({ ...appState, activeObject: appState.objects[index] });
+  }
+
+  function toggleActiveStyles(index) {
+    if (appState.objects[index] === appState.activeObject) {
+      return "box active";
+    } else {
+      return "box inactive";
+    }
+  }
+
   return (
-    <div className={classes.root}>
+    <div>
       <EnhancedTableToolbar numSelected={selected.length} />
       <TableContainer>
         <div className={classes.buttonContainer}>
-          <ButtonNotClickedBlue nome="Test in Running" />
+          {appState.objects.map((elements, index) => (
+            <ButtonNotClickedBlue
+              key={index}
+              nome={elements.name}
+              className={toggleActiveStyles}
+              onclick={() => {
+                toggleActive(index);
+              }}
+            />
+          ))}
+          {/* <ButtonNotClickedBlue
+            onClick={() => {
+              alert("Ciao");
+            }}
+            nome="Test in Running"
+          />
 
-          <ButtonNotClickedBlue nome="Test Caricati" />
+          <ButtonNotClickedBlue nome="Test Running" />
 
           <ButtonNotClickedBlue nome="Test Schedulati" />
 
-          <ButtonClickedBlue nome="Test Conclusi" />
+          <ButtonClickedBlue nome="Test Conclusi" /> */}
         </div>
         <Table
           className={classes.table}

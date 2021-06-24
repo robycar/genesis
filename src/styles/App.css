@@ -9,3 +9,18 @@
   text-decoration: none;
   color:#212529;
 }
+
+.box {
+  width:200px;
+  height:200px;
+  margin:10px;
+}
+
+.inactive{
+  background-color: "yellow",
+}
+.active{
+  background-color: "red",
+}
+
+
