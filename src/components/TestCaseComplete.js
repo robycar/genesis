@@ -22,6 +22,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
+import ButtonExport from "./ButtonExport";
 
 function createData(
   name,
@@ -213,24 +214,20 @@ const EnhancedTableToolbar = (props) => {
             variant="h6"
             id="tableTitle"
             component="div"
+            style={{display:'flex'}}
           >
             Last 30 Test Suite Completed
+            <SearchBar className={classes.searchBar} />
           </Typography>
-          <SearchBar className={classes.searchBar} />
-          <div className={classes.buttonRight}>
-            <Button
-              className={classes.buttonClickedGreen}
-              variant="contained"
-              color="primary"
-            >
-              Load Test Suite
-            </Button>
+          
+          <div >
+            <ButtonExport />
           </div>
         </>
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+          <Tooltip title="Delete">
           <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
@@ -296,14 +293,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "10px",
     width: "200px",
     height: "40px",
-  },
-
-  buttonRight: {
-    display: "flex",
-    justifyContent: "flex-end",
-  },
-  searchBar:{
-    height:"400px"
   }
 }));
 
