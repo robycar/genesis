@@ -28,6 +28,7 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonNotClickedBlue from "../components/ButtonNotClickedBlue";
 import { logDOM } from "@testing-library/react";
 import "../styles/App.css";
+import ButtonList from "./ButtonList";
 
 function createData(
   name,
@@ -280,7 +281,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-around",
     marginTop: "10px",
     marginBottom: "10px",
   },
@@ -307,6 +308,19 @@ const useStyles = makeStyles((theme) => ({
   buttonRight: {
     display: "flex",
     justifyContent: "flex-end",
+  },
+
+  inactive: {
+    backgroundColor: "#9b59b6 !important",
+  },
+  active: {
+    backgroundColor: "#3498db !important",
+  },
+  box: {
+    width: "200px",
+    height: "200px",
+    margin: "10px",
+    border: "1px solid black",
   },
 }));
 
@@ -398,12 +412,13 @@ export default function EnhancedTable() {
       <EnhancedTableToolbar numSelected={selected.length} />
       <TableContainer>
         <div className={classes.buttonContainer}>
+          {/* <ButtonList /> */}
           {appState.objects.map((elements, index) => (
             <ButtonNotClickedBlue
               key={index}
               nome={elements.name}
-              className={toggleActiveStyles}
-              onclick={() => {
+              className={toggleActiveStyles(index)}
+              onClick={() => {
                 toggleActive(index);
               }}
             />

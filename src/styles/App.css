@@ -10,17 +10,32 @@
   color:#212529;
 }
 
-.box {
-  width:200px;
-  height:200px;
-  margin:10px;
+
+.App {
+  display: flex;
+  height:100vh;
+  justify-content: center;
+  align-items:space-around;
+  flex-flow: row wrap;
+}
+.inactive {
+  background-color: white !important;
 }
 
-.inactive{
-  background-color: "yellow",
+.active {
+  background-color: #1665D8 !important;
+  color: white !important;
 }
-.active{
-  background-color: "red",
+.box {
+  background-color: white;
+  border: 1px solid #1665D8 !important;
+  color: #1665D8;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 200px;
+  height: 40px;
 }
+
+
 
 
