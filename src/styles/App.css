@@ -23,13 +23,13 @@
 }
 
 .active {
-  background-color: #1665D8 !important;
+  background-color: #303F9F !important;
   color: white !important;
 }
 .box {
   background-color: white;
-  border: 1px solid #1665D8 !important;
-  color: #1665D8;
+  border: 1px solid #303F9F !important;
+  color: #303F9F;
   margin-left: 10px;
   margin-right: 10px;
   width: 200px;
