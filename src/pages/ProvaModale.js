@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import Modale from "../components/Modale";
+import ModaleTestCase from "../components/ModaleTestCase";
 
 const drawerWidth = 240;
 
@@ -104,7 +104,7 @@ function ProvaModale() {
 
   return (
     <div className={classes.root}>
-      <Modale />
+      <ModaleTestCase />
     </div>
   );
 }

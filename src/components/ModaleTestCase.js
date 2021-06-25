@@ -9,6 +9,7 @@ import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Button from "@material-ui/core/Button";
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: "5%",
   },
   paperTop: {
     height: "20%",
@@ -45,8 +47,9 @@ const useStyles = makeStyles((theme) => ({
     //opacity: "25%",
   },
   paperBottom: {
+    padding: "2%",
     backgrounColor: "#FFFFFF",
-    justifyContent: "center",
+    //justifyContent: "center",
     flexDirection: "column",
     marginTop: "5%",
   },
@@ -59,18 +62,22 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "50px",
   },
   divTextarea: {
-    marginTop: "50px",
-    marginLeft: "5px",
+    marginTop: "20px",
   },
   intestazione: {
     color: "#47B881",
     marginTop: "5%",
-    marginLeft: "5%",
     flexDirection: "row",
   },
   icon: {
-    size: "medium",
+    transform: "scale(1.8)",
     color: "#47B881",
+    marginTop: "8px",
+  },
+  bottoni: {
+    marginLeft: "55px",
+    marginTop: "4%",
+    marginBottom: "2%",
   },
 }));
 
@@ -107,13 +114,18 @@ export default function SimpleModal() {
           <div className={classes.paper}>
             <Paper>
               <div>
-                <Typography className={classes.intestazione} variant="h5">
-                  Load Test Case
-                </Typography>
+                <ListItem button>
+                  <ListItemIcon>
+                    <BackupIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <Typography className={classes.intestazione} variant="h5">
+                    Load Test Case
+                  </Typography>
+                </ListItem>
               </div>
 
               <div className={classes.paperBottom}>
-                <Typography variant="h8">Seleziona test Case:</Typography>
+                <Typography variant="h6">Seleziona Test Case:</Typography>
                 <div className={classes.divSelectBar}>
                   <div className={classes.divTextarea}>
                     <Typography className={classes.contenuto} variant="h11">
@@ -125,14 +137,23 @@ export default function SimpleModal() {
                     classeName={classes.selectBar}
                   />
                 </div>
-              </div>
-              <div className={classes.divSelectBar}>
+
                 <div className={classes.divTextarea}>
                   <Typography className={classes.contenuto} variant="h11">
                     Descrizione
                   </Typography>
                 </div>
                 <SelectBar nome="Descrizione" classeName={classes.selectBar} />
+
+                <div className={classes.bottoni}>
+                  <Button variant="contained" color="secondary">
+                    Schedula Test
+                  </Button>
+
+                  <Button variant="contained" color="primary">
+                    Carica Test
+                  </Button>
+                </div>
               </div>
             </Paper>
           </div>
