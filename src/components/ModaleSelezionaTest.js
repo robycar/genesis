@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     transform: "scale(1.8)",
     color: "#47B881",
-    marginTop: "8px",
+    marginTop: "9px",
   },
   bottoni: {
     marginLeft: "55px",
@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleModal() {
+export default function SimpleModal(props) {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
@@ -119,31 +119,28 @@ export default function SimpleModal() {
                     <BackupIcon className={classes.icon} />
                   </ListItemIcon>
                   <Typography className={classes.intestazione} variant="h5">
-                    Load Test Case
+                    {props.titolo1}{" "}
                   </Typography>
                 </ListItem>
               </div>
 
               <div className={classes.paperBottom}>
-                <Typography variant="h6">Seleziona Test Case:</Typography>
+                <Typography variant="h6">{props.titolo2}</Typography>
                 <div className={classes.divSelectBar}>
                   <div className={classes.divTextarea}>
                     <Typography className={classes.contenuto} variant="h11">
-                      Nome del Test
+                      {props.label1}{" "}
                     </Typography>
                   </div>
-                  <SelectBar
-                    nome="Nome del test"
-                    classeName={classes.selectBar}
-                  />
+                  <SelectBar nome="Seleziona" classeName={classes.selectBar} />
                 </div>
 
                 <div className={classes.divTextarea}>
                   <Typography className={classes.contenuto} variant="h11">
-                    Descrizione
+                    {props.label2}
                   </Typography>
                 </div>
-                <SelectBar nome="Descrizione" classeName={classes.selectBar} />
+                <SelectBar nome="Seleziona" classeName={classes.selectBar} />
 
                 <div className={classes.bottoni}>
                   <Button variant="contained" color="secondary">
