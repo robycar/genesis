@@ -126,6 +126,10 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonNotClickedGreen: {
     backgroundColor: "white",
+    "&:hover": {
+      background: "#47B881",
+      color: "white",
+    },
     border: "1px solid #47B881 ",
     variant: "contained",
     color: "#47B881",

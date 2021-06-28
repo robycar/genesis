@@ -36,13 +36,11 @@
   height: 40px;
 }
 
-/* .nav-active {
-  background-color: red !important;
+.nav-active {
+  /* background-color: red !important; */
+  border-left: 3px solid #303F9F !important;
+  background-color:  #d0e4ff !important;
 }
-.a {
-  text-decoration: none;
-  color:#212529;
-} */
 
 /* .selected {
   background-color: red;

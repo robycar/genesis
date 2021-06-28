@@ -14,74 +14,106 @@ import "../styles/App.css";
 
 export const mainListItems = (
   <div className="nav-link">
-    <NavLink exact to="/dashboard" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary="Dashboard" />
-      </ListItem>
-    </NavLink>
-    <NavLink exact to="/launching" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <PlayCircleOutlineIcon />
-        </ListItemIcon>
-        <ListItemText primary="Launching" />
-      </ListItem>
-    </NavLink>
-    <NavLink exact to="/editing" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <EditIcon />
-        </ListItemIcon>
-        <ListItemText primary="Editing" />
-      </ListItem>
-    </NavLink>
-    <NavLink exact to="/amministrazione" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <LockIcon />
-        </ListItemIcon>
-        <ListItemText primary="Amministrazione" />
-      </ListItem>
-    </NavLink>
-    <NavLink exact to="/report" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Report" />
-      </ListItem>
-    </NavLink>
-    <NavLink exact to="/documentation" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <DescriptionIcon />
-        </ListItemIcon>
-        <ListItemText primary="Documentation" />
-      </ListItem>
-    </NavLink>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/dashboard"
+    >
+      <ListItemIcon>
+        <DashboardIcon />
+      </ListItemIcon>
+      <ListItemText primary="Dashboard" />
+    </ListItem>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/launching"
+    >
+      <ListItemIcon>
+        <PlayCircleOutlineIcon />
+      </ListItemIcon>
+      <ListItemText primary="Launching" />
+    </ListItem>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/editing"
+    >
+      <ListItemIcon>
+        <EditIcon />
+      </ListItemIcon>
+      <ListItemText primary="Editing" />
+    </ListItem>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/amministrazione"
+    >
+      <ListItemIcon>
+        <LockIcon />
+      </ListItemIcon>
+      <ListItemText primary="Amministrazione" />
+    </ListItem>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/report"
+    >
+      <ListItemIcon>
+        <BarChartIcon />
+      </ListItemIcon>
+      <ListItemText primary="Report" />
+    </ListItem>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/documentation"
+    >
+      <ListItemIcon>
+        <DescriptionIcon />
+      </ListItemIcon>
+      <ListItemText primary="Documentation" />
+    </ListItem>
   </div>
 );
 
 export const secondaryListItems = (
   <div className="nav-link">
-    <NavLink exact to="/supporto" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <HelpOutlineIcon />
-        </ListItemIcon>
-        <ListItemText primary="Supporto" />
-      </ListItem>
-    </NavLink>
-    <NavLink exact to="/provaModale" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <HelpOutlineIcon />
-        </ListItemIcon>
-        <ListItemText primary="provaModale" />
-      </ListItem>
-    </NavLink>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/supporto"
+    >
+      <ListItemIcon>
+        <HelpOutlineIcon />
+      </ListItemIcon>
+      <ListItemText primary="Supporto" />
+    </ListItem>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/provaModale"
+    >
+      <ListItemIcon>
+        <HelpOutlineIcon />
+      </ListItemIcon>
+      <ListItemText primary="provaModale" />
+    </ListItem>
   </div>
 );

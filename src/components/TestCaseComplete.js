@@ -214,20 +214,20 @@ const EnhancedTableToolbar = (props) => {
             variant="h6"
             id="tableTitle"
             component="div"
-            style={{display:'flex'}}
+            style={{ display: "flex" }}
           >
             Last 30 Test Suite Completed
             <SearchBar className={classes.searchBar} />
           </Typography>
-          
-          <div >
+
+          <div>
             <ButtonExport />
           </div>
         </>
       )}
 
       {numSelected > 0 ? (
-          <Tooltip title="Delete">
+        <Tooltip title="Delete">
           <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
@@ -293,7 +293,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "10px",
     width: "200px",
     height: "40px",
-  }
+  },
 }));
 
 export default function EnhancedTable() {
@@ -362,7 +362,6 @@ export default function EnhancedTable() {
     <div className={classes.root}>
       <EnhancedTableToolbar numSelected={selected.length} />
       <TableContainer>
-        
         <Table
           className={classes.table}
           aria-labelledby="tableTitle"
