@@ -96,24 +96,26 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  buttonContainer: {
-    marginBottom: "20px",
-  },
+
   generalContainer: {
     display: "flex",
+    padding: "20px",
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: "20px",
+    marginRight: "20px",
+    marginLeft: "20px",
+    marginBottom: "20px",
   },
   cardContainer: {
-    flexDirection: "column",
-    justifyContent: "space-around",
+    width: "350px",
   },
   card: {
-    marginTop: "10px",
-    marginBottom: "10px",
-    width: "50%",
-    backgroundColor: "yellow",
+    alignItems: "center",
+
+    // marginLeft: "10px",
+    // marginRight: "10px",
+    // marginTop: "10px",
+    // marginBottom: "10px",
   },
 }));
 
@@ -164,16 +166,33 @@ function Documentation() {
           </div>
         </Container>
 
-        <Paper className={classes.generalContainer} elevation={2}>
+        <Paper className={classes.generalContainer} elevation={3}>
           <Paper className={classes.cardContainer}>
-            <SimpleCard className={classes.card} />
-            <SimpleCard className={classes.card} />
-            <SimpleCard className={classes.card} />
+            <SimpleCard
+              className={classes.card}
+              titolo="Requisiti Funzionali"
+            />
           </Paper>
-          <Paper>
-            <SimpleCard className={classes.card} />
-            <SimpleCard className={classes.card} />
-            <SimpleCard className={classes.card} />
+          <Paper className={classes.cardContainer}>
+            <SimpleCard className={classes.card} titolo="Linee Guida" />
+          </Paper>
+          <Paper className={classes.cardContainer}>
+            <SimpleCard className={classes.card} titolo="Release Note" />
+          </Paper>
+        </Paper>
+
+        <Paper className={classes.generalContainer} elevation={3}>
+          <Paper className={classes.cardContainer} elevation={2}>
+            <SimpleCard className={classes.card} titolo="MoM" />
+          </Paper>
+          <Paper className={classes.cardContainer}>
+            <SimpleCard
+              className={classes.card}
+              titolo="Altri File A Corredo"
+            />
+          </Paper>
+          <Paper className={classes.cardContainer}>
+            <SimpleCard className={classes.card} titolo="Documenti" />
           </Paper>
         </Paper>
       </main>
