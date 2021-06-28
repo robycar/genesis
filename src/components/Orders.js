@@ -314,12 +314,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
   },
 
-  inactive: {
-    backgroundColor: "#9b59b6 !important",
-  },
-  active: {
-    backgroundColor: "#3498db !important",
-  },
+  // inactive: {
+  //   backgroundColor: "#9b59b6 !important",
+  // },
+  // active: {
+  //   backgroundColor: "#3498db !important",
+  // },
   box: {
     width: "200px",
     height: "200px",
@@ -406,9 +406,9 @@ export default function EnhancedTable() {
 
   function toggleActiveStyles(index) {
     if (appState.objects[index] === appState.activeObject) {
-      return "box active";
+      return "box nav-table-active";
     } else {
-      return "box inactive";
+      return "box nav-table-inactive";
     }
   }
 

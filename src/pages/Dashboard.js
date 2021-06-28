@@ -29,6 +29,7 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import Card from "../components/Card";
 import { NavLink } from "react-router-dom";
+import "../styles/App.css";
 
 function Copyright() {
   return (
@@ -146,6 +147,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     marginTop: "0px",
   },
+
+  active: {
+    backgroundColor: "#47B881",
+    color: "white",
+  },
 }));
 
 function Dashboard() {
@@ -203,14 +209,29 @@ function Dashboard() {
             <NavbarItem />
           </div>
           <div className={classes.bottonTest}>
-            <NavLink exact to="/dashboard/testcase">
-              {/* <ButtonClickedGreen nome="Test Case" /> */}
-              <Button>Test Case</Button>
-            </NavLink>
-            <NavLink exact to="/dashboard/testsuite">
-              {/* <ButtonNotClickedGreen nome="Test Suite" /> */}
-              <Button>Test Suite</Button>
-            </NavLink>
+            {/* <NavLink exact to="/dashboard/testcase"> */}
+            <Button
+              className={classes.buttonNotClickedGreen}
+              component={NavLink}
+              activeClassName={classes.active}
+              exact
+              to="/dashboard/testcase"
+            >
+              Test Case
+            </Button>
+            {/* </NavLink> */}
+
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
+            <Button
+              className={classes.buttonNotClickedGreen}
+              component={NavLink}
+              activeClassName={classes.active}
+              exact
+              to="/dashboard/testsuite"
+            >
+              Test Case
+            </Button>
+            {/* </NavLink> */}
           </div>
           <Grid container spacing={3}>
             <Card />

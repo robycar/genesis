@@ -18,13 +18,13 @@
   align-items:space-around;
   flex-flow: row wrap;
 }
-.inactive {
+.nav-table-inactive {
   background-color: white !important;
 }
 
-.active {
+.nav-table-active {
   background-color: #303F9F !important;
-  color: white !important;
+  color: white !important; 
 }
 .box {
   background-color: white;
@@ -36,6 +36,26 @@
   height: 40px;
 }
 
+/* .nav-active {
+  background-color: red !important;
+}
+.a {
+  text-decoration: none;
+  color:#212529;
+} */
 
+/* .selected {
+  background-color: red;
+} */
+
+/* 
+a {
+  background-color: "white";
+  border: 1px solid #47B881 ;
+  color: #47B881;
+  width: 200px;
+  height: 40px;
+  margin-right: 10px;
+} */
 
 
