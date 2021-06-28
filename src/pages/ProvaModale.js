@@ -1,7 +1,8 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import Modale from "../components/Modale";
+//import ModaleEseguiTest from "../components/ModaleEseguiTest";
+import ModaleSelezionaTest from "../components/ModaleSelezionaTest";
 
 const drawerWidth = 240;
 
@@ -103,8 +104,20 @@ function ProvaModale() {
   const classes = useStyles();
 
   return (
+    // <div className={classes.root}>
+    //   <ModaleEseguiTest
+    //     titolo1="Esegui Test Case"
+    //     titolo2="Vuoi lanciare di nuovo il test?"
+    //   />
+    // </div>
+
     <div className={classes.root}>
-      <Modale />
+      <ModaleSelezionaTest
+        titolo1="Load Test Case"
+        titolo2="Seleziona Test Case"
+        label1="Nome del Test"
+        label2="Descrizione"
+      />
     </div>
   );
 }
