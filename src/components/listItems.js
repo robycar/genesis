@@ -75,5 +75,13 @@ export const secondaryListItems = (
         <ListItemText primary="Supporto" />
       </ListItem>
     </NavLink>
+    <NavLink exact to="/provaModale" activeClassName="nav-active">
+      <ListItem button>
+        <ListItemIcon>
+          <HelpOutlineIcon />
+        </ListItemIcon>
+        <ListItemText primary="provaModale" />
+      </ListItem>
+    </NavLink>
   </div>
 );

@@ -5,15 +5,17 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 
 const useStyles = makeStyles({
   root: {
-    width: "100%",
-    backgroundColor: "yellow",
+    // width: "150%",
+    // height: "200px",
+    backgroundColor: "rgba(216, 216, 216, 0.1)",
+    padding: "5%",
   },
   bullet: {
-    // display: "inline-block",
-    //margin: "0 2px",
+    margin: "0 2px",
     transform: "scale(0.8)",
   },
   title: {
@@ -24,7 +26,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function SimpleCard() {
+export default function SimpleCard(props) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
@@ -36,11 +38,14 @@ export default function SimpleCard() {
           color="textSecondary"
           gutterBottom
         >
-          Word of the Day
+          Cosa stai cercando?
         </Typography>
-        <Typography variant="h5" component="h2">
-          be{bull}nev{bull}o{bull}lent
-        </Typography>
+        <CardActions>
+          <Button size="medium" startIcon={<AssignmentIcon />}>
+            {props.titolo}
+          </Button>
+        </CardActions>
+
         <Typography className={classes.pos} color="textSecondary">
           adjective
         </Typography>
@@ -49,9 +54,6 @@ export default function SimpleCard() {
           <br />
           {'"a benevolent smile"'}
         </Typography>
-        <CardActions>
-          <Button size="small">Learn More</Button>
-        </CardActions>
       </CardContent>
     </Card>
   );

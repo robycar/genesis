@@ -9,3 +9,33 @@
   text-decoration: none;
   color:#212529;
 }
+
+
+.App {
+  display: flex;
+  height:100vh;
+  justify-content: center;
+  align-items:space-around;
+  flex-flow: row wrap;
+}
+.inactive {
+  background-color: white !important;
+}
+
+.active {
+  background-color: #303F9F !important;
+  color: white !important;
+}
+.box {
+  background-color: white;
+  border: 1px solid #303F9F !important;
+  color: #303F9F;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 200px;
+  height: 40px;
+}
+
+
+
+

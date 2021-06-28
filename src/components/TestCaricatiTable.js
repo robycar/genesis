@@ -12,27 +12,14 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonClickedBlue from "../components/ButtonClickedBlue";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonNotClickedBlue from "../components/ButtonNotClickedBlue";
-import { logDOM } from "@testing-library/react";
 import "../styles/App.css";
-import ButtonList from "./ButtonList";
-import TestRunningTable from "./TestRunningTable";
-import TestCaricatiTable from "./TestCaricatiTable";
-import TestSchedulatiTable from "./TestSchedulatiTable";
-import TestConclusiTable from "./TestConclusiTable";
 
 function createData(
   name,
@@ -225,7 +212,7 @@ const EnhancedTableToolbar = (props) => {
             id="tableTitle"
             component="div"
           >
-            Total Test Case
+            Total Test Case Caricati
           </Typography>
           <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>
@@ -390,69 +377,10 @@ export default function EnhancedTable() {
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-  const [appState, changeState] = useState({
-    activeObject: null,
-    objects: [
-      { id: 1, name: "Test Running" },
-      { id: 2, name: "Test Caricati" },
-      { id: 3, name: "Test Schedulati" },
-      { id: 4, name: "Test Conclusi" },
-    ],
-  });
-
-  function toggleActive(index) {
-    changeState({ ...appState, activeObject: appState.objects[index] });
-  }
-
-  function toggleActiveStyles(index) {
-    if (appState.objects[index] === appState.activeObject) {
-      return "box active";
-    } else {
-      return "box inactive";
-    }
-  }
-
-  const [show, setShow] = useState(false);
-
-  function showActive() {
-    setShow(!show);
-  }
-
   return (
     <>
-      <div className={classes.buttonContainer}>
-        {/* <ButtonList /> */}
-        {appState.objects.map((elements, index) => (
-          <ButtonNotClickedBlue
-            key={index}
-            nome={elements.name}
-            className={toggleActiveStyles(index)}
-            onClick={() => {
-              toggleActive(index);
-              showActive();
-            }}
-          />
-        ))}
-        {/* <ButtonNotClickedBlue
-            onClick={() => {
-              alert("Ciao");
-            }}
-            nome="Test in Running"
-          />
-
-          <ButtonNotClickedBlue nome="Test Running" />
-
-          <ButtonNotClickedBlue nome="Test Schedulati" />
-
-          <ButtonClickedBlue nome="Test Conclusi" /> */}
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-      </div>
-
-      {appState.objects[0] === appState.activeObject && <TestRunningTable />}
-      {appState.objects[1] === appState.activeObject && <TestCaricatiTable />}
-      {appState.objects[2] === appState.activeObject && <TestSchedulatiTable />}
-      {appState.objects[3] === appState.activeObject && <TestConclusiTable />}
-      {/* <TableContainer>
+      <EnhancedTableToolbar numSelected={selected.length} />
+      <TableContainer>
         <Table
           className={classes.table}
           aria-labelledby="tableTitle"
@@ -526,7 +454,7 @@ export default function EnhancedTable() {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-      /> */}
+      />
     </>
   );
 }
