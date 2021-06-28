@@ -212,7 +212,7 @@ const EnhancedTableToolbar = (props) => {
             id="tableTitle"
             component="div"
           >
-            Total Test Case Schedulati
+            Total Test Case Conclusi
           </Typography>
           <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>

@@ -14,7 +14,7 @@ import "../styles/App.css";
 
 export const mainListItems = (
   <div className="nav-link">
-    <NavLink exact to="/" activeClassName="nav-active">
+    <NavLink exact to="/dashboard" activeClassName="nav-active">
       <ListItem button>
         <ListItemIcon>
           <DashboardIcon />

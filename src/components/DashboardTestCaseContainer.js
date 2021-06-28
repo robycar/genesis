@@ -148,7 +148,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Dashboard() {
+function DashboardTestCaseContainer() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -228,4 +228,6 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default DashboardTestCaseContainer;
+
+// DashboardTestCaseContainer

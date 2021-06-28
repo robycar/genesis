@@ -7,12 +7,24 @@ import Report from "./pages/Report";
 import Supporto from "./pages/Supporto";
 import Documentation from "./pages/Documentation";
 import ProvaModale from "./pages/ProvaModale";
+import DashboardTestCaseContainer from "./components/DashboardTestCaseContainer";
+import DashboardTestSuiteContainer from "./components/DashboardTestSuiteContainer";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" exact component={Dashboard} />
+        <Route path="/dashboard" exact component={Dashboard} />
+        <Route
+          path="/dashboard/testcase"
+          exact
+          component={DashboardTestCaseContainer}
+        />
+        <Route
+          path="/dashboard/testsuite"
+          exact
+          component={DashboardTestSuiteContainer}
+        />
         <Route path="/launching" exact component={Launching} />
         <Route path="/editing" exact component={Editing} />
         <Route path="/amministrazione" exact component={Amministrazione} />
