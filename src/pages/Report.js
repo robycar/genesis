@@ -3,40 +3,22 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
 import Navbar from "../components/Navbar";
-import Button from "@material-ui/core/Button";
-import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "../components/listItems";
-import TotalTestSuite from "../components/TotalTestSuite";
-import Deposits from "../components/Deposits";
 import Orders from "../components/TestCaseComplete";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import NavbarItemReport from "../components/NavbarItemReport";
+import ButtonNotClickedBlue from "../components/ButtonNotClickedBlue";
+import ButtonClickedBlue from "../components/ButtonClickedBlue";
+import Table from "../components/Table";
+import logo from "../assets/logoReply.png";
 
 const drawerWidth = 240;
 
@@ -141,6 +123,23 @@ const useStyles = makeStyles((theme) => ({
     width: "200px",
     height: "40px",
   },
+  containerNavbarItem: {},
+  bottomContainer: {
+    marginTop: "2%",
+    display: "flex",
+  },
+  paperTable: {
+    width: "62%",
+    flexDirection: "column",
+  },
+  paperLogo: {
+    width: "36%",
+    flexDirection: "column",
+    marginLeft: "2%",
+  },
+  logo: {
+    width: "100%",
+  },
 }));
 
 function Report() {
@@ -182,34 +181,38 @@ function Report() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>            
+          <div className={classes.containerNavbarItem}>
+            <NavbarItemReport fontSize="large" />
+          </div>
+        </Container>
+
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
             {/* Recent Orders */}
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <Button className={classes.buttonNotClickedBlue}>
-                  Test Schedulati
-                </Button>
+                <ButtonNotClickedBlue nome="Test Suite" />
 
-                <Button
-                  className={classes.buttonClickedBlue}
-                  variant="contained"
-                  color="primary"
-                >
-                  Test Conclusi
-                </Button>
+                <ButtonClickedBlue nome="Test Case" />
               </div>
             </Grid>
             <Grid item xs={12}>
-              
               <Paper className={classes.paper}>
                 <Orders />
               </Paper>
             </Grid>
           </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
+
+          <Paper className={classes.bottomContainer}>
+            <Paper className={classes.paperTable}>
+              <Table />
+            </Paper>
+            <Paper className={classes.paperLogo}>
+              <img src={logo} alt="Logo" className={classes.logo} />
+            </Paper>
+          </Paper>
         </Container>
       </main>
     </div>

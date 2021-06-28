@@ -4,9 +4,10 @@ import Typography from "@material-ui/core/Typography";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import BarChartIcon from "@material-ui/icons/BarChart";
 
 const useStyles = makeStyles((theme) => ({
-  support: {
+  report: {
     fontWeight: 500,
     fontStyle: "normal",
     fontSize: "35px",
@@ -15,16 +16,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NavbarItemSupport() {
+function NavbarItemReport() {
   const classes = useStyles();
 
   return (
     <ListItem>
       <ListItemIcon className={classes.listItemIcon}>
-        <HelpOutlineIcon fontSize="large" />
+        <BarChartIcon fontSize="large" />
       </ListItemIcon>
-      <Typography className={classes.support}> Support </Typography>
+      <Typography className={classes.report}> Report </Typography>
     </ListItem>
   );
 }
-export default NavbarItemSupport;
+export default NavbarItemReport;
