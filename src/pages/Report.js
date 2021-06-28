@@ -18,7 +18,8 @@ import NavbarItemReport from "../components/NavbarItemReport";
 import ButtonNotClickedBlue from "../components/ButtonNotClickedBlue";
 import ButtonClickedBlue from "../components/ButtonClickedBlue";
 import Table from "../components/Table";
-import logo from "../assets/logoReply.png";
+import img from "../assets/ggplot2_torta.png";
+import { Typography } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -132,13 +133,21 @@ const useStyles = makeStyles((theme) => ({
     width: "62%",
     flexDirection: "column",
   },
-  paperLogo: {
+  paperImg: {
+    display: "flex",
     width: "36%",
     flexDirection: "column",
     marginLeft: "2%",
   },
-  logo: {
+  img: {
     width: "100%",
+  },
+  titleImg: {
+    alignItems: "center",
+    fontSize: "24px",
+    padding: "5%",
+    marginLeft: "15%",
+    lineHeight: "20px",
   },
 }));
 
@@ -209,8 +218,11 @@ function Report() {
             <Paper className={classes.paperTable}>
               <Table />
             </Paper>
-            <Paper className={classes.paperLogo}>
-              <img src={logo} alt="Logo" className={classes.logo} />
+            <Paper className={classes.paperImg}>
+              <Typography className={classes.titleImg}>
+                Test Suite-CB Fibra
+              </Typography>
+              <img src={img} alt="Img" className={classes.img} />
             </Paper>
           </Paper>
         </Container>
