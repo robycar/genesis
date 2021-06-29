@@ -9,3 +9,51 @@
   text-decoration: none;
   color:#212529;
 }
+
+
+.App {
+  display: flex;
+  height:100vh;
+  justify-content: center;
+  align-items:space-around;
+  flex-flow: row wrap;
+}
+.nav-table-inactive {
+  background-color: white !important;
+}
+
+.nav-table-active {
+  background-color: #303F9F !important;
+  color: white !important; 
+}
+.box {
+  background-color: white;
+  border: 1px solid #303F9F !important;
+  color: #303F9F;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 200px;
+  height: 40px;
+}
+
+.nav-active {
+  /* background-color: red !important; */
+  border-left: 3px solid #303F9F !important;
+  background-color:  #d0e4ff !important;
+}
+
+/* .selected {
+  background-color: red;
+} */
+
+/* 
+a {
+  background-color: "white";
+  border: 1px solid #47B881 ;
+  color: #47B881;
+  width: 200px;
+  height: 40px;
+  margin-right: 10px;
+} */
+
+

@@ -18,16 +18,13 @@ import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { mainListItems, secondaryListItems } from "../components/listItems";
-import TotalTestSuite from "../components/TotalTestSuite";
-import Deposits from "../components/Deposits";
-import Orders from "../components/Orders";
-import Navbar from "../components/Navbar";
-import NavbarItem from "../components/NavbarItem";
+import { mainListItems, secondaryListItems } from "../../components/listItems";
+import Orders from "../../components/Orders";
+import Navbar from "../../components/Navbar";
+import NavbarItem from "../../components/NavbarItem";
 import Button from "@material-ui/core/Button";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import Card from "../components/Card";
+import Card from "../../components/Card";
+import { NavLink } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -124,6 +121,10 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonNotClickedGreen: {
     backgroundColor: "white",
+    "&:hover": {
+      background: "#47B881",
+      color: "white",
+    },
     border: "1px solid #47B881 ",
     variant: "contained",
     color: "#47B881",
@@ -145,9 +146,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     marginTop: "0px",
   },
+  active: {
+    backgroundColor: "#47B881",
+    color: "white",
+  },
 }));
 
-function Dashboard() {
+function DashboardTestSuite() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -202,8 +207,29 @@ function Dashboard() {
             <NavbarItem />
           </div>
           <div className={classes.bottonTest}>
-            <ButtonClickedGreen nome="Test Case" />
-            <ButtonNotClickedGreen nome="Test Suite" />
+            {/* <NavLink exact to="/dashboard/testcase"> */}
+            <Button
+              className={classes.buttonNotClickedGreen}
+              component={NavLink}
+              activeClassName={classes.active}
+              exact
+              to="/dashboard/testcase"
+            >
+              Test Case
+            </Button>
+            {/* </NavLink> */}
+
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
+            <Button
+              className={classes.buttonNotClickedGreen}
+              component={NavLink}
+              activeClassName={classes.active}
+              exact
+              to="/dashboard/testsuite"
+            >
+              Test Case
+            </Button>
+            {/* </NavLink> */}
           </div>
           <Grid container spacing={3}>
             <Card />
@@ -221,4 +247,6 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default DashboardTestSuite;
+
+// DashboardTestSuiteContainer;
