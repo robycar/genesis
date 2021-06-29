@@ -1,29 +1,25 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Amministrazione from "./pages/Amministrazione";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/dashboard/Dashboard";
 import Editing from "./pages/Editing";
 import Launching from "./pages/Launching";
 import Report from "./pages/Report";
 import Supporto from "./pages/Supporto";
 import Documentation from "./pages/Documentation";
 import ProvaModale from "./pages/ProvaModale";
-import DashboardTestCaseContainer from "./components/DashboardTestCaseContainer";
-import DashboardTestSuiteContainer from "./components/DashboardTestSuiteContainer";
+import DashboardTestCase from "./pages/dashboard/DashboardTestCase";
+import DashboardTestSuite from "./pages/dashboard/DashboardTestSuite";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/dashboard" exact component={Dashboard} />
-        <Route
-          path="/dashboard/testcase"
-          exact
-          component={DashboardTestCaseContainer}
-        />
+        <Route path="/dashboard/testcase" exact component={DashboardTestCase} />
         <Route
           path="/dashboard/testsuite"
           exact
-          component={DashboardTestSuiteContainer}
+          component={DashboardTestSuite}
         />
         <Route path="/launching" exact component={Launching} />
         <Route path="/editing" exact component={Editing} />

@@ -18,18 +18,17 @@ import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { mainListItems, secondaryListItems } from "../components/listItems";
-import TotalTestSuite from "../components/TotalTestSuite";
-import Deposits from "../components/Deposits";
-import Orders from "../components/Orders";
-import Navbar from "../components/Navbar";
-import NavbarItem from "../components/NavbarItem";
+import { mainListItems, secondaryListItems } from "../../components/listItems";
+import TotalTestSuite from "../../components/TotalTestSuite";
+import Orders from "../../components/Orders";
+import Navbar from "../../components/Navbar";
+import NavbarItem from "../../components/NavbarItem";
 import Button from "@material-ui/core/Button";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import Card from "../components/Card";
+import ButtonClickedGreen from "../../components/ButtonClickedGreen";
+import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
+import Card from "../../components/Card";
 import { NavLink } from "react-router-dom";
-import "../styles/App.css";
+import "../../styles/App.css";
 
 function Copyright() {
   return (
