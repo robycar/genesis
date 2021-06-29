@@ -151,7 +151,7 @@ function Navbar() {
           <ButtonGroup>
             <IconButton color="black">
               <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
+                <NotificationsIcon className={classes.icon} />
               </Badge>
             </IconButton>
             <IconButton>

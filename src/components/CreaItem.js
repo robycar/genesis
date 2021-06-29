@@ -19,16 +19,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NavbarItemEdit(props) {
+function CreaItem(props) {
   const classes = useStyles();
 
   return (
     <ListItem>
-      <ListItemIcon className={classes.listItemIcon}>
+      <ListItemIcon>
         <AddIcon fontSize="large" className={classes.icon} />
       </ListItemIcon>
       <Typography className={classes.titolo}> {props.titolo} </Typography>
     </ListItem>
   );
 }
-export default NavbarItemEdit;
+export default CreaItem;

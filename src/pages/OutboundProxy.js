@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Navbar from "../components/Navbar";
 import Drawer from "@material-ui/core/Drawer";
@@ -14,13 +14,56 @@ import { mainListItems, secondaryListItems } from "../components/listItems";
 import NavbarItemEdit from "../components/NavbarItemEdit";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import { Paper, Typography } from "@material-ui/core";
+import { FormControl, Paper, Typography } from "@material-ui/core";
 import SelectBar from "../components/SelectBar";
-import CreaItem from "../components/CreaItem";
+import InputBase from "@material-ui/core/InputBase";
+import DnsIcon from "@material-ui/icons/Dns";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import InputLabel from "@material-ui/core/InputLabel";
 
 const drawerWidth = 240;
 
+const BootstrapInput = withStyles((theme) => ({
+  root: {
+    "label + &": {
+      marginTop: theme.spacing(3),
+    },
+  },
+  input: {
+    borderRadius: 4,
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid #ced4da",
+    fontSize: 16,
+    width: "300px",
+    padding: "10px 26px 10px 12px",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:focus": {
+      borderRadius: 4,
+      borderColor: "#80bdff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+    },
+  },
+}))(InputBase);
+
 const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(1),
+  },
   root: {
     display: "flex",
   },
@@ -105,25 +148,33 @@ const useStyles = makeStyles((theme) => ({
   generalContainer: {
     display: "flex",
     marginTop: "5%",
+    backgroundColor: "yellow",
   },
-  paperContainer1: {
-    flexDirection: "column",
-    padding: "20px",
+  icon: {
+    color: "rgba(71, 184, 129, 1)",
   },
-  paperContainer2: {
-    flexDirection: "column",
-    padding: "20px",
+  titolo: {
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "24px",
+    color: "#66788A",
+    lineHeight: "20px",
+    color: "rgba(71, 184, 129, 1)",
   },
-  divSelect: {
+  bootstrapInput: {
+    flexDirection: "row",
+    width: "400px",
+  },
+  label: {
     padding: "5%",
+    width: "200px",
   },
-  bottone: {
-    marginLeft: "65%",
-    marginTop: "5%",
+  divLabel: {
+    marginTop: "1%",
   },
 }));
 
-function CreaLinea() {
+function OutboundProxy() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -167,9 +218,9 @@ function CreaLinea() {
           </div>
         </Container>
         <div className={classes.buttonContainer}>
-          <ButtonClickedGreen nome="LINEE" />
+          <ButtonNotClickedGreen nome="LINEE" />
 
-          <ButtonNotClickedGreen nome="OUTBOUND PROXY" />
+          <ButtonClickedGreen nome="OUTBOUND PROXY" />
 
           <ButtonNotClickedGreen nome="TEMPLATE" />
 
@@ -177,63 +228,29 @@ function CreaLinea() {
         </div>
 
         <Paper className={classes.paper}>
-          <CreaItem titolo="Crea Linea" />
+          <ListItem>
+            <ListItemIcon className={classes.listItemIcon}>
+              <DnsIcon fontSize="large" className={classes.icon} />
+            </ListItemIcon>
+            <Typography className={classes.titolo}> Outbound Proxy </Typography>
+          </ListItem>
 
-          <div className={classes.generalContainer}>
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  ID Linea{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Numero{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  ID Type Linea{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  {" "}
-                </Typography>
-              </Paper>
+          <Container className={classes.generalContainer}>
+            <Paper className={classes.divLabel}>
+              <Typography className={classes.label}>
+                Proxy IP Address:{" "}
+              </Typography>{" "}
             </Paper>
-
-            <Paper className={classes.paperContainer2} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Password{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  IP Simulatore{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  IP Simulatore{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-              <div className={classes.bottone}>
-                <ButtonClickedGreen size="medium" nome="Crea" />
-              </div>
+            <Paper className={classes.bootstrapInput}>
+              <FormControl className={classes.margin}>
+                <BootstrapInput id="demo-customized-textbox" />
+              </FormControl>
             </Paper>
-          </div>
+          </Container>
         </Paper>
       </main>
     </div>
   );
 }
 
-export default CreaLinea;
+export default OutboundProxy;
