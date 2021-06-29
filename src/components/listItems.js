@@ -19,7 +19,7 @@ export const mainListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
-      to="/dashboard"
+      to="/dashboard/testcase"
     >
       <ListItemIcon>
         <DashboardIcon />

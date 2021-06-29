@@ -400,19 +400,25 @@ export default function EnhancedTable() {
     ],
   });
 
+  // console.log(appState.activeObject);
+  // console.log(appState.objects[0]);
+
   function toggleActive(index) {
     changeState({ ...appState, activeObject: appState.objects[index] });
   }
 
   function toggleActiveStyles(index) {
-    if (appState.objects[index] === appState.activeObject) {
+    if (
+      appState.objects[index] === appState.activeObject ||
+      appState.activeObject === null
+    ) {
       return "box nav-table-active";
     } else {
       return "box nav-table-inactive";
     }
   }
 
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
 
   function showActive() {
     setShow(!show);
@@ -429,7 +435,7 @@ export default function EnhancedTable() {
             className={toggleActiveStyles(index)}
             onClick={() => {
               toggleActive(index);
-              showActive();
+              // showActive();
             }}
           />
         ))}
@@ -447,7 +453,7 @@ export default function EnhancedTable() {
           <ButtonClickedBlue nome="Test Conclusi" /> */}
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
       </div>
-
+      {appState.activeObject === null && <TestRunningTable />}
       {appState.objects[0] === appState.activeObject && <TestRunningTable />}
       {appState.objects[1] === appState.activeObject && <TestCaricatiTable />}
       {appState.objects[2] === appState.activeObject && <TestSchedulatiTable />}
