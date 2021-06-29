@@ -128,5 +128,17 @@ export const secondaryListItems = (
       </ListItemIcon>
       <ListItemText primary="creaLinea" />
     </ListItem>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/outboundProxy"
+    >
+      <ListItemIcon>
+        <HelpOutlineIcon />
+      </ListItemIcon>
+      <ListItemText primary="outboundProxy" />
+    </ListItem>
   </div>
 );

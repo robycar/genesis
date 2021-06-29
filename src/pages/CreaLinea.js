@@ -118,7 +118,8 @@ const useStyles = makeStyles((theme) => ({
     padding: "5%",
   },
   bottone: {
-    marginLeft: "68%",
+    marginLeft: "65%",
+    marginTop: "5%",
   },
 }));
 
@@ -179,7 +180,7 @@ function CreaLinea() {
           <CreaItem titolo="Crea Linea" />
 
           <div className={classes.generalContainer}>
-            <Paper className={classes.paperContainer1}>
+            <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   ID Linea{" "}
@@ -205,7 +206,7 @@ function CreaLinea() {
               </Paper>
             </Paper>
 
-            <Paper className={classes.paperContainer2}>
+            <Paper className={classes.paperContainer2} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Password{" "}
@@ -220,7 +221,7 @@ function CreaLinea() {
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Porta{" "}
+                  IP Simulatore{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
