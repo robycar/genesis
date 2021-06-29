@@ -408,15 +408,13 @@ export default function EnhancedTable() {
   }
 
   function toggleActiveStyles(index) {
-    if (
-      appState.objects[index] === appState.activeObject ||
-      appState.activeObject === null
-    ) {
+    if (appState.objects[index] === appState.activeObject) {
       return "box nav-table-active";
     } else {
       return "box nav-table-inactive";
     }
   }
+  //  ||appState.activeObject === null
 
   const [show, setShow] = useState(true);
 
