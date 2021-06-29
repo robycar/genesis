@@ -91,38 +91,6 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div className="nav-link">
-    <NavLink exact to="/supporto" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <HelpOutlineIcon />
-        </ListItemIcon>
-        <ListItemText primary="Supporto" />
-      </ListItem>
-    </NavLink>
-    <NavLink exact to="/provaModale" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <HelpOutlineIcon />
-        </ListItemIcon>
-        <ListItemText primary="provaModale" />
-      </ListItem>
-    </NavLink>
-    <NavLink exact to="/creaLinea" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <HelpOutlineIcon />
-        </ListItemIcon>
-        <ListItemText primary="creaLinea" />
-      </ListItem>
-    </NavLink>
-    <NavLink exact to="/outboundProxy" activeClassName="nav-active">
-      <ListItem button>
-        <ListItemIcon>
-          <HelpOutlineIcon />
-        </ListItemIcon>
-        <ListItemText primary="outboundProxy" />
-      </ListItem>
-    </NavLink>
     <ListItem
       button
       component={NavLink}
@@ -159,6 +127,18 @@ export const secondaryListItems = (
         <HelpOutlineIcon />
       </ListItemIcon>
       <ListItemText primary="creaLinea" />
+    </ListItem>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/outboundProxy"
+    >
+      <ListItemIcon>
+        <HelpOutlineIcon />
+      </ListItemIcon>
+      <ListItemText primary="outboundProxy" />
     </ListItem>
   </div>
 );
