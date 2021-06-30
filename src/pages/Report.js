@@ -20,6 +20,7 @@ import ButtonClickedBlue from "../components/ButtonClickedBlue";
 import Table from "../components/Table";
 import img from "../assets/ggplot2_torta.png";
 import { Typography } from "@material-ui/core";
+import Chart from '../components/ChartReport.js'
 
 const drawerWidth = 240;
 
@@ -222,7 +223,7 @@ function Report() {
               <Typography className={classes.titleImg}>
                 Test Suite-CB Fibra
               </Typography>
-              <img src={img} alt="Img" className={classes.img} />
+              <Chart />
             </Paper>
           </Paper>
         </Container>
