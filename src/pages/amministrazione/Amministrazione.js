@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
@@ -10,12 +10,13 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../components/listItems";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import { mainListItems, secondaryListItems } from "../../components/listItems";
 import { Paper } from "@material-ui/core";
-import GestioneUtenti from "../components/GestioneUtenti";
-import NavbarItemAdmin from "../components/NavbarItemAdmin";
+import GestioneUtenti from "../../components/GestioneUtenti";
+import NavbarItemAdmin from "../../components/NavbarItemAdmin";
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import "../../styles/App.css";
 
 const drawerWidth = 240;
 
@@ -148,11 +149,36 @@ function Amministrazione() {
           </div>
 
           <div className={classes.buttonContainer}>
-            <ButtonClickedGreen nome="UTENZE" />
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/amministrazione/utenze"
+            >
+              UTENZE
+            </Button>
+            {/* </NavLink> */}
 
-            <ButtonNotClickedGreen nome="RUOLI" />
-
-            <ButtonNotClickedGreen nome="AUTORIZZAZIONI" />
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/amministrazione/ruoli"
+            >
+              RUOLI{" "}
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/amministrazione/autorizzazioni"
+            >
+              AUTORIZZAZIONI
+            </Button>
           </div>
           <Paper className={classes.paper}>
             <GestioneUtenti />

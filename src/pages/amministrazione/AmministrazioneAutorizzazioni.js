@@ -1,8 +1,8 @@
 import React from "react";
 import clsx from "clsx";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
@@ -10,60 +10,17 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../components/listItems";
-import NavbarItemEdit from "../components/NavbarItemEdit";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import { FormControl, Paper, Typography } from "@material-ui/core";
-import SelectBar from "../components/SelectBar";
-import InputBase from "@material-ui/core/InputBase";
-import DnsIcon from "@material-ui/icons/Dns";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import InputSelect from "../components/InputSelect";
+import { mainListItems, secondaryListItems } from "../../components/listItems";
+import { Paper } from "@material-ui/core";
+import GestioneUtenti from "../../components/GestioneUtenti";
+import NavbarItemAdmin from "../../components/NavbarItemAdmin";
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import "../../styles/App.css";
 
 const drawerWidth = 240;
 
-const BootstrapInput = withStyles((theme) => ({
-  root: {
-    "label + &": {
-      marginTop: theme.spacing(3),
-    },
-  },
-  input: {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.background.paper,
-    border: "1px solid #ced4da",
-    fontSize: 16,
-    width: "300px",
-    padding: "10px 26px 10px 12px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-    "&:focus": {
-      borderRadius: 4,
-      borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
-    },
-  },
-}))(InputBase);
-
 const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(1),
-  },
   root: {
     display: "flex",
   },
@@ -136,8 +93,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    //backgroundColor: "yellow",
-    alignItems: "center",
   },
   fixedHeight: {
     height: 240,
@@ -145,46 +100,18 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     marginBottom: "20px",
   },
-  generalContainer: {
-    display: "flex",
-    marginTop: "5%",
-    backgroundColor: "yellow",
-    // flexDirection: "column",
-  },
-  smallContainer: {
-    flexDirection: "row",
-  },
-  icon: {
-    color: "rgba(71, 184, 129, 1)",
-  },
-  titolo: {
-    fontWeight: 500,
-    fontStyle: "normal",
-    fontSize: "24px",
-    color: "#66788A",
-    lineHeight: "20px",
-    color: "rgba(71, 184, 129, 1)",
-  },
-  bootstrapInput: {
-    flexDirection: "row",
-    width: "400px",
-  },
-  label: {
-    padding: "5%",
-    width: "200px",
-  },
-  divLabel: {
-    marginTop: "1%",
-  },
 }));
 
-function OutboundProxy() {
+function AmministrazioneAutorizzazioni() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -213,37 +140,53 @@ function OutboundProxy() {
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
+      <Container maxWidth="lg" className={classes.container}>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
 
-        <Container maxWidth="lg" className={classes.container}>
           <div className={classes.containerNavbarItem}>
-            <NavbarItemEdit fontSize="large" />
+            <NavbarItemAdmin fontSize="large" />
           </div>
-        </Container>
-        <div className={classes.buttonContainer}>
-          <ButtonNotClickedGreen nome="LINEE" />
 
-          <ButtonClickedGreen nome="OUTBOUND PROXY" />
+          <div className={classes.buttonContainer}>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/amministrazione/utenze"
+            >
+              UTENZE
+            </Button>
+            {/* </NavLink> */}
 
-          <ButtonNotClickedGreen nome="TEMPLATE" />
-
-          <ButtonNotClickedGreen nome="TEST" />
-        </div>
-
-        <Paper className={classes.paper}>
-          <ListItem>
-            <ListItemIcon className={classes.listItemIcon}>
-              <DnsIcon fontSize="large" className={classes.icon} />
-            </ListItemIcon>
-            <Typography className={classes.titolo}> Outbound Proxy </Typography>
-          </ListItem>
-
-          <InputSelect />
-        </Paper>
-      </main>
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/amministrazione/ruoli"
+            >
+              RUOLI{" "}
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/amministrazione/autorizzazioni"
+            >
+              AUTORIZZAZIONI
+            </Button>
+          </div>
+          <Paper className={classes.paper}>
+            <GestioneUtenti />
+          </Paper>
+        </main>
+      </Container>
     </div>
   );
 }
 
-export default OutboundProxy;
+export default AmministrazioneAutorizzazioni;
