@@ -11,6 +11,7 @@ import logo from "../assets/logoReply.png";
 import Typography from "@material-ui/core/Typography";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { ButtonGroup } from "@material-ui/core";
+import { shadows } from "@material-ui/system";
 
 const drawerWidth = 240;
 
@@ -21,10 +22,11 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
     backgroundColor: "#FFFFFF",
-    border: "1px solid #47B881",
+    border: "01px solid #47B881",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    boxShadow: "none",
   },
   toolbarIcon: {
     display: "flex",
@@ -127,7 +129,7 @@ function Navbar() {
   return (
     <>
       <CssBaseline />
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className={classes.toolbar} boxShadow={0}>
         {/* <IconButton
           edge="start"
           color="inherit"

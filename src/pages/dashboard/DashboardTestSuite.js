@@ -107,8 +107,8 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
   },
   container: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
   },
   paper: {
     padding: theme.spacing(2),
@@ -137,7 +137,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: "20px",
-    marginTop: "px",
   },
 
   bottonTest: {
@@ -209,9 +208,9 @@ function DashboardTestSuite() {
           <div className={classes.bottonTest}>
             {/* <NavLink exact to="/dashboard/testcase"> */}
             <Button
-              className={classes.buttonNotClickedGreen}
+              className="button-green"
               component={NavLink}
-              activeClassName={classes.active}
+              activeClassName="button-green-active"
               exact
               to="/dashboard/testcase"
             >
@@ -221,13 +220,13 @@ function DashboardTestSuite() {
 
             {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
-              className={classes.buttonNotClickedGreen}
+              className="button-green"
               component={NavLink}
-              activeClassName={classes.active}
+              activeClassName="button-green-active"
               exact
               to="/dashboard/testsuite"
             >
-              Test Case
+              Test suite
             </Button>
             {/* </NavLink> */}
           </div>

@@ -125,7 +125,7 @@ const useStyles = makeStyles((theme) => ({
   },
   scritta: {
     padding: "20px",
-    fontFamily: "roboto",
+    // fontFamily: "roboto",
     fontSize: "26px",
     color: "#47B881",
     letterSpacing: "0.15px",
@@ -188,7 +188,7 @@ function Launching() {
 
         <Container maxWidth="lg" className={classes.container}>
           <div className={classes.containerNavbarItem}>
-            <NavbarItemLaunch fontSize="large" />
+            <NavbarItemLaunch />
           </div>
 
           <Paper className={classes.generalContainer} elevation={1}>

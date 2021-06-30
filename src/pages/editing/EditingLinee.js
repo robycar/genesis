@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
@@ -10,12 +10,15 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../components/listItems";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import { mainListItems, secondaryListItems } from "../../components/listItems";
+import NavbarItemEdit from "../../components/NavbarItemEdit";
+import ButtonClickedGreen from "../../components/ButtonClickedGreen";
+import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
-import GestioneUtenti from "../components/GestioneUtenti";
-import NavbarItemAdmin from "../components/NavbarItemAdmin";
+import Linee from "../../components/Linee";
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import "../../styles/App.css";
 
 const drawerWidth = 240;
 
@@ -101,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Amministrazione() {
+function EditingLinee() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -144,18 +147,52 @@ function Amministrazione() {
           <div className={classes.appBarSpacer} />
 
           <div className={classes.containerNavbarItem}>
-            <NavbarItemAdmin fontSize="large" />
+            <NavbarItemEdit fontSize="large" />
           </div>
 
           <div className={classes.buttonContainer}>
-            <ButtonClickedGreen nome="UTENZE" />
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/linee"
+            >
+              LINEE
+            </Button>
+            {/* </NavLink> */}
 
-            <ButtonNotClickedGreen nome="RUOLI" />
-
-            <ButtonNotClickedGreen nome="AUTORIZZAZIONI" />
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/outboundproxy"
+            >
+              OUTBOUND PROXY
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/template"
+            >
+              TEMPLATE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/test"
+            >
+              TEST
+            </Button>
           </div>
           <Paper className={classes.paper}>
-            <GestioneUtenti />
+            <Linee />
           </Paper>
         </main>
       </Container>
@@ -163,4 +200,4 @@ function Amministrazione() {
   );
 }
 
-export default Amministrazione;
+export default EditingLinee;

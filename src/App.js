@@ -1,7 +1,7 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Amministrazione from "./pages/Amministrazione";
 import Dashboard from "./pages/dashboard/Dashboard";
-import Editing from "./pages/Editing";
+import Editing from "./pages/editing/Editing";
 import Launching from "./pages/Launching";
 import Report from "./pages/Report";
 import Supporto from "./pages/Supporto";
@@ -11,20 +11,32 @@ import Documentation from "./pages/Documentation";
 import ProvaModale from "./pages/ProvaModale";
 import CreaLinea from "./pages/CreaLinea";
 import OutboundProxy from "./pages/OutboundProxy";
+import EditingLinee from "./pages/editing/EditingLinee";
+import EditingOutboundProxy from "./pages/editing/EditingOutboundProxy";
+import EditingTemplate from "./pages/editing/EditingTemplate";
+import EditingTest from "./pages/editing/EditingTest";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Dashboard} />
-        <Route path="/launching" exact component={Launching} />
         <Route path="/dashboard/testcase" exact component={DashboardTestCase} />
         <Route
           path="/dashboard/testsuite"
           exact
           component={DashboardTestSuite}
         />
+        <Route path="/launching" exact component={Launching} />
         <Route path="/editing" exact component={Editing} />
+        <Route path="/editing/linee" exact component={EditingLinee} />
+        <Route
+          path="/editing/outboundproxy"
+          exact
+          component={EditingOutboundProxy}
+        />
+        <Route path="/editing/template" exact component={EditingTemplate} />
+        <Route path="/editing/test" exact component={EditingTest} />
         <Route path="/amministrazione" exact component={Amministrazione} />
         <Route path="/report" exact component={Report} />
         <Route path="/supporto" exact component={Supporto} />

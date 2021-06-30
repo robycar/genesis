@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
@@ -10,12 +10,15 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../components/listItems";
-import NavbarItemEdit from "../components/NavbarItemEdit";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import { mainListItems, secondaryListItems } from "../../components/listItems";
+import NavbarItemEdit from "../../components/NavbarItemEdit";
+import ButtonClickedGreen from "../../components/ButtonClickedGreen";
+import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
-import Linee from "../components/Linee";
+import Linee from "../../components/Linee";
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import "../../styles/App.css";
 
 const drawerWidth = 240;
 
@@ -139,27 +142,60 @@ function Editing() {
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
+      <Container maxWidth="lg" className={classes.container}>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
 
-        <Container maxWidth="lg" className={classes.container}>
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
           </div>
-        </Container>
-        <div className={classes.buttonContainer}>
-          <ButtonClickedGreen nome="LINEE" />
 
-          <ButtonNotClickedGreen nome="OUTBOUND PROXY" />
+          <div className={classes.buttonContainer}>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/linee"
+            >
+              LINEE
+            </Button>
+            {/* </NavLink> */}
 
-          <ButtonNotClickedGreen nome="TEMPLATE" />
-
-          <ButtonNotClickedGreen nome="TEST" />
-        </div>
-        <Paper className={classes.paper}>
-          <Linee />
-        </Paper>
-      </main>
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/outboundproxy"
+            >
+              OUTBOUND PROXY
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/template"
+            >
+              TEMPLATE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/test"
+            >
+              TEST
+            </Button>
+          </div>
+          <Paper className={classes.paper}>
+            <Linee />
+          </Paper>
+        </main>
+      </Container>
     </div>
   );
 }

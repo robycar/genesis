@@ -10,7 +10,6 @@
   color:#212529;
 }
 
-
 .App {
   display: flex;
   height:100vh;
@@ -42,18 +41,28 @@
   background-color:  #d0e4ff !important;
 }
 
-/* .selected {
-  background-color: red;
-} */
 
-/* 
-a {
-  background-color: "white";
-  border: 1px solid #47B881 ;
+.button-green {
+  background-color: white !important;
+  border: 1px solid #47B881 !important;
   color: #47B881;
   width: 200px;
   height: 40px;
-  margin-right: 10px;
-} */
+  margin-right: 10px !important;
+}
 
+.button-green:hover {
+  background-color: #47B881 !important;
+  border: 1px solid white !important;
+  color: black !important;
+  width: 200px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+.button-green-active {
+  background-color: #47B881 !important;
+  border: 1px solid white !important;
+  color: white !important;
+  ;
 
+}
