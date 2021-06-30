@@ -9,7 +9,6 @@ import DashboardTestSuite from "./pages/dashboard/DashboardTestSuite";
 import Documentation from "./pages/Documentation";
 import ProvaModale from "./pages/ProvaModale";
 import CreaLinea from "./pages/CreaLinea";
-import OutboundProxy from "./pages/OutboundProxy";
 import EditingLinee from "./pages/editing/EditingLinee";
 import EditingOutboundProxy from "./pages/editing/EditingOutboundProxy";
 import EditingTemplate from "./pages/editing/EditingTemplate";
@@ -59,10 +58,10 @@ function App() {
 
         <Route path="/report" exact component={Report} />
         <Route path="/supporto" exact component={Supporto} />
+
         <Route path="/documentation" exact component={Documentation} />
         <Route path="/provaModale" exact component={ProvaModale} />
         <Route path="/creaLinea" exact component={CreaLinea} />
-        <Route path="/outboundProxy" exact component={OutboundProxy} />
       </Switch>
     </BrowserRouter>
   );
