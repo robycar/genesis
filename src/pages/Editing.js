@@ -139,27 +139,28 @@ function Editing() {
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
+      <Container maxWidth="lg" className={classes.container}>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
 
-        <Container maxWidth="lg" className={classes.container}>
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
           </div>
-        </Container>
-        <div className={classes.buttonContainer}>
-          <ButtonClickedGreen nome="LINEE" />
 
-          <ButtonNotClickedGreen nome="OUTBOUND PROXY" />
+          <div className={classes.buttonContainer}>
+            <ButtonClickedGreen nome="LINEE" />
 
-          <ButtonNotClickedGreen nome="TEMPLATE" />
+            <ButtonNotClickedGreen nome="OUTBOUND PROXY" />
 
-          <ButtonNotClickedGreen nome="TEST" />
-        </div>
-        <Paper className={classes.paper}>
-          <Linee />
-        </Paper>
-      </main>
+            <ButtonNotClickedGreen nome="TEMPLATE" />
+
+            <ButtonNotClickedGreen nome="TEST" />
+          </div>
+          <Paper className={classes.paper}>
+            <Linee />
+          </Paper>
+        </main>
+      </Container>
     </div>
   );
 }

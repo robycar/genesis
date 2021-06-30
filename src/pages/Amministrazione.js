@@ -139,25 +139,26 @@ function Amministrazione() {
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
+      <Container maxWidth="lg" className={classes.container}>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
 
-        <Container maxWidth="lg" className={classes.container}>
           <div className={classes.containerNavbarItem}>
             <NavbarItemAdmin fontSize="large" />
           </div>
-        </Container>
-        <div className={classes.buttonContainer}>
-          <ButtonClickedGreen nome="UTENZE" />
 
-          <ButtonNotClickedGreen nome="RUOLI" />
+          <div className={classes.buttonContainer}>
+            <ButtonClickedGreen nome="UTENZE" />
 
-          <ButtonNotClickedGreen nome="AUTORIZZAZIONI" />
-        </div>
-        <Paper className={classes.paper}>
-          <GestioneUtenti />
-        </Paper>
-      </main>
+            <ButtonNotClickedGreen nome="RUOLI" />
+
+            <ButtonNotClickedGreen nome="AUTORIZZAZIONI" />
+          </div>
+          <Paper className={classes.paper}>
+            <GestioneUtenti />
+          </Paper>
+        </main>
+      </Container>
     </div>
   );
 }

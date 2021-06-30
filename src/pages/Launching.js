@@ -188,7 +188,7 @@ function Launching() {
 
         <Container maxWidth="lg" className={classes.container}>
           <div className={classes.containerNavbarItem}>
-            <NavbarItemLaunch fontSize="large" />
+            <NavbarItemLaunch />
           </div>
 
           <Paper className={classes.generalContainer} elevation={1}>
