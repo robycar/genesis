@@ -17,13 +17,13 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Dashboard} />
-        <Route path="/launching" exact component={Launching} />
         <Route path="/dashboard/testcase" exact component={DashboardTestCase} />
         <Route
           path="/dashboard/testsuite"
           exact
           component={DashboardTestSuite}
         />
+        <Route path="/launching" exact component={Launching} />
         <Route path="/editing" exact component={Editing} />
         <Route path="/amministrazione" exact component={Amministrazione} />
         <Route path="/report" exact component={Report} />

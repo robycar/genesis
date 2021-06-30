@@ -172,7 +172,7 @@ const useStyles = makeStyles((theme) => ({
     height: "260px",
     border: "1px solid rgba(0, 0, 0, 0.32)",
     marginTop: "10px",
-    fontFamily: "Roboto",
+    // fontFamily: "Roboto",
   },
   bottone: {
     size: "small",
