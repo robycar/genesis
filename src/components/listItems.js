@@ -67,7 +67,7 @@ export const mainListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
-      to="/report"
+      to="/report/testsuite"
     >
       <ListItemIcon>
         <BarChartIcon />

@@ -10,17 +10,19 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../components/listItems";
-import Orders from "../components/TestCaseComplete";
-import NavbarItemReport from "../components/NavbarItemReport";
-import ButtonNotClickedBlue from "../components/ButtonNotClickedBlue";
-import ButtonClickedBlue from "../components/ButtonClickedBlue";
-import Table from "../components/Table";
-import img from "../assets/ggplot2_torta.png";
+import { mainListItems, secondaryListItems } from "../../components/listItems";
+import Orders from "../../components/TestCaseComplete";
+import NavbarItemReport from "../../components/NavbarItemReport";
+import ButtonNotClickedBlue from "../../components/ButtonNotClickedBlue";
+import ButtonClickedBlue from "../../components/ButtonClickedBlue";
+import Table from "../../components/Table";
 import { Typography } from "@material-ui/core";
-import ChartReport from '../components/ChartReport.js'
+import ChartReport from '../../components/ChartReport.js';
+import "../../styles/App.css";
+import Button from "@material-ui/core/Button";
+import { NavLink } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -157,7 +159,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Report() {
+function ReportTestCase() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -216,9 +218,24 @@ function Report() {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
-                <ButtonNotClickedBlue nome="Test Suite" />
-
-                <ButtonClickedBlue nome="Test Case" />
+                <Button
+                  component={NavLink}
+                  className="button-blue"
+                  activeClassName="button-blue-active"
+                  exact
+                  to="/report/testsuite"
+                >
+                  TEST SUITE
+                </Button>
+                <Button
+                  component={NavLink}
+                  className="button-blue"
+                  activeClassName="button-blue-active"
+                  exact
+                  to="/report/testcase"
+                >
+                  TEST CASE
+                </Button>
               </div>
             </Grid>
             <Grid item xs={12}>
@@ -247,4 +264,4 @@ function Report() {
   );
 }
 
-export default Report;
+export default ReportTestCase;

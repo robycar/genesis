@@ -3,7 +3,9 @@ import Amministrazione from "./pages/Amministrazione";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Editing from "./pages/editing/Editing";
 import Launching from "./pages/Launching";
-import Report from "./pages/Report";
+import Report from "./pages/report/Report";
+import ReportTestSuite from "./pages/report/ReportTestSuite";
+import ReportTestCase from "./pages/report/ReportTestCase";
 import Supporto from "./pages/Supporto";
 import DashboardTestCase from "./pages/dashboard/DashboardTestCase";
 import DashboardTestSuite from "./pages/dashboard/DashboardTestSuite";
@@ -39,6 +41,8 @@ function App() {
         <Route path="/editing/test" exact component={EditingTest} />
         <Route path="/amministrazione" exact component={Amministrazione} />
         <Route path="/report" exact component={Report} />
+        <Route path="/report/testsuite" exact component={ReportTestSuite} />
+        <Route path="/report/testcase" exact component={ReportTestCase} />
         <Route path="/supporto" exact component={Supporto} />
         <Route path="/documentation" exact component={Documentation} />
         <Route path="/provaModale" exact component={ProvaModale} />

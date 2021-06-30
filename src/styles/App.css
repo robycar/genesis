@@ -66,3 +66,27 @@
   ;
 
 }
+.button-blue {
+  background-color: white !important;
+  border: 1px solid #4352db !important;
+  color: #4352db;
+  width: 200px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+
+.button-blue:hover {
+  background-color: #4352db !important;
+  border: 1px solid white !important;
+  color: black !important;
+  width: 200px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+.button-blue-active {
+  background-color: #4352db !important;
+  border: 1px solid white !important;
+  color: white !important;
+  ;
+
+}
