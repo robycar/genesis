@@ -20,7 +20,7 @@ import ButtonClickedBlue from "../components/ButtonClickedBlue";
 import Table from "../components/Table";
 import img from "../assets/ggplot2_torta.png";
 import { Typography } from "@material-ui/core";
-import Chart from '../components/ChartReport.js'
+import ChartReport from '../components/ChartReport.js'
 
 const drawerWidth = 240;
 
@@ -147,9 +147,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     fontSize: "24px",
     padding: "5%",
-    marginLeft: "15%",
+    marginLeft: "20%",
     lineHeight: "20px",
   },
+  chart:{
+    position:"relative", 
+    width:"255px",
+    marginLeft:"90px"
+  }
 }));
 
 function Report() {
@@ -163,6 +168,14 @@ function Report() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  // const table = [
+  //     {col1:"", col2:"Run", col3:"Passed", col4:"N/A", col5:"Failed"},
+  //     {col1:"Registrazione",col2: 159, col3:6.0, col4:24, col5:4.0},
+  //     {col1:"Plug-In", col2: 237, col3:9.0, col4:37, col5:4.3},
+  //     {col1:"Focus P-CSCF", col2:262, col3:16.0, col4:24, col5:6.0},
+  //     {col1:"Total", col2:305, col3:3.7, col4:67, col5:4.3},
+  //   ]
+  
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -223,7 +236,9 @@ function Report() {
               <Typography className={classes.titleImg}>
                 Test Suite-CB Fibra
               </Typography>
-              <Chart />
+              <div className={classes.chart}>
+                <ChartReport />
+              </div>
             </Paper>
           </Paper>
         </Container>
