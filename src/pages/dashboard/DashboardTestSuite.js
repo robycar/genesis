@@ -226,7 +226,7 @@ function DashboardTestSuite() {
               exact
               to="/dashboard/testsuite"
             >
-              Test Case
+              Test suite
             </Button>
             {/* </NavLink> */}
           </div>

@@ -43,7 +43,7 @@ export const mainListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
-      to="/editing"
+      to="/editing/linee"
     >
       <ListItemIcon>
         <EditIcon />
