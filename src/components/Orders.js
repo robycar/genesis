@@ -388,9 +388,9 @@ export default function EnhancedTable() {
     activeObject: null,
     objects: [
       { id: 1, name: "Test Running" },
-      { id: 2, name: "Test Caricati" },
-      { id: 3, name: "Test Schedulati" },
-      { id: 4, name: "Test Conclusi" },
+      { id: 2, name: "Test Conclusi" },
+      { id: 3, name: "Test Caricati" },
+      { id: 4, name: "Test Schedulati" },
     ],
   });
 
@@ -447,9 +447,9 @@ export default function EnhancedTable() {
       </div>
       {appState.activeObject === null && <TestRunningTable />}
       {appState.objects[0] === appState.activeObject && <TestRunningTable />}
-      {appState.objects[1] === appState.activeObject && <TestCaricatiTable />}
-      {appState.objects[2] === appState.activeObject && <TestSchedulatiTable />}
-      {appState.objects[3] === appState.activeObject && <TestConclusiTable />}
+      {appState.objects[1] === appState.activeObject && <TestConclusiTable />}
+      {appState.objects[2] === appState.activeObject && <TestCaricatiTable />}
+      {appState.objects[3] === appState.activeObject && <TestSchedulatiTable />}
       {/* <TableContainer>
         <Table
           className={classes.table}
