@@ -559,7 +559,7 @@ const TestRunningTable = () => {
   return (
     <div>
       <MaterialTable
-        border={0}
+        style={{ boxShadow: "none" }}
         title="Test Running"
         data={data}
         columns={columns}
