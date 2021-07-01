@@ -14,11 +14,13 @@ import { mainListItems, secondaryListItems } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import { Paper } from "@material-ui/core";
+import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
 import Linee from "../../components/Linee";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
+import EqualizerIcon from "@material-ui/icons/Equalizer";
+import TestCaseTable from "../../components/TestCaseTable";
 
 const drawerWidth = 240;
 
@@ -101,6 +103,31 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     marginBottom: "20px",
+    marginTop: "2%",
+  },
+  generalPaper: {
+    alignItems: "baseline",
+  },
+  icon: {
+    color: "rgba(71, 184, 129, 1)",
+  },
+  titolo: {
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "24px",
+    color: "#66788A",
+    lineHeight: "20px",
+    color: "rgba(71, 184, 129, 1)",
+    padding: "2%",
+    // marginTop: "2%",
+  },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+  },
+  buttonTestContainer: {
+    marginTop: "2%",
   },
 }));
 
@@ -190,9 +217,43 @@ function EditingTest() {
             >
               TEST
             </Button>
+            <div className={classes.buttonTestContainer}>
+              <Button
+                className="button-blue"
+                component={NavLink}
+                color="primary"
+                variant="contained"
+                activeClassName="button-blue"
+                exact
+                to="/editing/test/testcase"
+              >
+                TEST CASE
+              </Button>
+              <Button
+                className="button-blue"
+                component={NavLink}
+                color="primary"
+                variant="contained"
+                activeClassName="button-blue"
+                exact
+                to="/editing/test/testsuite"
+              >
+                TEST SUITE
+              </Button>
+            </div>
           </div>
-          <Paper className={classes.paper}>
-            <Linee />
+          <Paper className={classes.generalPaper}>
+            <ListItem>
+              <ListItemIcon>
+                <EqualizerIcon fontSize="large" className={classes.icon} />
+              </ListItemIcon>
+              <Typography className={classes.titolo}>
+                {" "}
+                Total Test Case{" "}
+              </Typography>
+            </ListItem>
+            <Divider className={classes.divider} />
+            <TestCaseTable />
           </Paper>
         </main>
       </Container>

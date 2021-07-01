@@ -10,7 +10,6 @@ import DashboardTestCase from "./pages/dashboard/DashboardTestCase";
 import DashboardTestSuite from "./pages/dashboard/DashboardTestSuite";
 import Documentation from "./pages/Documentation";
 import ProvaModale from "./pages/ProvaModale";
-import CreaLinea from "./pages/CreaLinea";
 import EditingLinee from "./pages/editing/EditingLinee";
 import EditingOutboundProxy from "./pages/editing/EditingOutboundProxy";
 import EditingTemplate from "./pages/editing/EditingTemplate";
@@ -20,6 +19,7 @@ import AmministrazioneAutorizzazioni from "./pages/amministrazione/Amministrazio
 import AmministrazioneRuoli from "./pages/amministrazione/AmministrazioneRuoli";
 import AmministrazioneUtenze from "./pages/amministrazione/AmministrazioneUtenze";
 import Supporto from "./pages/supporto/Supporto";
+import EditingLineeCreaLinea from "./pages/editing/EditingLineeCreaLinea";
 
 function App() {
   return (
@@ -36,12 +36,18 @@ function App() {
         <Route path="/editing" exact component={Editing} />
         <Route path="/editing/linee" exact component={EditingLinee} />
         <Route
+          path="/editing/linee/crealinea"
+          exact
+          component={EditingLineeCreaLinea}
+        />
+        <Route
           path="/editing/outboundproxy"
           exact
           component={EditingOutboundProxy}
         />
         <Route path="/editing/template" exact component={EditingTemplate} />
         <Route path="/editing/test" exact component={EditingTest} />
+        {/* <Route path="/editing/test/testcase" exact component={EditingTestTestCase} /> */}
         <Route path="/amministrazione" exact component={Amministrazione} />
         <Route
           path="/amministrazione/utenze"
@@ -66,7 +72,6 @@ function App() {
         <Route path="/supporto/support" exact component={Supporto} />
         <Route path="/documentation" exact component={Documentation} />
         <Route path="/provaModale" exact component={ProvaModale} />
-        <Route path="/creaLinea" exact component={CreaLinea} />
       </Switch>
     </BrowserRouter>
   );

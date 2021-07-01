@@ -14,11 +14,15 @@ import { mainListItems, secondaryListItems } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import { Paper } from "@material-ui/core";
+import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
 import Linee from "../../components/Linee";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import InputSelect from "../../components/InputSelect";
 import "../../styles/App.css";
+import DnsIcon from "@material-ui/icons/Dns";
+import SelectBar from "../../components/SelectBar";
+import ButtonClickedBlue from "../../components/ButtonClickedBlue";
 
 const drawerWidth = 240;
 
@@ -89,18 +93,54 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
     display: "flex",
-    overflow: "auto",
     flexDirection: "column",
+    // backgroundColor: "blue",
   },
+
   fixedHeight: {
     height: 240,
   },
   buttonContainer: {
     marginBottom: "20px",
+  },
+
+  paper: {
+    //backgroundColor: "yellow",
+    display: "flex",
+    alignItems: "center",
+    padding: "3%",
+    justifyContent: "flex-start",
+  },
+
+  label: {
+    marginRight: "4%",
+    marginLeft: "8%",
+  },
+  icon: {
+    color: "rgba(71, 184, 129, 1)",
+  },
+  titolo: {
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "24px",
+    color: "#66788A",
+    lineHeight: "20px",
+    color: "rgba(71, 184, 129, 1)",
+    padding: "2%",
+    // marginTop: "2%",
+  },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+  },
+  paperBottone: {
+    padding: "2%",
+  },
+  bottone: {
+    marginTop: "2%",
+    marginLeft: "85%",
   },
 }));
 
@@ -142,6 +182,7 @@ function EditingOutboundProxy() {
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
+
       <Container maxWidth="lg" className={classes.container}>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -191,8 +232,43 @@ function EditingOutboundProxy() {
               TEST
             </Button>
           </div>
+          <Paper className={classes.generalPaper}>
+            <ListItem>
+              <ListItemIcon>
+                <DnsIcon fontSize="large" className={classes.icon} />
+              </ListItemIcon>
+              <Typography className={classes.titolo}>
+                {" "}
+                OutboundBound Proxy{" "}
+              </Typography>
+            </ListItem>
+            <Divider className={classes.divider} />
+          </Paper>
           <Paper className={classes.paper}>
-            <Linee />
+            <Typography className={classes.label}>Proxy IP Address</Typography>
+            <InputSelect />
+            <Typography>:</Typography>
+            <InputSelect />
+          </Paper>
+
+          <Paper className={classes.paper}>
+            <Typography className={classes.label}>Description</Typography>
+            <InputSelect />
+          </Paper>
+
+          <Paper className={classes.paper}>
+            <Typography className={classes.label}>Tipo Linea</Typography>
+            <SelectBar />
+          </Paper>
+          <Paper className={classes.paperBottone}>
+            <Divider className={classes.divider} />
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.bottone}
+            >
+              Salva
+            </Button>
           </Paper>
         </main>
       </Container>

@@ -1,19 +1,10 @@
 import React from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import NativeSelect from "@material-ui/core/NativeSelect";
 import InputBase from "@material-ui/core/InputBase";
-import { Paper, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 const BootstrapInput = withStyles((theme) => ({
-  root: {
-    "label + &": {
-      marginTop: theme.spacing(3),
-    },
-  },
   input: {
     borderRadius: 4,
     position: "relative",
@@ -41,30 +32,25 @@ const BootstrapInput = withStyles((theme) => ({
       boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
     },
   },
-  divGenerale: {
-    display: "flex",
-    flexDirection: "row",
-    backgroundColor: "red",
-  },
 }))(InputBase);
 
 const useStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(1),
-    backgroundColor: "red",
   },
 }));
 
-export default function CustomizedSelects() {
+function CustomizedSelects(props) {
   const classes = useStyles();
   const [age, setAge] = React.useState("");
   const handleChange = (event) => {
     setAge(event.target.value);
   };
   return (
-    <div className={classes.divGenerale}>
-      <Paper>Ciao 1</Paper>
-      <Paper>Ciao 2</Paper>
-    </div>
+    <FormControl className={classes.margin}>
+      <Typography className={classes.titolo}> {props.nome} </Typography>
+      <BootstrapInput id="demo-customized-textbox" />
+    </FormControl>
   );
 }
+export default CustomizedSelects;
