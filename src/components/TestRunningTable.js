@@ -464,25 +464,106 @@ import MaterialTable from "material-table";
 
 const TestRunningTable = () => {
   const data = [
-    { name: "Ramesh", age: 12 },
-    { name: "Roger", age: 13 },
-    { name: "Anna", age: 14 },
-    { name: "Emma", age: 15 },
+    {
+      launcher: "Adam Denisov",
+      age: 12,
+      nameTs: "PEM_001",
+      startDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
+      result: "",
+      trace: "",
+      callId: "469UHNKJ",
+      report: "Modale",
+      launch: "Lancio",
+    },
+    {
+      launcher: "Keith M. Boyce",
+      age: 12,
+      nameTs: "PEM_001",
+      startDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
+      result: "",
+      trace: "",
+      callId: "469UHNKJ",
+      report: "Modale",
+      launch: "Lancio",
+    },
+    {
+      launcher: "Stella D. Knight",
+      age: 12,
+      nameTs: "PEM_001",
+      startDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
+      result: "",
+      trace: "",
+      callId: "469UHNKJ",
+      report: "Modale",
+      launch: "Lancio",
+    },
+    {
+      launcher: "Walter E. Harmon",
+      age: 12,
+      nameTs: "PEM_001",
+      startDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
+      result: "",
+      trace: "",
+      callId: "469UHNKJ",
+      report: "Modale",
+      launch: "Lancio",
+    },
   ];
 
   const columns = [
     {
-      title: "Name",
-      field: "name",
+      title: "Launcher",
+      field: "launcher",
     },
     {
       title: "Age",
       field: "age",
     },
+    {
+      title: "Name TS",
+      field: "nameTs",
+    },
+    {
+      title: "Start Date",
+      field: "startDate",
+    },
+    {
+      title: "End Date",
+      field: "endDate",
+    },
+    {
+      title: "Result",
+      field: "result",
+    },
+    {
+      title: "Trace",
+      field: "trace",
+    },
+    {
+      title: "Call ID",
+      field: "callID",
+    },
+    {
+      title: "Report",
+      field: "report",
+    },
+    {
+      title: "Launch",
+      field: "launch",
+    },
   ];
   return (
     <div>
-      <MaterialTable title="Material Table" data={data} columns={columns} />
+      <MaterialTable
+        border={0}
+        title="Test Running"
+        data={data}
+        columns={columns}
+      />
     </div>
   );
 };
