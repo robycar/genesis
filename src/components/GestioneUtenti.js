@@ -21,6 +21,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import SearchBar from "./Search";
 import ButtonClickedGreen from "./ButtonClickedGreen";
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import "../styles/App.css";
 
 function createData(
   name,
@@ -212,12 +215,22 @@ const EnhancedTableToolbar = (props) => {
             variant="h6"
             id="tableTitle"
             component="div"
+            style={{ display: "flex" }}
           >
             Gestione Utenti
+            <SearchBar className={classes.searchBar} />
           </Typography>
-          <SearchBar className={classes.searchBar} />
+          
           <div className={classes.buttonRight}>
-            <ButtonClickedGreen nome="Add Utente" />
+          <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/amministrazione/addutente"
+            >
+              ADD UTENTE
+            </Button>
           </div>
         </>
       )}
