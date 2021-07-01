@@ -5,9 +5,10 @@ import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import TotalTestSuite from "../components/TotalTestSuite";
-import TotalTestCase from "../components/TotalTestCase";
-import TotalLines from "../components/TotalLines";
+import TotalPlannedWeeKlyTestSuite from "./TotalPlannedWeeKlyTestSuite";
+import TotalPlannedWeeKlyTestCase from "./TotalPlannedWeeKlyTestCase";
+import TotalPlannedDaylyTestCase from "./TotalPlannedDaylyTestCase";
+import TotalPlannedDaylyTestSuite from "./TotalPlannedDaylyTestSuite";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,22 +32,27 @@ function Card() {
 
   return (
     <Container maxWidth="lg" className={classes.container}>
-      <Grid container spacing={3}>
-        <Grid item xs={20} md={4} lg={4}>
+      <Grid container spacing={4}>
+        <Grid item xs={20} md={4} lg={3}>
           <Paper className={fixedHeightPaper}>
-            <TotalTestCase />
+            <TotalPlannedDaylyTestCase />
+          </Paper>
+        </Grid>
+        <Grid item xs={20} md={4} lg={3}>
+          <Paper className={fixedHeightPaper}>
+            <TotalPlannedWeeKlyTestCase />
           </Paper>
         </Grid>
         {/* Total Test Suite */}
-        <Grid item xs={20} md={4} lg={4}>
+        <Grid item xs={20} md={4} lg={3}>
           <Paper className={fixedHeightPaper}>
-            <TotalTestSuite />
+            <TotalPlannedDaylyTestSuite />
           </Paper>
         </Grid>
         {/* Total Test Case */}
-        <Grid item xs={20} md={4} lg={4}>
+        <Grid item xs={20} md={4} lg={3}>
           <Paper className={fixedHeightPaper}>
-            <TotalLines />
+            <TotalPlannedWeeKlyTestSuite />
           </Paper>
         </Grid>
       </Grid>

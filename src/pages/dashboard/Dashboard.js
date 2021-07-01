@@ -19,7 +19,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-import TotalTestSuite from "../../components/TotalTestSuite";
+import TotalTestSuite from "../../components/TotalPlannedWeeKlyTestSuite";
 import Orders from "../../components/Orders";
 import Navbar from "../../components/Navbar";
 import NavbarItem from "../../components/NavbarItem";
@@ -232,7 +232,7 @@ function Dashboard() {
               exact
               to="/dashboard/testsuite"
             >
-              Test Case
+              Test Suite
             </Button>
             {/* </NavLink> */}
           </div>
