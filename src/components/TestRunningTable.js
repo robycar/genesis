@@ -563,6 +563,9 @@ const TestRunningTable = () => {
         title="Test Running"
         data={data}
         columns={columns}
+        options={{
+          tableLayout: "fixed",
+        }}
       />
     </div>
   );
