@@ -5,6 +5,7 @@ import AmministrazioneRuoli from "./pages/amministrazione/AmministrazioneRuoli";
 import AmministrazioneAutorizzazioni from "./pages/amministrazione/AmministrazioneAutorizzazioni";
 import AmministrazioneGruppo from "./pages/amministrazione/AmministrazioneGruppo";
 import AmministrazioneAddUtente from "./pages/amministrazione/AmministrazioneAddUtente";
+import AmministrazioneCreaRuolo from "./pages/amministrazione/AmministrazioneCreaRuolo";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Editing from "./pages/editing/Editing";
 import Launching from "./pages/Launching";
@@ -50,6 +51,7 @@ function App() {
         <Route path="/amministrazione/autorizzazioni" exact component={AmministrazioneAutorizzazioni} /> 
         <Route path="/amministrazione/gruppo" exact component={AmministrazioneGruppo} /> 
         <Route path="/amministrazione/addutente" exact component={AmministrazioneAddUtente} /> 
+        <Route path="/amministrazione/crearuolo" exact component={AmministrazioneCreaRuolo} /> 
         <Route path="/report" exact component={Report} />
         <Route path="/report/testsuite" exact component={ReportTestSuite} />
         <Route path="/report/testcase" exact component={ReportTestCase} />

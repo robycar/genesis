@@ -14,7 +14,7 @@ import { mainListItems, secondaryListItems } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
-import GestioneUtenti from "../../components/GestioneUtenti";
+import GestioneAutorizzazzioni from "../../components/GestioneAutorizzazzioni";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Amministrazione() {
+function AmministrazioneAutorizzazzioni() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -176,7 +176,7 @@ function Amministrazione() {
               exact
               to="/amministrazione/autorizzazioni"
             >
-              AUTORIZZAZIONE
+              AUTORIZZAZIONI
             </Button>
             <Button
               className="button-green"
@@ -189,7 +189,7 @@ function Amministrazione() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-            <GestioneUtenti />
+            <GestioneAutorizzazzioni />
           </Paper>
         </main>
       </Container>
@@ -197,4 +197,4 @@ function Amministrazione() {
   );
 }
 
-export default Amministrazione;
+export default AmministrazioneAutorizzazzioni;

@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Amministrazione() {
+function AmministrazioneUtenze() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -176,7 +176,7 @@ function Amministrazione() {
               exact
               to="/amministrazione/autorizzazioni"
             >
-              AUTORIZZAZIONE
+              AUTORIZZAZIONI
             </Button>
             <Button
               className="button-green"
@@ -197,4 +197,4 @@ function Amministrazione() {
   );
 }
 
-export default Amministrazione;
+export default AmministrazioneUtenze;

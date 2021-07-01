@@ -20,7 +20,7 @@ import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import Grid from "@material-ui/core/Grid";
-import FormAddUtente from "../../components/FormAddUtente";
+import FormCreaRuolo from "../../components/FormCreaRuolo";
 
 
 const drawerWidth = 240;
@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AmministrazioneAddUtente() {
+function AmministrazioneCreaRuolo() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -196,7 +196,7 @@ function AmministrazioneAddUtente() {
                 CREA UTENTE
             </Grid>
             <Grid item xs={12} style={{display:"flex"}}>
-              <FormAddUtente />
+              <FormCreaRuolo />
             </Grid>
             
           </Paper>
@@ -206,4 +206,4 @@ function AmministrazioneAddUtente() {
   );
 }
 
-export default AmministrazioneAddUtente;
+export default AmministrazioneCreaRuolo;

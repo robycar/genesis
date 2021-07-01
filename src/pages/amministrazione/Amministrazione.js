@@ -176,7 +176,7 @@ function Amministrazione() {
               exact
               to="/amministrazione/autorizzazioni"
             >
-              AUTORIZZAZIONE
+              AUTORIZZAZIONI
             </Button>
             <Button
               className="button-green"

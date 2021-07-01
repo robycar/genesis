@@ -87,6 +87,91 @@
   background-color: #4352db !important;
   border: 1px solid white !important;
   color: white !important;
-  ;
+}
 
+.button-red {
+  background-color: #ff0419 !important;
+  border: 1px solid #ff0419 !important;
+  color: white!important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+
+.button-red:hover {
+  background-color: white !important;
+  border: 1px solid #eb3342 !important;
+  color: #eb3342 !important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+.button-green-2 {
+  background-color: #47B881 !important;
+  border: 1px solid #47B881 !important;
+  color: white!important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+
+.button-green-2:hover {
+  background-color: white !important;
+  border: 1px solid #47B881 !important;
+  color: #47B881 !important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+
+.button-light-blue {
+  background-color: #cce5ff !important;
+  border: 1px solid #308aeb !important;
+  color: #308aeb!important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+
+.button-light-blue:hover {
+  background-color: #449fff !important;
+  border: 1px solid #4f9df0 !important;
+  color: white !important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+.button-light-red {
+  background-color: #f8d7da !important;
+  border: 1px solid #eb3342 !important;
+  color: #eb3342!important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+
+.button-light-red:hover {
+  background-color: #eb3342 !important;
+  border: 1px solid #eb3342 !important;
+  color: white !important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+.button-light-yellow {
+  background-color: #fff3cd !important;
+  border: 1px solid #fccc2f !important;
+  color: #ffcb1f!important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
+}
+
+.button-light-yellow:hover {
+  background-color: #fccc2f !important;
+  border: 1px solid #fccc2f !important;
+  color: white !important;
+  width: 100px;
+  height: 40px;
+  margin-right: 10px !important;
 }
