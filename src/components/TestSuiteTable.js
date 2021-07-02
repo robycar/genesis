@@ -227,9 +227,9 @@ const EnhancedTableToolbar = (props) => {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/testcase/createstcase"
+              to="/editing/testsuite/createstsuite"
             >
-              CREA TEST CASE{" "}
+              CREA TEST SUITE{" "}
             </Button>
           </div>
         </>

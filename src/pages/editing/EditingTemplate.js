@@ -14,14 +14,21 @@ import { mainListItems, secondaryListItems } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
+import {
+  ListItem,
+  ListItemIcon,
+  Paper,
+  TextareaAutosize,
+  Typography,
+} from "@material-ui/core";
 import Linee from "../../components/Linee";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import Template from "../../components/Template";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import TextArea from "../../components/TextArea";
+import InputSelect from "../../components/InputSelect";
+import ButtonClickedBlue from "../../components/ButtonClickedBlue";
 
 const drawerWidth = 240;
 
@@ -126,6 +133,18 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "5%",
     lineHeight: "1px",
   },
+  textArea: {
+    width: "98%",
+    alignItems: "center",
+  },
+  divTextArea: {
+    width: "100%",
+    marginTop: "3%",
+  },
+  divButton: {
+    marginLeft: "81%",
+    marginTop: "2%",
+  },
 }));
 
 function EditingTemplate() {
@@ -210,7 +229,7 @@ function EditingTemplate() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/test"
+              to="/editing/testcase"
             >
               TEST
             </Button>
@@ -224,7 +243,18 @@ function EditingTemplate() {
             </ListItem>
             <Divider className={classes.divider} />
             <Template />
-            <TextArea />
+            <div className={classes.divTextArea}>
+              <Typography>Editor di Testo</Typography>
+              <TextareaAutosize
+                className={classes.textArea}
+                aria-label="empty textarea"
+                rowsMin={8}
+                placeholder="Inserisci il testo"
+              />{" "}
+            </div>
+            <div className={classes.divButton}>
+              <ButtonClickedBlue nome="Salva" size="small" />
+            </div>
           </Paper>
         </main>
       </Container>

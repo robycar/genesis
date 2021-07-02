@@ -13,14 +13,17 @@ import ProvaModale from "./pages/ProvaModale";
 import EditingLinee from "./pages/editing/EditingLinee";
 import EditingOutboundProxy from "./pages/editing/EditingOutboundProxy";
 import EditingTemplate from "./pages/editing/EditingTemplate";
-import EditingTest from "./pages/editing/EditingTest";
+// import EditingTest from "./pages/editing/EditingTest";
 import Amministrazione from "./pages/amministrazione/Amministrazione";
 import AmministrazioneAutorizzazioni from "./pages/amministrazione/AmministrazioneAutorizzazioni";
 import AmministrazioneRuoli from "./pages/amministrazione/AmministrazioneRuoli";
 import AmministrazioneUtenze from "./pages/amministrazione/AmministrazioneUtenze";
 import Supporto from "./pages/supporto/Supporto";
 import EditingLineeCreaLinea from "./pages/editing/EditingLineeCreaLinea";
-import EditingTestTestCase from "./pages/editing/EditingTestTestCase";
+import EditingTestCase from "./pages/editing/EditingTestCase";
+import EditingTestCaseCreaTestCase from "./pages/editing/EditingTestCaseCreaTestCase";
+import EditingTestSuite from "./pages/editing/EditingTestSuite";
+import EditingTestSuiteCreaTestSuite from "./pages/editing/EditingTestSuiteCreaTestSuite";
 
 function App() {
   return (
@@ -47,11 +50,23 @@ function App() {
           component={EditingOutboundProxy}
         />
         <Route path="/editing/template" exact component={EditingTemplate} />
-        <Route path="/editing/test" exact component={EditingTest} />
-        <Route
+        {/* <Route
           path="/editing/test/testcase"
           exact
           component={EditingTestTestCase}
+        /> */}
+        <Route path="/editing/testcase" exact component={EditingTestCase} />
+        <Route path="/editing/testsuite" exact component={EditingTestSuite} />
+
+        <Route
+          path="/editing/testcase/createstcase"
+          exact
+          component={EditingTestCaseCreaTestCase}
+        />
+        <Route
+          path="/editing/testsuite/createstsuite"
+          exact
+          component={EditingTestSuiteCreaTestSuite}
         />
         <Route path="/amministrazione" exact component={Amministrazione} />
         <Route

@@ -20,7 +20,7 @@ import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
-import TestCaseTable from "../../components/TestCaseTable";
+import TestSuiteTable from "../../components/TestSuiteTable";
 
 const drawerWidth = 240;
 
@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function EditingTest() {
+function EditingTestSuite() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -213,7 +213,7 @@ function EditingTest() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/test/testcase"
+              to="/editing/testcase"
             >
               TEST
             </Button>
@@ -221,22 +221,20 @@ function EditingTest() {
               <Button
                 className="button-green"
                 component={NavLink}
-                //color="primary"
+                color="primary"
                 variant="contained"
                 activeClassName="button-green-active"
                 exact
-                to="/editing/test/testcase"
+                to="/editing/testcase"
               >
                 TEST CASE
               </Button>
               <Button
                 className="button-green"
                 component={NavLink}
-                //color="primary"
-                variant="contained"
                 activeClassName="button-green-active"
                 exact
-                to="/editing/test/testsuite"
+                to="/editing/testsuite"
               >
                 TEST SUITE
               </Button>
@@ -249,7 +247,7 @@ function EditingTest() {
               </ListItemIcon>
               <Typography className={classes.titolo}>
                 {" "}
-                Total Test Case{" "}
+                Total Test Suite{" "}
               </Typography>
             </ListItem>
             <Divider className={classes.divider} />
@@ -261,4 +259,4 @@ function EditingTest() {
   );
 }
 
-export default EditingTest;
+export default EditingTestSuite;

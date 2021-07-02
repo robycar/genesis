@@ -186,7 +186,7 @@ function Editing() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/test/testcase"
+              to="/editing/testcase"
             >
               TEST
             </Button>
