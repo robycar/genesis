@@ -11,11 +11,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-<<<<<<< HEAD
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-=======
->>>>>>> develop
 import { Paper } from "@material-ui/core";
 import GestioneUtenti from "../../components/GestioneUtenti";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
@@ -154,11 +149,7 @@ function AmministrazioneUtenze() {
           </div>
 
           <div className={classes.buttonContainer}>
-<<<<<<< HEAD
-          <Button
-=======
             <Button
->>>>>>> develop
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -167,12 +158,9 @@ function AmministrazioneUtenze() {
             >
               UTENZE
             </Button>
-<<<<<<< HEAD
-=======
             {/* </NavLink> */}
 
             {/* <NavLink exact to="/dashboard/testsuite"> */}
->>>>>>> develop
             <Button
               className="button-green"
               component={NavLink}
@@ -180,11 +168,7 @@ function AmministrazioneUtenze() {
               exact
               to="/amministrazione/ruoli"
             >
-<<<<<<< HEAD
-              RUOLI
-=======
               RUOLI{" "}
->>>>>>> develop
             </Button>
             <Button
               className="button-green"
@@ -195,18 +179,6 @@ function AmministrazioneUtenze() {
             >
               AUTORIZZAZIONI
             </Button>
-<<<<<<< HEAD
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/gruppo"
-            >
-              GRUPPO
-            </Button>
-=======
->>>>>>> develop
           </div>
           <Paper className={classes.paper}>
             <GestioneUtenti />

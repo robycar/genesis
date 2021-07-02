@@ -11,15 +11,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-<<<<<<< HEAD
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import { Paper } from "@material-ui/core";
-import GestioneRuoli from "../../components/GestioneRuoli";
-=======
 import { Paper } from "@material-ui/core";
 import GestioneUtenti from "../../components/GestioneUtenti";
->>>>>>> develop
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -165,12 +158,9 @@ function AmministrazioneRuoli() {
             >
               UTENZE
             </Button>
-<<<<<<< HEAD
-=======
             {/* </NavLink> */}
 
             {/* <NavLink exact to="/dashboard/testsuite"> */}
->>>>>>> develop
             <Button
               className="button-green"
               component={NavLink}
@@ -178,11 +168,7 @@ function AmministrazioneRuoli() {
               exact
               to="/amministrazione/ruoli"
             >
-<<<<<<< HEAD
-              RUOLI
-=======
               RUOLI{" "}
->>>>>>> develop
             </Button>
             <Button
               className="button-green"
@@ -193,24 +179,9 @@ function AmministrazioneRuoli() {
             >
               AUTORIZZAZIONI
             </Button>
-<<<<<<< HEAD
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/gruppo"
-            >
-              GRUPPO
-            </Button>
-          </div>
-          <Paper className={classes.paper}>
-            <GestioneRuoli />
-=======
           </div>
           <Paper className={classes.paper}>
             <GestioneUtenti />
->>>>>>> develop
           </Paper>
         </main>
       </Container>

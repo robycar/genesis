@@ -1,14 +1,4 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-<<<<<<< HEAD
-import Amministrazione from "./pages/amministrazione/Amministrazione";
-import AmministrazioneUtenze from "./pages/amministrazione/AmministrazioneUtenze";
-import AmministrazioneRuoli from "./pages/amministrazione/AmministrazioneRuoli";
-import AmministrazioneAutorizzazioni from "./pages/amministrazione/AmministrazioneAutorizzazioni";
-import AmministrazioneGruppo from "./pages/amministrazione/AmministrazioneGruppo";
-import AmministrazioneAddUtente from "./pages/amministrazione/AmministrazioneAddUtente";
-import AmministrazioneCreaRuolo from "./pages/amministrazione/AmministrazioneCreaRuolo";
-=======
->>>>>>> develop
 import Dashboard from "./pages/dashboard/Dashboard";
 import Editing from "./pages/editing/Editing";
 import Launching from "./pages/Launching";
@@ -57,15 +47,6 @@ function App() {
         />
         <Route path="/editing/template" exact component={EditingTemplate} />
         <Route path="/editing/test" exact component={EditingTest} />
-<<<<<<< HEAD
-         <Route path="/amministrazione" exact component={Amministrazione} />
-        <Route path="/amministrazione/utenze" exact component={AmministrazioneUtenze} />
-        <Route path="/amministrazione/ruoli" exact component={AmministrazioneRuoli} />
-        <Route path="/amministrazione/autorizzazioni" exact component={AmministrazioneAutorizzazioni} /> 
-        <Route path="/amministrazione/gruppo" exact component={AmministrazioneGruppo} /> 
-        <Route path="/amministrazione/addutente" exact component={AmministrazioneAddUtente} /> 
-        <Route path="/amministrazione/crearuolo" exact component={AmministrazioneCreaRuolo} /> 
-=======
         {/* <Route path="/editing/test/testcase" exact component={EditingTestTestCase} /> */}
         <Route path="/amministrazione" exact component={Amministrazione} />
         <Route
@@ -84,7 +65,6 @@ function App() {
           component={AmministrazioneAutorizzazioni}
         />
 
->>>>>>> develop
         <Route path="/report" exact component={Report} />
         <Route path="/report/testsuite" exact component={ReportTestSuite} />
         <Route path="/report/testcase" exact component={ReportTestCase} />
