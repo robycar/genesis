@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.reply.sipp.jwt.JWTComponent;
 import it.reply.sipp.jwt.TokenVerificationException;
-import it.reply.sipp.model.Utente;
-import it.reply.sipp.model.repository.UtenteRepository;
+import it.reply.sipp.model.UserVO;
+import it.reply.sipp.model.repository.UserRepository;
 import it.reply.sipp.service.UserAuthenticationService;
 
 @Service("jwtAuthenticationService")
@@ -26,7 +25,7 @@ public class JWTAuthenticationService implements UserAuthenticationService {
 	private static final Log logger = LogFactory.getLog(JWTAuthenticationService.class);
 	
 	@Autowired
-	private UtenteRepository utenteRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
 	private JWTComponent jwtComponent;
@@ -36,22 +35,19 @@ public class JWTAuthenticationService implements UserAuthenticationService {
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 	public String login(String username, String password) throws BadCredentialsException {
 		
-		SecurityContextHolder.getContext().setAuthentication(null);
-		
-		
-		return utenteRepository.findByUsername(username)
+		return userRepository.findByUsername(username)
 				.filter(user -> Objects.equals(password, user.getPassword()))
 				.map(user -> jwtComponent.createToken(username))
 				.orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
 	}
 
 	@Override
-	public Utente authenticateByToken(String token) throws AuthenticationException {
+	public UserVO authenticateByToken(String token) throws AuthenticationException {
 		Object username;
 		try {
 			username = jwtComponent.verifyToken(token).get(JWTComponent.CLAIM_USERNAME);
 			return Optional.ofNullable(username)
-					.flatMap(name -> utenteRepository.findByUsername(String.valueOf(name)))
+					.flatMap(name -> userRepository.findByUsername(String.valueOf(name)))
 					.orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' not found."));
 		} catch (TokenVerificationException e) {
 			logger.error(e);
@@ -61,7 +57,6 @@ public class JWTAuthenticationService implements UserAuthenticationService {
 
 	@Override
 	public void logout(String username) {
-		// TODO Auto-generated method stub
 
 	}
 

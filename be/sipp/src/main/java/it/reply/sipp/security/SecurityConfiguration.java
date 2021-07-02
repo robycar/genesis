@@ -1,88 +1,120 @@
 package it.reply.sipp.security;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity(debug = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
-	private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
-			new AntPathRequestMatcher("/api/auth/login")
-	);
+	private static final String[] UNPROTECTED_URLS = { "/api/auth/login", "/api/test/**" };
 
-//	private static final String[] PUBLIC_URLS = { "/login" };
-	
-	private static final RequestMatcher PROTECTED_URS = new NegatedRequestMatcher(PUBLIC_URLS);
 	
 	@Autowired
-	private TokenAuthenticationProvider tokenAuthenticationProvider;
+	private UserDetailsServiceImpl userDetailsService;
+	
+	@Autowired
+	private ForbiddenEntryPoint forbiddenEntryPoint;
+	
+	
+	
+	@Bean(name="authenticationManager")
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+	
+	@Bean
+	public TokenAuthenticationFilter tokenAuthenticationFilter() {
+		return new TokenAuthenticationFilter();
+	};
+
+	
+	
+//	@Autowired
+//	private TokenAuthenticationProvider tokenAuthenticationProvider;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(tokenAuthenticationProvider);
+		//auth.authenticationProvider(tokenAuthenticationProvider);
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().requestMatchers(PUBLIC_URLS);
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		String encodingId = "bcrypt";
+		
+		Map<String, PasswordEncoder> encoders = new HashMap<>();
+		encoders.put(encodingId, new BCryptPasswordEncoder());
+		encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
+		encoders.put("scrypt", new SCryptPasswordEncoder());
+		encoders.put("noop", NoOpPasswordEncoder.getInstance());
+
+		return new DelegatingPasswordEncoder(encodingId, encoders);
 	}
+
+//	@Override
+//	public void configure(WebSecurity web) throws Exception {
+//		web.ignoring().antMatchers(UNPROTECTED_URLS);
+//	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		http.cors().and().csrf().disable()
+		.exceptionHandling().authenticationEntryPoint(forbiddenEntryPoint)
 		.and()
-		.exceptionHandling()
-		.defaultAuthenticationEntryPointFor(forbiddenEntryPoint(), PROTECTED_URS)
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
-		.authenticationProvider(tokenAuthenticationProvider)
-		.addFilterBefore(restAuthenticationFilter(), AnonymousAuthenticationFilter.class)
-		.authorizeRequests().anyRequest().authenticated()
+		.authorizeRequests().antMatchers(UNPROTECTED_URLS).permitAll()
+		.anyRequest().authenticated()
 		.and()
-		.csrf().disable()
-		.formLogin().disable()
-		.httpBasic().disable()
-		.logout().disable()
+		.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		
+//		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//		.and()
+//		.exceptionHandling().authenticationEntryPoint(null)
+//		.defaultAuthenticationEntryPointFor(forbiddenEntryPoint(), PROTECTED_URS)
+//		.and()
+//		.authenticationProvider(tokenAuthenticationProvider)
+//		.addFilterBefore(restAuthenticationFilter(), AnonymousAuthenticationFilter.class)
+//		.authorizeRequests().anyRequest().authenticated()
+//		.and()
+//		.csrf().disable()
+//		.formLogin().disable()
+//		.httpBasic().disable()
+//		.logout().disable()
 		;
 	}
 
 	
-	@Bean
-	public TokenAuthenticationFilter restAuthenticationFilter() throws Exception {
-		TokenAuthenticationFilter filter = new TokenAuthenticationFilter(PROTECTED_URS);
-		filter.setAuthenticationManager(authenticationManager());
-		filter.setAuthenticationSuccessHandler(successHandler());
-		return filter;
-	}
 
-	@Bean
-	public AuthenticationSuccessHandler successHandler() {
-		SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-		successHandler.setRedirectStrategy(new NoRedirectStrategy());
-		return successHandler;
-	}
 
-	@Bean
-	public AuthenticationEntryPoint forbiddenEntryPoint() {
-		return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);
-	}
+//	@Bean
+//	public AuthenticationSuccessHandler successHandler() {
+//		SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
+//		successHandler.setRedirectStrategy(new NoRedirectStrategy());
+//		return successHandler;
+//	}
+
 
 
 }

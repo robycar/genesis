@@ -2,33 +2,40 @@ package it.reply.sipp.api.auth.payload;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class LoginResponse {
 
 	private static final String BEARER = "Bearer";
 	
-	private String token;
-	private String type = BEARER;
+	@JsonProperty("access_token")
+	private String accessToken;
+	
+	@JsonProperty("token_type")
+	private String tokenType = BEARER;
+	
 	private String username;
 	private String email;
 	private List<String> roles;
+	private List<String> functions;
 	
 	public LoginResponse() {
 	}
 
-	public String getToken() {
-		return token;
+	public String getAccessToken() {
+		return accessToken;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 
-	public String getType() {
-		return type;
+	public String getTokenType() {
+		return tokenType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTokenType(String tokenType) {
+		this.tokenType = tokenType;
 	}
 
 	public String getUsername() {
@@ -54,7 +61,13 @@ public class LoginResponse {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
-	
-	
 
+	public List<String> getFunctions() {
+		return functions;
+	}
+
+	public void setFunctions(List<String> functions) {
+		this.functions = functions;
+	}
+	
 }

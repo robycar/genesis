@@ -1,6 +1,6 @@
 package it.reply.sipp.model;
 
-public enum UtenteType {
+public enum UserType {
 
 	LOCAL,
 	LDAP;
