@@ -460,7 +460,8 @@
 // }
 
 import React from "react";
-import MaterialTable from "material-table";
+import MaterialTable, { MTableToolbar } from "material-table";
+import { Button } from "@material-ui/core";
 
 const TestRunningTable = () => {
   const data = [
@@ -573,6 +574,18 @@ const TestRunningTable = () => {
           header: {
             actions: "Actions",
           },
+        }}
+        components={{
+          Toolbar: (props) => (
+            <div>
+              <MTableToolbar {...props} />
+              <div style={{ padding: "0px 10px" }}>
+                <Button variant="contained" color="primary">
+                  Primary
+                </Button>
+              </div>
+            </div>
+          ),
         }}
       />
     </div>
