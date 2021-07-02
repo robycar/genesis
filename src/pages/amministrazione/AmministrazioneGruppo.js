@@ -151,7 +151,7 @@ function AmministrazioneGruppo() {
           </div>
 
           <div className={classes.buttonContainer}>
-          <Button
+            <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"

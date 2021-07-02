@@ -22,7 +22,6 @@ import "../../styles/App.css";
 import Grid from "@material-ui/core/Grid";
 import FormCreaRuolo from "../../components/FormCreaRuolo";
 
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -154,7 +153,7 @@ function AmministrazioneCreaRuolo() {
           </div>
 
           <div className={classes.buttonContainer}>
-          <Button
+            <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -192,13 +191,12 @@ function AmministrazioneCreaRuolo() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-            <Grid item xs={12} >
-                CREA UTENTE
+            <Grid item xs={12}>
+              CREA UTENTE
             </Grid>
-            <Grid item xs={12} style={{display:"flex"}}>
+            <Grid item xs={12} style={{ display: "flex" }}>
               <FormCreaRuolo />
             </Grid>
-            
           </Paper>
         </main>
       </Container>
