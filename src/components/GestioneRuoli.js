@@ -26,43 +26,23 @@ import Button from "@material-ui/core/Button";
 import "../styles/App.css";
 
 function createData(
-  name,
-  calories,
-  fat,
-  carbs,
-  protein,
-  prova1,
-  prova2,
-  prova3,
-  prova4
+  ruolo,
+  descrizione,
+  button,
 ) {
   return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    prova1,
-    prova2,
-    prova3,
-    prova4,
+    ruolo,
+    descrizione,
+    button,
   };
 }
 
 const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3, 1, 2, 3, 4),
-  createData("Donut", 452, 25.0, 51, 4.9, 1, 2, 3, 4),
-  createData("Eclair", 262, 16.0, 24, 6.0, 1, 2, 3, 4),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0, 1, 2, 3, 4),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1, 2, 3, 4),
-  createData("Honeycomb", 408, 3.2, 87, 6.5, 1, 2, 3, 4),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 1, 2, 3, 4),
-  createData("Jelly Bean", 375, 0.0, 94, 0.0, 1, 2, 3, 4),
-  createData("KitKat", 518, 26.0, 65, 7.0, 1, 2, 3, 4),
-  createData("Lollipop", 392, 0.2, 98, 0.0, 1, 2, 3, 4),
-  createData("Marshmallow", 318, 0, 81, 2.0, 1, 2, 3, 4),
-  createData("Nougat", 360, 19.0, 9, 37.0, 1, 2, 3, 4),
-  createData("Oreo", 437, 18.0, 63, 4.0, 1, 2, 3, 4),
+  createData("Cupcake", "sdjbkskr",""),
+  createData("Donut", "sdjbkskk",""),
+  createData("Eclair", "sdjbkskk",""),
+  createData("Frozen yoghurt", "sdjbkskk",""),
+  createData("Oreo", "ishcsdjh",""),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -93,19 +73,14 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: "ruolo",
     numeric: false,
     disablePadding: true,
-    label: "Name TS",
+    label: "Ruolo",
   },
-  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
-  { id: "prova1", numeric: true, disablePadding: false, label: "Prova1" },
-  { id: "prova2", numeric: true, disablePadding: false, label: "Prova2" },
-  { id: "prova3", numeric: true, disablePadding: false, label: "Prova3" },
-  { id: "prova4", numeric: true, disablePadding: false, label: "Prova4" },
+  { id: "descrizione", numeric: false, disablePadding: false, label: "Descrizione" },
+  { id: "button", numeric: false, disablePadding: true, label: "" },
+
 ];
 
 function EnhancedTableHead(props) {
@@ -139,6 +114,8 @@ function EnhancedTableHead(props) {
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
+            maxWidht={"300px!important"}
+            
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -227,9 +204,9 @@ const EnhancedTableToolbar = (props) => {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/amministrazione/addutente"
+              to="/amministrazione/crearuolo"
             >
-              ADD UTENTE
+              CREA RUOLO
             </Button>
           </div>
         </>
@@ -294,7 +271,7 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("ruolo");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -308,19 +285,19 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.ruolo);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, ruolo) => {
+    const selectedIndex = selected.indexOf(ruolo);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, ruolo);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -348,7 +325,7 @@ export default function EnhancedTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (ruolo) => selected.indexOf(ruolo) !== -1;
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -376,17 +353,17 @@ export default function EnhancedTable() {
             {stableSort(rows, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const isItemSelected = isSelected(row.name);
+                const isItemSelected = isSelected(row.ruolo);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.name)}
+                    onClick={(event) => handleClick(event, row.ruolo)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.name}
+                    key={row.ruolo}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
@@ -401,16 +378,35 @@ export default function EnhancedTable() {
                       scope="row"
                       padding="none"
                     >
-                      {row.name}
+                      {row.ruolo}
                     </TableCell>
-                    <TableCell align="center">{row.carbs}</TableCell>
-                    <TableCell align="center">{row.fat}</TableCell>
-                    <TableCell align="center">{row.calories}</TableCell>
-                    <TableCell align="center">{row.protein}</TableCell>
-                    <TableCell align="center">{row.prova1}</TableCell>
-                    <TableCell align="center">{row.prova2}</TableCell>
-                    <TableCell align="center">{row.prova3}</TableCell>
-                    <TableCell align="center">{row.prova4}</TableCell>
+                    <TableCell align="left">{row.descrizione}</TableCell>
+                    <TableCell align="center">
+                      <Button
+                      className="button-light-blue"
+                      component={NavLink}
+                      exact
+                      to="/amministrazione/addutente"
+                      >
+                        VISUALIZZA
+                      </Button>
+                      <Button
+                      className="button-light-yellow"
+                      component={NavLink}
+                      exact
+                      to="/amministrazione/ruoli"
+                      >
+                        MODIFICA
+                      </Button>
+                      <Button
+                      className="button-light-red"
+                      component={NavLink}
+                      exact
+                      to="/amministrazione/ruoli"
+                      >
+                        CANCELLA
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}

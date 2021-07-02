@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { lighten, makeStyles } from "@material-ui/core/styles";
+import { lighten, makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -12,57 +12,69 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-
+import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import SearchBar from "./Search";
-import ButtonClickedGreen from "./ButtonClickedGreen";
-import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import "../styles/App.css";
+import SearchBar from "./Search";
+import { NavLink } from "react-router-dom";
+import EditIcon from "@material-ui/icons/Edit";
+import ImageIcon from "@material-ui/icons/Image";
+import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 
-function createData(
-  name,
-  calories,
-  fat,
-  carbs,
-  protein,
-  prova1,
-  prova2,
-  prova3,
-  prova4
-) {
+function createData(name, nomeTemplate, visualizza, modifica, elimina) {
   return {
     name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    prova1,
-    prova2,
-    prova3,
-    prova4,
+    nomeTemplate,
+    visualizza,
+    modifica,
+    elimina,
   };
 }
 
 const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3, 1, 2, 3, 4),
-  createData("Donut", 452, 25.0, 51, 4.9, 1, 2, 3, 4),
-  createData("Eclair", 262, 16.0, 24, 6.0, 1, 2, 3, 4),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0, 1, 2, 3, 4),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1, 2, 3, 4),
-  createData("Honeycomb", 408, 3.2, 87, 6.5, 1, 2, 3, 4),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 1, 2, 3, 4),
-  createData("Jelly Bean", 375, 0.0, 94, 0.0, 1, 2, 3, 4),
-  createData("KitKat", 518, 26.0, 65, 7.0, 1, 2, 3, 4),
-  createData("Lollipop", 392, 0.2, 98, 0.0, 1, 2, 3, 4),
-  createData("Marshmallow", 318, 0, 81, 2.0, 1, 2, 3, 4),
-  createData("Nougat", 360, 19.0, 9, 37.0, 1, 2, 3, 4),
-  createData("Oreo", 437, 18.0, 63, 4.0, 1, 2, 3, 4),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="delete">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <ImageIcon />
+    </IconButton>,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="delete">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <ImageIcon />
+    </IconButton>,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="delete">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <ImageIcon />
+    </IconButton>,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -93,19 +105,25 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: "",
     numeric: false,
     disablePadding: true,
-    label: "Name TS",
+    label: "",
   },
-  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
-  { id: "prova1", numeric: true, disablePadding: false, label: "Prova1" },
-  { id: "prova2", numeric: true, disablePadding: false, label: "Prova2" },
-  { id: "prova3", numeric: true, disablePadding: false, label: "Prova3" },
-  { id: "prova4", numeric: true, disablePadding: false, label: "Prova4" },
+  {
+    id: "nomeTemplate",
+    numeric: true,
+    disablePadding: false,
+    label: "Nome Template",
+  },
+  {
+    id: "visualizza",
+    numeric: true,
+    disablePadding: false,
+    label: "Visualizza",
+  },
+  { id: "modifica", numeric: true, disablePadding: false, label: "Modifica" },
+  { id: "elimina", numeric: true, disablePadding: false, label: "Elimina" },
 ];
 
 function EnhancedTableHead(props) {
@@ -136,7 +154,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.numeric ? "center" : "center"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -171,8 +189,9 @@ EnhancedTableHead.propTypes = {
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
+    // paddingLeft: theme.spacing(2),
+    // paddingRight: theme.spacing(1),
+    marginLeft: "30%",
   },
   highlight:
     theme.palette.type === "light"
@@ -210,26 +229,29 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <>
+          {/* <LibraryBooksIcon />
           <Typography
             className={classes.title}
             variant="h6"
             id="tableTitle"
             component="div"
-            style={{ display: "flex" }}
           >
-            Gestione Utenti
-            <SearchBar className={classes.searchBar} />
-          </Typography>
-          
+            Template
+          </Typography> */}
+
+          <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>
-          <Button
-              className="button-green"
+            {/* <ButtonClickedGreen nome="Add Linea" /> */}
+            <Button
+              color="secondary"
+              variant="contained"
+              className="button-red"
               component={NavLink}
-              activeClassName="button-green-active"
+              //   activeClassName="button-red-active"
               exact
-              to="/amministrazione/addutente"
+              to="/editing/template/carica"
             >
-              ADD UTENTE
+              CARICA{" "}
             </Button>
           </div>
         </>
@@ -257,9 +279,9 @@ EnhancedTableToolbar.propTypes = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
+  //   root: {
+  //     width: "100%",
+  //   },
   paper: {
     width: "100%",
     marginBottom: theme.spacing(2),
@@ -294,7 +316,7 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("nomeTemplate");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -340,7 +362,7 @@ export default function EnhancedTable() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value, 5));
     setPage(0);
   };
 
@@ -403,14 +425,10 @@ export default function EnhancedTable() {
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell align="center">{row.carbs}</TableCell>
-                    <TableCell align="center">{row.fat}</TableCell>
-                    <TableCell align="center">{row.calories}</TableCell>
-                    <TableCell align="center">{row.protein}</TableCell>
-                    <TableCell align="center">{row.prova1}</TableCell>
-                    <TableCell align="center">{row.prova2}</TableCell>
-                    <TableCell align="center">{row.prova3}</TableCell>
-                    <TableCell align="center">{row.prova4}</TableCell>
+                    <TableCell align="center">{row.modifica}</TableCell>
+                    <TableCell align="center">{row.visualizza}</TableCell>
+                    <TableCell align="center">{row.nomeTemplate}</TableCell>
+                    <TableCell align="center">{row.elimina}</TableCell>
                   </TableRow>
                 );
               })}

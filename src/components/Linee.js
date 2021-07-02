@@ -23,6 +23,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
 import ButtonClickedGreen from "./ButtonClickedGreen";
+import { NavLink } from "react-router-dom";
 
 function createData(
   name,
@@ -172,6 +173,7 @@ const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
+    marginLeft: "50%",
   },
   highlight:
     theme.palette.type === "light"
@@ -209,17 +211,26 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <>
-          <Typography
+          {/* <Typography
             className={classes.title}
             variant="h6"
             id="tableTitle"
             component="div"
           >
             Linee
-          </Typography>
+          </Typography> */}
           <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>
-            <ButtonClickedGreen nome="Add Linea" />
+            {/* <ButtonClickedGreen nome="Add Linea" /> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/linee/crealinea"
+            >
+              CREA LINEA{" "}
+            </Button>
           </div>
         </>
       )}

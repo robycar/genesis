@@ -12,18 +12,18 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-
+import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import "../styles/App.css";
 
 function createData(
   name,
@@ -173,6 +173,7 @@ const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
+    marginLeft: "50%",
   },
   highlight:
     theme.palette.type === "light"
@@ -210,26 +211,25 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <>
-          <Typography
+          {/* <Typography
             className={classes.title}
             variant="h6"
             id="tableTitle"
             component="div"
-            style={{ display: "flex" }}
           >
-            Gestione Utenti
-            <SearchBar className={classes.searchBar} />
-          </Typography>
-          
+            Linee
+          </Typography> */}
+          <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>
-          <Button
+            {/* <ButtonClickedGreen nome="Add Linea" /> */}
+            <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/amministrazione/addutente"
+              to="/editing/test/testcase/createstcase"
             >
-              ADD UTENTE
+              CREA TEST CASE{" "}
             </Button>
           </div>
         </>

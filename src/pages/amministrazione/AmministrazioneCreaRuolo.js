@@ -14,11 +14,13 @@ import { mainListItems, secondaryListItems } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
-import GestioneAutorizzazzioni from "../../components/GestioneAutorizzazzioni";
+import GestioneUtenti from "../../components/GestioneUtenti";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
+import Grid from "@material-ui/core/Grid";
+import FormCreaRuolo from "../../components/FormCreaRuolo";
 
 const drawerWidth = 240;
 
@@ -104,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AmministrazioneAutorizzazzioni() {
+function AmministrazioneCreaRuolo() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -189,7 +191,12 @@ function AmministrazioneAutorizzazzioni() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-            <GestioneAutorizzazzioni />
+            <Grid item xs={12}>
+              CREA UTENTE
+            </Grid>
+            <Grid item xs={12} style={{ display: "flex" }}>
+              <FormCreaRuolo />
+            </Grid>
           </Paper>
         </main>
       </Container>
@@ -197,4 +204,4 @@ function AmministrazioneAutorizzazzioni() {
   );
 }
 
-export default AmministrazioneAutorizzazzioni;
+export default AmministrazioneCreaRuolo;
