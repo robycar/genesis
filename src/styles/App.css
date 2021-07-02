@@ -175,3 +175,38 @@
   height: 40px;
   margin-right: 10px !important;
 }
+
+.cont-autorizzazioni{
+  border:1px gray solid;
+  border-radius:3px;
+  min-height:500px;
+}
+.ul-gest-auto{
+  list-style-type: none;
+  padding-left:0px;
+}
+.ul-gest-auto>a>li{
+  padding-left:45px;
+  margin-left:-1px;
+}
+.ul-gest-auto>a:hover{
+  font-weight:bold;
+  text-decoration: none;
+}
+.ul-gest-auto-remove>a>li:hover{
+  color:red;
+}
+.active-red{
+  color:red!important;
+  font-weight:bold;
+}
+.ul-gest-auto-add>a>li:hover{
+  color:#47B881;
+}
+.active-green{
+  color:#47B881!important;
+  font-weight:bold;
+}
+a{
+  color:black!important;
+}
