@@ -473,8 +473,6 @@ const TestRunningTable = () => {
       result: "",
       trace: "",
       callId: "469UHNKJ",
-      report: "Modale",
-      launch: "Lancio",
     },
     {
       launcher: "Keith M. Boyce",
@@ -485,8 +483,6 @@ const TestRunningTable = () => {
       result: "",
       trace: "",
       callId: "469UHNKJ",
-      report: "Modale",
-      launch: "Lancio",
     },
     {
       launcher: "Stella D. Knight",
@@ -497,8 +493,6 @@ const TestRunningTable = () => {
       result: "",
       trace: "",
       callId: "469UHNKJ",
-      report: "Modale",
-      launch: "Lancio",
     },
     {
       launcher: "Walter E. Harmon",
@@ -509,8 +503,6 @@ const TestRunningTable = () => {
       result: "",
       trace: "",
       callId: "469UHNKJ",
-      report: "Modale",
-      launch: "Lancio",
     },
   ];
 
@@ -547,14 +539,6 @@ const TestRunningTable = () => {
       title: "Call ID",
       field: "callID",
     },
-    {
-      title: "Report",
-      field: "report",
-    },
-    {
-      title: "Launch",
-      field: "launch",
-    },
   ];
   return (
     <div>
@@ -565,6 +549,30 @@ const TestRunningTable = () => {
         columns={columns}
         options={{
           tableLayout: "fixed",
+          actionsColumnIndex: -1,
+          selection: true,
+          columnsButton: true,
+        }}
+        actions={[
+          {
+            icon: "assessment_outlined",
+            tooltip: "Report",
+            onClick: (event, rowData) =>
+              alert("Ho cliccato" + rowData.launcher),
+            position: "row",
+          },
+          {
+            icon: "play_circle_outlined",
+            tooltip: "Launch",
+            onClick: (event, rowData) =>
+              alert("Ho cliccato" + rowData.launcher),
+            position: "row",
+          },
+        ]}
+        localization={{
+          header: {
+            actions: "Actions",
+          },
         }}
       />
     </div>

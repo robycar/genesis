@@ -399,6 +399,8 @@ export default function EnhancedTable() {
 
   function toggleActive(index) {
     changeState({ ...appState, activeObject: appState.objects[index] });
+
+    // console.log(appState.objects[index].name);
   }
 
   function toggleActiveStyles(index) {
