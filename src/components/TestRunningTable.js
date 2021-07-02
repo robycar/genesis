@@ -462,6 +462,7 @@
 import React from "react";
 import MaterialTable, { MTableToolbar } from "material-table";
 import { Button } from "@material-ui/core";
+import "../styles/App.css";
 
 const TestRunningTable = () => {
   const data = [
@@ -569,6 +570,12 @@ const TestRunningTable = () => {
               alert("Ho cliccato" + rowData.launcher),
             position: "row",
           },
+          {
+            icon: () => <Button>Click me</Button>,
+            tooltip: "Click me",
+            onClick: (event, rowData) => alert("Click me"),
+            isFreeAction: true,
+          },
         ]}
         localization={{
           header: {
@@ -579,9 +586,9 @@ const TestRunningTable = () => {
           Toolbar: (props) => (
             <div>
               <MTableToolbar {...props} />
-              <div style={{ padding: "0px 10px" }}>
+              <div className="button-load-test">
                 <Button variant="contained" color="primary">
-                  Primary
+                  LOAD TEST CASE
                 </Button>
               </div>
             </div>

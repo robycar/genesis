@@ -175,3 +175,10 @@
   height: 40px;
   margin-right: 10px !important;
 }
+
+.button-load-test {
+  position: static;
+  left:300px;
+  top:100px;
+
+}
