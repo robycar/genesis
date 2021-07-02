@@ -251,7 +251,7 @@ function EditingTestSuite() {
               </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <TestCaseTable />
+            <TestSuiteTable />
           </Paper>
         </main>
       </Container>
