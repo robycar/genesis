@@ -221,7 +221,6 @@ function EditingTestSuite() {
               <Button
                 className="button-green"
                 component={NavLink}
-                color="primary"
                 variant="contained"
                 activeClassName="button-green-active"
                 exact
