@@ -20,6 +20,7 @@ import AmministrazioneRuoli from "./pages/amministrazione/AmministrazioneRuoli";
 import AmministrazioneUtenze from "./pages/amministrazione/AmministrazioneUtenze";
 import Supporto from "./pages/supporto/Supporto";
 import EditingLineeCreaLinea from "./pages/editing/EditingLineeCreaLinea";
+import EditingTestTestCase from "./pages/editing/EditingTestTestCase";
 
 function App() {
   return (
@@ -47,7 +48,11 @@ function App() {
         />
         <Route path="/editing/template" exact component={EditingTemplate} />
         <Route path="/editing/test" exact component={EditingTest} />
-        {/* <Route path="/editing/test/testcase" exact component={EditingTestTestCase} /> */}
+        <Route
+          path="/editing/test/testcase"
+          exact
+          component={EditingTestTestCase}
+        />
         <Route path="/amministrazione" exact component={Amministrazione} />
         <Route
           path="/amministrazione/utenze"
