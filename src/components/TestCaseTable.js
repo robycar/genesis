@@ -227,9 +227,9 @@ const EnhancedTableToolbar = (props) => {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/linee/crealinea"
+              to="/editing/test/testcase/createstcase"
             >
-              CREA LINEA{" "}
+              CREA TEST CASE{" "}
             </Button>
           </div>
         </>

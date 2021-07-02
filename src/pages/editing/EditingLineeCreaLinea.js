@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
@@ -10,13 +10,15 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../components/listItems";
-import NavbarItemEdit from "../components/NavbarItemEdit";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import { mainListItems, secondaryListItems } from "../../components/listItems";
+import NavbarItemEdit from "../../components/NavbarItemEdit";
+import ButtonClickedGreen from "../../components/ButtonClickedGreen";
+import ButtonNotClickedGreen from "../../components/ButtonClickedGreen";
 import { Paper, Typography } from "@material-ui/core";
-import SelectBar from "../components/SelectBar";
-import CreaItem from "../components/CreaItem";
+import SelectBar from "../../components/SelectBar";
+import CreaItem from "../../components/CreaItem";
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const drawerWidth = 240;
 
@@ -95,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     //backgroundColor: "yellow",
     alignItems: "center",
+    marginLeft: "1%",
   },
   fixedHeight: {
     height: 240,
@@ -119,11 +122,11 @@ const useStyles = makeStyles((theme) => ({
   },
   bottone: {
     marginLeft: "65%",
-    marginTop: "5%",
+    marginTop: "10%",
   },
 }));
 
-function CreaLinea() {
+function EditingLineaCreaLinea() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -167,26 +170,52 @@ function CreaLinea() {
           </div>
         </Container>
         <div className={classes.buttonContainer}>
-          <ButtonClickedGreen nome="LINEE" />
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/linee"
+          >
+            LINEE
+          </Button>
+          {/* </NavLink> */}
 
-          <ButtonNotClickedGreen nome="OUTBOUND PROXY" />
-
-          <ButtonNotClickedGreen nome="TEMPLATE" />
-
-          <ButtonNotClickedGreen nome="TEST" />
+          {/* <NavLink exact to="/dashboard/testsuite"> */}
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/outboundproxy"
+          >
+            OUTBOUND PROXY
+          </Button>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/template"
+          >
+            TEMPLATE
+          </Button>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/test"
+          >
+            TEST
+          </Button>
         </div>
 
-        <Paper className={classes.paper}>
+        <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Linea" />
 
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  ID Linea{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Numero{" "}
@@ -195,7 +224,13 @@ function CreaLinea() {
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  ID Type Linea{" "}
+                  IP Linea{" "}
+                </Typography>
+                <SelectBar />
+              </Paper>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  Password{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
@@ -209,24 +244,24 @@ function CreaLinea() {
             <Paper className={classes.paperContainer2} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Password{" "}
+                  Type Linea{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
+
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  IP Simulatore{" "}
+                  Porta{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  IP Simulatore{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
+              <Paper className={classes.divSelect} elevation={0}></Paper>
               <div className={classes.bottone}>
-                <ButtonClickedGreen size="medium" nome="Crea" />
+                <ButtonClickedGreen
+                  className={classes.bottone}
+                  size="medium"
+                  nome="Crea"
+                />
               </div>
             </Paper>
           </div>
@@ -236,4 +271,4 @@ function CreaLinea() {
   );
 }
 
-export default CreaLinea;
+export default EditingLineaCreaLinea;

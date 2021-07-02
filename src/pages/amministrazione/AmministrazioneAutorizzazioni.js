@@ -11,10 +11,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
-import GestioneAutorizzazzioni from "../../components/GestioneAutorizzazzioni";
+import GestioneUtenti from "../../components/GestioneUtenti";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -104,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AmministrazioneAutorizzazzioni() {
+function AmministrazioneAutorizzazioni() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -151,7 +149,7 @@ function AmministrazioneAutorizzazzioni() {
           </div>
 
           <div className={classes.buttonContainer}>
-          <Button
+            <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -160,6 +158,9 @@ function AmministrazioneAutorizzazzioni() {
             >
               UTENZE
             </Button>
+            {/* </NavLink> */}
+
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -167,7 +168,7 @@ function AmministrazioneAutorizzazzioni() {
               exact
               to="/amministrazione/ruoli"
             >
-              RUOLI
+              RUOLI{" "}
             </Button>
             <Button
               className="button-green"
@@ -178,18 +179,9 @@ function AmministrazioneAutorizzazzioni() {
             >
               AUTORIZZAZIONI
             </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/gruppo"
-            >
-              GRUPPO
-            </Button>
           </div>
           <Paper className={classes.paper}>
-            <GestioneAutorizzazzioni />
+            <GestioneUtenti />
           </Paper>
         </main>
       </Container>
@@ -197,4 +189,4 @@ function AmministrazioneAutorizzazzioni() {
   );
 }
 
-export default AmministrazioneAutorizzazzioni;
+export default AmministrazioneAutorizzazioni;
