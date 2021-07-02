@@ -11,10 +11,15 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
+<<<<<<< HEAD
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
 import GestioneAutorizzazzioni from "../../components/GestioneAutorizzazzioni";
+=======
+import { Paper } from "@material-ui/core";
+import GestioneUtenti from "../../components/GestioneUtenti";
+>>>>>>> develop
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -104,7 +109,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+<<<<<<< HEAD
 function AmministrazioneAutorizzazzioni() {
+=======
+function AmministrazioneAutorizzazioni() {
+>>>>>>> develop
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -151,7 +160,11 @@ function AmministrazioneAutorizzazzioni() {
           </div>
 
           <div className={classes.buttonContainer}>
+<<<<<<< HEAD
           <Button
+=======
+            <Button
+>>>>>>> develop
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -160,6 +173,12 @@ function AmministrazioneAutorizzazzioni() {
             >
               UTENZE
             </Button>
+<<<<<<< HEAD
+=======
+            {/* </NavLink> */}
+
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
+>>>>>>> develop
             <Button
               className="button-green"
               component={NavLink}
@@ -167,7 +186,11 @@ function AmministrazioneAutorizzazzioni() {
               exact
               to="/amministrazione/ruoli"
             >
+<<<<<<< HEAD
               RUOLI
+=======
+              RUOLI{" "}
+>>>>>>> develop
             </Button>
             <Button
               className="button-green"
@@ -178,6 +201,7 @@ function AmministrazioneAutorizzazzioni() {
             >
               AUTORIZZAZIONI
             </Button>
+<<<<<<< HEAD
             <Button
               className="button-green"
               component={NavLink}
@@ -190,6 +214,11 @@ function AmministrazioneAutorizzazzioni() {
           </div>
           <Paper className={classes.paper}>
             <GestioneAutorizzazzioni />
+=======
+          </div>
+          <Paper className={classes.paper}>
+            <GestioneUtenti />
+>>>>>>> develop
           </Paper>
         </main>
       </Container>
@@ -197,4 +226,8 @@ function AmministrazioneAutorizzazzioni() {
   );
 }
 
+<<<<<<< HEAD
 export default AmministrazioneAutorizzazzioni;
+=======
+export default AmministrazioneAutorizzazioni;
+>>>>>>> develop

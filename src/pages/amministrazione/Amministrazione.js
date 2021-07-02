@@ -11,8 +11,6 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
 import GestioneUtenti from "../../components/GestioneUtenti";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
@@ -151,7 +149,7 @@ function Amministrazione() {
           </div>
 
           <div className={classes.buttonContainer}>
-          <Button
+            <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -160,6 +158,9 @@ function Amministrazione() {
             >
               UTENZE
             </Button>
+            {/* </NavLink> */}
+
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -167,7 +168,7 @@ function Amministrazione() {
               exact
               to="/amministrazione/ruoli"
             >
-              RUOLI
+              RUOLI{" "}
             </Button>
             <Button
               className="button-green"
@@ -177,15 +178,6 @@ function Amministrazione() {
               to="/amministrazione/autorizzazioni"
             >
               AUTORIZZAZIONI
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/gruppo"
-            >
-              GRUPPO
             </Button>
           </div>
           <Paper className={classes.paper}>
