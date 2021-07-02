@@ -219,22 +219,20 @@ function EditingTestTestCase() {
             </Button>
             <div className={classes.buttonTestContainer}>
               <Button
-                className="button-blue"
+                className="button-green"
                 component={NavLink}
-                color="primary"
                 variant="contained"
-                activeClassName="button-blue"
+                activeClassName="button-green-active"
                 exact
                 to="/editing/test/testcase"
               >
                 TEST CASE
               </Button>
               <Button
-                className="button-blue"
+                className="button-green"
                 component={NavLink}
-                color="primary"
                 variant="contained"
-                activeClassName="button-blue"
+                activeClassName="button-green-active"
                 exact
                 to="/editing/test/testsuite"
               >
