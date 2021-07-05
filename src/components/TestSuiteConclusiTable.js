@@ -5,7 +5,7 @@ import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import "../styles/App.css";
 
-const TestConclusiTable = () => {
+const TestSuiteConclusiTable = () => {
   const data = [
     {
       launcher: "Adam Denisov",
@@ -138,4 +138,4 @@ const TestConclusiTable = () => {
   );
 };
 
-export default TestConclusiTable;
+export default TestSuiteConclusiTable;

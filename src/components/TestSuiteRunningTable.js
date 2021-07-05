@@ -466,7 +466,7 @@ import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import "../styles/App.css";
 
-const TestRunningTable = () => {
+const TestSuiteRunningTable = () => {
   const data = [
     {
       launcher: "Adam Denisov",
@@ -599,4 +599,4 @@ const TestRunningTable = () => {
   );
 };
 
-export default TestRunningTable;
+export default TestSuiteRunningTable;

@@ -22,17 +22,17 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import ButtonClickedBlue from "../components/ButtonClickedBlue";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonNotClickedBlue from "../components/ButtonNotClickedBlue";
+import ButtonClickedGreen from "./ButtonClickedGreen";
+import ButtonClickedBlue from "./ButtonClickedBlue";
+import ButtonNotClickedGreen from "./ButtonNotClickedGreen";
+import ButtonNotClickedBlue from "./ButtonNotClickedBlue";
 import { logDOM } from "@testing-library/react";
 import "../styles/App.css";
 import ButtonList from "./ButtonList";
-import TestRunningTable from "./TestRunningTable";
-import TestCaricatiTable from "./TestCaricatiTable";
-import TestSchedulatiTable from "./TestSchedulatiTable";
-import TestConclusiTable from "./TestConclusiTable";
+import TestSuiteRunningTable from "./TestSuiteRunningTable";
+import TestSuiteCaricatiTable from "./TestSuiteCaricatiTable";
+import TestSuiteSchedulatiTable from "./TestSuiteSchedulatiTable";
+import TestSuiteConclusiTable from "./TestSuiteConclusiTable";
 
 function createData(
   name,
@@ -387,10 +387,10 @@ export default function EnhancedTable() {
   const [appState, changeState] = useState({
     activeObject: null,
     objects: [
-      { id: 1, name: "Test Case Running" },
-      { id: 2, name: "Test Case Conclusi" },
-      { id: 3, name: "Test Case Caricati" },
-      { id: 4, name: "Test Case Schedulati" },
+      { id: 1, name: "Test Suite Running" },
+      { id: 2, name: "Test Suite Conclusi" },
+      { id: 3, name: "Test Suite Caricati" },
+      { id: 4, name: "Test Suite Schedulati" },
     ],
   });
 
@@ -447,11 +447,19 @@ export default function EnhancedTable() {
           <ButtonClickedBlue nome="Test Conclusi" /> */}
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
       </div>
-      {appState.activeObject === null && <TestRunningTable />}
-      {appState.objects[0] === appState.activeObject && <TestRunningTable />}
-      {appState.objects[1] === appState.activeObject && <TestConclusiTable />}
-      {appState.objects[2] === appState.activeObject && <TestCaricatiTable />}
-      {appState.objects[3] === appState.activeObject && <TestSchedulatiTable />}
+      {appState.activeObject === null && <TestSuiteRunningTable />}
+      {appState.objects[0] === appState.activeObject && (
+        <TestSuiteRunningTable />
+      )}
+      {appState.objects[1] === appState.activeObject && (
+        <TestSuiteConclusiTable />
+      )}
+      {appState.objects[2] === appState.activeObject && (
+        <TestSuiteCaricatiTable />
+      )}
+      {appState.objects[3] === appState.activeObject && (
+        <TestSuiteSchedulatiTable />
+      )}
       {/* <TableContainer>
         <Table
           className={classes.table}

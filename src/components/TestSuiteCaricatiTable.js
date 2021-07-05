@@ -5,13 +5,13 @@ import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import "../styles/App.css";
 
-const TestConclusiTable = () => {
+const TestSuiteCaricatiTable = () => {
   const data = [
     {
       launcher: "Adam Denisov",
       nameTs: "PEM_001",
       startDate: "28/09/2020 13:10",
-      endDate: "28/09/2020 13:10",
+      endDate: "",
       result: "2/10",
       trace: "*****",
       mos: "",
@@ -20,7 +20,7 @@ const TestConclusiTable = () => {
       launcher: "Keith M. Boyce",
       nameTs: "PEM_002",
       startDate: "28/09/2020 13:10",
-      endDate: "28/09/2020 13:10",
+      endDate: "",
       result: "3/10",
       trace: "*****",
       mos: "",
@@ -29,7 +29,7 @@ const TestConclusiTable = () => {
       launcher: "Stella D. Knight",
       nameTs: "PEM_003",
       startDate: "28/09/2020 13:10",
-      endDate: "28/09/2020 13:10",
+      endDate: "",
       result: "4/10",
       trace: "*****",
       mos: "",
@@ -38,7 +38,7 @@ const TestConclusiTable = () => {
       launcher: "Walter E. Harmon",
       nameTs: "PEM_004",
       startDate: "28/09/2020 13:10",
-      endDate: "28/09/2020 13:10",
+      endDate: "",
       result: "5/10",
       trace: "*****",
       mos: "",
@@ -79,7 +79,7 @@ const TestConclusiTable = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="Total Test Case Conclusi"
+        title=" Total Test Case Schedulati"
         data={data}
         columns={columns}
         options={{
@@ -88,7 +88,7 @@ const TestConclusiTable = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
+          selection: true,
           // columnsButton: true,
           // filtering: true,
         }}
@@ -138,4 +138,4 @@ const TestConclusiTable = () => {
   );
 };
 
-export default TestConclusiTable;
+export default TestSuiteCaricatiTable;

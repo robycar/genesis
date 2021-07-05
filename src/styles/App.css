@@ -180,5 +180,8 @@
   position: static;
   left:300px;
   top:100px;
+}
 
+.MuiOutlinedInput-input {
+padding: 10px 5px!important;
 }
