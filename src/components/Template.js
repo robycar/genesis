@@ -38,10 +38,10 @@ function createData(name, nomeTemplate, visualizza, modifica, elimina) {
 const rows = [
   createData(
     "Cupcake",
-    <IconButton aria-label="delete">
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="delete">
+    <IconButton aria-label="show">
       <ImageIcon />
     </IconButton>,
     305,
@@ -51,10 +51,10 @@ const rows = [
   ),
   createData(
     "Cupcake",
-    <IconButton aria-label="delete">
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="delete">
+    <IconButton aria-label="show">
       <ImageIcon />
     </IconButton>,
     305,
@@ -64,10 +64,101 @@ const rows = [
   ),
   createData(
     "Cupcake",
-    <IconButton aria-label="delete">
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
+    <IconButton aria-label="show">
+      <ImageIcon />
+    </IconButton>,
+    305,
     <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="show">
+      <ImageIcon />
+    </IconButton>,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="show">
+      <ImageIcon />
+    </IconButton>,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="show">
+      <ImageIcon />
+    </IconButton>,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="show">
+      <ImageIcon />
+    </IconButton>,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="show">
+      <ImageIcon />
+    </IconButton>,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="show">
+      <ImageIcon />
+    </IconButton>,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Cupcake",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="show">
       <ImageIcon />
     </IconButton>,
     305,
@@ -141,7 +232,7 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    <TableHead>
+    <TableHead className={classes.tableHead}>
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
@@ -156,7 +247,6 @@ function EnhancedTableHead(props) {
             key={headCell.id}
             align={headCell.numeric ? "center" : "center"}
             padding={headCell.disablePadding ? "none" : "default"}
-            sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -189,9 +279,9 @@ EnhancedTableHead.propTypes = {
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
-    // paddingLeft: theme.spacing(2),
-    // paddingRight: theme.spacing(1),
-    marginLeft: "30%",
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    //marginLeft: "30%",
   },
   highlight:
     theme.palette.type === "light"
@@ -205,6 +295,13 @@ const useToolbarStyles = makeStyles((theme) => ({
         },
   title: {
     flex: "1 1 25%",
+  },
+  searchBar: {
+    marginRight: "2%",
+    marginLeft: "8%",
+    width: "650px",
+    marginTop: "1%",
+    marginBottom: "1%",
   },
 }));
 
@@ -239,15 +336,16 @@ const EnhancedTableToolbar = (props) => {
             Template
           </Typography> */}
 
-          <SearchBar className={classes.searchBar} />
+          <div className={classes.searchBar}>
+            <SearchBar />
+          </div>
           <div className={classes.buttonRight}>
-            {/* <ButtonClickedGreen nome="Add Linea" /> */}
             <Button
               color="secondary"
               variant="contained"
               className="button-red"
               component={NavLink}
-              //   activeClassName="button-red-active"
+              activeClassName="button-red-active"
               exact
               to="/editing/template/carica"
             >
@@ -311,6 +409,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  tableHead: {
+    backgroundColor: "rgba(236, 76, 71, 1)",
+  },
 }));
 
 export default function EnhancedTable() {
@@ -320,7 +421,7 @@ export default function EnhancedTable() {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";

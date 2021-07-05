@@ -18,51 +18,204 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
-import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
-import ButtonClickedGreen from "./ButtonClickedGreen";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { NavLink } from "react-router-dom";
 
 function createData(
   name,
-  calories,
-  fat,
-  carbs,
-  protein,
-  prova1,
-  prova2,
-  prova3,
-  prova4
+  IdLinea,
+  numero,
+  IpLinea,
+  porta,
+  edit,
+  elimina
+  // prova3,
+  // prova4
 ) {
   return {
     name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    prova1,
-    prova2,
-    prova3,
-    prova4,
+    IdLinea,
+    numero,
+    IpLinea,
+    porta,
+    edit,
+    elimina,
+    // prova3,
+    // prova4,
   };
 }
 
 const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3, 1, 2, 3, 4),
-  createData("Donut", 452, 25.0, 51, 4.9, 1, 2, 3, 4),
-  createData("Eclair", 262, 16.0, 24, 6.0, 1, 2, 3, 4),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0, 1, 2, 3, 4),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1, 2, 3, 4),
-  createData("Honeycomb", 408, 3.2, 87, 6.5, 1, 2, 3, 4),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 1, 2, 3, 4),
-  createData("Jelly Bean", 375, 0.0, 94, 0.0, 1, 2, 3, 4),
-  createData("KitKat", 518, 26.0, 65, 7.0, 1, 2, 3, 4),
-  createData("Lollipop", 392, 0.2, 98, 0.0, 1, 2, 3, 4),
-  createData("Marshmallow", 318, 0, 81, 2.0, 1, 2, 3, 4),
-  createData("Nougat", 360, 19.0, 9, 37.0, 1, 2, 3, 4),
-  createData("Oreo", 437, 18.0, 63, 4.0, 1, 2, 3, 4),
+  createData(
+    "Cupcake",
+    305,
+    3.7,
+    67,
+    4.3,
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>,
+    3,
+    4
+  ),
+  createData(
+    "Donut",
+    452,
+    25.0,
+    51,
+    4.9,
+    1,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    4
+  ),
+  createData(
+    "Eclair",
+    159,
+    6.0,
+    24,
+    4.0,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    5,
+    4
+  ),
+  createData(
+    "Frozen yoghurt",
+    159,
+    6.0,
+    24,
+    4.0,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    5,
+    4
+  ),
+  createData(
+    "Gingerbread",
+    159,
+    6.0,
+    24,
+    4.0,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    5,
+    4
+  ),
+  createData(
+    "Honeycomb",
+    159,
+    6.0,
+    24,
+    4.0,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    5,
+    4
+  ),
+  createData(
+    "Ice cream sandwich",
+    159,
+    6.0,
+    24,
+    4.0,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    5,
+    4
+  ),
+  createData(
+    "Jelly Bean",
+    159,
+    6.0,
+    24,
+    4.0,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    5,
+    4
+  ),
+
+  createData(
+    "Marshmallow",
+    159,
+    6.0,
+    24,
+    4.0,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    5,
+    4
+  ),
+  createData(
+    "Nougat",
+    159,
+    6.0,
+    24,
+    4.0,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    5,
+    4
+  ),
+  createData(
+    "Oreo",
+    159,
+    6.0,
+    24,
+    4.0,
+    <IconButton>
+      <EditIcon />
+    </IconButton>,
+    <IconButton>
+      <DeleteIcon />
+    </IconButton>,
+    5,
+    4
+  ),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -96,16 +249,16 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Name TS",
+    label: " ",
   },
-  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
-  { id: "prova1", numeric: true, disablePadding: false, label: "Prova1" },
-  { id: "prova2", numeric: true, disablePadding: false, label: "Prova2" },
-  { id: "prova3", numeric: true, disablePadding: false, label: "Prova3" },
-  { id: "prova4", numeric: true, disablePadding: false, label: "Prova4" },
+  { id: "IdLinea", numeric: true, disablePadding: false, label: "ID Linea" },
+  { id: "numero", numeric: true, disablePadding: false, label: "Numero" },
+  { id: "IpLinea", numeric: true, disablePadding: false, label: "IP Linea" },
+  { id: "porta", numeric: true, disablePadding: false, label: "Porta" },
+  { id: "edit", numeric: true, disablePadding: false, label: "Modifica" },
+  { id: "elimina", numeric: true, disablePadding: false, label: "Elimina" },
+  // { id: "prova3", numeric: true, disablePadding: false, label: "Prova3" },
+  // { id: "prova4", numeric: true, disablePadding: false, label: "Prova4" },
 ];
 
 function EnhancedTableHead(props) {
@@ -136,7 +289,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.numeric ? "center" : "left"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -173,7 +326,8 @@ const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
-    marginLeft: "50%",
+    // marginLeft: "50%",
+    display: "flex",
   },
   highlight:
     theme.palette.type === "light"
@@ -187,6 +341,11 @@ const useToolbarStyles = makeStyles((theme) => ({
         },
   title: {
     flex: "1 1 25%",
+  },
+  searchBar: {
+    marginRight: "2%",
+    marginLeft: "8%",
+    width: "650px",
   },
 }));
 
@@ -219,7 +378,10 @@ const EnhancedTableToolbar = (props) => {
           >
             Linee
           </Typography> */}
-          <SearchBar className={classes.searchBar} />
+          <div className={classes.searchBar}>
+            <SearchBar />
+          </div>
+
           <div className={classes.buttonRight}>
             {/* <ButtonClickedGreen nome="Add Linea" /> */}
             <Button
@@ -294,11 +456,11 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("IdLinea");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -342,10 +504,6 @@ export default function EnhancedTable() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
   };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
@@ -403,14 +561,14 @@ export default function EnhancedTable() {
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell align="center">{row.carbs}</TableCell>
-                    <TableCell align="center">{row.fat}</TableCell>
-                    <TableCell align="center">{row.calories}</TableCell>
-                    <TableCell align="center">{row.protein}</TableCell>
-                    <TableCell align="center">{row.prova1}</TableCell>
-                    <TableCell align="center">{row.prova2}</TableCell>
-                    <TableCell align="center">{row.prova3}</TableCell>
-                    <TableCell align="center">{row.prova4}</TableCell>
+                    <TableCell align="center">{row.IpLinea}</TableCell>
+                    <TableCell align="center">{row.numero}</TableCell>
+                    <TableCell align="center">{row.IdLinea}</TableCell>
+                    <TableCell align="center">{row.porta}</TableCell>
+                    <TableCell align="center">{row.edit}</TableCell>
+                    <TableCell align="center">{row.elimina}</TableCell>
+                    {/* <TableCell align="center">{row.prova3}</TableCell>
+                    <TableCell align="center">{row.prova4}</TableCell> */}
                   </TableRow>
                 );
               })}
@@ -423,7 +581,7 @@ export default function EnhancedTable() {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[10, 20, 30]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}
