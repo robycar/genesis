@@ -65,6 +65,7 @@ const useStyles = makeStyles({
   container: {
     maxHeight: 510,
     marginTop: "1%",
+    marginBottom: "5%",
   },
 });
 

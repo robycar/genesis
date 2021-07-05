@@ -24,6 +24,7 @@ import { NavLink } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import ImageIcon from "@material-ui/icons/Image";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
+import ShowModalDescription from "../components/ShowModalDescription";
 
 function createData(name, nomeTemplate, visualizza, modifica, elimina) {
   return {
@@ -41,9 +42,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -54,9 +53,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -67,9 +64,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -80,9 +75,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -93,9 +86,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -106,9 +97,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -119,9 +108,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -132,9 +119,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -145,9 +130,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -158,9 +141,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>,
+    <ShowModalDescription />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
