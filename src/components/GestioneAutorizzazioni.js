@@ -29,59 +29,138 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  contAutorizzazioni: {
+    border:"1px gray solid",
+    borderAadius:3,
+    minHeight:"500px",
+  },
+  ulGestAuto: {
+    listStyleType: "none",
+    paddingLeft:"0px",
+  },
+  liRemove:{
+    paddingLeft:"45px",
+    marginLeft:"-1px",
+    "&:hover": {
+      color:"red",
+    }
+  },
+  liAdd:{
+    paddingLeft:"45px",
+    marginLeft:"-1px",
+    "&:hover": {
+      color:"#47B881",
+    }
+  },
+  activeRed: {
+    color:"red!important",
+    fontWeight:"bold",
+    "&:hover": {
+      textDecoration: "none",
+    }
+  },
+  activeGreen: {
+    color:"#47B881!important",
+    fontWeight:"bold",
+    "&:hover": {
+      textDecoration: "none",
+    }
+  },
+  parola: {
+    color:"black!important",
+    "&:hover": {
+      fontWeight:"bold",
+      textDecoration: "none",
+    },
+    "&:active":{
+      color:"#47B881!important",
+      fontWeight:"bold"
+    }
+  },
+  buttonRed: {
+    backgroundColor: "#ff0419 !important",
+    border: "1px solid #ff0419 !important",
+    color: "white!important",
+    width: "100px",
+    height: "40px",
+    marginRight: "10px !important",
+    "&:hover": {
+      backgroundColor: "white !important",
+      color: "#eb3342 !important",
+    }
+  }, 
+  buttonGreen: {
+    backgroundColor: "#47B881 !important",
+    border: "1px solid #47B881 !important",
+    color: "white!important",
+    width: "100px",
+    height: "40px",
+    marginRight: "10px !important",
+    "&:hover": {
+      backgroundColor: "white !important",
+      color: "#47B881 !important",
+    }
+  }
+  
+  
+  
 }));
 
 function FormCreaRuolo() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const [appState, changeState] = useState({
+  const [appState] = useState({
 
     roleGeneral: [
-      { id: 1, name: "Test Running",type:"red"},
-      { id: 2, name: "Test Caricati",type:"green" },
-      { id: 3, name: "Test Schedulati",type:"green" },
-      { id: 4, name: "Test Conclusi",type:"red" },
+      { /*IL PRIMO ELEMENTO DEVE ESSERE VUOTO, ALTRIMENTI BUG 1° ELEMENTO*/ },
+      { id: 1, name: "Admin",type: "role",color:"green" },
+      { id: 2, name: "L1",type: "role",color:"green"},
+      { id: 3, name: "L2",type: "role",color:"green" },
+      { id: 4, name: "Admin",type: "role",color:"red" },
+      { id: 5, name: "Admin management",type: "permission",color:"green" },
+      { id: 6, name: "Admin user management",type: "permission",color:"green" },
+      { id: 7, name: "Admin role management",type: "permission",color:"green" },
+      { id: 8, name: "Report manager",type: "permission",color:"green" },
+      { id: 9, name: "SuperAdmin",type: "role",color:"green" },
+      { id: 10, name: "Workstation management",type: "permission",color:"green" },
+      { id: 11, name: "Line management",type: "permission",color:"green" },
     ],
   });
 
-  let precedente;
-  let idRuolo;
   function toggleActive(indice) {
     
-    
-    // if(appState.roleGeneral[precedente].type == "green")
-    //  document.getElementById(indice+1).className="active-red";
-    // else
-    //   document.getElementById(indice+1).className="active-green";
-  
-
-    if(appState.roleGeneral[indice].type == "green")
-      document.getElementById(indice+1).className="active-green";
+    if(appState.roleGeneral[indice].color == "green"){
+      document.getElementById(indice).className=(classes.activeGreen);
       
-    else
-      document.getElementById(indice+1).className="active-red";
-
-    document.getElementById("button1").value=indice;
-    document.getElementById("button2").value=indice;
-
-    precedente = indice;
-    console.log(idRuolo)
-    
+      document.getElementById("button1").value=indice;
+    }else{
+      document.getElementById(indice).className=(classes.activeRed);
+      document.getElementById("button2").value=indice;
+    }
+    if(document.getElementById("checkbox").value!="on" && document.getElementById("checkbox").value!=indice)
+      document.getElementById(document.getElementById("checkbox").value).className=(classes.parola);
+    document.getElementById("checkbox").value=indice
   }
+
   function transferGreen(){
-    if((appState.roleGeneral[(document.getElementById("button1").value)].type) =="green" )
-      appState.roleGeneral[(document.getElementById("button1").value)].type ="red"
+    if(document.getElementById("button1").value != 0)
+      if((appState.roleGeneral[(document.getElementById("button1").value)].color) =="green" ){
+        appState.roleGeneral[(document.getElementById("button1").value)].color ="red"
+        document.getElementById("button2").value = 0
+      }
   }
   function transferRed(){
-    if((appState.roleGeneral[(document.getElementById("button2").value)].type) =="red" )
-      appState.roleGeneral[(document.getElementById("button2").value)].type ="green";
+    if(document.getElementById("button2").value != 0)
+      if((appState.roleGeneral[(document.getElementById("button2").value)].color) =="red" ){
+        appState.roleGeneral[(document.getElementById("button2").value)].color ="green";
+        document.getElementById("button1").value = 0
+      }
   }
   
 
   return (
     <Container maxWidth="lg" className={classes.container}>
-
           <Container>
             <Form>
             <Row md={3}>
@@ -100,17 +179,33 @@ function FormCreaRuolo() {
               </Row>
               <Row md={3}>
                 <Col md={5} style={{paddingRight:"0!important"}}>
-                  <div className="cont-autorizzazioni">
+                  <div className={classes.contAutorizzazioni}>
                     <h6 style={{paddingLeft:"15px"}}>Ruoli</h6>
-                    <ul className="ul-gest-auto ul-gest-auto-add">
+                    <ul className={classes.ulGestAuto}>
 
                       {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].type == "green" ?
+                        return appState.roleGeneral[index].color == "green" && appState.roleGeneral[index].type == "role" ?
                           <a href="#"
                             key={index}
                             id={elements.id}
+                            className={classes.parola}
                             onClick={() => {toggleActive(index)}}
-                          ><li>{elements.name}</li></a>
+                          ><li className={classes.liAdd}>{elements.name}</li></a>
+                        :""
+                        })}
+
+                    </ul>
+                    <h6 style={{paddingLeft:"15px",paddingTop:"20px"}}>Permission</h6>
+                    <ul className={classes.ulGestAuto}>
+
+                      {appState.roleGeneral.map((elements, index) => {
+                        return appState.roleGeneral[index].color == "green" && appState.roleGeneral[index].type == "permission"?
+                          <a href="#"
+                            key={index}
+                            id={elements.id}
+                            className={classes.parola}
+                            onClick={() => {toggleActive(index)}}
+                          ><li className={classes.liAdd}>{elements.name}</li></a>
                         :""
                         })}
 
@@ -118,13 +213,14 @@ function FormCreaRuolo() {
                   </div>
                 </Col>
                 <Col md={2} >
+                <input id="checkbox" type="checkbox" style={{display:"none"}}/>
                   <br />
                   <br />
                   <br />
                   <div style={{display:"flex",justifyContent:"center"}}>
                     <button 
                       id="button1"
-                      className="button-green-2"
+                      className={classes.buttonGreen}
                       onClick={() => {transferGreen()}}
                       
                       >
@@ -134,29 +230,45 @@ function FormCreaRuolo() {
                   <br />
                   <br />
                   <div style={{display:"flex",justifyContent:"center"}}>
-                    <Button
-                      className="button-red"
+                    <button
                       id="button2"
+                      className={classes.buttonRed}
                       onClick={() => {transferRed()}}
                       >
                         &lt;&lt;&lt;
-                      </Button>
+                      </button>
                   </div>
 
                 </Col>
                 <Col md={5} style={{paddingLeft:"0!important"}}>
-                  <div className="cont-autorizzazioni">
+                  <div className={classes.contAutorizzazioni}>
                     <h6 style={{paddingLeft:"15px"}}>Ruoli</h6>
-                    <ul className="ul-gest-auto ul-gest-auto-remove">
+                    <ul className={classes.ulGestAuto}>
                       {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].type == "red" ?
+                        return appState.roleGeneral[index].color == "red" && appState.roleGeneral[index].type == "role" ?
                           <a href="#"
                             key={index}
                             id={elements.id}
+                            className={classes.parola}
                             onClick={() => {toggleActive(index)}}
-                          ><li>{elements.name}</li></a>
+                          ><li className={classes.liRemove}>{elements.name}</li></a>
                         :""
                         })}
+                    </ul>
+                    <h6 style={{paddingLeft:"15px",paddingTop:"20px"}}>Permission</h6>
+                    <ul className={classes.ulGestAuto}>
+
+                      {appState.roleGeneral.map((elements, index) => {
+                        return appState.roleGeneral[index].color == "red" && appState.roleGeneral[index].type == "permission"?
+                          <a href="#"
+                            key={index}
+                            id={elements.id}
+                            className={classes.parola}
+                            onClick={() => {toggleActive(index)}}
+                          ><li className={classes.liRemove}>{elements.name}</li></a>
+                        :""
+                        })}
+
                     </ul>
                   </div>
                 </Col>

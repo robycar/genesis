@@ -19,6 +19,7 @@ import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
+import Typography from "@material-ui/core/Typography";
 
 const drawerWidth = 240;
 
@@ -101,6 +102,13 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     marginBottom: "20px",
+  },
+  edit: {
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "35px",
+    color: "#66788A",
+    lineHeight: "20px",
   },
 }));
 
@@ -189,6 +197,7 @@ function AmministrazioneAutorizzazioni() {
             </Button>
           </div>
           <Paper className={classes.paper}>
+          <Typography className={classes.edit}> Autorizzazioni </Typography>
             <GestioneAutorizzazioni />
           </Paper>
         </main>
