@@ -127,12 +127,17 @@ const useStyles = makeStyles((theme) => ({
   },
   bottone: {
     marginLeft: "80%",
-    marginTop: "10%",
+    marginTop: "2%",
   },
-  // testSuiteTable: {
-  //   height: "500px",
-  //   marginTop: "5%",
-  // },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+    marginTop: "2%",
+  },
+  testSuiteSelect: {
+    margitBottom: "2%",
+  },
 }));
 
 function EditingTestTestSuiteCreaTestSuite() {
@@ -222,6 +227,7 @@ function EditingTestTestSuiteCreaTestSuite() {
 
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Test Suite" />
+          <Divider className={classes.divider} />
 
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
@@ -264,15 +270,17 @@ function EditingTestTestSuiteCreaTestSuite() {
 
             <Paper className={classes.paperContainer2} elevation={0}>
               <Typography>Seleziona i Test Case da associare:</Typography>
-              <TestSuiteSelect className={classes.TestSuiteSelect} />
-              <div className={classes.bottone}>
-                <ButtonClickedGreen
-                  className={classes.bottone}
-                  size="medium"
-                  nome="Crea"
-                />
-              </div>
+              <TestSuiteSelect className={classes.testSuiteSelect} />
             </Paper>
+          </div>
+          <Divider className={classes.divider} />
+
+          <div className={classes.bottone}>
+            <ButtonClickedGreen
+              className={classes.bottone}
+              size="medium"
+              nome="Crea"
+            />
           </div>
         </Paper>
       </main>

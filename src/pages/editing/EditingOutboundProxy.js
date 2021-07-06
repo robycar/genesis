@@ -12,17 +12,14 @@ import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
-import Linee from "../../components/Linee";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import InputSelect from "../../components/InputSelect";
 import "../../styles/App.css";
 import DnsIcon from "@material-ui/icons/Dns";
 import SelectBar from "../../components/SelectBar";
-import ButtonClickedBlue from "../../components/ButtonClickedBlue";
+import MultipleSelect from "../../components/MultipleSelect";
 
 const drawerWidth = 240;
 
@@ -142,18 +139,30 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2%",
     marginLeft: "85%",
   },
+  divSelect: {
+    marginLeft: "5%",
+  },
+  label1: {
+    marginRight: "8%",
+  },
+  label2: {
+    marginRight: "12%",
+  },
+  label3: {
+    marginRight: "12.5%",
+  },
+  multipleSelect: {
+    width: "217px",
+  },
 }));
 
 function EditingOutboundProxy() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -243,32 +252,37 @@ function EditingOutboundProxy() {
               </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-          </Paper>
-          <Paper className={classes.paper}>
-            <Typography className={classes.label}>Proxy IP Address</Typography>
-            <InputSelect />
-            <Typography>:</Typography>
-            <InputSelect />
-          </Paper>
 
-          <Paper className={classes.paper}>
-            <Typography className={classes.label}>Description</Typography>
-            <InputSelect />
-          </Paper>
+            <Paper className={classes.divSelect} elevation={0}>
+              <Paper className={classes.paper} elevation={0}>
+                <Typography className={classes.label1}>
+                  Proxy IP Address
+                </Typography>
+                <InputSelect />
+                <Typography>:</Typography>
+                <InputSelect />
+              </Paper>
 
-          <Paper className={classes.paper}>
-            <Typography className={classes.label}>Tipo Linea</Typography>
-            <SelectBar />
-          </Paper>
-          <Paper className={classes.paperBottone}>
-            <Divider className={classes.divider} />
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.bottone}
-            >
-              Salva
-            </Button>
+              <Paper className={classes.paper} elevation={0}>
+                <Typography className={classes.label2}>Description</Typography>
+                <InputSelect />
+              </Paper>
+
+              <Paper className={classes.paper} elevation={0}>
+                <Typography className={classes.label3}>Tipo Linea</Typography>
+                <MultipleSelect className={classes.multipleSelect} />
+              </Paper>
+            </Paper>
+            <Paper className={classes.paperBottone}>
+              <Divider className={classes.divider} />
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.bottone}
+              >
+                Salva
+              </Button>
+            </Paper>
           </Paper>
         </main>
       </Container>
