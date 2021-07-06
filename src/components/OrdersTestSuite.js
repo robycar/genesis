@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -12,59 +12,66 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-
+import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
 import ButtonClickedGreen from "./ButtonClickedGreen";
-import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
+import ButtonClickedBlue from "./ButtonClickedBlue";
+import ButtonNotClickedGreen from "./ButtonNotClickedGreen";
+import ButtonNotClickedBlue from "./ButtonNotClickedBlue";
+import { logDOM } from "@testing-library/react";
 import "../styles/App.css";
+import ButtonList from "./ButtonList";
+import TestSuiteRunningTable from "./TestSuiteRunningTable";
+import TestSuiteCaricatiTable from "./TestSuiteCaricatiTable";
+import TestSuiteSchedulatiTable from "./TestSuiteSchedulatiTable";
+import TestSuiteConclusiTable from "./TestSuiteConclusiTable";
 
 function createData(
-  id,
-  nome,
-  cognome,
-  telefono,
-  email,
-  password,
-  level,
-  gruppo,
-  azienda,
-  modifica,
-  cancella,
+  name,
+  calories,
+  fat,
+  carbs,
+  protein,
+  prova1,
+  prova2,
+  prova3,
+  prova4
 ) {
   return {
-    id,
-    nome,
-    cognome,
-    telefono,
-    email,
-    password,
-    level,
-    gruppo,
-    azienda,
-    modifica,
-    cancella,
+    name,
+    calories,
+    fat,
+    carbs,
+    protein,
+    prova1,
+    prova2,
+    prova3,
+    prova4,
   };
 }
 
 const rows = [
-  createData("DEV6301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6401", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV8301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV7301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV5301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6391", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6601", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6331", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV3501", "Maria", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV7401", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6041", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
+  createData("Cupcake", 305, 3.7, 67, 4.3, 1, 2, 3, 4),
+  createData("Donut", 452, 25.0, 51, 4.9, 1, 2, 3, 4),
+  createData("Eclair", 262, 16.0, 24, 6.0, 1, 2, 3, 4),
+  createData("Frozen yoghurt", 159, 6.0, 24, 4.0, 1, 2, 3, 4),
+  createData("Gingerbread", 356, 16.0, 49, 3.9, 1, 2, 3, 4),
+  createData("Honeycomb", 408, 3.2, 87, 6.5, 1, 2, 3, 4),
+  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 1, 2, 3, 4),
+  createData("Jelly Bean", 375, 0.0, 94, 0.0, 1, 2, 3, 4),
+  createData("KitKat", 518, 26.0, 65, 7.0, 1, 2, 3, 4),
+  createData("Lollipop", 392, 0.2, 98, 0.0, 1, 2, 3, 4),
+  createData("Marshmallow", 318, 0, 81, 2.0, 1, 2, 3, 4),
+  createData("Nougat", 360, 19.0, 9, 37.0, 1, 2, 3, 4),
+  createData("Oreo", 437, 18.0, 63, 4.0, 1, 2, 3, 4),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -95,21 +102,19 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "id",
+    id: "name",
     numeric: false,
     disablePadding: true,
-    label: "ID Utenza",
+    label: "Name TS",
   },
-  { id: "nome", numeric: false, disablePadding: false, label: "Nome" },
-  { id: "cognome", numeric: false, disablePadding: false, label: "Cognome" },
-  { id: "telefono", numeric: false, disablePadding: false, label: "Telefono" },
-  { id: "email", numeric: false, disablePadding: false, label: "Email" },
-  { id: "password", numeric: false, disablePadding: false, label: "Password" },
-  { id: "level", numeric: false, disablePadding: false, label: "Level" },
-  { id: "gruppo", numeric: false, disablePadding: false, label: "Gruppo" },
-  { id: "azienda", numeric: false, disablePadding: false, label: "Azienda" },
-  { id: "modifica", numeric: false, disablePadding: false, label: "Modifica" },
-  { id: "cancella", numeric: false, disablePadding: false, label: "Cancella" },
+  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
+  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
+  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
+  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
+  { id: "prova1", numeric: true, disablePadding: false, label: "Prova1" },
+  { id: "prova2", numeric: true, disablePadding: false, label: "Prova2" },
+  { id: "prova3", numeric: true, disablePadding: false, label: "Prova3" },
+  { id: "prova4", numeric: true, disablePadding: false, label: "Prova4" },
 ];
 
 function EnhancedTableHead(props) {
@@ -219,22 +224,12 @@ const EnhancedTableToolbar = (props) => {
             variant="h6"
             id="tableTitle"
             component="div"
-            style={{ display: "flex" }}
           >
-            Gestione Utenti
-            <SearchBar className={classes.searchBar} />
+            Total Test Case
           </Typography>
-          
+          <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>
-          <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/addutente"
-            >
-              ADD UTENTE
-            </Button>
+            <ButtonClickedBlue nome="Load Test Suite" />
           </div>
         </>
       )}
@@ -284,21 +279,53 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-around",
     marginTop: "10px",
     marginBottom: "10px",
+  },
+  buttonClickedBlue: {
+    backgroundColor: "#1665D8",
+    color: "primary",
+    marginLeft: "10px",
+    marginRight: "10px",
+    width: "200px",
+    height: "40px",
+  },
+
+  buttonNotClickedBlue: {
+    backgroundColor: "whute",
+    border: "1px solid #1665D8",
+    variant: "contained",
+    color: "#1665D8",
+    marginLeft: "10px",
+    marginRight: "10px",
+    width: "200px",
+    height: "40px",
   },
 
   buttonRight: {
     display: "flex",
     justifyContent: "flex-end",
   },
+
+  // inactive: {
+  //   backgroundColor: "#9b59b6 !important",
+  // },
+  // active: {
+  //   backgroundColor: "#3498db !important",
+  // },
+  box: {
+    width: "200px",
+    height: "200px",
+    margin: "10px",
+    border: "1px solid black",
+  },
 }));
 
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("id");
+  const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -312,19 +339,19 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = rows.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -352,15 +379,88 @@ export default function EnhancedTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const [appState, changeState] = useState({
+    activeObject: null,
+    objects: [
+      { id: 1, name: "Test Suite Running" },
+      { id: 2, name: "Test Suite Conclusi" },
+      { id: 3, name: "Test Suite Caricati" },
+      { id: 4, name: "Test Suite Schedulati" },
+    ],
+  });
+
+  // console.log(appState.activeObject);
+  // console.log(appState.objects[0]);
+
+  function toggleActive(index) {
+    changeState({ ...appState, activeObject: appState.objects[index] });
+
+    // console.log(appState.objects[index].name);
+  }
+
+  function toggleActiveStyles(index) {
+    if (appState.objects[index] === appState.activeObject) {
+      return "box nav-table-active";
+    } else {
+      return "box nav-table-inactive";
+    }
+  }
+  //  ||appState.activeObject === null
+
+  const [show, setShow] = useState(true);
+
+  function showActive() {
+    setShow(!show);
+  }
+
   return (
-    <div className={classes.root}>
-      <EnhancedTableToolbar numSelected={selected.length} />
-      <TableContainer>
+    <>
+      <div className={classes.buttonContainer}>
+        {/* <ButtonList /> */}
+        {appState.objects.map((elements, index) => (
+          <ButtonNotClickedBlue
+            key={index}
+            nome={elements.name}
+            className={toggleActiveStyles(index)}
+            onClick={() => {
+              toggleActive(index);
+              // showActive();
+            }}
+          />
+        ))}
+        {/* <ButtonNotClickedBlue
+            onClick={() => {
+              alert("Ciao");
+            }}
+            nome="Test in Running"
+          />
+
+          <ButtonNotClickedBlue nome="Test Running" />
+
+          <ButtonNotClickedBlue nome="Test Schedulati" />
+
+          <ButtonClickedBlue nome="Test Conclusi" /> */}
+        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+      </div>
+      {appState.activeObject === null && <TestSuiteRunningTable />}
+      {appState.objects[0] === appState.activeObject && (
+        <TestSuiteRunningTable />
+      )}
+      {appState.objects[1] === appState.activeObject && (
+        <TestSuiteConclusiTable />
+      )}
+      {appState.objects[2] === appState.activeObject && (
+        <TestSuiteCaricatiTable />
+      )}
+      {appState.objects[3] === appState.activeObject && (
+        <TestSuiteSchedulatiTable />
+      )}
+      {/* <TableContainer>
         <Table
           className={classes.table}
           aria-labelledby="tableTitle"
@@ -380,17 +480,17 @@ export default function EnhancedTable() {
             {stableSort(rows, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const isItemSelected = isSelected(row.id);
+                const isItemSelected = isSelected(row.name);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event) => handleClick(event, row.name)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id}
+                    key={row.name}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
@@ -405,30 +505,16 @@ export default function EnhancedTable() {
                       scope="row"
                       padding="none"
                     >
-                      {row.id}
+                      {row.name}
                     </TableCell>
-                    <TableCell align="left">{row.nome}</TableCell>
-                    <TableCell align="left">{row.cognome}</TableCell>
-                    <TableCell align="left">{row.telefono}</TableCell>
-                    <TableCell align="left">{row.email}</TableCell>
-                    <TableCell align="left">{row.password}</TableCell>
-                    <TableCell align="left">{row.level}</TableCell>
-                    <TableCell align="left">{row.gruppo}</TableCell>
-                    <TableCell align="left">{row.azienda}</TableCell>
-                    <TableCell align="center">
-                      <Button
-                      className="button-light-yellow"
-                      >
-                        MODIFICA
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                      className="button-light-red"
-                      >
-                        CANCELLA
-                      </Button>
-                    </TableCell>
+                    <TableCell align="center">{row.carbs}</TableCell>
+                    <TableCell align="center">{row.fat}</TableCell>
+                    <TableCell align="center">{row.calories}</TableCell>
+                    <TableCell align="center">{row.protein}</TableCell>
+                    <TableCell align="center">{row.prova1}</TableCell>
+                    <TableCell align="center">{row.prova2}</TableCell>
+                    <TableCell align="center">{row.prova3}</TableCell>
+                    <TableCell align="center">{row.prova4}</TableCell>
                   </TableRow>
                 );
               })}
@@ -448,7 +534,7 @@ export default function EnhancedTable() {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </div>
+      /> */}
+    </>
   );
 }

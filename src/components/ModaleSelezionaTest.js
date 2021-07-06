@@ -28,11 +28,15 @@ function getModalStyle() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    width: 400,
+    width: 500,
     backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
+    // border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   modal: {
     display: "flex",
@@ -75,6 +79,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "9px",
   },
   bottoni: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
     marginLeft: "55px",
     marginTop: "4%",
     marginBottom: "2%",
@@ -111,49 +118,47 @@ function SimpleModal(props) {
         }}
       >
         <Fade in={open}>
-          <div className={classes.paper}>
-            <Paper>
-              <div>
-                <ListItem button>
-                  <ListItemIcon>
-                    <BackupIcon className={classes.icon} />
-                  </ListItemIcon>
-                  <Typography className={classes.intestazione} variant="h5">
-                    {props.titolo1}{" "}
-                  </Typography>
-                </ListItem>
-              </div>
+          <Paper className={classes.paper}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h5">
+                  {props.titolo1}{" "}
+                </Typography>
+              </ListItem>
+            </div>
 
-              <div className={classes.paperBottom}>
-                <Typography variant="h6">{props.titolo2}</Typography>
-                <div className={classes.divSelectBar}>
-                  <div className={classes.divTextarea}>
-                    <Typography className={classes.contenuto} variant="h11">
-                      {props.label1}{" "}
-                    </Typography>
-                  </div>
-                  <SelectBar nome="Seleziona" classeName={classes.selectBar} />
-                </div>
-
+            <div className={classes.paperBottom}>
+              <Typography variant="h6">{props.titolo2}</Typography>
+              <div className={classes.divSelectBar}>
                 <div className={classes.divTextarea}>
                   <Typography className={classes.contenuto} variant="h11">
-                    {props.label2}
+                    {props.label1}{" "}
                   </Typography>
                 </div>
                 <SelectBar nome="Seleziona" classeName={classes.selectBar} />
-
-                <div className={classes.bottoni}>
-                  <Button variant="contained" color="secondary">
-                    Schedula Test
-                  </Button>
-
-                  <Button variant="contained" color="primary">
-                    Carica Test
-                  </Button>
-                </div>
               </div>
-            </Paper>
-          </div>
+
+              <div className={classes.divTextarea}>
+                <Typography className={classes.contenuto} variant="h11">
+                  {props.label2}
+                </Typography>
+              </div>
+              <SelectBar nome="Seleziona" classeName={classes.selectBar} />
+
+              <div className={classes.bottoni}>
+                <Button variant="contained" color="secondary">
+                  Schedula Test
+                </Button>
+
+                <Button variant="contained" color="primary">
+                  Carica Test
+                </Button>
+              </div>
+            </div>
+          </Paper>
         </Fade>
       </Modal>
     </div>

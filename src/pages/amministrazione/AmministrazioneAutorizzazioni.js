@@ -14,11 +14,12 @@ import { mainListItems, secondaryListItems } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
-import GestioneAutorizzazzioni from "../../components/GestioneAutorizzazzioni";
+import GestioneAutorizzazioni from "../../components/GestioneAutorizzazioni";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
+import Typography from "@material-ui/core/Typography";
 
 const drawerWidth = 240;
 
@@ -102,9 +103,16 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     marginBottom: "20px",
   },
+  edit: {
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "35px",
+    color: "#66788A",
+    lineHeight: "20px",
+  },
 }));
 
-function AmministrazioneAutorizzazzioni() {
+function AmministrazioneAutorizzazioni() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -189,7 +197,8 @@ function AmministrazioneAutorizzazzioni() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-            <GestioneAutorizzazzioni />
+          <Typography className={classes.edit}> Autorizzazioni </Typography>
+            <GestioneAutorizzazioni />
           </Paper>
         </main>
       </Container>
@@ -197,4 +206,4 @@ function AmministrazioneAutorizzazzioni() {
   );
 }
 
-export default AmministrazioneAutorizzazzioni;
+export default AmministrazioneAutorizzazioni;

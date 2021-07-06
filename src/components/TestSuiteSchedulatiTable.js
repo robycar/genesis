@@ -5,7 +5,7 @@ import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import "../styles/App.css";
 
-const TestSchedulatiTable = () => {
+const TestSuiteSchedulatiTable = () => {
   const data = [
     {
       launcher: "Adam Denisov",
@@ -109,7 +109,7 @@ const TestSchedulatiTable = () => {
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Load Test Suite"></ButtonClickedBlue>
             ),
             tooltip: "Load Test Suite",
             onClick: (event, rowData) => alert("Load Test Suite"),
@@ -138,4 +138,4 @@ const TestSchedulatiTable = () => {
   );
 };
 
-export default TestSchedulatiTable;
+export default TestSuiteSchedulatiTable;

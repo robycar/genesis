@@ -14,7 +14,7 @@ import { mainListItems, secondaryListItems } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
-import GestioneUtenti from "../../components/GestioneUtenti";
+import GestioneGruppi from "../../components/GestioneGruppi";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -189,7 +189,7 @@ function AmministrazioneGruppo() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-            <GestioneUtenti />
+            <GestioneGruppi />
           </Paper>
         </main>
       </Container>

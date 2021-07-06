@@ -2,46 +2,23 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Navbar from "../../components/Navbar";
 import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-import TotalTestSuite from "../../components/TotalPlannedWeeKlyTestSuite";
-import Orders from "../../components/Orders";
-import Navbar from "../../components/Navbar";
-import NavbarItem from "../../components/NavbarItem";
-import Button from "@material-ui/core/Button";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import Card from "../../components/Card";
+import { Paper } from "@material-ui/core";
+import ViewGruppo from "../../components/ViewGruppo";
+import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const drawerWidth = 240;
 
@@ -49,10 +26,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  // toolbar: {
-  //   paddingRight: 24, // keep right padding when drawer closed
-  //   background: "red",
-  // },
+  toolbar: {
+    paddingRight: 24, // keep right padding when drawer closed
+  },
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
@@ -66,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    boxShadow: "none",
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -124,40 +99,12 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  buttonNotClickedGreen: {
-    backgroundColor: "white",
-    "&:hover": {
-      background: "#47B881",
-      color: "white",
-    },
-    border: "1px solid #47B881 ",
-    variant: "contained",
-    color: "#47B881",
-    width: "200px",
-    height: "40px",
-    marginRight: "10px",
-  },
-  containerNavbarItem: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+  buttonContainer: {
     marginBottom: "20px",
-  },
-
-  bottonTest: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: "0px",
-  },
-
-  active: {
-    backgroundColor: "#47B881",
-    color: "white",
   },
 }));
 
-function Dashboard() {
+function AmministrazioneViewGruppo() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -195,61 +142,59 @@ function Dashboard() {
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-
-        <Container maxWidth="lg" className={classes.container}>
-          {/* <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-          </Typography> */}
+      <Container maxWidth="lg" className={classes.container}>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
 
           <div className={classes.containerNavbarItem}>
-            <NavbarItem />
+            <NavbarItemAdmin fontSize="large" />
           </div>
-          <div className={classes.bottonTest}>
-            {/* <NavLink exact to="/dashboard/testcase"> */}
+
+          <div className={classes.buttonContainer}>
             <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/dashboard/testcase"
+              to="/amministrazione/utenze"
             >
-              Test Case
+              UTENZE
             </Button>
-            {/* </NavLink> */}
-
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/dashboard/testsuite"
+              to="/amministrazione/ruoli"
             >
-              Test Suite
+              RUOLI
             </Button>
-            {/* </NavLink> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/amministrazione/autorizzazioni"
+            >
+              AUTORIZZAZIONI
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/amministrazione/gruppo"
+            >
+              GRUPPO
+            </Button>
           </div>
-          <Grid container spacing={3}>
-            <Card />
-
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
-      </main>
+          <Paper className={classes.paper}>
+            <ViewGruppo />
+          </Paper>
+        </main>
+      </Container>
     </div>
   );
 }
 
-export default Dashboard;
+export default AmministrazioneViewGruppo;
