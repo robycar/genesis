@@ -80,6 +80,8 @@ const useStyles = makeStyles((theme) => ({
   },
   bottoni: {
     display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
     marginLeft: "55px",
     marginTop: "4%",
     marginBottom: "2%",

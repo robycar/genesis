@@ -64,9 +64,9 @@ function SelectBar(props) {
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        <MenuItem value={10}>Ciao</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
+        <MenuItem value={10}>Prova1</MenuItem>
+        <MenuItem value={20}>Prova2</MenuItem>
+        <MenuItem value={30}>Prova3</MenuItem>
       </Select>
     </FormControl>
   );
