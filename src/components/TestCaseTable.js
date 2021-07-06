@@ -12,19 +12,15 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
-import ImageIcon from "@material-ui/icons/Image";
 import EditIcon from "@material-ui/icons/Edit";
-import ButtonClickedGreen from "./ButtonClickedGreen";
+import ShowModalDescription from "../components/ShowModalDescription";
 import { NavLink } from "react-router-dom";
 
 function createData(
@@ -69,9 +65,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
   createData(
     "Donut",
@@ -86,9 +80,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
   createData(
     "Eclair",
@@ -103,9 +95,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
   createData(
     "Frozen yoghurt",
@@ -120,9 +110,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
   createData(
     "Gingerbread",
@@ -137,9 +125,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
   createData(
     "Honeycomb",
@@ -154,9 +140,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
   createData(
     "Ice cream sandwich",
@@ -171,9 +155,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
   createData(
     "Jelly Bean",
@@ -188,9 +170,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
 
   createData(
@@ -206,9 +186,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
   createData(
     "Nougat",
@@ -223,9 +201,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
   createData(
     "Oreo",
@@ -240,9 +216,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <IconButton aria-label="show">
-      <ImageIcon />
-    </IconButton>
+    <ShowModalDescription />
   ),
 ];
 
