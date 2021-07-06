@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function EditingTest() {
+function EditingTestTestCase() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -213,30 +213,26 @@ function EditingTest() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/test"
+              to="/editing/testcase"
             >
               TEST
             </Button>
             <div className={classes.buttonTestContainer}>
               <Button
-                className="button-blue"
+                className="button-green"
                 component={NavLink}
-                color="primary"
-                variant="contained"
-                activeClassName="button-blue"
+                activeClassName="button-green-active"
                 exact
-                to="/editing/test/testcase"
+                to="/editing/testcase"
               >
                 TEST CASE
               </Button>
               <Button
-                className="button-blue"
+                className="button-green"
                 component={NavLink}
-                color="primary"
-                variant="contained"
-                activeClassName="button-blue"
+                activeClassName="button-green-active"
                 exact
-                to="/editing/test/testsuite"
+                to="/editing/testsuite"
               >
                 TEST SUITE
               </Button>
@@ -261,4 +257,4 @@ function EditingTest() {
   );
 }
 
-export default EditingTest;
+export default EditingTestTestCase;

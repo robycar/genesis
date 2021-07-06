@@ -126,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function EditingLineaCreaLinea() {
+function EditingTestCreaTestCase() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -212,10 +212,22 @@ function EditingLineaCreaLinea() {
         </div>
 
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Linea" />
+          <CreaItem titolo="Crea Test Case" />
 
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  Numero{" "}
+                </Typography>
+                <SelectBar />
+              </Paper>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  Numero{" "}
+                </Typography>
+                <SelectBar />
+              </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Numero{" "}
@@ -248,14 +260,25 @@ function EditingLineaCreaLinea() {
                 </Typography>
                 <SelectBar />
               </Paper>
-
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  Numero{" "}
+                </Typography>
+                <SelectBar />
+              </Paper>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  Numero{" "}
+                </Typography>
+                <SelectBar />
+              </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Porta{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
-              <Paper className={classes.divSelect} elevation={0}></Paper>
+
               <div className={classes.bottone}>
                 <ButtonClickedGreen
                   className={classes.bottone}
@@ -271,4 +294,4 @@ function EditingLineaCreaLinea() {
   );
 }
 
-export default EditingLineaCreaLinea;
+export default EditingTestCreaTestCase;

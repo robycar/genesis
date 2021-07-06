@@ -19,7 +19,8 @@ import Linee from "../../components/Linee";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
-import LanguageIcon from "@material-ui/icons/Language";
+import EqualizerIcon from "@material-ui/icons/Equalizer";
+import TestSuiteTable from "../../components/TestSuiteTable";
 
 const drawerWidth = 240;
 
@@ -102,6 +103,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     marginBottom: "20px",
+    marginTop: "2%",
   },
   generalPaper: {
     alignItems: "baseline",
@@ -124,9 +126,12 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "5%",
     lineHeight: "1px",
   },
+  buttonTestContainer: {
+    marginTop: "2%",
+  },
 }));
 
-function EditingLinee() {
+function EditingTestSuite() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -212,16 +217,40 @@ function EditingLinee() {
             >
               TEST
             </Button>
+            <div className={classes.buttonTestContainer}>
+              <Button
+                className="button-green"
+                component={NavLink}
+                variant="contained"
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testcase"
+              >
+                TEST CASE
+              </Button>
+              <Button
+                className="button-green"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testsuite"
+              >
+                TEST SUITE
+              </Button>
+            </div>
           </div>
           <Paper className={classes.generalPaper}>
             <ListItem>
               <ListItemIcon>
-                <LanguageIcon fontSize="large" className={classes.icon} />
+                <EqualizerIcon fontSize="large" className={classes.icon} />
               </ListItemIcon>
-              <Typography className={classes.titolo}> Linee </Typography>
+              <Typography className={classes.titolo}>
+                {" "}
+                Total Test Suite{" "}
+              </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <Linee />
+            <TestSuiteTable />
           </Paper>
         </main>
       </Container>
@@ -229,4 +258,4 @@ function EditingLinee() {
   );
 }
 
-export default EditingLinee;
+export default EditingTestSuite;
