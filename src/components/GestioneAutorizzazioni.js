@@ -11,8 +11,6 @@ import ButtonClickedGreen from "./ButtonClickedGreen";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../styles/App.css";
-import 'jquery/dist/jquery.min.js'
-import $ from 'jquery'
 import { TransferWithinAStation } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
