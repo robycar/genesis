@@ -109,7 +109,7 @@ const TestConclusiTable = () => {
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Suite"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
             ),
             tooltip: "Load Test Suite",
             onClick: (event, rowData) => alert("Load Test Suite"),
