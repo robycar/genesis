@@ -14,7 +14,7 @@ import { mainListItems, secondaryListItems } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
-import GestioneGruppi from "../../components/GestioneGruppi";
+import ViewGruppo from "../../components/ViewGruppo";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AmministrazioneGruppo() {
+function AmministrazioneViewGruppo() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -189,7 +189,7 @@ function AmministrazioneGruppo() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-            <GestioneGruppi />
+            <ViewGruppo />
           </Paper>
         </main>
       </Container>
@@ -197,4 +197,4 @@ function AmministrazioneGruppo() {
   );
 }
 
-export default AmministrazioneGruppo;
+export default AmministrazioneViewGruppo;

@@ -13,6 +13,8 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import SelectBar from "../components/SelectBar";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -62,16 +64,27 @@ function FormAddUtente() {
                 </Col>
                 <Col>
                   <Form.Group controlId="form.Level">
-                      <Form.Label>Level</Form.Label>
-                      <Form.Control type="text" placeholder="Inserisci Level" />
+                    <Form.Label>Level</Form.Label>
+                    <Form.Control as="select" name="state"  >
+                      <option value="L2">L2</option>
+                      <option value="L1">L1</option>
+                      <option value="A">Admin</option>
+                      <option value="SA">SuperAdmin</option>               
+                    </Form.Control>
                   </Form.Group>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  <Form.Group controlId="form.Group" >
-                      <Form.Label>Group</Form.Label>
-                      <Form.Control type="text" placeholder="Inserisci Gruppo" />
+                  <Form.Group controlId="form.Gruppo" >
+                      <Form.Label>Gruppo</Form.Label>
+                      <Form.Control as="select" name="state"  >
+                        <option value="NN">None</option>
+                        <option value="G1">Gruppo 1</option>
+                        <option value="G2">Gruppo 2</option>
+                        <option value="G3">Gruppo 3</option>
+                        <option value="G4">Gruppo 4</option>               
+                      </Form.Control>
                   </Form.Group>
                 </Col>
                 <Col>
@@ -83,7 +96,7 @@ function FormAddUtente() {
               </Row>
               <Row>
                 <Col>
-                  <Form.Group controlId="form." >
+                  <Form.Group controlId="form.Nome" >
                       <Form.Label>Nome</Form.Label>
                       <Form.Control type="text" placeholder="Inserisci Nome" />
                   </Form.Group>
@@ -95,8 +108,18 @@ function FormAddUtente() {
                   </Form.Group>
                 </Col>
               </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="form.Telefono" >
+                      <Form.Label>Telefono</Form.Label>
+                      <Form.Control type="tel" placeholder="Inserisci Numero Cellulare" />
+                  </Form.Group>
+                </Col>
+                <Col>
+                </Col>
+              </Row>
               <div className={classes.bottone} style={{display: "flex",justifyContent: "flex-end"}}>
-                <ButtonClickedGreen size="medium" nome="Crea" />
+                <ButtonClickedGreen size="medium" nome="Aggiungi" />
               </div>
             </Form>
           </Container>

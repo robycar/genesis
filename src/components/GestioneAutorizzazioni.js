@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
   contAutorizzazioni: {
-    border:"1px gray solid",
-    borderAadius:3,
+    border:"1px #ced4da solid",
+    borderRadius:3,
     minHeight:"500px",
   },
   ulGestAuto: {
@@ -114,15 +114,15 @@ function FormCreaRuolo() {
 
     roleGeneral: [
       { /*IL PRIMO ELEMENTO DEVE ESSERE VUOTO, ALTRIMENTI BUG 1° ELEMENTO*/ },
-      { id: 1, name: "Admin",type: "role",color:"green" },
-      { id: 2, name: "L1",type: "role",color:"green"},
-      { id: 3, name: "L2",type: "role",color:"green" },
-      { id: 4, name: "Admin",type: "role",color:"red" },
+      { id: 1, name: "Marco Rossi",type: "utente",color:"green" },
+      { id: 2, name: "Mario Rossi",type: "utente",color:"green"},
+      { id: 3, name: "Valentina Bianchi",type: "utente",color:"green" },
+      { id: 4, name: "Antonio Verdi",type: "utente",color:"red" },
       { id: 5, name: "Admin management",type: "permission",color:"green" },
       { id: 6, name: "Admin user management",type: "permission",color:"green" },
-      { id: 7, name: "Admin role management",type: "permission",color:"green" },
+      { id: 7, name: "Admin utente management",type: "permission",color:"green" },
       { id: 8, name: "Report manager",type: "permission",color:"green" },
-      { id: 9, name: "SuperAdmin",type: "role",color:"green" },
+      { id: 9, name: "Maria Sacchi",type: "utente",color:"green" },
       { id: 10, name: "Workstation management",type: "permission",color:"green" },
       { id: 11, name: "Line management",type: "permission",color:"green" },
     ],
@@ -166,25 +166,33 @@ function FormCreaRuolo() {
             <Row md={3}>
                 <Col md={5} style={{paddingRight:"0!important"}}>
                   <Form.Group controlId="form.Text" >
-                      <Form.Control type="text" placeholder="Search for available " />
+                    <Form.Label><br /></Form.Label>
+                    
+                    <Form.Control type="text" placeholder="Search for available " />
                   </Form.Group>
                 </Col>
                 <Col md={2} >
                 </Col>
                 <Col md={5} style={{paddingLeft:"0!important"}}>
                   <Form.Group controlId="form.Text">
-                      <Form.Control type="text" placeholder="Search for available " />
+                    <Form.Label>Ruolo</Form.Label>
+                      <Form.Control as="select" name="state"  >
+                      <option value="L2">L2</option>
+                      <option value="L1">L1</option>
+                      <option value="A">Admin</option>
+                      <option value="SA">SuperAdmin</option>                      
+                        </Form.Control>
                   </Form.Group>
                 </Col>
               </Row>
               <Row md={3}>
                 <Col md={5} style={{paddingRight:"0!important"}}>
                   <div className={classes.contAutorizzazioni}>
-                    <h6 style={{paddingLeft:"15px"}}>Ruoli</h6>
+                    <h6 style={{paddingLeft:"15px"}}>Permessi</h6>
                     <ul className={classes.ulGestAuto}>
 
                       {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].color == "green" && appState.roleGeneral[index].type == "role" ?
+                        return appState.roleGeneral[index].color == "green" && appState.roleGeneral[index].type == "permission" ?
                           <a href="#"
                             key={index}
                             id={elements.id}
@@ -195,11 +203,11 @@ function FormCreaRuolo() {
                         })}
 
                     </ul>
-                    <h6 style={{paddingLeft:"15px",paddingTop:"20px"}}>Permission</h6>
+                    <h6 style={{paddingLeft:"15px",paddingTop:"20px"}}>Utenti</h6>
                     <ul className={classes.ulGestAuto}>
 
                       {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].color == "green" && appState.roleGeneral[index].type == "permission"?
+                        return appState.roleGeneral[index].color == "green" && appState.roleGeneral[index].type == "utente"?
                           <a href="#"
                             key={index}
                             id={elements.id}
@@ -242,10 +250,10 @@ function FormCreaRuolo() {
                 </Col>
                 <Col md={5} style={{paddingLeft:"0!important"}}>
                   <div className={classes.contAutorizzazioni}>
-                    <h6 style={{paddingLeft:"15px"}}>Ruoli</h6>
+                    <h6 style={{paddingLeft:"15px"}}>Permessi</h6>
                     <ul className={classes.ulGestAuto}>
                       {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].color == "red" && appState.roleGeneral[index].type == "role" ?
+                        return appState.roleGeneral[index].color == "red" && appState.roleGeneral[index].type == "permission" ?
                           <a href="#"
                             key={index}
                             id={elements.id}
@@ -255,11 +263,11 @@ function FormCreaRuolo() {
                         :""
                         })}
                     </ul>
-                    <h6 style={{paddingLeft:"15px",paddingTop:"20px"}}>Permission</h6>
+                    <h6 style={{paddingLeft:"15px",paddingTop:"20px"}}>Utenti</h6>
                     <ul className={classes.ulGestAuto}>
 
                       {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].color == "red" && appState.roleGeneral[index].type == "permission"?
+                        return appState.roleGeneral[index].color == "red" && appState.roleGeneral[index].type == "utente"?
                           <a href="#"
                             key={index}
                             id={elements.id}

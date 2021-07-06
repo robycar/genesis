@@ -23,6 +23,9 @@ import EditingLineeCreaLinea from "./pages/editing/EditingLineeCreaLinea";
 import AmministrazioneGruppo from "./pages/amministrazione/AmministrazioneGruppo";
 import AmministrazioneAddUtente from "./pages/amministrazione/AmministrazioneAddUtente";
 import AmministrazioneCreaRuolo from "./pages/amministrazione/AmministrazioneCreaRuolo";
+import AmministrazioneViewGruppo from "./pages/amministrazione/AmministrazioneViewGruppo";
+import AmministrazioneViewGruppoCreaGruppo from "./pages/amministrazione/AmministrazioneViewGruppoCreaGruppo";
+import AmministrazioneViewGruppoAddPartecipante from "./pages/amministrazione/AmministrazioneViewGruppoAddPartecipante";
 
 function App() {
   return (
@@ -90,6 +93,21 @@ function App() {
         <Route path="/supporto/support" exact component={Supporto} />
         <Route path="/documentation" exact component={Documentation} />
         <Route path="/provaModale" exact component={ProvaModale} />
+        <Route
+          path="/amministrazione/viewgruppo"
+          exact
+          component={AmministrazioneViewGruppo}
+        />
+        <Route
+          path="/amministrazione/creagruppo"
+          exact
+          component={AmministrazioneViewGruppoCreaGruppo}
+        />
+        <Route
+          path="/amministrazione/addpartecipante"
+          exact
+          component={AmministrazioneViewGruppoAddPartecipante}
+        />
       </Switch>
     </BrowserRouter>
   );

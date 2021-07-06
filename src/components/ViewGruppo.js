@@ -26,45 +26,23 @@ import Button from "@material-ui/core/Button";
 import "../styles/App.css";
 
 function createData(
-  id,
   nome,
-  cognome,
-  telefono,
-  email,
-  password,
-  level,
-  gruppo,
-  azienda,
-  modifica,
-  cancella,
+  ruolo,
+  button,
 ) {
   return {
-    id,
     nome,
-    cognome,
-    telefono,
-    email,
-    password,
-    level,
-    gruppo,
-    azienda,
-    modifica,
-    cancella,
+    ruolo,
+    button,
   };
 }
 
 const rows = [
-  createData("DEV6301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6401", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV8301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV7301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV5301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6391", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6601", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6331", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV3501", "Maria", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV7401", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6041", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
+  createData("Marco Rossi", "Admin",""),
+  createData("Mario Rossi","L2",""),
+  createData("Valentina Bianchi", "L2",""),
+  createData("Antonio Verdi","L1",""),
+  createData("Maria Sacchi", "Admin",""),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -95,21 +73,14 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "id",
+    id: "nome",
     numeric: false,
-    disablePadding: true,
-    label: "ID Utenza",
+    disablePadding: false,
+    label: "Nome Partecipante",
   },
-  { id: "nome", numeric: false, disablePadding: false, label: "Nome" },
-  { id: "cognome", numeric: false, disablePadding: false, label: "Cognome" },
-  { id: "telefono", numeric: false, disablePadding: false, label: "Telefono" },
-  { id: "email", numeric: false, disablePadding: false, label: "Email" },
-  { id: "password", numeric: false, disablePadding: false, label: "Password" },
-  { id: "level", numeric: false, disablePadding: false, label: "Level" },
-  { id: "gruppo", numeric: false, disablePadding: false, label: "Gruppo" },
-  { id: "azienda", numeric: false, disablePadding: false, label: "Azienda" },
-  { id: "modifica", numeric: false, disablePadding: false, label: "Modifica" },
-  { id: "cancella", numeric: false, disablePadding: false, label: "Cancella" },
+  { id: "ruolo", numeric: false, disablePadding: false, label: "Ruolo" },
+  { id: "button", numeric: false, disablePadding: true, label: "" },
+
 ];
 
 function EnhancedTableHead(props) {
@@ -129,20 +100,14 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
+            maxWidht={"300px!important"}
+            
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -198,60 +163,32 @@ const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
 
   return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
+    <Toolbar > 
+      <>
         <Typography
           className={classes.title}
-          color="inherit"
-          variant="subtitle1"
+          variant="h6"
+          id="tableTitle"
           component="div"
+          style={{ display: "flex"}}
         >
-          {numSelected} selected
+          Gestione Gruppo
+          <SearchBar className={classes.searchBar} />
         </Typography>
-      ) : (
-        <>
-          <Typography
-            className={classes.title}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-            style={{ display: "flex" }}
+        
+        <div className={classes.buttonRight}>
+        <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/amministrazione/addpartecipante"
           >
-            Gestione Utenti
-            <SearchBar className={classes.searchBar} />
-          </Typography>
-          
-          <div className={classes.buttonRight}>
-          <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/addutente"
-            >
-              ADD UTENTE
-            </Button>
-          </div>
-        </>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+            ADD PARTECIPANTE
+          </Button>
+        </div>
+      </>
+      
     </Toolbar>
   );
 };
@@ -298,7 +235,7 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("id");
+  const [orderBy, setOrderBy] = React.useState("nome");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -312,19 +249,19 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = rows.map((n) => n.nome);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
+  const handleClick = (event, nome) => {
+    const selectedIndex = selected.indexOf(nome);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, nome);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -352,7 +289,7 @@ export default function EnhancedTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (nome) => selected.indexOf(nome) !== -1;
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -380,53 +317,29 @@ export default function EnhancedTable() {
             {stableSort(rows, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => {
-                const isItemSelected = isSelected(row.id);
+                const isItemSelected = isSelected(row.nome);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id}
+                    key={row.nome}
                     selected={isItemSelected}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
-                    </TableCell>
                     <TableCell
                       component="th"
                       id={labelId}
                       scope="row"
-                      padding="none"
                     >
-                      {row.id}
+                      {row.nome}
                     </TableCell>
-                    <TableCell align="left">{row.nome}</TableCell>
-                    <TableCell align="left">{row.cognome}</TableCell>
-                    <TableCell align="left">{row.telefono}</TableCell>
-                    <TableCell align="left">{row.email}</TableCell>
-                    <TableCell align="left">{row.password}</TableCell>
-                    <TableCell align="left">{row.level}</TableCell>
-                    <TableCell align="left">{row.gruppo}</TableCell>
-                    <TableCell align="left">{row.azienda}</TableCell>
+                    <TableCell align="left" >{row.ruolo}</TableCell>
                     <TableCell align="center">
-                      <Button
-                      className="button-light-yellow"
-                      >
-                        MODIFICA
-                      </Button>
-                    </TableCell>
-                    <TableCell>
                       <Button
                       className="button-light-red"
                       >
-                        CANCELLA
+                        RIMUOVI
                       </Button>
                     </TableCell>
                   </TableRow>
