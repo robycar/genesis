@@ -119,10 +119,20 @@ const useStyles = makeStyles((theme) => ({
   },
   divSelect: {
     padding: "5%",
+    // height: "115.6px",
   },
   bottone: {
     marginLeft: "65%",
-    marginTop: "10%",
+    marginTop: "2%",
+  },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+    marginTop: "2%",
+  },
+  titolo: {
+    marginBottom: "2%",
   },
 }));
 
@@ -214,6 +224,8 @@ function EditingLineaCreaLinea() {
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Linea" />
 
+          <Divider className={classes.divider} />
+
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
@@ -255,15 +267,17 @@ function EditingLineaCreaLinea() {
                 </Typography>
                 <SelectBar />
               </Paper>
-              <Paper className={classes.divSelect} elevation={0}></Paper>
-              <div className={classes.bottone}>
-                <ButtonClickedGreen
-                  className={classes.bottone}
-                  size="medium"
-                  nome="Crea"
-                />
-              </div>
+
+              {/* <Paper className={classes.divSelect} elevation={0}></Paper> */}
             </Paper>
+          </div>
+          <Divider className={classes.divider} />
+          <div className={classes.bottone}>
+            <ButtonClickedGreen
+              className={classes.bottone}
+              size="medium"
+              nome="Crea"
+            />
           </div>
         </Paper>
       </main>

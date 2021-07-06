@@ -28,21 +28,21 @@ import "../styles/App.css";
 function createData(
   ruolo,
   descrizione,
-  button,
+  modifica,
+  cancella,
 ) {
   return {
     ruolo,
     descrizione,
-    button,
+    modifica,
+    cancella,
   };
 }
 
 const rows = [
-  createData("Cupcake", "sdjbkskr",""),
-  createData("Donut", "sdjbkskk",""),
-  createData("Eclair", "sdjbkskk",""),
-  createData("Frozen yoghurt", "sdjbkskk",""),
-  createData("Oreo", "ishcsdjh",""),
+  createData("Admin", "Operazioni di lettura, scrittura, edit e operazioni amministrative",""),
+  createData("L1", "Operazioni di lettura, scrittura e edit ma non operazioni amministrative",""),
+  createData("L2", "Operazioni di sola lettura",""),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -79,7 +79,8 @@ const headCells = [
     label: "Ruolo",
   },
   { id: "descrizione", numeric: false, disablePadding: false, label: "Descrizione" },
-  { id: "button", numeric: false, disablePadding: true, label: "" },
+  { id: "modifica", numeric: false, disablePadding: false, label: "Modifica" },
+  { id: "cancella", numeric: false, disablePadding: false, label: "Cancella" },
 
 ];
 
@@ -101,12 +102,6 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
-          />
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -359,18 +354,10 @@ export default function EnhancedTable() {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.ruolo)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
                     key={row.ruolo}
                     selected={isItemSelected}
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
                     </TableCell>
                     <TableCell
                       component="th"
@@ -381,28 +368,16 @@ export default function EnhancedTable() {
                       {row.ruolo}
                     </TableCell>
                     <TableCell align="left">{row.descrizione}</TableCell>
-                    <TableCell align="center">
-                      <Button
-                      className="button-light-blue"
-                      component={NavLink}
-                      exact
-                      to="/amministrazione/addutente"
-                      >
-                        VISUALIZZA
-                      </Button>
+                    <TableCell align="left">
                       <Button
                       className="button-light-yellow"
-                      component={NavLink}
-                      exact
-                      to="/amministrazione/ruoli"
                       >
                         MODIFICA
                       </Button>
+                    </TableCell>
+                    <TableCell align="left">
                       <Button
                       className="button-light-red"
-                      component={NavLink}
-                      exact
-                      to="/amministrazione/ruoli"
                       >
                         CANCELLA
                       </Button>
