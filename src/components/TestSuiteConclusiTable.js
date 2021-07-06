@@ -5,13 +5,13 @@ import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import "../styles/App.css";
 
-const TestSchedulatiTable = () => {
+const TestSuiteConclusiTable = () => {
   const data = [
     {
       launcher: "Adam Denisov",
       nameTs: "PEM_001",
       startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
       result: "2/10",
       trace: "*****",
       mos: "",
@@ -20,7 +20,7 @@ const TestSchedulatiTable = () => {
       launcher: "Keith M. Boyce",
       nameTs: "PEM_002",
       startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
       result: "3/10",
       trace: "*****",
       mos: "",
@@ -29,7 +29,7 @@ const TestSchedulatiTable = () => {
       launcher: "Stella D. Knight",
       nameTs: "PEM_003",
       startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
       result: "4/10",
       trace: "*****",
       mos: "",
@@ -38,7 +38,7 @@ const TestSchedulatiTable = () => {
       launcher: "Walter E. Harmon",
       nameTs: "PEM_004",
       startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
       result: "5/10",
       trace: "*****",
       mos: "",
@@ -59,8 +59,8 @@ const TestSchedulatiTable = () => {
       field: "startDate",
     },
     {
-      title: "Expected End Date",
-      field: "expectedEndDate",
+      title: "End Date",
+      field: "endDate",
     },
     {
       title: "Result",
@@ -79,7 +79,7 @@ const TestSchedulatiTable = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title=" Total Test Case Schedulati"
+        title="Total Test Case Conclusi"
         data={data}
         columns={columns}
         options={{
@@ -88,7 +88,7 @@ const TestSchedulatiTable = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          selection: true,
+          // selection: true,
           // columnsButton: true,
           // filtering: true,
         }}
@@ -109,7 +109,7 @@ const TestSchedulatiTable = () => {
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Load Test Suite"></ButtonClickedBlue>
             ),
             tooltip: "Load Test Suite",
             onClick: (event, rowData) => alert("Load Test Suite"),
@@ -138,4 +138,4 @@ const TestSchedulatiTable = () => {
   );
 };
 
-export default TestSchedulatiTable;
+export default TestSuiteConclusiTable;

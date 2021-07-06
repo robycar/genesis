@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -23,7 +23,16 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
 import ButtonClickedGreen from "./ButtonClickedGreen";
-import { NavLink } from "react-router-dom";
+import ButtonClickedBlue from "./ButtonClickedBlue";
+import ButtonNotClickedGreen from "./ButtonNotClickedGreen";
+import ButtonNotClickedBlue from "./ButtonNotClickedBlue";
+import { logDOM } from "@testing-library/react";
+import "../styles/App.css";
+import ButtonList from "./ButtonList";
+import TestSuiteRunningTable from "./TestSuiteRunningTable";
+import TestSuiteCaricatiTable from "./TestSuiteCaricatiTable";
+import TestSuiteSchedulatiTable from "./TestSuiteSchedulatiTable";
+import TestSuiteConclusiTable from "./TestSuiteConclusiTable";
 
 function createData(
   name,
@@ -173,7 +182,6 @@ const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
-    marginLeft: "50%",
   },
   highlight:
     theme.palette.type === "light"
@@ -211,26 +219,17 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <>
-          {/* <Typography
+          <Typography
             className={classes.title}
             variant="h6"
             id="tableTitle"
             component="div"
           >
-            Linee
-          </Typography> */}
+            Total Test Case
+          </Typography>
           <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>
-            {/* <ButtonClickedGreen nome="Add Linea" /> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/testcase/createstcase"
-            >
-              CREA TEST CASE{" "}
-            </Button>
+            <ButtonClickedBlue nome="Load Test Suite" />
           </div>
         </>
       )}
@@ -280,14 +279,46 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-around",
     marginTop: "10px",
     marginBottom: "10px",
+  },
+  buttonClickedBlue: {
+    backgroundColor: "#1665D8",
+    color: "primary",
+    marginLeft: "10px",
+    marginRight: "10px",
+    width: "200px",
+    height: "40px",
+  },
+
+  buttonNotClickedBlue: {
+    backgroundColor: "whute",
+    border: "1px solid #1665D8",
+    variant: "contained",
+    color: "#1665D8",
+    marginLeft: "10px",
+    marginRight: "10px",
+    width: "200px",
+    height: "40px",
   },
 
   buttonRight: {
     display: "flex",
     justifyContent: "flex-end",
+  },
+
+  // inactive: {
+  //   backgroundColor: "#9b59b6 !important",
+  // },
+  // active: {
+  //   backgroundColor: "#3498db !important",
+  // },
+  box: {
+    width: "200px",
+    height: "200px",
+    margin: "10px",
+    border: "1px solid black",
   },
 }));
 
@@ -353,10 +384,83 @@ export default function EnhancedTable() {
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const [appState, changeState] = useState({
+    activeObject: null,
+    objects: [
+      { id: 1, name: "Test Suite Running" },
+      { id: 2, name: "Test Suite Conclusi" },
+      { id: 3, name: "Test Suite Caricati" },
+      { id: 4, name: "Test Suite Schedulati" },
+    ],
+  });
+
+  // console.log(appState.activeObject);
+  // console.log(appState.objects[0]);
+
+  function toggleActive(index) {
+    changeState({ ...appState, activeObject: appState.objects[index] });
+
+    // console.log(appState.objects[index].name);
+  }
+
+  function toggleActiveStyles(index) {
+    if (appState.objects[index] === appState.activeObject) {
+      return "box nav-table-active";
+    } else {
+      return "box nav-table-inactive";
+    }
+  }
+  //  ||appState.activeObject === null
+
+  const [show, setShow] = useState(true);
+
+  function showActive() {
+    setShow(!show);
+  }
+
   return (
-    <div className={classes.root}>
-      <EnhancedTableToolbar numSelected={selected.length} />
-      <TableContainer>
+    <>
+      <div className={classes.buttonContainer}>
+        {/* <ButtonList /> */}
+        {appState.objects.map((elements, index) => (
+          <ButtonNotClickedBlue
+            key={index}
+            nome={elements.name}
+            className={toggleActiveStyles(index)}
+            onClick={() => {
+              toggleActive(index);
+              // showActive();
+            }}
+          />
+        ))}
+        {/* <ButtonNotClickedBlue
+            onClick={() => {
+              alert("Ciao");
+            }}
+            nome="Test in Running"
+          />
+
+          <ButtonNotClickedBlue nome="Test Running" />
+
+          <ButtonNotClickedBlue nome="Test Schedulati" />
+
+          <ButtonClickedBlue nome="Test Conclusi" /> */}
+        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+      </div>
+      {appState.activeObject === null && <TestSuiteRunningTable />}
+      {appState.objects[0] === appState.activeObject && (
+        <TestSuiteRunningTable />
+      )}
+      {appState.objects[1] === appState.activeObject && (
+        <TestSuiteConclusiTable />
+      )}
+      {appState.objects[2] === appState.activeObject && (
+        <TestSuiteCaricatiTable />
+      )}
+      {appState.objects[3] === appState.activeObject && (
+        <TestSuiteSchedulatiTable />
+      )}
+      {/* <TableContainer>
         <Table
           className={classes.table}
           aria-labelledby="tableTitle"
@@ -430,7 +534,7 @@ export default function EnhancedTable() {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </div>
+      /> */}
+    </>
   );
 }

@@ -19,6 +19,7 @@ import SelectBar from "../../components/SelectBar";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import TestSuiteSelect from "../../components/TestSuiteSelect";
 
 const drawerWidth = 240;
 
@@ -114,19 +115,27 @@ const useStyles = makeStyles((theme) => ({
     padding: "20px",
   },
   paperContainer2: {
+    marginTop: "2%",
     flexDirection: "column",
     padding: "20px",
+    width: "500px",
+    height: "500px",
+    marginLeft: "5%",
   },
   divSelect: {
     padding: "5%",
   },
   bottone: {
-    marginLeft: "65%",
+    marginLeft: "80%",
     marginTop: "10%",
   },
+  // testSuiteTable: {
+  //   height: "500px",
+  //   marginTop: "5%",
+  // },
 }));
 
-function EditingTestCreaTestCase() {
+function EditingTestTestSuiteCreaTestSuite() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -205,17 +214,29 @@ function EditingTestCreaTestCase() {
             component={NavLink}
             activeClassName="button-green-active"
             exact
-            to="/editing/test"
+            to="/editing/testcase"
           >
             TEST
           </Button>
         </div>
 
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Linea" />
+          <CreaItem titolo="Crea Test Suite" />
 
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  Numero{" "}
+                </Typography>
+                <SelectBar />
+              </Paper>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  Numero{" "}
+                </Typography>
+                <SelectBar />
+              </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Numero{" "}
@@ -242,20 +263,8 @@ function EditingTestCreaTestCase() {
             </Paper>
 
             <Paper className={classes.paperContainer2} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Type Linea{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Porta{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}></Paper>
+              <Typography>Seleziona i Test Case da associare:</Typography>
+              <TestSuiteSelect className={classes.TestSuiteSelect} />
               <div className={classes.bottone}>
                 <ButtonClickedGreen
                   className={classes.bottone}
@@ -271,4 +280,4 @@ function EditingTestCreaTestCase() {
   );
 }
 
-export default EditingTestCreaTestCase;
+export default EditingTestTestSuiteCreaTestSuite;

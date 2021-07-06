@@ -208,7 +208,7 @@ function EditingLinee() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/test"
+              to="/editing/testcase"
             >
               TEST
             </Button>

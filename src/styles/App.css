@@ -19,10 +19,12 @@
 }
 .nav-table-inactive {
   background-color: white !important;
+   line-height: 1.2 !important;
 }
 
 .nav-table-active {
   background-color: #303F9F !important;
+  line-height: 1.2 !important;
   color: white !important; 
 }
 .box {
@@ -140,3 +142,22 @@
   height: 40px;
   margin-right: 10px !important;
 }
+
+.button-load-test {
+  position: static;
+  left:300px;
+  top:100px;
+}
+
+.MuiOutlinedInput-input {
+padding: 10px 5px!important;
+}
+
+.MuiInputLabel-outlined {
+  transform: translate(12px, 14px) scale(1) !important;
+}
+
+.MuiInputLabel-outlined.MuiInputLabel-shrink {
+  transform: translate(12px, -6px) scale(0.75) !important;
+}
+

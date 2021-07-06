@@ -19,7 +19,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-import Orders from "../../components/Orders";
+import OrdersTestSuite from "../../components/OrdersTestSuite";
 import Navbar from "../../components/Navbar";
 import NavbarItem from "../../components/NavbarItem";
 import Button from "@material-ui/core/Button";
@@ -237,7 +237,7 @@ function DashboardTestSuite() {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <OrdersTestSuite />
               </Paper>
             </Grid>
           </Grid>

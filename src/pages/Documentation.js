@@ -14,8 +14,8 @@ import { mainListItems, secondaryListItems } from "../components/listItems";
 import { Card, Paper } from "@material-ui/core";
 import NavbarItemDocu from "../components/NavbarItemDocu";
 import SimpleCard from "../components/SimpleCard";
-import TotalTestCase from "../components/TotalTestCase";
-import TotalTestSuite from "../components/TotalTestSuite";
+import TotalTestCase from "../components/TotalPlannedDaylyTestCase";
+import TotalTestSuite from "../components/TotalPlannedWeeKlyTestSuite";
 
 const drawerWidth = 240;
 

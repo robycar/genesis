@@ -387,10 +387,10 @@ export default function EnhancedTable() {
   const [appState, changeState] = useState({
     activeObject: null,
     objects: [
-      { id: 1, name: "Test Running" },
-      { id: 2, name: "Test Caricati" },
-      { id: 3, name: "Test Schedulati" },
-      { id: 4, name: "Test Conclusi" },
+      { id: 1, name: "Test Case Running" },
+      { id: 2, name: "Test Case Conclusi" },
+      { id: 3, name: "Test Case Caricati" },
+      { id: 4, name: "Test Case Schedulati" },
     ],
   });
 
@@ -399,6 +399,8 @@ export default function EnhancedTable() {
 
   function toggleActive(index) {
     changeState({ ...appState, activeObject: appState.objects[index] });
+
+    // console.log(appState.objects[index].name);
   }
 
   function toggleActiveStyles(index) {
@@ -447,9 +449,9 @@ export default function EnhancedTable() {
       </div>
       {appState.activeObject === null && <TestRunningTable />}
       {appState.objects[0] === appState.activeObject && <TestRunningTable />}
-      {appState.objects[1] === appState.activeObject && <TestCaricatiTable />}
-      {appState.objects[2] === appState.activeObject && <TestSchedulatiTable />}
-      {appState.objects[3] === appState.activeObject && <TestConclusiTable />}
+      {appState.objects[1] === appState.activeObject && <TestConclusiTable />}
+      {appState.objects[2] === appState.activeObject && <TestCaricatiTable />}
+      {appState.objects[3] === appState.activeObject && <TestSchedulatiTable />}
       {/* <TableContainer>
         <Table
           className={classes.table}

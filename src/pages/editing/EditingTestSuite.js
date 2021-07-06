@@ -2,46 +2,25 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Navbar from "../../components/Navbar";
 import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-import TotalTestSuite from "../../components/TotalPlannedWeeKlyTestSuite";
-import Orders from "../../components/Orders";
-import Navbar from "../../components/Navbar";
-import NavbarItem from "../../components/NavbarItem";
-import Button from "@material-ui/core/Button";
+import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import Card from "../../components/Card";
+import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
+import Linee from "../../components/Linee";
 import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import EqualizerIcon from "@material-ui/icons/Equalizer";
+import TestSuiteTable from "../../components/TestSuiteTable";
 
 const drawerWidth = 240;
 
@@ -49,10 +28,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  // toolbar: {
-  //   paddingRight: 24, // keep right padding when drawer closed
-  //   background: "red",
-  // },
+  toolbar: {
+    paddingRight: 24, // keep right padding when drawer closed
+  },
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
@@ -66,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    boxShadow: "none",
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -124,40 +101,37 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  buttonNotClickedGreen: {
-    backgroundColor: "white",
-    "&:hover": {
-      background: "#47B881",
-      color: "white",
-    },
-    border: "1px solid #47B881 ",
-    variant: "contained",
-    color: "#47B881",
-    width: "200px",
-    height: "40px",
-    marginRight: "10px",
-  },
-  containerNavbarItem: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
+  buttonContainer: {
     marginBottom: "20px",
+    marginTop: "2%",
   },
-
-  bottonTest: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: "0px",
+  generalPaper: {
+    alignItems: "baseline",
   },
-
-  active: {
-    backgroundColor: "#47B881",
-    color: "white",
+  icon: {
+    color: "rgba(71, 184, 129, 1)",
+  },
+  titolo: {
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "24px",
+    color: "#66788A",
+    lineHeight: "20px",
+    color: "rgba(71, 184, 129, 1)",
+    padding: "2%",
+    // marginTop: "2%",
+  },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+  },
+  buttonTestContainer: {
+    marginTop: "2%",
   },
 }));
 
-function Dashboard() {
+function EditingTestSuite() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -195,32 +169,23 @@ function Dashboard() {
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-
-        <Container maxWidth="lg" className={classes.container}>
-          {/* <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-          </Typography> */}
+      <Container maxWidth="lg" className={classes.container}>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
 
           <div className={classes.containerNavbarItem}>
-            <NavbarItem />
+            <NavbarItemEdit fontSize="large" />
           </div>
-          <div className={classes.bottonTest}>
-            {/* <NavLink exact to="/dashboard/testcase"> */}
+
+          <div className={classes.buttonContainer}>
             <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/dashboard/testcase"
+              to="/editing/linee"
             >
-              Test Case
+              LINEE
             </Button>
             {/* </NavLink> */}
 
@@ -230,26 +195,67 @@ function Dashboard() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/dashboard/testsuite"
+              to="/editing/outboundproxy"
             >
-              Test Suite
+              OUTBOUND PROXY
             </Button>
-            {/* </NavLink> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/template"
+            >
+              TEMPLATE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testcase"
+            >
+              TEST
+            </Button>
+            <div className={classes.buttonTestContainer}>
+              <Button
+                className="button-green"
+                component={NavLink}
+                variant="contained"
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testcase"
+              >
+                TEST CASE
+              </Button>
+              <Button
+                className="button-green"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testsuite"
+              >
+                TEST SUITE
+              </Button>
+            </div>
           </div>
-          <Grid container spacing={3}>
-            <Card />
-
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
-      </main>
+          <Paper className={classes.generalPaper}>
+            <ListItem>
+              <ListItemIcon>
+                <EqualizerIcon fontSize="large" className={classes.icon} />
+              </ListItemIcon>
+              <Typography className={classes.titolo}>
+                {" "}
+                Total Test Suite{" "}
+              </Typography>
+            </ListItem>
+            <Divider className={classes.divider} />
+            <TestSuiteTable />
+          </Paper>
+        </main>
+      </Container>
     </div>
   );
 }
 
-export default Dashboard;
+export default EditingTestSuite;
