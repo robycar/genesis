@@ -249,13 +249,13 @@ const TestSuiteRunningTable = () => {
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
                 <Typography className={classes.intestazione} variant="h5">
-                  Load Test Case
+                  Load Test Suite
                 </Typography>
               </ListItem>
             </div>
 
             <div className={classes.paperBottom}>
-              <Typography variant="h6">Seleziona Test Case</Typography>
+              <Typography variant="h6">Seleziona Test Suite</Typography>
               <div className={classes.divSelectBar}>
                 <div className={classes.divTextarea}>
                   <Typography className={classes.contenuto} variant="h11">

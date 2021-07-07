@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable, { MTableToolbar } from "material-table";
+import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
+import { Checkbox, Select, MenuItem } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
+import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
+import { Fade, Paper, Typography } from "@material-ui/core";
+import SelectBar from "./SelectBar";
+import Backdrop from "@material-ui/core/Backdrop";
+import BackupIcon from "@material-ui/icons/Backup";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 const TestSuiteCaricatiTable = () => {
+  const [filter, setFilter] = useState(false);
   const data = [
     {
       launcher: "Adam Denisov",
@@ -75,11 +86,103 @@ const TestSuiteCaricatiTable = () => {
       field: "mos",
     },
   ];
+  function rand() {
+    return Math.round(Math.random() * 20) - 10;
+  }
+
+  function getModalStyle() {
+    const top = 50 + rand();
+    const left = 50 + rand();
+
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+    };
+  }
+
+  const useStyles = makeStyles((theme) => ({
+    paper: {
+      width: 500,
+      backgroundColor: theme.palette.background.paper,
+      // border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: "5%",
+    },
+    paperTop: {
+      height: "20%",
+      display: "flex",
+      alignItems: "center",
+      //opacity: "25%",
+    },
+    paperBottom: {
+      padding: "2%",
+      backgrounColor: "#FFFFFF",
+      //justifyContent: "center",
+      flexDirection: "column",
+      marginTop: "5%",
+    },
+    divSelectBar: {
+      marginTop: "25px",
+    },
+    selectBar: {
+      width: "50%",
+      height: "100",
+      marginTop: "50px",
+    },
+    divTextarea: {
+      marginTop: "20px",
+    },
+    intestazione: {
+      color: "#47B881",
+      marginTop: "5%",
+      flexDirection: "row",
+    },
+    icon: {
+      transform: "scale(1.8)",
+      color: "#47B881",
+      marginTop: "9px",
+    },
+    bottoni: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-around",
+      marginLeft: "55px",
+      marginTop: "4%",
+      marginBottom: "2%",
+    },
+  }));
+
+  const handleChange = () => {
+    setFilter(!filter);
+  };
+  const classes = useStyles();
+  // getModalStyle is not a pure function, we roll the style only on the first render
+  const [modalStyle] = React.useState(getModalStyle);
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title=" Total Test Case Schedulati"
+        title=" Total Test Suite Schedulati"
         data={data}
         columns={columns}
         options={{
@@ -90,7 +193,7 @@ const TestSuiteCaricatiTable = () => {
           searchFieldAlignment: "left",
           selection: true,
           // columnsButton: true,
-          // filtering: true,
+          filtering: filter,
         }}
         actions={[
           {
@@ -108,11 +211,22 @@ const TestSuiteCaricatiTable = () => {
             position: "row",
           },
           {
+            icon: "delete",
+            tooltip: "Delete all selected row",
+            onClick: () => alert("Ho cancellato le righe"),
+          },
+          {
+            icon: () => <FilterListIcon />,
+            tooltip: "Hide/Show Filter option",
+            isFreeAction: true,
+            onClick: () => handleChange(),
+          },
+          {
             icon: () => (
               <ButtonClickedBlue nome="Load Test Suite"></ButtonClickedBlue>
             ),
             tooltip: "Load Test Suite",
-            onClick: (event, rowData) => alert("Load Test Suite"),
+            onClick: () => handleOpen(),
             isFreeAction: true,
           },
         ]}
@@ -134,6 +248,60 @@ const TestSuiteCaricatiTable = () => {
         //   ),
         // }}
       />
+      <Modal
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <Paper className={classes.paper}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h5">
+                  Load Test Suite
+                </Typography>
+              </ListItem>
+            </div>
+
+            <div className={classes.paperBottom}>
+              <Typography variant="h6">Seleziona Test Suite</Typography>
+              <div className={classes.divSelectBar}>
+                <div className={classes.divTextarea}>
+                  <Typography className={classes.contenuto} variant="h11">
+                    Nome del Test
+                  </Typography>
+                </div>
+                <SelectBar nome="Seleziona" classeName={classes.selectBar} />
+              </div>
+
+              <div className={classes.divTextarea}>
+                <Typography className={classes.contenuto} variant="h11">
+                  Descrizione
+                </Typography>
+              </div>
+              <SelectBar nome="Seleziona" classeName={classes.selectBar} />
+
+              <div className={classes.bottoni}>
+                <Button variant="contained" color="secondary">
+                  Schedula Test
+                </Button>
+
+                <Button variant="contained" color="primary">
+                  Carica Test
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
     </div>
   );
 };
