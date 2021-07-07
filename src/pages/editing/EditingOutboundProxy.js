@@ -133,11 +133,12 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "1px",
   },
   paperBottone: {
-    padding: "2%",
+    //padding: "2%",
   },
   bottone: {
     marginTop: "2%",
     marginLeft: "85%",
+    marginBottom: "2%",
   },
   divSelect: {
     marginLeft: "5%",
@@ -152,7 +153,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "12.5%",
   },
   multipleSelect: {
-    width: "217px",
+    width: "284px",
   },
 }));
 
@@ -264,7 +265,7 @@ function EditingOutboundProxy() {
               </Paper>
 
               <Paper className={classes.paper} elevation={0}>
-                <Typography className={classes.label2}>Description</Typography>
+                <Typography className={classes.label2}>Descrizione</Typography>
                 <InputSelect />
               </Paper>
 

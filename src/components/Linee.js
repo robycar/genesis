@@ -28,6 +28,7 @@ import { NavLink } from "react-router-dom";
 function createData(
   name,
   IdLinea,
+  descrizione,
   numero,
   IpLinea,
   porta,
@@ -39,6 +40,7 @@ function createData(
   return {
     name,
     IdLinea,
+    descrizione,
     numero,
     IpLinea,
     porta,
@@ -51,170 +53,159 @@ function createData(
 
 const rows = [
   createData(
-    "Cupcake",
-    305,
-    3.7,
+    "Linea 1",
+    1,
+    "xxxxx",
     67,
     4.3,
+    3,
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
     <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    3,
-    4
+    </IconButton>
   ),
   createData(
-    "Donut",
-    452,
-    25.0,
-    51,
-    4.9,
+    "Linea 2",
     1,
-    <IconButton>
-      <DeleteIcon />
-    </IconButton>,
-    <IconButton>
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    4
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
   ),
   createData(
-    "Eclair",
-    159,
-    6.0,
-    24,
-    4.0,
-    <IconButton>
+    "Linea 3",
+    1,
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton>
+    <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    5,
-    4
+    </IconButton>
   ),
   createData(
-    "Frozen yoghurt",
-    159,
-    6.0,
-    24,
-    4.0,
-    <IconButton>
+    "Linea 4",
+    1,
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton>
+    <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    5,
-    4
+    </IconButton>
   ),
   createData(
-    "Gingerbread",
-    159,
-    6.0,
-    24,
-    4.0,
-    <IconButton>
+    "Linea 5",
+    1,
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton>
+    <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    5,
-    4
+    </IconButton>
   ),
   createData(
-    "Honeycomb",
-    159,
-    6.0,
-    24,
-    4.0,
-    <IconButton>
+    "Linea 6",
+    1,
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton>
+    <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    5,
-    4
+    </IconButton>
   ),
   createData(
-    "Ice cream sandwich",
-    159,
-    6.0,
-    24,
-    4.0,
-    <IconButton>
+    "Linea 7",
+    1,
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton>
+    <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    5,
-    4
+    </IconButton>
   ),
   createData(
-    "Jelly Bean",
-    159,
-    6.0,
-    24,
-    4.0,
-    <IconButton>
+    "Linea 8",
+    1,
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton>
+    <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    5,
-    4
+    </IconButton>
   ),
 
   createData(
-    "Marshmallow",
-    159,
-    6.0,
-    24,
-    4.0,
-    <IconButton>
+    "Linea 9",
+    1,
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton>
+    <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    5,
-    4
+    </IconButton>
   ),
   createData(
-    "Nougat",
-    159,
-    6.0,
-    24,
-    4.0,
-    <IconButton>
+    "Linea 10",
+    1,
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton>
+    <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    5,
-    4
+    </IconButton>
   ),
   createData(
-    "Oreo",
-    159,
-    6.0,
-    24,
-    4.0,
-    <IconButton>
+    "Linea 11",
+    1,
+    "xxxxx",
+    67,
+    4.3,
+    3,
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton>
+    <IconButton aria-label="delete">
       <DeleteIcon />
-    </IconButton>,
-    5,
-    4
+    </IconButton>
   ),
 ];
 
@@ -249,16 +240,20 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: " ",
+    label: "Nome Linea",
   },
   { id: "IdLinea", numeric: true, disablePadding: false, label: "ID Linea" },
+  {
+    id: "descrizione",
+    numeric: true,
+    disablePadding: false,
+    label: "Descrizione",
+  },
   { id: "numero", numeric: true, disablePadding: false, label: "Numero" },
   { id: "IpLinea", numeric: true, disablePadding: false, label: "IP Linea" },
   { id: "porta", numeric: true, disablePadding: false, label: "Porta" },
   { id: "edit", numeric: true, disablePadding: false, label: "Modifica" },
   { id: "elimina", numeric: true, disablePadding: false, label: "Elimina" },
-  // { id: "prova3", numeric: true, disablePadding: false, label: "Prova3" },
-  // { id: "prova4", numeric: true, disablePadding: false, label: "Prova4" },
 ];
 
 function EnhancedTableHead(props) {
@@ -562,6 +557,7 @@ export default function EnhancedTable() {
                       {row.name}
                     </TableCell>
                     <TableCell align="center">{row.IpLinea}</TableCell>
+                    <TableCell align="center">{row.descrizione}</TableCell>
                     <TableCell align="center">{row.numero}</TableCell>
                     <TableCell align="center">{row.IdLinea}</TableCell>
                     <TableCell align="center">{row.porta}</TableCell>

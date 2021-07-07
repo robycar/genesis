@@ -6,6 +6,7 @@ import { Typography } from "@material-ui/core";
 
 const BootstrapInput = withStyles((theme) => ({
   input: {
+    width: "340px",
     borderRadius: 4,
     position: "relative",
     backgroundColor: theme.palette.background.paper,
@@ -37,6 +38,10 @@ const BootstrapInput = withStyles((theme) => ({
 const useStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(1),
+    display: "flex",
+  },
+  titolo: {
+    flexDirection: "column",
   },
 }));
 

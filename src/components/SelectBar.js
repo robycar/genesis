@@ -8,9 +8,10 @@ import "../styles/App.css";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: theme.spacing(2),
+    margin: theme.spacing(1),
     // width: "20vw",
-    width: "380px",
+    width: "340px",
+    display: "flex",
   },
   select: {
     widht: "380x",
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   inputLabel: {
     fontSize: "2vh",
     alignSelf: "center",
+    flexDirection: "column",
   },
 }));
 
@@ -54,8 +56,6 @@ function SelectBar(props) {
       </InputLabel>
       <Select
         className={classes.select}
-        labelId="demo-simple-select-outlined-label"
-        id="demo-simple-select-outlined"
         value={test}
         onChange={handleChange}
         labelWidth={labelWidth}

@@ -213,7 +213,7 @@ function EditingLinee() {
               TEST
             </Button>
           </div>
-          <Paper className={classes.generalPaper}>
+          <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>
               <ListItemIcon>
                 <LanguageIcon fontSize="large" className={classes.icon} />

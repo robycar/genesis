@@ -23,7 +23,7 @@ import SearchBar from "./Search";
 import { NavLink } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import ImageIcon from "@material-ui/icons/Image";
-import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
+import { palette } from "@material-ui/system";
 import ShowModalDescription from "../components/ShowModalDescription";
 
 function createData(name, nomeTemplate, visualizza, modifica, elimina) {
@@ -38,7 +38,7 @@ function createData(name, nomeTemplate, visualizza, modifica, elimina) {
 
 const rows = [
   createData(
-    "Cupcake",
+    "Template1",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -49,7 +49,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Cupcake",
+    "Template2",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -60,7 +60,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Cupcake",
+    "Template3",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -71,7 +71,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Cupcake",
+    "Template4",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -82,7 +82,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Cupcake",
+    "Template5",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -93,7 +93,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Cupcake",
+    "Template6",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -104,7 +104,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Cupcake",
+    "Teamplate7",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -115,7 +115,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Cupcake",
+    "Teamplate8",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -126,7 +126,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Cupcake",
+    "Teamplate9",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -278,11 +278,10 @@ const useToolbarStyles = makeStyles((theme) => ({
     flex: "1 1 25%",
   },
   searchBar: {
-    marginRight: "2%",
     marginLeft: "8%",
     width: "650px",
-    marginTop: "1%",
-    marginBottom: "1%",
+    // marginTop: "3%",
+    // marginBottom: "5%",
   },
 }));
 
@@ -323,6 +322,7 @@ const EnhancedTableToolbar = (props) => {
           <div className={classes.buttonRight}>
             <Button
               color="secondary"
+              size="medium"
               variant="contained"
               className="button-red"
               component={NavLink}
@@ -331,6 +331,18 @@ const EnhancedTableToolbar = (props) => {
               to="/editing/template/carica"
             >
               CARICA{" "}
+            </Button>
+            <Button
+              color="primary"
+              size="medium"
+              variant="contained"
+              className="button-red"
+              //component={NavLink}
+              activeClassName="button-red-active"
+              // exact
+              // to="/editing/template/carica"
+            >
+              CREA{" "}
             </Button>
           </div>
         </>
@@ -383,7 +395,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     marginTop: "10px",
-    marginBottom: "10px",
+    marginBottom: "5%",
   },
 
   buttonRight: {
@@ -391,7 +403,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
   },
   tableHead: {
-    backgroundColor: "rgba(236, 76, 71, 1)",
+    backgroundColor: "#f50057",
   },
 }));
 

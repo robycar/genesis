@@ -19,6 +19,8 @@ import SelectBar from "../../components/SelectBar";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import InputSelect from "../../components/InputSelect";
+import ModaleAddLinea from "../../components/ModaleAddLinea";
 
 const drawerWidth = 240;
 
@@ -134,6 +136,12 @@ const useStyles = makeStyles((theme) => ({
   titolo: {
     marginBottom: "2%",
   },
+  InputSelect: {
+    width: "364.8px",
+  },
+  modaleAddLinea: {
+    marginLeft: "75%",
+  },
 }));
 
 function EditingLineaCreaLinea() {
@@ -230,42 +238,67 @@ function EditingLineaCreaLinea() {
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
+                  ID Linea{" "}
+                </Typography>
+                <InputSelect
+                  className={classes.InputSelect}
+                  placeholder="Passato da back end"
+                />
+              </Paper>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
                   Numero{" "}
                 </Typography>
-                <SelectBar />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  IP Linea{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Password{" "}
-                </Typography>
-                <SelectBar />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  {" "}
-                </Typography>
-              </Paper>
-            </Paper>
-
-            <Paper className={classes.paperContainer2} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Type Linea{" "}
-                </Typography>
-                <SelectBar />
+                <InputSelect
+                  className={classes.InputSelect}
+                  placeholder="Inserisci il numero di linea"
+                />
               </Paper>
 
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Porta{" "}
                 </Typography>
+                <InputSelect />
+              </Paper>
+
+              {/*
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  {" "}
+                </Typography>
+              </Paper> */}
+            </Paper>
+
+            <Paper className={classes.paperContainer2} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  Password{" "}
+                </Typography>
+                <InputSelect
+                  className={classes.InputSelect}
+                  list1="Type LInea1"
+                  list2="Type LInea2"
+                  list3="Type LInea3"
+                  list4="Type LInea4"
+                />
+              </Paper>
+
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  IP Simulatore{" "}
+                </Typography>
+                <InputSelect className={classes.InputSelect} />
+              </Paper>
+
+              <Paper className={classes.divSelect} elevation={0}>
+                <Typography className={classes.label} variant="h11">
+                  Type Linea
+                </Typography>
                 <SelectBar />
+                <div className={classes.modaleAddLinea}>
+                  <ModaleAddLinea />
+                </div>
               </Paper>
 
               {/* <Paper className={classes.divSelect} elevation={0}></Paper> */}

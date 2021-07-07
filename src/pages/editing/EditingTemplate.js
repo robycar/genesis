@@ -243,17 +243,18 @@ function EditingTemplate() {
             </ListItem>
             <Divider className={classes.divider} />
             <Template />
-            <div className={classes.divTextArea}>
-              <Typography>Editor di Testo</Typography>
-              <TextareaAutosize
+            {/* <div className={classes.divTextArea}>
+              <Typography>Editor di Testo</Typography> */}
+            {/* <TextareaAutosize
                 className={classes.textArea}
                 aria-label="empty textarea"
                 rowsMin={8}
                 placeholder="Inserisci il testo"
-              />{" "}
-            </div>
+              />{" "} */}
+            {/* </div> */}
             <div className={classes.divButton}>
-              <ButtonClickedBlue nome="Salva" size="small" />
+              <Button size="small"> CARICA TEMPLATE </Button>
+              <ButtonClickedBlue nome="NUOVO TEMPLATE" size="small" />
             </div>
           </Paper>
         </main>
