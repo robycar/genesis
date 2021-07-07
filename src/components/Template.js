@@ -22,9 +22,8 @@ import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
 import { NavLink } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import ImageIcon from "@material-ui/icons/Image";
-import { palette } from "@material-ui/system";
 import ShowModalDescription from "../components/ShowModalDescription";
+import ModaleCreaTemplate from "../components/ModaleCreaTemplate";
 
 function createData(name, nomeTemplate, visualizza, modifica, elimina) {
   return {
@@ -104,7 +103,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Teamplate7",
+    "Template7",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -115,7 +114,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Teamplate8",
+    "Template8",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -126,7 +125,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Teamplate9",
+    "Template9",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -137,7 +136,7 @@ const rows = [
     </IconButton>
   ),
   createData(
-    "Cupcake",
+    "Template10",
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
@@ -283,6 +282,9 @@ const useToolbarStyles = makeStyles((theme) => ({
     // marginTop: "3%",
     // marginBottom: "5%",
   },
+  buttonRight: {
+    display: "flex",
+  },
 }));
 
 const EnhancedTableToolbar = (props) => {
@@ -320,6 +322,7 @@ const EnhancedTableToolbar = (props) => {
             <SearchBar />
           </div>
           <div className={classes.buttonRight}>
+            <ModaleCreaTemplate />
             <Button
               color="secondary"
               size="medium"
@@ -331,18 +334,6 @@ const EnhancedTableToolbar = (props) => {
               to="/editing/template/carica"
             >
               CARICA{" "}
-            </Button>
-            <Button
-              color="primary"
-              size="medium"
-              variant="contained"
-              className="button-red"
-              //component={NavLink}
-              activeClassName="button-red-active"
-              // exact
-              // to="/editing/template/carica"
-            >
-              CREA{" "}
             </Button>
           </div>
         </>
@@ -398,10 +389,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "5%",
   },
 
-  buttonRight: {
-    display: "flex",
-    justifyContent: "flex-end",
-  },
   tableHead: {
     backgroundColor: "#f50057",
   },

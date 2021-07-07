@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import { Fade, Paper, Typography } from "@material-ui/core";
-import SelectBar from "./SelectBar";
+import InputSelect from "../components/InputSelect";
 import Backdrop from "@material-ui/core/Backdrop";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -38,12 +38,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   paper: {
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    height: "95%",
-    width: "90%",
+    padding: theme.spacing(2, 4, 3, 2),
+    height: "fit-content",
+    width: "fit-content",
   },
   icon: {
     color: "rgba(71, 184, 129, 1)",
@@ -63,8 +65,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "68%",
   },
   generalContainer: {
+    //padding: "3%",
     display: "flex",
     marginTop: "2%",
+    marginRight: "1%",
   },
   divInputRadio: {
     marginBottom: "2%",
@@ -83,13 +87,15 @@ const useStyles = makeStyles((theme) => ({
     // marginTop: "2%",
   },
   paperContainer1: {
-    marginLeft: "2%",
+    marginTop: "1%",
+    marginRight: "1%",
   },
   paperContainer2: {
-    marginLeft: "1%",
+    marginTop: "8px",
+    marginRight: "1%",
   },
   paperContainer3: {
-    marginTop: "5%",
+    marginTop: "75px",
   },
 }));
 
@@ -150,31 +156,31 @@ export default function SimpleModal(props) {
                   <Typography className={classes.label} variant="h11">
                     Last result{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Description{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Creator{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Id Template{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Linea Chiamante{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
@@ -186,7 +192,7 @@ export default function SimpleModal(props) {
                   <Typography className={classes.label} variant="h11">
                     Path{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
               </Paper>
 
@@ -202,42 +208,42 @@ export default function SimpleModal(props) {
                   <Typography className={classes.label} variant="h11">
                     Linea Chiamato{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Linea Chiamante 2{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Linea Chiamante 3{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     OPB Chiamato{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     OPB Chiamante{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     OPB Chiamante 2{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
               </Paper>
 
@@ -246,42 +252,42 @@ export default function SimpleModal(props) {
                   <Typography className={classes.label} variant="h11">
                     OPB Chiamante 3{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Test Suite{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Opzioni{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Start Date{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     End Date{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
                   <Typography className={classes.label} variant="h11">
                     Analysis{" "}
                   </Typography>
-                  <SelectBar />
+                  <InputSelect />
                 </Paper>
               </Paper>
             </div>
