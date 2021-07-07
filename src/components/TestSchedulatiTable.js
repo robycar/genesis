@@ -56,6 +56,36 @@ const TestSchedulatiTable = () => {
     },
   ];
 
+  const columns = [
+    {
+      title: "Launcher",
+      field: "launcher",
+    },
+    {
+      title: "Name TS",
+      field: "nameTs",
+    },
+    {
+      title: "Start Date",
+      field: "startDate",
+    },
+    {
+      title: "Expected End Date",
+      field: "expectedEndDate",
+    },
+    {
+      title: "Result",
+      field: "result",
+    },
+    {
+      title: "Trace",
+      field: "trace",
+    },
+    {
+      title: "MOS",
+      field: "mos",
+    },
+  ];
   function rand() {
     return Math.round(Math.random() * 20) - 10;
   }
@@ -133,36 +163,6 @@ const TestSchedulatiTable = () => {
     },
   }));
 
-  const columns = [
-    {
-      title: "Launcher",
-      field: "launcher",
-    },
-    {
-      title: "Name TS",
-      field: "nameTs",
-    },
-    {
-      title: "Start Date",
-      field: "startDate",
-    },
-    {
-      title: "Expected End Date",
-      field: "expectedEndDate",
-    },
-    {
-      title: "Result",
-      field: "result",
-    },
-    {
-      title: "Trace",
-      field: "trace",
-    },
-    {
-      title: "MOS",
-      field: "mos",
-    },
-  ];
   const handleChange = () => {
     setFilter(!filter);
   };
