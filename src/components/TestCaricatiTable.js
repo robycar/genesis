@@ -108,6 +108,11 @@ const TestCaricatiTable = () => {
             position: "row",
           },
           {
+            icon: "delete",
+            tooltip: "Delete all selected row",
+            onClick: () => alert("Ho cancellato le righe"),
+          },
+          {
             icon: () => (
               <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
             ),
