@@ -19,6 +19,7 @@ import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
+import Typography from "@material-ui/core/Typography";
 
 const drawerWidth = 240;
 

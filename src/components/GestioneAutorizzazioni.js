@@ -7,11 +7,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import ButtonClickedGreen from "./ButtonClickedGreen";
+import ButtonClickedBlue from "./ButtonClickedBlue";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../styles/App.css";
 import { TransferWithinAStation } from "@material-ui/icons";
+import GestioneAutorizzazioniRuoli from "./GestioneAutorizzazioniRuoli"
+import GestioneAutorizzazioniUtenti from "./GestioneAutorizzazioniUtenti"
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -98,7 +100,39 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "white !important",
       color: "#47B881 !important",
     }
-  }
+  },
+  
+  buttonClickedBlue: {
+    backgroundColor: "#1665D8",
+    color: "primary",
+    marginLeft: "10px",
+    marginRight: "10px",
+    width: "200px",
+    height: "40px",
+  },
+
+  buttonNotClickedBlue: {
+    backgroundColor: "whute",
+    border: "1px solid #1665D8",
+    variant: "contained",
+    color: "#1665D8",
+    marginLeft: "10px",
+    marginRight: "10px",
+    width: "200px",
+    height: "40px",
+  },
+  box: {
+    width: "200px",
+    height: "200px",
+    margin: "10px",
+    border: "1px solid black",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "space-around",
+    marginTop: "10px",
+    marginBottom: "10px",
+  },
   
   
   
@@ -107,187 +141,57 @@ const useStyles = makeStyles((theme) => ({
 function FormCreaRuolo() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  const [appState] = useState({
-
-    roleGeneral: [
-      { /*IL PRIMO ELEMENTO DEVE ESSERE VUOTO, ALTRIMENTI BUG 1° ELEMENTO*/ },
-      { id: 1, name: "Marco Rossi",type: "utente",color:"green" },
-      { id: 2, name: "Mario Rossi",type: "utente",color:"green"},
-      { id: 3, name: "Valentina Bianchi",type: "utente",color:"green" },
-      { id: 4, name: "Antonio Verdi",type: "utente",color:"red" },
-      { id: 5, name: "Admin management",type: "permission",color:"green" },
-      { id: 6, name: "Admin user management",type: "permission",color:"green" },
-      { id: 7, name: "Admin utente management",type: "permission",color:"green" },
-      { id: 8, name: "Report manager",type: "permission",color:"green" },
-      { id: 9, name: "Maria Sacchi",type: "utente",color:"green" },
-      { id: 10, name: "Workstation management",type: "permission",color:"green" },
-      { id: 11, name: "Line management",type: "permission",color:"green" },
+  
+  const [appState, changeState] = useState({
+    activeObject: null,
+    objects: [
+      { id: 1, name: "Gestione Ruoli" },
+      { id: 2, name: "Gestione Utenti" },
     ],
   });
+  function toggleActive(index) {
+    changeState({ ...appState, activeObject: appState.objects[index] });
 
-  function toggleActive(indice) {
-    
-    if(appState.roleGeneral[indice].color == "green"){
-      document.getElementById(indice).className=(classes.activeGreen);
-      
-      document.getElementById("button1").value=indice;
-    }else{
-      document.getElementById(indice).className=(classes.activeRed);
-      document.getElementById("button2").value=indice;
+    console.log(appState.objects[index].name);
+  }
+
+  function toggleActiveStyles(index) {
+    if (appState.objects[index] === appState.activeObject) {
+      return "box nav-table-active";
+    } else {
+      return "box nav-table-inactive";
     }
-    if(document.getElementById("checkbox").value!="on" && document.getElementById("checkbox").value!=indice)
-      document.getElementById(document.getElementById("checkbox").value).className=(classes.parola);
-    document.getElementById("checkbox").value=indice
   }
+  //  ||appState.activeObject === null
+  const [show, setShow] = useState(true);
 
-  function transferGreen(){
-    if(document.getElementById("button1").value != 0)
-      if((appState.roleGeneral[(document.getElementById("button1").value)].color) =="green" ){
-        appState.roleGeneral[(document.getElementById("button1").value)].color ="red"
-        document.getElementById("button2").value = 0
-      }
+  function showActive() {
+    setShow(!show);
   }
-  function transferRed(){
-    if(document.getElementById("button2").value != 0)
-      if((appState.roleGeneral[(document.getElementById("button2").value)].color) =="red" ){
-        appState.roleGeneral[(document.getElementById("button2").value)].color ="green";
-        document.getElementById("button1").value = 0
-      }
-  }
-  
-
   return (
-    <Container maxWidth="lg" className={classes.container}>
-          <Container>
-            <Form>
-            <Row md={3}>
-                <Col md={5} style={{paddingRight:"0!important"}}>
-                  <Form.Group controlId="form.Text" >
-                    <Form.Label><br /></Form.Label>
-                    
-                    <Form.Control type="text" placeholder="Search for available " />
-                  </Form.Group>
-                </Col>
-                <Col md={2} >
-                </Col>
-                <Col md={5} style={{paddingLeft:"0!important"}}>
-                  <Form.Group controlId="form.Text">
-                    <Form.Label>Ruolo</Form.Label>
-                      <Form.Control as="select" name="state"  >
-                      <option value="L2">L2</option>
-                      <option value="L1">L1</option>
-                      <option value="A">Admin</option>
-                      <option value="SA">SuperAdmin</option>                      
-                        </Form.Control>
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row md={3}>
-                <Col md={5} style={{paddingRight:"0!important"}}>
-                  <div className={classes.contAutorizzazioni}>
-                    <h6 style={{paddingLeft:"15px"}}>Permessi</h6>
-                    <ul className={classes.ulGestAuto}>
-
-                      {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].color == "green" && appState.roleGeneral[index].type == "permission" ?
-                          <a href="#"
-                            key={index}
-                            id={elements.id}
-                            className={classes.parola}
-                            onClick={() => {toggleActive(index)}}
-                          ><li className={classes.liAdd}>{elements.name}</li></a>
-                        :""
-                        })}
-
-                    </ul>
-                    <h6 style={{paddingLeft:"15px",paddingTop:"20px"}}>Utenti</h6>
-                    <ul className={classes.ulGestAuto}>
-
-                      {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].color == "green" && appState.roleGeneral[index].type == "utente"?
-                          <a href="#"
-                            key={index}
-                            id={elements.id}
-                            className={classes.parola}
-                            onClick={() => {toggleActive(index)}}
-                          ><li className={classes.liAdd}>{elements.name}</li></a>
-                        :""
-                        })}
-
-                    </ul>
-                  </div>
-                </Col>
-                <Col md={2} >
-                <input id="checkbox" type="checkbox" style={{display:"none"}}/>
-                  <br />
-                  <br />
-                  <br />
-                  <div style={{display:"flex",justifyContent:"center"}}>
-                    <button 
-                      id="button1"
-                      className={classes.buttonGreen}
-                      onClick={() => {transferGreen()}}
-                      
-                      >
-                        &gt;&gt;&gt;
-                      </button>
-                  </div>
-                  <br />
-                  <br />
-                  <div style={{display:"flex",justifyContent:"center"}}>
-                    <button
-                      id="button2"
-                      className={classes.buttonRed}
-                      onClick={() => {transferRed()}}
-                      >
-                        &lt;&lt;&lt;
-                      </button>
-                  </div>
-
-                </Col>
-                <Col md={5} style={{paddingLeft:"0!important"}}>
-                  <div className={classes.contAutorizzazioni}>
-                    <h6 style={{paddingLeft:"15px"}}>Permessi</h6>
-                    <ul className={classes.ulGestAuto}>
-                      {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].color == "red" && appState.roleGeneral[index].type == "permission" ?
-                          <a href="#"
-                            key={index}
-                            id={elements.id}
-                            className={classes.parola}
-                            onClick={() => {toggleActive(index)}}
-                          ><li className={classes.liRemove}>{elements.name}</li></a>
-                        :""
-                        })}
-                    </ul>
-                    <h6 style={{paddingLeft:"15px",paddingTop:"20px"}}>Utenti</h6>
-                    <ul className={classes.ulGestAuto}>
-
-                      {appState.roleGeneral.map((elements, index) => {
-                        return appState.roleGeneral[index].color == "red" && appState.roleGeneral[index].type == "utente"?
-                          <a href="#"
-                            key={index}
-                            id={elements.id}
-                            className={classes.parola}
-                            onClick={() => {toggleActive(index)}}
-                          ><li className={classes.liRemove}>{elements.name}</li></a>
-                        :""
-                        })}
-
-                    </ul>
-                  </div>
-                </Col>
-              </Row>
-              <br />
-              <br />
-              <br />
-              <div className={classes.bottone} style={{display: "flex",justifyContent: "center"}}>
-                <ButtonClickedGreen size="large" nome="SALVA" />
-              </div>
-            </Form>
-          </Container>
-    </Container>
+    <>
+      <div className={classes.buttonContainer}>
+        {/* <ButtonList /> */}
+        {appState.objects.map((elements, index) => (
+          <ButtonClickedBlue
+            key={index}
+            nome={elements.name}
+            className={toggleActiveStyles(index)}
+            onClick={() => {
+              toggleActive(index);
+              // showActive();
+            }}
+          />
+        ))}
+      </div>
+      {appState.activeObject === null && <GestioneAutorizzazioniUtenti />}
+      {appState.objects[0] === appState.activeObject && (
+        <GestioneAutorizzazioniRuoli />
+      )}
+      {appState.objects[1] === appState.activeObject && (
+        <GestioneAutorizzazioniUtenti />
+      )}
+    </>
   );
 }
 export default FormCreaRuolo;

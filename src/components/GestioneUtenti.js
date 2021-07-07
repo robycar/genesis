@@ -221,7 +221,7 @@ const EnhancedTableToolbar = (props) => {
             component="div"
             style={{ display: "flex" }}
           >
-            Gestione Utenti
+           Gestione Utenti 
             <SearchBar className={classes.searchBar} />
           </Typography>
           
