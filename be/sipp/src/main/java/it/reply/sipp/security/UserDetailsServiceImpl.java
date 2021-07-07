@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import it.reply.sipp.model.RoleVO;
 import it.reply.sipp.model.UserVO;
 import it.reply.sipp.model.repository.UserRepository;
+import it.reply.sipp.service.UserService;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -34,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 	}
 	
-	private List<GrantedAuthority> readRolesAndFunctionsForUser(UserVO u) {
+	public List<GrantedAuthority> readRolesAndFunctionsForUser(UserVO u) {
 		Set<RoleVO> roles = u.getRoles();
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		
@@ -50,4 +51,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return authorities;
 	}
 
+	
 }

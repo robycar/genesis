@@ -1,9 +1,6 @@
 package it.reply.sipp.api.controller;
 
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

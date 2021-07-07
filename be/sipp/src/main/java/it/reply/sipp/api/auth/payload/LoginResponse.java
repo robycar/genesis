@@ -15,7 +15,6 @@ public class LoginResponse {
 	private String tokenType = BEARER;
 	
 	private String username;
-	private String email;
 	private List<String> roles;
 	private List<String> functions;
 	
@@ -44,14 +43,6 @@ public class LoginResponse {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public List<String> getRoles() {

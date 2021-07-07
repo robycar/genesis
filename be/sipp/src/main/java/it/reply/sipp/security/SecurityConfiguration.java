@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -22,8 +23,8 @@ import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity(debug = true)
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity(debug = false)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 	private static final String[] UNPROTECTED_URLS = { "/api/auth/login", "/api/test/**" };
@@ -85,6 +86,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
 		.authorizeRequests().antMatchers(UNPROTECTED_URLS).permitAll()
+		.antMatchers(HttpMethod.GET, "/api/user/**").hasAuthority("FUN_user.view")
+		.antMatchers(HttpMethod.POST, "/api/user/**").hasAuthority("FUN_user.edit")
+		.antMatchers(HttpMethod.PUT, "/api/user/**").hasAuthority("FUN_user.edit")
 		.anyRequest().authenticated()
 		.and()
 		.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

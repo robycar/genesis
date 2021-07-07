@@ -67,7 +67,7 @@ public class AuthController {
 					continue;
 				}
 				if (authName.startsWith("ROLE_")) {
-					roles.add(authName);
+					roles.add(authName.substring(5));
 				} else if (authName.startsWith("FUN_")) {
 					functions.add(authName.substring(4));
 				}

@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="ROLE")
-public class RoleVO implements Serializable {
+public class RoleVO implements Serializable, Comparable<RoleVO> {
 
 	private static final long serialVersionUID = -404594990186615686L;
 	
@@ -46,4 +46,22 @@ public class RoleVO implements Serializable {
 		this.functions = functions;
 	}
 
+	@Override
+	public int compareTo(RoleVO o) {
+		String oname = o == null ? null : o.getName();
+		
+		if (this.name == oname) {
+			return 0;
+		}
+		
+		if (this.name == null) {
+			return -1;
+		}
+		
+		if (oname == null) {
+			return 1;
+		}
+		
+		return this.name.compareTo(oname);
+	}
 }

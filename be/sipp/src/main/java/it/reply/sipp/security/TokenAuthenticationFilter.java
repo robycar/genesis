@@ -20,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import it.reply.sipp.model.UserVO;
 import it.reply.sipp.service.UserAuthenticationService;
+import it.reply.sipp.service.UserService;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
@@ -30,6 +31,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	@Qualifier("jwtAuthenticationService")
 	private UserAuthenticationService userAuthenticationService;
+	
+	@Autowired
+	private UserService userService;
 
 
 	@Override
@@ -43,7 +47,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 			
 			UserDetails userDetails = User.withUsername(userVO.getUsername())
 					.password("***authenticatedFromToken***")
-					.roles("user")
+					.authorities(userService.readRolesAndFunctionsForUser(userVO))
 					.build();
 			
 			

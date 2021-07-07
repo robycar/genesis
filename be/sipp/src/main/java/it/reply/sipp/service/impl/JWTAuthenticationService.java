@@ -42,13 +42,16 @@ public class JWTAuthenticationService implements UserAuthenticationService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public UserVO authenticateByToken(String token) throws AuthenticationException {
 		Object username;
 		try {
 			username = jwtComponent.verifyToken(token).get(JWTComponent.CLAIM_USERNAME);
-			return Optional.ofNullable(username)
+			UserVO result = Optional.ofNullable(username)
 					.flatMap(name -> userRepository.findByUsername(String.valueOf(name)))
 					.orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' not found."));
+			result.getRoles().size();
+			return result;
 		} catch (TokenVerificationException e) {
 			logger.error(e);
 			throw new BadCredentialsException("Invalid JWT token", e);
