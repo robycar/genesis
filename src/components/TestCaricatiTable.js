@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import MaterialTable, { MTableToolbar } from "material-table";
-import { Button } from "@material-ui/core";
+import { Checkbox, Select, MenuItem } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
+import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
 
 const TestCaricatiTable = () => {
+  const [filter, setFilter] = useState(false);
   const data = [
     {
       launcher: "Adam Denisov",
@@ -75,8 +77,17 @@ const TestCaricatiTable = () => {
       field: "mos",
     },
   ];
+  const handleChange = () => {
+    setFilter(!filter);
+  };
   return (
     <div>
+      {/* <Checkbox
+        checked={filter}
+        onChange={handleChange}
+        inputProps={{ "aria-label": "primary checkbox" }}
+      /> */}
+
       <MaterialTable
         style={{ boxShadow: "none" }}
         title=" Total Test Case Schedulati"
@@ -90,7 +101,7 @@ const TestCaricatiTable = () => {
           searchFieldAlignment: "left",
           selection: true,
           // columnsButton: true,
-          // filtering: true,
+          filtering: filter,
         }}
         actions={[
           {
@@ -111,6 +122,12 @@ const TestCaricatiTable = () => {
             icon: "delete",
             tooltip: "Delete all selected row",
             onClick: () => alert("Ho cancellato le righe"),
+          },
+          {
+            icon: () => <FilterListIcon />,
+            tooltip: "Hide/Show Filter option",
+            isFreeAction: true,
+            onClick: () => handleChange(),
           },
           {
             icon: () => (
