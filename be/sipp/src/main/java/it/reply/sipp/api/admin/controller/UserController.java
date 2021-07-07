@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.reply.sipp.api.admin.payload.ListResponse;
+import it.reply.sipp.api.admin.payload.UtenteListResponse;
 import it.reply.sipp.api.admin.payload.RetrieveUserResponse;
 import it.reply.sipp.api.admin.payload.UpdateUserRequest;
 import it.reply.sipp.api.admin.payload.UpdateUserResponse;
@@ -41,14 +41,14 @@ public class UserController extends AbstractController {
 	 * Elenco di utenti e relativi ruoli
 	 */
 	@GetMapping("")
-	public ListResponse list() {
+	public UtenteListResponse list() {
 		logger.info("list");
 		List<UserVO> usersVO = userService.listUsers();
 		
 		List<UserDTO> userDTOList = usersVO.stream().map(vo -> new UserDTO(vo))
 			.collect(Collectors.toList());
 		
-		ListResponse response = new ListResponse();
+		UtenteListResponse response = new UtenteListResponse();
 		response.setUsers(userDTOList);
 		
 		return response;

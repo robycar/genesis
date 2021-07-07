@@ -27,6 +27,7 @@ import it.reply.sipp.model.RoleVO;
 import it.reply.sipp.model.UserVO;
 import it.reply.sipp.model.repository.RoleRepository;
 import it.reply.sipp.model.repository.UserRepository;
+import it.reply.sipp.service.GruppoService;
 import it.reply.sipp.service.UserService;
 
 @Service
@@ -42,6 +43,9 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
+	
+	@Autowired
+	private GruppoService gruppoService;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -88,7 +92,8 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	@Override
 	@Transactional(readOnly = false)
 	public void updateUser(String userIdOrUsername, UserDTO userDTO, String password, boolean updateRoles) throws ApplicationException {
-		
+		logger.debug("enter updateUser({}, {}, ****, {}",
+				userIdOrUsername, userDTO, updateRoles);
 		Long userId = null;
 		Optional<UserVO> userVOpt = Optional.empty();
 		try {
@@ -105,6 +110,15 @@ public class UserServiceImpl extends AbstractService implements UserService {
 						AppError.USER_NOT_FOUND.getErrorCode(),
 						errorMessage(AppError.USER_NOT_FOUND, userIdOrUsername),
 						errorLogMessage(AppError.USER_NOT_FOUND, userIdOrUsername)));
+
+		if (userDTO.getGruppo() != null) {
+			if (userDTO.getGruppo().getId() != null) {
+				userVO.setGruppo(gruppoService.readGruppo(userDTO.getGruppo().getId()));
+			} else {
+				userVO.setGruppo(null);
+			}
+		}
+		
 
 		if (password != null) {
 			logger.debug("Changing password for user {}", userVO.getUsername());
@@ -141,6 +155,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		if (userDTO.getTel2() != null) {
 			userVO.setTel2(userDTO.getTel2());
 		}
+		
 		
 		if (updateRoles) {
 			Map<String, RoleVO> oldRoles = new TreeMap<>();

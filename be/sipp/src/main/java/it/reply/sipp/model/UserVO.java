@@ -8,10 +8,12 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,7 +23,7 @@ public class UserVO implements Serializable {
 	private static final long serialVersionUID = -6114287442328258598L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	@Enumerated(EnumType.STRING)
@@ -50,6 +52,10 @@ public class UserVO implements Serializable {
 		inverseJoinColumns = @JoinColumn(name="ROLE_NAME")
 	)
 	private Set<RoleVO> roles;
+	
+	@ManyToOne
+	@JoinColumn(name="GRUPPO_ID")
+	private GruppoVO gruppo;
 
 	public Long getId() {
 		return id;
@@ -137,6 +143,14 @@ public class UserVO implements Serializable {
 
 	public void setTel2(String tel2) {
 		this.tel2 = tel2;
+	}
+
+	public GruppoVO getGruppo() {
+		return gruppo;
+	}
+
+	public void setGruppo(GruppoVO gruppo) {
+		this.gruppo = gruppo;
 	}
 	
 }

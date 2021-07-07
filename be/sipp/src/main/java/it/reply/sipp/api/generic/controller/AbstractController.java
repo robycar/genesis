@@ -32,8 +32,6 @@ public class AbstractController {
 		}
 		logger.error(logMessage, e);
 		
-		new PayloadResponse(errorCode, errorMessage);
-		
 		response.setError(new ErrorInfo(errorCode, errorMessage));
 		
 		ResponseEntity<T> result = ResponseEntity.status(statusCode).body(response);

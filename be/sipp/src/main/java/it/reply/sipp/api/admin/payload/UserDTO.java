@@ -3,8 +3,6 @@ package it.reply.sipp.api.admin.payload;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.constraints.NotNull;
-
 import it.reply.sipp.api.generic.payload.DTO;
 import it.reply.sipp.model.RoleVO;
 import it.reply.sipp.model.UserVO;
@@ -27,6 +25,8 @@ public class UserDTO extends DTO {
 	
 	private String tel2;
 	
+	private GruppoDTO gruppo;
+	
 	private Set<String> roles;
 
 	public UserDTO() {
@@ -40,6 +40,11 @@ public class UserDTO extends DTO {
 		this.tel1 = vo.getTel1();
 		this.tel2 = vo.getTel2();
 		this.email = vo.getEmail();
+		if (vo.getGruppo() != null) {
+			this.gruppo = new GruppoDTO(vo.getGruppo());
+		} else {
+			this.gruppo = new GruppoDTO();
+		}
 		
 		if (vo.getRoles() != null) {
 			this.roles = new HashSet<>(vo.getRoles().size());
@@ -112,6 +117,14 @@ public class UserDTO extends DTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public GruppoDTO getGruppo() {
+		return gruppo;
+	}
+
+	public void setGruppo(GruppoDTO gruppo) {
+		this.gruppo = gruppo;
+	}
 
 	@Override
 	protected void writeFields(StringBuilder sb) {
@@ -123,6 +136,7 @@ public class UserDTO extends DTO {
 		writeField(sb, "tel1", tel1);
 		writeField(sb, "tel2", tel2);
 		writeField(sb, "roles", roles);
+		writeField(sb, "gruppo", gruppo);
 		super.writeFields(sb);
 	}
 }

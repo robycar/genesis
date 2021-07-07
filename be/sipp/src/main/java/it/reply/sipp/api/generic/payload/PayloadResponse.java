@@ -11,14 +11,6 @@ public class PayloadResponse extends DTO {
 	public PayloadResponse() {
 	}
 	
-	public PayloadResponse(String errorCode, String errorDescription) {
-		this(new ErrorInfo(errorCode, errorDescription));
-	}
-
-	public PayloadResponse(ErrorInfo error) {
-		this.error = Objects.requireNonNull(error);
-	}
-
 	public ErrorInfo getError() {
 		return error;
 	}

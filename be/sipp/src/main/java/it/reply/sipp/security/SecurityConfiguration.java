@@ -89,6 +89,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		.antMatchers(HttpMethod.GET, "/api/user/**").hasAuthority("FUN_user.view")
 		.antMatchers(HttpMethod.POST, "/api/user/**").hasAuthority("FUN_user.edit")
 		.antMatchers(HttpMethod.PUT, "/api/user/**").hasAuthority("FUN_user.edit")
+		.antMatchers(HttpMethod.GET, "/api/group/**").hasAuthority("FUN_gruppo.view")
+		.antMatchers(HttpMethod.POST, "/api/group/**").hasAuthority("FUN_gruppo.edit")
+		.antMatchers(HttpMethod.PUT, "/api/group/**").hasAuthority("FUN_gruppo.edit")
 		.anyRequest().authenticated()
 		.and()
 		.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
