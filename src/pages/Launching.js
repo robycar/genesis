@@ -17,7 +17,7 @@ import { mainListItems, secondaryListItems } from "../components/listItems";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import SelectBar from "../components/SelectBar";
 import SelectAutocompleteTestCase from "../components/SelectAutocompleteTestCase";
-import SelectAutocompleteTestSuite from "../components/SelectAutocompleteTestCase";
+import SelectAutocompleteTestSuite from "../components/SelectAutocompleteTestSuite";
 
 const drawerWidth = 240;
 

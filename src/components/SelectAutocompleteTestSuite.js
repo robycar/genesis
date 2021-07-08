@@ -3,7 +3,7 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
-export default function SelectAutocomplete() {
+export default function SelectAutocompleteTestSuite() {
   return (
     <Autocomplete
       id="combo-box-demo"
