@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import { Fade, Paper, Typography } from "@material-ui/core";
-import InputSelect from "../components/InputSelect";
+import InputSelect from "./InputSelect";
 import Backdrop from "@material-ui/core/Backdrop";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -13,7 +13,7 @@ import Divider from "@material-ui/core/Divider";
 import ImageIcon from "@material-ui/icons/Image";
 import IconButton from "@material-ui/core/IconButton";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import InputRadio from "../../src/components/InputRadio";
+import InputRadio from "./InputRadio";
 import CloseIcon from "@material-ui/icons/Close";
 
 // function rand() {
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3, 2),
     height: "fit-content",
-    width: "fit-content",
+    width: "85%",
   },
   icon: {
     color: "rgba(71, 184, 129, 1)",
@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "20px",
     color: "rgba(71, 184, 129, 1)",
     padding: "2%",
+
     // marginTop: "2%",
   },
   closeButton: {
@@ -68,7 +69,9 @@ const useStyles = makeStyles((theme) => ({
     //padding: "3%",
     display: "flex",
     marginTop: "2%",
-    marginRight: "1%",
+    marginLeft: "1%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   divInputRadio: {
     marginBottom: "2%",

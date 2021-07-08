@@ -8,6 +8,7 @@ import Divider from "@material-ui/core/Divider";
 import InputUpload from "../components/InputUpload";
 import CreaItem from "../components/CreaItem";
 import InputSelect from "../components/InputSelect";
+import ButtonRadio from "../components/ButtonRadio";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -65,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     marginTop: "2%",
     marginBottom: "1%",
+  },
+  buttonRadio: {
+    marginLeft: "3%",
   },
 }));
 
@@ -131,6 +135,12 @@ export default function SimpleModal(props) {
                   <InputUpload label="Chiamante 3" />
                 </div>
               </div>
+              <Divider className={classes.divider} />
+
+              <div className={classes.buttonRadio}>
+                <ButtonRadio />
+              </div>
+
               <Divider className={classes.divider} />
               <div className={classes.bottoni}>
                 <Button variant="contained" color="primary">

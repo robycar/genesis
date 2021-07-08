@@ -22,7 +22,7 @@ import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
 import { NavLink } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import ShowModalDescription from "../components/ShowModalDescription";
+import ModalDescriptionTestCase from "./ModalDescriptionTestCase";
 import ModaleCreaTemplate from "../components/ModaleCreaTemplate";
 
 function createData(name, nomeTemplate, visualizza, modifica, elimina) {
@@ -41,7 +41,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -52,7 +52,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -63,7 +63,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -74,7 +74,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -85,7 +85,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -96,7 +96,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -107,7 +107,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -118,7 +118,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -129,7 +129,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -140,7 +140,7 @@ const rows = [
     <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <ShowModalDescription />,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />

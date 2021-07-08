@@ -20,6 +20,7 @@ import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import TestSuiteSelect from "../../components/TestSuiteSelect";
+import InputSelect from "../../components/InputSelect";
 
 const drawerWidth = 240;
 
@@ -233,33 +234,33 @@ function EditingTestTestSuiteCreaTestSuite() {
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Numero{" "}
+                  Name{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Numero{" "}
+                  Descrizione{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Numero{" "}
+                  ID Utenza{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  IP Linea{" "}
+                  Data Creazione{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Password{" "}
+                  Path{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">

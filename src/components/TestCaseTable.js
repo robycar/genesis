@@ -20,8 +20,9 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
 import EditIcon from "@material-ui/icons/Edit";
-import ShowModalDescription from "../components/ShowModalDescription";
+import ModalDescriptionTestCase from "../components/ModalDescriptionTestCase";
 import { NavLink } from "react-router-dom";
+import AddIcon from "@material-ui/icons/Add";
 
 function createData(
   name,
@@ -65,7 +66,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
   createData(
     "Donut",
@@ -80,7 +81,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
   createData(
     "Eclair",
@@ -95,7 +96,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
   createData(
     "Frozen yoghurt",
@@ -110,7 +111,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
   createData(
     "Gingerbread",
@@ -125,7 +126,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
   createData(
     "Honeycomb",
@@ -140,7 +141,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
   createData(
     "Ice cream sandwich",
@@ -155,7 +156,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
   createData(
     "Jelly Bean",
@@ -170,7 +171,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
 
   createData(
@@ -186,7 +187,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
   createData(
     "Nougat",
@@ -201,7 +202,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
   createData(
     "Oreo",
@@ -216,7 +217,7 @@ const rows = [
       <DeleteIcon />
     </IconButton>,
     "xxxx",
-    <ShowModalDescription />
+    <ModalDescriptionTestCase />
   ),
 ];
 
@@ -277,6 +278,7 @@ const headCells = [
   { id: "azienda", numeric: true, disablePadding: false, label: "Azienda" },
   { id: "show", numeric: true, disablePadding: false, label: "Mostra" },
 ];
+
 function EnhancedTableHead(props) {
   const {
     classes,
@@ -305,7 +307,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "center" : "left"}
+            align={headCell.numeric ? "center" : "center"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -404,8 +406,9 @@ const EnhancedTableToolbar = (props) => {
               activeClassName="button-green-active"
               exact
               to="/editing/testcase/createstcase"
+              startIcon={<AddIcon className={classes.icon} />}
             >
-              CREA TEST CASE{" "}
+              TEST CASE{" "}
             </Button>
           </div>
         </>
