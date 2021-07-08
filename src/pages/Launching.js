@@ -16,6 +16,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../components/listItems";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import SelectBar from "../components/SelectBar";
+import SelectAutocompleteTestCase from "../components/SelectAutocompleteTestCase";
+import SelectAutocompleteTestSuite from "../components/SelectAutocompleteTestCase";
 
 const drawerWidth = 240;
 
@@ -208,11 +210,13 @@ function Launching() {
                 </Typography>
               </Paper>
               <div className={classes.containerSelect}>
-                <SelectBar nome="Selezione Test Case" />
+                {/* <SelectBar nome="Selezione Test Case" /> */}
+                <SelectAutocompleteTestSuite />
               </div>
 
               <div>
-                <SelectBar nome="Selezione Test Suite" />
+                {/* <SelectBar nome="Selezione Test Suite" /> */}
+                <SelectAutocompleteTestCase />
               </div>
             </Paper>
 
