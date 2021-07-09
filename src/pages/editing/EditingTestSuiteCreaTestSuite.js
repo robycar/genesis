@@ -116,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "20px",
   },
   paperContainer2: {
-    marginTop: "2%",
+    // marginTop: "2%",
     flexDirection: "column",
     padding: "20px",
     width: "500px",
@@ -137,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2%",
   },
   testSuiteSelect: {
-    margitBottom: "2%",
+    height: "1980px",
   },
 }));
 
