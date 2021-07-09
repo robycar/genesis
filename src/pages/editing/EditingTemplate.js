@@ -16,7 +16,7 @@ import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
-import Template from "../../components/Template";
+import TemplateNew from "../../components/TemplateNew";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 
 const drawerWidth = 240;
@@ -231,7 +231,7 @@ function EditingTemplate() {
               <Typography className={classes.titolo}> Template </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <Template />
+            <TemplateNew />
             {/* <div className={classes.divTextArea}>
               <Typography>Editor di Testo</Typography> */}
             {/* <TextareaAutosize

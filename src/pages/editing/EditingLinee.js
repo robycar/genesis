@@ -15,7 +15,7 @@ import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
-import Linee from "../../components/Linee";
+import LineeNew from "../../components/LineeNew";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
@@ -221,7 +221,7 @@ function EditingLinee() {
               <Typography className={classes.titolo}> Linee </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <Linee />
+            <LineeNew />
           </Paper>
         </main>
       </Container>

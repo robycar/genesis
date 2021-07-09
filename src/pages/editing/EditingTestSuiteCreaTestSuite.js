@@ -19,7 +19,7 @@ import SelectBar from "../../components/SelectBar";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import TestSuiteSelect from "../../components/TestSuiteSelect";
+import TestSuiteSelectNew from "../../components/TestSuiteSelectNew";
 import InputSelect from "../../components/InputSelect";
 
 const drawerWidth = 240;
@@ -271,7 +271,7 @@ function EditingTestTestSuiteCreaTestSuite() {
 
             <Paper className={classes.paperContainer2} elevation={0}>
               <Typography>Seleziona i Test Case da associare:</Typography>
-              <TestSuiteSelect className={classes.testSuiteSelect} />
+              <TestSuiteSelectNew className={classes.testSuiteSelect} />
             </Paper>
           </div>
           <Divider className={classes.divider} />
