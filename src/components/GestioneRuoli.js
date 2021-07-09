@@ -105,7 +105,7 @@ const GestioneRuoli = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="Utenti"
+        title="Ruoli"
         data={data}
         columns={columns}
         options={{
