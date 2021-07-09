@@ -16,7 +16,7 @@ function ButtonClickedBlue(props) {
   const classes = useStyles();
 
   return (
-    <Button className={classes.button} variant="contained" color="primary">
+    <Button className={props.className} onClick={props.onClick} variant="contained" color="primary">
       {props.nome}
     </Button>
   );

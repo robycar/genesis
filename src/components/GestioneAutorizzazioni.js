@@ -102,34 +102,36 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   
-  buttonClickedBlue: {
-    backgroundColor: "#1665D8",
-    color: "primary",
+  buttonClickedGreen: {
+    backgroundColor: "#47B881",
+    border: "1px solid #47B881",
+    color: "white",
     marginLeft: "10px",
     marginRight: "10px",
     width: "200px",
     height: "40px",
+    "&:hover":{
+      backgroundColor: "#47B881",
+      border: "1px solid #47B881",
+      color: "white",
+    }
   },
 
-  buttonNotClickedBlue: {
-    backgroundColor: "whute",
-    border: "1px solid #1665D8",
-    variant: "contained",
-    color: "#1665D8",
+  buttonNotClickedGreen: {
+    backgroundColor: "white",
+    border: "1px solid #47B881",
+    color: "#47B881",
     marginLeft: "10px",
     marginRight: "10px",
     width: "200px",
     height: "40px",
-  },
-  box: {
-    width: "200px",
-    height: "200px",
-    margin: "10px",
-    border: "1px solid black",
+    "&:hover":{
+      backgroundColor: "#47B881",
+      border: "1px solid #47B881",
+      color: "white",
+    }
   },
   buttonContainer: {
-    display: "flex",
-    justifyContent: "space-around",
     marginTop: "10px",
     marginBottom: "10px",
   },
@@ -157,9 +159,9 @@ function FormCreaRuolo() {
 
   function toggleActiveStyles(index) {
     if (appState.objects[index] === appState.activeObject) {
-      return "box nav-table-active";
+      return classes.buttonClickedGreen;
     } else {
-      return "box nav-table-inactive";
+      return classes.buttonNotClickedGreen;
     }
   }
   //  ||appState.activeObject === null
@@ -184,7 +186,7 @@ function FormCreaRuolo() {
           />
         ))}
       </div>
-      {appState.activeObject === null && <GestioneAutorizzazioniUtenti />}
+      {appState.activeObject === null && <GestioneAutorizzazioniRuoli />}
       {appState.objects[0] === appState.activeObject && (
         <GestioneAutorizzazioniRuoli />
       )}
