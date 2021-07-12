@@ -22,8 +22,8 @@ import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
 import { NavLink } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import ImageIcon from "@material-ui/icons/Image";
-import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
+import ModalDescriptionTestCase from "./ModalDescriptionTestCase";
+import ModaleCreaTemplate from "../components/ModaleCreaTemplate";
 
 function createData(name, nomeTemplate, visualizza, modifica, elimina) {
   return {
@@ -37,39 +37,110 @@ function createData(name, nomeTemplate, visualizza, modifica, elimina) {
 
 const rows = [
   createData(
-    "Cupcake",
-    <IconButton aria-label="delete">
+    "Template1",
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="delete">
-      <ImageIcon />
-    </IconButton>,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
     </IconButton>
   ),
   createData(
-    "Cupcake",
-    <IconButton aria-label="delete">
+    "Template2",
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
-    <IconButton aria-label="delete">
-      <ImageIcon />
-    </IconButton>,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
     </IconButton>
   ),
   createData(
-    "Cupcake",
-    <IconButton aria-label="delete">
+    "Template3",
+    <IconButton aria-label="edit">
       <EditIcon />
     </IconButton>,
+    <ModalDescriptionTestCase />,
+    305,
     <IconButton aria-label="delete">
-      <ImageIcon />
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Template4",
+    <IconButton aria-label="edit">
+      <EditIcon />
     </IconButton>,
+    <ModalDescriptionTestCase />,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Template5",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <ModalDescriptionTestCase />,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Template6",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <ModalDescriptionTestCase />,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Template7",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <ModalDescriptionTestCase />,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Template8",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <ModalDescriptionTestCase />,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Template9",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <ModalDescriptionTestCase />,
+    305,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  ),
+  createData(
+    "Template10",
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <ModalDescriptionTestCase />,
     305,
     <IconButton aria-label="delete">
       <DeleteIcon />
@@ -141,7 +212,7 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    <TableHead>
+    <TableHead className={classes.tableHead}>
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
@@ -156,7 +227,6 @@ function EnhancedTableHead(props) {
             key={headCell.id}
             align={headCell.numeric ? "center" : "center"}
             padding={headCell.disablePadding ? "none" : "default"}
-            sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -189,9 +259,9 @@ EnhancedTableHead.propTypes = {
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
-    // paddingLeft: theme.spacing(2),
-    // paddingRight: theme.spacing(1),
-    marginLeft: "30%",
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    //marginLeft: "30%",
   },
   highlight:
     theme.palette.type === "light"
@@ -205,6 +275,15 @@ const useToolbarStyles = makeStyles((theme) => ({
         },
   title: {
     flex: "1 1 25%",
+  },
+  searchBar: {
+    marginLeft: "8%",
+    width: "650px",
+    // marginTop: "3%",
+    // marginBottom: "5%",
+  },
+  buttonRight: {
+    display: "flex",
   },
 }));
 
@@ -239,15 +318,18 @@ const EnhancedTableToolbar = (props) => {
             Template
           </Typography> */}
 
-          <SearchBar className={classes.searchBar} />
+          <div className={classes.searchBar}>
+            <SearchBar />
+          </div>
           <div className={classes.buttonRight}>
-            {/* <ButtonClickedGreen nome="Add Linea" /> */}
+            <ModaleCreaTemplate />
             <Button
               color="secondary"
+              size="medium"
               variant="contained"
               className="button-red"
               component={NavLink}
-              //   activeClassName="button-red-active"
+              activeClassName="button-red-active"
               exact
               to="/editing/template/carica"
             >
@@ -304,12 +386,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     marginTop: "10px",
-    marginBottom: "10px",
+    marginBottom: "5%",
   },
 
-  buttonRight: {
-    display: "flex",
-    justifyContent: "flex-end",
+  tableHead: {
+    backgroundColor: "#f50057",
   },
 }));
 
@@ -320,7 +401,7 @@ export default function EnhancedTable() {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";

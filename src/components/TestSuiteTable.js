@@ -24,45 +24,141 @@ import Button from "@material-ui/core/Button";
 import SearchBar from "./Search";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import { NavLink } from "react-router-dom";
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
+import ModalDescriptionTestSuite from "../components/ModalDescriptionTestSuite";
 
 function createData(
   name,
-  calories,
-  fat,
-  carbs,
-  protein,
-  prova1,
-  prova2,
-  prova3,
-  prova4
+  Template,
+  modifiedBy,
+  createdBy,
+  description,
+  edit,
+  elimina,
+  azienda,
+  show
 ) {
   return {
     name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    prova1,
-    prova2,
-    prova3,
-    prova4,
+    Template,
+    modifiedBy,
+    createdBy,
+    description,
+    edit,
+    elimina,
+    azienda,
+    show,
   };
 }
 
 const rows = [
-  createData("Cupcake", 305, 3.7, 67, 4.3, 1, 2, 3, 4),
-  createData("Donut", 452, 25.0, 51, 4.9, 1, 2, 3, 4),
-  createData("Eclair", 262, 16.0, 24, 6.0, 1, 2, 3, 4),
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0, 1, 2, 3, 4),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1, 2, 3, 4),
-  createData("Honeycomb", 408, 3.2, 87, 6.5, 1, 2, 3, 4),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 1, 2, 3, 4),
-  createData("Jelly Bean", 375, 0.0, 94, 0.0, 1, 2, 3, 4),
-  createData("KitKat", 518, 26.0, 65, 7.0, 1, 2, 3, 4),
-  createData("Lollipop", 392, 0.2, 98, 0.0, 1, 2, 3, 4),
-  createData("Marshmallow", 318, 0, 81, 2.0, 1, 2, 3, 4),
-  createData("Nougat", 360, 19.0, 9, 37.0, 1, 2, 3, 4),
-  createData("Oreo", 437, 18.0, 63, 4.0, 1, 2, 3, 4),
+  createData(
+    "Test Suite",
+    "xxxx",
+    3.7,
+    67,
+    4.3,
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>,
+    "xxxx",
+    <ModalDescriptionTestSuite />
+  ),
+  createData(
+    "Test Suite",
+    "xxxx",
+    3.7,
+    67,
+    4.3,
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>,
+    "xxxx",
+    <ModalDescriptionTestSuite />
+  ),
+  createData(
+    "Test Suite",
+    "xxxx",
+    3.7,
+    67,
+    4.3,
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>,
+    "xxxx",
+    <ModalDescriptionTestSuite />
+  ),
+  createData(
+    "Test Suite",
+    "xxxx",
+    3.7,
+    67,
+    4.3,
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>,
+    "xxxx",
+    <ModalDescriptionTestSuite />
+  ),
+  createData(
+    "Test Suite",
+    "xxxx",
+    3.7,
+    67,
+    4.3,
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>,
+    "xxxx",
+    <ModalDescriptionTestSuite />
+  ),
+  createData(
+    "Test Suite",
+    "xxxx",
+    3.7,
+    67,
+    4.3,
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>,
+    "xxxx",
+    <ModalDescriptionTestSuite />
+  ),
+
+  createData(
+    "Test Suite",
+    "xxxx",
+    3.7,
+    67,
+    4.3,
+    <IconButton aria-label="edit">
+      <EditIcon />
+    </IconButton>,
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>,
+    "xxxx",
+    <ModalDescriptionTestSuite />
+  ),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -96,16 +192,31 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Name TS",
+    label: "Nome Test",
   },
-  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
-  { id: "prova1", numeric: true, disablePadding: false, label: "Prova1" },
-  { id: "prova2", numeric: true, disablePadding: false, label: "Prova2" },
-  { id: "prova3", numeric: true, disablePadding: false, label: "Prova3" },
-  { id: "prova4", numeric: true, disablePadding: false, label: "Prova4" },
+  { id: "template", numeric: true, disablePadding: false, label: "Template" },
+  {
+    id: "modifiedBy",
+    numeric: false,
+    disablePadding: false,
+    label: "Modificato da",
+  },
+  {
+    id: "createdBy",
+    numeric: false,
+    disablePadding: false,
+    label: "Creato da",
+  },
+  {
+    id: "description",
+    numeric: false,
+    disablePadding: false,
+    label: "Descrizione",
+  },
+  { id: "edit", numeric: true, disablePadding: false, label: "Modifica" },
+  { id: "elimina", numeric: true, disablePadding: false, label: "Elimina" },
+  { id: "azienda", numeric: true, disablePadding: false, label: "Azienda" },
+  { id: "show", numeric: true, disablePadding: false, label: "Mostra" },
 ];
 
 function EnhancedTableHead(props) {
@@ -118,6 +229,7 @@ function EnhancedTableHead(props) {
     rowCount,
     onRequestSort,
   } = props;
+
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -136,7 +248,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.numeric ? "center" : "center"}
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -173,7 +285,7 @@ const useToolbarStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
-    marginLeft: "50%",
+    //  marginLeft: "50%",
   },
   highlight:
     theme.palette.type === "light"
@@ -187,6 +299,11 @@ const useToolbarStyles = makeStyles((theme) => ({
         },
   title: {
     flex: "1 1 25%",
+  },
+  searchBar: {
+    marginRight: "2%",
+    marginLeft: "8%",
+    width: "650px",
   },
 }));
 
@@ -219,7 +336,9 @@ const EnhancedTableToolbar = (props) => {
           >
             Linee
           </Typography> */}
-          <SearchBar className={classes.searchBar} />
+          <div className={classes.searchBar}>
+            <SearchBar />
+          </div>
           <div className={classes.buttonRight}>
             {/* <ButtonClickedGreen nome="Add Linea" /> */}
             <Button
@@ -228,8 +347,9 @@ const EnhancedTableToolbar = (props) => {
               activeClassName="button-green-active"
               exact
               to="/editing/testsuite/createstsuite"
+              startIcon={<AddIcon className={classes.icon} />}
             >
-              CREA TEST SUITE{" "}
+              TEST SUITE{" "}
             </Button>
           </div>
         </>
@@ -403,14 +523,14 @@ export default function EnhancedTable() {
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell align="center">{row.carbs}</TableCell>
-                    <TableCell align="center">{row.fat}</TableCell>
-                    <TableCell align="center">{row.calories}</TableCell>
-                    <TableCell align="center">{row.protein}</TableCell>
-                    <TableCell align="center">{row.prova1}</TableCell>
-                    <TableCell align="center">{row.prova2}</TableCell>
-                    <TableCell align="center">{row.prova3}</TableCell>
-                    <TableCell align="center">{row.prova4}</TableCell>
+                    <TableCell align="center">{row.createdBy}</TableCell>
+                    <TableCell align="center">{row.modifiedBy}</TableCell>
+                    <TableCell align="center">{row.template}</TableCell>
+                    <TableCell align="center">{row.description}</TableCell>
+                    <TableCell align="center">{row.edit}</TableCell>
+                    <TableCell align="center">{row.elimina}</TableCell>
+                    <TableCell align="center">{row.azienda}</TableCell>
+                    <TableCell align="center">{row.show}</TableCell>
                   </TableRow>
                 );
               })}

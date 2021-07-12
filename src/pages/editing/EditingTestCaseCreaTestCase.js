@@ -122,7 +122,13 @@ const useStyles = makeStyles((theme) => ({
   },
   bottone: {
     marginLeft: "65%",
-    marginTop: "10%",
+    marginTop: "2%",
+  },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+    marginTop: "2%",
   },
 }));
 
@@ -214,6 +220,8 @@ function EditingTestCreaTestCase() {
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Test Case" />
 
+          <Divider className={classes.divider} />
+
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
@@ -224,25 +232,25 @@ function EditingTestCreaTestCase() {
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Numero{" "}
+                  OPB{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Numero{" "}
+                  Linea{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  IP Linea{" "}
+                  Linea{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Password{" "}
+                  OPB{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
@@ -260,33 +268,32 @@ function EditingTestCreaTestCase() {
                 </Typography>
                 <SelectBar />
               </Paper>
+
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Numero{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
+
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Numero{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
+
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Porta{" "}
                 </Typography>
                 <SelectBar />
               </Paper>
-
-              <div className={classes.bottone}>
-                <ButtonClickedGreen
-                  className={classes.bottone}
-                  size="medium"
-                  nome="Crea"
-                />
-              </div>
             </Paper>
+          </div>
+          <Divider className={classes.divider} />
+          <div className={classes.bottone}>
+            <ButtonClickedGreen size="medium" nome="Crea" />
           </div>
         </Paper>
       </main>

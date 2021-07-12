@@ -16,6 +16,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../components/listItems";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import SelectBar from "../components/SelectBar";
+import SelectAutocompleteTestCase from "../components/SelectAutocompleteTestCase";
+import SelectAutocompleteTestSuite from "../components/SelectAutocompleteTestSuite";
 
 const drawerWidth = 240;
 
@@ -104,8 +106,10 @@ const useStyles = makeStyles((theme) => ({
   },
   generalContainer: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     padding: "20px",
+    // backgroundColor: "red",
+    width: "100%",
   },
   paperTest: {
     border: "1px",
@@ -119,13 +123,13 @@ const useStyles = makeStyles((theme) => ({
   },
   paperContainer2: {
     flexGrow: "4",
-    flexDirection: "row",
+    flexDirection: "column",
     padding: "20px",
     marginBottom: "20px",
+    marginLeft: "20px",
   },
   scritta: {
     padding: "20px",
-    // fontFamily: "roboto",
     fontSize: "26px",
     color: "#47B881",
     letterSpacing: "0.15px",
@@ -143,8 +147,11 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "15px",
   },
   bottone: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
     marginTop: "15px",
-    marginLeft: "620px",
+    // marginLeft: "62px",
   },
 }));
 
@@ -191,7 +198,7 @@ function Launching() {
             <NavbarItemLaunch />
           </div>
 
-          <Paper className={classes.generalContainer} elevation={1}>
+          <div className={classes.generalContainer} elevation={1}>
             <Paper
               className={classes.paperContainer1}
               variant="outlined"
@@ -203,11 +210,13 @@ function Launching() {
                 </Typography>
               </Paper>
               <div className={classes.containerSelect}>
-                <SelectBar nome="Selezione Test Case" />
+                {/* <SelectBar nome="Selezione Test Case" /> */}
+                <SelectAutocompleteTestSuite />
               </div>
 
               <div>
-                <SelectBar nome="Selezione Test Suite" />
+                {/* <SelectBar nome="Selezione Test Suite" /> */}
+                <SelectAutocompleteTestCase />
               </div>
             </Paper>
 
@@ -221,12 +230,14 @@ function Launching() {
                   Informazioni{" "}
                 </Typography>
                 <Typography className={classes.testo}>
-                  Numero Chiamante = 01225
-                  <br /> Tipo Linea Chiamante = FIBRA <br /> Numero Chiamato
-                  <br /> Tipo Line Chiamato
-                  <br /> Numero Chiamante 2
-                  <br /> Tipo Linea Chiamante 2
-                  <br /> Numero Chiamante 3
+                  Numero Chiamante = 01225*****
+                  <br /> Tipo Linea Chiamante = FIBRA <br /> Numero Chiamato =
+                  2494******
+                  <br /> Tipo Linea Chiamante = FIBRA
+                  <br /> Numero Chiamante 2 = 0126*****
+                  <br /> Tipo Linea Chiamante 2 = *****
+                  <br /> Numero Chiamante 3 = 0127*****
+                  <br /> Tipo Linea Chiamante 3 = *****
                 </Typography>
               </Paper>
 
@@ -252,7 +263,7 @@ function Launching() {
                 <ButtonClickedGreen nome="Start" />
               </div>
             </Paper>
-          </Paper>
+          </div>
 
           {/*          <Paper className={classes.paperTest}>
                 <Typography className={classes.scritta}>

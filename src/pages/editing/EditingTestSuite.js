@@ -20,7 +20,8 @@ import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
-import TestSuiteTable from "../../components/TestSuiteTable";
+//import TestSuiteTable from "../../components/TestSuiteTable";
+import TestSuiteTableNew from "../../components/TestSuiteTableNew";
 
 const drawerWidth = 240;
 
@@ -250,7 +251,7 @@ function EditingTestSuite() {
               </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <TestSuiteTable />
+            <TestSuiteTableNew />
           </Paper>
         </main>
       </Container>

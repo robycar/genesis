@@ -19,7 +19,8 @@ import SelectBar from "../../components/SelectBar";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import TestSuiteSelect from "../../components/TestSuiteSelect";
+import TestSuiteSelectNew from "../../components/TestSuiteSelectNew";
+import InputSelect from "../../components/InputSelect";
 
 const drawerWidth = 240;
 
@@ -115,7 +116,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "20px",
   },
   paperContainer2: {
-    marginTop: "2%",
+    // marginTop: "2%",
     flexDirection: "column",
     padding: "20px",
     width: "500px",
@@ -127,12 +128,17 @@ const useStyles = makeStyles((theme) => ({
   },
   bottone: {
     marginLeft: "80%",
-    marginTop: "10%",
+    marginTop: "2%",
   },
-  // testSuiteTable: {
-  //   height: "500px",
-  //   marginTop: "5%",
-  // },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+    marginTop: "2%",
+  },
+  testSuiteSelect: {
+    height: "1980px",
+  },
 }));
 
 function EditingTestTestSuiteCreaTestSuite() {
@@ -222,38 +228,39 @@ function EditingTestTestSuiteCreaTestSuite() {
 
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Test Suite" />
+          <Divider className={classes.divider} />
 
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Numero{" "}
+                  Name{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Numero{" "}
+                  Descrizione{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Numero{" "}
+                  ID Utenza{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  IP Linea{" "}
+                  Data Creazione{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
-                  Password{" "}
+                  Path{" "}
                 </Typography>
-                <SelectBar />
+                <InputSelect />
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
@@ -264,15 +271,17 @@ function EditingTestTestSuiteCreaTestSuite() {
 
             <Paper className={classes.paperContainer2} elevation={0}>
               <Typography>Seleziona i Test Case da associare:</Typography>
-              <TestSuiteSelect className={classes.TestSuiteSelect} />
-              <div className={classes.bottone}>
-                <ButtonClickedGreen
-                  className={classes.bottone}
-                  size="medium"
-                  nome="Crea"
-                />
-              </div>
+              <TestSuiteSelectNew className={classes.testSuiteSelect} />
             </Paper>
+          </div>
+          <Divider className={classes.divider} />
+
+          <div className={classes.bottone}>
+            <ButtonClickedGreen
+              className={classes.bottone}
+              size="medium"
+              nome="Crea"
+            />
           </div>
         </Paper>
       </main>

@@ -12,23 +12,12 @@ import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import {
-  ListItem,
-  ListItemIcon,
-  Paper,
-  TextareaAutosize,
-  Typography,
-} from "@material-ui/core";
-import Linee from "../../components/Linee";
+import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
-import Template from "../../components/Template";
+import TemplateNew from "../../components/TemplateNew";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
-import InputSelect from "../../components/InputSelect";
-import ButtonClickedBlue from "../../components/ButtonClickedBlue";
 
 const drawerWidth = 240;
 
@@ -242,19 +231,16 @@ function EditingTemplate() {
               <Typography className={classes.titolo}> Template </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <Template />
-            <div className={classes.divTextArea}>
-              <Typography>Editor di Testo</Typography>
-              <TextareaAutosize
+            <TemplateNew />
+            {/* <div className={classes.divTextArea}>
+              <Typography>Editor di Testo</Typography> */}
+            {/* <TextareaAutosize
                 className={classes.textArea}
                 aria-label="empty textarea"
                 rowsMin={8}
                 placeholder="Inserisci il testo"
-              />{" "}
-            </div>
-            <div className={classes.divButton}>
-              <ButtonClickedBlue nome="Salva" size="small" />
-            </div>
+              />{" "} */}
+            {/* </div> */}
           </Paper>
         </main>
       </Container>

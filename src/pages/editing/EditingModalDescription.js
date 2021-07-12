@@ -11,15 +11,15 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-import NavbarItemEdit from "../../components/NavbarItemEdit";
+import Typography from "@material-ui/core/Typography";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import SelectBar from "../../components/SelectBar";
+import { TextareaAutosize } from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
+import NavbarItemSupport from "../../components/NavbarItemSupport";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
-import LineeNew from "../../components/LineeNew";
-import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import "../../styles/App.css";
-import LanguageIcon from "@material-ui/icons/Language";
 
 const drawerWidth = 240;
 
@@ -100,42 +100,99 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  buttonContainer: {
+
+  generalContainer: {
+    display: "flex",
+    padding: "20px",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginRight: "20px",
+    marginLeft: "20px",
     marginBottom: "20px",
   },
-  generalPaper: {
-    alignItems: "baseline",
+  cardContainer: {
+    width: "350px",
   },
-  icon: {
-    color: "rgba(71, 184, 129, 1)",
+  card: {
+    alignItems: "center",
+
+    // marginLeft: "10px",
+    // marginRight: "10px",
+    // marginTop: "10px",
+    // marginBottom: "10px",
   },
-  titolo: {
-    fontWeight: 500,
-    fontStyle: "normal",
-    fontSize: "24px",
-    color: "#66788A",
-    lineHeight: "20px",
-    color: "rgba(71, 184, 129, 1)",
-    padding: "2%",
-    // marginTop: "2%",
+  modalContainer: {
+    width: "full-width",
+    backgroundColor: "#9EA0A5",
   },
-  divider: {
-    width: "90%",
-    marginLeft: "5%",
-    lineHeight: "1px",
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    border: "1px solid #3F3F44",
+    boxShadow: theme.shadows[5],
+    width: "500px",
+    height: "600px",
+  },
+  paperTop: {
+    backgroundColor: "#47B881",
+    height: "20%",
+    //opacity: "25%",
+  },
+  paperBottom: {
+    backgrounColor: "#FFFFFF",
+    height: "80%",
+    padding: "8%",
+    justifyContent: "center",
+    flexDirection: "column",
+  },
+  intestazione: {
+    color: "black",
+    marginTop: "35px",
+    marginLeft: "35px",
+  },
+  divSelectBar: {
+    marginTop: "25px",
+  },
+  selectBar: {
+    width: "400px",
+    height: "100",
+    marginTop: "50px",
+  },
+  divTextarea: {
+    marginTop: "50px",
+    marginLeft: "5px",
+  },
+  textarea: {
+    width: "380px",
+    height: "260px",
+    border: "1px solid rgba(0, 0, 0, 0.32)",
+    marginTop: "10px",
+    // fontFamily: "Roboto",
+  },
+  bottone: {
+    size: "small",
+  },
+  divBottone: {
+    marginTop: "2%",
+    marginLeft: "35%",
   },
 }));
 
-function EditingLinee() {
+function EditingModalDescription() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={classes.root}>
@@ -164,69 +221,36 @@ function EditingLinee() {
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
-      <Container maxWidth="lg" className={classes.container}>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
 
+        <Container maxWidth="lg" className={classes.container}>
           <div className={classes.containerNavbarItem}>
-            <NavbarItemEdit fontSize="large" />
+            <NavbarItemSupport fontSize="large" />
           </div>
+        </Container>
 
-          <div className={classes.buttonContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/linee"
-            >
-              LINEE
-            </Button>
-            {/* </NavLink> */}
-
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/outboundproxy"
-            >
-              OUTBOUND PROXY
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/template"
-            >
-              TEMPLATE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/testcase"
-            >
-              TEST
-            </Button>
-          </div>
-          <Paper className={classes.generalPaper} elevation={1}>
-            <ListItem>
-              <ListItemIcon>
-                <LanguageIcon fontSize="large" className={classes.icon} />
-              </ListItemIcon>
-              <Typography className={classes.titolo}> Linee </Typography>
-            </ListItem>
-            <Divider className={classes.divider} />
-            <LineeNew />
-          </Paper>
-        </main>
-      </Container>
+        <Container className={classes.modalContainer}>
+          <Modal
+            className={classes.modal}
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+          >
+            <Fade in={open}>
+              <div className={classes.paper}>
+                <Paper className={classes.paperTop}></Paper>
+              </div>
+            </Fade>
+          </Modal>
+        </Container>
+      </main>
     </div>
   );
 }
 
-export default EditingLinee;
+export default EditingModalDescription;

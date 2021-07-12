@@ -136,50 +136,53 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid #3F3F44",
     boxShadow: theme.shadows[5],
     width: "500px",
-    height: "600px",
+    height: "fit-content",
   },
   paperTop: {
     backgroundColor: "#47B881",
-    height: "20%",
+    //height: "30%",
     //opacity: "25%",
+    alignItems: "center",
   },
   paperBottom: {
+    display: "flex",
     backgrounColor: "#FFFFFF",
-    height: "80%",
-    padding: "8%",
+    height: "70%",
+    padding: "7%",
     justifyContent: "center",
     flexDirection: "column",
+    alignItems: "center",
   },
   intestazione: {
     color: "black",
-    marginTop: "35px",
-    marginLeft: "35px",
+    marginTop: "9%",
+    marginBottom: "4%",
+    marginLeft: "7%",
   },
   divSelectBar: {
-    marginTop: "25px",
+    marginTop: "8%",
+    marginRight: "18%",
   },
-  selectBar: {
-    width: "400px",
-    height: "100",
-    marginTop: "50px",
-  },
+  // selectBar: {
+  //   marginTop: "50px",
+  // },
   divTextarea: {
-    marginTop: "50px",
-    marginLeft: "5px",
+    marginTop: "10%",
+    marginLeft: "1%",
   },
   textarea: {
-    width: "380px",
+    width: "410px",
     height: "260px",
     border: "1px solid rgba(0, 0, 0, 0.32)",
-    marginTop: "10px",
+    marginTop: "2%",
+
     // fontFamily: "Roboto",
   },
-  bottone: {
-    size: "small",
-  },
+  // bottone: {
+  //   size: "small",
+  // },
   divBottone: {
     marginTop: "2%",
-    marginLeft: "35%",
   },
 }));
 
@@ -249,7 +252,7 @@ function Supporto() {
                   </Typography>
                 </Paper>
                 <Paper className={classes.paperBottom}>
-                  <Typography className={classes.contenuto} variant="h8">
+                  <Typography variant="h8">
                     Nessun problema, seleziona l'argomento e inviaci la tua
                     richiesta per avere maggiori informazioni.
                   </Typography>
@@ -260,7 +263,7 @@ function Supporto() {
                     />
                   </div>
                   <div className={classes.divTextarea}>
-                    <Typography className={classes.contenuto} variant="h11">
+                    <Typography variant="h11">
                       Ascoltiamo i tuoi bisogni:
                     </Typography>
                     <TextareaAutosize
