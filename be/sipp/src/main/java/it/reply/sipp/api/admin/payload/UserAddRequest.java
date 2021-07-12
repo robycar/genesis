@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import it.reply.sipp.api.generic.payload.PayloadRequest;
 import it.reply.sipp.model.UserVO;
 
-public class AddUserRequest extends PayloadRequest {
+public class UserAddRequest extends PayloadRequest {
 
 	private static final long serialVersionUID = 1558002983218074304L;
 
@@ -39,7 +39,7 @@ public class AddUserRequest extends PayloadRequest {
 	@Valid
 	private GruppoDTO gruppo;
 
-	public AddUserRequest() {
+	public UserAddRequest() {
 	}
 
 	public String getUsername() {

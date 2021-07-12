@@ -2,21 +2,23 @@ package it.reply.sipp.api.admin.payload;
 
 import java.util.Set;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.api.generic.payload.PayloadRequest;
 import it.reply.sipp.model.LevelVO;
 
-public class LevelDTO extends DTO {
+public class LevelUpdateRequest extends PayloadRequest {
 
-	private static final long serialVersionUID = 4924529927827320047L;
+	private static final long serialVersionUID = -3645259824182409540L;
 
 	@NotNull
 	private Long id;
 
 	@Length(max=LevelVO.NOME_LENGTH)
+	@NotEmpty
 	private String nome;
 	
 	@Length(max=LevelVO.DESCRIZIONE_LENGTH)
@@ -24,13 +26,7 @@ public class LevelDTO extends DTO {
 	
 	private Set<String> funzioni;
 
-	public LevelDTO() {
-	}
-	
-	public LevelDTO(LevelVO vo) {
-		this.id = vo.getId();
-		this.descrizione = vo.getDescrizione();
-		this.nome = vo.getNome();
+	public LevelUpdateRequest() {
 	}
 
 	public Long getId() {
@@ -57,6 +53,14 @@ public class LevelDTO extends DTO {
 		this.descrizione = descrizione;
 	}
 
+	public Set<String> getFunzioni() {
+		return funzioni;
+	}
+
+	public void setFunzioni(Set<String> funzioni) {
+		this.funzioni = funzioni;
+	}
+
 	@Override
 	protected void writeFields(StringBuilder sb) {
 		writeField(sb, "id", id);
@@ -65,14 +69,6 @@ public class LevelDTO extends DTO {
 		writeField(sb, "funzioni", funzioni);
 		
 		super.writeFields(sb);
-	}
-
-	public Set<String> getFunzioni() {
-		return funzioni;
-	}
-
-	public void setFunzioni(Set<String> funzioni) {
-		this.funzioni = funzioni;
 	}
 
 	

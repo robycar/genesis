@@ -2,13 +2,13 @@ package it.reply.sipp.api.admin.payload;
 
 import it.reply.sipp.api.generic.payload.PayloadResponse;
 
-public class AddUserResponse extends PayloadResponse {
+public class UserAddResponse extends PayloadResponse {
 
 	private static final long serialVersionUID = 2534992476145837059L;
 	
 	private UserDTO user;
 	
-	public AddUserResponse() {
+	public UserAddResponse() {
 	}
 
 	public UserDTO getUser() {

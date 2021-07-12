@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.reply.sipp.api.admin.payload.AddUserRequest;
-import it.reply.sipp.api.admin.payload.AddUserResponse;
+import it.reply.sipp.api.admin.payload.UserAddRequest;
+import it.reply.sipp.api.admin.payload.UserAddResponse;
 import it.reply.sipp.api.admin.payload.RetrieveUserResponse;
 import it.reply.sipp.api.admin.payload.UpdateUserRequest;
 import it.reply.sipp.api.admin.payload.UpdateUserResponse;
@@ -71,10 +71,10 @@ public class UserController extends AbstractController {
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<AddUserResponse> add(@Valid @RequestBody(required=true) AddUserRequest request) {
+	public ResponseEntity<UserAddResponse> add(@Valid @RequestBody(required=true) UserAddRequest request) {
 		logger.debug("enter add({}", request);
 		
-		AddUserResponse response = new AddUserResponse();
+		UserAddResponse response = new UserAddResponse();
 
 		try {
 			UserVO userVO = new UserVO();
