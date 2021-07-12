@@ -164,6 +164,9 @@ function FormCreaRuolo() {
       return classes.buttonNotClickedGreen;
     }
   }
+  window.onload = function(){
+    document.getElementById('1Gestione Ruoli').click();
+  }
   //  ||appState.activeObject === null
   const [show, setShow] = useState(true);
 
@@ -178,6 +181,7 @@ function FormCreaRuolo() {
           <ButtonClickedBlue
             key={index}
             nome={elements.name}
+            id={elements.id + elements.name}
             className={toggleActiveStyles(index)}
             onClick={() => {
               toggleActive(index);

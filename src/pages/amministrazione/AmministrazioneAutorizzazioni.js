@@ -109,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "35px",
     color: "#66788A",
     lineHeight: "20px",
+    display:"flex"
   },
 }));
 
@@ -197,7 +198,7 @@ function AmministrazioneAutorizzazioni() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-          <Typography className={classes.edit}> Autorizzazioni </Typography>
+            <Typography className={classes.edit}> Autorizzazioni </Typography>
             <GestioneAutorizzazioni />
           </Paper>
         </main>

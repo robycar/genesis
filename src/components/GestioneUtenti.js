@@ -6,6 +6,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
 import DeleteIcon from '@material-ui/icons/Delete';
+import Typography from "@material-ui/core/Typography";
 
 const GestioneUtenti = () => {
   const data = [
@@ -154,12 +155,6 @@ const GestioneUtenti = () => {
       alignItems: "center",
       justifyContent: "center",
     },
-    modal: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      marginBottom: "5%",
-    },
     paperTop: {
       height: "20%",
       display: "flex",
@@ -220,7 +215,7 @@ const GestioneUtenti = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="Utenti"
+        title="Utenze"
         data={data}
         columns={columns}
         options={{
