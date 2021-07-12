@@ -12,17 +12,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.reply.sipp.api.admin.payload.UtenteListResponse;
+import it.reply.sipp.api.admin.payload.AddUserRequest;
+import it.reply.sipp.api.admin.payload.AddUserResponse;
 import it.reply.sipp.api.admin.payload.RetrieveUserResponse;
 import it.reply.sipp.api.admin.payload.UpdateUserRequest;
 import it.reply.sipp.api.admin.payload.UpdateUserResponse;
 import it.reply.sipp.api.admin.payload.UserDTO;
+import it.reply.sipp.api.admin.payload.UtenteListResponse;
 import it.reply.sipp.api.generic.controller.AbstractController;
 import it.reply.sipp.api.generic.exception.ApplicationException;
+import it.reply.sipp.model.GruppoVO;
+import it.reply.sipp.model.LevelVO;
 import it.reply.sipp.model.UserVO;
 import it.reply.sipp.service.UserService;
 
@@ -65,21 +70,38 @@ public class UserController extends AbstractController {
 
 	}
 	
+	@PutMapping("")
+	public ResponseEntity<AddUserResponse> add(@Valid @RequestBody(required=true) AddUserRequest request) {
+		logger.debug("enter add({}", request);
+		
+		AddUserResponse response = new AddUserResponse();
+
+		try {
+			UserVO userVO = new UserVO();
+			userVO.setGruppo(new GruppoVO(request.getGruppo().getId()));
+			userVO.setLevel(new LevelVO(request.getLevel().getId()));
+			userVO.setAzienda(request.getAzienda());
+			userVO.setCognome(request.getCognome());
+			userVO.setNome(request.getNome());
+			userVO.setUsername(request.getUsername());
+		
+			userVO = userService.addUser(userVO, request.getPassword());
+			response.setUser(new UserDTO(userVO));
+			
+			return ResponseEntity.status(HttpStatus.CREATED).body(response);
+		} catch (ApplicationException e) {
+			return handleException(e, response);
+		}
+	}
+	
 	@PostMapping("")
 	public ResponseEntity<UpdateUserResponse> updateUser(@Valid @RequestBody(required=true) UpdateUserRequest request) {
 		logger.info("enter updateUser {}", request);
-		boolean updateRoles = false;
-		if (request.isUpdateRoles() != null) {
-			updateRoles = request.isUpdateRoles().booleanValue();
-		}
-		if (updateRoles && request.getUser().getRoles() == null) {
-			logger.error(null);
-		}
 		
 		UpdateUserResponse response = new UpdateUserResponse();
 		
 		try {
-			userService.updateUser(request.getUserId(), request.getUser(), request.getPassword(), updateRoles);
+			userService.updateUser(request.getUser(), request.getPassword());
 			return ResponseEntity.ok(response);
 						
 		} catch (ApplicationException e) {

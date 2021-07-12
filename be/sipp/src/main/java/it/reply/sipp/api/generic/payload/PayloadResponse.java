@@ -1,7 +1,5 @@
 package it.reply.sipp.api.generic.payload;
 
-import java.util.Objects;
-
 public class PayloadResponse extends DTO {
 
 	private static final long serialVersionUID = -806305394756060567L;

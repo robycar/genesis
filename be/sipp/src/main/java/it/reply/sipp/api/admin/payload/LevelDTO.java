@@ -2,27 +2,31 @@ package it.reply.sipp.api.admin.payload;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Length;
+
 import it.reply.sipp.api.generic.payload.DTO;
-import it.reply.sipp.model.GruppoVO;
+import it.reply.sipp.model.LevelVO;
 
-public class GruppoDTO extends DTO {
+public class LevelDTO extends DTO {
 
-	private static final long serialVersionUID = 790868777509335605L;
+	private static final long serialVersionUID = 4924529927827320047L;
 
 	@NotNull
 	private Long id;
-	
+
+	@Length(max=LevelVO.NOME_LENGTH)
 	private String nome;
 	
+	@Length(max=LevelVO.DESCRIZIONE_LENGTH)
 	private String descrizione;
 
-	public GruppoDTO() {
+	public LevelDTO() {
 	}
 	
-	public GruppoDTO(GruppoVO vo) {
+	public LevelDTO(LevelVO vo) {
 		this.id = vo.getId();
-		this.nome = vo.getNome();
 		this.descrizione = vo.getDescrizione();
+		this.nome = vo.getNome();
 	}
 
 	public Long getId() {
@@ -57,6 +61,7 @@ public class GruppoDTO extends DTO {
 		
 		super.writeFields(sb);
 	}
+
 	
 	
 }

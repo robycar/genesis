@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.model.GruppoVO;
 
-@Service
 public interface GruppoService {
 
 	List<GruppoVO> listGroups();

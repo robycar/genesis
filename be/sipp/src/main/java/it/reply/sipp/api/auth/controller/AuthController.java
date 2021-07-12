@@ -59,20 +59,17 @@ public class AuthController {
 						
 			LoginResponse response = new LoginResponse();
 			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-			ArrayList<String> roles = new ArrayList<>();
+			
 			ArrayList<String> functions = new ArrayList<>();
 			for (GrantedAuthority auth: userDetails.getAuthorities()) {
 				String authName = auth.getAuthority();
 				if (authName == null) {
 					continue;
 				}
-				if (authName.startsWith("ROLE_")) {
-					roles.add(authName.substring(5));
-				} else if (authName.startsWith("FUN_")) {
+				if (authName.startsWith("FUN_")) {
 					functions.add(authName.substring(4));
 				}
 			}
-			response.setRoles(roles);
 			response.setFunctions(functions);
 			response.setAccessToken(token);
 			response.setUsername(userDetails.getUsername());

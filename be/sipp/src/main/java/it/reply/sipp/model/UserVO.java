@@ -3,9 +3,8 @@ package it.reply.sipp.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,45 +16,56 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="USER")
+@Table(name="UTENZE")
 public class UserVO implements Serializable {
 
 	private static final long serialVersionUID = -6114287442328258598L;
 
+	public static final int USERNAME_LENGTH = 25;
+
+	public static final int PASWORD_LENGTH = 100;
+	
+	public static final int RAW_PASWORD_LENGTH = (PASWORD_LENGTH-8)/4;
+
+	public static final int COGNOME_LENGTH = 50;
+
+	public static final int NOME_LENGTH = 50;
+
+	public static final int AZIENDA_LENGTH = 70;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="ID_UTENZA")
 	private Long id;
 	
-	@Enumerated(EnumType.STRING)
-	private UserType type;
-	
+	@Column(length = USERNAME_LENGTH)
 	private String username;
 	
+	@Column(length=PASWORD_LENGTH)
 	private String password;
 	
-	private String token;
-	
+	@Column(length=COGNOME_LENGTH)
 	private String cognome;
 	
+	@Column(length=NOME_LENGTH)
 	private String nome;
 	
-	private String email;
-	
-	private String tel1;
-	
-	private String tel2;
-	
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(
-		name = "USER_ROLE",
-		joinColumns=@JoinColumn(name="USER_ID"),
-		inverseJoinColumns = @JoinColumn(name="ROLE_NAME")
-	)
-	private Set<RoleVO> roles;
+	@Column(length=AZIENDA_LENGTH)
+	private String azienda;
 	
 	@ManyToOne
-	@JoinColumn(name="GRUPPO_ID")
+	@JoinColumn(name="ID_LEVEL")
+	private LevelVO level;
+	
+	@ManyToOne
+	@JoinColumn(name="ID_GROUP")
 	private GruppoVO gruppo;
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "AUTORIZZAZIONE_UTENZE",
+		joinColumns = @JoinColumn(name="ID_UTENZA"),
+		inverseJoinColumns = @JoinColumn(name="FUNZIONE_CODICE"))
+	private Set<FunzioneVO> funzioni;
 
 	public Long getId() {
 		return id;
@@ -81,30 +91,6 @@ public class UserVO implements Serializable {
 		this.password = password;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public UserType getType() {
-		return type;
-	}
-
-	public void setType(UserType type) {
-		this.type = type;
-	}
-
-	public Set<RoleVO> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<RoleVO> roles) {
-		this.roles = roles;
-	}
-
 	public String getCognome() {
 		return cognome;
 	}
@@ -121,28 +107,20 @@ public class UserVO implements Serializable {
 		this.nome = nome;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getAzienda() {
+		return azienda;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setAzienda(String azienda) {
+		this.azienda = azienda;
 	}
 
-	public String getTel1() {
-		return tel1;
+	public LevelVO getLevel() {
+		return level;
 	}
 
-	public void setTel1(String tel1) {
-		this.tel1 = tel1;
-	}
-
-	public String getTel2() {
-		return tel2;
-	}
-
-	public void setTel2(String tel2) {
-		this.tel2 = tel2;
+	public void setLevel(LevelVO level) {
+		this.level = level;
 	}
 
 	public GruppoVO getGruppo() {
@@ -152,5 +130,13 @@ public class UserVO implements Serializable {
 	public void setGruppo(GruppoVO gruppo) {
 		this.gruppo = gruppo;
 	}
-	
+
+	public Set<FunzioneVO> getFunzioni() {
+		return funzioni;
+	}
+
+	public void setFunzioni(Set<FunzioneVO> funzioni) {
+		this.funzioni = funzioni;
+	}
+
 }

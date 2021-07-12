@@ -1,40 +1,50 @@
 package it.reply.sipp.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="GRUPPO")
-public class GruppoVO implements Serializable {
+@Table(name="LEVEL")
+public class LevelVO implements Serializable {
 
-
-	private static final long serialVersionUID = -5525398377075592073L;
+	private static final long serialVersionUID = -5771684324058623918L;
 
 	public static final int NOME_LENGTH = 50;
-	
+
 	public static final int DESCRIZIONE_LENGTH = 1000;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="ID_GRUPPO")
+	@Column(name="ID_LEVEL")
 	private Long id;
 	
-	@Column(name="GRUPPO", length = NOME_LENGTH)
+	@Column(name="LEVEL", length = NOME_LENGTH)
 	private String nome;
 	
-	@Column(name="DESCRIZIONE", length = DESCRIZIONE_LENGTH)
+	@Column(length=DESCRIZIONE_LENGTH)
 	private String descrizione;
 	
-	public GruppoVO() {
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "AUTORIZZAZIONE_LEVEL", 
+		joinColumns = @JoinColumn(name = "ID_LEVEL"), 
+		inverseJoinColumns = @JoinColumn(name="FUNZIONE_CODICE"))
+	private Set<FunzioneVO> funzioni;
+	
+	public LevelVO() {
 	}
 	
-	public GruppoVO(Long id) {
+	public LevelVO(Long id) {
 		this.id = id;
 	}
 
@@ -62,4 +72,13 @@ public class GruppoVO implements Serializable {
 		this.descrizione = descrizione;
 	}
 
+	public Set<FunzioneVO> getFunzioni() {
+		return funzioni;
+	}
+
+	public void setFunzioni(Set<FunzioneVO> funzioni) {
+		this.funzioni = funzioni;
+	}
+	
+	
 }

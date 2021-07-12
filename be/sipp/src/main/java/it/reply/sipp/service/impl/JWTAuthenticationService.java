@@ -50,7 +50,6 @@ public class JWTAuthenticationService implements UserAuthenticationService {
 			UserVO result = Optional.ofNullable(username)
 					.flatMap(name -> userRepository.findByUsername(String.valueOf(name)))
 					.orElseThrow(() -> new UsernameNotFoundException("User '" + username + "' not found."));
-			result.getRoles().size();
 			return result;
 		} catch (TokenVerificationException e) {
 			logger.error(e);

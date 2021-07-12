@@ -42,7 +42,7 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
 	@Override
 	public GruppoVO addGruppo(GruppoVO vo) throws ApplicationException {
 		if (vo.getId() != null) {
-			throw new ApplicationException("Il campo id non puo' deve essere valorizzato quando si aggiunge un gruppo");
+			throw new ApplicationException("Il campo id non puo' essere valorizzato quando si aggiunge un gruppo");
 		}
 		if (vo.getNome().length() > GruppoVO.NOME_LENGTH) {
 			vo.setNome(vo.getNome().substring(0, GruppoVO.NOME_LENGTH));

@@ -13,10 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import it.reply.sipp.model.RoleVO;
 import it.reply.sipp.model.UserVO;
 import it.reply.sipp.model.repository.UserRepository;
-import it.reply.sipp.service.UserService;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -36,12 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	}
 	
 	public List<GrantedAuthority> readRolesAndFunctionsForUser(UserVO u) {
-		Set<RoleVO> roles = u.getRoles();
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		
-		for (RoleVO roleVO: roles) {
-			authorities.add(new SimpleGrantedAuthority("ROLE_" + roleVO.getName()));
-		}
 		
 		Set<String> functions = userRepository.functionsPerUser(u.getId());
 		for (String function: functions) {

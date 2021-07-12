@@ -22,6 +22,15 @@ public interface UserService {
 
 	Optional<UserVO> readUser(Long id);
 
-	void updateUser(String userIdOrUsername, UserDTO user, String password, boolean updateRoles) throws ApplicationException;
+	void updateUser(UserDTO user, String password) throws ApplicationException;
+
+	/**
+	 * Aggiunge un nuovo utente al sistema
+	 * @param userVO i dati dell'utente da aggiungere
+	 * @param password la password (in chiaro) dell'utente da aggiungere
+	 * @return l'utente creato (con il campo id valorizzato)
+	 * @throws ApplicationException in caso di errori
+	 */
+	UserVO addUser(UserVO userVO, String password) throws ApplicationException;
 	
 }

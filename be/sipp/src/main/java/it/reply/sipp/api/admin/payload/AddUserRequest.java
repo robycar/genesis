@@ -1,18 +1,26 @@
 package it.reply.sipp.api.admin.payload;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
-import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.api.generic.payload.PayloadRequest;
 import it.reply.sipp.model.UserVO;
 
-public class UserDTO extends DTO {
+public class AddUserRequest extends PayloadRequest {
 
-	private static final long serialVersionUID = 7380820112751434618L;
+	private static final long serialVersionUID = 1558002983218074304L;
 
-	private Long id;
-	
 	@Length(max = UserVO.USERNAME_LENGTH)
+	@NotEmpty
 	private String username;
+	
+	@Length(min=1, max = UserVO.RAW_PASWORD_LENGTH)
+	@NotEmpty
+	private String password;
 	
 	@Length(max=UserVO.COGNOME_LENGTH)
 	private String cognome;
@@ -23,33 +31,17 @@ public class UserDTO extends DTO {
 	@Length(max=UserVO.AZIENDA_LENGTH)
 	private String azienda;
 	
+	@NotNull
+	@Valid
 	private LevelDTO level;
 	
+	@NotNull
+	@Valid
 	private GruppoDTO gruppo;
-	
-	public UserDTO() {
+
+	public AddUserRequest() {
 	}
-	
-	public UserDTO(UserVO vo) {
-		this.id = vo.getId();
-		this.username = vo.getUsername();
-		this.cognome = vo.getCognome();
-		this.nome = vo.getNome();
-		this.azienda = vo.getAzienda();
-		if (vo.getGruppo() != null) {
-			this.gruppo = new GruppoDTO(vo.getGruppo());
-		} else {
-			this.gruppo = new GruppoDTO();
-		}
-		
-		if (vo.getLevel() != null) {
-			this.level = new LevelDTO(vo.getLevel());
-		} else {
-			this.level = new LevelDTO();
-		}
-		
-	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -90,14 +82,6 @@ public class UserDTO extends DTO {
 		this.level = level;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
 	public GruppoDTO getGruppo() {
 		return gruppo;
 	}
@@ -106,15 +90,25 @@ public class UserDTO extends DTO {
 		this.gruppo = gruppo;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	protected void writeFields(StringBuilder sb) {
-		writeField(sb, "id", id);
 		writeField(sb, "username", username);
+		writeField(sb, "password", password != null ? StringUtils.repeat('*', password.length()) : null);
 		writeField(sb, "cognome", cognome);
 		writeField(sb, "nome", nome);
 		writeField(sb, "azienda", azienda);
-		writeField(sb, "level", level);
 		writeField(sb, "gruppo", gruppo);
+		writeField(sb, "level", level);
 		super.writeFields(sb);
 	}
+
+	
 }

@@ -2,12 +2,9 @@ package it.reply.sipp.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +20,10 @@ import it.reply.sipp.AppError;
 import it.reply.sipp.api.admin.payload.UserDTO;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.generic.service.AbstractService;
-import it.reply.sipp.model.RoleVO;
 import it.reply.sipp.model.UserVO;
-import it.reply.sipp.model.repository.RoleRepository;
 import it.reply.sipp.model.repository.UserRepository;
 import it.reply.sipp.service.GruppoService;
+import it.reply.sipp.service.LevelService;
 import it.reply.sipp.service.UserService;
 
 @Service
@@ -42,7 +38,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private RoleRepository roleRepository;
+	private LevelService levelService;
 	
 	@Autowired
 	private GruppoService gruppoService;
@@ -50,22 +46,16 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<UserVO> listUsers() {
-		
-		return userRepository.findAllWithRole();
-		
+		return userRepository.findAll();
 	}
 
 	@Transactional(readOnly = true)
 	public List<GrantedAuthority> readRolesAndFunctionsForUser(UserVO u) {
 		logger.debug("enter readRolesAndFunctionsForUser {}", u.getUsername());
-		Set<RoleVO> roles = u.getRoles();
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		
-		for (RoleVO roleVO: roles) {
-			authorities.add(new SimpleGrantedAuthority("ROLE_" + roleVO.getName()));
-		}
-		
+	
 		Set<String> functions = userRepository.functionsPerUser(u.getId());
+		
 		for (String function: functions) {
 			authorities.add(new SimpleGrantedAuthority("FUN_" + function));
 		}
@@ -82,7 +72,8 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		
 		Optional<UserVO> result = userRepository.findById(id);
 		result.ifPresentOrElse(u -> { 
-			u.getRoles(); 
+			u.getGruppo().getId();
+			u.getLevel().getId();
 			logger.debug("readed user detail for {}", u.getUsername());
 		}, () -> logger.warn("user not found for id %d", id));
 		
@@ -91,34 +82,21 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	
 	@Override
 	@Transactional(readOnly = false)
-	public void updateUser(String userIdOrUsername, UserDTO userDTO, String password, boolean updateRoles) throws ApplicationException {
-		logger.debug("enter updateUser({}, {}, ****, {}",
-				userIdOrUsername, userDTO, updateRoles);
-		Long userId = null;
-		Optional<UserVO> userVOpt = Optional.empty();
-		try {
-			userId = Long.parseLong(userIdOrUsername);
-			userVOpt = userRepository.findById(userId);
-		} catch (NumberFormatException e) {
-			//not a long userId
-		}
+	public void updateUser(UserDTO userDTO, String password) throws ApplicationException {
+		logger.debug("enter updateUser({}, {}, ****, {}", userDTO);
+		Long userId = userDTO.getId();
 		
-		UserVO userVO = userVOpt
-				.or(() -> userRepository.findByUsername(userIdOrUsername))
-				.orElseThrow(()-> new ApplicationException(
-						HttpStatus.NOT_FOUND.value(), 
-						AppError.USER_NOT_FOUND.getErrorCode(),
-						errorMessage(AppError.USER_NOT_FOUND, userIdOrUsername),
-						errorLogMessage(AppError.USER_NOT_FOUND, userIdOrUsername)));
+		UserVO userVO = userRepository.findById(userId)
+				.orElseThrow(()-> makeError(HttpStatus.NOT_FOUND, 
+						AppError.USER_NOT_FOUND, userId));
 
-		if (userDTO.getGruppo() != null) {
-			if (userDTO.getGruppo().getId() != null) {
-				userVO.setGruppo(gruppoService.readGruppo(userDTO.getGruppo().getId()));
-			} else {
-				userVO.setGruppo(null);
-			}
+		if (userDTO.getGruppo() != null && userDTO.getGruppo().getId() != null) {
+			userVO.setGruppo(gruppoService.readGruppo(userDTO.getGruppo().getId()));
 		}
 		
+		if (userDTO.getLevel() != null && userDTO.getLevel().getId() != null) {
+			userVO.setLevel(levelService.read(userDTO.getLevel().getId()));
+		}
 
 		if (password != null) {
 			logger.debug("Changing password for user {}", userVO.getUsername());
@@ -140,64 +118,39 @@ public class UserServiceImpl extends AbstractService implements UserService {
 			userVO.setCognome(userDTO.getCognome());
 		}
 		
-		if (userDTO.getEmail() != null) {
-			userVO.setEmail(userDTO.getEmail());
-		}
-		
 		if (userDTO.getNome() != null) {
 			userVO.setNome(userDTO.getNome());
 		}
-
-		if (userDTO.getTel1() != null) {
-			userVO.setTel1(userDTO.getTel1());
-		}
 		
-		if (userDTO.getTel2() != null) {
-			userVO.setTel2(userDTO.getTel2());
-		}
-		
-		
-		if (updateRoles) {
-			Map<String, RoleVO> oldRoles = new TreeMap<>();
-			for (RoleVO roleVO: userVO.getRoles()) {
-				oldRoles.put(roleVO.getName(), roleVO);
-			}
-			
-			
-			TreeSet<RoleVO> newRoles = new TreeSet<>();
-			TreeMap<String, RoleVO> rolesToFind = new TreeMap<>();
-			
-			if (userDTO.getRoles() != null) {
-				for (String roleName: userDTO.getRoles()) {
-					if (oldRoles.containsKey(roleName)) {
-						newRoles.add(oldRoles.get(roleName));
-					} else {
-						rolesToFind.put(roleName, null);
-					}
-				}
-			}
-			if (!rolesToFind.isEmpty()) {
-				roleRepository.findAllById(rolesToFind.keySet())
-					.forEach(r -> {rolesToFind.put(r.getName(), r);});
-			}
-			
-			//Se ci sono dei ruoli non trovati, lancia un'eccezione
-			for (Map.Entry<String, RoleVO> roleEntry: rolesToFind.entrySet()) {
-				if (roleEntry.getValue() == null) {
-					throw new ApplicationException(HttpStatus.NOT_FOUND.value(),
-							AppError.ROLE_NOT_FOUND.getErrorCode(),
-							errorMessage(AppError.ROLE_NOT_FOUND, roleEntry.getKey()),
-							errorLogMessage(AppError.ROLE_NOT_FOUND, roleEntry.getKey()));
-				}
-			}
-			newRoles.addAll(rolesToFind.values());
-			userVO.getRoles().clear();
-			userVO.getRoles().addAll(newRoles);
-			
+		if (userDTO.getAzienda() != null) {
+			userVO.setAzienda(userDTO.getAzienda());
 		}
 		
 		userRepository.saveAndFlush(userVO);
 		
+	}
+
+	@Override
+	@Transactional
+	public UserVO addUser(UserVO userVO, String password) throws ApplicationException {
+		logger.debug("enter addUser");
+		if (userVO.getId() != null) {
+			throw new ApplicationException("Il campo id non puo' essere valorizzato quando si aggiunge un nuovo utente");
+		}
+		
+		userVO.setGruppo(gruppoService.readGruppo(userVO.getGruppo().getId()));
+		userVO.setLevel(levelService.read(userVO.getLevel().getId()));
+		
+		Optional<UserVO> existingUser = userRepository.findByUsername(userVO.getUsername());
+		if (existingUser.isPresent()) {
+			throw makeError(HttpStatus.CONFLICT, AppError.USERNAME_ALRADY_EXISTS, userVO.getUsername());
+		}
+		
+		userVO.setPassword(passwordEncoder.encode(password));
+		
+		userVO = userRepository.saveAndFlush(userVO);
+		logger.debug("exit addUser");
+		return userVO;
 	}
 
 

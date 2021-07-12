@@ -15,7 +15,7 @@ public class LoginResponse {
 	private String tokenType = BEARER;
 	
 	private String username;
-	private List<String> roles;
+//	private List<String> roles;
 	private List<String> functions;
 	
 	public LoginResponse() {
@@ -45,13 +45,13 @@ public class LoginResponse {
 		this.username = username;
 	}
 
-	public List<String> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
+//	public List<String> getRoles() {
+//		return roles;
+//	}
+//
+//	public void setRoles(List<String> roles) {
+//		this.roles = roles;
+//	}
 
 	public List<String> getFunctions() {
 		return functions;
