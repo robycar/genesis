@@ -36,7 +36,7 @@ function createData(
   gruppo,
   azienda,
   modifica,
-  cancella,
+  cancella
 ) {
   return {
     id,
@@ -54,17 +54,127 @@ function createData(
 }
 
 const rows = [
-  createData("DEV6301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6401", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV8301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV7301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV5301", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6391", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6601", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6331", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV3501", "Maria", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV7401", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
-  createData("DEV6041", "Mario", "Rossi", 3354745787, "email@esempio.it", "*****", "Admin","Gruppo1", "Tim"),
+  createData(
+    "DEV6301",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV6401",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV8301",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV7301",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV5301",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV6391",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV6601",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV6331",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV3501",
+    "Maria",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV7401",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
+  createData(
+    "DEV6041",
+    "Mario",
+    "Rossi",
+    3354745787,
+    "email@esempio.it",
+    "*****",
+    "Admin",
+    "Gruppo1",
+    "Tim"
+  ),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -224,9 +334,9 @@ const EnhancedTableToolbar = (props) => {
             Gestione Utenti
             <SearchBar className={classes.searchBar} />
           </Typography>
-          
+
           <div className={classes.buttonRight}>
-          <Button
+            <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -416,18 +526,10 @@ export default function EnhancedTable() {
                     <TableCell align="left">{row.gruppo}</TableCell>
                     <TableCell align="left">{row.azienda}</TableCell>
                     <TableCell align="center">
-                      <Button
-                      className="button-light-yellow"
-                      >
-                        MODIFICA
-                      </Button>
+                      <Button className="button-light-yellow">MODIFICA</Button>
                     </TableCell>
                     <TableCell>
-                      <Button
-                      className="button-light-red"
-                      >
-                        CANCELLA
-                      </Button>
+                      <Button className="button-light-red">CANCELLA</Button>
                     </TableCell>
                   </TableRow>
                 );

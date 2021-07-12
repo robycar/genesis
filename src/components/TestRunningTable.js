@@ -11,7 +11,6 @@ import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-
 import "../styles/App.css";
 
 const TestRunningTable = () => {
