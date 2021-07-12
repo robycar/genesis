@@ -108,9 +108,11 @@ const useStyles = makeStyles((theme) => ({
   },
   cardContainer: {
     width: "350px",
+    heigth: "234px",
   },
   card: {
     alignItems: "center",
+    height: "234px",
 
     // marginLeft: "10px",
     // marginRight: "10px",

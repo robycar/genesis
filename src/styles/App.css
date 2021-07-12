@@ -1,36 +1,36 @@
 .nav-link a:link {
   text-decoration: none;
-  color:#66788A;
+  color: #66788a;
 }
 .nav-link a:visited {
   text-decoration: none;
 }
 .nav-link a:hover {
   text-decoration: none;
-  color:#212529;
+  color: #212529;
 }
 
 .App {
   display: flex;
-  height:100vh;
+  height: 100vh;
   justify-content: center;
-  align-items:space-around;
+  align-items: space-around;
   flex-flow: row wrap;
 }
 .nav-table-inactive {
   background-color: white !important;
-   line-height: 1.2 !important;
+  line-height: 1.2 !important;
 }
 
 .nav-table-active {
-  background-color: #303F9F !important;
+  background-color: #303f9f !important;
   line-height: 1.2 !important;
-  color: white !important; 
+  color: white !important;
 }
 .box {
   background-color: white;
-  border: 1px solid #303F9F !important;
-  color: #303F9F;
+  border: 1px solid #303f9f !important;
+  color: #303f9f;
   margin-left: 10px;
   margin-right: 10px;
   width: 200px;
@@ -39,22 +39,21 @@
 
 .nav-active {
   /* background-color: red !important; */
-  border-left: 3px solid #303F9F !important;
-  background-color:  #d0e4ff !important;
+  border-left: 3px solid #303f9f !important;
+  background-color: #d0e4ff !important;
 }
-
 
 .button-green {
   background-color: white !important;
-  border: 1px solid #47B881 !important;
-  color: #47B881;
+  border: 1px solid #47b881 !important;
+  color: #47b881;
   width: 200px;
   height: 40px;
   margin-right: 10px !important;
 }
 
 .button-green:hover {
-  background-color: #47B881 !important;
+  background-color: #47b881 !important;
   border: 1px solid white !important;
   color: black !important;
   width: 200px;
@@ -62,11 +61,9 @@
   margin-right: 10px !important;
 }
 .button-green-active {
-  background-color: #47B881 !important;
+  background-color: #47b881 !important;
   border: 1px solid white !important;
   color: white !important;
-  ;
-
 }
 .button-blue {
   background-color: white !important;
@@ -94,7 +91,7 @@
 .button-light-blue {
   background-color: #cce5ff !important;
   border: 1px solid #308aeb !important;
-  color: #308aeb!important;
+  color: #308aeb !important;
   width: 100px;
   height: 40px;
   margin-right: 10px !important;
@@ -111,7 +108,7 @@
 .button-light-red {
   background-color: #f8d7da !important;
   border: 1px solid #eb3342 !important;
-  color: #eb3342!important;
+  color: #eb3342 !important;
   width: 100px;
   height: 40px;
   margin-right: 10px !important;
@@ -128,7 +125,7 @@
 .button-light-yellow {
   background-color: #fff3cd !important;
   border: 1px solid #fccc2f !important;
-  color: #ffcb1f!important;
+  color: #ffcb1f !important;
   width: 100px;
   height: 40px;
   margin-right: 10px !important;
@@ -145,12 +142,12 @@
 
 .button-load-test {
   position: static;
-  left:300px;
-  top:100px;
+  left: 300px;
+  top: 100px;
 }
 
 .MuiOutlinedInput-input {
-padding: 10px 5px!important;
+  padding: 10px 5px !important;
 }
 
 .MuiInputLabel-outlined {
@@ -161,3 +158,10 @@ padding: 10px 5px!important;
   transform: translate(12px, -6px) scale(0.75) !important;
 }
 
+/* .MuiTable-root {
+  height: 600px;
+}
+
+.MuiPaper-root.makeStyles-paperContainer2-19.MuiPaper-elevation0.MuiPaper-rounded {
+  height: 580px;
+}*/

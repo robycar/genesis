@@ -113,18 +113,19 @@ const useStyles = makeStyles((theme) => ({
   },
   paperContainer1: {
     flexDirection: "column",
-    padding: "20px",
+    // padding: "20px",
   },
   paperContainer2: {
     // marginTop: "2%",
     flexDirection: "column",
-    padding: "20px",
+    padding: "2%",
     width: "500px",
-    height: "500px",
+    height: "660px",
     marginLeft: "5%",
   },
   divSelect: {
-    padding: "5%",
+    marginTop: "3%",
+    padding: "4%",
   },
   bottone: {
     marginLeft: "80%",
@@ -136,9 +137,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "1px",
     marginTop: "2%",
   },
-  testSuiteSelect: {
-    height: "1980px",
-  },
+  testSuiteSelect: {},
 }));
 
 function EditingTestTestSuiteCreaTestSuite() {
@@ -231,7 +230,7 @@ function EditingTestTestSuiteCreaTestSuite() {
           <Divider className={classes.divider} />
 
           <div className={classes.generalContainer}>
-            <Paper className={classes.paperContainer1} elevation={0}>
+            <Paper className={classes.paperContainer1} elevation={2}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Name{" "}
@@ -262,14 +261,9 @@ function EditingTestTestSuiteCreaTestSuite() {
                 </Typography>
                 <InputSelect />
               </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  {" "}
-                </Typography>
-              </Paper>
             </Paper>
 
-            <Paper className={classes.paperContainer2} elevation={0}>
+            <Paper className={classes.paperContainer2} elevation={2}>
               <Typography>Seleziona i Test Case da associare:</Typography>
               <TestSuiteSelectNew className={classes.testSuiteSelect} />
             </Paper>

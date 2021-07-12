@@ -1,7 +1,15 @@
 import React from "react";
 import MaterialTable, { MTableToolbar } from "material-table";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  materialTable: {
+    height: "400px",
+  },
+}));
 
 function TestSuiteSelect() {
+  const classes = useStyles();
   const columns = [
       { title: "Nome Test Case", field: "name" },
       { title: "ID Template", field: "template" },
@@ -134,33 +142,86 @@ function TestSuiteSelect() {
         opbChiamante2: "",
         opbChiamante3: "",
       },
+      {
+        name: "Test suite 1",
+        idTemplate: "xxx",
+        modifiedBy: "utente1",
+        createdBy: "utente1",
+        lineaChiamante: "xxxx",
+        lineaChiamato: "kfguiggf",
+        lineaChiamate2: "",
+        lineaChiamate3: "",
+        tipoLineaChiamante: "",
+        tipoLineaChiamato: "",
+        tipoLIneaChiamante2: "",
+        tipoLineaChiamante3: "",
+        opbChiamante: "",
+        opbChiamato: "",
+        opbChiamante2: "",
+        opbChiamante3: "",
+      },
+      {
+        name: "Test suite 1",
+        idTemplate: "xxx",
+        modifiedBy: "utente1",
+        createdBy: "utente1",
+        lineaChiamante: "xxxx",
+        lineaChiamato: "kfguiggf",
+        lineaChiamate2: "",
+        lineaChiamate3: "",
+        tipoLineaChiamante: "",
+        tipoLineaChiamato: "",
+        tipoLIneaChiamante2: "",
+        tipoLineaChiamante3: "",
+        opbChiamante: "",
+        opbChiamato: "",
+        opbChiamante2: "",
+        opbChiamante3: "",
+      },
+      {
+        name: "Test suite 1",
+        idTemplate: "xxx",
+        modifiedBy: "utente1",
+        createdBy: "utente1",
+        lineaChiamante: "xxxx",
+        lineaChiamato: "kfguiggf",
+        lineaChiamate2: "",
+        lineaChiamate3: "",
+        tipoLineaChiamante: "",
+        tipoLineaChiamato: "",
+        tipoLIneaChiamante2: "",
+        tipoLineaChiamante3: "",
+        opbChiamante: "",
+        opbChiamato: "",
+        opbChiamante2: "",
+        opbChiamante3: "",
+      },
     ];
 
   return (
-    <div>
+    <div className={classes.materialTable}>
       <MaterialTable
         style={{ boxShadow: "none" }}
         title="Test Case"
         data={data}
         columns={columns}
-        height="fit-content"
         options={{
           //tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
+          paging: true,
           //exportButton: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
+          selection: true,
           // columnsButton: true,
           // filtering: true,
-          selection: true,
           headerStyle: {
             backgroundColor: "#1976d2",
-            height: "40px",
+            height: "20px",
           },
           cellStyle: {
-            height: "40px",
+            height: "20px",
           },
         }}
       />
