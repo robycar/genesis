@@ -13,7 +13,11 @@ import Paper from "@material-ui/core/Paper";
 import Navbar from "../components/Navbar";
 import NavbarItemLaunch from "../components/NavbarItemLaunch";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../components/listItems";
+import {
+  mainListItems,
+  secondaryListItems,
+  tertiaryListItems,
+} from "../components/listItems";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import SelectBar from "../components/SelectBar";
 import SelectAutocompleteTestCase from "../components/SelectAutocompleteTestCase";
@@ -187,6 +191,8 @@ function Launching() {
         </div>
         <Divider />
         <List>{mainListItems}</List>
+        <Divider />
+        <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>

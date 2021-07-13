@@ -18,7 +18,11 @@ import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { mainListItems, secondaryListItems } from "../../components/listItems";
+import {
+  mainListItems,
+  secondaryListItems,
+  tertiaryListItems,
+} from "../../components/listItems";
 import TotalTestSuite from "../../components/TotalPlannedWeeKlyTestSuite";
 import Deposits from "../../components/Deposits";
 import Orders from "../../components/Orders";
@@ -191,6 +195,8 @@ function DashboardTestCase() {
         </div>
         <Divider />
         <List>{mainListItems}</List>
+        <Divider />
+        <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>

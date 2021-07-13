@@ -62,30 +62,6 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Amministrazione" />
     </ListItem>
-    <ListItem
-      button
-      component={NavLink}
-      activeClassName="nav-active"
-      exact
-      to="/report/testsuite"
-    >
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Report" />
-    </ListItem>
-    <ListItem
-      button
-      component={NavLink}
-      activeClassName="nav-active"
-      exact
-      to="/documentation"
-    >
-      <ListItemIcon>
-        <DescriptionIcon />
-      </ListItemIcon>
-      <ListItemText primary="Documentation" />
-    </ListItem>
   </div>
 );
 
@@ -139,6 +115,35 @@ export const secondaryListItems = (
         <HelpOutlineIcon />
       </ListItemIcon>
       <ListItemText primary="outboundProxy" />
+    </ListItem>
+  </div>
+);
+
+export const tertiaryListItems = (
+  <div className="nav-link">
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/report/testsuite"
+    >
+      <ListItemIcon>
+        <BarChartIcon />
+      </ListItemIcon>
+      <ListItemText primary="Report" />
+    </ListItem>
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/documentation"
+    >
+      <ListItemIcon>
+        <DescriptionIcon />
+      </ListItemIcon>
+      <ListItemText primary="Documentation" />
     </ListItem>
   </div>
 );
