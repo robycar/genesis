@@ -13,7 +13,7 @@ import Paper from "@material-ui/core/Paper";
 import Navbar from "../../components/Navbar";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-import Orders from "../../components/TestCaseComplete";
+import TestSuiteComplete from "../../components/TestSuiteComplete";
 import NavbarItemReport from "../../components/NavbarItemReport";
 import ButtonNotClickedBlue from "../../components/ButtonNotClickedBlue";
 import ButtonClickedBlue from "../../components/ButtonClickedBlue";
@@ -215,7 +215,7 @@ function ReportTestSuite() {
 
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Recent Orders */}
+            {/* Recent TestSuiteComplete */}
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
                 <Button
@@ -241,7 +241,7 @@ function ReportTestSuite() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <TestSuiteComplete />
               </Paper>
             </Grid>
           </Grid>

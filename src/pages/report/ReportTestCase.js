@@ -13,7 +13,7 @@ import Paper from "@material-ui/core/Paper";
 import Navbar from "../../components/Navbar";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../../components/listItems";
-import Orders from "../../components/TestCaseComplete";
+import TestCaseComplete from "../../components/TestCaseComplete";
 import NavbarItemReport from "../../components/NavbarItemReport";
 import ButtonNotClickedBlue from "../../components/ButtonNotClickedBlue";
 import ButtonClickedBlue from "../../components/ButtonClickedBlue";
@@ -240,7 +240,7 @@ function ReportTestCase() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <TestCaseComplete />
               </Paper>
             </Grid>
           </Grid>
@@ -251,7 +251,7 @@ function ReportTestCase() {
             </Paper>
             <Paper className={classes.paperImg}>
               <Typography className={classes.titleImg}>
-                Test Suite-CB Fibra
+                Test Case-CB Fibra
               </Typography>
               <div className={classes.chart}>
                 <ChartReport />
