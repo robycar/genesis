@@ -12,14 +12,18 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Navbar from "../../components/Navbar";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../../components/listItems";
-import Orders from "../../components/TestCaseComplete";
+import {
+  mainListItems,
+  secondaryListItems,
+  tertiaryListItems,
+} from "../../components/listItems";
+import TestSuiteComplete from "../../components/TestSuiteComplete";
 import NavbarItemReport from "../../components/NavbarItemReport";
 import ButtonNotClickedBlue from "../../components/ButtonNotClickedBlue";
 import ButtonClickedBlue from "../../components/ButtonClickedBlue";
 import Table from "../../components/Table";
 import { Typography } from "@material-ui/core";
-import ChartReport from '../../components/ChartReport.js';
+import ChartReport from "../../components/ChartReport.js";
 import "../../styles/App.css";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
@@ -152,11 +156,11 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "20%",
     lineHeight: "20px",
   },
-  chart:{
-    position:"relative", 
-    width:"255px",
-    marginLeft:"90px"
-  }
+  chart: {
+    position: "relative",
+    width: "255px",
+    marginLeft: "90px",
+  },
 }));
 
 function ReportTestSuite() {
@@ -177,7 +181,7 @@ function ReportTestSuite() {
   //     {col1:"Focus P-CSCF", col2:262, col3:16.0, col4:24, col5:6.0},
   //     {col1:"Total", col2:305, col3:3.7, col4:67, col5:4.3},
   //   ]
-  
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -202,6 +206,8 @@ function ReportTestSuite() {
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
+        <List>{tertiaryListItems}</List>
+        <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
       <main className={classes.content}>
@@ -215,7 +221,7 @@ function ReportTestSuite() {
 
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Recent Orders */}
+            {/* Recent TestSuiteComplete */}
             <Grid item xs={12}>
               <div className={classes.buttonContainer}>
                 <Button
@@ -236,12 +242,11 @@ function ReportTestSuite() {
                 >
                   TEST CASE
                 </Button>
-
               </div>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <TestSuiteComplete />
               </Paper>
             </Grid>
           </Grid>

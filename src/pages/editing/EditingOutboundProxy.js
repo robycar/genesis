@@ -10,7 +10,11 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../../components/listItems";
+import {
+  mainListItems,
+  secondaryListItems,
+  tertiaryListItems,
+} from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
@@ -190,7 +194,9 @@ function EditingOutboundProxy() {
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
+        <List>{tertiaryListItems}</List>
+        <Divider />
+        <List>{secondaryListItems}</List>{" "}
       </Drawer>
 
       <Container maxWidth="lg" className={classes.container}>

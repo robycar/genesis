@@ -10,7 +10,11 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../../components/listItems";
+import {
+  mainListItems,
+  secondaryListItems,
+  tertiaryListItems,
+} from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
@@ -139,6 +143,8 @@ function AmministrazioneViewGruppo() {
         </div>
         <Divider />
         <List>{mainListItems}</List>
+        <Divider />
+        <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>

@@ -22,7 +22,7 @@ const TestConclusiTable = () => {
       endDate: "28/09/2020 13:10",
       result: "2/10",
       trace: "*****",
-      mos: "",
+      callId: "",
     },
     {
       launcher: "Keith M. Boyce",
@@ -31,7 +31,7 @@ const TestConclusiTable = () => {
       endDate: "28/09/2020 13:10",
       result: "3/10",
       trace: "*****",
-      mos: "",
+      callId: "",
     },
     {
       launcher: "Stella D. Knight",
@@ -40,7 +40,7 @@ const TestConclusiTable = () => {
       endDate: "28/09/2020 13:10",
       result: "4/10",
       trace: "*****",
-      mos: "",
+      callId: "",
     },
     {
       launcher: "Walter E. Harmon",
@@ -49,7 +49,7 @@ const TestConclusiTable = () => {
       endDate: "28/09/2020 13:10",
       result: "5/10",
       trace: "*****",
-      mos: "",
+      callId: "",
     },
   ];
 
@@ -79,8 +79,8 @@ const TestConclusiTable = () => {
       field: "trace",
     },
     {
-      title: "MOS",
-      field: "mos",
+      title: "Call ID",
+      field: "callId",
     },
   ];
   function rand() {
