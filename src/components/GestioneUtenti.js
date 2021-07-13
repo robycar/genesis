@@ -215,7 +215,7 @@ const GestioneUtenti = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="Utenze"
+        title="Gestione Utenti"
         data={data}
         columns={columns}
         options={{

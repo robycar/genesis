@@ -17,13 +17,13 @@ import {
 } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import { Paper } from "@material-ui/core";
 import GestioneAutorizzazioni from "../../components/GestioneAutorizzazioni";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
-import Typography from "@material-ui/core/Typography";
+import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const drawerWidth = 240;
 
@@ -107,13 +107,26 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     marginBottom: "20px",
   },
-  edit: {
+  icon: {
+    color: "rgba(71, 184, 129, 1)",
+  },
+  titolo: {
     fontWeight: 500,
     fontStyle: "normal",
-    fontSize: "35px",
+    fontSize: "24px",
     color: "#66788A",
     lineHeight: "20px",
-    display: "flex",
+    color: "rgba(71, 184, 129, 1)",
+    padding: "2%",
+    // marginTop: "2%",
+  },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+  },
+  generalPaper: {
+    alignItems: "baseline",
   },
 }));
 
@@ -203,8 +216,14 @@ function AmministrazioneAutorizzazioni() {
               GRUPPO
             </Button>
           </div>
-          <Paper className={classes.paper}>
-            <Typography className={classes.edit}> Autorizzazioni </Typography>
+          <Paper className={classes.generalPaper}>
+            <ListItem>
+              <ListItemIcon>
+                <AssignmentIcon fontSize="large" className={classes.icon} />
+              </ListItemIcon>
+              <Typography className={classes.titolo}> Autorizzazioni </Typography>
+            </ListItem>
+            <Divider className={classes.divider} />
             <GestioneAutorizzazioni />
           </Paper>
         </main>

@@ -17,12 +17,13 @@ import {
 } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import { Paper } from "@material-ui/core";
 import GestioneRuoli from "../../components/GestioneRuoli";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
+import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 const drawerWidth = 240;
 
@@ -105,6 +106,27 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     marginBottom: "20px",
+  },
+  icon: {
+    color: "rgba(71, 184, 129, 1)",
+  },
+  titolo: {
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "24px",
+    color: "#66788A",
+    lineHeight: "20px",
+    color: "rgba(71, 184, 129, 1)",
+    padding: "2%",
+    // marginTop: "2%",
+  },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+  },
+  generalPaper: {
+    alignItems: "baseline",
   },
 }));
 
@@ -194,7 +216,14 @@ function AmministrazioneRuoli() {
               GRUPPO
             </Button>
           </div>
-          <Paper className={classes.paper}>
+          <Paper className={classes.generalPaper}>
+            <ListItem>
+              <ListItemIcon>
+                <SupervisorAccountIcon fontSize="large" className={classes.icon} />
+              </ListItemIcon>
+              <Typography className={classes.titolo}> Ruoli </Typography>
+            </ListItem>
+            <Divider className={classes.divider} />
             <GestioneRuoli />
           </Paper>
         </main>
