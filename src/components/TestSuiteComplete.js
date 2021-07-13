@@ -4,10 +4,10 @@ import MaterialTable from "material-table";
 import {Button} from "@material-ui/core";
 import "../styles/App.css";
 
-const TestCaseComplete = () => {
+const TestSuiteComplete = () => {
   const data = [
     {
-      id: "2541",
+      id: "1489",
       launcher: "Adam Denisov",
       nameTS: "PEM_001",
       startDate: "04/28/2018",
@@ -18,7 +18,7 @@ const TestCaseComplete = () => {
       partiallyResoult: 1,
     },
     {
-      id: "2541",
+      id: "1489",
       launcher: "Adam Denisov",
       nameTS: "PEM_001",
       startDate: "04/28/2018",
@@ -29,7 +29,7 @@ const TestCaseComplete = () => {
       partiallyResoult: 1,
     },
     {
-      id: "2541",
+      id: "1489",
       launcher: "Adam Denisov",
       nameTS: "PEM_001",
       startDate: "04/28/2018",
@@ -40,7 +40,7 @@ const TestCaseComplete = () => {
       partiallyResoult: 1,
     },
     {
-      id: "2541",
+      id: "1489",
       launcher: "Adam Denisov",
       nameTS: "PEM_001",
       startDate: "04/28/2018",
@@ -223,4 +223,4 @@ const TestCaseComplete = () => {
   );
 };
 
-export default TestCaseComplete;
+export default TestSuiteComplete;
