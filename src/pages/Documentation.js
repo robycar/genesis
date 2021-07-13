@@ -14,8 +14,20 @@ import { mainListItems, secondaryListItems } from "../components/listItems";
 import { Card, Paper } from "@material-ui/core";
 import NavbarItemDocu from "../components/NavbarItemDocu";
 import SimpleCard from "../components/SimpleCard";
+import SearchBarDocu from "../components/SearchBarDocu";
+import { Typography } from "@material-ui/core";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import DescriptionIcon from "@material-ui/icons/Description";
+import { NavLink } from "react-router-dom";
+import FindInPageIcon from "@material-ui/icons/FindInPage";
 import TotalTestCase from "../components/TotalPlannedDaylyTestCase";
 import TotalTestSuite from "../components/TotalPlannedWeeKlyTestSuite";
+import Settings from "@material-ui/icons/Settings";
+import SubjectIcon from "@material-ui/icons/Subject";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
+import SendIcon from "@material-ui/icons/Send";
+import Icon from "@material-ui/core/Icon";
+import Button from "@material-ui/core/Button";
 
 const drawerWidth = 240;
 
@@ -105,6 +117,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "20px",
     marginLeft: "20px",
     marginBottom: "20px",
+    marginTop: "3%",
   },
   cardContainer: {
     width: "350px",
@@ -113,11 +126,39 @@ const useStyles = makeStyles((theme) => ({
   card: {
     alignItems: "center",
     height: "234px",
-
-    // marginLeft: "10px",
-    // marginRight: "10px",
-    // marginTop: "10px",
-    // marginBottom: "10px",
+  },
+  generalPaper: {
+    padding: "3%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  intestazione: {
+    marginBottom: "2%",
+    fontFamily: "Segoe UI Symbol",
+    fontSize: "18px",
+    color: "#47B881",
+  },
+  divSearch: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginBottom: "2%",
+  },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+    marginTop: "2%",
+  },
+  searchButton: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  button: {
+    backgroundColor: "#47B881",
+    marginLeft: "1%",
+    color: "#FFFFFF",
   },
 }));
 
@@ -168,33 +209,78 @@ function Documentation() {
           </div>
         </Container>
 
-        <Paper className={classes.generalContainer} elevation={3}>
-          <Paper className={classes.cardContainer}>
-            <SimpleCard
-              className={classes.card}
-              titolo="Requisiti Funzionali"
-            />
+        <Paper className={classes.generalPaper}>
+          <div className={classes.divSearch}>
+            <Typography className={classes.intestazione}>
+              Everything you need to get your documentation online
+            </Typography>
+            <div className={classes.searchButton}>
+              <SearchBarDocu
+                className={classes.search}
+                placeholder="Search the docs..."
+              />
+              <Button
+                className={classes.button}
+                variant="contained"
+                endIcon={<Icon>send</Icon>}
+                activeClassName="button-green-active"
+              >
+                Send
+              </Button>
+            </div>
+          </div>
+          <Divider className={classes.divider} />
+          <Paper className={classes.generalContainer} elevation={3}>
+            <Paper className={classes.cardContainer}>
+              <SimpleCard
+                className={classes.card}
+                titolo="Requisiti Funzionali"
+                startIcon={<Settings className={classes.icon} />}
+                color="secondary"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="documentation/requisitifunzionali"
+              />
+            </Paper>
+            <Paper className={classes.cardContainer}>
+              <SimpleCard
+                className={classes.card}
+                titolo="Linee Guida"
+                startIcon={<AssignmentIcon className={classes.icon} />}
+              />
+            </Paper>
+            <Paper className={classes.cardContainer}>
+              <SimpleCard
+                className={classes.card}
+                titolo="Release Note"
+                startIcon={<SubjectIcon className={classes.icon} />}
+              />
+            </Paper>
           </Paper>
-          <Paper className={classes.cardContainer}>
-            <SimpleCard className={classes.card} titolo="Linee Guida" />
-          </Paper>
-          <Paper className={classes.cardContainer}>
-            <SimpleCard className={classes.card} titolo="Release Note" />
-          </Paper>
-        </Paper>
 
-        <Paper className={classes.generalContainer} elevation={3}>
-          <Paper className={classes.cardContainer} elevation={2}>
-            <SimpleCard className={classes.card} titolo="MoM" />
-          </Paper>
-          <Paper className={classes.cardContainer}>
-            <SimpleCard
-              className={classes.card}
-              titolo="Altri File A Corredo"
-            />
-          </Paper>
-          <Paper className={classes.cardContainer}>
-            <SimpleCard className={classes.card} titolo="Documenti" />
+          <Paper className={classes.generalContainer} elevation={3}>
+            <Paper className={classes.cardContainer} elevation={2}>
+              <SimpleCard
+                className={classes.card}
+                titolo="MoM"
+                startIcon={<SendIcon className={classes.icon} />}
+              />
+            </Paper>
+            <Paper className={classes.cardContainer}>
+              <SimpleCard
+                className={classes.card}
+                titolo="Altri File A Corredo"
+                startIcon={<MenuBookIcon className={classes.icon} />}
+              />
+            </Paper>
+            <Paper className={classes.cardContainer}>
+              <SimpleCard
+                className={classes.card}
+                titolo="Documenti"
+                startIcon={<DescriptionIcon className={classes.icon} />}
+              />
+            </Paper>
           </Paper>
         </Paper>
       </main>

@@ -9,10 +9,12 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 
 const useStyles = makeStyles({
   root: {
-    // width: "150%",
-    // height: "200px",
     backgroundColor: "rgba(216, 216, 216, 0.1)",
     padding: "5%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   bullet: {
     margin: "0 2px",
@@ -20,9 +22,22 @@ const useStyles = makeStyles({
   },
   title: {
     fontSize: 14,
+    fontFamily: "Segoe UI Symbol",
   },
   pos: {
     marginBottom: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    backgroundColor: "#47B881",
+    // color: "#FFFFFF",
+  },
+  cardContent: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
@@ -32,27 +47,24 @@ export default function SimpleCard(props) {
 
   return (
     <Card className={classes.root}>
-      <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          Cosa stai cercando?
-        </Typography>
+      <CardContent className={classes.cardContent}>
         <CardActions>
-          <Button size="medium" startIcon={<AssignmentIcon />}>
+          <Button
+            className={classes.button}
+            size="large"
+            startIcon={props.startIcon}
+          >
             {props.titolo}
           </Button>
         </CardActions>
 
-        <Typography className={classes.pos} color="textSecondary">
+        {/* <Typography className={classes.pos} color="textSecondary">
           adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
+        </Typography> */}
+        <Typography className={classes.pos} variant="body2" component="p">
+          Section overview goes here. CoderDocs is a free documentation template
+          built on the popular Bootstrap framework. The design is super modern
+          and clean and it’s made specifically for software developers. <br />
         </Typography>
       </CardContent>
     </Card>

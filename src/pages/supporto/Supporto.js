@@ -101,15 +101,6 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
 
-  generalContainer: {
-    display: "flex",
-    padding: "20px",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginRight: "20px",
-    marginLeft: "20px",
-    marginBottom: "20px",
-  },
   cardContainer: {
     width: "350px",
   },
@@ -121,22 +112,28 @@ const useStyles = makeStyles((theme) => ({
     // marginTop: "10px",
     // marginBottom: "10px",
   },
-  modalContainer: {
-    width: "full-width",
-    backgroundColor: "#9EA0A5",
-  },
-  modal: {
+  // modalContainer: {
+  //   width: "full-width",
+  //   backgroundColor: "#9EA0A5",
+  // },
+  // modal: {
+  //   display: "flex",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
+  generalPaper: {
     display: "flex",
-    alignItems: "center",
     justifyContent: "center",
-  },
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    border: "1px solid #3F3F44",
-    boxShadow: theme.shadows[5],
-    width: "500px",
-    height: "fit-content",
+    alignItems: "center",
+    padding: "20px",
+    marginRight: "10%",
+    marginLeft: "10%",
+    // flexDirection: "column",
+
+    // border: "1px solid #3F3F44",
+    // boxShadow: theme.shadows[5],
+    // width: "500px",
+    // height: "fit-content",
   },
   paperTop: {
     backgroundColor: "#47B881",
@@ -171,7 +168,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "1%",
   },
   textarea: {
-    width: "410px",
+    width: "470px",
     height: "260px",
     border: "1px solid rgba(0, 0, 0, 0.32)",
     marginTop: "2%",
@@ -233,8 +230,8 @@ function Supporto() {
           </div>
         </Container>
 
-        <Container className={classes.modalContainer}>
-          <Modal
+        {/* <Container className={classes.modalContainer}> */}
+        {/* <Modal
             className={classes.modal}
             open={open}
             onClose={handleClose}
@@ -243,48 +240,52 @@ function Supporto() {
             BackdropProps={{
               timeout: 500,
             }}
-          >
-            <Fade in={open}>
-              <div className={classes.paper}>
-                <Paper className={classes.paperTop}>
-                  <Typography className={classes.intestazione} variant="h5">
-                    Non hai trovato quello che cercavi?
-                  </Typography>
-                </Paper>
-                <Paper className={classes.paperBottom}>
-                  <Typography variant="h8">
-                    Nessun problema, seleziona l'argomento e inviaci la tua
-                    richiesta per avere maggiori informazioni.
-                  </Typography>
-                  <div className={classes.divSelectBar}>
-                    <SelectBar
-                      nome="Seleziona l'argomento"
-                      classeName={classes.selectBar}
-                    />
-                  </div>
-                  <div className={classes.divTextarea}>
-                    <Typography variant="h11">
-                      Ascoltiamo i tuoi bisogni:
-                    </Typography>
-                    <TextareaAutosize
-                      className={classes.textarea}
-                      aria-label="minimum height"
-                      rowsMin={10}
-                      placeholder="Inserisci il messaggio"
-                    />
-                  </div>
-                  <div className={classes.divBottone}>
-                    <ButtonClickedGreen
-                      className={classes.bottone}
-                      nome="Invia"
-                      size="small"
-                    />
-                  </div>
-                </Paper>
+          > */}
+        {/* <Fade in={open}> */}
+
+        <Paper className={classes.generalPaper} elevation={2}>
+          <div className={classes.paper}>
+            <Paper className={classes.paperTop} elevation={2}>
+              <Typography className={classes.intestazione} variant="h5">
+                Non hai trovato quello che cercavi?
+              </Typography>
+            </Paper>
+            <Paper className={classes.paperBottom} elevation={2}>
+              <Typography variant="h8">
+                Nessun problema, seleziona l'argomento e inviaci la tua
+                richiesta per avere maggiori informazioni.
+              </Typography>
+              <div className={classes.divSelectBar}>
+                <SelectBar
+                  nome="Seleziona l'argomento"
+                  classeName={classes.selectBar}
+                />
               </div>
-            </Fade>
-          </Modal>
-        </Container>
+              <div className={classes.divTextarea}>
+                <Typography variant="h11">
+                  Ascoltiamo i tuoi bisogni:
+                </Typography>
+                <TextareaAutosize
+                  className={classes.textarea}
+                  aria-label="minimum height"
+                  rowsMin={10}
+                  placeholder="Inserisci il messaggio"
+                />
+              </div>
+              <div className={classes.divBottone}>
+                <ButtonClickedGreen
+                  className={classes.bottone}
+                  nome="Invia"
+                  size="small"
+                />
+              </div>
+            </Paper>
+          </div>
+          {/* </Fade>
+          </Modal> */}
+        </Paper>
+
+        {/* </Container> */}
       </main>
     </div>
   );
