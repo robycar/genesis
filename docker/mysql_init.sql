@@ -7,107 +7,118 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
+DROP TABLE IF EXISTS `AUTORIZZAZIONE_LEVEL`;
+CREATE TABLE `AUTORIZZAZIONE_LEVEL` (
+  `ID_LEVEL` int NOT NULL,
+  `FUNZIONE_CODICE` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`ID_LEVEL`,`FUNZIONE_CODICE`),
+  KEY `FUNZIONE_CODICE` (`FUNZIONE_CODICE`),
+  CONSTRAINT `autorizzazione_level_ibfk_2` FOREIGN KEY (`FUNZIONE_CODICE`) REFERENCES `FUNZIONE` (`CODICE`),
+  CONSTRAINT `autorizzazione_level_ibfk_3` FOREIGN KEY (`ID_LEVEL`) REFERENCES `LEVEL` (`ID_LEVEL`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `AUTORIZZAZIONE_LEVEL` (`ID_LEVEL`, `FUNZIONE_CODICE`) VALUES
+(2,	'f1'),
+(2,	'f2'),
+(2,	'f3'),
+(2,	'f4'),
+(2,	'group.delete'),
+(2,	'group.edit'),
+(2,	'group.view'),
+(2,	'level.delete'),
+(2,	'level.edit'),
+(6,	'level.edit'),
+(2,	'level.view'),
+(2,	'user.delete'),
+(2,	'user.edit'),
+(2,	'user.view'),
+(6,	'user.view');
+
+DROP TABLE IF EXISTS `AUTORIZZAZIONE_UTENZE`;
+CREATE TABLE `AUTORIZZAZIONE_UTENZE` (
+  `ID_UTENZA` int NOT NULL,
+  `FUNZIONE_CODICE` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`ID_UTENZA`,`FUNZIONE_CODICE`),
+  KEY `FUNZIONE_CODICE` (`FUNZIONE_CODICE`),
+  CONSTRAINT `autorizzazione_utenze_ibfk_1` FOREIGN KEY (`ID_UTENZA`) REFERENCES `UTENZE` (`ID_UTENZA`),
+  CONSTRAINT `autorizzazione_utenze_ibfk_2` FOREIGN KEY (`FUNZIONE_CODICE`) REFERENCES `FUNZIONE` (`CODICE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+DROP TABLE IF EXISTS `FUNZIONE`;
+CREATE TABLE `FUNZIONE` (
+  `CODICE` varchar(20) NOT NULL,
+  `NOME` varchar(150) NOT NULL,
+  `DESCRIZIONE` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`CODICE`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `FUNZIONE` (`CODICE`, `NOME`, `DESCRIZIONE`) VALUES
+('f1',	'f1',	'f1'),
+('f2',	'f2',	'f2'),
+('f3',	'f3',	'f3'),
+('f4',	'f4',	'f4'),
+('group.delete',	'Elimina gruppo',	'Rimuove un gruppo dal sistema'),
+('group.edit',	'Modifica gruppo',	'Consente di modificare un gruppo'),
+('group.view',	'Mostra gruppi',	'Consente di accedere ai gruppi di utente'),
+('level.delete',	'Elimina livello',	'Consente di eliminare un livello'),
+('level.edit',	'Modifica livello',	'Consente di modificare un livello'),
+('level.view',	'Mostra i livelli',	'Consente di accedere ai livelli definiti nel sistema'),
+('user.delete',	'Elimina utente',	'Consente di rimuovere un utente dal sistema'),
+('user.edit',	'Modifica utente',	'Consente di aggiungere o modificare gli utenti che possono accedere al sistema'),
+('user.view',	'Accedi dati utente',	'Consente di accedere ai dati di un altro utente');
+
 DROP TABLE IF EXISTS `GRUPPO`;
 CREATE TABLE `GRUPPO` (
-  `ID` int NOT NULL AUTO_INCREMENT,
-  `NOME` varchar(20) NOT NULL,
-  `DESCRIZIONE` varchar(80) DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `GRUPPO_UK` (`NOME`)
+  `ID_GRUPPO` int NOT NULL AUTO_INCREMENT,
+  `DESCRIZIONE` varchar(1000) DEFAULT NULL,
+  `GRUPPO` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID_GRUPPO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `GRUPPO` (`ID`, `NOME`, `DESCRIZIONE`) VALUES
-(1,	'Gruppo1',	'Descrizione gruppo 1'),
-(2,	'Gruppo 2',	'Descrizione gruppo 2'),
-(12,	'Dynamic Quality Liai',	'Future'),
-(13,	'Regional Data Strate',	'Global');
+INSERT INTO `GRUPPO` (`ID_GRUPPO`, `DESCRIZIONE`, `GRUPPO`) VALUES
+(1,	'g1',	'g1'),
+(2,	'Forward',	'Central Integration Designer');
 
-DROP TABLE IF EXISTS `OPERATION`;
-CREATE TABLE `OPERATION` (
-  `CODE` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `NAME` varchar(40) DEFAULT NULL,
-  `DESCRIPTION` tinytext NOT NULL,
-  PRIMARY KEY (`CODE`)
+DROP TABLE IF EXISTS `LEVEL`;
+CREATE TABLE `LEVEL` (
+  `ID_LEVEL` int NOT NULL AUTO_INCREMENT,
+  `DESCRIZIONE` varchar(1000) DEFAULT NULL,
+  `LEVEL` varchar(50) NOT NULL,
+  PRIMARY KEY (`ID_LEVEL`),
+  UNIQUE KEY `LEVEL_UQ` (`LEVEL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `OPERATION` (`CODE`, `NAME`, `DESCRIPTION`) VALUES
-('gruppo.edit',	'Modifica gruppi',	'Consente di modificare un gruppo'),
-('gruppo.view',	'Mostra gruppi',	'Consente di visualizzare i gruppi presenti nel sistema'),
-('role.edit',	'Modifica ruoli',	'Consente di definire i ruoli dell\'applicazione'),
-('test.run',	'Avvio di un test case',	'Consente di avviare un test case, impostando i parametri di lancio'),
-('user.edit',	'Modifica utenti',	'Consente di aggiungere, rimuovere o modificare gli utenti che possono accedere all\'applicazione'),
-('user.role.edit',	'Modifica ruoli utente',	'Consente di assegnare o rimuovere i ruoli agli utenti'),
-('user.view',	'Visualizza utenti',	'Consente di visualizzare i dati relativi agli utenti registrati nel sistema');
+INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`) VALUES
+(2,	'Descrizione livello admin',	'ADMIN'),
+(4,	'Regional',	'Lead Operations Manager'),
+(6,	'Descrizione Level 5',	'Level 6');
 
-DROP TABLE IF EXISTS `ROLE`;
-CREATE TABLE `ROLE` (
-  `NAME` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  PRIMARY KEY (`NAME`)
+DROP TABLE IF EXISTS `UTENZE`;
+CREATE TABLE `UTENZE` (
+  `ID_UTENZA` int NOT NULL AUTO_INCREMENT,
+  `USERNAME` varchar(25) NOT NULL,
+  `PASSWORD` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ID_LEVEL` int NOT NULL,
+  `ID_GROUP` int NOT NULL,
+  `NOME` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `COGNOME` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `AZIENDA` varchar(70) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`ID_UTENZA`),
+  KEY `ID_LEVEL` (`ID_LEVEL`),
+  KEY `ID_GROUP` (`ID_GROUP`),
+  CONSTRAINT `utenze_ibfk_3` FOREIGN KEY (`ID_LEVEL`) REFERENCES `LEVEL` (`ID_LEVEL`),
+  CONSTRAINT `utenze_ibfk_4` FOREIGN KEY (`ID_GROUP`) REFERENCES `GRUPPO` (`ID_GRUPPO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `ROLE` (`NAME`) VALUES
-('ADMIN'),
-('RUNNER'),
-('USER');
+INSERT INTO `UTENZE` (`ID_UTENZA`, `USERNAME`, `PASSWORD`, `ID_LEVEL`, `ID_GROUP`, `NOME`, `COGNOME`, `AZIENDA`) VALUES
+(1,	'test',	'{noop}test',	2,	1,	'nome',	'cognome',	'azienda'),
+(2,	'test2',	'{bcrypt}$2a$10$OaqeCzbt8SlYGm4FJa7Ru.D.NamHojDDC/UJaB3uIRf7f7QbNgT4e',	4,	2,	'Neva',	'Tromp',	'Quigley Inc'),
+(3,	'RFBUbsJtaDuUl6g',	'{bcrypt}$2a$10$YWSVEp6QxBknYQ9.VakGpOdR9szIG0eUtDw4z7QErhFx6NcgqGDd.',	4,	1,	'Raina',	'Muller',	'Osinski Group'),
+(4,	'j4LF_SGh6Ml6n4D',	'{bcrypt}$2a$10$uST9hNmsLIesttAVGA35jedF77DczK/PCP62bNBkSq5D1.alk1/WG',	4,	1,	'Preston',	'Lindgren',	'Cronin - Larkin'),
+(5,	'Z8fThHxwZCm_Pl6',	'{bcrypt}$2a$10$nthMbb.8A1qTGHcQ4tKRIOPXLPf8IoOAMbozDCYnN6XZQXbROhpzG',	4,	1,	'Arden',	'Fahey',	'Littel - Monahan'),
+(6,	'1SeKrL3L3mCljlQ',	'{bcrypt}$2a$10$daQM3x0BLdQhIH8ZCiQfe.3UR0yHnlfAubMsQKBcYZPAeNsnhK2qC',	4,	1,	'Tyson',	'Jaskolski',	'Lakin and Sons'),
+(7,	'_beibN_r7_7JL40',	'{bcrypt}$2a$10$dQ8bSHNWaQlEXuJ9.OfPjetraUXxjhtLMTxKarILzLlnmih7aE/wu',	4,	1,	'Isom',	'Bins',	'Brekke - Reichel'),
+(8,	'lwUR1QJJLelHO8x',	'{bcrypt}$2a$10$mvWNe8qoJD772s1uLydsVeB82Kq7HGifhP35nmclJRccKOP/39rYK',	4,	1,	'Abelardo',	'Sawayn',	'Sawayn - Bailey');
 
-DROP TABLE IF EXISTS `ROLE_OPERATION`;
-CREATE TABLE `ROLE_OPERATION` (
-  `ROLE_NAME` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `OPERATION_CODE` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  PRIMARY KEY (`ROLE_NAME`,`OPERATION_CODE`),
-  KEY `OPERATION_CODE` (`OPERATION_CODE`),
-  CONSTRAINT `ROLE_OPERATION_ibfk_1` FOREIGN KEY (`ROLE_NAME`) REFERENCES `ROLE` (`NAME`) ON DELETE CASCADE,
-  CONSTRAINT `ROLE_OPERATION_ibfk_2` FOREIGN KEY (`OPERATION_CODE`) REFERENCES `OPERATION` (`CODE`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-INSERT INTO `ROLE_OPERATION` (`ROLE_NAME`, `OPERATION_CODE`) VALUES
-('ADMIN',	'gruppo.edit'),
-('ADMIN',	'gruppo.view'),
-('ADMIN',	'role.edit'),
-('RUNNER',	'test.run'),
-('USER',	'test.run'),
-('ADMIN',	'user.edit'),
-('ADMIN',	'user.role.edit'),
-('ADMIN',	'user.view'),
-('USER',	'user.view');
-
-DROP TABLE IF EXISTS `USER`;
-CREATE TABLE `USER` (
-  `ID` int unsigned NOT NULL AUTO_INCREMENT,
-  `TYPE` enum('LOCAL','LDAP') CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `USERNAME` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `PASSWORD` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `TOKEN` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `EMAIL` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin DEFAULT NULL,
-  `COGNOME` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `NOME` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `TEL1` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `TEL2` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
-  `GRUPPO_ID` int DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `USER_USERNAME_UQ` (`USERNAME`),
-  KEY `UTENTE_IDX_GRUPPO_ID` (`GRUPPO_ID`),
-  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`GRUPPO_ID`) REFERENCES `GRUPPO` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
-
-INSERT INTO `USER` (`ID`, `TYPE`, `USERNAME`, `PASSWORD`, `TOKEN`, `EMAIL`, `COGNOME`, `NOME`, `TEL1`, `TEL2`, `GRUPPO_ID`) VALUES
-(1,	'LOCAL',	'test',	'{noop}test',	'51742615-cb3b-43ab-8838-d9160df81294',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL),
-(2,	'LOCAL',	'test2',	'{bcrypt}$2a$10$m5ovfkAnJ2MpJdmiJB4OWeloLX4rrzBeqQ3O1X3V2RwPj0eYS6Ie2',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	1);
-
-DROP TABLE IF EXISTS `USER_ROLE`;
-CREATE TABLE `USER_ROLE` (
-  `USER_ID` int unsigned NOT NULL,
-  `ROLE_NAME` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  PRIMARY KEY (`USER_ID`,`ROLE_NAME`),
-  KEY `ROLE_NAME` (`ROLE_NAME`),
-  CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`USER_ID`) REFERENCES `USER` (`ID`),
-  CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`ROLE_NAME`) REFERENCES `ROLE` (`NAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-INSERT INTO `USER_ROLE` (`USER_ID`, `ROLE_NAME`) VALUES
-(1,	'ADMIN'),
-(1,	'RUNNER'),
-(1,	'USER'),
-(2,	'USER');
-
--- 2021-07-09 06:15:13
+-- 2021-07-13 13:46:27
