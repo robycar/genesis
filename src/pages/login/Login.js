@@ -3,61 +3,46 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
-import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
+import Toolbar from "@material-ui/core/Toolbar";
+
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
+import Navbar from "../../components/Navbar";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import TotalTestSuite from "../../components/TotalPlannedWeeKlyTestSuite";
-import Orders from "../../components/Orders";
-import Navbar from "../../components/Navbar";
-import NavbarItem from "../../components/NavbarItem";
-import Button from "@material-ui/core/Button";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import Card from "../../components/Card";
-import { NavLink } from "react-router-dom";
+import logo from "../../assets/logoReply.png";
+import img from "../../assets/Bitmap.png";
+import Orders from "../../components/TestCaseComplete";
+import NavbarItemReport from "../../components/NavbarItemReport";
+import ButtonNotClickedBlue from "../../components/ButtonNotClickedBlue";
+import ButtonClickedBlue from "../../components/ButtonClickedBlue";
+import Table from "../../components/Table";
+import { Typography } from "@material-ui/core";
+import ChartReport from "../../components/ChartReport.js";
 import "../../styles/App.css";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Button from "@material-ui/core/Button";
+import { NavLink } from "react-router-dom";
+import TextField from "@material-ui/core/TextField";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
-  // toolbar: {
-  //   paddingRight: 24, // keep right padding when drawer closed
-  //   background: "red",
-  // },
+
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
@@ -65,13 +50,13 @@ const useStyles = makeStyles((theme) => ({
     padding: "0 8px",
     ...theme.mixins.toolbar,
   },
+
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    boxShadow: "none",
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -129,40 +114,57 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  buttonNotClickedGreen: {
-    backgroundColor: "white",
-    "&:hover": {
-      background: "#47B881",
-      color: "white",
-    },
-    border: "1px solid #47B881 ",
-    variant: "contained",
-    color: "#47B881",
+  contenuto: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  generalPaper: {
+    display: "flex",
+    width: "960px",
+  },
+  logo: {
+    height: "50px",
+  },
+  intestazione: {
+    color: "rgba(158, 160, 165, 1)",
+    marginLeft: "35px",
     width: "200px",
-    height: "40px",
-    marginRight: "10px",
   },
-  containerNavbarItem: {
+  paper1: {
+    padding: "3%",
+    width: "480px",
+  },
+  paper2: {
+    width: "fit-content",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  subpaper1: {
+    padding: "4%",
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: "20px",
+    flexDirection: "column",
   },
-
-  bottonTest: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: "0px",
+  textField: {
+    padding: "5%",
+    marginBottom: "2%",
   },
-
-  active: {
-    backgroundColor: "#47B881",
-    color: "white",
+  intestazione1: {
+    fontSize: "24px",
+    color: "primary",
+    // marginBottom: "1%",
+    marginLeft: "2%",
+  },
+  intestazione2: {
+    marginBottom: "9%",
+    color: "rgba(158, 160, 165, 1)",
+    marginLeft: "2%",
+  },
+  img: {
+    marginLeft: "2%",
   },
 }));
 
-function Dashboard() {
+function Login() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -176,12 +178,12 @@ function Dashboard() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
+      {/* <AppBar
         position="absolute"
         className={clsx(classes.appBar, open && classes.appBarShift)}
       >
         <Navbar />
-      </AppBar>
+      </AppBar> */}
 
       <Drawer
         variant="permanent"
@@ -204,61 +206,70 @@ function Dashboard() {
         <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
+
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
 
         <Container maxWidth="lg" className={classes.container}>
-          {/* <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-          </Typography> */}
+          <Paper className={classes.generalPaper} elevation={1}>
+            <Paper className={classes.paper1}>
+              <Toolbar className={classes.toolbar} boxShadow={0}>
+                <img src={logo} alt="Logo" className={classes.logo} />
 
-          <div className={classes.containerNavbarItem}>
-            <NavbarItem />
-          </div>
-          <div className={classes.bottonTest}>
-            {/* <NavLink exact to="/dashboard/testcase"> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/dashboard/testcase"
-            >
-              Test Case
-            </Button>
-            {/* </NavLink> */}
+                <Typography className={classes.intestazione} variant="body2">
+                  Have ah account? Sign in
+                </Typography>
+              </Toolbar>
 
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/dashboard/testsuite"
-            >
-              Test Suite
-            </Button>
-            {/* </NavLink> */}
-          </div>
-          <Grid container spacing={3}>
-            <Card />
-
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Orders />
+              <Paper className={classes.subpaper1} elevation={0}>
+                <Typography variant="h5" className={classes.intestazione1}>
+                  Sign up to Reply
+                </Typography>
+                <Typography variant="body1" className={classes.intestazione2}>
+                  Sign up on the internal platform
+                </Typography>
+                <TextField
+                  className={classes.textField}
+                  required
+                  //id="outlined-required"
+                  label="Last Name"
+                  defaultValue="Last Name"
+                  variant="outlined"
+                />
+                <TextField
+                  className={classes.textField}
+                  required
+                  id="outlined-required"
+                  label="First Name"
+                  defaultValue="First Name"
+                  variant="outlined"
+                />
+                <TextField
+                  className={classes.textField}
+                  required
+                  id="outlined-required"
+                  label="Email Address"
+                  defaultValue="Email Address"
+                  variant="outlined"
+                />
+                <TextField
+                  className={classes.textField}
+                  required
+                  id="outlined-required"
+                  label="Password"
+                  defaultValue="Password"
+                  variant="outlined"
+                />
               </Paper>
-            </Grid>
-          </Grid>
+            </Paper>
+
+            <Paper className={classes.paper2} elevation={0}>
+              <img src={img} alt="Immagine" className={classes.img} />
+            </Paper>
+          </Paper>
         </Container>
       </main>
     </div>
   );
 }
-
-export default Dashboard;
+export default Login;

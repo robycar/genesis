@@ -11,6 +11,7 @@ import { NavLink } from "react-router-dom";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/App.css";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
 
 export const mainListItems = (
   <div className="nav-link">
@@ -79,43 +80,6 @@ export const secondaryListItems = (
       </ListItemIcon>
       <ListItemText primary="Supporto" />
     </ListItem>
-    <ListItem
-      button
-      component={NavLink}
-      activeClassName="nav-active"
-      exact
-      to="/provaModale"
-    >
-      <ListItemIcon>
-        <HelpOutlineIcon />
-      </ListItemIcon>
-      <ListItemText primary="provaModale" />
-    </ListItem>
-
-    <ListItem
-      button
-      component={NavLink}
-      activeClassName="nav-active"
-      exact
-      to="/creaLinea"
-    >
-      <ListItemIcon>
-        <HelpOutlineIcon />
-      </ListItemIcon>
-      <ListItemText primary="creaLinea" />
-    </ListItem>
-    <ListItem
-      button
-      component={NavLink}
-      activeClassName="nav-active"
-      exact
-      to="/outboundProxy"
-    >
-      <ListItemIcon>
-        <HelpOutlineIcon />
-      </ListItemIcon>
-      <ListItemText primary="outboundProxy" />
-    </ListItem>
   </div>
 );
 
@@ -144,6 +108,23 @@ export const tertiaryListItems = (
         <DescriptionIcon />
       </ListItemIcon>
       <ListItemText primary="Documentation" />
+    </ListItem>
+  </div>
+);
+
+export const quaterListItems = (
+  <div className="nav-link">
+    <ListItem
+      button
+      component={NavLink}
+      activeClassName="nav-active"
+      exact
+      to="/login"
+    >
+      <ListItemIcon>
+        <LockOpenIcon />
+      </ListItemIcon>
+      <ListItemText primary="Login" />
     </ListItem>
   </div>
 );

@@ -14,6 +14,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
@@ -168,7 +169,7 @@ function EditingLinee() {
         <Divider />
         <List>{tertiaryListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
+        <List>{quaterListItems}</List>
       </Drawer>
       <Container maxWidth="lg" className={classes.container}>
         <main className={classes.content}>

@@ -14,6 +14,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
@@ -23,7 +24,7 @@ import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 
 const drawerWidth = 240;
 
@@ -169,6 +170,8 @@ function AmministrazioneRuoli() {
         <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
       <Container maxWidth="lg" className={classes.container}>
         <main className={classes.content}>
@@ -219,7 +222,10 @@ function AmministrazioneRuoli() {
           <Paper className={classes.generalPaper}>
             <ListItem>
               <ListItemIcon>
-                <SupervisorAccountIcon fontSize="large" className={classes.icon} />
+                <SupervisorAccountIcon
+                  fontSize="large"
+                  className={classes.icon}
+                />
               </ListItemIcon>
               <Typography className={classes.titolo}> Ruoli </Typography>
             </ListItem>
