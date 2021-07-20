@@ -1,63 +1,67 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router";
 
-async function loginUser(credentials) {
-  return fetch("http://localhost:9081/api/auth/login", {
-    method: "POST",
-    headers: {
-      Accept: "*/*",
-      "Cache-Control": "no-cache",
-      Host: "localhost:9081",
-      "Accept-Encoding": "gzip, deflate, br",
-      Connection: "keep - alive",
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Content-Length": 27,
-      Authentication:
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjYzNTcyMzYsImlhdCI6MTYyNjM1MzYzNiwidXNlcm5hbWUiOiJ0ZXN0In0.OXqSaEKHs8o_wHY2jxr5qQ-UbncfF-4kB2B-ZNkjdPBy4ozB1bJzi3cz8MQ84dMJ4tfYdFWICNn-pBW3bwl5IA",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true,
-    },
-    // mode: "no-cors",
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
-}
 
-export default function Login({ setToken }) {
-  const [username, setUserName] = useState();
-  const [password, setPassword] = useState();
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const token = await loginUser({
-      username,
-      password,
-    });
-    setToken(token);
-  };
+  const history = useHistory();
+  useEffect(() => {
+    if (localStorage.getItem("user-info")) {
+      // history.push("/dashboard/testcase");
+    }
+  }, []);
+  async function login() {
+    console.warn(username, password);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("username", username);
+    urlencoded.append("password", password);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+    let result = await fetch(
+      `http://localhost:9081/api/auth/login`,
+      requestOptions
+    );
+
+    result = await result.json();
+    console.log(result);
+    localStorage.setItem("user-info", JSON.stringify(result));
+    history.push("/dashboard/testcase");
+  }
 
   return (
-    <div className="login-wrapper">
-      <h1>Please Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <p>Username</p>
-          <input type="text" onChange={(e) => setUserName(e.target.value)} />
-        </label>
-        <label>
-          <p>Password</p>
-          <input
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
-        <div>
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+    <div>
+      <h1>Login Page</h1>
+      <div className="col-sm-6 offset-sm-3">
+        <input
+          type="text"
+          placeholder="user"
+          className="form-control"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <br />
+        <input
+          type="text"
+          placeholder="password"
+          className="form-control"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <br />
+        <button className="btn btn-primary" onClick={login}>
+          Login
+        </button>
+      </div>
     </div>
   );
-}
-
-Login.propTypes = {
-  setToken: PropTypes.func.isRequired,
 };
+
+export default Login;
