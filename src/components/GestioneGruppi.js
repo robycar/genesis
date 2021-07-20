@@ -1,52 +1,89 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
-import CreateIcon from '@material-ui/icons/Create';
+import CreateIcon from "@material-ui/icons/Create";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
-import DeleteIcon from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import DeleteIcon from "@material-ui/icons/Delete";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import { PersonalVideoSharp } from "@material-ui/icons";
 
 const GestioneRuoli = () => {
-  const data = [
-    {
-      nome: "Gruppo1",
-      descrizione: "Desrizione gruppo"
-    },
-    {
-      nome: "Gruppo2",
-      descrizione: "Desrizione gruppo2"
-    },
-    {
-      nome: "Gruppo3",
-      descrizione: "Desrizione gruppo3"
-    },
-    {
-      nome: "Gruppo4",
-      descrizione: "Desrizione gruppo4"
-    },
-    {
-      nome: "Gruppo5",
-      descrizione: "Desrizione gruppo5"
-    },
-  ];
+  // const data = [
+  //   {
+  //     nome: "Gruppo1",
+  //     descrizione: "Desrizione gruppo"
+  //   },
+  //   {
+  //     nome: "Gruppo2",
+  //     descrizione: "Desrizione gruppo2"
+  //   },
+  //   {
+  //     nome: "Gruppo3",
+  //     descrizione: "Desrizione gruppo3"
+  //   },
+  //   {
+  //     nome: "Gruppo4",
+  //     descrizione: "Desrizione gruppo4"
+  //   },
+  //   {
+  //     nome: "Gruppo5",
+  //     descrizione: "Desrizione gruppo5"
+  //   },
+  // ];
 
   const columns = [
     {
-      title: "Gruppo",
+      title: "Nome",
       field: "nome",
     },
     {
       title: "Descrizione",
       field: "descrizione",
-    },    
+    },
   ];
 
-  
+  const [data, setData] = useState([]);
 
- 
+  useEffect(() => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("username", "test");
+    urlencoded.append("password", "test");
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:9081/api/auth/login", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        Test(result.access_token);
+        console.log(result);
+      })
+      .catch((error) => console.log("error", error));
+
+    // USER
+
+    function Test(token) {
+      fetch("http://localhost:9081/api/group", {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((response) => response.json())
+        .then((result) => setData(result.gruppi))
+        .catch((error) => console.log("error", error));
+    }
+  }, []);
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -109,7 +146,7 @@ const GestioneRuoli = () => {
       marginBottom: "2%",
     },
   }));
-  
+
   const classes = useStyles();
   return (
     <div>
@@ -130,22 +167,24 @@ const GestioneRuoli = () => {
         }}
         actions={[
           {
-            icon: () => <a href="../amministrazione/viewgruppo"><VisibilityIcon /></a>,
+            icon: () => (
+              <a href="../amministrazione/viewgruppo">
+                <VisibilityIcon />
+              </a>
+            ),
             tooltip: "Visualizza",
             position: "row",
           },
           {
             icon: () => <CreateIcon />,
             tooltip: "Modifica",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.id),
+            onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
             tooltip: "Elimina",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.id),
+            onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
             position: "row",
           },
           {
@@ -177,4 +216,3 @@ const GestioneRuoli = () => {
 };
 
 export default GestioneRuoli;
-

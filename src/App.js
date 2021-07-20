@@ -38,7 +38,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         {/* <Route path="/" exact component={Dashboard} /> */}
-        <Route path="/" exact component={Login} />
+        <Route path="/" exact component={LoginChiara} />
         <Route path="/dashboard/testcase" exact component={DashboardTestCase} />
         <Route
           path="/dashboard/testsuite"

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -8,7 +9,7 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Toolbar from "@material-ui/core/Toolbar";
-
+import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -30,7 +31,6 @@ import Table from "../../components/Table";
 import { Typography } from "@material-ui/core";
 import ChartReport from "../../components/ChartReport.js";
 import "../../styles/App.css";
-import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 
@@ -136,6 +136,12 @@ const useStyles = makeStyles((theme) => ({
     // margin: theme.spacing(1),
     color: "rgba(158, 160, 165, 1)",
   },
+  button: {
+    marginTop: "5%",
+    width: "352px",
+    height: "39px",
+    marginLeft: "4%",
+  },
   paper1: {
     padding: "3%",
     width: "480px",
@@ -180,16 +186,44 @@ function Login() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const history = useHistory();
+  useEffect(() => {
+    if (localStorage.getItem("user-info")) {
+      // history.push("/dashboard/testcase");
+    }
+  }, []);
+  async function login() {
+    console.warn(username, password);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("username", username);
+    urlencoded.append("password", password);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+    let result = await fetch(
+      `http://localhost:9081/api/auth/login`,
+      requestOptions
+    );
+
+    result = await result.json();
+    console.log(result);
+    localStorage.setItem("user-info", JSON.stringify(result));
+    history.push("/dashboard/testcase");
+  }
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      {/* <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
-      >
-        <Navbar />
-      </AppBar> */}
 
       <Drawer
         variant="permanent"
@@ -242,26 +276,12 @@ function Login() {
                   className={classes.textField}
                   required
                   //id="outlined-required"
-                  label="Last Name"
-                  defaultValue="Last Name"
+                  label="Username"
+                  defaultValue="Username"
                   variant="outlined"
+                  onChange={(e) => setUsername(e.target.value)}
                 />
-                <TextField
-                  className={classes.textField}
-                  required
-                  id="outlined-required"
-                  label="First Name"
-                  defaultValue="First Name"
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.textField}
-                  required
-                  id="outlined-required"
-                  label="Email Address"
-                  defaultValue="Email Address"
-                  variant="outlined"
-                />
+
                 <TextField
                   className={classes.textField}
                   required
@@ -269,7 +289,17 @@ function Login() {
                   label="Password"
                   defaultValue="Password"
                   variant="outlined"
+                  onChange={(e) => setPassword(e.target.value)}
                 />
+
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  onClick={login}
+                  color="primary"
+                >
+                  Login
+                </Button>
               </Paper>
             </Paper>
 
