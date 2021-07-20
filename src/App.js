@@ -31,12 +31,14 @@ import AmministrazioneViewGruppo from "./pages/amministrazione/AmministrazioneVi
 import AmministrazioneViewGruppoCreaGruppo from "./pages/amministrazione/AmministrazioneViewGruppoCreaGruppo";
 import AmministrazioneViewGruppoAddPartecipante from "./pages/amministrazione/AmministrazioneViewGruppoAddPartecipante";
 import LoginChiara from "./pages/login/LoginChiara";
+import Login from "./pages/Login";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" exact component={Dashboard} />
+        {/* <Route path="/" exact component={Dashboard} /> */}
+        <Route path="/" exact component={Login} />
         <Route path="/dashboard/testcase" exact component={DashboardTestCase} />
         <Route
           path="/dashboard/testsuite"
