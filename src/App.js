@@ -30,7 +30,7 @@ import AmministrazioneCreaRuolo from "./pages/amministrazione/AmministrazioneCre
 import AmministrazioneViewGruppo from "./pages/amministrazione/AmministrazioneViewGruppo";
 import AmministrazioneViewGruppoCreaGruppo from "./pages/amministrazione/AmministrazioneViewGruppoCreaGruppo";
 import AmministrazioneViewGruppoAddPartecipante from "./pages/amministrazione/AmministrazioneViewGruppoAddPartecipante";
-import Login from "./pages/login/Login";
+import LoginChiara from "./pages/login/LoginChiara";
 
 function App() {
   return (
@@ -129,7 +129,7 @@ function App() {
           exact
           component={AmministrazioneViewGruppoAddPartecipante}
         />
-        <Route path="/login" exact component={Login} />
+        <Route path="/login" exact component={LoginChiara} />
       </Switch>
     </BrowserRouter>
   );

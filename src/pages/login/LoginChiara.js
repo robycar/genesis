@@ -129,6 +129,12 @@ const useStyles = makeStyles((theme) => ({
     color: "rgba(158, 160, 165, 1)",
     marginLeft: "35px",
     width: "200px",
+    display: "flex",
+    alignItems: "baseline",
+  },
+  margin: {
+    // margin: theme.spacing(1),
+    color: "rgba(158, 160, 165, 1)",
   },
   paper1: {
     padding: "3%",
@@ -217,7 +223,11 @@ function Login() {
                 <img src={logo} alt="Logo" className={classes.logo} />
 
                 <Typography className={classes.intestazione} variant="body2">
-                  Have ah account? Sign in
+                  Have ah account?
+                  <Button size="small" className={classes.margin}>
+                    {" "}
+                    Sign in
+                  </Button>
                 </Typography>
               </Toolbar>
 
