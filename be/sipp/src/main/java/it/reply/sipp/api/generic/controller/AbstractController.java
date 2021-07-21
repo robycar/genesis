@@ -26,11 +26,11 @@ public class AbstractController {
 		
 		String errorCode = e.getErrorCode();
 		String errorMessage = e.getMessage();
-		String logMessage = e.getLogMessage();
-		if (logMessage == null) {
-			logMessage = errorMessage;
-		}
-		logger.error(logMessage, e);
+//		String logMessage = e.getLogMessage();
+//		if (logMessage == null) {
+//			logMessage = errorMessage;
+//		}
+//		logger.error(logMessage, e);
 		
 		response.setError(new ErrorInfo(errorCode, errorMessage));
 		

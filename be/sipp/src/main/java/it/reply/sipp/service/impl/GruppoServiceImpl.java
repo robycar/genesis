@@ -21,6 +21,7 @@ import it.reply.sipp.model.repository.GruppoRepository;
 import it.reply.sipp.service.GruppoService;
 
 @Service
+@Transactional(rollbackFor=ApplicationException.class)
 public class GruppoServiceImpl extends AbstractService implements GruppoService {
 
 	
@@ -34,7 +35,6 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
 	}
 	
 	@Override
-	@Transactional(readOnly = true)
 	public List<GruppoVO> listGroups() {
 		return gruppoRepository.findAll();
 	}

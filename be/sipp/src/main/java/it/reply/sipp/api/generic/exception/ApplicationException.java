@@ -8,16 +8,13 @@ public class ApplicationException extends Exception {
 	
 	private String errorCode;
 	
-	private String logMessage;
-
 	public ApplicationException() {
 	}
 
-	public ApplicationException(int statusCode, String errorCode, String message, String logMessage) {
+	public ApplicationException(int statusCode, String errorCode, String message) {
 		super(message);
 		this.statusCode = statusCode;
 		this.errorCode = errorCode;
-		this.logMessage = logMessage;
 	}
 	
 	public ApplicationException(String message) {
@@ -43,10 +40,6 @@ public class ApplicationException extends Exception {
 
 	public String getErrorCode() {
 		return errorCode;
-	}
-
-	public String getLogMessage() {
-		return logMessage;
 	}
 
 }

@@ -27,6 +27,7 @@ import it.reply.sipp.service.LevelService;
 import it.reply.sipp.service.UserService;
 
 @Service
+@Transactional(rollbackFor = ApplicationException.class)
 public class UserServiceImpl extends AbstractService implements UserService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -49,7 +50,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		return userRepository.findAll();
 	}
 
-	@Transactional(readOnly = true)
+	
 	public List<GrantedAuthority> readRolesAndFunctionsForUser(UserVO u) {
 		logger.debug("enter readRolesAndFunctionsForUser {}", u.getUsername());
 		List<GrantedAuthority> authorities = new ArrayList<>();
@@ -66,7 +67,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public Optional<UserVO> readUser(Long id) {
 		logger.debug("enter readUser(%d)", id);
 		
@@ -81,7 +81,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	}
 	
 	@Override
-	@Transactional(readOnly = false)
 	public void updateUser(UserDTO userDTO, String password) throws ApplicationException {
 		logger.debug("enter updateUser({}, {}, ****, {}", userDTO);
 		Long userId = userDTO.getId();
@@ -131,7 +130,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	}
 
 	@Override
-	@Transactional
 	public UserVO addUser(UserVO userVO, String password) throws ApplicationException {
 		logger.debug("enter addUser");
 		if (userVO.getId() != null) {

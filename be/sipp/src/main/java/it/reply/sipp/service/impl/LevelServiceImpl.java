@@ -25,6 +25,7 @@ import it.reply.sipp.model.repository.UserRepository;
 import it.reply.sipp.service.LevelService;
 
 @Service
+@Transactional(rollbackFor = ApplicationException.class)
 public class LevelServiceImpl extends AbstractService implements LevelService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LevelServiceImpl.class);
@@ -43,7 +44,6 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 	}
 
 	@Override
-	@Transactional
 	public LevelVO read(Long id) throws ApplicationException {
 		logger.debug("enter read");
 		return levelRepository.findById(id)
@@ -51,7 +51,6 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 	}
 
 	@Override
-	@Transactional
 	public LevelVO addLevel(LevelDTO dto) throws ApplicationException {
 		logger.debug("enter addLevel");
 		
@@ -74,14 +73,12 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 	}
 
 	@Override
-	@Transactional
 	public List<LevelVO> listLivelli() {
 		logger.debug("enter listLivelli");
 		return levelRepository.findAll();
 	}
 
 	@Override
-	@Transactional
 	public LevelVO updateLevel(LevelDTO dto) throws ApplicationException {
 		logger.debug("enter updateLevel({})", dto);
 		
@@ -136,7 +133,6 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 	}
 
 	@Override
-	@Transactional
 	public void removeLevel(Long id) throws ApplicationException {
 		logger.debug("enter removeLevel");
 		LevelVO vo = read(id);
