@@ -16,6 +16,7 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
+import CreaItem from "../../components/CreaItem";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
@@ -206,7 +207,10 @@ function AmministrazioneViewGruppoCreaGruppo() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-            <Typography className={classes.edit}> Creazione Gruppo </Typography>
+            <CreaItem titolo="Crea Gruppo" />
+
+            <Divider className={classes.divider} />
+            {/* <Typography className={classes.edit}> Creazione Gruppo </Typography> */}
             <FormCreaGruppo />
           </Paper>
         </main>

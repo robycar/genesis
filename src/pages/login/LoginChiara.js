@@ -277,7 +277,7 @@ function Login() {
                   required
                   //id="outlined-required"
                   label="Username"
-                  defaultValue="Username"
+                  defaultValue=" "
                   variant="outlined"
                   onChange={(e) => setUsername(e.target.value)}
                 />
@@ -287,7 +287,7 @@ function Login() {
                   required
                   id="outlined-required"
                   label="Password"
-                  defaultValue="Password"
+                  defaultValue=" "
                   variant="outlined"
                   onChange={(e) => setPassword(e.target.value)}
                 />
