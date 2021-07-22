@@ -1,52 +1,68 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
-import CreateIcon from '@material-ui/icons/Create';
+import CreateIcon from "@material-ui/icons/Create";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
-import DeleteIcon from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import DeleteIcon from "@material-ui/icons/Delete";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import { PersonalVideoSharp } from "@material-ui/icons";
 
 const GestioneRuoli = () => {
-  const data = [
-    {
-      nome: "Gruppo1",
-      descrizione: "Desrizione gruppo"
-    },
-    {
-      nome: "Gruppo2",
-      descrizione: "Desrizione gruppo2"
-    },
-    {
-      nome: "Gruppo3",
-      descrizione: "Desrizione gruppo3"
-    },
-    {
-      nome: "Gruppo4",
-      descrizione: "Desrizione gruppo4"
-    },
-    {
-      nome: "Gruppo5",
-      descrizione: "Desrizione gruppo5"
-    },
-  ];
-
+  // const data = [
+  //   {
+  //     nome: "Gruppo1",
+  //     descrizione: "Desrizione gruppo"
+  //   },
+  //   {
+  //     nome: "Gruppo2",
+  //     descrizione: "Desrizione gruppo2"
+  //   },
+  //   {
+  //     nome: "Gruppo3",
+  //     descrizione: "Desrizione gruppo3"
+  //   },
+  //   {
+  //     nome: "Gruppo4",
+  //     descrizione: "Desrizione gruppo4"
+  //   },
+  //   {
+  //     nome: "Gruppo5",
+  //     descrizione: "Desrizione gruppo5"
+  //   },
+  // ];
+  const token =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDQ5NDIsImlhdCI6MTYyNjk0MTM0MiwidXNlcm5hbWUiOiJ0ZXN0In0.C6-eZFX8oK-XUR6nVJELZQijg6Uro3O7reVTcRAn34jbWNdfM9ME85Zf6Q2H3gj1s-8nkvpN61S31QAPFZ70ow";
   const columns = [
     {
-      title: "Gruppo",
+      title: "Nome",
       field: "nome",
     },
     {
       title: "Descrizione",
       field: "descrizione",
-    },    
+    },
   ];
 
-  
+  const [data, setData] = useState([]);
 
- 
+  useEffect(() => {
+    getGruppi();
+  }, []);
+
+  const getGruppi = () => {
+    fetch("http://localhost:9081/api/group", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => setData(result.gruppi))
+      .catch((error) => console.log("error", error));
+  };
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -109,7 +125,7 @@ const GestioneRuoli = () => {
       marginBottom: "2%",
     },
   }));
-  
+
   const classes = useStyles();
   return (
     <div>
@@ -119,7 +135,7 @@ const GestioneRuoli = () => {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
+          // tableLayout: "",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
@@ -128,26 +144,87 @@ const GestioneRuoli = () => {
           // columnsButton: true,
           // filtering: true,
         }}
+        editable={{
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+              var myHeaders = new Headers();
+              myHeaders.append("Authorization", "Bearer " + token);
+              myHeaders.append("Content-Type", "application/json");
+
+              var raw = JSON.stringify({
+                id: oldData.id,
+                nome: newData.nome,
+                descrizione: newData.descrizione,
+              });
+
+              var requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
+
+              fetch("http://localhost:9081/api/group", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                  getGruppi();
+                  resolve();
+                })
+
+                .catch((error) => console.log("error", error));
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve, reject) => {
+              var myHeaders = new Headers();
+              myHeaders.append("Authorization", "Bearer " + token);
+              myHeaders.append("Content-Type", "application/json");
+              // setTimeout(() => {
+              //   setData(result.gruppi);
+              //resolve();
+              // }, 2000);
+
+              var raw = JSON.stringify({
+                id: oldData.id,
+              });
+
+              var requestOptions = {
+                method: "DELETE",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
+
+              fetch("http://localhost:9081/api/group", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                  getGruppi();
+                  resolve();
+                })
+                .catch((error) => console.log("error", error));
+            }),
+        }}
         actions={[
           {
-            icon: () => <a href="../amministrazione/viewgruppo"><VisibilityIcon /></a>,
+            icon: () => (
+              <a href="../amministrazione/viewgruppo">
+                <VisibilityIcon />
+              </a>
+            ),
             tooltip: "Visualizza",
             position: "row",
           },
-          {
-            icon: () => <CreateIcon />,
-            tooltip: "Modifica",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.id),
-            position: "row",
-          },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Elimina",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.id),
-            position: "row",
-          },
+          // {
+          //   icon: () => <CreateIcon />,
+          //   tooltip: "Modifica",
+          //   onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
+          //   position: "row",
+          // },
+          // {
+          //   icon: () => <DeleteIcon />,
+          //   tooltip: "Elimina",
+          //   onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
+          //   position: "row",
+          // },
           {
             icon: () => (
               <div className={classes.buttonRight}>
@@ -177,4 +254,3 @@ const GestioneRuoli = () => {
 };
 
 export default GestioneRuoli;
-

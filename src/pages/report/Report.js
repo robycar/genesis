@@ -16,6 +16,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
 import Orders from "../../components/TestCaseComplete";
 import NavbarItemReport from "../../components/NavbarItemReport";
@@ -209,6 +210,8 @@ function Report() {
         <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

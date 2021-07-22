@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
@@ -6,37 +6,58 @@ import CreateIcon from '@material-ui/icons/Create';
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
 import DeleteIcon from '@material-ui/icons/Delete';
+import Delete from "@material-ui/icons/Delete";
 
 const GestioneRuoli = () => {
-  const data = [
-    {
-      level: "Admin",
-      descrizione: "Operazioni di lettura, scrittura, edit e operazioni amministrative"
-    },
-    {
-      level: "L1",
-      descrizione: "Operazioni di lettura, scrittura e edit ma non operazioni amministrative"
-    },
-    {
-      level: "L2",
-      descrizione: "Operazioni di sola lettura"
-    },
-  ];
+  // const data = [
+  //   {
+  //     level: "Admin",
+  //     descrizione: "Operazioni di lettura, scrittura, edit e operazioni amministrative"
+  //   },
+  //   {
+  //     level: "L1",
+  //     descrizione: "Operazioni di lettura, scrittura e edit ma non operazioni amministrative"
+  //   },
+  //   {
+  //     level: "L2",
+  //     descrizione: "Operazioni di sola lettura"
+  //   },
+  // ];
+
+  const [data, setData] = useState([])
 
   const columns = [
     {
       title: "Level",
-      field: "level",
+      field: "nome",
     },
     {
       title: "Descrizione",
       field: "descrizione",
-    },    
+    },
   ];
 
-  
+  var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDg0ODEsImlhdCI6MTYyNjk0NDg4MSwidXNlcm5hbWUiOiJ0ZXN0In0.yBSsJFLzHF16IWSger4M4SaY0F6Q5aBXJ0VSl_RdZ1RcBAulFG-byKaG6h01mvMMgOTieDKKoJN_kUkya0Knuw";
 
- 
+  useEffect(() => {
+
+    getLevel()
+
+  }, [])
+
+  const getLevel= () => {
+    // GET LEVEL
+    fetch("http://localhost:9081/api/level", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => setData(result.livelli))
+      .catch((error) => console.log("error", error));
+  }
+
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -109,7 +130,6 @@ const GestioneRuoli = () => {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
@@ -118,21 +138,66 @@ const GestioneRuoli = () => {
           // columnsButton: true,
           // filtering: true,
         }}
+        editable={{
+          onRowUpdate: (newData, oldData) => new Promise((resolve, reject) => {
+            //Backend call
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer "+ token);
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+              "id": oldData.id,
+              "nome": newData.nome,
+              "descrizione": newData.descrizione,
+              "funzioni": [
+                "user.view",
+                "level.edit",
+                "user.list",
+                "list.user",
+                "list.level"
+              ]
+            });
+
+            var requestOptions = {
+              method: 'POST',
+              headers: myHeaders,
+              body: raw,
+              redirect: 'follow'
+            };
+
+            fetch("http://localhost:9081/api/level", requestOptions)
+              .then(response => response.json())
+              .then(result => {getLevel() 
+                resolve()})
+              .catch(error => console.log('error', error));
+          }),
+          onRowDelete: (oldData) => new Promise((resolve, reject) => {
+            //Backend call
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Bearer " + token);
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+              "id": oldData.id
+            });
+
+            var requestOptions = {
+              method: 'DELETE',
+              headers: myHeaders,
+              body: raw,
+              redirect: 'follow'
+            };
+
+            fetch("http://localhost:9081/api/level", requestOptions)
+              .then(response => response.json())
+              .then(result => {getLevel() 
+                resolve()})
+              .catch(error => console.log('error', error));
+                       
+          })
+          
+        }}
         actions={[
-          {
-            icon: () => <CreateIcon />,
-            tooltip: "Modifica",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.id),
-            position: "row",
-          },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Elimina",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.id),
-            position: "row",
-          },
           {
             icon: () => (
               <div className={classes.buttonRight}>
@@ -141,21 +206,16 @@ const GestioneRuoli = () => {
                   component={NavLink}
                   activeClassName="button-green-active"
                   exact
-                  to="/amministrazione/addutente"
+                  to="/amministrazione/crearuolo"
                 >
-                  ADD UTENTE
+                  ADD RUOLO
                 </Button>
               </div>
             ),
             tooltip: "Load Test Suite",
             isFreeAction: true,
-          },
+          }
         ]}
-        localization={{
-          header: {
-            actions: "Actions",
-          },
-        }}
       />
     </div>
   );

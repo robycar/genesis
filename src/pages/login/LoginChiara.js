@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -7,6 +8,8 @@ import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
+import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -18,7 +21,9 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import TestSuiteComplete from "../../components/TestSuiteComplete";
+import logo from "../../assets/logoReply.png";
+import img from "../../assets/Bitmap.png";
+import Orders from "../../components/TestCaseComplete";
 import NavbarItemReport from "../../components/NavbarItemReport";
 import ButtonNotClickedBlue from "../../components/ButtonNotClickedBlue";
 import ButtonClickedBlue from "../../components/ButtonClickedBlue";
@@ -26,18 +31,18 @@ import Table from "../../components/Table";
 import { Typography } from "@material-ui/core";
 import ChartReport from "../../components/ChartReport.js";
 import "../../styles/App.css";
-import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
+import TextField from "@material-ui/core/TextField";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
+
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
@@ -45,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "0 8px",
     ...theme.mixins.toolbar,
   },
+
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
@@ -108,63 +114,69 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  buttonContainer: {
+  contenuto: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  generalPaper: {
     display: "flex",
-    justifyContent: "flex-end",
-    marginTop: "10px",
-    marginBottom: "10px",
+    width: "960px",
   },
-  buttonNotClickedBlue: {
-    backgroundColor: "whute",
-    border: "1px solid #1665D8",
-    variant: "contained",
-    color: "#1665D8",
-    marginLeft: "10px",
-    marginRight: "10px",
+  logo: {
+    height: "50px",
+  },
+  intestazione: {
+    color: "rgba(158, 160, 165, 1)",
+    marginLeft: "35px",
     width: "200px",
-    height: "40px",
+    display: "flex",
+    alignItems: "baseline",
   },
-  buttonClickedBlue: {
-    backgroundColor: "#1665D8",
+  margin: {
+    // margin: theme.spacing(1),
+    color: "rgba(158, 160, 165, 1)",
+  },
+  button: {
+    marginTop: "5%",
+    width: "352px",
+    height: "39px",
+    marginLeft: "4%",
+  },
+  paper1: {
+    padding: "3%",
+    width: "480px",
+  },
+  paper2: {
+    width: "fit-content",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  subpaper1: {
+    padding: "4%",
+    display: "flex",
+    flexDirection: "column",
+  },
+  textField: {
+    padding: "5%",
+    marginBottom: "2%",
+  },
+  intestazione1: {
+    fontSize: "24px",
     color: "primary",
-    marginLeft: "10px",
-    marginRight: "10px",
-    width: "200px",
-    height: "40px",
+    // marginBottom: "1%",
+    marginLeft: "2%",
   },
-  containerNavbarItem: {},
-  bottomContainer: {
-    marginTop: "2%",
-    display: "flex",
-  },
-  paperTable: {
-    width: "62%",
-    flexDirection: "column",
-  },
-  paperImg: {
-    display: "flex",
-    width: "36%",
-    flexDirection: "column",
+  intestazione2: {
+    marginBottom: "9%",
+    color: "rgba(158, 160, 165, 1)",
     marginLeft: "2%",
   },
   img: {
-    width: "100%",
-  },
-  titleImg: {
-    alignItems: "center",
-    fontSize: "24px",
-    padding: "5%",
-    marginLeft: "20%",
-    lineHeight: "20px",
-  },
-  chart: {
-    position: "relative",
-    width: "255px",
-    marginLeft: "90px",
+    marginLeft: "2%",
   },
 }));
 
-function ReportTestSuite() {
+function Login() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -174,24 +186,45 @@ function ReportTestSuite() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-  // const table = [
-  //     {col1:"", col2:"Run", col3:"Passed", col4:"N/A", col5:"Failed"},
-  //     {col1:"Registrazione",col2: 159, col3:6.0, col4:24, col5:4.0},
-  //     {col1:"Plug-In", col2: 237, col3:9.0, col4:37, col5:4.3},
-  //     {col1:"Focus P-CSCF", col2:262, col3:16.0, col4:24, col5:6.0},
-  //     {col1:"Total", col2:305, col3:3.7, col4:67, col5:4.3},
-  //   ]
+  const history = useHistory();
+  useEffect(() => {
+    if (localStorage.getItem("user-info")) {
+      // history.push("/dashboard/testcase");
+    }
+  }, []);
+  async function login() {
+    console.warn(username, password);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("username", username);
+    urlencoded.append("password", password);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+    let result = await fetch(
+      `http://localhost:9081/api/auth/login`,
+      requestOptions
+    );
+
+    result = await result.json();
+    console.log(result);
+    localStorage.setItem("user-info", JSON.stringify(result));
+    history.push("/dashboard/testcase");
+  }
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
-      >
-        <Navbar />
-      </AppBar>
+
       <Drawer
         variant="permanent"
         classes={{
@@ -213,58 +246,65 @@ function ReportTestSuite() {
         <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
+
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
 
         <Container maxWidth="lg" className={classes.container}>
-          <div className={classes.containerNavbarItem}>
-            <NavbarItemReport fontSize="large" />
-          </div>
-        </Container>
+          <Paper className={classes.generalPaper} elevation={1}>
+            <Paper className={classes.paper1}>
+              <Toolbar className={classes.toolbar} boxShadow={0}>
+                <img src={logo} alt="Logo" className={classes.logo} />
 
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Recent TestSuiteComplete */}
-            <Grid item xs={12}>
-              <div className={classes.buttonContainer}>
+                <Typography className={classes.intestazione} variant="body2">
+                  Have ah account?
+                  <Button size="small" className={classes.margin}>
+                    {" "}
+                    Sign in
+                  </Button>
+                </Typography>
+              </Toolbar>
+
+              <Paper className={classes.subpaper1} elevation={0}>
+                <Typography variant="h5" className={classes.intestazione1}>
+                  Sign up to Reply
+                </Typography>
+                <Typography variant="body1" className={classes.intestazione2}>
+                  Sign up on the internal platform
+                </Typography>
+                <TextField
+                  className={classes.textField}
+                  required
+                  //id="outlined-required"
+                  label="Username"
+                  defaultValue=" "
+                  variant="outlined"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+
+                <TextField
+                  className={classes.textField}
+                  required
+                  id="outlined-required"
+                  label="Password"
+                  defaultValue=" "
+                  variant="outlined"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
                 <Button
-                  component={NavLink}
-                  className="button-blue"
-                  activeClassName="button-blue-active"
-                  exact
-                  to="/report/testsuite"
+                  className={classes.button}
+                  variant="contained"
+                  onClick={login}
+                  color="primary"
                 >
-                  TEST SUITE
+                  Login
                 </Button>
-                <Button
-                  component={NavLink}
-                  className="button-blue"
-                  activeClassName="button-blue-active"
-                  exact
-                  to="/report/testcase"
-                >
-                  TEST CASE
-                </Button>
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <TestSuiteComplete />
               </Paper>
-            </Grid>
-          </Grid>
-
-          <Paper className={classes.bottomContainer}>
-            <Paper className={classes.paperTable}>
-              <Table />
             </Paper>
-            <Paper className={classes.paperImg}>
-              <Typography className={classes.titleImg}>
-                Test Suite-CB Fibra
-              </Typography>
-              <div className={classes.chart}>
-                <ChartReport />
-              </div>
+
+            <Paper className={classes.paper2} elevation={0}>
+              <img src={img} alt="Immagine" className={classes.img} />
             </Paper>
           </Paper>
         </Container>
@@ -272,5 +312,4 @@ function ReportTestSuite() {
     </div>
   );
 }
-
-export default ReportTestSuite;
+export default Login;

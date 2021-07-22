@@ -14,6 +14,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
@@ -23,7 +24,7 @@ import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
 
 const drawerWidth = 240;
 
@@ -169,6 +170,8 @@ function AmministrazioneUtenze() {
         <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
       <Container maxWidth="lg" className={classes.container}>
         <main className={classes.content}>

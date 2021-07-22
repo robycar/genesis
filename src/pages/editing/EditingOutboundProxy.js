@@ -14,6 +14,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
@@ -196,7 +197,8 @@ function EditingOutboundProxy() {
         <Divider />
         <List>{tertiaryListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>{" "}
+        <List>{secondaryListItems}</List> <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
 
       <Container maxWidth="lg" className={classes.container}>

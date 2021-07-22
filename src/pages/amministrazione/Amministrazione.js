@@ -14,6 +14,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
@@ -55,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
+  // containerNavbarItem: {
+  //   marginBottom: "20px",
+  // },
   menuButton: {
     marginRight: 36,
   },
@@ -147,6 +151,8 @@ function Amministrazione() {
         <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
       <Container maxWidth="lg" className={classes.container}>
         <main className={classes.content}>

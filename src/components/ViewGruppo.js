@@ -1,35 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
-import CreateIcon from '@material-ui/icons/Create';
+import CreateIcon from "@material-ui/icons/Create";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
-import DeleteIcon from '@material-ui/icons/Delete';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import DeleteIcon from "@material-ui/icons/Delete";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import { PersonalVideoSharp } from "@material-ui/icons";
 
 const ViewGruppo = () => {
   const data = [
     {
       nome: "Marco Rossi",
-      level: "Admin"
+      level: "Admin",
     },
     {
       nome: "Mario Rossi",
-      level: "L1"
+      level: "L1",
     },
     {
       nome: "Valentina Bianchi",
-      level: "L2"
+      level: "L2",
     },
     {
       nome: "Antonio Verdi",
-      level: "L2"
+      level: "L2",
     },
     {
       nome: "Maria Sacchi",
-      level: "Admin"
+      level: "Admin",
     },
   ];
 
@@ -41,7 +41,7 @@ const ViewGruppo = () => {
     {
       title: "Level",
       field: "level",
-    },    
+    },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -105,7 +105,7 @@ const ViewGruppo = () => {
       marginBottom: "2%",
     },
   }));
-  
+
   const classes = useStyles();
   return (
     <div>
@@ -128,8 +128,7 @@ const ViewGruppo = () => {
           {
             icon: () => <DeleteIcon />,
             tooltip: "Elimina",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.id),
+            onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
             position: "row",
           },
           {

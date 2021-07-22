@@ -22,6 +22,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
 import TotalTestSuite from "../../components/TotalPlannedWeeKlyTestSuite";
 import Deposits from "../../components/Deposits";
@@ -199,6 +200,8 @@ function DashboardTestCase() {
         <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
