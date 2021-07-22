@@ -37,7 +37,7 @@ const GestioneRuoli = () => {
     },
   ];
 
-  var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY4ODMyMDksImlhdCI6MTYyNjg3OTYwOSwidXNlcm5hbWUiOiJ0ZXN0In0.vzgHThrJ2cF_I7_z59ub72f_2Ev71Qg6VCZ5YR4t7SlByqQ2PkLFh_-_Mw0HEva_wygGR4bB3lxzCdX-jzvZFQ";
+  var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDQxOTQsImlhdCI6MTYyNjk0MDU5NCwidXNlcm5hbWUiOiJ0ZXN0In0.WOaN5pTzNyxi_j8X-0u4r_ERsIPTOA823HP7_Hx8FmIA_gIq8cyVbNAYtdls5bpug7HdTxONk4WPYU7YjdhhoQ";
 
   useEffect(() => {
 
@@ -167,7 +167,8 @@ const GestioneRuoli = () => {
 
             fetch("http://localhost:9081/api/level", requestOptions)
               .then(response => response.json())
-              .then(result => console.log(result))
+              .then(result => {getLevel() 
+                resolve()})
               .catch(error => console.log('error', error));
           }),
           onRowDelete: (oldData) => new Promise((resolve, reject) => {
