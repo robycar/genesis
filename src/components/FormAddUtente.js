@@ -45,11 +45,11 @@ function FormAddUtente() {
   const [level, setLevel] = useState("");
   // console.warn(level);
 
-  async function login() {
+  function login() {
     var myHeaders = new Headers();
     myHeaders.append(
       "Authorization",
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY4NzMyMjksImlhdCI6MTYyNjg2OTYyOSwidXNlcm5hbWUiOiJ0ZXN0In0.Jz7a4TLzpaspJgfJ8Tu-XaVk_gntSZG6X9vACEGYjJgKQzUDscPkpXERFQBk3bkVsITr92vWx8Whv3SryxJBMw"
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY4NzkyMDksImlhdCI6MTYyNjg3NTYwOSwidXNlcm5hbWUiOiJ0ZXN0In0.pXrcuOKfAnzPwEOlbu8IBSzyGrK-o1ZmKJJEgH0LPz-so91HhVDIYTUVCo2ndkFg7W7mVQTLjIYcmY6_hlvyWQ"
     );
     myHeaders.append("Content-Type", "application/json");
 
@@ -79,8 +79,6 @@ function FormAddUtente() {
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
 
-    result = await result.json();
-    console.log(result);
     // localStorage.setItem("user-info", JSON.stringify(result));
     // history.push("/dashboard/testcase");
   }
@@ -180,14 +178,10 @@ function FormAddUtente() {
             className={classes.bottone}
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            <button className="btn btn-primary" onClick={login}>
+            {/* <button className="btn btn-primary" onClick={login}>
               Aggiungi
-            </button>
-            {/* <ButtonClickedGreen
-              size="medium"
-              nome="Aggiungi"
-              onClick={sendForm}
-            /> */}
+            </button> */}
+            <ButtonClickedGreen size="medium" nome="Aggiungi" onClick={login} />
           </div>
         </Form>
       </Container>
