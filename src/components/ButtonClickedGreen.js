@@ -20,6 +20,7 @@ function ButtonClickedGreen(props) {
       variant="contained"
       color="primary"
       size="large"
+      onClick={props.onClick}
     >
       {props.nome}
     </Button>

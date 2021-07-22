@@ -14,7 +14,9 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
+import CreaItem from "../../components/CreaItem";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
@@ -155,6 +157,8 @@ function AmministrazioneViewGruppoCreaGruppo() {
         <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
       <Container maxWidth="lg" className={classes.container}>
         <main className={classes.content}>
@@ -203,7 +207,10 @@ function AmministrazioneViewGruppoCreaGruppo() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-            <Typography className={classes.edit}> Creazione Gruppo </Typography>
+            <CreaItem titolo="Crea Gruppo" />
+
+            <Divider className={classes.divider} />
+            {/* <Typography className={classes.edit}> Creazione Gruppo </Typography> */}
             <FormCreaGruppo />
           </Paper>
         </main>

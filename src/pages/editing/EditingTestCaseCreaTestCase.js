@@ -14,6 +14,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
@@ -172,6 +173,8 @@ function EditingTestCreaTestCase() {
         <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

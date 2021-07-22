@@ -1,132 +1,114 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
-import CreateIcon from '@material-ui/icons/Create';
+import CreateIcon from "@material-ui/icons/Create";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from "@material-ui/icons/Delete";
 import Typography from "@material-ui/core/Typography";
 
 const GestioneUtenti = () => {
-  const data = [
-    {
-      id: "DEV6301",
-      nome: "Mario",
-      cognome: "Rossi",
-      telefono: 3354745787,
-      email: "email@esempio.it",
-      password: "*****",
-      level: "Admin",
-      gruppo: "Gruppo1",
-      azienda: "Tim",
-    },
-    {
-      id: "DEV6601",
-      nome: "Mario",
-      cognome: "Rossi",
-      telefono: 3354745787,
-      email: "email@esempio.it",
-      password: "*****",
-      level: "Admin",
-      gruppo: "Gruppo1",
-      azienda: "Tim",
-    },
-    {
-      id: "DEV6391",
-      nome: "Mario",
-      cognome: "Rossi",
-      telefono: 3354745787,
-      email: "email@esempio.it",
-      password: "*****",
-      level: "Admin",
-      gruppo: "Gruppo1",
-      azienda: "Tim",
-    },
-    {
-      id: "DEV5301",
-      nome: "Mario",
-      cognome: "Rossi",
-      telefono: 3354745787,
-      email: "email@esempio.it",
-      password: "*****",
-      level: "Admin",
-      gruppo: "Gruppo1",
-      azienda: "Tim",
-    },
-    {
-      id: "DEV7301",
-      nome: "Mario",
-      cognome: "Rossi",
-      telefono: 3354745787,
-      email: "email@esempio.it",
-      password: "*****",
-      level: "Admin",
-      gruppo: "Gruppo1",
-      azienda: "Tim",
-    },
-    {
-      id: "DEV8301",
-      nome: "Mario",
-      cognome: "Rossi",
-      telefono: 3354745787,
-      email: "email@esempio.it",
-      password: "*****",
-      level: "Admin",
-      gruppo: "Gruppo1",
-      azienda: "Tim",
-    },
-    {
-      id: "DEV6401",
-      nome: "Mario",
-      cognome: "Rossi",
-      telefono: 3354745787,
-      email: "email@esempio.it",
-      password: "*****",
-      level: "Admin",
-      gruppo: "Gruppo1",
-      azienda: "Tim",
-    },
-  ];
+  const [data, setData] = useState([]);
 
   const columns = [
     {
-      title: "ID Utenza",
+      title: "ID",
       field: "id",
     },
     {
-      title: "Nome",
-      field: "nome",
+      title: "Username",
+      field: "username",
     },
     {
       title: "Cognome",
       field: "cognome",
     },
     {
-      title: "Telefono",
-      field: "telefono",
-    },
-    {
-      title: "Email",
-      field: "email",
-    },
-    {
-      title: "Password",
-      field: "password",
-    },
-    {
-      title: "Level",
-      field: "level",
-    },
-    {
-      title: "Gruppo",
-      field: "gruppo",
+      title: "Nome",
+      field: "nome",
     },
     {
       title: "Azienda",
       field: "azienda",
     },
+    {
+      title: "Level",
+      field: "level.nome",
+    },
+    {
+      title: "Gruppo",
+      field: "gruppo.nome",
+    },
   ];
+
+  const getUsers = () => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDYwNjEsImlhdCI6MTYyNjk0MjQ2MSwidXNlcm5hbWUiOiJ0ZXN0In0.BRLvoxd2WoQ0xc5hl2IKsGQVLj8uPbqi5skBuKKYbIgBx5uIFwb9dFcwQnrczKL5xDpYJuBYfiiAC7Mci2Q_1Q"
+    );
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:9081/api/user", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setData(result.users);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    // var myHeaders = new Headers();
+    // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+    // var urlencoded = new URLSearchParams();
+    // urlencoded.append("username", "test");
+    // urlencoded.append("password", "test");
+    // var requestOptions = {
+    //   method: "POST",
+    //   headers: myHeaders,
+    //   body: urlencoded,
+    //   redirect: "follow",
+    // };
+    // fetch("http://localhost:9081/api/auth/login", requestOptions)
+    //   .then((response) => response.json())
+    //   .then((result) => {
+    //     Test(result.access_token);
+    //     console.log(result);
+    //   })
+    //   .catch((error) => console.log("error", error));
+    // // USER
+    // function Test(token) {
+    //   var myHeaders = new Headers();
+    //   myHeaders.append("Authorization", `Bearer ${token}`);
+    //   var requestOptions = {
+    //     method: "GET",
+    //     headers: myHeaders,
+    //     redirect: "follow",
+    //   };
+    //   console.log(token);
+    //   fetch("http://localhost:9081/api/user", {
+    //     method: "GET",
+    //     headers: {
+    //       Authorization: "Bearer " + token,
+    //     },
+    //   })
+    //     .then((response) => response.json())
+    //     .then((result) => {
+    //       console.log(result);
+    //       setData(result.users);
+    //     })
+    //     .catch((error) => console.log("error", error));
+    // }
+
+    getUsers();
+  }, []);
 
   function rand() {
     return Math.round(Math.random() * 20) - 10;
@@ -219,30 +201,29 @@ const GestioneUtenti = () => {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
+          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
+          pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
           // selection: true,
           // columnsButton: true,
           // filtering: true,
         }}
         actions={[
-          {
-            icon: () => <CreateIcon />,
-            tooltip: "Modifica",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.id),
-            position: "row",
-          },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Elimina",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.id),
-            position: "row",
-          },
+          // {
+          //   icon: () => <CreateIcon />,
+          //   tooltip: "Modifica",
+          //   onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
+          //   position: "row",
+          // },
+          // {
+          //   icon: () => <DeleteIcon />,
+          //   tooltip: "Elimina",
+          //   onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
+          //   position: "row",
+          // },
           {
             icon: () => (
               <div className={classes.buttonRight}>
@@ -266,6 +247,51 @@ const GestioneUtenti = () => {
           header: {
             actions: "Actions",
           },
+        }}
+        editable={{
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+              var myHeaders = new Headers();
+              myHeaders.append(
+                "Authorization",
+                "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDYwNjEsImlhdCI6MTYyNjk0MjQ2MSwidXNlcm5hbWUiOiJ0ZXN0In0.BRLvoxd2WoQ0xc5hl2IKsGQVLj8uPbqi5skBuKKYbIgBx5uIFwb9dFcwQnrczKL5xDpYJuBYfiiAC7Mci2Q_1Q"
+              );
+              myHeaders.append("Content-Type", "application/json");
+
+              var raw = JSON.stringify({
+                user: {
+                  id: newData.id,
+                  username: newData.username,
+                  cognome: newData.cognome,
+                  nome: newData.nome,
+                  gruppo: {
+                    id: 2,
+                  },
+                  level: {
+                    id: 2,
+                  },
+                },
+                password: "test2",
+              });
+
+              var requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
+
+              fetch(
+                "http://localhost:9081/api/user" + "?id=" + oldData.id,
+                requestOptions
+              )
+                .then((response) => response.json())
+                .then((response) => {
+                  getUsers();
+                  resolve();
+                });
+              // .catch((error) => console.log("error", error));
+            }),
         }}
       />
     </div>

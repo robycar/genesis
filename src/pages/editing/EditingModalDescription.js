@@ -14,6 +14,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../../components/listItems";
 import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
@@ -226,6 +227,8 @@ function EditingModalDescription() {
         <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

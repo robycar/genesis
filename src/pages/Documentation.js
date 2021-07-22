@@ -14,6 +14,7 @@ import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
+  quaterListItems,
 } from "../components/listItems";
 import { Card, Paper } from "@material-ui/core";
 import NavbarItemDocu from "../components/NavbarItemDocu";
@@ -205,6 +206,8 @@ function Documentation() {
         <List>{tertiaryListItems}</List>
         <Divider />
         <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
