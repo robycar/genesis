@@ -26,6 +26,7 @@ import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import Grid from "@material-ui/core/Grid";
 import FormCreaRuolo from "../../components/FormCreaRuolo";
+import CreaItem from "../../components/CreaItem";
 
 const drawerWidth = 240;
 
@@ -200,9 +201,9 @@ function AmministrazioneCreaRuolo() {
             </Button>
           </div>
           <Paper className={classes.paper}>
-            <Grid item xs={12}>
-              CREA RUOLO
-            </Grid>
+            <CreaItem titolo="Crea Ruolo" />
+
+            <Divider className={classes.divider} />
             <Grid item xs={12} style={{ display: "flex" }}>
               <FormCreaRuolo />
             </Grid>

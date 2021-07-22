@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
@@ -34,6 +34,40 @@ function FormCreaRuolo() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  const [nome, setNome] = useState("");
+  const [descrizione, setDescrizione] = useState("");
+  // console.warn(descrizione);
+
+  function login() {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NTIyNTMsImlhdCI6MTYyNjk0ODY1MywidXNlcm5hbWUiOiJ0ZXN0In0.K9bMBXlUZAgPcBzeXdoJlCQnJnuhY1qc8ZS3HIVopB5bhXqeyIn3-gnQH2TrxUxF1jyK6dWurTDx3VfSvHqNRA"
+    );
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      nome: nome,
+      descrizione: descrizione,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    let result = fetch("http://localhost:9081/api/level", requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
+    // localStorage.setItem("user-info", JSON.stringify(result));
+    // history.push("/dashboard/testcase");
+    window.location = "/amministrazione/ruoli";
+  }
+
   return (
     <Container maxWidth="lg" className={classes.container}>
       
@@ -43,7 +77,10 @@ function FormCreaRuolo() {
                 <Col>
                   <Form.Group controlId="form.Ruolo" >
                       <Form.Label>Ruolo</Form.Label>
-                      <Form.Control type="text" placeholder="Inserisci Ruolo" />
+                      <Form.Control 
+                        type="text" 
+                        placeholder="Inserisci Ruolo" 
+                        onChange={(e) => setNome(e.target.value)}/>
                   </Form.Group>
                 </Col>
               </Row>
@@ -51,7 +88,11 @@ function FormCreaRuolo() {
                 <Col>
                   <Form.Group controlId="form.Textarea">
                       <Form.Label>Descrizione</Form.Label>
-                      <Form.Control as="textarea" rows={7} placeholder="Inserisci Descrizione " />
+                      <Form.Control 
+                        as="textarea" 
+                        rows={7} 
+                        placeholder="Inserisci Descrizione " 
+                        onChange={(e) => setDescrizione(e.target.value)}/>
                   </Form.Group>
                 </Col>
               </Row>
@@ -59,7 +100,7 @@ function FormCreaRuolo() {
               <br />
               <br />
               <div className={classes.bottone} style={{display: "flex",justifyContent: "flex-end"}}>
-                <ButtonClickedGreen size="medium" nome="Crea" />
+                <ButtonClickedGreen size="medium" nome="Crea" onClick={login} />
               </div>
             </Form>
           </Container>
