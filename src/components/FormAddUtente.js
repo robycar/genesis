@@ -44,13 +44,11 @@ function FormAddUtente() {
   const [password, setPassword] = useState("");
   const [level, setLevel] = useState("");
   // console.warn(level);
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   function login() {
     var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY4NzkyMDksImlhdCI6MTYyNjg3NTYwOSwidXNlcm5hbWUiOiJ0ZXN0In0.pXrcuOKfAnzPwEOlbu8IBSzyGrK-o1ZmKJJEgH0LPz-so91HhVDIYTUVCo2ndkFg7W7mVQTLjIYcmY6_hlvyWQ"
-    );
+    myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
@@ -78,6 +76,8 @@ function FormAddUtente() {
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
+
+    window.location = "/amministrazione/utenze";
 
     // localStorage.setItem("user-info", JSON.stringify(result));
     // history.push("/dashboard/testcase");
