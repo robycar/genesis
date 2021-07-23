@@ -13,6 +13,7 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import logo from "../../src/assets/logoReply.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +45,29 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  logo: {
+    height: "50px",
+  },
+  subpaper1: {
+    width: "80%",
+    padding: "4%",
+    display: "flex",
+    flexDirection: "column",
+  },
+  intestazione1: {
+    fontSize: "24px",
+    color: "primary",
+    // marginBottom: "1%",
+    marginLeft: "2%",
+  },
+  intestazione2: {
+    marginBottom: "9%",
+    color: "rgba(158, 160, 165, 1)",
+    marginLeft: "2%",
+  },
+  button: {
+    marginTop: "5%",
   },
 }));
 
@@ -91,51 +115,64 @@ export default function Login() {
 
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+          {/* <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
+          </Avatar> */}
+          <div>
+            <img src={logo} alt="Logo" className={classes.logo} />
+          </div>
+          {/* <Typography component="h1" variant="h5">
             Sign in
-          </Typography>
+          </Typography> */}
 
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="username"
-            label="Username"
-            name="user"
-            autoComplete="off"
-            autoFocus
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {/* <FormControlLabel
+          <Paper className={classes.subpaper1} elevation={0}>
+            <Typography variant="h5" className={classes.intestazione1}>
+              Sign up to Reply
+            </Typography>
+            <Typography variant="body1" className={classes.intestazione2}>
+              Sign up on the internal platform
+            </Typography>
+
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="user"
+              autoComplete="off"
+              autoFocus
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            // className={classes.submit}
-            onClick={login}
-          >
-            Accedi
-          </Button>
+            <Button
+              className={classes.button}
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              // className={classes.submit}
+              onClick={login}
+            >
+              Accedi
+            </Button>
+          </Paper>
         </div>
       </Grid>
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
