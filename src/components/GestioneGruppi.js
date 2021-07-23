@@ -11,30 +11,10 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import { PersonalVideoSharp } from "@material-ui/icons";
 
 const GestioneRuoli = () => {
-  // const data = [
-  //   {
-  //     nome: "Gruppo1",
-  //     descrizione: "Desrizione gruppo"
-  //   },
-  //   {
-  //     nome: "Gruppo2",
-  //     descrizione: "Desrizione gruppo2"
-  //   },
-  //   {
-  //     nome: "Gruppo3",
-  //     descrizione: "Desrizione gruppo3"
-  //   },
-  //   {
-  //     nome: "Gruppo4",
-  //     descrizione: "Desrizione gruppo4"
-  //   },
-  //   {
-  //     nome: "Gruppo5",
-  //     descrizione: "Desrizione gruppo5"
-  //   },
-  // ];
-  const token =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDk3MzMsImlhdCI6MTYyNjk0NjEzMywidXNlcm5hbWUiOiJ0ZXN0In0.H46RqdyIWZy6imOkqqXAgmmHI2iYJyXIVOD6Fht5QjIvIklUgtiEA7biVzGMV5-XAzgLZkhWEP4wIF3ADKbcNw";
+  const [data, setData] = useState([]);
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
   const columns = [
     {
       title: "Nome",
@@ -46,8 +26,6 @@ const GestioneRuoli = () => {
     },
   ];
 
-  const [data, setData] = useState([]);
-
   useEffect(() => {
     getGruppi();
   }, []);
@@ -56,7 +34,7 @@ const GestioneRuoli = () => {
     fetch("http://localhost:9081/api/group", {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: bearer,
       },
     })
       .then((response) => response.json())
@@ -148,7 +126,7 @@ const GestioneRuoli = () => {
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               var myHeaders = new Headers();
-              myHeaders.append("Authorization", "Bearer " + token);
+              myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
 
               var raw = JSON.stringify({
@@ -176,7 +154,7 @@ const GestioneRuoli = () => {
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               var myHeaders = new Headers();
-              myHeaders.append("Authorization", "Bearer " + token);
+              myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
               // setTimeout(() => {
               //   setData(result.gruppi);

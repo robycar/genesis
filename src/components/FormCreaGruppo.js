@@ -43,8 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NjA0MDQsImlhdCI6MTYyNjk1NjgwNCwidXNlcm5hbWUiOiJ0ZXN0In0.kejWUsqGQCEkN-Af5Kx5DoyVmyR7WLB9V0ccPLsngufLkQEVYZwWi823ycgzV2GzYOa-y9SfFLE7hqWfUH3djg.COZT3NrD98bjTJOZzEu1TzNKxmxnoOwy9aypvGsBzN2ATds0vhslJB_6TD0SU_pQrlqjndzU014UXRv3MiP4ug";
+const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
 function FormCreaGruppo() {
   const classes = useStyles();
@@ -54,7 +53,7 @@ function FormCreaGruppo() {
 
   function login() {
     var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer" + token);
+    myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
