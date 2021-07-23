@@ -13,14 +13,17 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
   },
+  container: {
+    marginBottom: "3%",
+  },
 }));
 
 function NavbarItemEdit() {
   const classes = useStyles();
 
   return (
-    <ListItem>
-      <ListItemIcon className={classes.listItemIcon}>
+    <ListItem className={classes.container}>
+      <ListItemIcon>
         <EditIcon fontSize="large" />
       </ListItemIcon>
       <Typography className={classes.edit}> Edit </Typography>

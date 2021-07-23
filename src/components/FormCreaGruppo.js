@@ -44,12 +44,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const token =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NTUxMTksImlhdCI6MTYyNjk1MTUxOSwidXNlcm5hbWUiOiJ0ZXN0In0.COZT3NrD98bjTJOZzEu1TzNKxmxnoOwy9aypvGsBzN2ATds0vhslJB_6TD0SU_pQrlqjndzU014UXRv3MiP4ug";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NjA0MDQsImlhdCI6MTYyNjk1NjgwNCwidXNlcm5hbWUiOiJ0ZXN0In0.kejWUsqGQCEkN-Af5Kx5DoyVmyR7WLB9V0ccPLsngufLkQEVYZwWi823ycgzV2GzYOa-y9SfFLE7hqWfUH3djg.COZT3NrD98bjTJOZzEu1TzNKxmxnoOwy9aypvGsBzN2ATds0vhslJB_6TD0SU_pQrlqjndzU014UXRv3MiP4ug";
 
-function FormCreaRuolo() {
+function FormCreaGruppo() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
 
@@ -70,7 +69,7 @@ function FormCreaRuolo() {
       redirect: "follow",
     };
 
-    fetch("http://localhost:9081/api/group", requestOptions)
+    let result = fetch("http://localhost:9081/api/group", requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
@@ -90,7 +89,7 @@ function FormCreaRuolo() {
                 <Form.Label>Gruppo</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Inserisci Nome Gruppo"
+                  placeholder="Inserisci nome gruppo"
                   onChange={(e) => setNome(e.target.value)}
                 />
               </Form.Group>
@@ -102,7 +101,7 @@ function FormCreaRuolo() {
                 <Form.Control
                   as="textarea"
                   rows={7}
-                  placeholder="Inserisci Descrizione "
+                  placeholder="Inserisci descrizione "
                   onChange={(e) => setDescrizione(e.target.value)}
                 />
               </Form.Group>
@@ -155,4 +154,4 @@ function FormCreaRuolo() {
     </Container>
   );
 }
-export default FormCreaRuolo;
+export default FormCreaGruppo;
