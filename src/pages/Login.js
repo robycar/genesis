@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 
-
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +33,7 @@ const Login = () => {
 
     result = await result.json();
     console.log(result);
-    localStorage.setItem("user-info", JSON.stringify(result));
+    localStorage.setItem("token", JSON.stringify(result.access_token));
     history.push("/dashboard/testcase");
   }
 

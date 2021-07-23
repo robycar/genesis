@@ -41,13 +41,14 @@ const GestioneUtenti = () => {
       field: "gruppo.nome",
     },
   ];
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   const getUsers = () => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDYwNjEsImlhdCI6MTYyNjk0MjQ2MSwidXNlcm5hbWUiOiJ0ZXN0In0.BRLvoxd2WoQ0xc5hl2IKsGQVLj8uPbqi5skBuKKYbIgBx5uIFwb9dFcwQnrczKL5xDpYJuBYfiiAC7Mci2Q_1Q"
-    );
+
+    myHeaders.append("Authorization", bearer);
+
+    // console.log(bearer.toString());
 
     var requestOptions = {
       method: "GET",
@@ -252,10 +253,7 @@ const GestioneUtenti = () => {
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve, reject) => {
               var myHeaders = new Headers();
-              myHeaders.append(
-                "Authorization",
-                "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDYwNjEsImlhdCI6MTYyNjk0MjQ2MSwidXNlcm5hbWUiOiJ0ZXN0In0.BRLvoxd2WoQ0xc5hl2IKsGQVLj8uPbqi5skBuKKYbIgBx5uIFwb9dFcwQnrczKL5xDpYJuBYfiiAC7Mci2Q_1Q"
-              );
+              myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
 
               var raw = JSON.stringify({
