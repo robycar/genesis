@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
-import CreateIcon from '@material-ui/icons/Create';
+import CreateIcon from "@material-ui/icons/Create";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from "@material-ui/icons/Delete";
 import Delete from "@material-ui/icons/Delete";
 
 const GestioneRuoli = () => {
@@ -24,7 +24,7 @@ const GestioneRuoli = () => {
   //   },
   // ];
 
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
 
   const columns = [
     {
@@ -37,27 +37,24 @@ const GestioneRuoli = () => {
     },
   ];
 
-  var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDg0ODEsImlhdCI6MTYyNjk0NDg4MSwidXNlcm5hbWUiOiJ0ZXN0In0.yBSsJFLzHF16IWSger4M4SaY0F6Q5aBXJ0VSl_RdZ1RcBAulFG-byKaG6h01mvMMgOTieDKKoJN_kUkya0Knuw";
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   useEffect(() => {
+    getLevel();
+  }, []);
 
-    getLevel()
-
-  }, [])
-
-  const getLevel= () => {
+  const getLevel = () => {
     // GET LEVEL
     fetch("http://localhost:9081/api/level", {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: bearer,
       },
     })
       .then((response) => response.json())
       .then((result) => setData(result.livelli))
       .catch((error) => console.log("error", error));
-  }
-
+  };
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -139,63 +136,67 @@ const GestioneRuoli = () => {
           // filtering: true,
         }}
         editable={{
-          onRowUpdate: (newData, oldData) => new Promise((resolve, reject) => {
-            //Backend call
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer "+ token);
-            myHeaders.append("Content-Type", "application/json");
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+              //Backend call
+              var myHeaders = new Headers();
+              myHeaders.append("Authorization", bearer);
+              myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({
-              "id": oldData.id,
-              "nome": newData.nome,
-              "descrizione": newData.descrizione,
-              "funzioni": [
-                "user.view",
-                "level.edit",
-                "user.list",
-                "list.user",
-                "list.level"
-              ]
-            });
+              var raw = JSON.stringify({
+                id: oldData.id,
+                nome: newData.nome,
+                descrizione: newData.descrizione,
+                funzioni: [
+                  "user.view",
+                  "level.edit",
+                  "user.list",
+                  "list.user",
+                  "list.level",
+                ],
+              });
 
-            var requestOptions = {
-              method: 'POST',
-              headers: myHeaders,
-              body: raw,
-              redirect: 'follow'
-            };
+              var requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
 
-            fetch("http://localhost:9081/api/level", requestOptions)
-              .then(response => response.json())
-              .then(result => {getLevel() 
-                resolve()})
-              .catch(error => console.log('error', error));
-          }),
-          onRowDelete: (oldData) => new Promise((resolve, reject) => {
-            //Backend call
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + token);
-            myHeaders.append("Content-Type", "application/json");
+              fetch("http://localhost:9081/api/level", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                  getLevel();
+                  resolve();
+                })
+                .catch((error) => console.log("error", error));
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve, reject) => {
+              //Backend call
+              var myHeaders = new Headers();
+              myHeaders.append("Authorization", bearer);
+              myHeaders.append("Content-Type", "application/json");
 
-            var raw = JSON.stringify({
-              "id": oldData.id
-            });
+              var raw = JSON.stringify({
+                id: oldData.id,
+              });
 
-            var requestOptions = {
-              method: 'DELETE',
-              headers: myHeaders,
-              body: raw,
-              redirect: 'follow'
-            };
+              var requestOptions = {
+                method: "DELETE",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
 
-            fetch("http://localhost:9081/api/level", requestOptions)
-              .then(response => response.json())
-              .then(result => {getLevel() 
-                resolve()})
-              .catch(error => console.log('error', error));
-                       
-          })
-          
+              fetch("http://localhost:9081/api/level", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                  getLevel();
+                  resolve();
+                })
+                .catch((error) => console.log("error", error));
+            }),
         }}
         actions={[
           {
@@ -214,7 +215,7 @@ const GestioneRuoli = () => {
             ),
             tooltip: "Load Test Suite",
             isFreeAction: true,
-          }
+          },
         ]}
       />
     </div>
