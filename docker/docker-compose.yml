@@ -34,3 +34,16 @@ services:
     networks: 
       - netbe
 
+  be:
+    build:
+      context: ../be
+      network: host
+    image: genesysbe:latest
+    container_name: genesys_be
+    depends_on:
+      - db
+    ports:
+      - 9081:9081
+    networks:
+      - netbe
+
