@@ -237,6 +237,23 @@
 			]
 		},
 		{
+			"name": "api/funzione",
+			"item": [
+				{
+					"name": "funzione_list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						},
+						"description": "Recupera le funzioni definite nel sistema"
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "api/user",
 			"item": [
 				{
@@ -2762,7 +2779,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 3\r\n}",
+							"raw": "{\r\n    \"id\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

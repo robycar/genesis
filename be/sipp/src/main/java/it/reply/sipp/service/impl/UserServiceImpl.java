@@ -9,6 +9,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,7 +49,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<UserVO> listUsers() {
-		return userRepository.findAll();
+		return userRepository.findAll(Sort.by(Direction.DESC, "id"));
 	}
 
 	
