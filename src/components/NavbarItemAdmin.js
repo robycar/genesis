@@ -13,13 +13,16 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
   },
+  container: {
+    marginBottom: "3%",
+  },
 }));
 
 function NavbarItemAdmin() {
   const classes = useStyles();
 
   return (
-    <ListItem>
+    <ListItem className={classes.container}>
       <ListItemIcon className={classes.listItemIcon}>
         <LockIcon fontSize="large" />
       </ListItemIcon>
