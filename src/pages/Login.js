@@ -1,69 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { useHistory } from "react-router";
-
-// const Login = () => {
-//   const [username, setUsername] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   const history = useHistory();
-//   useEffect(() => {
-//     if (localStorage.getItem("user-info")) {
-//       // history.push("/dashboard/testcase");
-//     }
-//   }, []);
-//   async function login() {
-//     console.warn(username, password);
-//     var myHeaders = new Headers();
-//     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-//     var urlencoded = new URLSearchParams();
-//     urlencoded.append("username", username);
-//     urlencoded.append("password", password);
-
-//     var requestOptions = {
-//       method: "POST",
-//       headers: myHeaders,
-//       body: urlencoded,
-//       redirect: "follow",
-//     };
-//     let result = await fetch(
-//       `http://localhost:9081/api/auth/login`,
-//       requestOptions
-//     );
-
-//     result = await result.json();
-//     console.log(result);
-//     localStorage.setItem("token", JSON.stringify(result.access_token));
-//     history.push("/dashboard/testcase");
-//   }
-
-//   return (
-//     <div>
-//       <h1>Login Page</h1>
-//       <div className="col-sm-6 offset-sm-3">
-//         <input
-//           type="text"
-//           placeholder="user"
-//           className="form-control"
-//           onChange={(e) => setUsername(e.target.value)}
-//         />
-//         <br />
-//         <input
-//           type="text"
-//           placeholder="password"
-//           className="form-control"
-//           onChange={(e) => setPassword(e.target.value)}
-//         />
-//         <br />
-//         <button className="btn btn-primary" onClick={login}>
-//           Login
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Login;
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import Avatar from "@material-ui/core/Avatar";
@@ -154,7 +88,7 @@ export default function Login() {
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -204,6 +138,7 @@ export default function Login() {
           </Button>
         </div>
       </Grid>
+      <Grid item xs={false} sm={4} md={7} className={classes.image} />
     </Grid>
   );
 }
