@@ -37,7 +37,7 @@ const GestioneRuoli = () => {
     },
   ];
 
-  var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NDg0ODEsImlhdCI6MTYyNjk0NDg4MSwidXNlcm5hbWUiOiJ0ZXN0In0.yBSsJFLzHF16IWSger4M4SaY0F6Q5aBXJ0VSl_RdZ1RcBAulFG-byKaG6h01mvMMgOTieDKKoJN_kUkya0Knuw";
+  var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY5NTIyNTMsImlhdCI6MTYyNjk0ODY1MywidXNlcm5hbWUiOiJ0ZXN0In0.K9bMBXlUZAgPcBzeXdoJlCQnJnuhY1qc8ZS3HIVopB5bhXqeyIn3-gnQH2TrxUxF1jyK6dWurTDx3VfSvHqNRA";
 
   useEffect(() => {
 
