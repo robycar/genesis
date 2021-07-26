@@ -14,13 +14,15 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import logo from "../../src/assets/logoReply.png";
+import loginImage from "../../src/assets/image.png";
+import { login } from "../service/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
   },
   image: {
-    backgroundImage: "url(https://source.unsplash.com/random)",
+    backgroundImage: `url(${loginImage})`,
     backgroundRepeat: "no-repeat",
     backgroundColor:
       theme.palette.type === "light"
@@ -28,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
         : theme.palette.grey[900],
     backgroundSize: "cover",
     backgroundPosition: "center",
+    // display: "flex",
+    // flexDirection: "column",
+    // alignItems: "center",
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -58,13 +63,12 @@ const useStyles = makeStyles((theme) => ({
   intestazione1: {
     fontSize: "24px",
     color: "primary",
-    // marginBottom: "1%",
-    marginLeft: "2%",
+    textAlign: "center",
   },
   intestazione2: {
     marginBottom: "9%",
     color: "rgba(158, 160, 165, 1)",
-    marginLeft: "2%",
+    textAlign: "center",
   },
   button: {
     marginTop: "5%",
@@ -77,37 +81,43 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  // function userLogin() {
+  //   login(username, password);
+  // }
+
   const history = useHistory();
   useEffect(() => {
     if (localStorage.getItem("user-info")) {
       // history.push("/dashboard/testcase");
     }
   }, []);
-  async function login() {
-    console.warn(username, password);
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-    var urlencoded = new URLSearchParams();
-    urlencoded.append("username", username);
-    urlencoded.append("password", password);
+  // login(username, password);
+  // async function login() {
+  //   console.warn(username, password);
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: urlencoded,
-      redirect: "follow",
-    };
-    let result = await fetch(
-      `http://localhost:9081/api/auth/login`,
-      requestOptions
-    );
+  //   var urlencoded = new URLSearchParams();
+  //   urlencoded.append("username", username);
+  //   urlencoded.append("password", password);
 
-    result = await result.json();
-    console.log(result);
-    localStorage.setItem("token", JSON.stringify(result.access_token));
-    history.push("/dashboard/testcase");
-  }
+  //   var requestOptions = {
+  //     method: "POST",
+  //     headers: myHeaders,
+  //     body: urlencoded,
+  //     redirect: "follow",
+  //   };
+  //   let result = await fetch(
+  //     `http://localhost:9081/api/auth/login`,
+  //     requestOptions
+  //   );
+
+  //   result = await result.json();
+  //   console.log(result);
+  //   localStorage.setItem("token", JSON.stringify(result.access_token));
+  // history.push("/dashboard/testcase");
+  // }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -126,12 +136,14 @@ export default function Login() {
           </Typography> */}
 
           <Paper className={classes.subpaper1} elevation={0}>
-            <Typography variant="h5" className={classes.intestazione1}>
-              Sign up to Reply
-            </Typography>
-            <Typography variant="body1" className={classes.intestazione2}>
-              Sign up on the internal platform
-            </Typography>
+            <div className="subtitle">
+              <Typography variant="h5" className={classes.intestazione1}>
+                Sign up to Reply
+              </Typography>
+              <Typography variant="body1" className={classes.intestazione2}>
+                Sign up on the internal platform
+              </Typography>
+            </div>
 
             <TextField
               variant="outlined"
@@ -168,14 +180,18 @@ export default function Login() {
               variant="contained"
               color="primary"
               // className={classes.submit}
-              onClick={login}
+              onClick={() => login(username, password)}
             >
               Accedi
             </Button>
           </Paper>
         </div>
       </Grid>
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
+      <Grid item xs={false} sm={4} md={7} className={classes.image}>
+        {/* <div className={classes.image}>
+          <img src={loginImage} alt="Logo" />
+        </div> */}
+      </Grid>
     </Grid>
   );
 }
