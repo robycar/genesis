@@ -245,7 +245,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "{{contextUrl}}/api/funzione",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"funzione"
+							]
 						},
 						"description": "Recupera le funzioni definite nel sistema"
 					},
