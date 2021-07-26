@@ -9,6 +9,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,6 +29,7 @@ import it.reply.sipp.service.LevelService;
 import it.reply.sipp.service.UserService;
 
 @Service
+@Transactional(rollbackFor = ApplicationException.class)
 public class UserServiceImpl extends AbstractService implements UserService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -46,10 +49,10 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<UserVO> listUsers() {
-		return userRepository.findAll();
+		return userRepository.findAll(Sort.by(Direction.DESC, "id"));
 	}
 
-	@Transactional(readOnly = true)
+	
 	public List<GrantedAuthority> readRolesAndFunctionsForUser(UserVO u) {
 		logger.debug("enter readRolesAndFunctionsForUser {}", u.getUsername());
 		List<GrantedAuthority> authorities = new ArrayList<>();
@@ -66,7 +69,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public Optional<UserVO> readUser(Long id) {
 		logger.debug("enter readUser(%d)", id);
 		
@@ -81,7 +83,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	}
 	
 	@Override
-	@Transactional(readOnly = false)
 	public void updateUser(UserDTO userDTO, String password) throws ApplicationException {
 		logger.debug("enter updateUser({}, {}, ****, {}", userDTO);
 		Long userId = userDTO.getId();
@@ -131,7 +132,6 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	}
 
 	@Override
-	@Transactional
 	public UserVO addUser(UserVO userVO, String password) throws ApplicationException {
 		logger.debug("enter addUser");
 		if (userVO.getId() != null) {

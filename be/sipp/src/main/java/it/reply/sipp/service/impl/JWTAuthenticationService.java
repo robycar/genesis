@@ -1,11 +1,14 @@
 package it.reply.sipp.service.impl;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,9 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.reply.sipp.api.admin.payload.FunzioneDTO;
 import it.reply.sipp.jwt.JWTComponent;
 import it.reply.sipp.jwt.TokenVerificationException;
 import it.reply.sipp.model.UserVO;
+import it.reply.sipp.model.repository.FunzioneRepository;
 import it.reply.sipp.model.repository.UserRepository;
 import it.reply.sipp.service.UserAuthenticationService;
 
@@ -29,6 +34,9 @@ public class JWTAuthenticationService implements UserAuthenticationService {
 	
 	@Autowired
 	private JWTComponent jwtComponent;
+	
+	@Autowired
+	private FunzioneRepository funzioneRepository;
 	
 	
 	@Override
@@ -60,6 +68,17 @@ public class JWTAuthenticationService implements UserAuthenticationService {
 	@Override
 	public void logout(String username) {
 
+	}
+
+	@Override
+	@Transactional
+	public List<FunzioneDTO> listFunzioni() {
+		logger.debug("enter listFunzioni");
+		List<FunzioneDTO> result = funzioneRepository.findAll(Sort.by("codice"))
+				.stream().map(vo -> new FunzioneDTO(vo))
+				.collect(Collectors.toList());
+		logger.debug("exit listFunzioni");
+		return result;
 	}
 
 }

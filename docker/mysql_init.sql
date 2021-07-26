@@ -18,10 +18,6 @@ CREATE TABLE `AUTORIZZAZIONE_LEVEL` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `AUTORIZZAZIONE_LEVEL` (`ID_LEVEL`, `FUNZIONE_CODICE`) VALUES
-(2,	'f1'),
-(2,	'f2'),
-(2,	'f3'),
-(2,	'f4'),
 (2,	'group.delete'),
 (2,	'group.edit'),
 (2,	'group.view'),
@@ -29,6 +25,9 @@ INSERT INTO `AUTORIZZAZIONE_LEVEL` (`ID_LEVEL`, `FUNZIONE_CODICE`) VALUES
 (2,	'level.edit'),
 (6,	'level.edit'),
 (2,	'level.view'),
+(2,	'linea.delete'),
+(2,	'linea.edit'),
+(2,	'linea.view'),
 (2,	'user.delete'),
 (2,	'user.edit'),
 (2,	'user.view'),
@@ -54,16 +53,15 @@ CREATE TABLE `FUNZIONE` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `FUNZIONE` (`CODICE`, `NOME`, `DESCRIZIONE`) VALUES
-('f1',	'f1',	'f1'),
-('f2',	'f2',	'f2'),
-('f3',	'f3',	'f3'),
-('f4',	'f4',	'f4'),
 ('group.delete',	'Elimina gruppo',	'Rimuove un gruppo dal sistema'),
 ('group.edit',	'Modifica gruppo',	'Consente di modificare un gruppo'),
 ('group.view',	'Mostra gruppi',	'Consente di accedere ai gruppi di utente'),
 ('level.delete',	'Elimina livello',	'Consente di eliminare un livello'),
 ('level.edit',	'Modifica livello',	'Consente di modificare un livello'),
 ('level.view',	'Mostra i livelli',	'Consente di accedere ai livelli definiti nel sistema'),
+('linea.delete',	'Elimina linea',	'Consente di eliminare una linea'),
+('linea.edit',	'Modifica linea',	'consente di modificare una linea'),
+('linea.view',	'Mostra le linee',	'Consente di accedere alle linee presenti nel sistema'),
 ('user.delete',	'Elimina utente',	'Consente di rimuovere un utente dal sistema'),
 ('user.edit',	'Modifica utente',	'Consente di aggiungere o modificare gli utenti che possono accedere al sistema'),
 ('user.view',	'Accedi dati utente',	'Consente di accedere ai dati di un altro utente');
@@ -94,6 +92,34 @@ INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`) VALUES
 (4,	'Regional',	'Lead Operations Manager'),
 (6,	'Descrizione Level 5',	'Level 6');
 
+DROP TABLE IF EXISTS `LINEE`;
+CREATE TABLE `LINEE` (
+  `ID_LINEA` int NOT NULL AUTO_INCREMENT,
+  `NUMERO` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,
+  `ID_TYPE_LINEA` int NOT NULL,
+  `IP_LINEA` varchar(39) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `PORTA` int NOT NULL,
+  `PASSWORD` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  PRIMARY KEY (`ID_LINEA`),
+  KEY `ID_TYPE_LINEA` (`ID_TYPE_LINEA`),
+  CONSTRAINT `linee_ibfk_1` FOREIGN KEY (`ID_TYPE_LINEA`) REFERENCES `TYPE_LINEE` (`ID_TYPE_LINEA`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `LINEE` (`ID_LINEA`, `NUMERO`, `ID_TYPE_LINEA`, `IP_LINEA`, `PORTA`, `PASSWORD`) VALUES
+(1,	'90-400-754-1037',	1,	'240.195.169.235',	924,	'IdZtVacO4inAlAw'),
+(2,	'9042382',	1,	'241.88.251.202',	224,	'passwordSegreta');
+
+DROP TABLE IF EXISTS `TYPE_LINEE`;
+CREATE TABLE `TYPE_LINEE` (
+  `ID_TYPE_LINEA` int NOT NULL,
+  `DESCRIZIONE` varchar(1000) NOT NULL,
+  PRIMARY KEY (`ID_TYPE_LINEA`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `TYPE_LINEE` (`ID_TYPE_LINEA`, `DESCRIZIONE`) VALUES
+(1,	'descrizione type linea 1'),
+(2,	'descrizione type linea 2');
+
 DROP TABLE IF EXISTS `UTENZE`;
 CREATE TABLE `UTENZE` (
   `ID_UTENZA` int NOT NULL AUTO_INCREMENT,
@@ -121,4 +147,4 @@ INSERT INTO `UTENZE` (`ID_UTENZA`, `USERNAME`, `PASSWORD`, `ID_LEVEL`, `ID_GROUP
 (7,	'_beibN_r7_7JL40',	'{bcrypt}$2a$10$dQ8bSHNWaQlEXuJ9.OfPjetraUXxjhtLMTxKarILzLlnmih7aE/wu',	4,	1,	'Isom',	'Bins',	'Brekke - Reichel'),
 (8,	'lwUR1QJJLelHO8x',	'{bcrypt}$2a$10$mvWNe8qoJD772s1uLydsVeB82Kq7HGifhP35nmclJRccKOP/39rYK',	4,	1,	'Abelardo',	'Sawayn',	'Sawayn - Bailey');
 
--- 2021-07-13 13:46:27
+-- 2021-07-21 08:35:42
