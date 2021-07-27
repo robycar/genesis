@@ -7,6 +7,7 @@ import "../styles/App.css";
 import { NavLink } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Typography from "@material-ui/core/Typography";
+import acccessControl from "../service/url.js";
 
 const GestioneUtenti = () => {
   const [data, setData] = useState([]);
@@ -47,6 +48,8 @@ const GestioneUtenti = () => {
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
     // console.log(bearer.toString());
 
@@ -56,7 +59,7 @@ const GestioneUtenti = () => {
       redirect: "follow",
     };
 
-    fetch("http://localhost:9081/api/user", requestOptions)
+    fetch("http:/api/user", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);

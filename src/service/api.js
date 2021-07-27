@@ -1,10 +1,13 @@
-const URL = `http://localhost:9081/`;
+// const URL = `http://localhost:9081/`;
+import acccessControl from "url";
 
 //Login
 export async function login(username, password) {
   console.warn(username, password);
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  myHeaders.append("Access-Control-Allow-Credentials", "true");
 
   var urlencoded = new URLSearchParams();
   urlencoded.append("username", username);
@@ -16,7 +19,7 @@ export async function login(username, password) {
     body: urlencoded,
     redirect: "follow",
   };
-  let result = await fetch(`${URL}api/auth/login`, requestOptions);
+  let result = await fetch(`api/auth/login`, requestOptions);
 
   result = await result.json();
   console.log(result);

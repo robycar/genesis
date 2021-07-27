@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { PersonalVideoSharp } from "@material-ui/icons";
+import acccessControl from "../service/url.js";
 
 const GestioneRuoli = () => {
   const [data, setData] = useState([]);
@@ -31,12 +32,28 @@ const GestioneRuoli = () => {
   }, []);
 
   const getGruppi = () => {
-    fetch("http://localhost:9081/api/group", {
+    // fetch("http://localhost:9081/api/group", {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: bearer,
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((result) => setData(result.gruppi))
+    //   .catch((error) => console.log("error", error));
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
       method: "GET",
-      headers: {
-        Authorization: bearer,
-      },
-    })
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch("http:/api/group", requestOptions)
       .then((response) => response.json())
       .then((result) => setData(result.gruppi))
       .catch((error) => console.log("error", error));

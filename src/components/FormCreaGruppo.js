@@ -14,6 +14,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import Button from "@material-ui/core/Button";
+import acccessControl from "../service/url.js";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -43,18 +44,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-
 function FormCreaGruppo() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
 
+  let bearer = `Bearer ${localStorage.getItem("token")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+
+  // console.log(bearer);
+
   function login() {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
     var raw = JSON.stringify({
       nome: nome,
@@ -68,14 +77,15 @@ function FormCreaGruppo() {
       redirect: "follow",
     };
 
-    let result = fetch("http://localhost:9081/api/group", requestOptions)
+    fetch(`/api/group`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
 
+    window.location = "/amministrazione/gruppo";
+
     // localStorage.setItem("user-info", JSON.stringify(result));
     // history.push("/dashboard/testcase");
-    window.location = "/amministrazione/gruppo";
   }
 
   return (
