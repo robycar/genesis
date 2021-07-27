@@ -15,6 +15,7 @@ import Row from "react-bootstrap/Row";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import SelectBar from "../components/SelectBar";
 import { Typography } from "@material-ui/core";
+import acccessControl from "../service/url.js";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -44,12 +45,18 @@ function FormAddUtente() {
   const [password, setPassword] = useState("");
   const [level, setLevel] = useState("");
   // console.warn(level);
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  let bearer = `Bearer ${localStorage.getItem("token")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
 
   function login() {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
     var raw = JSON.stringify({
       password: password,
@@ -72,7 +79,7 @@ function FormAddUtente() {
       redirect: "follow",
     };
 
-    let result = fetch("http://localhost:9081/api/user", requestOptions)
+    fetch(`/api/user`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));

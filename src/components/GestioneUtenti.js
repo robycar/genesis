@@ -258,6 +258,8 @@ const GestioneUtenti = () => {
               var myHeaders = new Headers();
               myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
 
               var raw = JSON.stringify({
                 user: {
@@ -282,12 +284,10 @@ const GestioneUtenti = () => {
                 redirect: "follow",
               };
 
-              fetch(
-                "http://localhost:9081/api/user" + "?id=" + oldData.id,
-                requestOptions
-              )
+              fetch(`/api/user` + "?id=" + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((response) => {
+                  console.log(response);
                   getUsers();
                   resolve();
                 });

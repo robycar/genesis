@@ -58,7 +58,7 @@ function FormCreaGruppo() {
 
   // console.log(bearer);
 
-  function login() {
+  function putGroup() {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
@@ -156,7 +156,7 @@ function FormCreaGruppo() {
             className={classes.bottone}
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            <ButtonClickedGreen size="medium" nome="Crea" onClick={login} />
+            <ButtonClickedGreen size="medium" nome="Crea" onClick={putGroup} />
           </div>
         </Form>
       </Container>
