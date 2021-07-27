@@ -7,6 +7,7 @@ import "../styles/App.css";
 import { NavLink } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Delete from "@material-ui/icons/Delete";
+import acccessControl from "../service/url.js";
 
 const GestioneRuoli = () => {
   // const data = [
@@ -45,12 +46,28 @@ const GestioneRuoli = () => {
 
   const getLevel = () => {
     // GET LEVEL
-    fetch("http://localhost:9081/api/level", {
+    // fetch("http://localhost:9081/api/level", {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: bearer,
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((result) => setData(result.livelli))
+    //   .catch((error) => console.log("error", error));
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
       method: "GET",
-      headers: {
-        Authorization: bearer,
-      },
-    })
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/level`, requestOptions)
       .then((response) => response.json())
       .then((result) => setData(result.livelli))
       .catch((error) => console.log("error", error));
@@ -142,18 +159,14 @@ const GestioneRuoli = () => {
               var myHeaders = new Headers();
               myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
 
               var raw = JSON.stringify({
                 id: oldData.id,
                 nome: newData.nome,
                 descrizione: newData.descrizione,
-                funzioni: [
-                  "user.view",
-                  "level.edit",
-                  "user.list",
-                  "list.user",
-                  "list.level",
-                ],
+                funzioni: [],
               });
 
               var requestOptions = {
@@ -163,7 +176,7 @@ const GestioneRuoli = () => {
                 redirect: "follow",
               };
 
-              fetch("http://localhost:9081/api/level", requestOptions)
+              fetch(`/api/level` + "?id=" + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                   getLevel();
@@ -177,6 +190,8 @@ const GestioneRuoli = () => {
               var myHeaders = new Headers();
               myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
 
               var raw = JSON.stringify({
                 id: oldData.id,
@@ -189,7 +204,7 @@ const GestioneRuoli = () => {
                 redirect: "follow",
               };
 
-              fetch("http://localhost:9081/api/level", requestOptions)
+              fetch(`/api/level` + "?id=" + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                   getLevel();

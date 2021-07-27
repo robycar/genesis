@@ -53,7 +53,7 @@ const GestioneRuoli = () => {
       redirect: "follow",
     };
 
-    fetch("http:/api/group", requestOptions)
+    fetch(`/api/group`, requestOptions)
       .then((response) => response.json())
       .then((result) => setData(result.gruppi))
       .catch((error) => console.log("error", error));
