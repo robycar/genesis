@@ -145,6 +145,8 @@ const GestioneRuoli = () => {
               var myHeaders = new Headers();
               myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
 
               var raw = JSON.stringify({
                 id: oldData.id,
@@ -159,7 +161,7 @@ const GestioneRuoli = () => {
                 redirect: "follow",
               };
 
-              fetch("http://localhost:9081/api/group", requestOptions)
+              fetch(`/api/group` + "?id=" + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                   getGruppi();
@@ -173,10 +175,8 @@ const GestioneRuoli = () => {
               var myHeaders = new Headers();
               myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
-              // setTimeout(() => {
-              //   setData(result.gruppi);
-              //resolve();
-              // }, 2000);
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
 
               var raw = JSON.stringify({
                 id: oldData.id,
@@ -189,7 +189,7 @@ const GestioneRuoli = () => {
                 redirect: "follow",
               };
 
-              fetch("http://localhost:9081/api/group", requestOptions)
+              fetch(`/api/group` + "?id=" + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                   getGruppi();
