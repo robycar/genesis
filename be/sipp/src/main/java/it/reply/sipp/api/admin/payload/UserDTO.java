@@ -1,5 +1,8 @@
 package it.reply.sipp.api.admin.payload;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.hibernate.validator.constraints.Length;
 
 import it.reply.sipp.api.generic.payload.DTO;
@@ -27,6 +30,8 @@ public class UserDTO extends DTO {
 	
 	private GruppoDTO gruppo;
 	
+	private Set<String> funzioni;
+	
 	public UserDTO() {
 	}
 	
@@ -46,6 +51,13 @@ public class UserDTO extends DTO {
 			this.level = new LevelDTO(vo.getLevel());
 		} else {
 			this.level = new LevelDTO();
+		}
+		
+		if (vo.getFunzioni() != null) {
+		  this.funzioni = vo.getFunzioni()
+		      .stream()
+		      .map(f -> f.getCodice())
+		      .collect(Collectors.toSet());
 		}
 		
 	}
@@ -106,7 +118,15 @@ public class UserDTO extends DTO {
 		this.gruppo = gruppo;
 	}
 
-	@Override
+	public Set<String> getFunzioni() {
+    return funzioni;
+  }
+
+  public void setFunzioni(Set<String> funzioni) {
+    this.funzioni = funzioni;
+  }
+
+  @Override
 	protected void writeFields(StringBuilder sb) {
 		writeField(sb, "id", id);
 		writeField(sb, "username", username);
@@ -115,6 +135,7 @@ public class UserDTO extends DTO {
 		writeField(sb, "azienda", azienda);
 		writeField(sb, "level", level);
 		writeField(sb, "gruppo", gruppo);
+		writeField(sb, "funzioni", funzioni);
 		super.writeFields(sb);
 	}
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MaterialTable, { MTableToolbar } from "material-table";
 import ButtonClickeGreen from "./ButtonClickedGreen";
 import "../styles/App.css";
@@ -8,63 +8,58 @@ import { NavLink } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ModalDescriptionTestCase from "./ModalDescriptionTestCase";
+import acccessControl from "../service/url.js";
 
 function Linee() {
+  const [data, setData] = useState([]);
+
   const columns = [
-      { title: "Nome Linea", field: "name" },
-      { title: "ID Linea", field: "idLinea" },
-      { title: "Numero", field: "numero" },
-      {
-        title: "IP Linea",
-        field: "ipLinea",
-      },
-      { title: "Description", field: "description" },
+    { title: "Numero", field: "numero" },
+    { title: "IP Linea", field: "ip" },
+    { title: "Porta", field: "porta" },
+    { title: "Password", field: "password" },
+    { title: "Id", field: "typeLinea.id" },
+    { title: "Descrizione", field: "typeLinea.descrizione" },
+  ];
 
-      { title: "Porta", field: "porta" },
-    ],
-    data = [
-      {
-        name: "Linea 1",
-        idLinea: "xxx",
-        numero: "351255",
-        ipLinea: "ndgiufgidg",
-        description: "xxxx",
-        porta: "404",
-      },
-      {
-        name: "Linea 1",
-        idLinea: "xxx",
-        numero: "351255",
-        ipLinea: "ndgiufgidg",
-        description: "xxxx",
-        porta: "404",
-      },
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
-      {
-        name: "Linea 1",
-        idLinea: "xxx",
-        numero: "351255",
-        ipLinea: "ndgiufgidg",
-        description: "xxxx",
-        porta: "404",
-      },
-      {
-        name: "Linea 1",
-        idLinea: "xxx",
-        numero: "351255",
-        ipLinea: "ndgiufgidg",
-        description: "xxxx",
-        porta: "404",
-      },
-      {
-        name: "Linea 1",
-        idLinea: "xxx",
-        numero: "351255",
-        ipLinea: "ndgiufgidg",
-        description: "xxxx",
-        porta: "404",
-      },
-    ];
+  useEffect(() => {
+    getLinea();
+  }, []);
+
+  const getLinea = () => {
+    // GET LINEA
+
+    // fetch("http://localhost:9081/api/linea", {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: bearer,
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((result) => setData(result.list))
+    //   .catch((error) => console.log("error", error));
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/linea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   return (
     <div>
@@ -74,7 +69,6 @@ function Linee() {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           exportButton: true,
@@ -83,6 +77,71 @@ function Linee() {
           // selection: true,
           // columnsButton: true,
           // filtering: true,
+        }}
+        editable={{
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+              //Backend call
+              var myHeaders = new Headers();
+              myHeaders.append("Authorization", bearer);
+              myHeaders.append("Content-Type", "application/json");
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+              var raw = JSON.stringify({
+                id: oldData.id,
+                numero: newData.numero,
+                ip: newData.ip,
+                porta: newData.porta,
+                password: newData.password,
+                typeLinea: {
+                  id: newData.typeLinea.id,
+                },
+              });
+
+              var requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
+
+              fetch(`/api/linea`, requestOptions)
+                .then((response) => response.json())
+                .then((response) => {
+                  getLinea();
+                  resolve();
+                })
+                .catch((error) => console.log("error", error));
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve, reject) => {
+              //Backend call
+              var myHeaders = new Headers();
+              myHeaders.append("Authorization", bearer);
+              myHeaders.append("Content-Type", "application/json");
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+              var raw = JSON.stringify({
+                id: oldData.id,
+              });
+
+              var requestOptions = {
+                method: "DELETE",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
+
+              fetch(`/api/linea`, requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                  getLinea();
+                  resolve();
+                })
+                .catch((error) => console.log("error", error));
+            }),
         }}
         actions={[
           {
@@ -102,46 +161,12 @@ function Linee() {
             // onClick: (event, rowData) => alert("Load Test Suite"),
             isFreeAction: true,
           },
-          {
-            icon: () => <EditIcon />,
-            tooltip: "Edit",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Delete",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          //   {
-          //     icon: () => <ModalDescriptionTestCase />,
-          //     tooltip: "Image",
-          //     // onClick: (event, rowData) =>
-          //     // alert("Ho cliccato " + rowData.launcher),
-          //     // position: "row",
-          //   },
         ]}
         localization={{
           header: {
             actions: "Actions",
           },
         }}
-
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
     </div>
   );

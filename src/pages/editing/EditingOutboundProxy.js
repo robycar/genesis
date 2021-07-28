@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Navbar from "../../components/Navbar";
@@ -17,7 +18,15 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
+import {
+  FormControl,
+  ListItem,
+  ListItemIcon,
+  MenuItem,
+  Paper,
+  Select,
+  Typography,
+} from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import InputSelect from "../../components/InputSelect";
@@ -170,6 +179,38 @@ function EditingOutboundProxy() {
     setOpen(false);
   };
 
+  //put descrizione e ip
+
+  const [ip, setIp] = useState("");
+  const [descrizione, setDescrizione] = useState("");
+  const [typeLineaId, setTypeLineaId] = useState("");
+
+  function salva() {
+    // var myHeaders = new Headers();
+    // const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+    // myHeaders.append("Authorization", bearer);
+    // myHeaders.append("Content-Type", "application/json");
+    // var raw = JSON.stringify({
+    //   ip: ip,
+    //   descrizione: descrizione,
+    //   typeLinea: {
+    //     id: typeLineaId,
+    //   },
+    // });
+    // var requestOptions = {
+    //   method: "PUT",
+    //   headers: myHeaders,
+    //   body: raw,
+    //   redirect: "follow",
+    // };
+    // let result = fetch("http://localhost:9081/api/linea", requestOptions)
+    //   .then((response) => response.json())
+    //   .catch((error) => console.log("error", error));
+    // // localStorage.setItem("user-info", JSON.stringify(result));
+    // // history.push("/dashboard/testcase");
+    // window.location = "/editing/linee";
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -267,14 +308,28 @@ function EditingOutboundProxy() {
                 <Typography className={classes.label1}>
                   Proxy IP Address
                 </Typography>
-                <InputSelect />
+
+                <InputSelect
+                  type="text"
+                  placeholder="Inserisci Ip"
+                  onChange={(e) => setIp(e.target.value)}
+                />
+
                 <Typography>:</Typography>
-                <InputSelect />
+                <InputSelect
+                  type="text"
+                  placeholder="Inserisci Ip"
+                  onChange={(e) => setIp(e.target.value)}
+                />
               </Paper>
 
               <Paper className={classes.paper} elevation={0}>
                 <Typography className={classes.label2}>Descrizione</Typography>
-                <InputSelect />
+                <InputSelect
+                  type="text"
+                  placeholder="Inserisci descrizione"
+                  onChange={(e) => setDescrizione(e.target.value)}
+                />
               </Paper>
 
               <Paper className={classes.paper} elevation={0}>
@@ -288,6 +343,7 @@ function EditingOutboundProxy() {
                 variant="contained"
                 color="primary"
                 className={classes.bottone}
+                onClick={salva}
               >
                 Salva
               </Button>

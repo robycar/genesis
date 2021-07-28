@@ -1,7 +1,6 @@
 package it.reply.sipp.api.admin.controller;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -9,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,13 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.reply.sipp.api.admin.payload.UserAddRequest;
-import it.reply.sipp.api.admin.payload.UserAddResponse;
 import it.reply.sipp.api.admin.payload.RetrieveUserResponse;
 import it.reply.sipp.api.admin.payload.UpdateUserRequest;
 import it.reply.sipp.api.admin.payload.UpdateUserResponse;
+import it.reply.sipp.api.admin.payload.UserAddRequest;
+import it.reply.sipp.api.admin.payload.UserAddResponse;
 import it.reply.sipp.api.admin.payload.UserDTO;
 import it.reply.sipp.api.admin.payload.UtenteListResponse;
+import it.reply.sipp.api.admin.payload.UtenteSearchRequest;
+import it.reply.sipp.api.admin.payload.UtenteSearchResponse;
 import it.reply.sipp.api.generic.controller.AbstractController;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.model.GruppoVO;
@@ -60,13 +62,39 @@ public class UserController extends AbstractController {
 		
 	}
 	
+	@GetMapping("search")
+	@PreAuthorize("hasAuthority('FUN_user.view')")
+	public ResponseEntity<UtenteSearchResponse> search(@Valid @RequestBody UtenteSearchRequest request) {
+	  logger.info("search({})", request);
+	  
+	  UtenteSearchResponse response = new UtenteSearchResponse();
+	  
+	  try {
+	    List<UserDTO> result = userService.listUsers(request.getUser());
+	    logger.debug("Recuperati {} utenti per i criteria di ricerca forniti", result.size());
+	    response.setUsers(result);
+	    return ResponseEntity.ok(response);
+	    
+	  } catch (ApplicationException e) {
+	    return handleException(e, response);
+	  }
+	  
+	}
+	
+	
 	@GetMapping("{id}")
 	public ResponseEntity<RetrieveUserResponse> retrieveUser(@PathVariable Long id) {
 		logger.info("retrieveUser({})", id);
-		Optional<UserVO> o = userService.readUser(id);
-		
-		return o.map(vo -> ResponseEntity.ok(new RetrieveUserResponse(new UserDTO(vo))))
-				.orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(new RetrieveUserResponse()));
+		RetrieveUserResponse response = new RetrieveUserResponse();
+		try {
+      UserDTO userDTO = userService.readUser(id);
+      response.setUser(userDTO);
+      return ResponseEntity.ok(response);
+      
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+
 
 	}
 	

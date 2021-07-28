@@ -1,14 +1,18 @@
 package it.reply.sipp.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
@@ -22,7 +26,11 @@ import it.reply.sipp.AppError;
 import it.reply.sipp.api.admin.payload.UserDTO;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.generic.service.AbstractService;
+import it.reply.sipp.model.FunzioneVO;
+import it.reply.sipp.model.GruppoVO;
+import it.reply.sipp.model.LevelVO;
 import it.reply.sipp.model.UserVO;
+import it.reply.sipp.model.repository.FunzioneRepository;
 import it.reply.sipp.model.repository.UserRepository;
 import it.reply.sipp.service.GruppoService;
 import it.reply.sipp.service.LevelService;
@@ -46,12 +54,44 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	@Autowired
 	private GruppoService gruppoService;
 	
+	@Autowired
+	private FunzioneRepository funzioneRepository;
+	
+	
 	@Override
-	@Transactional(readOnly = true)
 	public List<UserVO> listUsers() {
 		return userRepository.findAll(Sort.by(Direction.DESC, "id"));
 	}
 
+	private static UserVO dto2vo(UserDTO dto) {
+	  UserVO userVO = new UserVO();
+	  userVO.setAzienda(dto.getAzienda());
+	  userVO.setCognome(dto.getCognome());
+	  userVO.setId(dto.getId());
+	  userVO.setNome(dto.getNome());
+	  userVO.setUsername(dto.getUsername());
+	  
+	  
+	  return userVO;
+	}
+	
+	public List<UserDTO> listUsers(UserDTO dto) {
+	  
+	  UserVO criteria = dto2vo(dto);
+	  
+	  if (dto.getGruppo() != null && dto.getGruppo().getId() != null) {
+	    criteria.setGruppo(new GruppoVO(dto.getGruppo().getId()));
+	  }
+	  
+	  if (dto.getLevel() != null && dto.getLevel().getId() != null) {
+	    criteria.setLevel(new LevelVO(dto.getLevel().getId()));
+	  }
+	  
+	  List<UserVO> result = userRepository.findAll(Example.of(criteria), Sort.by(Direction.DESC, "id"));
+	  return result.stream().map(vo -> new UserDTO(vo)).collect(Collectors.toList());
+	  
+	}
+	
 	
 	public List<GrantedAuthority> readRolesAndFunctionsForUser(UserVO u) {
 		logger.debug("enter readRolesAndFunctionsForUser {}", u.getUsername());
@@ -69,17 +109,17 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	}
 
 	@Override
-	public Optional<UserVO> readUser(Long id) {
+	public UserDTO readUser(Long id) throws ApplicationException {
 		logger.debug("enter readUser(%d)", id);
 		
-		Optional<UserVO> result = userRepository.findById(id);
-		result.ifPresentOrElse(u -> { 
-			u.getGruppo().getId();
-			u.getLevel().getId();
-			logger.debug("readed user detail for {}", u.getUsername());
-		}, () -> logger.warn("user not found for id %d", id));
 		
-		return result;
+		UserVO userVO = userRepository.findById(id).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.USER_NOT_FOUND, id));
+		
+//		userVO.getGruppo().getId();
+//		userVO.getLevel().getId();
+//		userVO.getFunzioni().size();
+		
+		return new UserDTO(userVO);
 	}
 	
 	@Override
@@ -98,7 +138,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		if (userDTO.getLevel() != null && userDTO.getLevel().getId() != null) {
 			userVO.setLevel(levelService.read(userDTO.getLevel().getId()));
 		}
-
+		
 		if (password != null) {
 			logger.debug("Changing password for user {}", userVO.getUsername());
 			userVO.setPassword(passwordEncoder.encode(password));
@@ -114,6 +154,42 @@ public class UserServiceImpl extends AbstractService implements UserService {
 			}
 			userVO.setUsername(userDTO.getUsername());
 		}
+		
+		if (userDTO.getFunzioni() != null) {
+		  if (userDTO.getFunzioni().isEmpty()) {
+		    userVO.getFunzioni().clear();
+		  } else {
+		    //Rimuovi le funzioni e memorizza il nome delle rimanenti
+		    Set<String> nuoveFunzioni = userDTO.getFunzioni();
+		    HashMap<String, FunzioneVO> funzioniAssegnate = new HashMap<>(userVO.getFunzioni().size());
+		    Iterator<FunzioneVO> it = userVO.getFunzioni().iterator();
+		    
+        while (it.hasNext()) {
+          FunzioneVO funzioneVO = it.next();
+          if (nuoveFunzioni.contains(funzioneVO.getCodice())) {
+            funzioniAssegnate.put(funzioneVO.getCodice(), funzioneVO);
+          } else {
+            it.remove();
+          }
+        }
+        nuoveFunzioni.removeAll(funzioniAssegnate.keySet());
+        if (!nuoveFunzioni.isEmpty()) {
+          List<FunzioneVO> funzioniDaAggiungere = funzioneRepository.findAllById(nuoveFunzioni);
+          //Verifica che non ci siano funzioni sconosciute
+          for (FunzioneVO funzioneVO: funzioniDaAggiungere) {
+            nuoveFunzioni.remove(funzioneVO.getCodice());
+          }
+          if (!nuoveFunzioni.isEmpty()) {
+            throw makeError(HttpStatus.NOT_FOUND, AppError.FUNZIONI_NOT_FOUND, nuoveFunzioni);
+          }
+          userVO.getFunzioni().addAll(funzioniDaAggiungere);
+        }
+		  }
+		  
+	
+		  
+		}
+		
 		
 		if (userDTO.getCognome() != null) {
 			userVO.setCognome(userDTO.getCognome());

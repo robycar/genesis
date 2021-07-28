@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -19,13 +19,21 @@ import {
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonClickedGreen";
-import { Paper, Typography } from "@material-ui/core";
+import { MenuItem, Paper, Typography } from "@material-ui/core";
 import SelectBar from "../../components/SelectBar";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import InputSelect from "../../components/InputSelect";
 import ModaleAddLinea from "../../components/ModaleAddLinea";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
+import Form from "react-bootstrap/Form";
+import { SettingsPhoneTwoTone } from "@material-ui/icons";
+import acccessControl from "../../service/url.js";
 
 const drawerWidth = 240;
 
@@ -147,6 +155,18 @@ const useStyles = makeStyles((theme) => ({
   modaleAddLinea: {
     marginLeft: "75%",
   },
+  formControl: {
+    margin: theme.spacing(1),
+    // width: "20vw",
+    width: "340px",
+    display: "flex",
+  },
+  select: {
+    widht: "380x",
+    height: "40px",
+    padding: "2%",
+    alignItems: "center",
+  },
 }));
 
 function EditingLineaCreaLinea() {
@@ -156,6 +176,75 @@ function EditingLineaCreaLinea() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const [data, setData] = useState([]);
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  const getTypeId = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getTypeId();
+  }, []);
+
+  const [ip, setIP] = useState("");
+  const [numero, setNumero] = useState("");
+  const [password, setPassword] = useState("");
+  const [porta, setPorta] = useState("");
+  const [typeLineaId, setTypeLineaId] = useState("");
+
+  function salva() {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    var raw = JSON.stringify({
+      ip: ip,
+      numero: numero,
+      password: password,
+      porta: porta,
+      typeLinea: {
+        id: typeLineaId,
+      },
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/linea`, requestOptions)
+      .then((response) => response.json())
+      .catch((error) => console.log("error", error));
+
+    // localStorage.setItem("user-info", JSON.stringify(result));
+    // history.push("/dashboard/testcase");
+    window.location = "/editing/linee";
+  }
 
   return (
     <div className={classes.root}>
@@ -246,71 +335,75 @@ function EditingLineaCreaLinea() {
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  ID Linea{" "}
-                </Typography>
-                <InputSelect
-                  className={classes.InputSelect}
-                  placeholder="Passato da back end"
-                />
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Numero</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Inserisci Numero"
+                    onChange={(e) => setNumero(e.target.value)}
+                  />
+                </Form.Group>
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Numero{" "}
-                </Typography>
-                <InputSelect
-                  className={classes.InputSelect}
-                  placeholder="Inserisci il numero di linea"
-                />
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Porta{" "}
-                </Typography>
-                <InputSelect />
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>IP Linea</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Inserisci IP"
+                    onChange={(e) => setIP(e.target.value)}
+                  />
+                </Form.Group>
               </Paper>
 
-              {/*
               <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  {" "}
-                </Typography>
-              </Paper> */}
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Inserisci Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Form.Group>
+              </Paper>
             </Paper>
 
             <Paper className={classes.paperContainer2} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Password{" "}
-                </Typography>
-                <InputSelect
-                  className={classes.InputSelect}
-                  list1="Type LInea1"
-                  list2="Type LInea2"
-                  list3="Type LInea3"
-                  list4="Type LInea4"
-                />
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Porta</Form.Label>
+                  <Form.Control
+                    type="number"
+                    placeholder="Inserisci Porta"
+                    onChange={(e) => setPorta(e.target.value)}
+                  />
+                </Form.Group>
               </Paper>
 
               <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  IP Simulatore{" "}
-                </Typography>
-                <InputSelect className={classes.InputSelect} />
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Type Linea</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Select
+                      value={data.descrizione}
+                      onChange={(e) => setTypeLineaId(e.target.value)}
+                    >
+                      {data.map((prova) => {
+                        return (
+                          <MenuItem key={prova.id} value={prova.id}>
+                            {prova.descrizione}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  <div className={classes.modaleAddLinea}>
+                    <ModaleAddLinea />
+                  </div>
+                </Form.Group>
               </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Type Linea
-                </Typography>
-                <SelectBar />
-                <div className={classes.modaleAddLinea}>
-                  <ModaleAddLinea />
-                </div>
-              </Paper>
-
-              {/* <Paper className={classes.divSelect} elevation={0}></Paper> */}
             </Paper>
           </div>
           <Divider className={classes.divider} />
@@ -319,6 +412,7 @@ function EditingLineaCreaLinea() {
               className={classes.bottone}
               size="medium"
               nome="Crea"
+              onClick={salva}
             />
           </div>
         </Paper>

@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { useState, useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -9,6 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 import Chip from "@material-ui/core/Chip";
+import acccessControl from "../service/url.js";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -39,35 +41,117 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
+// const names = [
+//   "Oliver Hansen",
+//   "Van Henry",
+//   "April Tucker",
+//   "Ralph Hubbard",
+//   "Omar Alexander",
+//   "Carlos Abbott",
+//   "Miriam Wagner",
+//   "Bradley Wilkerson",
+//   "Virginia Andrews",
+//   "Kelly Snyder",
+// ];
 
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
+// function getStyles(name, personName, theme) {
+//   return {
+//     fontWeight:
+//       personName.indexOf(name) === -1
+//         ? theme.typography.fontWeightRegular
+//         : theme.typography.fontWeightMedium,
+//   };
+// }
+
+// function MultipleSelect(props) {
+//   const classes = useStyles();
+//   const theme = useTheme();
+//   const [personName, setPersonName] = React.useState([]);
+
+//   const handleChange = (event) => {
+//     setPersonName(event.target.value);
+//   };
+
+//   const handleChangeMultiple = (event) => {
+//     const { options } = event.target;
+//     const value = [];
+//     for (let i = 0, l = options.length; i < l; i += 1) {
+//       if (options[i].selected) {
+//         value.push(options[i].value);
+//       }
+//     }
+//     setPersonName(value);
+//   };
+
+//   return (
+//     <div>
+//       <FormControl className={classes.formControl}>
+//         <InputLabel id="demo-mutiple-name-label">{props.titolo}</InputLabel>
+//         <Select
+//           multiple
+//           value={personName}
+//           onChange={handleChange}
+//           input={<Input />}
+//           MenuProps={MenuProps}
+//         >
+//           {names.map((name) => (
+//             <MenuItem
+//               key={name}
+//               value={name}
+//               style={getStyles(name, personName, theme)}
+//             >
+//               {name}
+//             </MenuItem>
+//           ))}
+//         </Select>
+//       </FormControl>
+//     </div>
+//   );
+// }
+// export default MultipleSelect;
 
 function MultipleSelect(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  // const [personName, setPersonName] = React.useState([]);
+  const [open, setOpen] = React.useState(true);
+  const [data, setData] = useState([]);
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const getTypeId = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getTypeId();
+  }, []);
 
   const handleChange = (event) => {
-    setPersonName(event.target.value);
+    setData(event.target.value);
   };
 
   const handleChangeMultiple = (event) => {
@@ -78,14 +162,14 @@ function MultipleSelect(props) {
         value.push(options[i].value);
       }
     }
-    setPersonName(value);
+    setData(value);
   };
 
   return (
     <div>
       <FormControl className={classes.formControl}>
         <InputLabel id="demo-mutiple-name-label">{props.titolo}</InputLabel>
-        <Select
+        {/* <Select
           multiple
           value={personName}
           onChange={handleChange}
@@ -96,11 +180,20 @@ function MultipleSelect(props) {
             <MenuItem
               key={name}
               value={name}
-              style={getStyles(name, personName, theme)}
+              //style={getStyles(name, personName, theme)}
             >
               {name}
             </MenuItem>
           ))}
+        </Select> */}
+        <Select multiple value={data} input={<Input />} onChange={handleChange}>
+          {data.map((prova) => {
+            return (
+              <MenuItem key={prova.id} value={prova.id}>
+                {prova.descrizione}
+              </MenuItem>
+            );
+          })}
         </Select>
       </FormControl>
     </div>

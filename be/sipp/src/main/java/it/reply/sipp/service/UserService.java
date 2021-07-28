@@ -1,7 +1,6 @@
 package it.reply.sipp.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -18,9 +17,11 @@ public interface UserService {
 	 */
 	List<UserVO> listUsers();
 	
+	List<UserDTO> listUsers(UserDTO criteria) throws ApplicationException;
+	
 	List<GrantedAuthority> readRolesAndFunctionsForUser(UserVO userId);
 
-	Optional<UserVO> readUser(Long id);
+	UserDTO readUser(Long id) throws ApplicationException;
 
 	void updateUser(UserDTO user, String password) throws ApplicationException;
 

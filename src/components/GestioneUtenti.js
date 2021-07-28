@@ -59,10 +59,9 @@ const GestioneUtenti = () => {
       redirect: "follow",
     };
 
-    fetch("http:/api/user", requestOptions)
+    fetch(`/api/user`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setData(result.users);
       })
       .catch((error) => console.log("error", error));
