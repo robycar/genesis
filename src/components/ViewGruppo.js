@@ -1,37 +1,38 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
-import CreateIcon from "@material-ui/icons/Create";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import { PersonalVideoSharp } from "@material-ui/icons";
+import acccessControl from "../service/url.js";
 
 const ViewGruppo = () => {
-  const data = [
-    {
-      nome: "Marco Rossi",
-      level: "Admin",
-    },
-    {
-      nome: "Mario Rossi",
-      level: "L1",
-    },
-    {
-      nome: "Valentina Bianchi",
-      level: "L2",
-    },
-    {
-      nome: "Antonio Verdi",
-      level: "L2",
-    },
-    {
-      nome: "Maria Sacchi",
-      level: "Admin",
-    },
-  ];
+  const [data, setData] = useState([]);
+  // const data = [
+  //   {
+  //     nome: "Marco Rossi",
+  //     level: "Admin",
+  //   },
+  //   {
+  //     nome: "Mario Rossi",
+  //     level: "L1",
+  //   },
+  //   {
+  //     nome: "Valentina Bianchi",
+  //     level: "L2",
+  //   },
+  //   {
+  //     nome: "Antonio Verdi",
+  //     level: "L2",
+  //   },
+  //   {
+  //     nome: "Maria Sacchi",
+  //     level: "Admin",
+  //   },
+  // ];
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   const columns = [
     {
@@ -43,6 +44,38 @@ const ViewGruppo = () => {
       field: "level",
     },
   ];
+
+  useEffect(() => {
+    getGruppo();
+  }, []);
+
+  const getGruppo = () => {
+    // fetch("http://localhost:9081/api/group", {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: bearer,
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((result) => setData(result.gruppi))
+    //   .catch((error) => console.log("error", error));
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/group`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => setData(result.gruppi))
+      .catch((error) => console.log("error", error));
+  };
 
   const useStyles = makeStyles((theme) => ({
     paper: {
