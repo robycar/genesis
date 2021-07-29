@@ -9,6 +9,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
+import acccessControl from "../service/url.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,18 +53,13 @@ function intersection(a, b) {
 }
 
 export default function TransferList() {
-  const roleGeneral = [
+  let roleGeneral = [
     { name: "Admin management", type: "permission", side: "left" },
     { name: "Admin user management", type: "permission", side: "left" },
     { name: "Admin utente management", type: "permission", side: "left" },
     { name: "Report manager", type: "permission", side: "left" },
     { name: "Workstation management", type: "permission", side: "left" },
     { name: "Line management", type: "permission", side: "left" },
-    { name: "Line management", type: "permission", side: "left" },
-    { name: "Line management", type: "permission", side: "left" },
-    { name: "Line management", type: "permission", side: "left" },
-    { name: "Line management", type: "permission", side: "left" },
-    { name: "Line management", side: "left" },
   ];
 
   const [data, setData] = useState([]);
@@ -74,6 +70,8 @@ export default function TransferList() {
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
     // console.log(bearer.toString());
 
@@ -83,10 +81,11 @@ export default function TransferList() {
       redirect: "follow",
     };
 
-    fetch("http://localhost:9081/api/funzione", requestOptions)
+    fetch(`/api/funzione`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setData(result.funzioni);
+        console.log(result.funzioni);
       })
       .catch((error) => console.log("error", error));
   };
@@ -95,23 +94,30 @@ export default function TransferList() {
     getLevel();
   }, []);
 
-  const prova = [];
+  const dataFunction = [];
 
   for (let i = 0; i < data.length; i++) {
-    prova.push(data[i].nome);
+    dataFunction.push(data[i].nome);
   }
-  console.log(prova);
-  const sinistra = prova;
+  console.log(dataFunction, "Data");
+  const sinistra = [];
   const destra = [];
+
+  roleGeneral = data;
+
   for (let i = 0; i < roleGeneral.length; i++) {
-    if (roleGeneral[i].side == "left") sinistra.push(roleGeneral[i].name);
-    else destra.push(roleGeneral[i].name);
+    if (roleGeneral[i].nome !== null) sinistra.push(roleGeneral[i].nome);
+    else destra.push(roleGeneral[i].nome);
+
+    console.log(roleGeneral[i].nome);
   }
   console.log(sinistra);
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([]);
-  const [left, setLeft] = React.useState(sinistra);
-  const [right, setRight] = React.useState(destra);
+  const [checked, setChecked] = useState([]);
+  const [left, setLeft] = useState(sinistra);
+  const [right, setRight] = useState(destra);
+
+  console.log(left);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -155,7 +161,8 @@ export default function TransferList() {
     <Paper className={classes.paper}>
       <List dense component="div" role="list">
         {items.map((value) => {
-          const labelId = `transfer-list-item-${value}-label`;
+          const labelId = `transfer-list-item-${value.nome}-label`;
+          console.log(items);
 
           return (
             <ListItem
