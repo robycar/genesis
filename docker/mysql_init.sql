@@ -147,4 +147,14 @@ INSERT INTO `UTENZE` (`ID_UTENZA`, `USERNAME`, `PASSWORD`, `ID_LEVEL`, `ID_GROUP
 (7,	'_beibN_r7_7JL40',	'{bcrypt}$2a$10$dQ8bSHNWaQlEXuJ9.OfPjetraUXxjhtLMTxKarILzLlnmih7aE/wu',	4,	1,	'Isom',	'Bins',	'Brekke - Reichel'),
 (8,	'lwUR1QJJLelHO8x',	'{bcrypt}$2a$10$mvWNe8qoJD772s1uLydsVeB82Kq7HGifhP35nmclJRccKOP/39rYK',	4,	1,	'Abelardo',	'Sawayn',	'Sawayn - Bailey');
 
+
+DROP TABLE IF EXISTS `OUTBOUNDPROXY`;
+CREATE TABLE `OUTBOUNDPROXY` (
+  `ID_OBP` int NOT NULL AUTO_INCREMENT,
+  `IP_DESTINAZIONE` varchar(1000) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `DESCRIZIONE` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `PORTA` int NOT NULL,
+  PRIMARY KEY (`ID_OBP`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- 2021-07-21 08:35:42

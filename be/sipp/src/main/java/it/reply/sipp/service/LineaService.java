@@ -5,6 +5,7 @@ import java.util.List;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.linea.payload.LineaDTO;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
+import it.reply.sipp.model.TypeLineaVO;
 
 public interface LineaService {
 
@@ -48,4 +49,13 @@ public interface LineaService {
 	 */
 	void removeLinea(Long id) throws ApplicationException;
 
+	/**
+	 * Ricerca le typeLinee a partire dall'id. Se almeno uno degli id non e' presente
+	 * nel db, viene lanciata una {@link ApplicationException}
+	 * @param ids gli identificatori delle type linee da cercare
+	 * @return le TypeLineaVO trovate
+	 * @throws ApplicationException in caso di errori.
+	 */
+	List<TypeLineaVO> readTypeLineeVO(Iterable<Long> ids) throws ApplicationException;
+	
 }

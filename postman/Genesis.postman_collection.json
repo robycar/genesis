@@ -783,18 +783,6 @@
 					]
 				},
 				{
-					"name": "user_list_by_group",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": ""
-						},
-						"description": "Recupera l'elenco degli utenti che appartengono ad uno specifico gruppo.\r\nPermessi: "
-					},
-					"response": []
-				},
-				{
 					"name": "user_search",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -3034,6 +3022,1090 @@
 				}
 			],
 			"description": "Servizi per l'accesso e la gestione delle linee"
+		},
+		{
+			"name": "api/obp",
+			"item": [
+				{
+					"name": "obp_list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/obp",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"obp"
+							]
+						},
+						"description": "Recupera gli outbound proxy presenti nel sistema"
+					},
+					"response": [
+						{
+							"name": "obp_list success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/obp",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 09:15:16 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"list\": [\n        {\n            \"id\": 7,\n            \"ipDestinazione\": \"142.54.125.189\",\n            \"descrizione\": \"Nostrum qui id aut tempore aut illo autem sequi. Beatae amet unde quis qui. Odio accusamus temporibus error est est eaque quidem. Labore enim porro voluptatem officia officiis quos ipsum. Eum soluta est non rerum iusto ut quisquam.\",\n            \"porta\": 177,\n            \"typeLinee\": []\n        },\n        {\n            \"id\": 6,\n            \"ipDestinazione\": \"38.227.249.70\",\n            \"descrizione\": \"Alias dolorum nihil autem eveniet et. Est voluptatem debitis autem. Nostrum recusandae tenetur dolores et ut tempora minima adipisci provident.\",\n            \"porta\": 357,\n            \"typeLinee\": []\n        },\n        {\n            \"id\": 5,\n            \"ipDestinazione\": \"51.8.161.17\",\n            \"descrizione\": \"Quaerat nobis et sed. Qui quis dolor nihil vitae sed. Exercitationem inventore perferendis sunt nemo voluptatem consequatur optio. Recusandae optio quis fugit aliquid et beatae autem et quia.\",\n            \"porta\": 313,\n            \"typeLinee\": []\n        },\n        {\n            \"id\": 4,\n            \"ipDestinazione\": \"72.105.95.107\",\n            \"descrizione\": \"Doloremque est ab impedit. Atque pariatur consequuntur sapiente et corporis illum ratione quidem at. Nam hic repellat dolor et quaerat ab. Tempora rerum et saepe libero nulla vel. Cum atque eos qui dolores sed et labore eum quas. Voluptate dignissimos doloribus earum ut consequatur quas rem est est.\",\n            \"porta\": 64,\n            \"typeLinee\": []\n        },\n        {\n            \"id\": 2,\n            \"ipDestinazione\": \"237.213.178.182\",\n            \"descrizione\": \"Neque nostrum omnis eius tenetur facilis est. Ad omnis magnam ipsa qui. Vero quia alias quam maiores repellat aut. Quia ipsum eius dolore excepturi corporis dignissimos fuga.\",\n            \"porta\": 8080,\n            \"typeLinee\": []\n        },\n        {\n            \"id\": 1,\n            \"ipDestinazione\": \"127.0.0.1\",\n            \"descrizione\": \"descrizione per l'outbound proxy 1\",\n            \"porta\": 8080,\n            \"typeLinee\": []\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "obp_add",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ipDestinazione\": \"{{$randomIP}}\",\r\n    \"descrizione\": \"{{$randomLoremParagraph}}\",\r\n    \"porta\": {{$randomInt}},\r\n    \"typeLinee\": [\r\n        {\r\n            \"id\": 1\r\n        },\r\n        {\r\n            \"id\": 2\r\n        }]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/obp",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"obp"
+							]
+						},
+						"description": "Crea un nuovo Outbound proxy.\r\nPermessi: obp_edit"
+					},
+					"response": [
+						{
+							"name": "obp_add success con type line (versione espansa)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ipDestinazione\": \"{{$randomIP}}\",\r\n    \"descrizione\": \"{{$randomLoremParagraph}}\",\r\n    \"porta\": {{$randomInt}},\r\n    \"typeLinee\": [\r\n        {\r\n            \"id\": 1\r\n        },\r\n        {\r\n            \"id\": 2\r\n        }]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/obp",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 09:18:05 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"proxy\": {\n        \"id\": 9,\n        \"ipDestinazione\": \"208.98.238.116\",\n        \"descrizione\": \"Aut aliquam voluptate molestias nisi consequatur. Asperiores exercitationem in harum expedita est unde voluptatem similique omnis. Quidem incidunt iste natus tempora vitae mollitia.\",\n        \"porta\": 400,\n        \"typeLinee\": [\n            {\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            {\n                \"id\": 2,\n                \"descrizione\": \"descrizione type linea 2\"\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "obp_add success senza type_linee",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ipDestinazione\": \"{{$randomIP}}\",\r\n    \"descrizione\": \"{{$randomLoremParagraph}}\",\r\n    \"porta\": {{$randomInt}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/obp",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 09:14:40 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"proxy\": {\n        \"id\": 7,\n        \"ipDestinazione\": \"142.54.125.189\",\n        \"descrizione\": \"Nostrum qui id aut tempore aut illo autem sequi. Beatae amet unde quis qui. Odio accusamus temporibus error est est eaque quidem. Labore enim porro voluptatem officia officiis quos ipsum. Eum soluta est non rerum iusto ut quisquam.\",\n        \"porta\": 177,\n        \"typeLinee\": null\n    }\n}"
+						},
+						{
+							"name": "obp_add success con type_linea (versione compatta)",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ipDestinazione\": \"{{$randomIP}}\",\r\n    \"descrizione\": \"{{$randomLoremParagraph}}\",\r\n    \"porta\": {{$randomInt}},\r\n    \"typeLinee\": [1,2]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/obp",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 09:16:40 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"proxy\": {\n        \"id\": 8,\n        \"ipDestinazione\": \"196.1.11.207\",\n        \"descrizione\": \"Dolores labore quas saepe qui quia. Facilis quo et exercitationem sed. Et vitae saepe sequi enim maiores sit.\",\n        \"porta\": 977,\n        \"typeLinee\": [\n            {\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            {\n                \"id\": 2,\n                \"descrizione\": \"descrizione type linea 2\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "obp_update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"ipDestinazione\": \"237.213.178.182\",\r\n    \"descrizione\": \"Neque nostrum omnis eius tenetur facilis est. Ad omnis magnam ipsa qui. Vero quia alias quam maiores repellat aut. Quia ipsum eius dolore excepturi corporis dignissimos fuga.\",\r\n    \"porta\": 123,\r\n    \"typeLinee\": [2,1]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/obp",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"obp"
+							]
+						},
+						"description": "Aggiorna un Outbound proxy esistente.\r\nPermessi: obp_edit"
+					},
+					"response": [
+						{
+							"name": "obp_update failed type linea not found",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2,\r\n    \"ipDestinazione\": \"237.213.178.182\",\r\n    \"descrizione\": \"Neque nostrum omnis eius tenetur facilis est. Ad omnis magnam ipsa qui. Vero quia alias quam maiores repellat aut. Quia ipsum eius dolore excepturi corporis dignissimos fuga.\",\r\n    \"porta\": 123,\r\n    \"typeLinee\": [2,1,3]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/obp",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 09:59:05 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"LINEA-0001\",\n        \"description\": \"TypeLinea non trovato: [3]\"\n    },\n    \"proxy\": null\n}"
+						},
+						{
+							"name": "obp_update failed missing id",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\r\n    \"ipDestinazione\": \"237.213.178.182\",\r\n    \"descrizione\": \"Neque nostrum omnis eius tenetur facilis est. Ad omnis magnam ipsa qui. Vero quia alias quam maiores repellat aut. Quia ipsum eius dolore excepturi corporis dignissimos fuga.\",\r\n    \"porta\": 123,\r\n    \"typeLinee\": [2,1]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/obp",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 09:59:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-07-29T09:59:32.563+00:00\",\n    \"status\": 400,\n    \"error\": \"Bad Request\",\n    \"trace\": \"org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<it.reply.sipp.api.linea.payload.OBPUpdateResponse> it.reply.sipp.api.linea.controller.OBPController.update(it.reply.sipp.api.linea.payload.OBPUpdateRequest): [Field error in object 'OBPUpdateRequest' on field 'id': rejected value [null]; codes [NotNull.OBPUpdateRequest.id,NotNull.id,NotNull.java.lang.Long,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [OBPUpdateRequest.id,id]; arguments []; default message [id]]; default message [Il campo id &egrave; obbligatorio]] \\r\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:139)\\r\\n\\tat org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:121)\\r\\n\\tat org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:170)\\r\\n\\tat org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:137)\\r\\n\\tat org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106)\\r\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:894)\\r\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)\\r\\n\\tat org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)\\r\\n\\tat org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1063)\\r\\n\\tat org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:963)\\r\\n\\tat org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)\\r\\n\\tat org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)\\r\\n\\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:652)\\r\\n\\tat org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)\\r\\n\\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:733)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:113)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:327)\\r\\n\\tat org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)\\r\\n\\tat org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:121)\\r\\n\\tat org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:115)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:126)\\r\\n\\tat org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:81)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:105)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:149)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat it.reply.sipp.security.TokenAuthenticationFilter.doFilterInternal(TokenAuthenticationFilter.java:67)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103)\\r\\n\\tat org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)\\r\\n\\tat org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:110)\\r\\n\\tat org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:80)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:211)\\r\\n\\tat org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:183)\\r\\n\\tat org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:358)\\r\\n\\tat org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:271)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202)\\r\\n\\tat org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)\\r\\n\\tat org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:542)\\r\\n\\tat org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:143)\\r\\n\\tat org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)\\r\\n\\tat org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)\\r\\n\\tat org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:357)\\r\\n\\tat org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:374)\\r\\n\\tat org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)\\r\\n\\tat org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:893)\\r\\n\\tat org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1707)\\r\\n\\tat org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)\\r\\n\\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\\r\\n\\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\\r\\n\\tat org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)\\r\\n\\tat java.base/java.lang.Thread.run(Thread.java:834)\\r\\n\",\n    \"message\": \"Validation failed for object='OBPUpdateRequest'. Error count: 1\",\n    \"errors\": [\n        {\n            \"codes\": [\n                \"NotNull.OBPUpdateRequest.id\",\n                \"NotNull.id\",\n                \"NotNull.java.lang.Long\",\n                \"NotNull\"\n            ],\n            \"arguments\": [\n                {\n                    \"codes\": [\n                        \"OBPUpdateRequest.id\",\n                        \"id\"\n                    ],\n                    \"arguments\": null,\n                    \"defaultMessage\": \"id\",\n                    \"code\": \"id\"\n                }\n            ],\n            \"defaultMessage\": \"Il campo id &egrave; obbligatorio\",\n            \"objectName\": \"OBPUpdateRequest\",\n            \"field\": \"id\",\n            \"rejectedValue\": null,\n            \"bindingFailure\": false,\n            \"code\": \"NotNull\"\n        }\n    ],\n    \"path\": \"/api/obp\"\n}"
+						},
+						{
+							"name": "obp_update success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2,\r\n    \"ipDestinazione\": \"237.213.178.182\",\r\n    \"descrizione\": \"Neque nostrum omnis eius tenetur facilis est. Ad omnis magnam ipsa qui. Vero quia alias quam maiores repellat aut. Quia ipsum eius dolore excepturi corporis dignissimos fuga.\",\r\n    \"porta\": 123,\r\n    \"typeLinee\": [1]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/obp",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 09:57:00 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"proxy\": {\n        \"id\": 2,\n        \"ipDestinazione\": \"237.213.178.182\",\n        \"descrizione\": \"Neque nostrum omnis eius tenetur facilis est. Ad omnis magnam ipsa qui. Vero quia alias quam maiores repellat aut. Quia ipsum eius dolore excepturi corporis dignissimos fuga.\",\n        \"porta\": 123,\n        \"typeLinee\": [\n            {\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            {\n                \"id\": 2,\n                \"descrizione\": \"descrizione type linea 2\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "obp_get_by_id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/obp/5",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"obp",
+								"5"
+							]
+						},
+						"description": "Recupera un Outbound proxy a partire dal suo id.\r\nPermessi: obp.view"
+					},
+					"response": [
+						{
+							"name": "obp_get_by_id failed not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/obp/20",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp",
+										"20"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 10:53:42 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"LINEA-0004\",\n        \"description\": \"Outbound Proxy non trovato: 20\"\n    },\n    \"proxy\": null\n}"
+						},
+						{
+							"name": "obp_get_by_id success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/obp/2",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 10:53:24 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"proxy\": {\n        \"id\": 2,\n        \"ipDestinazione\": \"237.213.178.182\",\n        \"descrizione\": \"Neque nostrum omnis eius tenetur facilis est. Ad omnis magnam ipsa qui. Vero quia alias quam maiores repellat aut. Quia ipsum eius dolore excepturi corporis dignissimos fuga.\",\n        \"porta\": 123,\n        \"typeLinee\": [\n            {\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            {\n                \"id\": 2,\n                \"descrizione\": \"descrizione type linea 2\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "obp_delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 9\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/obp",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"obp"
+							]
+						},
+						"description": "Elimina un Outbound proxy a partire dal suo id.\r\nPermessi: obp.delete"
+					},
+					"response": [
+						{
+							"name": "obp_delete success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 9\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/obp",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 10:55:07 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null\n}"
+						},
+						{
+							"name": "obp_delete failed not found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 9\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/obp",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"obp"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 29 Jul 2021 10:55:34 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"LINEA-0004\",\n        \"description\": \"Outbound Proxy non trovato: 9\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"description": "Servizi dedicati agli Outbound proxy"
 		}
 	],
 	"auth": {

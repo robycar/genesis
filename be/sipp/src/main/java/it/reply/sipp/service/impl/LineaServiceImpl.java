@@ -1,11 +1,11 @@
 package it.reply.sipp.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -53,7 +53,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 	 */
 	private TypeLineaVO readTypeLineaVO(Long id) throws ApplicationException {
 		return typeLineaRepository.findById(id)
-				.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TPYE_LINEA_NOT_FOUND, id));
+				.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TYPE_LINEA_NOT_FOUND, id));
 	}
 
 	private LineaVO readLineaVO(Long id) throws ApplicationException {
@@ -155,5 +155,25 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 			throw makeError(HttpStatus.NOT_FOUND, AppError.LINEA_NOT_FOUND, id);
 		}
 	}
+
+  @Override
+  public List<TypeLineaVO> readTypeLineeVO(Iterable<Long> ids) throws ApplicationException {
+    logger.debug("enter readTypeLineeVO");
+    List<TypeLineaVO> result = typeLineaRepository.findAllById(ids);
+    
+    Set<Long> idMancanti = new HashSet<>();
+    for (Long id: ids) {
+      idMancanti.add(id);
+    }
+    for (TypeLineaVO vo: result) {
+      idMancanti.remove(vo.getId());
+    }
+    
+    if (!idMancanti.isEmpty()) {
+      throw makeError(HttpStatus.NOT_FOUND, AppError.TYPE_LINEA_NOT_FOUND, idMancanti);
+    }
+    logger.debug("exit readTypeLineeVO");
+    return result;
+  }
 
 }
