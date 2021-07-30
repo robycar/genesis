@@ -62,7 +62,7 @@ public class UserController extends AbstractController {
 		
 	}
 	
-	@GetMapping("search")
+	@PostMapping("search")
 	@PreAuthorize("hasAuthority('FUN_user.view')")
 	public ResponseEntity<UtenteSearchResponse> search(@Valid @RequestBody UtenteSearchRequest request) {
 	  logger.info("search({})", request);
