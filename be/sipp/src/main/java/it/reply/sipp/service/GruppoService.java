@@ -2,8 +2,7 @@ package it.reply.sipp.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
+import it.reply.sipp.api.admin.payload.GruppoDTO;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.model.GruppoVO;
 
@@ -26,7 +25,7 @@ public interface GruppoService {
 	 * @return il gruppo trovato
 	 * @throws ApplicationException in caso di errore o se il gruppo non pu&ograve; essere trovato
 	 */
-	GruppoVO readGruppo(Long id) throws ApplicationException;
+	GruppoVO readVO(long id) throws ApplicationException;
 	
 	/**
 	 * Modifica i campi del gruppo identificato da {@link GruppoVO#getId()}.
@@ -41,6 +40,14 @@ public interface GruppoService {
 	 * @param id l'identificatore del gruppo
 	 * @throws ApplicationException in caso di errori
 	 */
-	void removeGruppo(Long id) throws ApplicationException;
+	void removeGruppo(long id) throws ApplicationException;
+
+	/**
+	 * Recupera un gruppo dal sistema a partire dal suo identificatore.
+	 * @param id l'identificatore del gruppo
+	 * @return il gruppo recuperato
+	 * @throws ApplicationException in caso di errori.
+	 */
+  GruppoDTO readGruppo(long id) throws ApplicationException;
 
 }

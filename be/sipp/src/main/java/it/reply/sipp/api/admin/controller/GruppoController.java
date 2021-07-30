@@ -8,8 +8,10 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +23,7 @@ import it.reply.sipp.api.admin.payload.GruppoAddResponse;
 import it.reply.sipp.api.admin.payload.GruppoDTO;
 import it.reply.sipp.api.admin.payload.GruppoListResponse;
 import it.reply.sipp.api.admin.payload.GruppoRemoveRequest;
+import it.reply.sipp.api.admin.payload.GruppoRetrieveResponse;
 import it.reply.sipp.api.admin.payload.GruppoUpdateRequest;
 import it.reply.sipp.api.admin.payload.GruppoUpdateResponse;
 import it.reply.sipp.api.generic.controller.AbstractController;
@@ -40,6 +43,7 @@ public class GruppoController extends AbstractController {
 	}
 
 	@GetMapping("")
+	@PreAuthorize("hasAuthority('FUN_group.view')")
 	public GruppoListResponse list() {
 		
 		List<GruppoVO> gruppi = gruppoService.listGroups();
@@ -51,7 +55,24 @@ public class GruppoController extends AbstractController {
 		return response;
 	}
 	
+	@GetMapping("{id}")
+	@PreAuthorize("hasAuthority('FUN_group.view')")
+	public ResponseEntity<GruppoRetrieveResponse> retrieve(@PathVariable(required=true) Long id) {
+	  logger.info("enter retrieve({})", id);
+	  GruppoRetrieveResponse response = new GruppoRetrieveResponse();
+	  try {
+	    GruppoDTO gruppo = gruppoService.readGruppo(id);
+	    response.setGruppo(gruppo);
+	    logger.debug("Recuperato gruppo: {}", gruppo);
+	    return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+	  
+	}
+	
 	@PutMapping("")
+	@PreAuthorize("hasAuthority('FUN_group.edit')")
 	public ResponseEntity<? extends GruppoAddResponse> add(@Valid @RequestBody(required=true) GruppoAddRequest request) {
 		GruppoVO vo = new GruppoVO();
 		vo.setNome(request.getNome());
@@ -68,6 +89,7 @@ public class GruppoController extends AbstractController {
 	}
 	
 	@PostMapping("")
+	@PreAuthorize("hasAuthority('FUN_group.edit')")
 	public ResponseEntity<? extends GruppoUpdateResponse> update(
 			@Valid @RequestBody(required=true) GruppoUpdateRequest request) {
 		
@@ -89,13 +111,15 @@ public class GruppoController extends AbstractController {
 	}
 	
 	@DeleteMapping
+	@PreAuthorize("hasAuthority('FUN_group.delete')")
 	public ResponseEntity<PayloadResponse> remove(
 			@Valid @RequestBody(required=true) GruppoRemoveRequest request) {
-		
+		logger.info("enter remove");
 		PayloadResponse response = new PayloadResponse();
 		
 		try {
 			gruppoService.removeGruppo(request.getId());
+			logger.info("Gruppo {} eliminato", request.getId());
 			return ResponseEntity.ok(response);
 		} catch (ApplicationException e) {
 			return handleException(e, response);

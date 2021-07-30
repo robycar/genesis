@@ -1546,7 +1546,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 3\r\n}",
+							"raw": "{\r\n    \"id\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1566,6 +1566,91 @@
 						"description": "Elimina un gruppo esistente dal sistema, a partire dal suo id.\r\nPermessi: group.edit"
 					},
 					"response": [
+						{
+							"name": "group_delete failed not empty",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/group",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"group"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Jul 2021 16:19:46 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"ADMIN-0012\",\n        \"description\": \"Gruppo non eliminabile perche'' non vuoto.\"\n    }\n}"
+						},
 						{
 							"name": "group_delete success",
 							"originalRequest": {
@@ -1743,6 +1828,189 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"error\": {\n        \"code\": \"ADMIN-0005\",\n        \"description\": \"Gruppo non trovato: 3\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "group_by_id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/group/2",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"group",
+								"2"
+							]
+						},
+						"description": "Recupera un gruppo a partire dal suo identificatore.\r\nPermessi: group.view"
+					},
+					"response": [
+						{
+							"name": "group_by_id failed not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/group/3",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"group",
+										"3"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Jul 2021 16:22:07 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"ADMIN-0011\",\n        \"description\": \"Gruppo non trovato: 3\"\n    },\n    \"gruppo\": null\n}"
+						},
+						{
+							"name": "group_by_id success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/group/2",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"group",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Jul 2021 16:21:44 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"gruppo\": {\n        \"id\": 2,\n        \"nome\": \"Central Integration Designer\",\n        \"descrizione\": \"Forward\"\n    }\n}"
 						}
 					]
 				}

@@ -134,7 +134,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 						AppError.USER_NOT_FOUND, userId));
 
 		if (userDTO.getGruppo() != null && userDTO.getGruppo().getId() != null) {
-			userVO.setGruppo(gruppoService.readGruppo(userDTO.getGruppo().getId()));
+			userVO.setGruppo(gruppoService.readVO(userDTO.getGruppo().getId()));
 		}
 		
 		if (userDTO.getLevel() != null && userDTO.getLevel().getId() != null) {
@@ -216,7 +216,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 			throw new ApplicationException("Il campo id non puo' essere valorizzato quando si aggiunge un nuovo utente");
 		}
 		
-		userVO.setGruppo(gruppoService.readGruppo(userVO.getGruppo().getId()));
+		userVO.setGruppo(gruppoService.readVO(userVO.getGruppo().getId()));
 		userVO.setLevel(levelService.readVO(userVO.getLevel().getId()));
 		
 		Optional<UserVO> existingUser = userRepository.findByUsername(userVO.getUsername());
