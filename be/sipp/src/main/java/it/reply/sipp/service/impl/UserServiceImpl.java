@@ -136,7 +136,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		}
 		
 		if (userDTO.getLevel() != null && userDTO.getLevel().getId() != null) {
-			userVO.setLevel(levelService.read(userDTO.getLevel().getId()));
+			userVO.setLevel(levelService.readVO(userDTO.getLevel().getId()));
 		}
 		
 		if (password != null) {
@@ -215,7 +215,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		}
 		
 		userVO.setGruppo(gruppoService.readGruppo(userVO.getGruppo().getId()));
-		userVO.setLevel(levelService.read(userVO.getLevel().getId()));
+		userVO.setLevel(levelService.readVO(userVO.getLevel().getId()));
 		
 		Optional<UserVO> existingUser = userRepository.findByUsername(userVO.getUsername());
 		if (existingUser.isPresent()) {

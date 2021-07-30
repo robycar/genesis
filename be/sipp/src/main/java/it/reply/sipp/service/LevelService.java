@@ -15,8 +15,18 @@ public interface LevelService  {
 	 * @return il level letto
 	 * @throws ApplicationException in caso di errori, o se il livello non esiste
 	 */
-	LevelVO read(Long id) throws ApplicationException;
+	LevelVO readVO(Long id) throws ApplicationException;
 
+	/**
+	 * Recupera un level esistente nel sistema a partre dal suo identificatore.
+	 * Se il level non esiste &egrave; lancia una {@link ApplicationException}.
+	 * 
+	 * @param id l'identificatore del level da leggere
+	 * @return il level recuperato
+	 * @throws ApplicationException in caso di errori
+	 */
+	LevelDTO readLevel(long id) throws ApplicationException;
+	
 	/**
 	 * Aggiunge un nuovo livello al sistema. Il nome del livello deve essere unico.
 	 * @param dto il livello da aggiungere

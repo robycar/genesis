@@ -1,12 +1,14 @@
 package it.reply.sipp.api.admin.payload;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
 import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.model.FunzioneVO;
 import it.reply.sipp.model.LevelVO;
 
 public class LevelDTO extends DTO {
@@ -28,12 +30,21 @@ public class LevelDTO extends DTO {
 	}
 	
 	public LevelDTO(LevelVO vo) {
-		this.id = vo.getId();
-		this.descrizione = vo.getDescrizione();
-		this.nome = vo.getNome();
+	  this(vo, null);
 	}
 
-	public Long getId() {
+	public LevelDTO(LevelVO vo, Set<FunzioneVO> funzioniVO) {
+    this.id = vo.getId();
+    this.descrizione = vo.getDescrizione();
+    this.nome = vo.getNome();
+    if (funzioniVO != null) {
+      this.funzioni = funzioniVO.stream()
+          .map(f -> f.getCodice())
+          .collect(Collectors.toSet());
+    }
+  }
+
+  public Long getId() {
 		return id;
 	}
 
