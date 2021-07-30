@@ -108,16 +108,18 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		return authorities;
 	}
 
+	private UserVO readVO(long id) throws ApplicationException {
+	  logger.debug("enter readVO");
+	  return userRepository.findById(id)
+	      .orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.USER_NOT_FOUND, id));
+	  
+	}
+	
 	@Override
 	public UserDTO readUser(Long id) throws ApplicationException {
 		logger.debug("enter readUser(%d)", id);
 		
-		
-		UserVO userVO = userRepository.findById(id).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.USER_NOT_FOUND, id));
-		
-//		userVO.getGruppo().getId();
-//		userVO.getLevel().getId();
-//		userVO.getFunzioni().size();
+		UserVO userVO = readVO(id);
 		
 		return new UserDTO(userVO);
 	}
@@ -228,6 +230,19 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		logger.debug("exit addUser");
 		return userVO;
 	}
+
+  @Override
+  public void removeUser(Long id) throws ApplicationException {
+    logger.debug("enter removeUser");
+    
+    UserVO userVO = readVO(id);
+    logger.info("Tentativo di eliminare l'utente {}: {}", userVO.getId(), userVO.getUsername());
+    
+    //TODO: Verificare le condizioni per cui non si puo' eliminare l'utente.
+    //TODO: Un utente puo' eliminare se stesso?
+    userRepository.delete(userVO);
+
+  }
 
 
 }

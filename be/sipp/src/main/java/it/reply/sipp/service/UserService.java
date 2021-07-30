@@ -33,5 +33,13 @@ public interface UserService {
 	 * @throws ApplicationException in caso di errori
 	 */
 	UserVO addUser(UserVO userVO, String password) throws ApplicationException;
+
+	/**
+	 * Rimuove un utente dal sistema
+	 * 
+	 * @param id l'identificatore dell'utente da rimuovere
+	 * @throws ApplicationException
+	 */
+  void removeUser(Long id) throws ApplicationException;
 	
 }
