@@ -8,16 +8,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.reply.sipp.AppError;
+import it.reply.sipp.api.admin.payload.GruppoDTO;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.generic.service.AbstractService;
 import it.reply.sipp.model.GruppoVO;
 import it.reply.sipp.model.repository.GruppoRepository;
+import it.reply.sipp.model.repository.UserRepository;
 import it.reply.sipp.service.GruppoService;
 
 @Service
@@ -30,6 +31,9 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
 	
 	@Autowired
 	private GruppoRepository gruppoRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	public GruppoServiceImpl() {
 	}
@@ -67,15 +71,24 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
 	}
 
 	@Override
-	public GruppoVO readGruppo(Long id) throws ApplicationException {
+	public GruppoVO readVO(long id) throws ApplicationException {
 		return gruppoRepository.findById(id)
 		.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.GROUP_NOT_FOUND, id));
 	}
 
+  @Override
+  public GruppoDTO readGruppo(long id) throws ApplicationException {
+    GruppoVO vo = readVO(id);
+    GruppoDTO dto = new GruppoDTO(vo);
+    
+    return dto;
+  }
+
+	
 	@Override
 	public GruppoVO updateGruppo(GruppoVO gruppoIn) throws ApplicationException {
 
-		GruppoVO vo = readGruppo(gruppoIn.getId());
+		GruppoVO vo = readVO(gruppoIn.getId());
 		if (gruppoIn.getNome() != null) {
 			vo.setNome(gruppoIn.getNome());
 			if (vo.getNome().length() > GruppoVO.NOME_LENGTH) {
@@ -109,12 +122,20 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
 	}
 
 	@Override
-	public void removeGruppo(Long id) throws ApplicationException {
-		try {
-			gruppoRepository.deleteById(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw makeError(HttpStatus.NOT_FOUND, AppError.GROUP_NOT_FOUND, id);
-		}
+	public void removeGruppo(long id) throws ApplicationException {
+	  logger.debug("enter removeGruppo");
+	  GruppoVO gruppo = readVO(id);
+	  long count = userRepository.countByGruppo(gruppo);
+	  if (count > 0) {
+	    logger.error("Trovati {} utenti che appartengono al gruppo {}: {}",
+	        count, id, gruppo.getNome());
+	    throw makeError(HttpStatus.BAD_REQUEST, AppError.GROUP_NOT_EMPTY_IN_DELETE);
+	  }
+	  
+	  logger.info("Ternativo di eliminazione del gruppo {}:{}", gruppo.getId(), gruppo.getNome());
+	  gruppoRepository.delete(gruppo);
+	  
 	}
+
 
 }

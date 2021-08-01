@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,11 +24,13 @@ import it.reply.sipp.api.admin.payload.UpdateUserResponse;
 import it.reply.sipp.api.admin.payload.UserAddRequest;
 import it.reply.sipp.api.admin.payload.UserAddResponse;
 import it.reply.sipp.api.admin.payload.UserDTO;
+import it.reply.sipp.api.admin.payload.UserRemoveRequest;
 import it.reply.sipp.api.admin.payload.UtenteListResponse;
 import it.reply.sipp.api.admin.payload.UtenteSearchRequest;
 import it.reply.sipp.api.admin.payload.UtenteSearchResponse;
 import it.reply.sipp.api.generic.controller.AbstractController;
 import it.reply.sipp.api.generic.exception.ApplicationException;
+import it.reply.sipp.api.generic.payload.PayloadResponse;
 import it.reply.sipp.model.GruppoVO;
 import it.reply.sipp.model.LevelVO;
 import it.reply.sipp.model.UserVO;
@@ -62,7 +65,7 @@ public class UserController extends AbstractController {
 		
 	}
 	
-	@GetMapping("search")
+	@PostMapping("search")
 	@PreAuthorize("hasAuthority('FUN_user.view')")
 	public ResponseEntity<UtenteSearchResponse> search(@Valid @RequestBody UtenteSearchRequest request) {
 	  logger.info("search({})", request);
@@ -136,6 +139,20 @@ public class UserController extends AbstractController {
 			return handleException(e, response);
 		}
 			
+	}
+	
+	@DeleteMapping("")
+	public ResponseEntity<PayloadResponse> removeUser(@Valid @RequestBody(required=true) UserRemoveRequest request) {
+	  logger.info("enter removeUser({})", request);
+	  PayloadResponse response = new PayloadResponse();
+	  try {
+	    userService.removeUser(request.getId());
+	    logger.info("Utente eliminato: {}", request.getId());
+	    return ResponseEntity.ok(response);
+	  } catch (ApplicationException e) {
+	    return handleException(e, response);
+	  }
+	  
 	}
 	
 }

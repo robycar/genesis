@@ -109,8 +109,8 @@ public class OBPController extends AbstractController {
   }
   
   @GetMapping("{id}")
-  public ResponseEntity<OBPRetrieveResponse> retrieveUser(@PathVariable Long id) {
-    logger.info("enter retrieveUser({})", id);
+  public ResponseEntity<OBPRetrieveResponse> retrieveProxy(@PathVariable Long id) {
+    logger.info("enter retrieveProxy({})", id);
     
     OBPRetrieveResponse response = new OBPRetrieveResponse();
     try {

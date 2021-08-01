@@ -108,16 +108,18 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		return authorities;
 	}
 
+	private UserVO readVO(long id) throws ApplicationException {
+	  logger.debug("enter readVO");
+	  return userRepository.findById(id)
+	      .orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.USER_NOT_FOUND, id));
+	  
+	}
+	
 	@Override
 	public UserDTO readUser(Long id) throws ApplicationException {
 		logger.debug("enter readUser(%d)", id);
 		
-		
-		UserVO userVO = userRepository.findById(id).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.USER_NOT_FOUND, id));
-		
-//		userVO.getGruppo().getId();
-//		userVO.getLevel().getId();
-//		userVO.getFunzioni().size();
+		UserVO userVO = readVO(id);
 		
 		return new UserDTO(userVO);
 	}
@@ -132,11 +134,11 @@ public class UserServiceImpl extends AbstractService implements UserService {
 						AppError.USER_NOT_FOUND, userId));
 
 		if (userDTO.getGruppo() != null && userDTO.getGruppo().getId() != null) {
-			userVO.setGruppo(gruppoService.readGruppo(userDTO.getGruppo().getId()));
+			userVO.setGruppo(gruppoService.readVO(userDTO.getGruppo().getId()));
 		}
 		
 		if (userDTO.getLevel() != null && userDTO.getLevel().getId() != null) {
-			userVO.setLevel(levelService.read(userDTO.getLevel().getId()));
+			userVO.setLevel(levelService.readVO(userDTO.getLevel().getId()));
 		}
 		
 		if (password != null) {
@@ -214,8 +216,8 @@ public class UserServiceImpl extends AbstractService implements UserService {
 			throw new ApplicationException("Il campo id non puo' essere valorizzato quando si aggiunge un nuovo utente");
 		}
 		
-		userVO.setGruppo(gruppoService.readGruppo(userVO.getGruppo().getId()));
-		userVO.setLevel(levelService.read(userVO.getLevel().getId()));
+		userVO.setGruppo(gruppoService.readVO(userVO.getGruppo().getId()));
+		userVO.setLevel(levelService.readVO(userVO.getLevel().getId()));
 		
 		Optional<UserVO> existingUser = userRepository.findByUsername(userVO.getUsername());
 		if (existingUser.isPresent()) {
@@ -228,6 +230,19 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		logger.debug("exit addUser");
 		return userVO;
 	}
+
+  @Override
+  public void removeUser(Long id) throws ApplicationException {
+    logger.debug("enter removeUser");
+    
+    UserVO userVO = readVO(id);
+    logger.info("Tentativo di eliminare l'utente {}: {}", userVO.getId(), userVO.getUsername());
+    
+    //TODO: Verificare le condizioni per cui non si puo' eliminare l'utente.
+    //TODO: Un utente puo' eliminare se stesso?
+    userRepository.delete(userVO);
+
+  }
 
 
 }

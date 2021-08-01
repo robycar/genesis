@@ -44,12 +44,20 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 	}
 
 	@Override
-	public LevelVO read(Long id) throws ApplicationException {
-		logger.debug("enter read");
+	public LevelVO readVO(Long id) throws ApplicationException {
+		logger.debug("enter readVO");
 		return levelRepository.findById(id)
 		.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.LEVEL_NOT_FOUND, id));
 	}
 
+  @Override
+  public LevelDTO readLevel(long id) throws ApplicationException {
+    logger.debug("enter readLevel");
+    LevelVO vo = readVO(id);
+    return new LevelDTO(vo, vo.getFunzioni());
+  }
+
+	
 	@Override
 	public LevelVO addLevel(LevelDTO dto) throws ApplicationException {
 		logger.debug("enter addLevel");
@@ -82,7 +90,7 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 	public LevelVO updateLevel(LevelDTO dto) throws ApplicationException {
 		logger.debug("enter updateLevel({})", dto);
 		
-		LevelVO vo = read(dto.getId());
+		LevelVO vo = readVO(dto.getId());
 		final Long levelId = vo.getId();
 		if (dto.getNome() != null && !dto.getNome().equals(vo.getNome())) {
 			Optional<LevelVO> existingLevel = levelRepository.findByNome(dto.getNome())
@@ -135,7 +143,7 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 	@Override
 	public void removeLevel(Long id) throws ApplicationException {
 		logger.debug("enter removeLevel");
-		LevelVO vo = read(id);
+		LevelVO vo = readVO(id);
 		logger.info("Tentativo di eliminare il livello {},{}", vo.getId(), vo.getNome());
 
 		long usersInLevel = userRepository.countByLevel(vo);
@@ -147,5 +155,6 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 		levelRepository.delete(vo);
 		
 	}
+
 
 }
