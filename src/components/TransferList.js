@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
@@ -7,8 +7,10 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import { MenuItem, Paper, Typography } from "@material-ui/core";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import Form from "react-bootstrap/Form";
 import acccessControl from "../service/url.js";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +44,17 @@ const useStyles = makeStyles((theme) => ({
       color: "#47B881 !important",
     },
   },
+  fixedHeight: {
+    height: 240,
+  },
+  formControl: {
+    paddingBottom: "20px",
+    margin: theme.spacing(1),
+    minWidth: 200,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 function not(a, b) {
@@ -53,18 +66,13 @@ function intersection(a, b) {
 }
 
 export default function TransferList() {
-  let roleGeneral = [
-    { name: "Admin management", type: "permission", side: "left" },
-    { name: "Admin user management", type: "permission", side: "left" },
-    { name: "Admin utente management", type: "permission", side: "left" },
-    { name: "Report manager", type: "permission", side: "left" },
-    { name: "Workstation management", type: "permission", side: "left" },
-    { name: "Line management", type: "permission", side: "left" },
-  ];
-
-  const [data, setData] = useState([]);
+  const sinistra = [];
+  const destra = [];
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  //---------------------GET LEVEL-------------------------------------------
+  const [dataLevel, setDataLevel] = useState([]);
 
   const getLevel = () => {
     var myHeaders = new Headers();
@@ -84,50 +92,163 @@ export default function TransferList() {
     fetch(`/api/funzione`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setData(result.funzioni);
-        console.log(result.funzioni);
+        setDataLevel(result.funzioni);
       })
       .catch((error) => console.log("error", error));
   };
 
+  //_---------------GET USER-------------------------------
+  const [dataUtenti, setDataUtenti] = useState([]);
+
+  const getUsers = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/user`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setDataUtenti(result.users);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  //----------------GET ALL FUNCTION-----------------
+  const [allFunzioni, setAllFunzioni] = useState([]);
+
+  const getAllFunzioni = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/funzione`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAllFunzioni(result.funzioni);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  //----------------GET USER FUNCTION BY ID-----------------
+
+  const [funzioniUtente, setFunzioniUtente] = useState([]);
+
+  const [idSelezionato, setIdSelezionato] = useState([]);
+
+  const getUserById = (event) => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/user/${event.target.value}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setFunzioniUtente(result.user.funzioni);
+        setIdSelezionato(event.target.value);
+      })
+      .catch((error) => console.log("error", error));
+    // console.log(event.target.value)
+
+    // for (let i = 0; i < funzioniUtente.length; i++) {
+    //   console.log(funzioniUtente[i])
+
+    // }
+  };
+
+  //---------------MODIFICA FUNZIONI UTENTE-------------------
+  const modificaFunzioniUtente = (codici) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      user: {
+        id: idSelezionato,
+        funzioni: codici,
+      },
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/user`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
+  var funzioni = [];
+
+  const provaFunzione = (codice) => {
+    funzioni = funzioniUtente;
+    const index = funzioni.indexOf(codice);
+    if (index > -1) {
+      funzioni.splice(index, 1);
+    } else {
+      funzioni.push(codice);
+    }
+    modificaFunzioniUtente(funzioni);
+  };
+
   useEffect(() => {
+    getAllFunzioni();
+    getUsers();
     getLevel();
   }, []);
 
-  const dataFunction = [];
+  // for (let i = 0; i < roleGeneral.length; i++) {
+  //   if (roleGeneral[i].side == "left")
+  //     sinistra.push(roleGeneral[i].nome)
+  //   else
+  //     destra.push(roleGeneral[i].nome)
+  // }
 
-  for (let i = 0; i < data.length; i++) {
-    dataFunction.push(data[i].nome);
-  }
-  console.log(dataFunction, "Data");
-  const sinistra = [];
-  const destra = [];
-
-  roleGeneral = data;
-
-  for (let i = 0; i < roleGeneral.length; i++) {
-    if (roleGeneral[i].nome !== null) sinistra.push(roleGeneral[i].nome);
-    else destra.push(roleGeneral[i].nome);
-
-    console.log(roleGeneral[i].nome);
-  }
-  console.log(sinistra);
   const classes = useStyles();
-  const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState(sinistra);
-  const [right, setRight] = useState(destra);
+  const [checked, setChecked] = React.useState([]);
 
-  console.log(left);
-
-  const leftChecked = intersection(checked, left);
-  const rightChecked = intersection(checked, right);
-
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
+  const handleToggle = (codice) => () => {
+    const currentIndex = checked.indexOf(codice);
     const newChecked = [...checked];
 
+    provaFunzione(codice);
     if (currentIndex === -1) {
-      newChecked.push(value);
+      newChecked.push(codice);
     } else {
       newChecked.splice(currentIndex, 1);
     }
@@ -135,51 +256,36 @@ export default function TransferList() {
     setChecked(newChecked);
   };
 
-  const handleAllRight = () => {
-    setRight(right.concat(left));
-    setLeft([]);
-  };
-
-  const handleCheckedRight = () => {
-    setRight(right.concat(leftChecked));
-    setLeft(not(left, leftChecked));
-    setChecked(not(checked, leftChecked));
-  };
-
-  const handleCheckedLeft = () => {
-    setLeft(left.concat(rightChecked));
-    setRight(not(right, rightChecked));
-    setChecked(not(checked, rightChecked));
-  };
-
-  const handleAllLeft = () => {
-    setLeft(left.concat(right));
-    setRight([]);
-  };
-
-  const customList = (items) => (
+  const customList = () => (
     <Paper className={classes.paper}>
       <List dense component="div" role="list">
-        {items.map((value) => {
+        {allFunzioni.map((value) => {
           const labelId = `transfer-list-item-${value.nome}-label`;
-          console.log(items);
 
+          const funzione = () => {
+            for (let i = 0; i < funzioniUtente.length; i++) {
+              if (value.codice == funzioniUtente[i]) {
+                return true;
+              }
+            }
+            return false;
+          };
           return (
             <ListItem
-              key={value}
+              key={value.nome}
               role="listitem"
               button
-              onClick={handleToggle(value)}
+              onClick={handleToggle(value.codice)}
             >
               <ListItemIcon>
                 <Checkbox
-                  checked={checked.indexOf(value) !== -1}
+                  checked={funzione()}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{ "aria-labelledby": labelId }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={value} />
+              <ListItemText id={labelId} primary={value.nome} />
             </ListItem>
           );
         })}
@@ -189,76 +295,38 @@ export default function TransferList() {
   );
 
   return (
-    <Grid
-      container
-      spacing={2}
-      justifyContent="center"
-      alignItems="center"
-      className={classes.root}
-    >
-      <Grid item>
-        <Typography className={classes.edit}>
-          {" "}
-          Permessi Non Accordati
-        </Typography>
-        {customList(left)}
-      </Grid>
-      <Grid item>
-        <Grid container direction="column" alignItems="center">
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleAllRight}
-            disabled={left.length === 0}
-            aria-label="move all right"
-          >
-            ≫
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleCheckedRight}
-            disabled={leftChecked.length === 0}
-            aria-label="move selected right"
-          >
-            &gt;
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleCheckedLeft}
-            disabled={rightChecked.length === 0}
-            aria-label="move selected left"
-          >
-            &lt;
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            className={classes.button}
-            onClick={handleAllLeft}
-            disabled={right.length === 0}
-            aria-label="move all left"
-          >
-            ≪
-          </Button>
+    <div>
+      <Paper className={classes.divSelect} elevation={0}>
+        <Form.Group controlId="form.Numero">
+          <Form.Label>Type Linea</Form.Label>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <Select value={dataUtenti.nome} onChange={getUserById}>
+              {dataUtenti.map((prova) => {
+                return (
+                  <MenuItem key={prova.id} value={prova.id}>
+                    {prova.nome}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Form.Group>
+      </Paper>
+      <Grid
+        container
+        spacing={2}
+        justifyContent="center"
+        alignItems="center"
+        className={classes.root}
+      >
+        <Grid item>
+          <Typography className={classes.edit}>
+            {" "}
+            Permessi Non Accordati
+          </Typography>
+          {customList()}
         </Grid>
       </Grid>
-      <Grid item>
-        <Typography className={classes.edit}> Permessi Accordati </Typography>
-        {customList(right)}
-      </Grid>
-      <Grid className={classes.lastGrid}></Grid>
-      <Grid item>
-        <Grid>
-          <Button className={classes.buttonGreen} size="medium">
-            Salva
-          </Button>
-        </Grid>
-      </Grid>
-    </Grid>
+    </div>
   );
 }
