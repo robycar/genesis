@@ -15,6 +15,7 @@ import Row from "react-bootstrap/Row";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import Button from "@material-ui/core/Button";
 import acccessControl from "../service/url.js";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -56,6 +57,16 @@ function FormCreaGruppo() {
     bearer = bearer.replace(/"/g, "");
   }
 
+  const checkRichiesta = (result) => {
+    if (result.error == null) {
+      window.location = "/amministrazione/gruppo";
+    } else if (result.error.code === "ADMIN-0010") {
+      document.getElementById("alertGruppo").style.display = "";
+    } else {
+      document.getElementById("alertGruppo").style.display = "none";
+    }
+  };
+
   // console.log(bearer);
 
   function putGroup() {
@@ -79,10 +90,10 @@ function FormCreaGruppo() {
 
     fetch(`/api/group`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => checkRichiesta(result))
       .catch((error) => console.log("error", error));
 
-    window.location = "/amministrazione/gruppo";
+    //window.location = "/amministrazione/gruppo";
 
     // localStorage.setItem("user-info", JSON.stringify(result));
     // history.push("/dashboard/testcase");
@@ -101,6 +112,13 @@ function FormCreaGruppo() {
                   placeholder="Inserisci nome gruppo"
                   onChange={(e) => setNome(e.target.value)}
                 />
+                <Alert
+                  severity="error"
+                  id="alertGruppo"
+                  style={{ display: "none" }}
+                >
+                  Gruppo already exists!
+                </Alert>
               </Form.Group>
               <br />
               <br />

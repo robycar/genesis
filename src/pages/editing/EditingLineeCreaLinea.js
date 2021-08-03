@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
+import { useForm } from "react-hook-form";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Navbar from "../../components/Navbar";
@@ -10,6 +11,7 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import Alert from "@material-ui/lab/Alert";
 import {
   mainListItems,
   secondaryListItems,
@@ -18,19 +20,13 @@ import {
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonClickedGreen";
-import { MenuItem, Paper, Typography } from "@material-ui/core";
-import SelectBar from "../../components/SelectBar";
+import { MenuItem, Paper } from "@material-ui/core";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import InputSelect from "../../components/InputSelect";
 import ModaleAddLinea from "../../components/ModaleAddLinea";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import NativeSelect from "@material-ui/core/NativeSelect";
 import Form from "react-bootstrap/Form";
 import { SettingsPhoneTwoTone } from "@material-ui/icons";
 import acccessControl from "../../service/url.js";
@@ -119,18 +115,22 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     marginBottom: "20px",
+    marginLeft: "1%",
   },
   generalContainer: {
     display: "flex",
     marginTop: "5%",
   },
   paperContainer1: {
+    display: "flex",
     flexDirection: "column",
     padding: "20px",
+    marginRight: "8%",
   },
   paperContainer2: {
     flexDirection: "column",
     padding: "20px",
+    marginBottom: "10%",
   },
   divSelect: {
     padding: "5%",
@@ -209,41 +209,89 @@ function EditingLineaCreaLinea() {
   }, []);
 
   const [ip, setIP] = useState("");
+  const [ip1, setIP1] = useState("");
+  const [ip2, setIP2] = useState("");
+  const [ip3, setIP3] = useState("");
+  const [ip4, setIP4] = useState("");
   const [numero, setNumero] = useState("");
   const [password, setPassword] = useState("");
   const [porta, setPorta] = useState("");
   const [typeLineaId, setTypeLineaId] = useState("");
 
-  function salva() {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-    var raw = JSON.stringify({
-      ip: ip,
-      numero: numero,
-      password: password,
-      porta: porta,
-      typeLinea: {
-        id: typeLineaId,
-      },
-    });
+  const aggiornaIP = () => {
+    if (ip1 !== "" && ip2 !== "" && ip3 !== "" && ip4 !== "") {
+      setIP(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
+      console.log(ip, "ip okay");
+    }
+  };
 
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
+  function salva() {
+    const Invia = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var raw = JSON.stringify({
+        ip: ip,
+        numero: numero,
+        password: password,
+        porta: porta,
+        typeLinea: {
+          id: typeLineaId,
+        },
+      });
+
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/linea`, requestOptions)
+        .then((response) => response.json())
+        .catch((error) => console.log("error", error));
+
+      // localStorage.setItem("user-info", JSON.stringify(result));
+      // history.push("/dashboard/testcase");
+      //window.location = "/editing/linee";
     };
 
-    fetch(`/api/linea`, requestOptions)
-      .then((response) => response.json())
-      .catch((error) => console.log("error", error));
-
-    // localStorage.setItem("user-info", JSON.stringify(result));
-    // history.push("/dashboard/testcase");
-    window.location = "/editing/linee";
+    if (
+      ip !== "" &&
+      numero !== "" &&
+      password !== "" &&
+      porta !== "" &&
+      porta.length > 3 &&
+      porta.length < 6 &&
+      typeLineaId !== ""
+    ) {
+      Invia();
+      // console.log(ip);
+    } else {
+      if (ip === "") {
+        document.getElementById("alertIP").style.display = "";
+      } else {
+        document.getElementById("alertIP").style.display = "none";
+      }
+      if (numero === "") {
+        document.getElementById("alertNumero").style.display = "";
+      } else {
+        document.getElementById("alertNumero").style.display = "none";
+      }
+      if (password === "") {
+        document.getElementById("alertPassword").style.display = "";
+      } else {
+        document.getElementById("alertPassword").style.display = "none";
+      }
+      if (porta === "" || porta.length < 4 || porta.length > 5) {
+        document.getElementById("alertPorta").style.display = "";
+      }
+      else {
+        document.getElementById("alertPorta").style.display = "none";
+      }
+    }
   }
 
   return (
@@ -338,20 +386,66 @@ function EditingLineaCreaLinea() {
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Numero</Form.Label>
                   <Form.Control
+                    className={classes.formControl}
                     type="text"
                     placeholder="Inserisci Numero"
                     onChange={(e) => setNumero(e.target.value)}
                   />
+                  <Alert
+                    severity="error"
+                    id="alertNumero"
+                    style={{ display: "none" }}
+                  >
+                    Numero is required!
+                  </Alert>
                 </Form.Group>
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>IP Linea</Form.Label>
                   <Form.Control
+                    className={classes.formControl}
                     type="text"
-                    placeholder="Inserisci IP"
-                    onChange={(e) => setIP(e.target.value)}
-                  />
+                    placeholder="Inserisci IP1"
+                    onChange={(e) => {
+                      setIP1(e.target.value);
+                      aggiornaIP();
+                    }}
+                  />{" "}
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci IP2"
+                    onChange={(e) => {
+                      setIP2(e.target.value);
+                      aggiornaIP();
+                    }}
+                  />{" "}
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci IP3"
+                    onChange={(e) => {
+                      setIP3(e.target.value);
+                      aggiornaIP();
+                    }}
+                  />{" "}
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci IP4"
+                    onChange={(e) => {
+                      setIP4(e.target.value);
+                      aggiornaIP();
+                    }}
+                  />{" "}
+                  <Alert
+                    severity="error"
+                    id="alertIP"
+                    style={{ display: "none" }}
+                  >
+                    IP Linea is required!
+                  </Alert>
                 </Form.Group>
               </Paper>
 
@@ -359,10 +453,18 @@ function EditingLineaCreaLinea() {
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
+                    className={classes.formControl}
                     type="text"
                     placeholder="Inserisci Password"
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  <Alert
+                    severity="error"
+                    id="alertPassword"
+                    style={{ display: "none" }}
+                  >
+                    Password is required!
+                  </Alert>
                 </Form.Group>
               </Paper>
             </Paper>
@@ -372,10 +474,19 @@ function EditingLineaCreaLinea() {
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Porta</Form.Label>
                   <Form.Control
+                    className={classes.formControl}
                     type="number"
                     placeholder="Inserisci Porta"
                     onChange={(e) => setPorta(e.target.value)}
                   />
+                  <Alert
+                    severity="error"
+                    id="alertPorta"
+                    style={{ display: "none" }}
+                  >
+                    La lunghezza della porta deve essere compresa tra 4 e 5
+                    valori!
+                  </Alert>
                 </Form.Group>
               </Paper>
 

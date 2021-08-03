@@ -14,12 +14,14 @@ function Linee() {
   const [data, setData] = useState([]);
 
   const columns = [
+    { title: "Id", field: "typeLinea.id" },
     { title: "Numero", field: "numero" },
     { title: "IP Linea", field: "ip" },
     { title: "Porta", field: "porta" },
     { title: "Password", field: "password" },
-    { title: "Id", field: "typeLinea.id" },
     { title: "Descrizione", field: "typeLinea.descrizione" },
+    { title: "Created By", field: "createdBy" },
+    { title: "Modified By", field: "modifiedBy" },
   ];
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;

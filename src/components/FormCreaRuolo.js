@@ -3,17 +3,13 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Container from "react-bootstrap/Container";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import TotalTestSuite from "./TotalTestSuite";
-import TotalTestCase from "./TotalTestCase";
-import TotalLines from "./TotalLines";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import acccessControl from "../service/url.js";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,6 +37,16 @@ function FormCreaRuolo() {
   const [descrizione, setDescrizione] = useState("");
   // console.warn(descrizione);
 
+  const checkRichiesta = (result) => {
+    if (result.error == null) {
+      window.location = "/amministrazione/ruoli";
+    } else if (result.error.code === "ADMIN-0020") {
+      document.getElementById("alertRuolo").style.display = "";
+    } else {
+      document.getElementById("alertRuolo").style.display = "none";
+    }
+  };
+
   function login() {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -60,14 +66,14 @@ function FormCreaRuolo() {
       redirect: "follow",
     };
 
-    let result = fetch(`/api/level`, requestOptions)
+    fetch(`/api/level`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => checkRichiesta(result))
       .catch((error) => console.log("error", error));
 
     // localStorage.setItem("user-info", JSON.stringify(result));
     // history.push("/dashboard/testcase");
-    window.location = "/amministrazione/ruoli";
+    // window.location = "/amministrazione/ruoli";
   }
 
   return (
@@ -83,6 +89,13 @@ function FormCreaRuolo() {
                   placeholder="Inserisci Ruolo"
                   onChange={(e) => setNome(e.target.value)}
                 />
+                <Alert
+                  severity="error"
+                  id="alertRuolo"
+                  style={{ display: "none" }}
+                >
+                  Ruolo already exists!
+                </Alert>
               </Form.Group>
             </Col>
           </Row>
@@ -113,4 +126,5 @@ function FormCreaRuolo() {
     </Container>
   );
 }
+
 export default FormCreaRuolo;

@@ -1,21 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
 import Container from "react-bootstrap/Container";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import TotalTestSuite from "./TotalTestSuite";
-import TotalTestCase from "./TotalTestCase";
-import TotalLines from "./TotalLines";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import SelectBar from "../components/SelectBar";
-import { Typography } from "@material-ui/core";
 import acccessControl from "../service/url.js";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import { MenuItem } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -51,43 +47,153 @@ function FormAddUtente() {
     bearer = bearer.replace(/"/g, "");
   }
 
-  function login() {
+  const [appearGroup, setAppearGroup] = useState([]);
+  const [appearLevel, setAppearLevel] = useState([]);
+
+  const getGroup = () => {
     var myHeaders = new Headers();
+
     myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var raw = JSON.stringify({
-      password: password,
-      username: username,
-      cognome: cognome,
-      nome: nome,
-      azienda: azienda,
-      level: {
-        id: level,
-      },
-      gruppo: {
-        id: gruppo,
-      },
-    });
+    // console.log(bearer.toString());
 
     var requestOptions = {
-      method: "PUT",
+      method: "GET",
       headers: myHeaders,
-      body: raw,
       redirect: "follow",
     };
 
-    fetch(`/api/user`, requestOptions)
+    fetch(`/api/group`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => {
+        setAppearGroup(result.gruppi);
+      })
       .catch((error) => console.log("error", error));
+  };
 
-    window.location = "/amministrazione/utenze";
+  const getAppearLevel = () => {
+    var myHeaders = new Headers();
 
-    // localStorage.setItem("user-info", JSON.stringify(result));
-    // history.push("/dashboard/testcase");
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/level`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLevel(result.livelli);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getGroup();
+    getAppearLevel();
+  }, []);
+
+  const checkRichiesta = (result) => {
+    if (result.error == null) {
+      window.location = "/amministrazione/utenze";
+    } else if (result.error.code == "ADMIN-0003") {
+      document.getElementById("alertUsername2").style.display = "";
+    } else {
+      document.getElementById("alertUsername2").style.display = "none";
+    }
+  };
+
+  function addUtente() {
+    const Invia = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+      var raw = JSON.stringify({
+        password: password,
+        username: username,
+        cognome: cognome,
+        nome: nome,
+        azienda: azienda,
+        level: {
+          id: level,
+        },
+        gruppo: {
+          id: gruppo,
+        },
+      });
+
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/user`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => checkRichiesta(result))
+        .catch((error) => console.log("error", error));
+    };
+
+    if (
+      password !== "" &&
+      username !== "" &&
+      nome !== "" &&
+      cognome !== "" &&
+      azienda !== "" &&
+      level !== "" &&
+      gruppo !== ""
+    ) {
+      Invia();
+      // console.log(ip);
+    } else {
+      if (password === "") {
+        document.getElementById("alertPassword").style.display = "";
+      } else {
+        document.getElementById("alertPassword").style.display = "none";
+      }
+      if (username === "") {
+        document.getElementById("alertUsername").style.display = "";
+      } else {
+        document.getElementById("alertUsername").style.display = "none";
+      }
+      if (nome === "") {
+        document.getElementById("alertNome").style.display = "";
+      } else {
+        document.getElementById("alertNome").style.display = "none";
+      }
+      if (cognome === "") {
+        document.getElementById("alertCognome").style.display = "";
+      } else {
+        document.getElementById("alertCognome").style.display = "none";
+      }
+      if (azienda === "") {
+        document.getElementById("alertAzienda").style.display = "";
+      } else {
+        document.getElementById("alertAzienda").style.display = "none";
+      }
+      if (level === "") {
+        document.getElementById("alertLevel").style.display = "";
+      } else {
+        document.getElementById("alertLevel").style.display = "none";
+      }
+      if (gruppo === "") {
+        document.getElementById("alertGruppo").style.display = "";
+      } else {
+        document.getElementById("alertGruppo").style.display = "none";
+      }
+    }
   }
 
   return (
@@ -102,7 +208,15 @@ function FormAddUtente() {
                   type="text"
                   placeholder="Inserisci Nome"
                   onChange={(e) => setNome(e.target.value)}
+                  required
                 />
+                <Alert
+                  severity="error"
+                  id="alertNome"
+                  style={{ display: "none" }}
+                >
+                  Nome is required!
+                </Alert>
               </Form.Group>
             </Col>
             <Col>
@@ -113,6 +227,13 @@ function FormAddUtente() {
                   placeholder="Inserisci Cognome"
                   onChange={(e) => setCognome(e.target.value)}
                 />
+                <Alert
+                  severity="error"
+                  id="alertCognome"
+                  style={{ display: "none" }}
+                >
+                  Cognome is required!
+                </Alert>
               </Form.Group>
             </Col>
           </Row>
@@ -120,15 +241,27 @@ function FormAddUtente() {
             <Col>
               <Form.Group controlId="form.Gruppo">
                 <Form.Label>Gruppo</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="state"
-                  onChange={(e) => setGruppo(e.target.value)}
-                >
-                  <option value="">None</option>
-                  <option value="1">Gruppo 1</option>
-                  <option value="2">Gruppo 2</option>
-                </Form.Control>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <Select
+                    value={appearGroup.nome}
+                    onChange={(e) => setGruppo(e.target.value)}
+                  >
+                    {appearGroup.map((prova) => {
+                      return (
+                        <MenuItem key={prova.id} value={prova.id}>
+                          {prova.nome}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  <Alert
+                    severity="error"
+                    id="alertGruppo"
+                    style={{ display: "none" }}
+                  >
+                    Gruppo is required!
+                  </Alert>
+                </FormControl>
               </Form.Group>
             </Col>
             <Col>
@@ -139,6 +272,13 @@ function FormAddUtente() {
                   placeholder="Inserisci Azienda"
                   onChange={(e) => setAzienda(e.target.value)}
                 />
+                <Alert
+                  severity="error"
+                  id="alertAzienda"
+                  style={{ display: "none" }}
+                >
+                  Azienda is required!
+                </Alert>
               </Form.Group>
             </Col>
           </Row>
@@ -151,6 +291,20 @@ function FormAddUtente() {
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Inserisci Username"
                 />
+                <Alert
+                  severity="error"
+                  id="alertUsername"
+                  style={{ display: "none" }}
+                >
+                  Username is required!
+                </Alert>
+                <Alert
+                  severity="error"
+                  id="alertUsername2"
+                  style={{ display: "none" }}
+                >
+                  Username already exist!
+                </Alert>
               </Form.Group>
             </Col>
             <Col>
@@ -161,6 +315,13 @@ function FormAddUtente() {
                   type="password"
                   placeholder="Inserisci Password"
                 />
+                <Alert
+                  severity="error"
+                  id="alertPassword"
+                  style={{ display: "none" }}
+                >
+                  Password is required!
+                </Alert>
               </Form.Group>
             </Col>
           </Row>
@@ -168,15 +329,27 @@ function FormAddUtente() {
             <Col>
               <Form.Group controlId="form.Level">
                 <Form.Label>Level</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="state"
-                  onChange={(e) => setLevel(e.target.value)}
-                >
-                  <option value="2">Admin</option>
-                  <option value="4">SuperAdmin</option>
-                  <option value="6">L1</option>
-                </Form.Control>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <Select
+                    value={appearGroup.nome}
+                    onChange={(e) => setLevel(e.target.value)}
+                  >
+                    {appearLevel.map((prova) => {
+                      return (
+                        <MenuItem key={prova.id} value={prova.id}>
+                          {prova.nome}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  <Alert
+                    severity="error"
+                    id="alertLevel"
+                    style={{ display: "none" }}
+                  >
+                    Level is required!
+                  </Alert>
+                </FormControl>
               </Form.Group>
             </Col>
             <Col></Col>
@@ -185,10 +358,10 @@ function FormAddUtente() {
             className={classes.bottone}
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            {/* <button className="btn btn-primary" onClick={login}>
+            {/* <button className="btn btn-primary" onClick={addUtente}>
               Aggiungi
             </button> */}
-            <ButtonClickedGreen size="medium" nome="Aggiungi" onClick={login} />
+            <ButtonClickedGreen size="medium" nome="Crea" onClick={addUtente} />
           </div>
         </Form>
       </Container>

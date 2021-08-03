@@ -12,6 +12,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
 import acccessControl from "../service/url.js";
+import InputLabel from '@material-ui/core/InputLabel';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,7 +66,7 @@ function intersection(a, b) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 
-export default function TransferList() {
+export default function TransferListRuolo() {
   const sinistra = [];
   const destra = [];
 
@@ -89,39 +90,14 @@ export default function TransferList() {
       redirect: "follow",
     };
 
-    fetch(`/api/funzione`, requestOptions)
+    fetch(`/api/level`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setDataLevel(result.funzioni);
+        setDataLevel(result.livelli);
       })
       .catch((error) => console.log("error", error));
   };
 
-  //_---------------GET USER-------------------------------
-  const [dataUtenti, setDataUtenti] = useState([]);
-
-  const getUsers = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/user`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setDataUtenti(result.users);
-      })
-      .catch((error) => console.log("error", error));
-  };
 
   //----------------GET ALL FUNCTION-----------------
   const [allFunzioni, setAllFunzioni] = useState([]);
@@ -151,11 +127,11 @@ export default function TransferList() {
 
   //----------------GET USER FUNCTION BY ID-----------------
 
-  const [funzioniUtente, setFunzioniUtente] = useState([]);
+  const [funzioniLevel, setfunzioniLevel] = useState([]);
 
   const [idSelezionato, setIdSelezionato] = useState([]);
 
-  const getUserById = (event) => {
+  const getLevelById = (event) => {
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
@@ -170,23 +146,23 @@ export default function TransferList() {
       redirect: "follow",
     };
 
-    fetch(`/api/user/${event.target.value}`, requestOptions)
+    fetch(`/api/level/${event.target.value}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setFunzioniUtente(result.user.funzioni);
+        setfunzioniLevel(result.level.funzioni);
         setIdSelezionato(event.target.value);
       })
       .catch((error) => console.log("error", error));
     // console.log(event.target.value)
 
-    // for (let i = 0; i < funzioniUtente.length; i++) {
-    //   console.log(funzioniUtente[i])
+    // for (let i = 0; i < funzioniLevel.length; i++) {
+    //   console.log(funzioniLevel[i])
 
     // }
   };
 
   //---------------MODIFICA FUNZIONI UTENTE-------------------
-  const modificaFunzioniUtente = (codici) => {
+  const modificaFunzioniLevel = (codici) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
@@ -207,7 +183,7 @@ export default function TransferList() {
       redirect: "follow",
     };
 
-    fetch(`/api/user`, requestOptions)
+    fetch(`/api/level`, requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
@@ -216,19 +192,18 @@ export default function TransferList() {
   var funzioni = [];
 
   const provaFunzione = (codice) => {
-    funzioni = funzioniUtente;
+    funzioni = funzioniLevel;
     const index = funzioni.indexOf(codice);
     if (index > -1) {
       funzioni.splice(index, 1);
     } else {
       funzioni.push(codice);
     }
-    modificaFunzioniUtente(funzioni);
+    modificaFunzioniLevel(funzioni);
   };
 
   useEffect(() => {
     getAllFunzioni();
-    getUsers();
     getLevel();
   }, []);
 
@@ -263,8 +238,8 @@ export default function TransferList() {
           const labelId = `transfer-list-item-${value.nome}-label`;
 
           const funzione = () => {
-            for (let i = 0; i < funzioniUtente.length; i++) {
-              if (value.codice == funzioniUtente[i]) {
+            for (let i = 0; i < funzioniLevel.length; i++) {
+              if (value.codice == funzioniLevel[i]) {
                 return true;
               }
             }
@@ -296,22 +271,20 @@ export default function TransferList() {
 
   return (
     <div>
-      <Paper className={classes.divSelect} elevation={0}>
-        <Form.Group controlId="form.Numero">
-          <Form.Label>Type Linea</Form.Label>
-          <FormControl variant="outlined" className={classes.formControl}>
-            <Select value={dataUtenti.nome} onChange={getUserById}>
-              {dataUtenti.map((prova) => {
-                return (
-                  <MenuItem key={prova.id} value={prova.id}>
-                    {prova.nome}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Form.Group>
-      </Paper>
+      <Form.Group controlId="form.Numero">
+        <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel id="select-ruolo-label">Ruoli</InputLabel>
+          <Select value={dataLevel.nome} onChange={getLevelById}>
+            {dataLevel.map((prova) => {
+              return (
+                <MenuItem key={prova.id} value={prova.id}>
+                  {prova.nome}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      </Form.Group>
       <Grid
         container
         spacing={2}

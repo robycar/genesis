@@ -7,7 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-import TransferList from '../components/TransferList';
+import TransferListRuolo from "./TransferListRuolo";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -43,25 +43,8 @@ function GestioneAutorizzazioniRuoli() {
   
   return (
     <div style={{marginTop:"20px"}}>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="select-ruolo-label">Ruolo</InputLabel>
-        <Select
-          labelId="select-ruolo-label"
-          id="select-ruolo"
-          value={ruolo}
-          onChange={handleChange}
-          label="Ruolo"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={"L2"}>L2</MenuItem>
-          <MenuItem value={"L1"}>L1</MenuItem>
-          <MenuItem value={"Admin"}>Admin</MenuItem>
-        </Select>
-      </FormControl>
 
-      <TransferList />
+      <TransferListRuolo />
 
     </div>
   );

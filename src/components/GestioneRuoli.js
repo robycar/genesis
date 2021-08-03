@@ -224,7 +224,7 @@ const GestioneRuoli = () => {
                   exact
                   to="/amministrazione/crearuolo"
                 >
-                  ADD RUOLO
+                  CREA RUOLO
                 </Button>
               </div>
             ),

@@ -237,7 +237,7 @@ const GestioneUtenti = () => {
                   exact
                   to="/amministrazione/addutente"
                 >
-                  ADD UTENTE
+                  CREA UTENTE
                 </Button>
               </div>
             ),
@@ -291,6 +291,35 @@ const GestioneUtenti = () => {
                   resolve();
                 });
               // .catch((error) => console.log("error", error));
+            }),
+
+          onRowDelete: (oldData) =>
+            new Promise((resolve, reject) => {
+              //Backend call
+              var myHeaders = new Headers();
+              myHeaders.append("Authorization", bearer);
+              myHeaders.append("Content-Type", "application/json");
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+              var raw = JSON.stringify({
+                id: oldData.id,
+              });
+
+              var requestOptions = {
+                method: "DELETE",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
+
+              fetch(`/api/user` + "?id=" + oldData.id, requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                  getUsers();
+                  resolve();
+                })
+                .catch((error) => console.log("error", error));
             }),
         }}
       />
