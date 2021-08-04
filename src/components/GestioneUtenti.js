@@ -2,15 +2,103 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
-import CreateIcon from "@material-ui/icons/Create";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
-import DeleteIcon from "@material-ui/icons/Delete";
-import Typography from "@material-ui/core/Typography";
 import acccessControl from "../service/url.js";
+import Select from "@material-ui/core/Select";
+import { MenuItem } from "@material-ui/core";
 
 const GestioneUtenti = () => {
+  let bearer = `Bearer ${localStorage.getItem("token")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+  
   const [data, setData] = useState([]);
+  const [appearGroup, setAppearGroup] = useState([]);
+  const [appearLevel, setAppearLevel] = useState([]);
+
+  //-----------GET USER----------------------
+  const getUsers = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/user`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.users);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  /*------- Get grooup-------*/
+
+  const getGroup = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/group`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearGroup(result.gruppi);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  /*------- Get level-------*/
+
+  const getAppearLevel = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/level`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLevel(result.livelli);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getGroup();
+    getAppearLevel();
+    getUsers();
+  }, []);
+
 
   const columns = [
     {
@@ -35,83 +123,24 @@ const GestioneUtenti = () => {
     },
     {
       title: "Level",
-      field: "level.nome",
+      field: "level.id",
+      lookup: appearLevel.map((data) => {
+        //console.log(data.nome);
+        return data.nome;
+      }),
     },
     {
       title: "Gruppo",
-      field: "gruppo.nome",
+      field: "gruppo.id",
+      lookup: appearGroup.map((data) => {
+        //console.log(data.nome);
+        return data.nome;
+      }),
     },
   ];
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  // const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
-  const getUsers = () => {
-    var myHeaders = new Headers();
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/user`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.users);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  useEffect(() => {
-    // var myHeaders = new Headers();
-    // myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-    // var urlencoded = new URLSearchParams();
-    // urlencoded.append("username", "test");
-    // urlencoded.append("password", "test");
-    // var requestOptions = {
-    //   method: "POST",
-    //   headers: myHeaders,
-    //   body: urlencoded,
-    //   redirect: "follow",
-    // };
-    // fetch("http://localhost:9081/api/auth/login", requestOptions)
-    //   .then((response) => response.json())
-    //   .then((result) => {
-    //     Test(result.access_token);
-    //     console.log(result);
-    //   })
-    //   .catch((error) => console.log("error", error));
-    // // USER
-    // function Test(token) {
-    //   var myHeaders = new Headers();
-    //   myHeaders.append("Authorization", `Bearer ${token}`);
-    //   var requestOptions = {
-    //     method: "GET",
-    //     headers: myHeaders,
-    //     redirect: "follow",
-    //   };
-    //   console.log(token);
-    //   fetch("http://localhost:9081/api/user", {
-    //     method: "GET",
-    //     headers: {
-    //       Authorization: "Bearer " + token,
-    //     },
-    //   })
-    //     .then((response) => response.json())
-    //     .then((result) => {
-    //       console.log(result);
-    //       setData(result.users);
-    //     })
-    //     .catch((error) => console.log("error", error));
-    // }
-
-    getUsers();
-  }, []);
 
   function rand() {
     return Math.round(Math.random() * 20) - 10;
@@ -210,23 +239,8 @@ const GestioneUtenti = () => {
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
-          // selection: true,
-          // columnsButton: true,
-          // filtering: true,
         }}
         actions={[
-          // {
-          //   icon: () => <CreateIcon />,
-          //   tooltip: "Modifica",
-          //   onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
-          //   position: "row",
-          // },
-          // {
-          //   icon: () => <DeleteIcon />,
-          //   tooltip: "Elimina",
-          //   onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
-          //   position: "row",
-          // },
           {
             icon: () => (
               <div className={classes.buttonRight}>
@@ -253,7 +267,10 @@ const GestioneUtenti = () => {
         }}
         editable={{
           onRowUpdate: (newData, oldData) =>
+          
             new Promise((resolve, reject) => {
+              console.log(newData.gruppo.id)
+          console.log(newData.gruppo)
               var myHeaders = new Headers();
               myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
@@ -262,15 +279,14 @@ const GestioneUtenti = () => {
 
               var raw = JSON.stringify({
                 user: {
-                  id: newData.id,
                   username: newData.username,
                   cognome: newData.cognome,
                   nome: newData.nome,
                   gruppo: {
-                    id: 2,
+                    id: newData.gruppo.id,
                   },
                   level: {
-                    id: 2,
+                    id: newData.level.id,
                   },
                 },
                 password: "test2",

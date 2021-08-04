@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  select: {
+    width: "530px",
+  },
 }));
 
 function FormAddUtente() {
@@ -241,8 +244,9 @@ function FormAddUtente() {
             <Col>
               <Form.Group controlId="form.Gruppo">
                 <Form.Label>Gruppo</Form.Label>
-                <FormControl variant="outlined" className={classes.formControl}>
+                <FormControl variant="outlined">
                   <Select
+                    className={classes.select}
                     value={appearGroup.nome}
                     onChange={(e) => setGruppo(e.target.value)}
                   >
@@ -329,8 +333,9 @@ function FormAddUtente() {
             <Col>
               <Form.Group controlId="form.Level">
                 <Form.Label>Level</Form.Label>
-                <FormControl variant="outlined" className={classes.formControl}>
+                <FormControl variant="outlined">
                   <Select
+                    className={classes.select}
                     value={appearGroup.nome}
                     onChange={(e) => setLevel(e.target.value)}
                   >

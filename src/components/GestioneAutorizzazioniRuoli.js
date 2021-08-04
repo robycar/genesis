@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/App.css";
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Paper from "@material-ui/core/Paper";
 
 import TransferListRuolo from "./TransferListRuolo";
 
@@ -19,12 +19,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
+    marginRight: "2%",
   },
   fixedHeight: {
     height: 240,
   },
   formControl: {
-    paddingBottom:"20px",
+    paddingBottom: "20px",
     margin: theme.spacing(1),
     minWidth: 200,
   },
@@ -35,18 +36,16 @@ const useStyles = makeStyles((theme) => ({
 
 function GestioneAutorizzazioniRuoli() {
   const classes = useStyles();
-  const [ruolo, setRuolo] = React.useState('');
+  const [ruolo, setRuolo] = React.useState("");
 
   const handleChange = (event) => {
     setRuolo(event.target.value);
   };
-  
+
   return (
-    <div style={{marginTop:"20px"}}>
-
+    <Paper elevation={0} className={classes.paper}>
       <TransferListRuolo />
-
-    </div>
+    </Paper>
   );
 }
 export default GestioneAutorizzazioniRuoli;

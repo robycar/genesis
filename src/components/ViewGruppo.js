@@ -50,15 +50,7 @@ const ViewGruppo = () => {
   }, []);
 
   const getGruppo = () => {
-    // fetch("http://localhost:9081/api/group", {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: bearer,
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((result) => setData(result.gruppi))
-    //   .catch((error) => console.log("error", error));
+    
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
