@@ -57,5 +57,14 @@ public interface LineaService {
 	 * @throws ApplicationException in caso di errori.
 	 */
 	List<TypeLineaVO> readTypeLineeVO(Iterable<Long> ids) throws ApplicationException;
+
+	/**
+	 * Aggiunge una nuova TypeLinea al sistema.
+	 * @param typeLineaDTO la typeLinea da creare
+	 * 
+	 * @return la typeLinea creata
+	 * @throws ApplicationException in caso di errori
+	 */
+  TypeLineaDTO createTypeLinea(TypeLineaDTO typeLineaDTO) throws ApplicationException;
 	
 }

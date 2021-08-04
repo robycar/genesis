@@ -370,7 +370,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"{{$randomPassword}}\",\r\n    \"username\": \"{{$randomPassword}}\",\r\n    \"cognome\": \"{{$randomLastName}}\",\r\n    \"nome\": \"{{$randomFirstName}}\",\r\n    \"azienda\": \"{{$randomCompanyName}}\",\r\n    \"level\": {\r\n        \"id\": 2\r\n    },\r\n    \"gruppo\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"raw": "{\r\n    \"password\": \"{{$randomPassword}}\",\r\n    \"username\": \"{{$randomPassword}}\",\r\n    \"cognome\": \"{{$randomLastName}}\",\r\n    \"nome\": \"{{$randomFirstName}}\",\r\n    \"azienda\": \"{{$randomCompanyName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"level\": {\r\n        \"id\": 2\r\n    },\r\n    \"gruppo\": {\r\n        \"id\": 1\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -397,7 +397,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"password\": \"{{$randomPassword}}\",\r\n    \"username\": \"{{$randomPassword}}\",\r\n    \"cognome\": \"{{$randomLastName}}\",\r\n    \"nome\": \"{{$randomFirstName}}\",\r\n    \"azienda\": \"{{$randomCompanyName}}\",\r\n    \"level\": {\r\n        \"id\": 2\r\n    },\r\n    \"gruppo\": {\r\n        \"id\": 1\r\n    }\r\n}",
+									"raw": "{\r\n    \"password\": \"{{$randomPassword}}\",\r\n    \"username\": \"{{$randomPassword}}\",\r\n    \"cognome\": \"{{$randomLastName}}\",\r\n    \"nome\": \"{{$randomFirstName}}\",\r\n    \"azienda\": \"{{$randomCompanyName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"level\": {\r\n        \"id\": 2\r\n    },\r\n    \"gruppo\": {\r\n        \"id\": 1\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -465,7 +465,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Mon, 12 Jul 2021 14:22:31 GMT"
+									"value": "Wed, 04 Aug 2021 16:31:05 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -477,7 +477,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"error\": null,\n    \"user\": {\n        \"id\": 8,\n        \"username\": \"lwUR1QJJLelHO8x\",\n        \"cognome\": \"Sawayn\",\n        \"nome\": \"Abelardo\",\n        \"azienda\": null,\n        \"level\": {\n            \"id\": 2,\n            \"nome\": \"ADMIN\",\n            \"descrizione\": \"Descrizione livello admin\"\n        },\n        \"gruppo\": {\n            \"id\": 1,\n            \"nome\": \"g1\",\n            \"descrizione\": \"g1\"\n        }\n    }\n}"
+							"body": "{\n    \"error\": null,\n    \"user\": {\n        \"id\": 2,\n        \"username\": \"y4RF5I4p88JUkP_\",\n        \"cognome\": \"Harber\",\n        \"nome\": \"Adrain\",\n        \"azienda\": \"Hane, Hettinger and Hermann\",\n        \"email\": \"Rosa_Sipes@gmail.com\",\n        \"level\": {\n            \"id\": 2,\n            \"nome\": \"ADMIN\",\n            \"descrizione\": \"Descrizione livello admin\",\n            \"funzioni\": null\n        },\n        \"gruppo\": {\n            \"id\": 1,\n            \"nome\": \"g1\",\n            \"descrizione\": \"g1\"\n        },\n        \"funzioni\": null\n    }\n}"
 						}
 					]
 				},
@@ -671,7 +671,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user\": {\r\n        \"id\": 2,\r\n        \"username\": \"test2\",\r\n        \"cognome\": null,\r\n        \"nome\": null,\r\n        \"gruppo\": {\r\n            \"id\": 2\r\n        },\r\n        \"level\": {\r\n            \"id\": 2\r\n        },\r\n        \"funzioni\": [\r\n            \"user.view\", \"linea.edit\", \"user.edit\"\r\n        ]\r\n    },\r\n    \"password\": \"test2\"\r\n}",
+							"raw": "{\r\n    \"user\": {\r\n        \"id\": 2,\r\n        \"username\": \"test2\",\r\n        \"cognome\": null,\r\n        \"nome\": null,\r\n        \"email\": null,\r\n        \"gruppo\": {\r\n            \"id\": 2\r\n        },\r\n        \"level\": {\r\n            \"id\": 2\r\n        },\r\n        \"funzioni\": [\r\n            \"user.view\", \"linea.edit\", \"user.edit\"\r\n        ]\r\n    },\r\n    \"password\": \"test2\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3024,6 +3024,213 @@
 						"description": "Recupera l'elenco dei TypeLinea.\r\nPermessi: linea.view"
 					},
 					"response": []
+				},
+				{
+					"name": "typeLinea_add",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descrizione\": \"fibra\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/typeLinea",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"typeLinea"
+							]
+						},
+						"description": "Recupera l'elenco dei TypeLinea.\r\nPermessi: linea.view"
+					},
+					"response": [
+						{
+							"name": "typeLinea_add nome esistente",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"descrizione\": \"fibra\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/typeLinea",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"typeLinea"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Aug 2021 17:05:11 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"LINEA-0005\",\n        \"description\": \"Type linea gi&agrave; esistente: fibra\"\n    },\n    \"typeLinea\": null\n}"
+						},
+						{
+							"name": "typeLinea_add success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"descrizione\": \"fibra\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/typeLinea",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"typeLinea"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 04 Aug 2021 17:04:57 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"typeLinea\": {\n        \"id\": 3,\n        \"descrizione\": \"fibra\"\n    }\n}"
+						}
+					]
 				}
 			]
 		},
@@ -3776,7 +3983,7 @@
 								"obp"
 							]
 						},
-						"description": "Recupera gli outbound proxy presenti nel sistema"
+						"description": "Recupera gli outbound proxy presenti nel sistema.\r\nPermessi: obp.view"
 					},
 					"response": [
 						{
@@ -3885,7 +4092,7 @@
 								"obp"
 							]
 						},
-						"description": "Crea un nuovo Outbound proxy.\r\nPermessi: obp_edit"
+						"description": "Crea un nuovo Outbound proxy.\r\nPermessi: obp.edit"
 					},
 					"response": [
 						{
@@ -4181,7 +4388,7 @@
 								"obp"
 							]
 						},
-						"description": "Aggiorna un Outbound proxy esistente.\r\nPermessi: obp_edit"
+						"description": "Aggiorna un Outbound proxy esistente.\r\nPermessi: obp.edit"
 					},
 					"response": [
 						{

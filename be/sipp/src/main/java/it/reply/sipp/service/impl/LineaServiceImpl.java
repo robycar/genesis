@@ -172,8 +172,25 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     if (!idMancanti.isEmpty()) {
       throw makeError(HttpStatus.NOT_FOUND, AppError.TYPE_LINEA_NOT_FOUND, idMancanti);
     }
-    logger.debug("exit readTypeLineeVO");
     return result;
+  }
+
+  @Override
+  public TypeLineaDTO createTypeLinea(TypeLineaDTO dto) throws ApplicationException {
+    logger.debug("enter createTypeLinea");
+    
+    long numExisting = typeLineaRepository.countByDescrizione(dto.getDescrizione());
+    
+    if (numExisting > 0) {
+      throw makeError(HttpStatus.CONFLICT, AppError.TYPE_LINEA_ALRADY_EXISTS, dto.getDescrizione());
+    }
+    
+    TypeLineaVO vo = new TypeLineaVO();
+        
+    vo.setDescrizione(dto.getDescrizione());
+    vo = typeLineaRepository.saveAndFlush(vo);
+    
+    return new TypeLineaDTO(vo);
   }
 
 }

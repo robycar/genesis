@@ -6,4 +6,6 @@ import it.reply.sipp.model.TypeLineaVO;
 
 public interface TypeLineaRepository extends JpaRepository<TypeLineaVO, Long> {
 
+  long countByDescrizione(String descrizione);
+
 }
