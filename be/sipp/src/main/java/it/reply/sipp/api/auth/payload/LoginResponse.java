@@ -4,15 +4,19 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class LoginResponse {
+import it.reply.sipp.api.generic.payload.PayloadResponse;
 
-	private static final String BEARER = "Bearer";
+public class LoginResponse extends PayloadResponse {
+
+  private static final long serialVersionUID = 4603560222909986180L;
+
+  public static final String BEARER = "Bearer";
 	
 	@JsonProperty("access_token")
 	private String accessToken;
 	
 	@JsonProperty("token_type")
-	private String tokenType = BEARER;
+	private String tokenType;
 	
 	private String username;
 //	private List<String> roles;
@@ -60,5 +64,16 @@ public class LoginResponse {
 	public void setFunctions(List<String> functions) {
 		this.functions = functions;
 	}
+
+  @Override
+  protected void writeFields(StringBuilder sb) {
+    writeField(sb, "accessToken", accessToken);
+    writeField(sb, "functions", functions);
+    writeField(sb, "tokenType", tokenType);
+    writeField(sb, "username", username);
+    
+    super.writeFields(sb);
+  }
+	
 	
 }

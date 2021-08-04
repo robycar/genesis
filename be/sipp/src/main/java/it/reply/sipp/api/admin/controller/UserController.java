@@ -115,6 +115,7 @@ public class UserController extends AbstractController {
 			userVO.setCognome(request.getCognome());
 			userVO.setNome(request.getNome());
 			userVO.setUsername(request.getUsername());
+			userVO.setEmail(request.getEmail());
 		
 			userVO = userService.addUser(userVO, request.getPassword());
 			response.setUser(new UserDTO(userVO));

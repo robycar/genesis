@@ -70,6 +70,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 	  userVO.setId(dto.getId());
 	  userVO.setNome(dto.getNome());
 	  userVO.setUsername(dto.getUsername());
+	  userVO.setEmail(dto.getEmail());
 	  
 	  
 	  return userVO;
@@ -155,6 +156,17 @@ public class UserServiceImpl extends AbstractService implements UserService {
 				throw makeError(HttpStatus.CONFLICT, AppError.USERNAME_ALRADY_EXISTS, userDTO.getUsername());
 			}
 			userVO.setUsername(userDTO.getUsername());
+		}
+		
+		if (userDTO.getEmail() != null && !userDTO.getEmail().equals(userVO.getEmail())) {
+		  Long existingId = userRepository.findByEmail(userDTO.getEmail())
+		      .map(u -> u.getId())
+		      .filter(id -> !id.equals(userVO.getId()))
+		      .orElse(null);
+		  if (existingId != null) {
+		    throw makeError(HttpStatus.CONFLICT, AppError.EMAIL_ALRADY_EXISTS, userDTO.getEmail());
+		  }
+		  userVO.setEmail(userDTO.getEmail());
 		}
 		
 		if (userDTO.getFunzioni() != null) {

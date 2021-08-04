@@ -32,6 +32,8 @@ public class UserVO implements Serializable {
 	public static final int NOME_LENGTH = 50;
 
 	public static final int AZIENDA_LENGTH = 70;
+	
+	public static final int EMAIL_LENGTH = 80;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +54,9 @@ public class UserVO implements Serializable {
 	
 	@Column(length=AZIENDA_LENGTH)
 	private String azienda;
+	
+	@Column(length=EMAIL_LENGTH)
+	private String email;
 	
 	@ManyToOne
 	@JoinColumn(name="ID_LEVEL")
@@ -138,5 +143,13 @@ public class UserVO implements Serializable {
 	public void setFunzioni(Set<FunzioneVO> funzioni) {
 		this.funzioni = funzioni;
 	}
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
 }

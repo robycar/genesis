@@ -3,9 +3,9 @@ package it.reply.sipp.api.admin.payload;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.Length;
 
 import it.reply.sipp.api.generic.payload.PayloadRequest;
 import it.reply.sipp.model.UserVO;
@@ -14,22 +14,29 @@ public class UserAddRequest extends PayloadRequest {
 
 	private static final long serialVersionUID = 1558002983218074304L;
 
-	@Length(max = UserVO.USERNAME_LENGTH)
+	@Size(max = UserVO.USERNAME_LENGTH)
 	@NotEmpty
 	private String username;
 	
-	@Length(min=1, max = UserVO.RAW_PASWORD_LENGTH)
+	@Size(min=1, max = UserVO.RAW_PASWORD_LENGTH)
 	@NotEmpty
 	private String password;
 	
-	@Length(max=UserVO.COGNOME_LENGTH)
+	@Size(max=UserVO.COGNOME_LENGTH)
+	@NotEmpty
 	private String cognome;
 	
-	@Length(max=UserVO.NOME_LENGTH)
+	@Size(max=UserVO.NOME_LENGTH)
+	@NotEmpty
 	private String nome;
 	
-	@Length(max=UserVO.AZIENDA_LENGTH)
+	@Size(max=UserVO.AZIENDA_LENGTH)
+	@NotEmpty
 	private String azienda;
+	
+	@Size(max=UserVO.EMAIL_LENGTH)
+	@NotEmpty
+	private String email;
 	
 	@NotNull
 	@Valid
@@ -98,10 +105,19 @@ public class UserAddRequest extends PayloadRequest {
 		this.password = password;
 	}
 
-	@Override
+	public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  @Override
 	protected void writeFields(StringBuilder sb) {
 		writeField(sb, "username", username);
 		writeField(sb, "password", password != null ? StringUtils.repeat('*', password.length()) : null);
+		writeField(sb, "email", email);
 		writeField(sb, "cognome", cognome);
 		writeField(sb, "nome", nome);
 		writeField(sb, "azienda", azienda);

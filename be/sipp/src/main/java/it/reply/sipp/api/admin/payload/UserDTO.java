@@ -3,7 +3,7 @@ package it.reply.sipp.api.admin.payload;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.Size;
 
 import it.reply.sipp.api.generic.payload.DTO;
 import it.reply.sipp.model.UserVO;
@@ -14,17 +14,20 @@ public class UserDTO extends DTO {
 
 	private Long id;
 	
-	@Length(max = UserVO.USERNAME_LENGTH)
+	@Size(max = UserVO.USERNAME_LENGTH)
 	private String username;
 	
-	@Length(max=UserVO.COGNOME_LENGTH)
+	@Size(max=UserVO.COGNOME_LENGTH)
 	private String cognome;
 	
-	@Length(max=UserVO.NOME_LENGTH)
+	@Size(max=UserVO.NOME_LENGTH)
 	private String nome;
 	
-	@Length(max=UserVO.AZIENDA_LENGTH)
+	@Size(max=UserVO.AZIENDA_LENGTH)
 	private String azienda;
+	
+	@Size(max = UserVO.EMAIL_LENGTH)
+	private String email;
 	
 	private LevelDTO level;
 	
@@ -41,6 +44,7 @@ public class UserDTO extends DTO {
 		this.cognome = vo.getCognome();
 		this.nome = vo.getNome();
 		this.azienda = vo.getAzienda();
+		this.email = vo.getEmail();
 		if (vo.getGruppo() != null) {
 			this.gruppo = new GruppoDTO(vo.getGruppo());
 		} else {
@@ -126,10 +130,19 @@ public class UserDTO extends DTO {
     this.funzioni = funzioni;
   }
 
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
   @Override
 	protected void writeFields(StringBuilder sb) {
 		writeField(sb, "id", id);
 		writeField(sb, "username", username);
+		writeField(sb, "email", email);
 		writeField(sb, "cognome", cognome);
 		writeField(sb, "nome", nome);
 		writeField(sb, "azienda", azienda);

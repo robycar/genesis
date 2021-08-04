@@ -1,6 +1,9 @@
 FROM maven:3.8-openjdk-11 AS MAVEN_TOOL_CHAIN
-COPY sipp/pom.xml /tmp/
-RUN mvn -B dependency:go-offline -f /tmp/pom.xml -s /usr/share/maven/ref/settings-docker.xml
-COPY sipp/src /tmp/src/
-WORKDIR /tmp
-RUN mvn -B -s /usr/share/maven/ref/settings-docker.xml package -DskipTests
+COPY pom.xml /app/
+RUN mvn -B dependency:go-offline -f /app/pom.xml -s /usr/share/maven/ref/settings-docker.xml
+
+WORKDIR /app
+
+ENTRYPOINT ["mvn","-B","-s","/usr/share/maven/ref/settings-docker.xml"]
+
+CMD ["-DskipTests", "package"]

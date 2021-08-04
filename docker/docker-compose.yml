@@ -13,7 +13,7 @@ services:
       - "3306:3306"
     volumes: 
       - ./mysql:/var/lib/mysql
-      - ./mysql_init.sql:/docker-entrypoint-initdb.d/1.sql
+      - ./mysql_init_script:/docker-entrypoint-initdb.d/
     environment: 
       MYSQL_DATABASE: sippone
       MYSQL_USER: sippone
@@ -39,7 +39,7 @@ services:
       context: ../be
       network: host
     image: genesysbe:latest
-    container_name: genesys_be
+    container_name: genesis_be
     depends_on:
       - db
     ports:

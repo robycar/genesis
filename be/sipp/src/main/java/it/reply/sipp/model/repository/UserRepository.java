@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<UserVO, Long> {
 	long countByLevel(LevelVO level);
 
 	long countByGruppo(GruppoVO gruppo);
+
+  Optional<UserVO> findByEmail(String email);
 }
