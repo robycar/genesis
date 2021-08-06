@@ -13,6 +13,8 @@ import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import AddIcon from "@material-ui/icons/Add";
 import TextArea from "../components/TextArea";
+import TextField from "@material-ui/core/TextField";
+import acccessControl from "../service/url";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -64,6 +66,7 @@ export default function SimpleModal(props) {
   // getModalStyle is not a pure function, we roll the style only on the first render
   // const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
+  const [type, setType] = React.useState([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -71,6 +74,46 @@ export default function SimpleModal(props) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  const checkRichiesta = (result) => {
+    console.log(result);
+  };
+
+  const salva = () => {
+    const Invia = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var raw = JSON.stringify({
+        descrizione: type,
+      });
+
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/typeLinea`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => checkRichiesta(result))
+        .catch((error) => console.log("error", error));
+
+      // localStorage.setItem("user-info", JSON.stringify(result));
+      // history.push("/dashboard/testcase");
+      //window.location = "/editing/linee";
+    };
+
+    if (type !== "") {
+      Invia();
+    } else {
+    }
   };
 
   return (
@@ -103,14 +146,21 @@ export default function SimpleModal(props) {
               </div>
 
               <div className={classes.paperBottom}>
-                <TextArea placeholder="Inserisci la nuova Type" rowsMin="4" />
+                <form className={classes.root} noValidate autoComplete="off">
+                  <TextField
+                    id="outlined-basic"
+                    label="New Type"
+                    variant="outlined"
+                    onChange={(e) => setType(e.target.value)}
+                  />
+                </form>
 
                 <div className={classes.divider}>
                   <Divider />
                 </div>
 
                 <div className={classes.bottoni}>
-                  <Button variant="contained" color="secondary">
+                  <Button variant="contained" color="secondary" onClick={salva}>
                     Conferma
                   </Button>
 

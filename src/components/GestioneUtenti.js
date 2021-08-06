@@ -45,7 +45,7 @@ const GestioneUtenti = () => {
 
   /*------- Get grooup-------*/
 
-  const getGroup = () => {
+  const getAppearGroup = () => {
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
@@ -94,7 +94,7 @@ const GestioneUtenti = () => {
   };
 
   useEffect(() => {
-    getGroup();
+    getAppearGroup();
     getAppearLevel();
     getUsers();
   }, []);
@@ -122,19 +122,23 @@ const GestioneUtenti = () => {
       field: "azienda",
     },
     {
+      title: "Email",
+      field: "email",
+    },
+    {
       title: "Level",
       field: "level.id",
-      lookup: appearLevel.map((data) => {
-        //console.log(data.nome);
-        return data.nome;
+      lookup: appearLevel.map((livelli) => {
+        console.log(livelli);
+        return livelli.nome;
       }),
     },
     {
       title: "Gruppo",
       field: "gruppo.id",
-      lookup: appearGroup.map((data) => {
+      lookup: appearGroup.map((gruppi) => {
         //console.log(data.nome);
-        return data.nome;
+        return gruppi.nome;
       }),
     },
   ];
@@ -282,6 +286,7 @@ const GestioneUtenti = () => {
                   username: newData.username,
                   cognome: newData.cognome,
                   nome: newData.nome,
+                  email: newData.email,
                   gruppo: {
                     id: newData.gruppo.id,
                   },

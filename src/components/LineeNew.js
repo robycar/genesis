@@ -19,7 +19,7 @@ function Linee() {
     { title: "IP Linea", field: "ip" },
     { title: "Porta", field: "porta" },
     { title: "Password", field: "password" },
-    { title: "Descrizione", field: "typeLinea.descrizione" },
+    { title: "Tipo Linea", field: "typeLinea.descrizione" },
     { title: "Created By", field: "createdBy" },
     { title: "Modified By", field: "modifiedBy" },
   ];
@@ -31,18 +31,6 @@ function Linee() {
   }, []);
 
   const getLinea = () => {
-    // GET LINEA
-
-    // fetch("http://localhost:9081/api/linea", {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: bearer,
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((result) => setData(result.list))
-    //   .catch((error) => console.log("error", error));
-
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -78,7 +66,7 @@ function Linee() {
           searchFieldAlignment: "left",
           // selection: true,
           // columnsButton: true,
-          // filtering: true,
+          filtering: true,
         }}
         editable={{
           onRowUpdate: (newData, oldData) =>

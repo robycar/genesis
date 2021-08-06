@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import clsx from "clsx";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Navbar from "../../components/Navbar";
@@ -10,8 +10,9 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
+import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import Alert from "@material-ui/lab/Alert";
+import Form from "react-bootstrap/Form";
 import {
   mainListItems,
   secondaryListItems,
@@ -19,17 +20,24 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import { MenuItem, Paper } from "@material-ui/core";
-import CreaItem from "../../components/CreaItem";
+import {
+  FormControl,
+  ListItem,
+  ListItemIcon,
+  MenuItem,
+  Paper,
+  Select,
+  Typography,
+} from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import ModaleAddLinea from "../../components/ModaleAddLinea";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Form from "react-bootstrap/Form";
-import { SettingsPhoneTwoTone } from "@material-ui/icons";
+import InputSelect from "../../components/InputSelect";
+import "../../styles/App.css";
+import DnsIcon from "@material-ui/icons/Dns";
+import SelectBar from "../../components/SelectBar";
+import MultipleSelect from "../../components/MultipleSelect";
 import acccessControl from "../../service/url.js";
+import Alert from "@material-ui/lab/Alert";
 
 const drawerWidth = 240;
 
@@ -100,83 +108,86 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
     display: "flex",
-    overflow: "auto",
     flexDirection: "column",
-    //backgroundColor: "yellow",
-    alignItems: "center",
-    marginLeft: "1%",
+    // backgroundColor: "blue",
   },
+
   fixedHeight: {
     height: 240,
   },
   buttonContainer: {
     marginBottom: "20px",
-    marginLeft: "1%",
   },
-  generalContainer: {
+
+  paper: {
+    //backgroundColor: "yellow",
     display: "flex",
-    marginTop: "5%",
+    alignItems: "center",
+    padding: "3%",
+    justifyContent: "flex-start",
   },
-  paperContainer1: {
-    display: "flex",
-    flexDirection: "column",
-    padding: "20px",
-    marginRight: "8%",
+
+  label: {
+    marginRight: "4%",
+    marginLeft: "8%",
   },
-  paperContainer2: {
-    flexDirection: "column",
-    padding: "20px",
-    marginBottom: "10%",
+  icon: {
+    color: "rgba(71, 184, 129, 1)",
   },
-  divSelect: {
-    padding: "5%",
-    // height: "115.6px",
-  },
-  bottone: {
-    marginLeft: "65%",
-    marginTop: "2%",
+  titolo: {
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "24px",
+    color: "#66788A",
+    lineHeight: "20px",
+    color: "rgba(71, 184, 129, 1)",
+    padding: "2%",
+    // marginTop: "2%",
   },
   divider: {
     width: "90%",
     marginLeft: "5%",
     lineHeight: "1px",
-    marginTop: "2%",
   },
-  titolo: {
+  paperBottone: {
+    //padding: "2%",
+  },
+  bottone: {
+    marginTop: "2%",
+    marginLeft: "85%",
     marginBottom: "2%",
   },
-  InputSelect: {
-    width: "364.8px",
+  divSelect: {
+    marginLeft: "5%",
   },
-  modaleAddLinea: {
-    marginLeft: "75%",
+  label1: {
+    marginRight: "8%",
   },
-  formControl: {
+  label2: {
+    marginRight: "12%",
+  },
+  label3: {
+    marginRight: "12.5%",
+  },
+  multipleSelect: {
+    width: "284px",
+  },
+  fromControl: {
     margin: theme.spacing(1),
     // width: "20vw",
     width: "340px",
     display: "flex",
   },
-  select: {
-    widht: "380x",
-    height: "40px",
-    padding: "2%",
-    alignItems: "center",
-  },
 }));
 
-function EditingLineaCreaLinea() {
+function EditingOutboundProxy() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
   const [data, setData] = useState([]);
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
@@ -208,14 +219,15 @@ function EditingLineaCreaLinea() {
     getTypeId();
   }, []);
 
-  const [ip, setIP] = useState("");
+  //put descrizione e ip
+
+  const [ipDestinazione, setIPDestinazione] = useState("");
   const [ip1, setIP1] = useState("");
   const [ip2, setIP2] = useState("");
   const [ip3, setIP3] = useState("");
   const [ip4, setIP4] = useState("");
-  const [numero, setNumero] = useState("");
-  const [password, setPassword] = useState("");
   const [porta, setPorta] = useState("");
+  const [descrizione, setDescrizione] = useState("");
   const [typeLineaId, setTypeLineaId] = useState("");
 
   const aggiornaIP = () => {
@@ -227,10 +239,10 @@ function EditingLineaCreaLinea() {
       ip3 !== "" &&
       //ip3 < 5 &&
       ip4 !== ""
-      //ip4.length < 5
+      // ip4.length < 5
     ) {
-      setIP(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
-      console.log(ip, "ip okay");
+      setIPDestinazione(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
+      console.log(ipDestinazione, "ip okay");
     }
   };
 
@@ -241,12 +253,12 @@ function EditingLineaCreaLinea() {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
       myHeaders.append("Access-Control-Allow-Credentials", "true");
+
       var raw = JSON.stringify({
-        ip: ip,
-        numero: numero,
-        password: password,
+        ipDestinazione: ipDestinazione,
+        descrizione: descrizione,
         porta: porta,
-        typeLinea: {
+        typeLinee: {
           id: typeLineaId,
         },
       });
@@ -258,43 +270,36 @@ function EditingLineaCreaLinea() {
         redirect: "follow",
       };
 
-      fetch(`/api/linea`, requestOptions)
+      fetch(`/api/obp`, requestOptions)
         .then((response) => response.json())
+        .then((result) => console.log(result))
         .catch((error) => console.log("error", error));
 
       // localStorage.setItem("user-info", JSON.stringify(result));
       // history.push("/dashboard/testcase");
-      window.location = "/editing/linee";
+      //window.location = "/editing/outboundproxy";
     };
 
     if (
-      ip !== "" &&
-      numero !== "" &&
-      password !== "" &&
-      porta !== "" &&
-      porta.length > 3 &&
-      porta.length < 6 &&
-      typeLineaId !== ""
+      ipDestinazione !== "" &&
+      descrizione !== "" &&
+      typeLineaId !== "" &&
+      porta !== ""
     ) {
       Invia();
       // console.log(ip);
     } else {
-      if (ip === "") {
+      if (ipDestinazione === "") {
         document.getElementById("alertIP").style.display = "";
       } else {
         document.getElementById("alertIP").style.display = "none";
       }
-      if (numero === "") {
-        document.getElementById("alertNumero").style.display = "";
+      if (descrizione === "") {
+        document.getElementById("alertDescrizione").style.display = "";
       } else {
-        document.getElementById("alertNumero").style.display = "none";
+        document.getElementById("alertDescrizione").style.display = "none";
       }
-      if (password === "") {
-        document.getElementById("alertPassword").style.display = "";
-      } else {
-        document.getElementById("alertPassword").style.display = "none";
-      }
-      if (porta === "" || porta.length < 4 || porta.length > 5) {
+      if (porta === "") {
         document.getElementById("alertPorta").style.display = "";
       } else {
         document.getElementById("alertPorta").style.display = "none";
@@ -329,88 +334,75 @@ function EditingLineaCreaLinea() {
         <Divider />
         <List>{tertiaryListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
-        <Divider />
+        <List>{secondaryListItems}</List> <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
 
-        <Container maxWidth="lg" className={classes.container}>
+      <Container maxWidth="lg" className={classes.container}>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
           </div>
-        </Container>
-        <div className={classes.buttonContainer}>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/linee"
-          >
-            LINEE
-          </Button>
-          {/* </NavLink> */}
 
-          {/* <NavLink exact to="/dashboard/testsuite"> */}
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/outboundproxy"
-          >
-            OUTBOUND PROXY
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/template"
-          >
-            TEMPLATE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/testcase"
-          >
-            TEST
-          </Button>
-        </div>
+          <div className={classes.buttonContainer}>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/linee"
+            >
+              LINEE
+            </Button>
+            {/* </NavLink> */}
 
-        <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Linea" />
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/outboundproxy"
+            >
+              OUTBOUND PROXY
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/template"
+            >
+              TEMPLATE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testcase"
+            >
+              TEST
+            </Button>
+          </div>
+          <Paper className={classes.generalPaper}>
+            <ListItem>
+              <ListItemIcon>
+                <DnsIcon fontSize="large" className={classes.icon} />
+              </ListItemIcon>
+              <Typography className={classes.titolo}>
+                {" "}
+                OutboundBound Proxy{" "}
+              </Typography>
+            </ListItem>
+            <Divider className={classes.divider} />
 
-          <Divider className={classes.divider} />
-
-          <div className={classes.generalContainer}>
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
+            <Paper className={classes.divSelect} elevation={0}>
+              <Paper className={classes.paper} elevation={0}>
                 <Form.Group controlId="form.Numero">
-                  <Form.Label>Numero</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Numero"
-                    onChange={(e) => setNumero(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertNumero"
-                    style={{ display: "none" }}
-                  >
-                    Numero is required!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>IP Linea</Form.Label>
+                  <Form.Label>Proxy IP Address</Form.Label>
                   <Form.Control
                     className={classes.formControl}
                     type="text"
@@ -457,55 +449,48 @@ function EditingLineaCreaLinea() {
                 </Form.Group>
               </Paper>
 
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertPassword"
-                    style={{ display: "none" }}
-                  >
-                    Password is required!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-            </Paper>
-
-            <Paper className={classes.paperContainer2} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Porta</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="number"
-                    placeholder="Inserisci Porta"
-                    onChange={(e) => setPorta(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertPorta"
-                    style={{ display: "none" }}
-                  >
-                    La lunghezza della porta deve essere compresa tra 4 e 5
-                    valori!
-                  </Alert>
-                </Form.Group>
+              <Paper className={classes.paper} elevation={0}>
+                <Form.Label className={classes.label2}>Descrizione</Form.Label>
+                <Form.Control
+                  className={classes.formControl}
+                  type="text"
+                  placeholder="Inserisci Descrizione"
+                  onChange={(e) => setDescrizione(e.target.value)}
+                />
+                <Alert
+                  severity="error"
+                  id="alertDescrizione"
+                  style={{ display: "none" }}
+                >
+                  Descrizione is required!
+                </Alert>
               </Paper>
 
-              <Paper className={classes.divSelect} elevation={0}>
+              <Paper className={classes.paper} elevation={0}>
+                <Form.Label className={classes.label2}>Porta</Form.Label>
+                <Form.Control
+                  className={classes.formControl}
+                  type="text"
+                  placeholder="Inserisci Porta"
+                  onChange={(e) => setPorta(e.target.value)}
+                />
+                <Alert
+                  severity="error"
+                  id="alertPorta"
+                  style={{ display: "none" }}
+                >
+                  Porta is required!
+                </Alert>
+              </Paper>
+
+              <Paper className={classes.paper} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Type Linea</Form.Label>
                   <FormControl
                     variant="outlined"
                     className={classes.formControl}
                   >
-                    <Select
+                    <MultipleSelect
                       value={data.descrizione}
                       onChange={(e) => setTypeLineaId(e.target.value)}
                     >
@@ -516,28 +501,28 @@ function EditingLineaCreaLinea() {
                           </MenuItem>
                         );
                       })}
-                    </Select>
+                    </MultipleSelect>
                   </FormControl>
-                  <div className={classes.modaleAddLinea}>
-                    <ModaleAddLinea />
-                  </div>
                 </Form.Group>
+                {/* <MultipleSelect className={classes.multipleSelect} /> */}
               </Paper>
             </Paper>
-          </div>
-          <Divider className={classes.divider} />
-          <div className={classes.bottone}>
-            <ButtonClickedGreen
-              className={classes.bottone}
-              size="medium"
-              nome="Crea"
-              onClick={salva}
-            />
-          </div>
-        </Paper>
-      </main>
+            <Paper className={classes.paperBottone}>
+              <Divider className={classes.divider} />
+              <div className={classes.bottone}>
+                <ButtonClickedGreen
+                  className={classes.bottone}
+                  size="medium"
+                  nome="Crea"
+                  onClick={salva}
+                />
+              </div>
+            </Paper>
+          </Paper>
+        </main>
+      </Container>
     </div>
   );
 }
 
-export default EditingLineaCreaLinea;
+export default EditingOutboundProxy;

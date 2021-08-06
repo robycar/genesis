@@ -321,7 +321,7 @@ export default function TransferListUtente() {
         <Grid item>
           <Typography className={classes.edit}>
             {" "}
-            Permessi Non Accordati
+            Permessi
           </Typography>
           {customList()}
         </Grid>

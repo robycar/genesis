@@ -11,6 +11,7 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import OBP from "../../components/OBP";
 import {
   mainListItems,
   secondaryListItems,
@@ -18,22 +19,13 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import {
-  FormControl,
-  ListItem,
-  ListItemIcon,
-  MenuItem,
-  Paper,
-  Select,
-  Typography,
-} from "@material-ui/core";
+import ButtonClickedGreen from "../../components/ButtonClickedGreen";
+import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
+import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import InputSelect from "../../components/InputSelect";
 import "../../styles/App.css";
-import DnsIcon from "@material-ui/icons/Dns";
-import SelectBar from "../../components/SelectBar";
-import MultipleSelect from "../../components/MultipleSelect";
+import LanguageIcon from "@material-ui/icons/Language";
 
 const drawerWidth = 240;
 
@@ -104,29 +96,21 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
-    display: "flex",
-    flexDirection: "column",
-    // backgroundColor: "blue",
   },
-
+  paper: {
+    padding: theme.spacing(2),
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
+  },
   fixedHeight: {
     height: 240,
   },
   buttonContainer: {
     marginBottom: "20px",
   },
-
-  paper: {
-    //backgroundColor: "yellow",
-    display: "flex",
-    alignItems: "center",
-    padding: "3%",
-    justifyContent: "flex-start",
-  },
-
-  label: {
-    marginRight: "4%",
-    marginLeft: "8%",
+  generalPaper: {
+    alignItems: "baseline",
   },
   icon: {
     color: "rgba(71, 184, 129, 1)",
@@ -146,70 +130,18 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "5%",
     lineHeight: "1px",
   },
-  paperBottone: {
-    //padding: "2%",
-  },
-  bottone: {
-    marginTop: "2%",
-    marginLeft: "85%",
-    marginBottom: "2%",
-  },
-  divSelect: {
-    marginLeft: "5%",
-  },
-  label1: {
-    marginRight: "8%",
-  },
-  label2: {
-    marginRight: "12%",
-  },
-  label3: {
-    marginRight: "12.5%",
-  },
-  multipleSelect: {
-    width: "284px",
-  },
 }));
 
 function EditingOutboundProxy() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  //put descrizione e ip
-
-  const [ip, setIp] = useState("");
-  const [descrizione, setDescrizione] = useState("");
-  const [typeLineaId, setTypeLineaId] = useState("");
-
-  function salva() {
-    // var myHeaders = new Headers();
-    // const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-    // myHeaders.append("Authorization", bearer);
-    // myHeaders.append("Content-Type", "application/json");
-    // var raw = JSON.stringify({
-    //   ip: ip,
-    //   descrizione: descrizione,
-    //   typeLinea: {
-    //     id: typeLineaId,
-    //   },
-    // });
-    // var requestOptions = {
-    //   method: "PUT",
-    //   headers: myHeaders,
-    //   body: raw,
-    //   redirect: "follow",
-    // };
-    // let result = fetch("http://localhost:9081/api/linea", requestOptions)
-    //   .then((response) => response.json())
-    //   .catch((error) => console.log("error", error));
-    // // localStorage.setItem("user-info", JSON.stringify(result));
-    // // history.push("/dashboard/testcase");
-    // window.location = "/editing/linee";
-  }
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -238,10 +170,8 @@ function EditingOutboundProxy() {
         <Divider />
         <List>{tertiaryListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List> <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
-
       <Container maxWidth="lg" className={classes.container}>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
@@ -291,63 +221,18 @@ function EditingOutboundProxy() {
               TEST
             </Button>
           </div>
-          <Paper className={classes.generalPaper}>
+          <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>
               <ListItemIcon>
-                <DnsIcon fontSize="large" className={classes.icon} />
+                <LanguageIcon fontSize="large" className={classes.icon} />
               </ListItemIcon>
               <Typography className={classes.titolo}>
                 {" "}
-                OutboundBound Proxy{" "}
+                Outbound Proxy{" "}
               </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-
-            <Paper className={classes.divSelect} elevation={0}>
-              <Paper className={classes.paper} elevation={0}>
-                <Typography className={classes.label1}>
-                  Proxy IP Address
-                </Typography>
-
-                <InputSelect
-                  type="text"
-                  placeholder="Inserisci Ip"
-                  onChange={(e) => setIp(e.target.value)}
-                />
-
-                <Typography>:</Typography>
-                <InputSelect
-                  type="text"
-                  placeholder="Inserisci Ip"
-                  onChange={(e) => setIp(e.target.value)}
-                />
-              </Paper>
-
-              <Paper className={classes.paper} elevation={0}>
-                <Typography className={classes.label2}>Descrizione</Typography>
-                <InputSelect
-                  type="text"
-                  placeholder="Inserisci descrizione"
-                  onChange={(e) => setDescrizione(e.target.value)}
-                />
-              </Paper>
-
-              <Paper className={classes.paper} elevation={0}>
-                <Typography className={classes.label3}>Tipo Linea</Typography>
-                <MultipleSelect className={classes.multipleSelect} />
-              </Paper>
-            </Paper>
-            <Paper className={classes.paperBottone}>
-              <Divider className={classes.divider} />
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.bottone}
-                onClick={salva}
-              >
-                Salva
-              </Button>
-            </Paper>
+            <OBP />
           </Paper>
         </main>
       </Container>

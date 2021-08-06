@@ -43,6 +43,7 @@ function FormAddUtente() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [level, setLevel] = useState("");
+  const [email, setEmail] = useState("");
   // console.warn(level);
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -107,7 +108,7 @@ function FormAddUtente() {
   const checkRichiesta = (result) => {
     if (result.error == null) {
       window.location = "/amministrazione/utenze";
-    } else if (result.error.code == "ADMIN-0003") {
+    } else if (result.error.code === "ADMIN-0003") {
       document.getElementById("alertUsername2").style.display = "";
     } else {
       document.getElementById("alertUsername2").style.display = "none";
@@ -128,6 +129,7 @@ function FormAddUtente() {
         cognome: cognome,
         nome: nome,
         azienda: azienda,
+        email: email,
         level: {
           id: level,
         },
@@ -156,7 +158,8 @@ function FormAddUtente() {
       cognome !== "" &&
       azienda !== "" &&
       level !== "" &&
-      gruppo !== ""
+      gruppo !== "" &&
+      email !== ""
     ) {
       Invia();
       // console.log(ip);
@@ -195,6 +198,11 @@ function FormAddUtente() {
         document.getElementById("alertGruppo").style.display = "";
       } else {
         document.getElementById("alertGruppo").style.display = "none";
+      }
+      if (email === "") {
+        document.getElementById("alertEmail").style.display = "";
+      } else {
+        document.getElementById("alertEmail").style.display = "none";
       }
     }
   }
@@ -329,7 +337,28 @@ function FormAddUtente() {
               </Form.Group>
             </Col>
           </Row>
+
           <Row>
+            <Col>
+              <Form.Group>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Inserisci Email "
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertEmail"
+                    style={{ display: "none" }}
+                  >
+                    Email required!
+                  </Alert>
+                </Form.Group>
+              </Form.Group>
+            </Col>
+
             <Col>
               <Form.Group controlId="form.Level">
                 <Form.Label>Level</Form.Label>
@@ -357,7 +386,6 @@ function FormAddUtente() {
                 </FormControl>
               </Form.Group>
             </Col>
-            <Col></Col>
           </Row>
           <div
             className={classes.bottone}

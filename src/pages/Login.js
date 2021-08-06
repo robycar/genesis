@@ -16,6 +16,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import logo from "../../src/assets/logoReply.png";
 import loginImage from "../../src/assets/image.png";
 import { login } from "../service/api";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -77,7 +78,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -92,32 +92,25 @@ export default function Login() {
     }
   }, []);
 
-  // login(username, password);
-  // async function login() {
-  //   console.warn(username, password);
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+  const checkRichiesta = (result) => {
+    console.log(result);
 
-  //   var urlencoded = new URLSearchParams();
-  //   urlencoded.append("username", username);
-  //   urlencoded.append("password", password);
+    if (result.error == null) {
+      localStorage.setItem("token", JSON.stringify(result.access_token));
+      window.location = "/dashboard/testcase";
+    } else if (result.error.code === "ADMIN-0004") {
+      document.getElementById("alertUsername").style.display = "";
+    } else {
+      document.getElementById("alertUsername").style.display = "none";
+    }
+  };
 
-  //   var requestOptions = {
-  //     method: "POST",
-  //     headers: myHeaders,
-  //     body: urlencoded,
-  //     redirect: "follow",
-  //   };
-  //   let result = await fetch(
-  //     `http://localhost:9081/api/auth/login`,
-  //     requestOptions
-  //   );
+  const accesso = (username, password) => {
+    (async () => {
+      checkRichiesta(await login(username, password))
+   })()
+  };
 
-  //   result = await result.json();
-  //   console.log(result);
-  //   localStorage.setItem("token", JSON.stringify(result.access_token));
-  // history.push("/dashboard/testcase");
-  // }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -144,7 +137,13 @@ export default function Login() {
                 Sign up on the internal platform
               </Typography>
             </div>
-
+            <Alert
+              severity="error"
+              id="alertUsername"
+              style={{ display: "none" }}
+            >
+              Username e/o Password errati!
+            </Alert>
             <TextField
               variant="outlined"
               margin="normal"
@@ -180,7 +179,7 @@ export default function Login() {
               variant="contained"
               color="primary"
               // className={classes.submit}
-              onClick={() => login(username, password)}
+              onClick={() => accesso(username, password)}
             >
               Accedi
             </Button>

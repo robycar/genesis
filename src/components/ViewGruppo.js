@@ -9,39 +9,29 @@ import acccessControl from "../service/url.js";
 
 const ViewGruppo = () => {
   const [data, setData] = useState([]);
-  // const data = [
-  //   {
-  //     nome: "Marco Rossi",
-  //     level: "Admin",
-  //   },
-  //   {
-  //     nome: "Mario Rossi",
-  //     level: "L1",
-  //   },
-  //   {
-  //     nome: "Valentina Bianchi",
-  //     level: "L2",
-  //   },
-  //   {
-  //     nome: "Antonio Verdi",
-  //     level: "L2",
-  //   },
-  //   {
-  //     nome: "Maria Sacchi",
-  //     level: "Admin",
-  //   },
-  // ];
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   const columns = [
     {
-      title: "Nome Utente",
+      title: "Username",
+      field: "username",
+    },
+    {
+      title: "Nome",
       field: "nome",
     },
     {
+      title: "Cognome",
+      field: "cognome",
+    },
+    {
+      title: "Email",
+      field: "email",
+    },
+    {
       title: "Level",
-      field: "level",
+      field: "level.nome",
     },
   ];
 
@@ -54,18 +44,28 @@ const ViewGruppo = () => {
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
+    var raw = JSON.stringify({
+      "user": {
+        "gruppo": {
+          "id": 1
+        }
+      }
+    });
+
     var requestOptions = {
-      method: "GET",
+      method: 'POST',
       headers: myHeaders,
-      redirect: "follow",
+      body: raw,
+      redirect: 'follow'
     };
 
-    fetch(`/api/group`, requestOptions)
+    fetch(`/api/user/search`, requestOptions)
       .then((response) => response.json())
-      .then((result) => setData(result.gruppi))
+      .then((result) => setData(result.users))
       .catch((error) => console.log("error", error));
   };
 
@@ -140,7 +140,6 @@ const ViewGruppo = () => {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",

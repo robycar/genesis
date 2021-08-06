@@ -126,5 +126,9 @@ export const quaterListItems = (
       </ListItemIcon>
       <ListItemText primary="Login" />
     </ListItem>
+    <div className="versione">
+      <hr />
+      Versione 0.0.1
+    </div>
   </div>
 );

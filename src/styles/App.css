@@ -9,6 +9,10 @@
   text-decoration: none;
   color: #212529;
 }
+.versione{
+  color:grey;
+  margin-top: 140px;
+}
 
 .App {
   display: flex;

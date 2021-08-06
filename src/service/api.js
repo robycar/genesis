@@ -22,8 +22,5 @@ export async function login(username, password) {
   let result = await fetch(`api/auth/login`, requestOptions);
 
   result = await result.json();
-  console.log(result);
-  localStorage.setItem("token", JSON.stringify(result.access_token));
-  // history.push("/dashboard/testcase");
-  window.location = "/dashboard/testcase";
+  return result;
 }

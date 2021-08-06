@@ -10,55 +10,9 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { PersonalVideoSharp } from "@material-ui/icons";
 import acccessControl from "../service/url.js";
+import ViewGruppo from "./ViewGruppo";
 
 const GestioneRuoli = () => {
-  const [data, setData] = useState([]);
-
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-
-  const columns = [
-    {
-      title: "Nome",
-      field: "nome",
-    },
-    {
-      title: "Descrizione",
-      field: "descrizione",
-    },
-  ];
-
-  useEffect(() => {
-    getGruppi();
-  }, []);
-
-  const getGruppi = () => {
-    // fetch("http://localhost:9081/api/group", {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: bearer,
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((result) => setData(result.gruppi))
-    //   .catch((error) => console.log("error", error));
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/group`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => setData(result.gruppi))
-      .catch((error) => console.log("error", error));
-  };
-
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -122,6 +76,50 @@ const GestioneRuoli = () => {
   }));
 
   const classes = useStyles();
+  const [data, setData] = useState([]);
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  const columns = [
+    {
+      title: "Nome",
+      field: "nome",
+    },
+    {
+      title: "Descrizione",
+      field: "descrizione",
+    },
+  ];
+
+  
+  const getGruppi = () => {
+    
+    var myHeaders = new Headers();
+    
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    
+    fetch(`/api/group`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => setData(result.gruppi))
+    .catch((error) => console.log("error", error));
+  };
+  
+  useEffect(() => {
+    getGruppi();
+  }, []);
+
+  const viewGruppo = (id) => {
+    console.log(id)
+  }
+
   return (
     <div>
       <MaterialTable
@@ -201,25 +199,15 @@ const GestioneRuoli = () => {
         actions={[
           {
             icon: () => (
-              <a href="../amministrazione/viewgruppo">
+              //href="../amministrazione/viewgruppo"
+              <a onClick={(e) => {viewGruppo(e.target.value)}}>
                 <VisibilityIcon />
               </a>
             ),
             tooltip: "Visualizza",
             position: "row",
           },
-          // {
-          //   icon: () => <CreateIcon />,
-          //   tooltip: "Modifica",
-          //   onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
-          //   position: "row",
-          // },
-          // {
-          //   icon: () => <DeleteIcon />,
-          //   tooltip: "Elimina",
-          //   onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
-          //   position: "row",
-          // },
+          
           {
             icon: () => (
               <div className={classes.buttonRight}>
