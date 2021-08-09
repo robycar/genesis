@@ -14,7 +14,7 @@ const GestioneUtenti = () => {
   if (bearer != null) {
     bearer = bearer.replace(/"/g, "");
   }
-  
+
   const [data, setData] = useState([]);
   const [appearGroup, setAppearGroup] = useState([]);
   const [appearLevel, setAppearLevel] = useState([]);
@@ -43,7 +43,7 @@ const GestioneUtenti = () => {
       .catch((error) => console.log("error", error));
   };
 
-  /*------- Get grooup-------*/
+  /*------- Get group-------*/
 
   const getAppearGroup = () => {
     var myHeaders = new Headers();
@@ -99,34 +99,54 @@ const GestioneUtenti = () => {
     getUsers();
   }, []);
 
-
   const columns = [
     {
       title: "ID",
       field: "id",
+      editable: "never",
     },
     {
       title: "Username",
       field: "username",
+      validate: (rowData) =>
+        rowData.username === ""
+          ? { isValid: false, helperText: "Inserire un Username valido" }
+          : true,
     },
     {
       title: "Cognome",
       field: "cognome",
+      validate: (rowData) =>
+        rowData.cognome === ""
+          ? { isValid: false, helperText: "Inserire un Cognome" }
+          : true,
     },
     {
       title: "Nome",
       field: "nome",
+      validate: (rowData) =>
+        rowData.nome === ""
+          ? { isValid: false, helperText: "Inserire un Nome" }
+          : true,
     },
     {
       title: "Azienda",
       field: "azienda",
+      validate: (rowData) =>
+        rowData.azienda === ""
+          ? { isValid: false, helperText: "Inserire un'Azienda" }
+          : true,
     },
     {
       title: "Email",
       field: "email",
+      validate: (rowData) =>
+        rowData.email === ""
+          ? { isValid: false, helperText: "Inserire un'Email" }
+          : true,
     },
     {
-      title: "Level",
+      title: "Ruolo",
       field: "level.id",
       lookup: appearLevel.map((livelli) => {
         console.log(livelli);
@@ -143,8 +163,6 @@ const GestioneUtenti = () => {
     },
   ];
   // const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-
-
 
   function rand() {
     return Math.round(Math.random() * 20) - 10;
@@ -241,6 +259,7 @@ const GestioneUtenti = () => {
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
+          filtering: true,
           searchFieldAlignment: "left",
           pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
@@ -271,10 +290,9 @@ const GestioneUtenti = () => {
         }}
         editable={{
           onRowUpdate: (newData, oldData) =>
-          
             new Promise((resolve, reject) => {
-              console.log(newData.gruppo.id)
-          console.log(newData.gruppo)
+              console.log(newData.gruppo.id);
+              console.log(newData.gruppo);
               var myHeaders = new Headers();
               myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");

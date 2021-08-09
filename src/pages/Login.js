@@ -35,6 +35,11 @@ const useStyles = makeStyles((theme) => ({
     // flexDirection: "column",
     // alignItems: "center",
   },
+  forgotPassword: {
+    // marginBottom: "9%",
+    color: "rgba(158, 160, 165, 1)",
+    marginLeft: "70%",
+  },
   paper: {
     margin: theme.spacing(8, 4),
     display: "flex",
@@ -72,7 +77,12 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   button: {
-    marginTop: "5%",
+    marginTop: "7%",
+  },
+  signUp: {
+    marginTop: "30%",
+    display: "flex",
+    flexDirection: "column",
   },
 }));
 
@@ -107,10 +117,9 @@ export default function Login() {
 
   const accesso = (username, password) => {
     (async () => {
-      checkRichiesta(await login(username, password))
-   })()
+      checkRichiesta(await login(username, password));
+    })();
   };
-
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -172,6 +181,11 @@ export default function Login() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
+            <div className={classes.forgotPassword}>
+              <Typography variant="body2" color="rgba(158, 160, 165, 1)">
+                Forgot Password?
+              </Typography>
+            </div>
             <Button
               className={classes.button}
               type="submit"
@@ -183,6 +197,12 @@ export default function Login() {
             >
               Accedi
             </Button>
+
+            <div className={classes.signUp}>
+              <Button size="small" color="rgba(158, 160, 165, 1)">
+                Or Sign up
+              </Button>
+            </div>
           </Paper>
         </div>
       </Grid>

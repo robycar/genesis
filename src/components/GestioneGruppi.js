@@ -84,10 +84,12 @@ const GestioneRuoli = () => {
     {
       title: "Nome",
       field: "nome",
+      validate: rowData => rowData.nome === '' ? { isValid: false, helperText: 'Inserire Nome Gruppo' } : true,
     },
     {
       title: "Descrizione",
       field: "descrizione",
+      validate: rowData => rowData.descrizione === '' ? { isValid: false, helperText: 'Inserire Descrizione Gruppo' } : true,
     },
   ];
 
@@ -198,14 +200,15 @@ const GestioneRuoli = () => {
         }}
         actions={[
           {
-            icon: () => (
+            icon: (dat) => (
               //href="../amministrazione/viewgruppo"
-              <a onClick={(e) => {viewGruppo(e.target.value)}}>
+              <a>
                 <VisibilityIcon />
               </a>
             ),
             tooltip: "Visualizza",
             position: "row",
+            onClick: (event, rowData) => window.location = "../amministrazione/viewgruppo?id="+rowData.id
           },
           
           {

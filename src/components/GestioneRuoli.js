@@ -17,10 +17,12 @@ const GestioneRuoli = () => {
     {
       title: "Nome",
       field: "nome",
+      validate: rowData => rowData.nome === '' ? { isValid: false, helperText: 'Inserire Nome Ruolo' } : true,
     },
     {
       title: "Descrizione",
       field: "descrizione",
+      validate: rowData => rowData.descrizione === '' ? { isValid: false, helperText: 'Inserire Descrizione Ruolo' } : true,
     },
   ];
 

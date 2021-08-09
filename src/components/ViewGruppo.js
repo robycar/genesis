@@ -30,17 +30,22 @@ const ViewGruppo = () => {
       field: "email",
     },
     {
-      title: "Level",
+      title: "Ruolo",
       field: "level.nome",
     },
   ];
+
 
   useEffect(() => {
     getGruppo();
   }, []);
 
+  //prende l'id dall'url e lo usa per fare la get
+  let url = new URL(window.location.href);
+  let search_params = url.searchParams;
+
   const getGruppo = () => {
-    
+
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
@@ -51,7 +56,7 @@ const ViewGruppo = () => {
     var raw = JSON.stringify({
       "user": {
         "gruppo": {
-          "id": 1
+          "id": search_params.get('id')
         }
       }
     });
@@ -148,36 +153,64 @@ const ViewGruppo = () => {
           // columnsButton: true,
           // filtering: true,
         }}
-        actions={[
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Elimina",
-            onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
-            position: "row",
-          },
-          {
-            icon: () => (
-              <div className={classes.buttonRight}>
-                <Button
-                  className="button-green"
-                  component={NavLink}
-                  activeClassName="button-green-active"
-                  exact
-                  to="/amministrazione/addpartecipante"
-                >
-                  ADD PARTECIPANTE
-                </Button>
-              </div>
-            ),
-            tooltip: "",
-            isFreeAction: true,
-          },
-        ]}
-        localization={{
-          header: {
-            actions: "Actions",
-          },
-        }}
+        // editable={{
+        //   onRowDelete: (oldData) =>
+        //     new Promise((resolve, reject) => {
+        //       var myHeaders = new Headers();
+        //       myHeaders.append("Authorization", bearer);
+        //       myHeaders.append("Content-Type", "application/json");
+        //       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+        //       myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+        //       var raw = JSON.stringify({
+        //         "user": {
+        //           id: oldData.id,
+        //           gruppo: null
+        //         }
+        //       });
+
+        //       var requestOptions = {
+        //         method: "POST",
+        //         headers: myHeaders,
+        //         body: raw,
+        //         redirect: "follow",
+        //       };
+
+        //       fetch(`/api/user`, requestOptions)
+        //         .then((response) => response.json())
+        //         .then((result) => {
+        //           console.log(result)
+        //           getGruppo();
+        //           resolve();
+        //         })
+
+        //         .catch((error) => console.log("error", error));
+        //     }),
+        // }}
+        // actions={[
+        //   {
+        //     icon: () => (
+        //       <div className={classes.buttonRight}>
+        //         <Button
+        //           className="button-green"
+        //           component={NavLink}
+        //           activeClassName="button-green-active"
+        //           exact
+        //           to={"/amministrazione/addpartecipante?id="+search_params.get('id')}
+        //         >
+        //           ADD PARTECIPANTE
+        //         </Button>
+        //       </div>
+        //     ),
+        //     tooltip: "",
+        //     isFreeAction: true,
+        //   },
+        // ]}
+        // localization={{
+        //   header: {
+        //     actions: "Actions",
+        //   },
+        // }}
       />
     </div>
   );

@@ -5,26 +5,82 @@ import "../styles/App.css";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ModalDescriptionTestCase from "./ModalDescriptionTestCase";
 import acccessControl from "../service/url.js";
 
 function Obp() {
   const [data, setData] = useState([]);
+  const [appearLine, setAppearLine] = useState([]);
+
+  /*----Get Type Linea ------*/
+
+  const getAppearLine = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLine(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   const columns = [
-    { title: "ID OBP", field: "id" },
-    { title: "Proxy IP Address", field: "ipDestinazione" },
-    { title: "Tipo Linea", field: "typeLinee.descrizione" },
-    { title: "Porta", field: "porta" },
-    { title: "Descrizione", field: "descrizione" },
+    { title: "ID OBP", field: "id", editable: "never" },
+    {
+      title: "Proxy IP Address",
+      field: "ipDestinazione",
+      validate: (rowData) =>
+        rowData.ipDestinazione === ""
+          ? "Il campo IP Address non può essere vuoto"
+          : "",
+    },
+    {
+      title: "Tipo Linea",
+      field: "typeLinee.id",
+      lookup: appearLine.map((list) => {
+        //console.log(data.typeLinee.id);
+        return list.descrizione;
+      }),
+      validate: (rowData) =>
+        rowData.typeLinea === ""
+          ? "Il campo Tipo Linea non può essere vuoto"
+          : "",
+    },
+    {
+      title: "Porta",
+      field: "porta",
+      validate: (rowData) =>
+        (rowData.porta.length > 3 && rowData.porta.length < 6) ||
+        rowData.porta.length === 0
+          ? true
+          : {
+              helperText: "il campo Porta deve essere compreso tra 4 e 5 digit",
+            },
+    },
+    {
+      title: "Descrizione",
+      field: "descrizione",
+      validate: (rowData) =>
+        rowData.descrizione === ""
+          ? "Il campo descrizione non può essere vuoto"
+          : "",
+    },
   ];
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   useEffect(() => {
     getObp();
+    getAppearLine();
   }, []);
 
   const getObp = () => {
@@ -79,8 +135,9 @@ function Obp() {
                 id: oldData.id,
                 ipDestinazione: newData.ipDestinazione,
                 descrizione: newData.descrizione,
-                porta: newData.porta,
-                typeLinee: {
+                porta: newData.porta.length === 0 ? 5060 : newData.porta,
+
+                typeLinea: {
                   id: newData.typeLinee.id,
                 },
               });
@@ -94,7 +151,7 @@ function Obp() {
 
               fetch(`/api/obp`, requestOptions)
                 .then((response) => response.json())
-                .then((response) => {
+                .then((result) => {
                   getObp();
                   resolve();
                 })

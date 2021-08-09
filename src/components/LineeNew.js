@@ -1,34 +1,41 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable, { MTableToolbar } from "material-table";
-import ButtonClickeGreen from "./ButtonClickedGreen";
 import "../styles/App.css";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ModalDescriptionTestCase from "./ModalDescriptionTestCase";
+
 import acccessControl from "../service/url.js";
 
 function Linee() {
   const [data, setData] = useState([]);
-
-  const columns = [
-    { title: "Id", field: "typeLinea.id" },
-    { title: "Numero", field: "numero" },
-    { title: "IP Linea", field: "ip" },
-    { title: "Porta", field: "porta" },
-    { title: "Password", field: "password" },
-    { title: "Tipo Linea", field: "typeLinea.descrizione" },
-    { title: "Created By", field: "createdBy" },
-    { title: "Modified By", field: "modifiedBy" },
-  ];
+  const [appearLine, setAppearLine] = useState([]);
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
-  useEffect(() => {
-    getLinea();
-  }, []);
+  /*----Get Type Linea ------*/
+
+  const getAppearLine = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLine(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  // -------get linea-----------
 
   const getLinea = () => {
     var myHeaders = new Headers();
@@ -50,6 +57,71 @@ function Linee() {
       })
       .catch((error) => console.log("error", error));
   };
+
+  useEffect(() => {
+    getLinea();
+    getAppearLine();
+  }, []);
+
+  const columns = [
+    { title: "Id", field: "id", editable: "never" },
+    {
+      title: "Numero",
+      field: "numero",
+      validate: (rowData) =>
+        rowData.numero === "" ? "Il campo Numero non può essere vuoto" : "",
+    },
+    {
+      title: "IP Linea",
+      field: "ip",
+      validate: (rowData) =>
+        rowData.ip === "" ? "Il campo Ip non può essere vuoto" : "",
+    },
+    {
+      title: "Porta",
+      field: "porta",
+
+      validate: (rowData) =>
+        rowData.porta.length > 5 || rowData.porta.length < 4
+          ? {
+              helperText: "il campo Porta deve essere compreso tra 4 e 5 digit",
+            }
+          : true,
+    },
+    {
+      title: "Password",
+      field: "password",
+      validate: (rowData) =>
+        rowData.password === "" ? "Il campo Password non può essere vuoto" : "",
+    },
+    {
+      title: "Tipo Linea",
+      field: "typeLinea.id",
+      lookup: appearLine.map((list) => {
+        return list.descrizione;
+      }),
+      validate: (rowData) =>
+        rowData.typeLinea === ""
+          ? "Il campo Tipo Linea non può essere vuoto"
+          : "",
+    },
+    {
+      title: "Created By",
+      field: "createdBy",
+      validate: (rowData) =>
+        rowData.createdBy === ""
+          ? "Il campo Created By non può essere vuoto"
+          : "",
+    },
+    {
+      title: "Modified By",
+      field: "modifiedBy",
+      validate: (rowData) =>
+        rowData.modifiedBy === ""
+          ? "Il campo Modified By non può essere vuoto"
+          : "",
+    },
+  ];
 
   return (
     <div>
@@ -99,6 +171,7 @@ function Linee() {
               fetch(`/api/linea`, requestOptions)
                 .then((response) => response.json())
                 .then((response) => {
+                  console.log(response);
                   getLinea();
                   resolve();
                 })

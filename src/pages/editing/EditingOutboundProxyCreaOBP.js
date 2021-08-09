@@ -13,6 +13,7 @@ import Container from "@material-ui/core/Container";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Form from "react-bootstrap/Form";
+import Input from "@material-ui/core/Input";
 import {
   mainListItems,
   secondaryListItems,
@@ -228,7 +229,7 @@ function EditingOutboundProxy() {
   const [ip4, setIP4] = useState("");
   const [porta, setPorta] = useState("");
   const [descrizione, setDescrizione] = useState("");
-  const [typeLineaId, setTypeLineaId] = useState("");
+  const [typeLineaId, setTypeLineaId] = useState([]);
 
   const aggiornaIP = () => {
     if (
@@ -258,9 +259,7 @@ function EditingOutboundProxy() {
         ipDestinazione: ipDestinazione,
         descrizione: descrizione,
         porta: porta,
-        typeLinee: {
-          id: typeLineaId,
-        },
+        typeLinee: typeLineaId,
       });
 
       var requestOptions = {
@@ -272,22 +271,17 @@ function EditingOutboundProxy() {
 
       fetch(`/api/obp`, requestOptions)
         .then((response) => response.json())
-        .then((result) => console.log(result))
+        //.then((result) => console.log(result))
         .catch((error) => console.log("error", error));
 
       // localStorage.setItem("user-info", JSON.stringify(result));
       // history.push("/dashboard/testcase");
-      //window.location = "/editing/outboundproxy";
+      window.location = "/editing/outboundproxy";
     };
 
-    if (
-      ipDestinazione !== "" &&
-      descrizione !== "" &&
-      typeLineaId !== "" &&
-      porta !== ""
-    ) {
+    if (ipDestinazione !== "" && descrizione !== "" && porta !== "") {
+      console.log(typeLineaId);
       Invia();
-      // console.log(ip);
     } else {
       if (ipDestinazione === "") {
         document.getElementById("alertIP").style.display = "";
@@ -299,13 +293,20 @@ function EditingOutboundProxy() {
       } else {
         document.getElementById("alertDescrizione").style.display = "none";
       }
-      if (porta === "") {
-        document.getElementById("alertPorta").style.display = "";
+      if (porta === "" && ipDestinazione !== "" && descrizione !== "") {
+        setPorta("5060");
+        Invia();
+        //document.getElementById("alertPorta").style.display = "";
       } else {
         document.getElementById("alertPorta").style.display = "none";
       }
     }
   }
+
+  const handleChange = (event) => {
+    setTypeLineaId(event.target.value);
+    console.log(typeLineaId, "typeLineaId");
+  };
 
   return (
     <div className={classes.root}>
@@ -490,9 +491,9 @@ function EditingOutboundProxy() {
                     variant="outlined"
                     className={classes.formControl}
                   >
-                    <MultipleSelect
-                      value={data.descrizione}
-                      onChange={(e) => setTypeLineaId(e.target.value)}
+                    {/* <MultipleSelect
+                      value={data.id}
+                      onChange={(e) => console.log(e.target.value)}
                     >
                       {data.map((prova) => {
                         return (
@@ -501,7 +502,20 @@ function EditingOutboundProxy() {
                           </MenuItem>
                         );
                       })}
-                    </MultipleSelect>
+                    </MultipleSelect> */}
+                    <Select
+                      multiple
+                      value={typeLineaId}
+                      onChange={handleChange}
+                      input={<Input />}
+                      //MenuProps={MenuProps}
+                    >
+                      {data.map((name) => (
+                        <MenuItem key={name.id} value={name.id}>
+                          {name.descrizione}
+                        </MenuItem>
+                      ))}
+                    </Select>
                   </FormControl>
                 </Form.Group>
                 {/* <MultipleSelect className={classes.multipleSelect} /> */}
