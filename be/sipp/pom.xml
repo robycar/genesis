@@ -18,6 +18,7 @@
   <properties>
     <java.version>11</java.version>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -75,6 +76,14 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.modeshape</groupId>
+      <artifactId>modeshape-jcr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.modeshape</groupId>
+      <artifactId>modeshape-jcr-api</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -85,7 +94,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.3.0</version>
+        <!-- <version>3.3.0</version>  -->
         <configuration>
           <descriptors>
             <descriptor>src/assembly/distribution.xml</descriptor>
@@ -101,10 +110,28 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surfire-plugin</artifactId>
+        <version>3.0.0-M9</version>
+        <configuration>
+          <argLine>-Dspring.profiles.active=test</argLine>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-
   <scm>
     <url>https://10.21.125.71/git/sipp.git</url>
   </scm>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.modeshape.bom</groupId>
+        <artifactId>modeshape-bom-embedded</artifactId>
+        <version>5.4.1.Final</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>

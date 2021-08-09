@@ -1,0 +1,11 @@
+{
+    "name" : "grepo",
+    "storage" : {
+        "persistence": {
+            "type": "file",
+            "path": "target/grepo"
+            
+        }
+    }
+
+}
