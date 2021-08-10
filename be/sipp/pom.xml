@@ -110,14 +110,16 @@
           </execution>
         </executions>
       </plugin>
+      <!-- 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surfire-plugin</artifactId>
-        <version>3.0.0-M9</version>
+        <version>3.0.0-M5</version>
         <configuration>
           <argLine>-Dspring.profiles.active=test</argLine>
         </configuration>
       </plugin>
+       -->
     </plugins>
   </build>
   <scm>
