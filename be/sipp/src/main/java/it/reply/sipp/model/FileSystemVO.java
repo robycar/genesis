@@ -22,6 +22,8 @@ public class FileSystemVO extends BaseEntity {
 
   private static final int PATH_LENGTH = 255;
 
+  private static final int CONTENT_TYPE_LENGTH = 255;
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -35,6 +37,9 @@ public class FileSystemVO extends BaseEntity {
   
   @Column(name="PATH", length = PATH_LENGTH)
   private String path;
+  
+  @Column(name="CONTENT_TYPE", length = CONTENT_TYPE_LENGTH)
+  private String contentType;
   
   @Lob
   @Basic(fetch = FetchType.LAZY)
@@ -81,6 +86,14 @@ public class FileSystemVO extends BaseEntity {
 
   public void setContent(Blob content) {
     this.content = content;
+  }
+
+  public String getContentType() {
+    return contentType;
+  }
+
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
   }
 
   

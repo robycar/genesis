@@ -9,7 +9,6 @@ import org.springframework.util.LinkedMultiValueMap;
 
 import it.reply.sipp.api.files.payload.FileDTO;
 import it.reply.sipp.api.generic.payload.TrackedDTO;
-import it.reply.sipp.model.TemplateFileVO;
 import it.reply.sipp.model.TemplateVO;
 
 public class TemplateDTO extends TrackedDTO {
