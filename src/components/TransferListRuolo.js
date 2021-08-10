@@ -78,9 +78,6 @@ function intersection(a, b) {
 }
 
 export default function TransferListRuolo() {
-  const sinistra = [];
-  const destra = [];
-
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   //---------------------GET LEVEL-------------------------------------------
@@ -285,7 +282,7 @@ export default function TransferListRuolo() {
       <Form.Group controlId="form.Numero">
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="select-ruolo-label">Ruoli</InputLabel>
-          <Select value={dataLevel.nome} onChange={getLevelById}>
+          <Select label="Ruoli"value={dataLevel.nome} onChange={getLevelById}>
             {dataLevel.map((prova) => {
               return (
                 <MenuItem key={prova.id} value={prova.id}>

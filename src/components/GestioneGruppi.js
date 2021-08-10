@@ -84,43 +84,47 @@ const GestioneRuoli = () => {
     {
       title: "Nome",
       field: "nome",
-      validate: rowData => rowData.nome === '' ? { isValid: false, helperText: 'Inserire Nome Gruppo' } : true,
+      validate: (rowData) =>
+        rowData.nome === ""
+          ? { isValid: false, helperText: "Inserire Nome Gruppo" }
+          : true,
     },
     {
       title: "Descrizione",
       field: "descrizione",
-      validate: rowData => rowData.descrizione === '' ? { isValid: false, helperText: 'Inserire Descrizione Gruppo' } : true,
+      validate: (rowData) =>
+        rowData.descrizione === ""
+          ? { isValid: false, helperText: "Inserire Descrizione Gruppo" }
+          : true,
     },
   ];
 
-  
   const getGruppi = () => {
-    
     var myHeaders = new Headers();
-    
+
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
-    
+
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
-    
+
     fetch(`/api/group`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => setData(result.gruppi))
-    .catch((error) => console.log("error", error));
+      .then((response) => response.json())
+      .then((result) => setData(result.gruppi))
+      .catch((error) => console.log("error", error));
   };
-  
+
   useEffect(() => {
     getGruppi();
   }, []);
 
   const viewGruppo = (id) => {
-    console.log(id)
-  }
+    console.log(id);
+  };
 
   return (
     <div>
@@ -137,7 +141,7 @@ const GestioneRuoli = () => {
           searchFieldAlignment: "left",
           // selection: true,
           // columnsButton: true,
-          // filtering: true,
+          filtering: true,
         }}
         editable={{
           onRowUpdate: (newData, oldData) =>
@@ -208,9 +212,11 @@ const GestioneRuoli = () => {
             ),
             tooltip: "Visualizza",
             position: "row",
-            onClick: (event, rowData) => window.location = "../amministrazione/viewgruppo?id="+rowData.id
+            onClick: (event, rowData) =>
+              (window.location =
+                "../amministrazione/viewgruppo?id=" + rowData.id),
           },
-          
+
           {
             icon: () => (
               <div className={classes.buttonRight}>

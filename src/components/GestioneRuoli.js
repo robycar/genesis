@@ -10,19 +10,24 @@ import Delete from "@material-ui/icons/Delete";
 import acccessControl from "../service/url.js";
 
 const GestioneRuoli = () => {
-
   const [data, setData] = useState([]);
 
   const columns = [
     {
       title: "Nome",
       field: "nome",
-      validate: rowData => rowData.nome === '' ? { isValid: false, helperText: 'Inserire Nome Ruolo' } : true,
+      validate: (rowData) =>
+        rowData.nome === ""
+          ? { isValid: false, helperText: "Inserire Nome Ruolo" }
+          : true,
     },
     {
       title: "Descrizione",
       field: "descrizione",
-      validate: rowData => rowData.descrizione === '' ? { isValid: false, helperText: 'Inserire Descrizione Ruolo' } : true,
+      validate: (rowData) =>
+        rowData.descrizione === ""
+          ? { isValid: false, helperText: "Inserire Descrizione Ruolo" }
+          : true,
     },
   ];
 
@@ -33,7 +38,6 @@ const GestioneRuoli = () => {
   }, []);
 
   const getLevel = () => {
-    
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -126,6 +130,7 @@ const GestioneRuoli = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
+          filtering: true,
         }}
         editable={{
           onRowUpdate: (newData, oldData) =>

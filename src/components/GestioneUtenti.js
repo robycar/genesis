@@ -164,6 +164,9 @@ const GestioneUtenti = () => {
   ];
   // const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
+
+  const [arr1, setArr1] = useState([]);
+
   function rand() {
     return Math.round(Math.random() * 20) - 10;
   }
@@ -290,9 +293,14 @@ const GestioneUtenti = () => {
         }}
         editable={{
           onRowUpdate: (newData, oldData) =>
+
             new Promise((resolve, reject) => {
-              console.log(newData.gruppo.id);
-              console.log(newData.gruppo);
+
+              setArr1( appearLevel.map((elem) => {
+                console.log("prova",elem.nome.indexOf("Level 6"))
+                return elem;
+              }));
+              
               var myHeaders = new Headers();
               myHeaders.append("Authorization", bearer);
               myHeaders.append("Content-Type", "application/json");
@@ -301,18 +309,17 @@ const GestioneUtenti = () => {
 
               var raw = JSON.stringify({
                 user: {
+                  id:oldData.id,
                   username: newData.username,
                   cognome: newData.cognome,
                   nome: newData.nome,
                   email: newData.email,
-                  gruppo: {
-                    id: newData.gruppo.id,
-                  },
                   level: {
-                    id: newData.level.id,
+                    id: arr1[newData.level.id].id, //aggiornare qui per passare ID corretto
                   },
                 },
-                password: "test2",
+                password: "test",
+                
               });
 
               var requestOptions = {
@@ -322,7 +329,7 @@ const GestioneUtenti = () => {
                 redirect: "follow",
               };
 
-              fetch(`/api/user` + "?id=" + oldData.id, requestOptions)
+              fetch(`/api/user` , requestOptions)
                 .then((response) => response.json())
                 .then((response) => {
                   console.log(response);

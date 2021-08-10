@@ -1,42 +1,143 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MaterialTable, { MTableToolbar } from "material-table";
 import ButtonClickeGreen from "./ButtonClickedGreen";
 import "../styles/App.css";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+// import EditIcon from "@material-ui/icons/Edit";
+// import DeleteIcon from "@material-ui/icons/Delete";
 import ModaleCreaTemplate from "./ModaleCreaTemplate";
+import acccessControl from "../service/url.js";
 
 function Template() {
-  const columns = [
-      { title: "Nome", field: "name" },
-      { title: "ID Template", field: "idTemplate" },
-    ],
-    data = [
-      {
-        name: "Template1",
-        idTemplate: "554894",
-      },
-      {
-        name: "Template2",
-        idTemplate: "554894",
-      },
+  const [data, setData] = useState([]);
 
-      {
-        name: "Template3",
-        idTemplate: "554894",
-      },
-      {
-        name: "Template4",
-        idTemplate: "554894",
-      },
-      {
-        name: "Template5",
-        idTemplate: "554894",
-      },
-    ];
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  //----- get template -------
+
+  const getTemplate = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/template`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const columns = [
+    { title: "ID Template", field: "id", editable: "never" },
+    {
+      title: "Nome",
+      field: "nome",
+      validate: (rowData) =>
+        rowData.nome === ""
+          ? { isValid: false, helperText: "IL campo Nome non può essere vuoto" }
+          : true,
+    },
+    {
+      title: "Data di modifica",
+      field: "modifiedDate",
+      validate: (rowData) =>
+        rowData.modifiedDate === ""
+          ? {
+              isValid: false,
+              helperText: "IL campo Data di modifica non può essere vuoto",
+            }
+          : true,
+    },
+    {
+      title: "Data di creazione",
+      field: "creationDate",
+      validate: (rowData) =>
+        rowData.creationDate === ""
+          ? {
+              isValid: false,
+              helperText: "IL campo Data di creazione non può essere vuoto",
+            }
+          : true,
+    },
+    {
+      title: "Modificato da",
+      field: "modifiedBy",
+      validate: (rowData) =>
+        rowData.modifiedBy === ""
+          ? {
+              isValid: false,
+              helperText: "IL campo Modificato da non può essere vuoto",
+            }
+          : true,
+    },
+    {
+      title: "Creato da",
+      field: "createdBy",
+      validate: (rowData) =>
+        rowData.createdBy === ""
+          ? {
+              isValid: false,
+              helperText: "IL campo Creato da non può essere vuoto",
+            }
+          : true,
+    },
+    {
+      title: "Versione",
+      field: "version",
+      validate: (rowData) =>
+        rowData.version === ""
+          ? {
+              isValid: false,
+              helperText: "IL campo Versione non può essere vuoto",
+            }
+          : true,
+    },
+    {
+      title: "Tipo",
+      field: "typeTemplate",
+      validate: (rowData) =>
+        rowData.typeTemplate === ""
+          ? { isValid: false, helperText: "IL campo Tipo non può essere vuoto" }
+          : true,
+    },
+    {
+      title: "Descrizione",
+      field: "descrizione",
+      validate: (rowData) =>
+        rowData.descrizione === ""
+          ? {
+              isValid: false,
+              helperText: "IL campo Descrizione non può essere vuoto",
+            }
+          : true,
+    },
+    {
+      title: "Durata",
+      field: "durata",
+      validate: (rowData) =>
+        rowData.durata === ""
+          ? {
+              isValid: false,
+              helperText: "IL campo Durata non può essere vuoto",
+            }
+          : true,
+    },
+  ];
+
+  useEffect(() => {
+    getTemplate();
+  }, []);
 
   return (
     <div>
@@ -46,16 +147,84 @@ function Template() {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
           actionsColumnIndex: -1,
-
-          // search: true,
+          search: true,
           exportButton: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "left",
+          searchFieldAlignment: "center",
           // selection: true,
           // columnsButton: true,
-          // filtering: true,
+          filtering: true,
+        }}
+        editable={{
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+              //Backend call
+              var myHeaders = new Headers();
+              myHeaders.append("Authorization", bearer);
+              myHeaders.append("Content-Type", "application/json");
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+              var raw = JSON.stringify({
+                id: oldData.id,
+                version: newData.version,
+                nome: newData.nome,
+                durata: newData.durata,
+                createdBy: newData.createdBy,
+                modifiedBy: newData.modifiedBy,
+                modifiedDate: newData.modifiedDate,
+                creationDate: newData.creationDate,
+                typeTemplate: newData.typeTemplate,
+                descrizione: newData.descrizione,
+                folder: newData.folder,
+                fileLinks: {},
+              });
+
+              var requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
+
+              fetch(`/api/template`, requestOptions)
+                .then((response) => response.json())
+                .then((response) => {
+                  console.log(response);
+                  getTemplate();
+                  resolve();
+                })
+                .catch((error) => console.log("error", error));
+            }),
+          onRowDelete: (oldData) =>
+            new Promise((resolve, reject) => {
+              //backend call
+              var myHeaders = new Headers();
+              myHeaders.append("Authorization", bearer);
+              myHeaders.append("Content-Type", "application/json");
+              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+              var raw = JSON.stringify({
+                id: oldData.id,
+              });
+
+              var requestOptions = {
+                method: "DELETE",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
+
+              fetch(`/api/template`, requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                  getTemplate();
+                  resolve();
+                })
+                .catch((error) => console.log("error", error));
+            }),
         }}
         actions={[
           {
@@ -83,27 +252,6 @@ function Template() {
             // onClick: (event, rowData) => alert("Load Test Suite"),
             isFreeAction: true,
           },
-          {
-            icon: () => <EditIcon />,
-            tooltip: "Edit",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Delete",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          //   {
-          //     icon: () => <ModalDescriptionTestCase />,
-          //     tooltip: "Image",
-          //     // onClick: (event, rowData) =>
-          //     // alert("Ho cliccato " + rowData.launcher),
-          //     // position: "row",
-          //   },
         ]}
         localization={{
           header: {
@@ -115,18 +263,6 @@ function Template() {
             backgroundColor: "#f50057",
           },
         }}
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
     </div>
   );

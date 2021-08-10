@@ -66,7 +66,7 @@ export default function SimpleModal(props) {
   // getModalStyle is not a pure function, we roll the style only on the first render
   // const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
-  const [type, setType] = React.useState([]);
+  const [type, setType] = React.useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -111,9 +111,14 @@ export default function SimpleModal(props) {
     };
 
     if (type !== "") {
+      alert()
+      console.log(type)
       Invia();
+      handleClose();
     } else {
     }
+
+    
   };
 
   return (
@@ -164,7 +169,7 @@ export default function SimpleModal(props) {
                     Conferma
                   </Button>
 
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" onClick={handleClose} color="primary">
                     Cancel
                   </Button>
                 </div>

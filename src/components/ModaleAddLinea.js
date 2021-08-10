@@ -118,9 +118,9 @@ export default function SimpleModal(props) {
                 </div>
 
                 <div className={classes.bottoni}>
-                  <ModaleAddLinea2 />
+                  <ModaleAddLinea2  />
 
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" onClick={handleClose} color="primary">
                     No
                   </Button>
                 </div>

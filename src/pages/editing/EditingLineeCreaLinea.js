@@ -12,6 +12,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
+import Typography from "@material-ui/core/Typography";
 import {
   mainListItems,
   secondaryListItems,
@@ -160,6 +161,21 @@ const useStyles = makeStyles((theme) => ({
     // width: "20vw",
     width: "340px",
     display: "flex",
+  },
+  formControlIp: {
+    margin: theme.spacing(1),
+    width: "70px",
+  },
+  divIp: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-end",
+  },
+  separatoreIp: {
+    marginBottom: "2%",
+    fontWeight: "600px",
+    lineHeigth: "2%",
+    //fontSize: "2px",
   },
   select: {
     widht: "380x",
@@ -408,52 +424,58 @@ function EditingLineaCreaLinea() {
                   </Alert>
                 </Form.Group>
               </Paper>
+
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>IP Linea</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci IP1"
-                    onChange={(e) => {
-                      setIP1(e.target.value);
-                      aggiornaIP();
-                    }}
-                  />{" "}
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci IP2"
-                    onChange={(e) => {
-                      setIP2(e.target.value);
-                      aggiornaIP();
-                    }}
-                  />{" "}
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci IP3"
-                    onChange={(e) => {
-                      setIP3(e.target.value);
-                      aggiornaIP();
-                    }}
-                  />{" "}
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci IP4"
-                    onChange={(e) => {
-                      setIP4(e.target.value);
-                      aggiornaIP();
-                    }}
-                  />{" "}
-                  <Alert
-                    severity="error"
-                    id="alertIP"
-                    style={{ display: "none" }}
-                  >
-                    IP Linea is required!
-                  </Alert>
+                  <div className={classes.divIp}>
+                    <Form.Control
+                      className={classes.formControlIp}
+                      type="text"
+                      placeholder="IP1"
+                      onChange={(e) => {
+                        setIP1(e.target.value);
+                        aggiornaIP();
+                      }}
+                    />{" "}
+                    <Typography className={classes.separatoreIp}>.</Typography>
+                    <Form.Control
+                      className={classes.formControlIp}
+                      type="text"
+                      placeholder="IP2"
+                      onChange={(e) => {
+                        setIP2(e.target.value);
+                        aggiornaIP();
+                      }}
+                    />{" "}
+                    <Typography className={classes.separatoreIp}>.</Typography>
+                    <Form.Control
+                      className={classes.formControlIp}
+                      type="text"
+                      placeholder="IP3"
+                      onChange={(e) => {
+                        setIP3(e.target.value);
+                        aggiornaIP();
+                      }}
+                    />{" "}
+                    <Typography className={classes.separatoreIp}>.</Typography>
+                    <Form.Control
+                      className={classes.formControlIp}
+                      type="text"
+                      placeholder="IP4"
+                      onChange={(e) => {
+                        setIP4(e.target.value);
+                        aggiornaIP();
+                      }}
+                    />{" "}
+                    <Alert
+                      severity="error"
+                      id="alertIP"
+                      style={{ display: "none" }}
+                    >
+                      IP Linea is required!
+                    </Alert>
+                  </div>
                 </Form.Group>
               </Paper>
 
