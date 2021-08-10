@@ -25,6 +25,8 @@ import it.reply.sipp.api.generic.service.AbstractService;
 import it.reply.sipp.model.BaseEntity;
 import it.reply.sipp.model.FileSystemScope;
 import it.reply.sipp.model.FileSystemVO;
+import it.reply.sipp.model.TemplateFileVO;
+import it.reply.sipp.model.TemplateVO;
 import it.reply.sipp.model.repository.FileSystemRepository;
 import it.reply.sipp.model.repository.TemplateRepository;
 import it.reply.sipp.service.FileSystemService;
@@ -90,9 +92,7 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     Blob content = fileVO.getContent();
     if (content == null) {
       try {
-        try (InputStream is = file.getInputStream()) {
-          fileVO.setContent(BlobProxy.generateProxy(is, file.getSize()));
-        }
+        fileVO.setContent(BlobProxy.generateProxy(file.getInputStream(), file.getSize()));
       } catch (IOException e) {
         logger.error("Impossibile leggere il contenuto del file da caricare: {} ({})",
             file.getName(), file.getSize(), e);
@@ -133,12 +133,10 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     return null;
     
   }
-
-  @Override
-  public FileContentDTO readFile(FileSystemScope scope, long idRef, String pathOrId) throws ApplicationException {
-    checkFolderExists(scope, idRef);
+  
+  private FileSystemVO findFile(FileSystemScope scope, long idRef, String pathOrId) throws ApplicationException {
+   
     FileSystemVO fileVO = null;
-    
     try {
       Long id = Long.parseLong(pathOrId);
       fileVO = fileSystemRepository.findById(id)
@@ -153,6 +151,14 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
           .orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.FS_ENTITY_FILE_NOT_FOUND, 
               scope, idRef, pathOrId));
     }
+
+    return fileVO;
+  }
+
+  @Override
+  public FileContentDTO readFile(FileSystemScope scope, long idRef, String pathOrId) throws ApplicationException {
+    checkFolderExists(scope, idRef);
+    FileSystemVO fileVO = findFile(scope, idRef, pathOrId);
     
     try {
       return new FileContentDTO(fileVO);
@@ -161,6 +167,27 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
       throw makeGenericError("Errore nella lettura della risorsa richiesta");
     }
     
+    
+  }
+
+  @Override
+  public void deleteFile(FileSystemScope scope, long idRef, String pathOrId) throws ApplicationException {
+    FileSystemVO fileVO = findFile(scope, idRef, pathOrId);
+    BaseEntity entity = checkFolderExists(scope, idRef);
+    switch(scope) {
+    case TEMPLATE:
+      TemplateVO template = (TemplateVO) entity;
+      for (TemplateFileVO templateFile : template.getFiles()) {
+        if (templateFile.getFile().equals(fileVO)) {
+          throw makeError(HttpStatus.BAD_REQUEST, AppError.FS_PREVENT_DELETE_USED_FILE);
+        }
+      }
+      break;
+    case TEST:
+      break;
+    }
+    
+    fileSystemRepository.delete(fileVO);
     
   }
   

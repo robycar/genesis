@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import it.reply.sipp.api.files.payload.FileSystemListFilesResponse;
 import it.reply.sipp.api.files.payload.FileSystemUploadResponse;
 import it.reply.sipp.api.generic.controller.AbstractController;
 import it.reply.sipp.api.generic.exception.ApplicationException;
+import it.reply.sipp.api.generic.payload.PayloadResponse;
 import it.reply.sipp.model.FileSystemScope;
 import it.reply.sipp.model.FileSystemVO;
 import it.reply.sipp.service.FileSystemService;
@@ -140,6 +142,31 @@ public class FileSystemController extends AbstractController {
     } 
   }
 
+  @DeleteMapping("entityfolder/{scope}/{idRef}/{id}")
+  public ResponseEntity<PayloadResponse> delete(
+      @PathVariable(required = true, name = "scope") FileSystemScope scope,
+      @PathVariable(required = true, name = "idRef") long idRef,
+      @PathVariable(required = true, name = "id") String pathOrId) 
+  {
+    logger.info("enter delete");
+    
+    PayloadResponse response = new PayloadResponse();
+    
+    String functionToCheck = "FUN_" + scope.name().toLowerCase() + ".edit";
+    if (!hasAuthority(functionToCheck)) {
+      logger.error("Utente {} non autorizzato ad accedere alla risorsa {}/entityfolder/{}/{}", currentUsername(), FS_API_PATH,
+          scope, idRef);
+      return writeError(response, HttpStatus.FORBIDDEN, AppError.HTTP_FORBIDDEN);
+    }
+    
+    try {
+      fileSystemService.deleteFile(scope, idRef, pathOrId);
+      logger.debug("File eliminato");
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
 
+  }
   
 }

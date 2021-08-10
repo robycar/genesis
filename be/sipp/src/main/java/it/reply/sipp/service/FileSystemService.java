@@ -17,4 +17,6 @@ public interface FileSystemService {
 
   FileContentDTO readFile(FileSystemScope scope, long idRef, String pathOrId) throws ApplicationException;
 
+  void deleteFile(FileSystemScope scope, long idRef, String pathOrId) throws ApplicationException;
+
 }
