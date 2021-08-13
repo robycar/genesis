@@ -223,7 +223,7 @@ function EditingTestSuite() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/testcase"
+              to="/editing/testsuite"
             >
               TEST
             </Button>

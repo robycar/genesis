@@ -49,7 +49,7 @@ function Template() {
           : true,
     },
     {
-      title: "Data di modifica",
+      title: "Data modifica",
       field: "modifiedDate",
       validate: (rowData) =>
         rowData.modifiedDate === ""
@@ -60,7 +60,7 @@ function Template() {
           : true,
     },
     {
-      title: "Data di creazione",
+      title: "Data creazione",
       field: "creationDate",
       validate: (rowData) =>
         rowData.creationDate === ""
@@ -151,10 +151,13 @@ function Template() {
           search: true,
           exportButton: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "center",
+          searchFieldAlignment: "left",
           // selection: true,
           // columnsButton: true,
           filtering: true,
+          headerStyle: {
+            backgroundColor: "#f50057",
+          },
         }}
         editable={{
           onRowUpdate: (newData, oldData) =>
@@ -177,8 +180,8 @@ function Template() {
                 creationDate: newData.creationDate,
                 typeTemplate: newData.typeTemplate,
                 descrizione: newData.descrizione,
-                folder: newData.folder,
-                fileLinks: {},
+                // folder: newData.folder,
+                // fileLinks: {},
               });
 
               var requestOptions = {
@@ -227,6 +230,25 @@ function Template() {
             }),
         }}
         actions={[
+          // {
+          //   icon: () => (
+          //     <Button
+          //       color="secondary"
+          //       size="medium"
+          //       variant="contained"
+          //       className="button-red"
+          //       component={NavLink}
+          //       activeClassName="button-red-active"
+          //       exact
+          //       to="/editing/template/carica"
+          //     >
+          //       CARICA{" "}
+          //     </Button>
+          //   ),
+          //   tooltip: "Carica Template",
+          //   // onClick: (event, rowData) => alert("Load Test Suite"),
+          //   isFreeAction: true,
+          // },
           {
             icon: () => (
               <Button
@@ -237,17 +259,11 @@ function Template() {
                 component={NavLink}
                 activeClassName="button-red-active"
                 exact
-                to="/editing/template/carica"
+                to="/editing/template/createmplate"
               >
-                CARICA{" "}
+                CREA{" "}
               </Button>
             ),
-            tooltip: "Carica Template",
-            // onClick: (event, rowData) => alert("Load Test Suite"),
-            isFreeAction: true,
-          },
-          {
-            icon: () => <ModaleCreaTemplate />,
             tooltip: "Crea Template",
             // onClick: (event, rowData) => alert("Load Test Suite"),
             isFreeAction: true,
@@ -258,11 +274,11 @@ function Template() {
             actions: "Actions",
           },
         }}
-        options={{
-          headerStyle: {
-            backgroundColor: "#f50057",
-          },
-        }}
+        // options={{
+        //   headerStyle: {
+        //     backgroundColor: "#f50057",
+        //   },
+        // }}
       />
     </div>
   );

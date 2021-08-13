@@ -67,6 +67,9 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     marginLeft: "2%",
   },
+  gridPermessi: {
+    width: "900px",
+  },
 }));
 
 function not(a, b) {
@@ -159,7 +162,7 @@ export default function TransferListRuolo() {
       .then((result) => {
         setfunzioniLevel(result.level.funzioni);
         setIdSelezionato(event.target.value);
-        setNomeLevel(result.level.nome)
+        setNomeLevel(result.level.nome);
       })
       .catch((error) => console.log("error", error));
     // console.log(event.target.value)
@@ -179,9 +182,9 @@ export default function TransferListRuolo() {
     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
     var raw = JSON.stringify({
-        id: idSelezionato,
-        nome: nomeLevel,
-        funzioni: codici,
+      id: idSelezionato,
+      nome: nomeLevel,
+      funzioni: codici,
     });
 
     var requestOptions = {
@@ -282,7 +285,7 @@ export default function TransferListRuolo() {
       <Form.Group controlId="form.Numero">
         <FormControl variant="outlined" className={classes.formControl}>
           <InputLabel id="select-ruolo-label">Ruoli</InputLabel>
-          <Select label="Ruoli"value={dataLevel.nome} onChange={getLevelById}>
+          <Select label="Ruoli" value={dataLevel.nome} onChange={getLevelById}>
             {dataLevel.map((prova) => {
               return (
                 <MenuItem key={prova.id} value={prova.id}>
@@ -294,11 +297,8 @@ export default function TransferListRuolo() {
         </FormControl>
       </Form.Group>
       <Grid container spacing={2} className={classes.grid}>
-        <Grid item>
-          <Typography className={classes.edit}>
-            {" "}
-            Permessi
-          </Typography>
+        <Grid item className={classes.gridPermessi}>
+          <Typography className={classes.edit}> Permessi</Typography>
           {customList()}
         </Grid>
       </Grid>

@@ -11,8 +11,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
-import AddIcon from "@material-ui/icons/Add";
-import TextArea from "../components/TextArea";
 import TextField from "@material-ui/core/TextField";
 import acccessControl from "../service/url";
 
@@ -77,7 +75,7 @@ export default function SimpleModal(props) {
   };
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-
+//Controllare se il type esiste gia
   const checkRichiesta = (result) => {
     console.log(result);
   };
@@ -111,8 +109,6 @@ export default function SimpleModal(props) {
     };
 
     if (type !== "") {
-      alert()
-      console.log(type)
       Invia();
       handleClose();
     } else {

@@ -4,12 +4,16 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   button: {
+    '&:hover': {
+      backgroundColor: "#47B881",
+      color: "white",
+    },
     backgroundColor: "white",
     border: "1px solid #47B881",
     color: "#47B881",
     marginLeft: "10px",
     marginRight: "10px",
-    width: "200px",
+    // width: "200px",
   },
 }));
 
@@ -20,8 +24,7 @@ function ButtonNotClickedGreen(props) {
     <Button
       className={classes.button}
       variant="contained"
-      color="primary"
-      size="large"
+      onClick={props.onClick}
     >
       {props.nome}
     </Button>

@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
-import { Button } from "@material-ui/core";
+import { Button, Paper, Typography } from "@material-ui/core";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
 import acccessControl from "../service/url.js";
-import Select from "@material-ui/core/Select";
+import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import ListItem from "@material-ui/core/ListItem";
+import TextField from "@material-ui/core/TextField";
+import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
 
 const GestioneUtenti = () => {
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -19,15 +30,23 @@ const GestioneUtenti = () => {
   const [appearGroup, setAppearGroup] = useState([]);
   const [appearLevel, setAppearLevel] = useState([]);
 
+  const [id, setId] = useState();
+  const [nome, setNome] = useState("");
+  const [cognome, setCognome] = useState("");
+  const [gruppo, setGruppo] = useState("");
+  const [azienda, setAzienda] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [level, setLevel] = useState("");
+  const [email, setEmail] = useState("");
+
   //-----------GET USER----------------------
-  const getUsers = () => {
+  const getAllUsers = () => {
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
 
     var requestOptions = {
       method: "GET",
@@ -43,6 +62,47 @@ const GestioneUtenti = () => {
       .catch((error) => console.log("error", error));
   };
 
+  const aggiornaUtente = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      user: {
+        id: id,
+        username: username,
+        cognome: cognome,
+        nome: nome,
+        email: email,
+        level: {
+          id: level, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
+        },
+        gruppo: {
+          id: gruppo, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
+        },
+      },
+      password: "test",
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/user`, requestOptions)
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        getAllUsers();
+      });
+
+    // .catch((error) => console.log("error", error));
+  };
+
   /*------- Get group-------*/
 
   const getAppearGroup = () => {
@@ -51,8 +111,6 @@ const GestioneUtenti = () => {
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
 
     var requestOptions = {
       method: "GET",
@@ -96,91 +154,70 @@ const GestioneUtenti = () => {
   useEffect(() => {
     getAppearGroup();
     getAppearLevel();
-    getUsers();
+    getAllUsers();
   }, []);
 
   const columns = [
     {
       title: "ID",
       field: "id",
-      editable: "never",
     },
     {
       title: "Username",
       field: "username",
-      validate: (rowData) =>
-        rowData.username === ""
-          ? { isValid: false, helperText: "Inserire un Username valido" }
-          : true,
     },
     {
       title: "Cognome",
       field: "cognome",
-      validate: (rowData) =>
-        rowData.cognome === ""
-          ? { isValid: false, helperText: "Inserire un Cognome" }
-          : true,
     },
     {
       title: "Nome",
       field: "nome",
-      validate: (rowData) =>
-        rowData.nome === ""
-          ? { isValid: false, helperText: "Inserire un Nome" }
-          : true,
     },
     {
       title: "Azienda",
       field: "azienda",
-      validate: (rowData) =>
-        rowData.azienda === ""
-          ? { isValid: false, helperText: "Inserire un'Azienda" }
-          : true,
     },
     {
       title: "Email",
       field: "email",
-      validate: (rowData) =>
-        rowData.email === ""
-          ? { isValid: false, helperText: "Inserire un'Email" }
-          : true,
     },
     {
       title: "Ruolo",
-      field: "level.id",
-      lookup: appearLevel.map((livelli) => {
-        console.log(livelli);
-        return livelli.nome;
-      }),
+      field: "level.nome",
+      // lookup: appearLevel.map((livelli) => {
+      //   return livelli.nome;
+      // }),
     },
     {
       title: "Gruppo",
-      field: "gruppo.id",
-      lookup: appearGroup.map((gruppi) => {
-        //console.log(data.nome);
-        return gruppi.nome;
-      }),
+      field: "gruppo.nome",
     },
   ];
   // const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
+  const [open, setOpen] = React.useState(false);
 
-  const [arr1, setArr1] = useState([]);
+  const handleOpen = (rowData) => {
+    setId(rowData.id);
+    setNome(rowData.nome);
+    setCognome(rowData.cognome);
+    setUsername(rowData.username);
+    setAzienda(rowData.azienda);
+    setEmail(rowData.email);
+    setLevel(rowData.level);
+    setGruppo(rowData.gruppo);
+    setOpen(true);
+  };
 
-  function rand() {
-    return Math.round(Math.random() * 20) - 10;
-  }
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  function getModalStyle() {
-    const top = 50 + rand();
-    const left = 50 + rand();
-
-    return {
-      top: `${top}%`,
-      left: `${left}%`,
-      transform: `translate(-${top}%, -${left}%)`,
-    };
-  }
+  const handleClose2 = () => {
+    aggiornaUtente();
+    setOpen(false);
+  };
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -222,34 +259,54 @@ const GestioneUtenti = () => {
       color: "#47B881",
       marginTop: "5%",
       flexDirection: "row",
+      marginBottom: "5%",
     },
     icon: {
       transform: "scale(1.8)",
       color: "#47B881",
       marginTop: "9px",
     },
-    bottoni: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-around",
+    bottone: {
+      // display: "flex",
+      // alignItems: "center",
+      // justifyContent: "space-around",
       marginLeft: "55px",
       marginTop: "4%",
       marginBottom: "2%",
     },
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    divider: {
+      marginTop: "3%",
+      marginBottom: "5",
+    },
+    paperModale: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      width: "fit-content",
+      height: "80%",
+    },
+    col: {
+      padding: "5%",
+    },
+    row: {
+      width: "600px",
+    },
+    textField: {
+      width: "200px",
+    },
+    bottoneAnnulla: {
+      width: "128px",
+    },
   }));
 
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <div>
       <MaterialTable
@@ -258,7 +315,6 @@ const GestioneUtenti = () => {
         data={data}
         columns={columns}
         options={{
-          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
@@ -282,8 +338,15 @@ const GestioneUtenti = () => {
               </div>
             ),
             tooltip: "Load Test Suite",
-            onClick: () => handleOpen(),
+            //onClick: () => funzioneFor(),
             isFreeAction: true,
+          },
+          {
+            icon: () => <EditIcon />,
+            tooltip: "Edit",
+            onClick: (event, rowData) => handleOpen(rowData),
+
+            position: "row",
           },
         ]}
         localization={{
@@ -292,53 +355,6 @@ const GestioneUtenti = () => {
           },
         }}
         editable={{
-          onRowUpdate: (newData, oldData) =>
-
-            new Promise((resolve, reject) => {
-
-              setArr1( appearLevel.map((elem) => {
-                console.log("prova",elem.nome.indexOf("Level 6"))
-                return elem;
-              }));
-              
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-              var raw = JSON.stringify({
-                user: {
-                  id:oldData.id,
-                  username: newData.username,
-                  cognome: newData.cognome,
-                  nome: newData.nome,
-                  email: newData.email,
-                  level: {
-                    id: arr1[newData.level.id].id, //aggiornare qui per passare ID corretto
-                  },
-                },
-                password: "test",
-                
-              });
-
-              var requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
-
-              fetch(`/api/user` , requestOptions)
-                .then((response) => response.json())
-                .then((response) => {
-                  console.log(response);
-                  getUsers();
-                  resolve();
-                });
-              // .catch((error) => console.log("error", error));
-            }),
-
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               //Backend call
@@ -362,13 +378,155 @@ const GestioneUtenti = () => {
               fetch(`/api/user` + "?id=" + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
-                  getUsers();
+                  getAllUsers();
                   resolve();
                 })
                 .catch((error) => console.log("error", error));
             }),
         }}
       />
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem button>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Modifica Utente <b>{username}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form>
+                <Row className={classes.row}>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={nome != "" ? false : true}
+                      onChange={(e) => setNome(e.target.value)}
+                      required
+                      label="Nome"
+                      defaultValue={nome}
+                      helperText={nome != "" ? "" : "Il Nome è richiesto"}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={cognome != "" ? false : true}
+                      onChange={(e) => setCognome(e.target.value)}
+                      label="Cognome"
+                      defaultValue={cognome}
+                      helperText={cognome != "" ? "" : "Il Cognome è richiesto"}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      id="standard-select-currency"
+                      select
+                      label="Gruppo"
+                      value={appearGroup.id}
+                      defaultValue={gruppo.id}
+                      onChange={(e) => setGruppo(e.target.value)}
+                    >
+                      {appearGroup.map((gruppo) => (
+                        <MenuItem key={gruppo.id} value={gruppo.id}>
+                          {gruppo.nome}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={azienda != "" ? false : true}
+                      onChange={(e) => setAzienda(e.target.value)}
+                      label="Azienda"
+                      defaultValue={azienda}
+                      helperText={azienda != "" ? "" : "L'Azienda è richiesta"}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={username != "" ? false : true}
+                      onChange={(e) => setUsername(e.target.value)}
+                      label="Username"
+                      defaultValue={username}
+                      helperText={
+                        username != "" ? "" : "L'Username è richiesto"
+                      }
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      id="standard-select-currency"
+                      select
+                      label="Ruolo"
+                      value={appearLevel.id}
+                      defaultValue={level.id}
+                      onChange={(e) => setLevel(e.target.value)}
+                    >
+                      {appearLevel.map((level) => (
+                        <MenuItem key={level.id} value={level.id}>
+                          {level.nome}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={email != "" ? false : true}
+                      onChange={(e) => setEmail(e.target.value)}
+                      label="Email"
+                      defaultValue={email}
+                      helperText={email != "" ? "" : "L'Email è richiesto"}
+                    />
+                  </Col>
+                </Row>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Aggiorna"
+                    onClick={handleClose2}
+                  />
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleClose}
+                    nome="Annulla"
+                  />
+                </div>
+              </Form>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 };

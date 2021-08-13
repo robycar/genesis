@@ -151,34 +151,52 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "5%",
     lineHeight: "1px",
   },
-  paperBottone: {
-    //padding: "2%",
-  },
+
   bottone: {
     marginTop: "2%",
     marginLeft: "85%",
     marginBottom: "2%",
   },
   divSelect: {
-    marginLeft: "5%",
+    padding: "3%",
+    // height: "115.6px",
   },
-  label1: {
-    marginRight: "8%",
-  },
-  label2: {
-    marginRight: "12%",
-  },
-  label3: {
-    marginRight: "12.5%",
-  },
+
   multipleSelect: {
     width: "284px",
   },
   fromControl: {
     margin: theme.spacing(1),
     // width: "20vw",
-    width: "340px",
+    width: "200px",
     display: "flex",
+  },
+  formControlIp: {
+    margin: theme.spacing(1),
+    width: "70px",
+  },
+  divIp: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-end",
+  },
+  separatoreIp: {
+    marginBottom: "2%",
+    fontWeight: "600px",
+    lineHeigth: "2%",
+    //fontSize: "2px",
+  },
+  generalContainer: {
+    display: "flex",
+    marginTop: "5%",
+    flexDirection: "column",
+  },
+  formControlSelect: {
+    display: "flex",
+    flexDiretions: "column",
+  },
+  select: {
+    width: "400px",
   },
 }));
 
@@ -400,58 +418,63 @@ function EditingOutboundProxy() {
             </ListItem>
             <Divider className={classes.divider} />
 
-            <Paper className={classes.divSelect} elevation={0}>
-              <Paper className={classes.paper} elevation={0}>
+            <Paper className={classes.generalContainer} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
-                  <Form.Label>Proxy IP Address</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci IP1"
-                    onChange={(e) => {
-                      setIP1(e.target.value);
-                      aggiornaIP();
-                    }}
-                  />{" "}
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci IP2"
-                    onChange={(e) => {
-                      setIP2(e.target.value);
-                      aggiornaIP();
-                    }}
-                  />{" "}
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci IP3"
-                    onChange={(e) => {
-                      setIP3(e.target.value);
-                      aggiornaIP();
-                    }}
-                  />{" "}
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci IP4"
-                    onChange={(e) => {
-                      setIP4(e.target.value);
-                      aggiornaIP();
-                    }}
-                  />{" "}
-                  <Alert
-                    severity="error"
-                    id="alertIP"
-                    style={{ display: "none" }}
-                  >
-                    IP Linea is required!
-                  </Alert>
+                  <Form.Label>IP Proxy Address</Form.Label>
+                  <div className={classes.divIp}>
+                    <Form.Control
+                      className={classes.formControlIp}
+                      type="text"
+                      placeholder="IP1"
+                      onChange={(e) => {
+                        setIP1(e.target.value);
+                        aggiornaIP();
+                      }}
+                    />{" "}
+                    <Typography className={classes.separatoreIp}>.</Typography>
+                    <Form.Control
+                      className={classes.formControlIp}
+                      type="text"
+                      placeholder="IP2"
+                      onChange={(e) => {
+                        setIP2(e.target.value);
+                        aggiornaIP();
+                      }}
+                    />{" "}
+                    <Typography className={classes.separatoreIp}>.</Typography>
+                    <Form.Control
+                      className={classes.formControlIp}
+                      type="text"
+                      placeholder="IP3"
+                      onChange={(e) => {
+                        setIP3(e.target.value);
+                        aggiornaIP();
+                      }}
+                    />{" "}
+                    <Typography className={classes.separatoreIp}>.</Typography>
+                    <Form.Control
+                      className={classes.formControlIp}
+                      type="text"
+                      placeholder="IP4"
+                      onChange={(e) => {
+                        setIP4(e.target.value);
+                        aggiornaIP();
+                      }}
+                    />{" "}
+                    <Alert
+                      severity="error"
+                      id="alertIP"
+                      style={{ display: "none" }}
+                    >
+                      IP Linea is required!
+                    </Alert>
+                  </div>
                 </Form.Group>
               </Paper>
 
-              <Paper className={classes.paper} elevation={0}>
-                <Form.Label className={classes.label2}>Descrizione</Form.Label>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Label>Descrizione</Form.Label>
                 <Form.Control
                   className={classes.formControl}
                   type="text"
@@ -467,7 +490,27 @@ function EditingOutboundProxy() {
                 </Alert>
               </Paper>
 
-              <Paper className={classes.paper} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Porta</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="number"
+                    placeholder="Inserisci Porta"
+                    onChange={(e) => setPorta(e.target.value)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertPorta"
+                    style={{ display: "none" }}
+                  >
+                    La lunghezza della porta deve essere compresa tra 4 e 5
+                    valori!
+                  </Alert>
+                </Form.Group>
+              </Paper>
+
+              {/* <Paper className={classes.paper} elevation={0}>
                 <Form.Label className={classes.label2}>Porta</Form.Label>
                 <Form.Control
                   className={classes.formControl}
@@ -482,18 +525,22 @@ function EditingOutboundProxy() {
                 >
                   Porta is required!
                 </Alert>
-              </Paper>
+              </Paper> */}
 
-              <Paper className={classes.paper} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Type Linea</Form.Label>
                   <FormControl
                     variant="outlined"
-                    className={classes.formControl}
+                    className={classes.formControlSelect}
                   >
-                    {/* <MultipleSelect
-                      value={data.id}
-                      onChange={(e) => console.log(e.target.value)}
+                    <Select
+                      multiple
+                      className={classes.select}
+                      value={typeLineaId}
+                      onChange={handleChange}
+                      input={<Input />}
+                      //MenuProps={MenuProps}
                     >
                       {data.map((prova) => {
                         return (
@@ -502,7 +549,18 @@ function EditingOutboundProxy() {
                           </MenuItem>
                         );
                       })}
-                    </MultipleSelect> */}
+                    </Select>
+                  </FormControl>
+                </Form.Group>
+              </Paper>
+
+              {/* <Paper className={classes.paper} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Type Linea</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
                     <Select
                       multiple
                       value={typeLineaId}
@@ -518,19 +576,20 @@ function EditingOutboundProxy() {
                     </Select>
                   </FormControl>
                 </Form.Group>
-                {/* <MultipleSelect className={classes.multipleSelect} /> */}
+                {/* <MultipleSelect className={classes.multipleSelect} /> 
+              </Paper> */}
+
+              <Paper className={classes.paperBottone}>
+                <Divider className={classes.divider} />
+                <div className={classes.bottone}>
+                  <ButtonClickedGreen
+                    className={classes.bottone}
+                    size="medium"
+                    nome="Crea"
+                    onClick={salva}
+                  />
+                </div>
               </Paper>
-            </Paper>
-            <Paper className={classes.paperBottone}>
-              <Divider className={classes.divider} />
-              <div className={classes.bottone}>
-                <ButtonClickedGreen
-                  className={classes.bottone}
-                  size="medium"
-                  nome="Crea"
-                  onClick={salva}
-                />
-              </div>
             </Paper>
           </Paper>
         </main>

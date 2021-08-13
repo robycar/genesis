@@ -31,17 +31,13 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  contAutorizzazioni: {
-    border: "1px solid #ced4da",
-    borderRadius: 4,
-    minHeight: "182px",
+
+  bottone: {
+    marginTop: "1%",
+    marginRight: "51%",
   },
-  parola: {
-    color: "black!important",
-    paddingLeft: "15px",
-    "&:hover": {
-      textDecoration: "none",
-    },
+  formDescrizione: {
+    marginTop: "2%",
   },
 }));
 
@@ -101,83 +97,51 @@ function FormCreaGruppo() {
 
   return (
     <Container maxWidth="lg" className={classes.container}>
-      <Container>
-        <Form>
-          <Row>
-            <Col md={6}>
-              <Form.Group controlId="form.Ruolo">
-                <Form.Label>Gruppo</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Inserisci nome gruppo"
-                  onChange={(e) => setNome(e.target.value)}
-                />
-                <Alert
-                  severity="error"
-                  id="alertGruppo"
-                  style={{ display: "none" }}
-                >
-                  Gruppo already exists!
-                </Alert>
-              </Form.Group>
-              <br />
-              <br />
-              <br />
-              <Form.Group controlId="form.Textarea">
-                <Form.Label>Descrizione</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={7}
-                  placeholder="Inserisci descrizione "
-                  onChange={(e) => setDescrizione(e.target.value)}
-                />
-              </Form.Group>
-            </Col>
-            {/* <Col> */}
-            {/* <Col md={8}>
-                    <Form.Group controlId="form.Utenti">
-                      <Form.Label>Utenti</Form.Label>
-                      <Form.Control as="select" name="state"  >
-                        <option value="">none</option>
-                        <option value="Maria Sacchi">Maria Sacchi</option>
-                        <option value="Antonio Verdi">Antonio Verdi</option>
-                        <option value="Valentina Bianchi">Valentina Bianchi</option>
-                        <option value="Mario Rossi">Mario Rossi</option>               
-                        <option value="Marco Rossi">Marco Rossi</option>               
-                        </Form.Control>
-                      </Form.Group>
-                    </Col> */}
-            {/* <Col md={3}>
-                      <Button 
-                        className="button-green"
-                      >
-                        Aggiungi
-                      </Button>
-                    </Col>
-                    <br /> */}
-            {/* <Col>
-                    <Form.Group controlId="form.Textarea">
-                        <Form.Label>Partecipanti</Form.Label>
-                        <div className={classes.contAutorizzazioni}>
-                          <ul style={{listStyleType: "none",paddingLeft:"25px",}}>
-                            <a className={classes.parola}><li>Valentina Bianchi</li></a>
-                          </ul>
-                        </div>
-                    </Form.Group>
-                  </Col> */}
-            {/* </Col> */}
-          </Row>
-          <br />
-          <br />
-          <br />
-          <div
-            className={classes.bottone}
-            style={{ display: "flex", justifyContent: "flex-end" }}
-          >
-            <ButtonClickedGreen size="medium" nome="Crea" onClick={putGroup} />
-          </div>
-        </Form>
-      </Container>
+      <Form>
+        <Row md={2}>
+          <Col>
+            <Form.Group controlId="form.Ruolo">
+              <Form.Label>Gruppo</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Inserisci nome gruppo"
+                onChange={(e) => setNome(e.target.value)}
+              />
+              <Alert
+                severity="error"
+                id="alertGruppo"
+                style={{ display: "none" }}
+              >
+                Gruppo already exists!
+              </Alert>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row md={2}>
+          <Col>
+            <Form.Group
+              controlId="form.Textarea"
+              className={classes.formDescrizione}
+            >
+              <Form.Label>Descrizione</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={7}
+                placeholder="Inserisci descrizione "
+                onChange={(e) => setDescrizione(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <div
+          className={classes.bottone}
+          style={{ display: "flex", justifyContent: "flex-end" }}
+        >
+          <ButtonClickedGreen size="medium" nome="Crea" onClick={putGroup} />
+        </div>
+      </Form>
     </Container>
   );
 }

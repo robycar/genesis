@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+    display: "flex",
+    flexDirection: "column",
   },
   paper: {
     padding: theme.spacing(2),
@@ -28,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
   select: {
-    width: "530px",
+    width: "526px",
   },
 }));
 
@@ -361,7 +363,7 @@ function FormAddUtente() {
 
             <Col>
               <Form.Group controlId="form.Level">
-                <Form.Label>Level</Form.Label>
+                <Form.Label>Ruolo</Form.Label>
                 <FormControl variant="outlined">
                   <Select
                     className={classes.select}
@@ -381,7 +383,7 @@ function FormAddUtente() {
                     id="alertLevel"
                     style={{ display: "none" }}
                   >
-                    Level is required!
+                    Ruolo is required!
                   </Alert>
                 </FormControl>
               </Form.Group>

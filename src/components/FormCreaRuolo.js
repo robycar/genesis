@@ -25,6 +25,13 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  bottone: {
+    marginTop: "1%",
+    marginRight: "51%",
+  },
+  formDescrizione: {
+    marginTop: "2%",
+  },
 }));
 
 function FormCreaRuolo() {
@@ -78,51 +85,50 @@ function FormCreaRuolo() {
 
   return (
     <Container maxWidth="lg" className={classes.container}>
-      <Container>
-        <Form>
-          <Row md={2}>
-            <Col>
-              <Form.Group controlId="form.Ruolo">
-                <Form.Label>Ruolo</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Inserisci Ruolo"
-                  onChange={(e) => setNome(e.target.value)}
-                />
-                <Alert
-                  severity="error"
-                  id="alertRuolo"
-                  style={{ display: "none" }}
-                >
-                  Ruolo already exists!
-                </Alert>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row md={2}>
-            <Col>
-              <Form.Group controlId="form.Textarea">
-                <Form.Label>Descrizione</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={7}
-                  placeholder="Inserisci Descrizione "
-                  onChange={(e) => setDescrizione(e.target.value)}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <br />
-          <br />
-          <br />
-          <div
-            className={classes.bottone}
-            style={{ display: "flex", justifyContent: "flex-end" }}
-          >
-            <ButtonClickedGreen size="medium" nome="Crea" onClick={login} />
-          </div>
-        </Form>
-      </Container>
+      <Form>
+        <Row md={2}>
+          <Col>
+            <Form.Group controlId="form.Ruolo">
+              <Form.Label>Ruolo</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Inserisci Ruolo"
+                onChange={(e) => setNome(e.target.value)}
+              />
+              <Alert
+                severity="error"
+                id="alertRuolo"
+                style={{ display: "none" }}
+              >
+                Ruolo already exists!
+              </Alert>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row md={2}>
+          <Col>
+            <Form.Group
+              controlId="form.Textarea"
+              className={classes.formDescrizione}
+            >
+              <Form.Label>Descrizione</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={7}
+                placeholder="Inserisci Descrizione "
+                onChange={(e) => setDescrizione(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <div
+          className={classes.bottone}
+          style={{ display: "flex", justifyContent: "flex-end" }}
+        >
+          <ButtonClickedGreen size="medium" nome="Crea" onClick={login} />
+        </div>
+      </Form>
     </Container>
   );
 }

@@ -16,10 +16,8 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
+import CreaItem from "../../components/CreaItem";
 import { Paper } from "@material-ui/core";
-import GestioneUtenti from "../../components/GestioneUtenti";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -201,7 +199,8 @@ function AmministrazioneAddUtente() {
           </div>
           <Paper className={classes.paper}>
             <Grid item xs={12}>
-              CREA UTENTE
+              <CreaItem titolo="Crea Utente" />
+              <Divider className={classes.divider} />
             </Grid>
             <Grid item xs={12} style={{ display: "flex" }}>
               <FormAddUtente />

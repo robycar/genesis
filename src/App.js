@@ -14,6 +14,7 @@ import EditingLinee from "./pages/editing/EditingLinee";
 import EditingOutboundProxy from "./pages/editing/EditingOutboundProxy";
 import EditingOutboundProxyCreaOBP from "./pages/editing/EditingOutboundProxyCreaOBP";
 import EditingTemplate from "./pages/editing/EditingTemplate";
+import EditingTemplateCreaTemplate from "./pages/editing/EditingTemplateCreaTemplate";
 // import EditingTest from "./pages/editing/EditingTest";
 import Amministrazione from "./pages/amministrazione/Amministrazione";
 import AmministrazioneAutorizzazioni from "./pages/amministrazione/AmministrazioneAutorizzazioni";
@@ -65,6 +66,11 @@ function App() {
           component={EditingOutboundProxyCreaOBP}
         />
         <Route path="/editing/template" exact component={EditingTemplate} />
+        <Route
+          path="/editing/template/createmplate"
+          exact
+          component={EditingTemplateCreaTemplate}
+        />
         {/* <Route
           path="/editing/test/testcase"
           exact
