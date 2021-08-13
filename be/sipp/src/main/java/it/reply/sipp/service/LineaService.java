@@ -5,6 +5,7 @@ import java.util.List;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.linea.payload.LineaDTO;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
+import it.reply.sipp.model.LineaVO;
 import it.reply.sipp.model.TypeLineaVO;
 
 public interface LineaService {
@@ -66,5 +67,15 @@ public interface LineaService {
 	 * @throws ApplicationException in caso di errori
 	 */
   TypeLineaDTO createTypeLinea(TypeLineaDTO typeLineaDTO) throws ApplicationException;
+
+  /**
+   * Ottiene i dati relativi ad una linea a partire dal suo identificatore.
+   * @param id l'identificatore della linea
+   * @return la linea letta
+   * @throws ApplicationException in caso di errori
+   */
+  LineaDTO readLinea(long id) throws ApplicationException;
+  
+  LineaVO readLineaVO(long id) throws ApplicationException;
 	
 }

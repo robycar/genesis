@@ -1,5 +1,6 @@
 package it.reply.sipp.api.linea.payload;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +12,7 @@ public class LineaDTO extends DTO {
 
 	private static final long serialVersionUID = -7062059016489551231L;
 
+	@NotNull
 	private Long id;
 	
 	@Size(max = LineaVO.NUMERO_LENGTH)
@@ -29,7 +31,11 @@ public class LineaDTO extends DTO {
 	public LineaDTO() {
 	}
 	
-	public LineaDTO(LineaVO vo) {
+	public LineaDTO(Long id) {
+    this.id = id;
+  }
+
+  public LineaDTO(LineaVO vo) {
 		this.id = vo.getId();
 		this.ip = vo.getIp();
 		this.numero = vo.getNumero();

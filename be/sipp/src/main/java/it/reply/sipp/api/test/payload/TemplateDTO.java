@@ -35,6 +35,10 @@ public class TemplateDTO extends TrackedDTO {
   public TemplateDTO() {
   }
 
+  public TemplateDTO(long id) {
+    this.id = id;
+  }
+
   public TemplateDTO(TemplateVO vo) {
     super(vo);
     this.id = vo.getId();

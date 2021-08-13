@@ -147,7 +147,8 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
     return new OutboundProxyDTO(vo);
   }
 
-  private OutboundProxyVO readProxyVO(Long id) throws ApplicationException {
+  @Override
+  public OutboundProxyVO readProxyVO(long id) throws ApplicationException {
     return oBPRepository.findById(id)
         .orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.OBP_NOT_FOUND, id));
   }

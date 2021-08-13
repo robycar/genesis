@@ -6,6 +6,7 @@ import org.springframework.lang.Nullable;
 
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.linea.payload.OutboundProxyDTO;
+import it.reply.sipp.model.OutboundProxyVO;
 
 public interface OBPService {
 
@@ -52,5 +53,7 @@ public interface OBPService {
    * @throws ApplicationException in caso di errori.
    */
   void removProxy(Long id) throws ApplicationException;
+
+  OutboundProxyVO readProxyVO(long id) throws ApplicationException;
   
 }

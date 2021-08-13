@@ -1,5 +1,7 @@
 package it.reply.sipp.api.files.payload;
 
+import javax.validation.constraints.NotNull;
+
 import it.reply.sipp.api.files.controller.FileSystemController;
 import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.FileSystemVO;
@@ -8,6 +10,7 @@ public class FileDTO extends TrackedDTO {
 
   private static final long serialVersionUID = -5435769889057157452L;
 
+  @NotNull
   private Long id;
 
   private String path;

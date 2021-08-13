@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.UpdateTimestamp;
+
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 
@@ -17,6 +19,7 @@ public class BaseEntity implements Serializable {
   public static final int CREATED_BY_LENGTH = UserVO.USERNAME_LENGTH;
   
   @Column(name="MODIFIED_WHEN")
+  @UpdateTimestamp
   private Timestamp modifiedDate;
   
   @Column(name="CREATED_WHEN")
@@ -78,6 +81,6 @@ public class BaseEntity implements Serializable {
   
   public void modifiedBy(String editor) {
     this.modifiedBy = editor;
-    this.modifiedDate = new Timestamp(System.currentTimeMillis());
+    //this.modifiedDate = new Timestamp(System.currentTimeMillis());
   }
 }

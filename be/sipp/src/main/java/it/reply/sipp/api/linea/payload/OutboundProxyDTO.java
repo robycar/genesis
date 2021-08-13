@@ -29,6 +29,10 @@ public class OutboundProxyDTO extends DTO {
   public OutboundProxyDTO() {
   }
 
+  public OutboundProxyDTO(@NotNull Long id) {
+    this.id = id;
+  }
+
   public OutboundProxyDTO(OutboundProxyVO vo) {
     this.descrizione = vo.getDescrizione();
     this.id = vo.getId();

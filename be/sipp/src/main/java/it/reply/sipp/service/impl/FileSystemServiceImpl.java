@@ -8,10 +8,13 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,7 +131,7 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     if (scope.equals(FileSystemScope.TEMPLATE)) {
       return templateRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEMPLATE_NOT_FOUND, idRef));
     }
-    
+
     //TODO: return test
     return null;
     
@@ -188,6 +191,35 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     }
     
     fileSystemRepository.delete(fileVO);
+    
+  }
+
+  @Override
+  public List<Pair<FileSystemVO, FileSystemVO>> copyFilesThroughScope(FileSystemScope sourceScope, long sourceId, FileSystemScope targetScope,
+      long targetId) throws ApplicationException {
+    
+    List<FileSystemVO> originalFiles = fileSystemRepository.findByScopeAndIdRef(sourceScope, sourceId);
+    Map<String, FileSystemVO> targetMap = fileSystemRepository.findByScopeAndIdRef(targetScope, targetId)
+      .stream().collect(Collectors.toMap(FileSystemVO::getPath, Function.identity()));
+    ArrayList<Pair<FileSystemVO, FileSystemVO>> result = new ArrayList<>(originalFiles.size());
+    
+    
+    for (FileSystemVO f: originalFiles) {
+      FileSystemVO t = targetMap.get(f.getPath());
+      if (t == null) {
+        t = new FileSystemVO();
+        t.init(getUsername());
+        t.setScope(targetScope);
+        t.setIdRef(targetId);
+        t.setPath(f.getPath());
+      }
+      t.setContentType(f.getContentType());
+      t.setContent(f.getContent());
+      t = fileSystemRepository.save(t);
+      result.add(Pair.of(f, t));
+    }
+    
+    return result;
     
   }
   

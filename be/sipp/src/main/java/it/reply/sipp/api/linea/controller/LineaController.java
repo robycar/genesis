@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ import it.reply.sipp.api.linea.payload.LineaAddResponse;
 import it.reply.sipp.api.linea.payload.LineaDTO;
 import it.reply.sipp.api.linea.payload.LineaListResponse;
 import it.reply.sipp.api.linea.payload.LineaRemoveRequest;
+import it.reply.sipp.api.linea.payload.LineaRetrieveResponse;
 import it.reply.sipp.api.linea.payload.LineaUpdateRequest;
 import it.reply.sipp.api.linea.payload.LineaUpdateResponse;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
@@ -125,5 +127,19 @@ public class LineaController extends AbstractController {
 			return handleException(e, response);
 		}
 	}
+	
+  @GetMapping("{id}")
+  public ResponseEntity<LineaRetrieveResponse> retrieveLinea(@PathVariable(required=true) Long id) {
+    logger.info("enter retrieveProxy({})", id);
+    
+    LineaRetrieveResponse response = new LineaRetrieveResponse();
+    try {
+      LineaDTO result = lineaService.readLinea(id);
+      response.setLinea(result);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+  }
 
 }

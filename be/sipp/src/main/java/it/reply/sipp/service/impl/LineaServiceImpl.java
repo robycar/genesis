@@ -56,7 +56,8 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 				.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TYPE_LINEA_NOT_FOUND, id));
 	}
 
-	private LineaVO readLineaVO(Long id) throws ApplicationException {
+	@Override
+	public LineaVO readLineaVO(long id) throws ApplicationException {
 		return lineaRepository.findById(id)
 				.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.LINEA_NOT_FOUND, id));
 	}
@@ -191,6 +192,12 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     vo = typeLineaRepository.saveAndFlush(vo);
     
     return new TypeLineaDTO(vo);
+  }
+
+  @Override
+  public LineaDTO readLinea(long id) throws ApplicationException {
+    logger.debug("enter readLinea");
+    return new LineaDTO(readLineaVO(id));
   }
 
 }

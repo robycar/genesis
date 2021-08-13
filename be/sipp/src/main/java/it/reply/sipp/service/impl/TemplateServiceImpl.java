@@ -188,7 +188,8 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     return result;
   }
 
-  private TemplateVO readVO(long id) throws ApplicationException {
+  @Override
+  public TemplateVO readVO(long id) throws ApplicationException {
     Optional<TemplateVO> result = templateRepository.findById(id);
     return result.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEMPLATE_NOT_FOUND, id));
   }

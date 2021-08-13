@@ -17,7 +17,11 @@ INSERT INTO `FUNZIONE` (`CODICE`, `NOME`, `DESCRIZIONE`) VALUES
 ('user.view',	'Accedi dati utente',	'Consente di accedere ai dati di un altro utente'),
 ('template.view', 'Mostra test template', 'Consente di visualizzare i test template definiti nel sistema'),
 ('template.edit', 'Modifica Test Template', 'Consente di modificare un template per la creazione dei test case'),
-('template.delete', 'Elimina test Template', 'Consente di eliminare i template dei test definiti nel sistema');
+('template.delete', 'Elimina test Template', 'Consente di eliminare i template dei test definiti nel sistema'),
+('test.view', 'Mostra Test Case', 'Consente di accedere ai test case'),
+('test.edit', 'Modifica Test Case', 'Consente di modificare un test case'),
+('test.delete', 'Elimina Test Case', 'Consente di eliminare un test case')
+;
 
 INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`) VALUES
 (2,	'Descrizione livello admin',	'ADMIN'),
