@@ -3441,6 +3441,189 @@
 					]
 				},
 				{
+					"name": "linea_get_by_id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/linea/1",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"linea",
+								"1"
+							]
+						},
+						"description": "Recupera i dati di una singola linea.\r\nPermessi: linea.view"
+					},
+					"response": [
+						{
+							"name": "linea_get_by_id success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/linea/1",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"linea",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 13 Aug 2021 14:48:59 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"linea\": {\n        \"id\": 1,\n        \"numero\": \"90-400-754-1037\",\n        \"ip\": \"240.195.169.235\",\n        \"porta\": 924,\n        \"password\": \"IdZtVacO4inAlAw\",\n        \"typeLinea\": {\n            \"id\": 1,\n            \"descrizione\": \"descrizione type linea 1\"\n        }\n    }\n}"
+						},
+						{
+							"name": "linea_get_by_id not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/linea/10",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"linea",
+										"10"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 13 Aug 2021 14:50:03 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"LINEA-0002\",\n        \"description\": \"Linea non trovata: 10\"\n    },\n    \"linea\": null\n}"
+						}
+					]
+				},
+				{
 					"name": "linea_list_all",
 					"request": {
 						"method": "GET",
@@ -5788,9 +5971,527 @@
 							"body": "{\n    \"error\": null\n}"
 						}
 					]
+				},
+				{
+					"name": "template_load_file",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"1\",\r\n    \"fileRef\": \"pom.xml\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/template/file",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"template",
+								"file"
+							]
+						},
+						"description": "Legge il contenuto di un file associato ad un template"
+					},
+					"response": []
 				}
 			],
 			"description": "Servizi rest dedicati ai test template"
+		},
+		{
+			"name": "api/testcase",
+			"item": [
+				{
+					"name": "testcase_list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase"
+							]
+						},
+						"description": "Recupera l'elenco dei test case.\r\nPermessi: testcase.view"
+					},
+					"response": []
+				},
+				{
+					"name": "testcase_add",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomProductName}}\",\r\n    \"template\": 1,\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"expectedDuration\": null,\r\n    \"chiamato\": {\r\n        \"linea\": 1,\r\n        \"proxy\": 1\r\n    },\r\n    \"chiamanti\": [\r\n        {\r\n            \"linea\": 2,\r\n            \"proxy\": 2\r\n        },\r\n        {\r\n            \"linea\": 2,\r\n            \"proxy\": 3\r\n        },\r\n        {\r\n            \"linea\": 2,\r\n            \"proxy\": 4\r\n        }\r\n    ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase"
+							]
+						},
+						"description": "Crea un nuovo test a partire da un template.\r\nPermessi: test.edit"
+					},
+					"response": []
+				},
+				{
+					"name": "testcase_delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase"
+							]
+						},
+						"description": "Elimina un test case esistente dal sistema.\r\nPermessi: test.delete"
+					},
+					"response": [
+						{
+							"name": "testcase_delete success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/testcase",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testcase"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 13 Aug 2021 17:01:37 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null\n}"
+						},
+						{
+							"name": "testcase_delete failed not found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/testcase",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testcase"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 13 Aug 2021 17:02:29 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"TEST-0007\",\n        \"description\": \"TestCase non trovato: 10\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "testcase_get_by_id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase/11",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase",
+								"11"
+							]
+						},
+						"description": "Recupera un TestCase a partire dal suo identificatore.\r\nPermessi: test.view"
+					},
+					"response": []
+				},
+				{
+					"name": "testcase_update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 11,\r\n    \"version\": 2,\r\n    \"expectedDuration\": 57,\r\n    \"nome\": \"Rustic Steel Cheese\",\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"chiamato\": {\r\n        \"linea\": {\r\n            \"id\": 1\r\n        },\r\n        \"proxy\": {\r\n            \"id\": 1\r\n        }\r\n    },\r\n    \"chiamanti\": [\r\n        {\r\n            \"linea\": {\r\n                \"id\": 2\r\n            },\r\n            \"proxy\": {\r\n                \"id\": 2\r\n            }\r\n        },\r\n        {\r\n            \"linea\": {\r\n                \"id\": 2\r\n            },\r\n            \"proxy\": {\r\n                \"id\": 3\r\n            }\r\n        },\r\n        {\r\n            \"linea\": {\r\n                \"id\": 2\r\n            },\r\n            \"proxy\": {\r\n                \"id\": 4\r\n            }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase"
+							]
+						},
+						"description": "Modifica un test case esistente.\r\nPermessi: test.edit"
+					},
+					"response": [
+						{
+							"name": "testcase_update failed. Version mismatch",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 11,\r\n    \"version\": 1,\r\n    \"expectedDuration\": 57,\r\n    \"nome\": \"Rustic Steel Cheese\",\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"chiamato\": {\r\n        \"linea\": {\r\n            \"id\": 1\r\n        },\r\n        \"proxy\": {\r\n            \"id\": 1\r\n        }\r\n    },\r\n    \"chiamanti\": [\r\n        {\r\n            \"linea\": {\r\n                \"id\": 2\r\n            },\r\n            \"proxy\": {\r\n                \"id\": 2\r\n            }\r\n        },\r\n        {\r\n            \"linea\": {\r\n                \"id\": 2\r\n            },\r\n            \"proxy\": {\r\n                \"id\": 3\r\n            }\r\n        },\r\n        {\r\n            \"linea\": {\r\n                \"id\": 2\r\n            },\r\n            \"proxy\": {\r\n                \"id\": 4\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/testcase",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testcase"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 13 Aug 2021 18:22:41 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"GENESIS-0002\",\n        \"description\": \"Questa entit&agrave; &egrave; stata gi&agrave; modificata da test in data 13/08/21, 19:02\"\n    },\n    \"testCase\": null\n}"
+						},
+						{
+							"name": "testcase_update success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 11,\r\n    \"version\": 2,\r\n    \"expectedDuration\": 57,\r\n    \"nome\": \"Rustic Steel Cheese\",\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"chiamato\": {\r\n        \"linea\": {\r\n            \"id\": 1\r\n        },\r\n        \"proxy\": {\r\n            \"id\": 1\r\n        }\r\n    },\r\n    \"chiamanti\": [\r\n        {\r\n            \"linea\": {\r\n                \"id\": 2\r\n            },\r\n            \"proxy\": {\r\n                \"id\": 2\r\n            }\r\n        },\r\n        {\r\n            \"linea\": {\r\n                \"id\": 2\r\n            },\r\n            \"proxy\": {\r\n                \"id\": 3\r\n            }\r\n        },\r\n        {\r\n            \"linea\": {\r\n                \"id\": 2\r\n            },\r\n            \"proxy\": {\r\n                \"id\": 4\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/testcase",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testcase"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 13 Aug 2021 18:23:23 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"testCase\": {\n        \"modifiedDate\": \"2021-08-13T17:02:55.000+00:00\",\n        \"creationDate\": \"2021-08-13T17:02:55.000+00:00\",\n        \"modifiedBy\": \"test\",\n        \"createdBy\": \"test\",\n        \"version\": 3,\n        \"id\": 11,\n        \"expectedDuration\": 57,\n        \"nome\": \"Rustic Steel Cheese\",\n        \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n        \"chiamato\": {\n            \"linea\": {\n                \"id\": 1,\n                \"numero\": \"90-400-754-1037\",\n                \"ip\": \"240.195.169.235\",\n                \"porta\": 924,\n                \"password\": \"IdZtVacO4inAlAw\",\n                \"typeLinea\": {\n                    \"id\": 1,\n                    \"descrizione\": \"descrizione type linea 1\"\n                }\n            },\n            \"proxy\": {\n                \"id\": 1,\n                \"ipDestinazione\": \"87.216.188.151\",\n                \"descrizione\": \"Odit sequi blanditiis illo. Eligendi exercitationem laborum porro veniam ullam ipsam earum aut. Autem omnis modi qui explicabo et optio quibusdam illo occaecati. Ea architecto ut.\",\n                \"porta\": 187,\n                \"typeLinee\": [\n                    {\n                        \"id\": 1,\n                        \"descrizione\": \"descrizione type linea 1\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"descrizione\": \"descrizione type linea 2\"\n                    }\n                ]\n            },\n            \"file\": {\n                \"modifiedDate\": \"2021-08-13T17:02:56.000+00:00\",\n                \"creationDate\": \"2021-08-13T17:02:56.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 79,\n                \"path\": \"file1.xml\",\n                \"url\": \"/api/fs/TEST/11/79\"\n            }\n        },\n        \"chiamanti\": [\n            {\n                \"linea\": {\n                    \"id\": 2,\n                    \"numero\": \"9042382\",\n                    \"ip\": \"241.88.251.202\",\n                    \"porta\": 224,\n                    \"password\": \"passwordSegreta\",\n                    \"typeLinea\": {\n                        \"id\": 1,\n                        \"descrizione\": \"descrizione type linea 1\"\n                    }\n                },\n                \"proxy\": {\n                    \"id\": 2,\n                    \"ipDestinazione\": \"2.244.140.46\",\n                    \"descrizione\": \"Harum voluptatem eum sunt commodi quibusdam veritatis eos iusto illo. Autem id hic facere est voluptatum ab et. Omnis et sit aut neque ut doloremque id libero dolor. Eum in facilis enim facilis repellat voluptatum doloremque a corrupti.\",\n                    \"porta\": 422,\n                    \"typeLinee\": [\n                        {\n                            \"id\": 1,\n                            \"descrizione\": \"descrizione type linea 1\"\n                        },\n                        {\n                            \"id\": 2,\n                            \"descrizione\": \"descrizione type linea 2\"\n                        }\n                    ]\n                },\n                \"file\": {\n                    \"modifiedDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"creationDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 82,\n                    \"path\": \"file4.xml\",\n                    \"url\": \"/api/fs/TEST/11/82\"\n                }\n            },\n            {\n                \"linea\": {\n                    \"id\": 2,\n                    \"numero\": \"9042382\",\n                    \"ip\": \"241.88.251.202\",\n                    \"porta\": 224,\n                    \"password\": \"passwordSegreta\",\n                    \"typeLinea\": {\n                        \"id\": 1,\n                        \"descrizione\": \"descrizione type linea 1\"\n                    }\n                },\n                \"proxy\": {\n                    \"id\": 3,\n                    \"ipDestinazione\": \"170.251.148.64\",\n                    \"descrizione\": \"Unde sunt iste similique eius. Rerum nihil recusandae. Perferendis temporibus voluptas dicta aspernatur.\",\n                    \"porta\": 678,\n                    \"typeLinee\": [\n                        {\n                            \"id\": 1,\n                            \"descrizione\": \"descrizione type linea 1\"\n                        },\n                        {\n                            \"id\": 2,\n                            \"descrizione\": \"descrizione type linea 2\"\n                        }\n                    ]\n                },\n                \"file\": {\n                    \"modifiedDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"creationDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 81,\n                    \"path\": \"file3.xml\",\n                    \"url\": \"/api/fs/TEST/11/81\"\n                }\n            },\n            {\n                \"linea\": {\n                    \"id\": 2,\n                    \"numero\": \"9042382\",\n                    \"ip\": \"241.88.251.202\",\n                    \"porta\": 224,\n                    \"password\": \"passwordSegreta\",\n                    \"typeLinea\": {\n                        \"id\": 1,\n                        \"descrizione\": \"descrizione type linea 1\"\n                    }\n                },\n                \"proxy\": {\n                    \"id\": 4,\n                    \"ipDestinazione\": \"228.183.17.147\",\n                    \"descrizione\": \"Harum natus ad. Eum quia voluptate vitae officiis sed quis. Delectus vel perferendis voluptatum et ut quia vero est.\",\n                    \"porta\": 339,\n                    \"typeLinee\": [\n                        {\n                            \"id\": 1,\n                            \"descrizione\": \"descrizione type linea 1\"\n                        },\n                        {\n                            \"id\": 2,\n                            \"descrizione\": \"descrizione type linea 2\"\n                        }\n                    ]\n                },\n                \"file\": {\n                    \"modifiedDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"creationDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 80,\n                    \"path\": \"file2.xml\",\n                    \"url\": \"/api/fs/TEST/11/80\"\n                }\n            }\n        ],\n        \"template\": null\n    }\n}"
+						}
+					]
+				}
+			]
 		},
 		{
 			"name": "file_system",
@@ -6304,6 +7005,29 @@
 							"body": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\r\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\r\n  xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0</modelVersion>\n    <parent>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-parent</artifactId>\n        <version>2.5.0</version>\n        <relativePath />\n        <!-- lookup parent from repository -->\r\n  \n    </parent>\n    <groupId>it.reply.sipp</groupId>\n    <artifactId>sipp</artifactId>\n    <version>0.0.1-SNAPSHOT</version>\n    <packaging>war</packaging>\n    <name>sipp</name>\n    <description>Sipp project</description>\n    <properties>\n        <java.version>11</java.version>\n    </properties>\n    <dependencies>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-data-jdbc</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-data-jpa</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-security</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-web</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-devtools</artifactId>\n            <scope>runtime</scope>\n            <optional>true</optional>\n        </dependency>\n        <dependency>\n            <groupId>mysql</groupId>\n            <artifactId>mysql-connector-java</artifactId>\n            <scope>runtime</scope>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-tomcat</artifactId>\n            <scope>provided</scope>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-test</artifactId>\n            <scope>test</scope>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.security</groupId>\n            <artifactId>spring-security-test</artifactId>\n            <scope>test</scope>\n        </dependency>\n        <dependency>\n            <groupId>com.auth0</groupId>\n            <artifactId>java-jwt</artifactId>\n            <version>3.16.0</version>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-validation</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.apache.commons</groupId>\n            <artifactId>commons-lang3</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.modeshape</groupId>\n            <artifactId>modeshape-jcr</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.modeshape</groupId>\n            <artifactId>modeshape-jcr-api</artifactId>\n        </dependency>\n    </dependencies>\n    <build>\n        <plugins>\n            <plugin>\n                <groupId>org.springframework.boot</groupId>\n                <artifactId>spring-boot-maven-plugin</artifactId>\n            </plugin>\n            <plugin>\n                <artifactId>maven-assembly-plugin</artifactId>\n                <!-- <version>3.3.0</version>  -->\n                <configuration>\n                    <descriptors>\n                        <descriptor>src/assembly/distribution.xml</descriptor>\n                    </descriptors>\n                </configuration>\n                <executions>\n                    <execution>\n                        <id>dist-assembly</id>\n                        <phase>package</phase>\n                        <goals>\n                            <goal>single</goal>\n                        </goals>\n                    </execution>\n                </executions>\n            </plugin>\n            <!-- \r\n      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surfire-plugin</artifactId><version>3.0.0-M5</version><configuration><argLine>-Dspring.profiles.active=test</argLine></configuration>\r\n      </plugin>\r\n       -->\r\n    \n    </plugins>\n</build>\n<scm>\n    <url>https://10.21.125.71/git/sipp.git</url>\n</scm>\n<dependencyManagement>\n    <dependencies>\n        <dependency>\n            <groupId>org.modeshape.bom</groupId>\n            <artifactId>modeshape-bom-embedded</artifactId>\n            <version>5.4.1.Final</version>\n            <type>pom</type>\n            <scope>import</scope>\n        </dependency>\n    </dependencies>\n</dependencyManagement>\n</project>"
 						}
 					]
+				},
+				{
+					"name": "fs_entity_file_delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/fs/entityfolder/TEMPLATE/1/pom.xml",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"fs",
+								"entityfolder",
+								"TEMPLATE",
+								"1",
+								"pom.xml"
+							]
+						},
+						"description": "Elimina un file associato ad un'entita'."
+					},
+					"response": []
 				}
 			]
 		}
