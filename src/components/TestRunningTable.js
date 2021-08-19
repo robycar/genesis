@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import MaterialTable, { MTableToolbar } from "material-table";
@@ -12,75 +12,66 @@ import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import "../styles/App.css";
+import { NavLink } from "react-router-dom";
+import acccessControl from "../service/url.js";
+import EditIcon from "@material-ui/icons/Edit";
 
 const TestRunningTable = () => {
-  const data = [
-    {
-      launcher: "Adam Denisov",
-      nameTs: "PEM_001",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "2/10",
-      trace: "*****",
-      callId: "469UHNKJ",
-    },
-    {
-      launcher: "Keith M. Boyce",
-      nameTs: "PEM_002",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "3/10",
-      trace: "*****",
-      callId: "469UHNKJ",
-    },
-    {
-      launcher: "Stella D. Knight",
-      nameTs: "PEM_003",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "4/10",
-      trace: "*****",
-      callId: "469UHNKJ",
-    },
-    {
-      launcher: "Walter E. Harmon",
-      nameTs: "PEM_004",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "5/10",
-      trace: "*****",
-      callId: "469UHNKJ",
-    },
-  ];
+  let bearer = `Bearer ${localStorage.getItem("token")}`;
 
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+
+  const [data, setData] = useState([]);
+
+  //-----------GET USER----------------------
+  const getAllTestCase = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestCase();
+  }, []);
+
+  //---------TABLE COLUMNS------------------
   const columns = [
     {
-      title: "Launcher",
-      field: "launcher",
+      title: "ID",
+      field: "id",
     },
     {
-      title: "Name TS",
-      field: "nameTs",
+      title: "Nome",
+      field: "nome",
     },
     {
-      title: "Start Date",
-      field: "startDate",
+      title: "Descrizione",
+      field: "descrizione",
     },
     {
-      title: "End Date",
-      field: "endDate",
+      title: "Versione",
+      field: "version",
     },
     {
-      title: "Result",
-      field: "result",
-    },
-    {
-      title: "Trace",
-      field: "trace",
-    },
-    {
-      title: "Call ID",
-      field: "callId",
+      title: "Durata",
+      field: "expectedDuration",
     },
   ];
 
@@ -177,41 +168,47 @@ const TestRunningTable = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="Total Test Case Running"
+        title="TestCase"
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
+          filtering: true,
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
-          // filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
         actions={[
+          // {
+          //   icon: () => (
+          //     <div className={classes.buttonRight}>
+          //       <Button
+          //         className="button-green"
+          //         component={NavLink}
+          //         activeClassName="button-green-active"
+          //         exact
+          //         to="/amministrazione/addutente"
+          //       >
+          //         CREA UTENTE
+          //       </Button>
+          //     </div>
+          //   ),
+          //   tooltip: "Load Test Suite",
+          //   //onClick: () => funzioneFor(),
+          //   isFreeAction: true,
+          // },
           {
             icon: () => <PieChartOutlinedIcon />,
             tooltip: "Report",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
             position: "row",
           },
           {
             icon: "play_circle_outlined",
             tooltip: "Launch",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            onClick: (event, rowData) => alert("Ho cliccato " + rowData.id),
             position: "row",
-          },
-          {
-            icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
-            ),
-            tooltip: "Load Test Suite",
-            onClick: () => handleOpen(),
-            isFreeAction: true,
           },
         ]}
         localization={{
@@ -219,76 +216,7 @@ const TestRunningTable = () => {
             actions: "Actions",
           },
         }}
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
-      {/* <button type="button" onClick={handleOpen}>
-        Load Test Case
-      </button> */}
-      <Modal
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <Paper className={classes.paper}>
-            <div>
-              <ListItem button>
-                <ListItemIcon>
-                  <BackupIcon className={classes.icon} />
-                </ListItemIcon>
-                <Typography className={classes.intestazione} variant="h5">
-                  Load Test Case
-                </Typography>
-              </ListItem>
-            </div>
-
-            <div className={classes.paperBottom}>
-              <Typography variant="h6">Seleziona Test Case</Typography>
-              <div className={classes.divSelectBar}>
-                <div className={classes.divTextarea}>
-                  <Typography className={classes.contenuto} variant="h11">
-                    Nome del Test
-                  </Typography>
-                </div>
-                <SelectBar nome="Seleziona" classeName={classes.selectBar} />
-              </div>
-
-              <div className={classes.divTextarea}>
-                <Typography className={classes.contenuto} variant="h11">
-                  Descrizione
-                </Typography>
-              </div>
-              <SelectBar nome="Seleziona" classeName={classes.selectBar} />
-
-              <div className={classes.bottoni}>
-                <Button variant="contained" color="secondary">
-                  Schedula Test
-                </Button>
-
-                <Button variant="contained" color="primary">
-                  Carica Test
-                </Button>
-              </div>
-            </div>
-          </Paper>
-        </Fade>
-      </Modal>
     </div>
   );
 };

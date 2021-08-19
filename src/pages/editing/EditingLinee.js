@@ -189,6 +189,15 @@ function EditingLinee() {
             >
               LINEE
             </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/lineegeneratore"
+            >
+              LINEE GENERATORE
+            </Button>
             {/* </NavLink> */}
 
             {/* <NavLink exact to="/dashboard/testsuite"> */}

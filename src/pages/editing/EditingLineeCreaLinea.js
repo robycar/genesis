@@ -12,7 +12,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
-import Typography from "@material-ui/core/Typography";
+import {Typography, Fade} from "@material-ui/core";
 import {
   mainListItems,
   secondaryListItems,
@@ -25,12 +25,18 @@ import { MenuItem, Paper } from "@material-ui/core";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import ModaleAddLinea from "../../components/ModaleAddLinea";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
 import { SettingsPhoneTwoTone } from "@material-ui/icons";
-import acccessControl from "../../service/url.js";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import SettingsIcon from "@material-ui/icons/Settings";
+import AddIcon from "@material-ui/icons/Add";
+import acccessControl from "../../service/url";
+import TextField from "@material-ui/core/TextField";
+import Backdrop from "@material-ui/core/Backdrop";
+import Modal from "@material-ui/core/Modal";
 
 const drawerWidth = 240;
 
@@ -183,19 +189,60 @@ const useStyles = makeStyles((theme) => ({
     padding: "2%",
     alignItems: "center",
   },
+  
+  paper2: {
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(4, 6, 3),
+  },
+  modal: {
+    display: "flex",
+    marginBottom: "5%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  paperBottom: {
+    display: "flex",
+    flexDirection: "column",
+    backgrounColor: "#FFFFFF",
+    justifyContent: "center",
+    marginTop: "5%",
+    marginBottom: "2px",
+    padding: "5%",
+  },
+
+  intestazione: {
+    color: "#47B881",
+    marginTop: "5%",
+  },
+  icon: {
+    transform: "scale(1.8)",
+    color: "#47B881",
+    marginTop: "8px",
+  },
+  bottoni: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  divider2: {
+    marginTop: "6%",
+    marginBottom: "5%",
+  },
 }));
 
 function EditingLineaCreaLinea() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+
+  const [data, setData] = useState([]);
+  const [openDrawer, setOpenDrawer] = useState([]);
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const [data, setData] = useState([]);
-
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   const getTypeId = () => {
     var myHeaders = new Headers();
@@ -318,12 +365,84 @@ function EditingLineaCreaLinea() {
     }
   }
 
+  //--------------------MODALI TYPE LINEE---------------------------------
+const[idSelect , setIdSelect]=useState(0)
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  //--------------------MODAALE 2----------------------------------
+
+  const [open2, setOpen2] = React.useState(false);
+  const [type, setType] = React.useState("");
+
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const checkRichiesta = (result) => {
+    console.log(result);
+    setIdSelect(result.id)
+  };
+
+  const salva2 = () => {
+    const Invia = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var raw = JSON.stringify({
+        descrizione: type,
+      });
+
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/typeLinea`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          checkRichiesta(result.typeLinea)
+          getTypeId()
+        })
+        .catch((error) => console.log("error", error));
+
+      // localStorage.setItem("user-info", JSON.stringify(result));
+      // history.push("/dashboard/testcase");
+      //window.location = "/editing/linee";
+    };
+
+    if (type !== "") {
+      Invia();
+      handleClose();
+      handleClose2();
+    } else {
+    }
+
+
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
         position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
+        className={clsx(classes.appBar, openDrawer && classes.appBarShift)}
       >
         <Navbar />
       </AppBar>
@@ -331,9 +450,9 @@ function EditingLineaCreaLinea() {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          paper: clsx(classes.drawerPaper, !openDrawer && classes.drawerPaperClose),
         }}
-        open={open}
+        open={openDrawer}
       >
         <div className={classes.toolbarIcon}>
           <IconButton onClick={handleDrawerClose}>
@@ -367,6 +486,15 @@ function EditingLineaCreaLinea() {
           >
             LINEE
           </Button>
+          <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/lineegeneratore"
+            >
+              LINEE GENERATORE
+            </Button>
           {/* </NavLink> */}
 
           {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -528,20 +656,136 @@ function EditingLineaCreaLinea() {
                     className={classes.formControl}
                   >
                     <Select
-                      value={data.descrizione}
+                    id="selectTypeId"
+                      value={idSelect}
                       onChange={(e) => setTypeLineaId(e.target.value)}
                     >
-                      {data.map((prova) => {
+                      {data.map((typeLinea) => {
                         return (
-                          <MenuItem key={prova.id} value={prova.id}>
-                            {prova.descrizione}
+                          <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                            {typeLinea.descrizione}
                           </MenuItem>
                         );
                       })}
                     </Select>
                   </FormControl>
                   <div className={classes.modaleAddLinea}>
-                    <ModaleAddLinea />
+                    {/* ----------------------------MODALI----------------------------------------*/}
+
+                    <div>
+                      <Button
+                        onClick={handleOpen}
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<AddIcon />}
+                        size="small"
+                      >
+                        TYPE
+                      </Button>
+                      <Modal
+                        className={classes.modal}
+                        open={open}
+                        onClose={handleClose}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                          timeout: 500,
+                        }}
+                      >
+                        <Fade in={open}>
+                          <div className={classes.paper2}>
+                            <Paper>
+                              <div>
+                                <ListItem button>
+                                  <ListItemIcon>
+                                    <SettingsIcon className={classes.icon} />
+                                  </ListItemIcon>
+                                  <Typography className={classes.intestazione} variant="h5">
+                                    Add Type Linea{" "}
+                                  </Typography>
+                                </ListItem>
+                              </div>
+
+                              <div className={classes.paperBottom}>
+                                <Typography variant="h11">
+                                  Sei sicuro che il nuovo "Type Linea" non è già presente?
+                                </Typography>
+
+                                <div className={classes.divider2}>
+                                  <Divider />
+                                </div>
+
+                                <div className={classes.bottoni}>
+
+                                  <div>
+                                    <Button onClick={handleOpen2} variant="contained" color="secondary">
+                                      Si, prosegui
+                                    </Button>
+                                    <Modal
+                                      className={classes.modal}
+                                      open={open2}
+                                      onClose={handleClose2}
+                                      closeAfterTransition
+                                      BackdropComponent={Backdrop}
+                                      BackdropProps={{
+                                        timeout: 500,
+                                      }}
+                                    >
+                                      <Fade in={open2}>
+                                        <div className={classes.paper2}>
+                                          <Paper>
+                                            <div>
+                                              <ListItem button>
+                                                <ListItemIcon>
+                                                  <SettingsIcon className={classes.icon} />
+                                                </ListItemIcon>
+                                                <Typography className={classes.intestazione} variant="h5">
+                                                  Add Type Linea{" "}
+                                                </Typography>
+                                              </ListItem>
+                                            </div>
+
+                                            <div className={classes.paperBottom}>
+                                              <form className={classes.root} noValidate autoComplete="off">
+                                                <TextField
+                                                  id="outlined-basic"
+                                                  label="New Type"
+                                                  variant="outlined"
+                                                  onChange={(e) => setType(e.target.value)}
+                                                />
+                                              </form>
+
+                                              <div className={classes.divider2}>
+                                                <Divider />
+                                              </div>
+
+                                              <div className={classes.bottoni}>
+                                                <Button variant="contained" color="secondary" onClick={salva2}>
+                                                  Conferma
+                                                </Button>
+
+                                                <Button variant="contained" onClick={handleClose2} color="primary">
+                                                  Cancel
+                                                </Button>
+                                              </div>
+                                            </div>
+                                          </Paper>
+                                        </div>
+                                      </Fade>
+                                    </Modal>
+                                  </div>
+
+                                  <Button variant="contained" onClick={handleClose} color="primary">
+                                    No
+                                  </Button>
+                                </div>
+                              </div>
+                            </Paper>
+                          </div>
+                        </Fade>
+                      </Modal>
+                    </div>
+                    {/* ------------------------------FINE MODALI-------------------------------------- */}
                   </div>
                 </Form.Group>
               </Paper>

@@ -433,100 +433,14 @@ export default function EnhancedTable() {
             }}
           />
         ))}
-        {/* <ButtonNotClickedBlue
-            onClick={() => {
-              alert("Ciao");
-            }}
-            nome="Test in Running"
-          />
-
-          <ButtonNotClickedBlue nome="Test Running" />
-
-          <ButtonNotClickedBlue nome="Test Schedulati" />
-
-          <ButtonClickedBlue nome="Test Conclusi" /> */}
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+        
       </div>
       {appState.activeObject === null && <TestRunningTable />}
       {appState.objects[0] === appState.activeObject && <TestRunningTable />}
       {appState.objects[1] === appState.activeObject && <TestConclusiTable />}
       {appState.objects[2] === appState.activeObject && <TestCaricatiTable />}
       {appState.objects[3] === appState.activeObject && <TestSchedulatiTable />}
-      {/* <TableContainer>
-        <Table
-          className={classes.table}
-          aria-labelledby="tableTitle"
-          size={dense ? "small" : "medium"}
-          aria-label="enhanced table"
-        >
-          <EnhancedTableHead
-            classes={classes}
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={rows.length}
-          />
-          <TableBody>
-            {stableSort(rows, getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.name);
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.name)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.name}
-                    selected={isItemSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isItemSelected}
-                        inputProps={{ "aria-labelledby": labelId }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="center">{row.carbs}</TableCell>
-                    <TableCell align="center">{row.fat}</TableCell>
-                    <TableCell align="center">{row.calories}</TableCell>
-                    <TableCell align="center">{row.protein}</TableCell>
-                    <TableCell align="center">{row.prova1}</TableCell>
-                    <TableCell align="center">{row.prova2}</TableCell>
-                    <TableCell align="center">{row.prova3}</TableCell>
-                    <TableCell align="center">{row.prova4}</TableCell>
-                  </TableRow>
-                );
-              })}
-            {emptyRows > 0 && (
-              <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      /> */}
+      
     </>
   );
 }

@@ -34,6 +34,7 @@ import AmministrazioneViewGruppoCreaGruppo from "./pages/amministrazione/Amminis
 import AmministrazioneViewGruppoAddPartecipante from "./pages/amministrazione/AmministrazioneViewGruppoAddPartecipante";
 // import LoginChiara from "./pages/login/LoginChiara";
 import Login from "./pages/Login";
+import EditingLineeGeneratore from "./pages/editing/EditingLineeGeneratore";
 
 function App() {
   return (
@@ -143,6 +144,7 @@ function App() {
           exact
           component={AmministrazioneViewGruppoAddPartecipante}
         />
+        <Route path="/editing/lineegeneratore" exact component={EditingLineeGeneratore} />
         {/* <Route path="/login" exact component={LoginChiara} /> */}
       </Switch>
     </BrowserRouter>

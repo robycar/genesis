@@ -19,6 +19,7 @@ import { Divider } from "@material-ui/core";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
+import Input from "@material-ui/core/Input";
 
 function Obp() {
   const [data, setData] = useState([]);
@@ -103,7 +104,7 @@ function Obp() {
     },
     {
       title: "Tipo Linea",
-      field: "typeLinee[0].id",
+      field: "typeLinee.id",
     },
     {
       title: "Porta",
@@ -158,7 +159,7 @@ function Obp() {
 
     setPorta(rowData.porta);
     setDescrizione(rowData.descrizione);
-    setTypeLinea(rowData.typeLinee[0].id);
+    setTypeLinea(rowData.typeLinee.id);
     setOpen(true);
   };
 
@@ -460,10 +461,11 @@ function Obp() {
               <Row className={classes.row}>
                 <Col className={classes.col}>
                   <TextField
-                    select
+                    multiple
                     label="Tipo Linea"
-                    value={appearLine.id}
+                    value={appearLine}
                     defaultValue={typeLinea}
+                    input={<Input />}
                     onChange={(e) => setTypeLinea(e.target.value)}
                   >
                     {appearLine.map((typeLinea) => (

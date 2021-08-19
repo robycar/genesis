@@ -20,13 +20,11 @@ import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
-import Linee from "../../components/Linee";
+import LineeNew from "../../components/LineeNew";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
-import EqualizerIcon from "@material-ui/icons/Equalizer";
-//import TestSuiteTable from "../../components/TestSuiteTable";
-import TestSuiteTableNew from "../../components/TestSuiteTableNew";
+import LanguageIcon from "@material-ui/icons/Language";
 
 const drawerWidth = 240;
 
@@ -109,7 +107,6 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     marginBottom: "20px",
-    marginTop: "2%",
   },
   generalPaper: {
     alignItems: "baseline",
@@ -132,12 +129,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "5%",
     lineHeight: "1px",
   },
-  buttonTestContainer: {
-    marginTop: "2%",
-  },
 }));
 
-function EditingTestSuite() {
+function EditingLineeGeneratore() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -174,8 +168,6 @@ function EditingTestSuite() {
         <List>{mainListItems}</List>
         <Divider />
         <List>{tertiaryListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
         <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
@@ -232,44 +224,20 @@ function EditingTestSuite() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/testsuite"
+              to="/editing/testcase"
             >
               TEST
             </Button>
-            <div className={classes.buttonTestContainer}>
-              <Button
-                className="button-green"
-                component={NavLink}
-                variant="contained"
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testcase"
-              >
-                TEST CASE
-              </Button>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testsuite"
-              >
-                TEST SUITE
-              </Button>
-            </div>
           </div>
-          <Paper className={classes.generalPaper}>
+          <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>
               <ListItemIcon>
-                <EqualizerIcon fontSize="large" className={classes.icon} />
+                <LanguageIcon fontSize="large" className={classes.icon} />
               </ListItemIcon>
-              <Typography className={classes.titolo}>
-                {" "}
-                Total Test Suite{" "}
-              </Typography>
+              <Typography className={classes.titolo}> Linee </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <TestSuiteTableNew />
+            <LineeNew />
           </Paper>
         </main>
       </Container>
@@ -277,4 +245,4 @@ function EditingTestSuite() {
   );
 }
 
-export default EditingTestSuite;
+export default EditingLineeGeneratore;
