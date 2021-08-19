@@ -33,11 +33,13 @@ const GestioneUtenti = () => {
   const [id, setId] = useState();
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
-  const [gruppo, setGruppo] = useState("");
+  const [gruppo, setGruppo] = useState([]);
+  const [gruppoId, setGruppoId] = useState();
   const [azienda, setAzienda] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [level, setLevel] = useState("");
+  const [level, setLevel] = useState([]);
+  const [levelId, setLevelId] = useState();
   const [email, setEmail] = useState("");
 
   //-----------GET USER----------------------
@@ -77,10 +79,10 @@ const GestioneUtenti = () => {
         nome: nome,
         email: email,
         level: {
-          id: level, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
+          id: levelId, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
         },
         gruppo: {
-          id: gruppo, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
+          id: gruppoId, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
         },
       },
       password: "test",
@@ -206,7 +208,9 @@ const GestioneUtenti = () => {
     setAzienda(rowData.azienda);
     setEmail(rowData.email);
     setLevel(rowData.level);
+    setLevelId(rowData.level.id);
     setGruppo(rowData.gruppo);
+    setGruppoId(rowData.gruppo.id);
     setOpen(true);
   };
 
@@ -442,7 +446,7 @@ const GestioneUtenti = () => {
                       label="Gruppo"
                       value={appearGroup.id}
                       defaultValue={gruppo.id}
-                      onChange={(e) => setGruppo(e.target.value)}
+                      onChange={(e) => setGruppoId(e.target.value)}
                     >
                       {appearGroup.map((gruppo) => (
                         <MenuItem key={gruppo.id} value={gruppo.id}>
@@ -483,7 +487,7 @@ const GestioneUtenti = () => {
                       label="Ruolo"
                       value={appearLevel.id}
                       defaultValue={level.id}
-                      onChange={(e) => setLevel(e.target.value)}
+                      onChange={(e) => setLevelId(e.target.value)}
                     >
                       {appearLevel.map((level) => (
                         <MenuItem key={level.id} value={level.id}>
