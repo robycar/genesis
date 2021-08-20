@@ -6,7 +6,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
-import Button from "@material-ui/core/Button";
 import { MenuItem, Paper, Typography } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -71,14 +70,6 @@ const useStyles = makeStyles((theme) => ({
     width: "900px",
   },
 }));
-
-function not(a, b) {
-  return a.filter((value) => b.indexOf(value) === -1);
-}
-
-function intersection(a, b) {
-  return a.filter((value) => b.indexOf(value) !== -1);
-}
 
 export default function TransferListRuolo() {
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;

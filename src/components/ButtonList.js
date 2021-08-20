@@ -11,10 +11,6 @@ const ButtonList = () => {
       { id: 3, name: "Test Conclusi" },
     ],
   });
-  function toggleActive(index) {
-    changeState({ ...appState, activeObject: appState.objects[index] });
-    console.log(index);
-  }
 
   function toggleActiveStyles(index) {
     if (appState.objects[index] === appState.activeObject) {

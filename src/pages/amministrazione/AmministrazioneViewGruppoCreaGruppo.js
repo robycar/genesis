@@ -17,15 +17,12 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import CreaItem from "../../components/CreaItem";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
 import FormCreaGruppo from "../../components/FormCreaGruppo";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
-import Typography from "@material-ui/core/Typography";
 
 const drawerWidth = 240;
 
@@ -121,13 +118,9 @@ const useStyles = makeStyles((theme) => ({
 function AmministrazioneViewGruppoCreaGruppo() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -147,9 +140,9 @@ function AmministrazioneViewGruppoCreaGruppo() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>
@@ -160,9 +153,9 @@ function AmministrazioneViewGruppoCreaGruppo() {
         <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
-      <Container maxWidth="lg" className={classes.container}>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
 
           <div className={classes.containerNavbarItem}>
             <NavbarItemAdmin fontSize="large" />
@@ -213,8 +206,8 @@ function AmministrazioneViewGruppoCreaGruppo() {
             {/* <Typography className={classes.edit}> Creazione Gruppo </Typography> */}
             <FormCreaGruppo />
           </Paper>
-        </main>
-      </Container>
+        </Container>
+      </main>
     </div>
   );
 }

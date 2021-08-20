@@ -20,8 +20,6 @@ import {
 } from "../../components/listItems";
 import Orders from "../../components/TestCaseComplete";
 import NavbarItemReport from "../../components/NavbarItemReport";
-import ButtonNotClickedBlue from "../../components/ButtonNotClickedBlue";
-import ButtonClickedBlue from "../../components/ButtonClickedBlue";
 import Table from "../../components/Table";
 import { Typography } from "@material-ui/core";
 import ChartReport from "../../components/ChartReport.js";
@@ -167,13 +165,9 @@ const useStyles = makeStyles((theme) => ({
 function Report() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   // const table = [
   //     {col1:"", col2:"Run", col3:"Passed", col4:"N/A", col5:"Failed"},

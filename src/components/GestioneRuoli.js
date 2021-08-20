@@ -240,7 +240,7 @@ const GestioneRuoli = () => {
                 redirect: "follow",
               };
 
-              fetch(`/api/level` + "?id=" + oldData.id, requestOptions)
+              fetch(`/api/level?id=` + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                   getLevel();
@@ -306,12 +306,12 @@ const GestioneRuoli = () => {
                     <Col className={classes.col}>
                       <TextField
                         className={classes.textField}
-                        error={nome != "" ? false : true}
+                        error={nome !== "" ? false : true}
                         onChange={(e) => setNome(e.target.value)}
                         required
                         label="Nome"
                         defaultValue={nome}
-                        helperText={nome != "" ? "" : "Il Nome è richiesto"}
+                        helperText={nome !== "" ? "" : "Il Nome è richiesto"}
                       />
                     </Col>
 

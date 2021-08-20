@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import MaterialTable, { MTableToolbar } from "material-table";
-import ButtonClickeGreen from "./ButtonClickedGreen";
+import MaterialTable from "material-table";
 import "../styles/App.css";
 import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
 // import EditIcon from "@material-ui/icons/Edit";
 // import DeleteIcon from "@material-ui/icons/Delete";
-import ModaleCreaTemplate from "./ModaleCreaTemplate";
 import acccessControl from "../service/url.js";
 
 function Template() {

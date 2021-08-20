@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ButtonNotClickedBlue(props) {
-  const classes = useStyles();
 
   return (
     <Button

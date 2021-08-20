@@ -16,10 +16,7 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
-import GestioneUtenti from "../../components/GestioneUtenti";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -115,13 +112,9 @@ const useStyles = makeStyles((theme) => ({
 function AmministrazioneCreaRuolo() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -141,9 +134,9 @@ function AmministrazioneCreaRuolo() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>
@@ -154,9 +147,9 @@ function AmministrazioneCreaRuolo() {
         <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
-      <Container maxWidth="lg" className={classes.container}>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
 
           <div className={classes.containerNavbarItem}>
             <NavbarItemAdmin fontSize="large" />
@@ -208,8 +201,8 @@ function AmministrazioneCreaRuolo() {
               <FormCreaRuolo />
             </Grid>
           </Paper>
-        </main>
-      </Container>
+        </Container>
+      </main>
     </div>
   );
 }

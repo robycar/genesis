@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
-import { useForm } from "react-hook-form";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Navbar from "../../components/Navbar";
@@ -16,7 +15,6 @@ import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import Grid from "@material-ui/core/Grid";
 import DateFnsUtils from "@date-io/date-fns";
 import TextField from "@material-ui/core/TextField";
 
@@ -28,17 +26,14 @@ import {
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import { MenuItem, Paper } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import ModaleCreaTemplate from "../../components/ModaleCreaTemplate";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
-import { SettingsPhoneTwoTone } from "@material-ui/icons";
 import acccessControl from "../../service/url.js";
-
+import VerticalStepper from "../../components/VerticalStepper";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -231,6 +226,10 @@ function EditingTemplateCreaTemplate() {
   //     setSelectedDate(date);
   //   };
 
+  const todayDate = new Date(
+    new Date().toString().split("GMT")[0] + " UTC"
+  ).toISOString();
+
   function salva() {
     const Invia = () => {
       var myHeaders = new Headers();
@@ -246,7 +245,8 @@ function EditingTemplateCreaTemplate() {
         typeTemplate: typeTemplate,
         version: version,
         // id: id,
-        creationDate: creationDate,
+        creationDate: todayDate,
+        // creationDate: creationDate,
         modifiedDate: modifiedDate,
         modifiedBy: modifiedBy,
         createdBy: createdBy,
@@ -343,9 +343,9 @@ function EditingTemplateCreaTemplate() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>
@@ -375,14 +375,14 @@ function EditingTemplateCreaTemplate() {
             LINEE
           </Button>
           <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/lineegeneratore"
-            >
-              LINEE GENERATORE
-            </Button>
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/lineegeneratore"
+          >
+            LINEE GENERATORE
+          </Button>
           {/* </NavLink> */}
 
           {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -414,258 +414,7 @@ function EditingTemplateCreaTemplate() {
             TEST
           </Button>
         </div>
-
-        <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Template" />
-
-          <Divider className={classes.divider} />
-
-          <div className={classes.generalContainer}>
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Nome</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci nome"
-                    //onChange={(e) => setNome(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertNome"
-                    style={{ display: "none" }}
-                  >
-                    Nome is required!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Durata</Form.Label>
-                  <form className={classes.containerTextField} noValidate>
-                    <TextField
-                      // id="time"
-                      // label="Alarm clock"
-                      type="number"
-                      defaultValue=""
-                      placeholder="Inserisci durata"
-                      className={classes.textField}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      //   onChange={(e) => {
-                      //     setDurata(e.target.value);
-                      //}}
-                      //   inputProps={{
-                      //     step: 300, // 5 min
-                      //   }}
-                    />
-                  </form>
-
-                  <Alert
-                    severity="error"
-                    id="alertDurata"
-                    style={{ display: "none" }}
-                  >
-                    Durata is required!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-
-              {/* <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Modificato da</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Descrizione"
-                    onChange={(e) => setModifiedBy(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertModifiedBy"
-                    style={{ display: "none" }}
-                  >
-                    Modificato da is required!
-                  </Alert>
-                </Form.Group>
-              </Paper> */}
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Data di creazione</Form.Label>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                      disableToolbar
-                      variant="inline"
-                      format="dd/MM/yyyy"
-                      placeholder="data di creazione"
-                      margin="normal"
-                      className={classes.picker}
-                      id="date-picker-inline"
-                      value={creationDate}
-                      // onChange={(e) => setCreationDate(e.target.value)}
-                      KeyboardButtonProps={{
-                        "aria-label": "change date",
-                      }}
-                    />
-                    <Alert
-                      severity="error"
-                      id="alertCreationDate"
-                      style={{ display: "none" }}
-                    >
-                      Data Creazione is required!
-                    </Alert>
-                  </MuiPickersUtilsProvider>
-                </Form.Group>
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Descrizione</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Descrizione"
-                    // onChange={(e) => setDescrizione(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertDescrizione"
-                    style={{ display: "none" }}
-                  >
-                    Descrizione is required!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-            </Paper>
-
-            <Paper className={classes.paperContainer2} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Type Template</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Type Template"
-                    //onChange={(e) => setTypeTemplate(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertTypeTemplate"
-                    style={{ display: "none" }}
-                  >
-                    Type Template is required!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Version</Form.Label>
-                  <form className={classes.containerTextField} noValidate>
-                    <TextField
-                      // id="time"
-                      // label="Alarm clock"
-                      type="number"
-                      defaultValue=""
-                      placeholder="Inserisci version"
-                      className={classes.textField}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      //   onChange={(e) => {
-                      //     setVersion(e.target.value);
-                      //   }}
-                      //   inputProps={{
-                      //     step: 300, // 5 min
-                      //   }}
-                    />
-                  </form>
-
-                  <Alert
-                    severity="error"
-                    id="alertVersion"
-                    style={{ display: "none" }}
-                  >
-                    Version is required!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-
-              {/* <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Creato da</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Creato da"
-                    onChange={(e) => setCreatedBy(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertCreatedBy"
-                    style={{ display: "none" }}
-                  >
-                    Creato da is required!
-                  </Alert>
-                </Form.Group>
-              </Paper> */}
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Data di modifica</Form.Label>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                      disableToolbar
-                      variant="inline"
-                      format="dd/MM/yyyy"
-                      margin="normal"
-                      placeholder="data di modifica"
-                      className={classes.picker}
-                      //id="date-picker-inline"
-                      value={modifiedDate}
-                      // onChange={(e) => setModifiedDate(e.target.value)}
-                      KeyboardButtonProps={{
-                        "aria-label": "change date",
-                      }}
-                    />
-                    <Alert
-                      severity="error"
-                      id="alertModifiedDate"
-                      style={{ display: "none" }}
-                    >
-                      Data Modifica is required!
-                    </Alert>
-                  </MuiPickersUtilsProvider>
-                </Form.Group>
-              </Paper>
-            </Paper>
-          </div>
-          <Divider className={classes.divider} />
-          <div className={classes.bottone}>
-            <ButtonClickedGreen
-              className={classes.bottone}
-              size="medium"
-              nome="Crea"
-              onClick={salva}
-              exact
-              to={<ModaleCreaTemplate />}
-            />
-            <Button
-              className="button-green"
-              component={NavLink}
-              size="medium"
-              activeClassName="button-green-active"
-              exact
-              to="/editing/template"
-            >
-              ANNULLA
-            </Button>
-          </div>
-        </Paper>
+        <VerticalStepper />
       </main>
     </div>
   );

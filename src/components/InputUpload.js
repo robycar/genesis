@@ -2,9 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import InputSelect from "../components/InputSelect";
-import InputBase from "@material-ui/core/InputBase";
-import { DialogTitle, Typography } from "@material-ui/core";
-import FormControl from "@material-ui/core/FormControl";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {

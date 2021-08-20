@@ -4,14 +4,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
 import { Paper, Typography } from "@material-ui/core";
-import CreateIcon from "@material-ui/icons/Create";
 import "../styles/App.css";
 import EditIcon from "@material-ui/icons/Edit";
 import { NavLink } from "react-router-dom";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import { PersonalVideoSharp } from "@material-ui/icons";
 import acccessControl from "../service/url.js";
-import ViewGruppo from "./ViewGruppo";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -163,10 +160,6 @@ const GestioneRuoli = () => {
     getGruppi();
   }, []);
 
-  const viewGruppo = (id) => {
-    console.log(id);
-  };
-
   const aggiornaGruppo = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -254,7 +247,7 @@ const GestioneRuoli = () => {
                 redirect: "follow",
               };
 
-              fetch(`/api/group` + "?id=" + oldData.id, requestOptions)
+              fetch(`/api/group?id=` + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                   getGruppi();
@@ -338,12 +331,12 @@ const GestioneRuoli = () => {
                     <Col className={classes.col}>
                       <TextField
                         className={classes.textField}
-                        error={nome != "" ? false : true}
+                        error={nome !== "" ? false : true}
                         onChange={(e) => setNome(e.target.value)}
                         required
                         label="Nome"
                         defaultValue={nome}
-                        helperText={nome != "" ? "" : "Il Nome è richiesto"}
+                        helperText={nome !== "" ? "" : "Il Nome è richiesto"}
                       />
                     </Col>
 

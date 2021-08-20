@@ -16,7 +16,7 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../components/listItems";
-import { Card, Paper } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import NavbarItemDocu from "../components/NavbarItemDocu";
 import SimpleCard from "../components/SimpleCard";
 import SearchBarDocu from "../components/SearchBarDocu";
@@ -24,9 +24,6 @@ import { Typography } from "@material-ui/core";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import DescriptionIcon from "@material-ui/icons/Description";
 import { NavLink } from "react-router-dom";
-import FindInPageIcon from "@material-ui/icons/FindInPage";
-import TotalTestCase from "../components/TotalPlannedDaylyTestCase";
-import TotalTestSuite from "../components/TotalPlannedWeeKlyTestSuite";
 import Settings from "@material-ui/icons/Settings";
 import SubjectIcon from "@material-ui/icons/Subject";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
@@ -170,13 +167,9 @@ const useStyles = makeStyles((theme) => ({
 function Documentation() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -196,9 +189,9 @@ function Documentation() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>

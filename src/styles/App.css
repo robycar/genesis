@@ -69,6 +69,16 @@
   border: 1px solid white !important;
   color: white !important;
 }
+.button-green-disactive {
+  background-color: white !important;
+  border: 1px solid #47b881 !important;
+  color: #47b881 !important;
+}
+.button-green-disactive:hover {
+  background-color: #47b881 !important;
+  border: 1px solid #47b881 !important;
+  color: white !important;
+}
 .button-blue {
   background-color: white !important;
   border: 1px solid #4352db !important;
@@ -169,3 +179,50 @@
 .MuiPaper-root.makeStyles-paperContainer2-19.MuiPaper-elevation0.MuiPaper-rounded {
   height: 580px;
 }*/
+
+.MuiStepIcon-root.MuiStepIcon-active {
+  color: #47b881 !important;
+  
+}
+
+.MuiStepIcon-root.MuiStepIcon-completed {
+  color: #47b881 !important;
+}
+
+.flexbox {
+  display: flex !important;
+  justify-content: space-between !important;
+  width: 50% !important;
+  max-width: 768px !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  margin: 0 auto !important;
+  padding: 15px !important;
+
+}
+
+.flexbox .board {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  max-width: 300px !important;
+  background-color: #FAFAFA !important;
+  padding: 15px !important;
+  margin: 15px !important;
+  border: 1px solid #47b881 !important;
+  border-radius: 5px !important;
+
+
+  }
+
+
+.flexbox .board .card {
+  padding: 15px 25px !important;
+  
+  background-color: #cce5ff !important;
+  
+  cursor: pointer !important;
+  
+  margin-bottom: 15px !important;
+  
+}

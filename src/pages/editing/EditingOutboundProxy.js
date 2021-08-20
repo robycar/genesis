@@ -1,6 +1,5 @@
 import React from "react";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Navbar from "../../components/Navbar";
@@ -19,8 +18,6 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -121,7 +118,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "24px",
     color: "#66788A",
     lineHeight: "20px",
-    color: "rgba(71, 184, 129, 1)",
     padding: "2%",
     // marginTop: "2%",
   },
@@ -135,13 +131,9 @@ const useStyles = makeStyles((theme) => ({
 function EditingOutboundProxy() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -161,20 +153,22 @@ function EditingOutboundProxy() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
         <List>{tertiaryListItems}</List>
         <Divider />
+        <List>{secondaryListItems}</List>
+        <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
-      <Container maxWidth="lg" className={classes.container}>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
 
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
@@ -243,8 +237,8 @@ function EditingOutboundProxy() {
             <Divider className={classes.divider} />
             <OBP />
           </Paper>
-        </main>
-      </Container>
+        </Container>
+      </main>
     </div>
   );
 }

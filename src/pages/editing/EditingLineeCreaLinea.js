@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import clsx from "clsx";
-import { useForm } from "react-hook-form";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Navbar from "../../components/Navbar";
@@ -12,7 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
-import {Typography, Fade} from "@material-ui/core";
+import { Typography, Fade } from "@material-ui/core";
 import {
   mainListItems,
   secondaryListItems,
@@ -28,11 +27,11 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
-import { SettingsPhoneTwoTone } from "@material-ui/icons";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
 import acccessControl from "../../service/url";
 import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -189,7 +188,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "2%",
     alignItems: "center",
   },
-  
+
   paper2: {
     width: 400,
     backgroundColor: theme.palette.background.paper,
@@ -267,6 +266,10 @@ function EditingLineaCreaLinea() {
       .catch((error) => console.log("error", error));
   };
 
+  const removeTypeLinea = (id) => {
+    alert("id "+id+" rimosso")
+  }
+
   useEffect(() => {
     getTypeId();
   }, []);
@@ -279,7 +282,8 @@ function EditingLineaCreaLinea() {
   const [numero, setNumero] = useState("");
   const [password, setPassword] = useState("");
   const [porta, setPorta] = useState("");
-  const [typeLineaId, setTypeLineaId] = useState("");
+  const [typeLineaId, setTypeLineaId] = useState(0);
+  const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
   const aggiornaIP = () => {
     if (
@@ -366,8 +370,9 @@ function EditingLineaCreaLinea() {
   }
 
   //--------------------MODALI TYPE LINEE---------------------------------
-const[idSelect , setIdSelect]=useState(0)
+  
   const [open, setOpen] = React.useState(false);
+  const [openRemove, setOpenRemove] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -375,6 +380,14 @@ const[idSelect , setIdSelect]=useState(0)
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleOpenRemove = () => {
+    setOpenRemove(true);
+  };
+
+  const handleCloseRemove = () => {
+    setOpenRemove(false);
   };
 
   //--------------------MODAALE 2----------------------------------
@@ -393,7 +406,7 @@ const[idSelect , setIdSelect]=useState(0)
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
   const checkRichiesta = (result) => {
     console.log(result);
-    setIdSelect(result.id)
+    setTypeLineaId(result.id)
   };
 
   const salva2 = () => {
@@ -455,9 +468,9 @@ const[idSelect , setIdSelect]=useState(0)
         open={openDrawer}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>
@@ -487,14 +500,14 @@ const[idSelect , setIdSelect]=useState(0)
             LINEE
           </Button>
           <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/lineegeneratore"
-            >
-              LINEE GENERATORE
-            </Button>
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/lineegeneratore"
+          >
+            LINEE GENERATORE
+          </Button>
           {/* </NavLink> */}
 
           {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -656,13 +669,16 @@ const[idSelect , setIdSelect]=useState(0)
                     className={classes.formControl}
                   >
                     <Select
-                    id="selectTypeId"
-                      value={idSelect}
-                      onChange={(e) => setTypeLineaId(e.target.value)}
+                      id="selectTypeId"
+                      value={typeLineaId}
+                      onChange={(e) => {
+                        setTypeLineaId(e.target.value)
+                        setTypeLineaDescrizione(e.target.value.descrizione)
+                      }}
                     >
                       {data.map((typeLinea) => {
                         return (
-                          <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                          <MenuItem key={typeLinea.id} value={typeLinea}>
                             {typeLinea.descrizione}
                           </MenuItem>
                         );
@@ -676,8 +692,19 @@ const[idSelect , setIdSelect]=useState(0)
                       <Button
                         onClick={handleOpen}
                         variant="contained"
-                        color="secondary"
+                        color="primary"
                         startIcon={<AddIcon />}
+                        size="small"
+                      >
+                        TYPE
+                      </Button>
+                      <br />
+                      <br />
+                      <Button
+                        onClick={handleOpenRemove}
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<RemoveIcon />}
                         size="small"
                       >
                         TYPE
@@ -784,6 +811,59 @@ const[idSelect , setIdSelect]=useState(0)
                           </div>
                         </Fade>
                       </Modal>
+
+                      {/*------------------MODALE RIMUOVI TYPE--------------- */}
+                      <Modal
+                        className={classes.modal}
+                        open={openRemove}
+                        onClose={handleCloseRemove}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                          timeout: 500,
+                        }}
+                      >
+                        <Fade in={openRemove}>
+                          <div className={classes.paper2}>
+                            <Paper>
+                              <div>
+                                <ListItem >
+                                  <ListItemIcon>
+                                    <SettingsIcon className={classes.icon} />
+                                  </ListItemIcon>
+                                  <Typography className={classes.intestazione} variant="h5">
+                                    Rimuovi TypeLinea{" "}
+                                  </Typography>
+                                </ListItem>
+                              </div>
+
+                              <div className={classes.paperBottom}>
+                                <Typography variant="h11">
+                                  Sei sicuro di voler rimuovere il TypeLinea "<b>{openRemove === true ?typeLineaDescrizione:""}</b>"
+                                </Typography>
+
+                                <div className={classes.divider2}>
+                                  <Divider />
+                                </div>
+
+                                <div className={classes.bottoni}>
+
+                                  <div>
+                                    <Button onClick={()=>removeTypeLinea(typeLineaId.id)} variant="contained" color="secondary">
+                                      Si, RIMUOVI
+                                    </Button>
+                                    <Button onClick={handleCloseRemove} variant="contained" color="primary">
+                                      annulla
+                                    </Button>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </Paper>
+                                    </div>
+                                    </Fade>
+                                    </Modal>
+
+                      
                     </div>
                     {/* ------------------------------FINE MODALI-------------------------------------- */}
                   </div>
@@ -799,6 +879,16 @@ const[idSelect , setIdSelect]=useState(0)
               nome="Crea"
               onClick={salva}
             />
+            <Button
+              component={NavLink}
+              className="button-green-disactive"
+              exact
+              to="/editing/linee"
+              variant="contained"
+              size="medium"
+            >
+              annulla
+            </Button>
           </div>
         </Paper>
       </main>

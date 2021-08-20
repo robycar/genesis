@@ -1,5 +1,4 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Dashboard from "./pages/dashboard/Dashboard";
 import Editing from "./pages/editing/Editing";
 import Launching from "./pages/Launching";
 import Report from "./pages/report/Report";

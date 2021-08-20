@@ -17,10 +17,7 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
-import Linee from "../../components/Linee";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
@@ -122,7 +119,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "24px",
     color: "#66788A",
     lineHeight: "20px",
-    color: "rgba(71, 184, 129, 1)",
     padding: "2%",
     // marginTop: "2%",
   },
@@ -139,13 +135,9 @@ const useStyles = makeStyles((theme) => ({
 function EditingTestTestCase() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -165,9 +157,9 @@ function EditingTestTestCase() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>
@@ -178,9 +170,9 @@ function EditingTestTestCase() {
         <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
-      <Container maxWidth="lg" className={classes.container}>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
 
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
@@ -269,8 +261,8 @@ function EditingTestTestCase() {
             <Divider className={classes.divider} />
             <TestCaseTableNew />
           </Paper>
-        </main>
-      </Container>
+        </Container>
+      </main>
     </div>
   );
 }

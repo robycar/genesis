@@ -4,7 +4,6 @@ import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
-import DeleteIcon from "@material-ui/icons/Delete";
 import acccessControl from "../service/url.js";
 
 const ViewGruppo = () => {
@@ -187,30 +186,30 @@ const ViewGruppo = () => {
         //         .catch((error) => console.log("error", error));
         //     }),
         // }}
-        // actions={[
-        //   {
-        //     icon: () => (
-        //       <div className={classes.buttonRight}>
-        //         <Button
-        //           className="button-green"
-        //           component={NavLink}
-        //           activeClassName="button-green-active"
-        //           exact
-        //           to={"/amministrazione/addpartecipante?id="+search_params.get('id')}
-        //         >
-        //           ADD PARTECIPANTE
-        //         </Button>
-        //       </div>
-        //     ),
-        //     tooltip: "",
-        //     isFreeAction: true,
-        //   },
-        // ]}
-        // localization={{
-        //   header: {
-        //     actions: "Actions",
-        //   },
-        // }}
+        actions={[
+          {
+            icon: () => (
+              <div className={classes.buttonRight}>
+                <Button
+                  className="button-green"
+                  component={NavLink}
+                  activeClassName="button-green-active"
+                  exact
+                  to={"/amministrazione/gruppo"}
+                >
+                  indietro
+                </Button>
+              </div>
+            ),
+            tooltip: "",
+            isFreeAction: true,
+          },
+        ]}
+        localization={{
+          header: {
+            actions: "Actions",
+          },
+        }}
       />
     </div>
   );

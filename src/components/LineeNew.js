@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import MaterialTable, { MTableToolbar } from "material-table";
+import MaterialTable from "material-table";
 import "../styles/App.css";
 import {
   MenuItem,
@@ -17,7 +17,6 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import ListItem from "@material-ui/core/ListItem";
 import TextField from "@material-ui/core/TextField";
-import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
@@ -129,7 +128,7 @@ function Linee() {
         })
         .catch((error) => console.log("error", error));
     };
-    if (ip != "") invia();
+    if (ip !== "") invia();
   };
   const columns = [
     { title: "Id", field: "id" },
@@ -406,19 +405,19 @@ function Linee() {
                 <Col className={classes.col}>
                   <TextField
                     className={classes.textField}
-                    error={numero != "" ? false : true}
+                    error={numero !== "" ? false : true}
                     onChange={(e) => setNumero(e.target.value)}
                     required
                     label="Numero"
                     defaultValue={numero}
-                    helperText={numero != "" ? "" : "Il Numero è richiesto"}
+                    helperText={numero !== "" ? "" : "Il Numero è richiesto"}
                   />
                 </Col>
 
                 <Col className={classes.col}>
                   <TextField
                     error={
-                      porta != "" && porta > 1000 && porta < 100000
+                      porta !== "" && porta > 1000 && porta < 100000
                         ? false
                         : true
                     }
@@ -428,7 +427,7 @@ function Linee() {
                     required
                     defaultValue={porta}
                     helperText={
-                      porta != "" && porta > 1000 && porta < 100000
+                      porta !== "" && porta > 1000 && porta < 100000
                         ? ""
                         : "La Porta deve essere compresa tra 4 e 5 digit"
                     }
@@ -441,7 +440,7 @@ function Linee() {
                 <TextField
                   className={classes.textFieldIp}
                   error={
-                    ip1 <= 255 && ip1 != "" && ip1.length < 4 ? false : true
+                    ip1 <= 255 && ip1 !== "" && ip1.length < 4 ? false : true
                   }
                   onChange={(e) => setIp1(e.target.value)}
                   label="Ip1 Linea"
@@ -449,7 +448,7 @@ function Linee() {
                   required
                   defaultValue={ip1}
                   helperText={
-                    ip1 <= 255 && ip1 != "" && ip1.length < 4
+                    ip1 <= 255 && ip1 !== "" && ip1.length < 4
                       ? ""
                       : "IP richiesto e compreso tra 0 e 255"
                   }
@@ -459,7 +458,7 @@ function Linee() {
                 <TextField
                   className={classes.textFieldIp}
                   error={
-                    ip2 <= 255 && ip2 != "" && ip2.length < 4 ? false : true
+                    ip2 <= 255 && ip2 !== "" && ip2.length < 4 ? false : true
                   }
                   onChange={(e) => setIp2(e.target.value)}
                   label="Ip2 Linea"
@@ -467,7 +466,7 @@ function Linee() {
                   required
                   defaultValue={ip2}
                   helperText={
-                    ip2 <= 255 && ip2 != "" && ip2.length < 4
+                    ip2 <= 255 && ip2 !== "" && ip2.length < 4
                       ? ""
                       : "IP richiesto e compreso tra 0 e 255"
                   }
@@ -477,7 +476,7 @@ function Linee() {
                 <TextField
                   className={classes.textFieldIp}
                   error={
-                    ip3 <= 255 && ip3 != "" && ip3.length < 4 ? false : true
+                    ip3 <= 255 && ip3 !== "" && ip3.length < 4 ? false : true
                   }
                   onChange={(e) => setIp3(e.target.value)}
                   label="Ip3 Linea"
@@ -485,7 +484,7 @@ function Linee() {
                   required
                   defaultValue={ip3}
                   helperText={
-                    ip3 <= 255 && ip3 != "" && ip3.length < 4
+                    ip3 <= 255 && ip3 !== "" && ip3.length < 4
                       ? ""
                       : "IP richiesto e compreso tra 0 e 255"
                   }
@@ -495,7 +494,7 @@ function Linee() {
                 <TextField
                   className={classes.textFieldIp}
                   error={
-                    ip4 <= 255 && ip4 != "" && ip4.length < 4 ? false : true
+                    ip4 <= 255 && ip4 !== "" && ip4.length < 4 ? false : true
                   }
                   onChange={(e) => setIp4(e.target.value)}
                   label="Ip4 Linea"
@@ -503,7 +502,7 @@ function Linee() {
                   required
                   defaultValue={ip4}
                   helperText={
-                    ip4 <= 255 && ip4 != "" && ip4.length < 4
+                    ip4 <= 255 && ip4 !== "" && ip4.length < 4
                       ? ""
                       : "IP richiesto e compreso tra 0 e 255"
                   }
@@ -514,12 +513,12 @@ function Linee() {
               <Row className={classes.row}>
                 <Col className={classes.col}>
                   <TextField
-                    error={password != "" ? false : true}
+                    error={password !== "" ? false : true}
                     onChange={(e) => setPassword(e.target.value)}
                     label="Password"
                     required
                     defaultValue={password}
-                    helperText={password != "" ? "" : "La Password è richiesta"}
+                    helperText={password !== "" ? "" : "La Password è richiesta"}
                   />
                 </Col>
 

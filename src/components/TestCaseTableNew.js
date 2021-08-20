@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
-import MaterialTable, { MTableToolbar } from "material-table";
-import ButtonClickeGreen from "./ButtonClickedGreen";
+import MaterialTable from "material-table";
 import "../styles/App.css";
-import { Button, Paper, Typography } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import { NavLink } from "react-router-dom";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ModalDescriptionTestCase from "./ModalDescriptionTestCase";
+import { Paper, Typography } from "@material-ui/core";
 import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
@@ -45,10 +40,11 @@ function TestCaseTable() {
   const [modificatoDa, setModificatoDa] = useState("");
   const [dataCreazione, setDataCreazione] = useState("");
   const [dataModifica, setDataModifica] = useState("");
-  const [chiamato, setchiamato] = useState([]);
-  const [chiamante, setchiamante] = useState([]);
+  const [chiamato, setChiamato] = useState([]);
   const [chiamanti, setChiamanti] = useState([]);
-  const [template, setTemplate] = useState([]);
+  const [appearLine, setAppearLine] = useState([]);
+  const [appearOBP, setAppearOBP] = useState([]);
+  const [appearFile, setAppearFile] = useState([]);
 
 
 
@@ -96,9 +92,73 @@ function TestCaseTable() {
       })
       .catch((error) => console.log("error", error));
   };
+//--------------GET LINE------------------------------
+  const getAppearLine = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLine(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+//--------------GET LINE------------------------------
+  const getAppearOBP = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/obp`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearOBP(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+//--------------GET FILE------------------------------
+  const getAppearFile = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearFile(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   useEffect(() => {
     getAllTestCase();
+    getAppearLine();
+    getAppearOBP();
+    getAppearFile();
   }, []);
 
   const columns = [
@@ -127,13 +187,13 @@ function TestCaseTable() {
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
   const [openChiamato, setOpenChiamato] = React.useState(false);
-  const [openChiamante, setOpenChiamante] = React.useState(false);
+  const [openChiamanti, setOpenChiamanti] = React.useState(false);
 
-  const openModifica = (rowData) =>{
+  const openModifica = (rowData) => {
     setModifica(true);
     handleOpen(rowData)
   }
-  const openVisualizza = (rowData) =>{
+  const openVisualizza = (rowData) => {
     setModifica(false)
     handleOpen(rowData)
   }
@@ -182,31 +242,31 @@ function TestCaseTable() {
     //aggiornaUtente();
     setOpenChiamato(false);
   };
-  //---------MODALE CHIAMANTE--------------------
-  const handleOpenChiamante = () => {
-    var appoggioChiamante;
-    appoggioChiamante = testCase.chiamanti
+  //---------MODALE CHIAMANTi--------------------
+  const handleOpenChiamanti = () => {
+    var appoggioChiamanti;
+    appoggioChiamanti = testCase.chiamanti
 
-    for (let i = 0; i < appoggioChiamante.length; i++) {
-      chiamante[i]=[0, 0, 0, 0]
+    for (let i = 0; i < appoggioChiamanti.length; i++) {
+      chiamanti[i] = [0, 0, 0, 0]
     }
-    for (let i = 0; i < appoggioChiamante.length; i++) {
-      chiamante[i][0] = appoggioChiamante[i]["proxy"].id
-      chiamante[i][1] = appoggioChiamante[i]["linea"].id
-      chiamante[i][2] = appoggioChiamante[i]["file"].id
-      chiamante[i][3] = i
+    for (let i = 0; i < appoggioChiamanti.length; i++) {
+      chiamanti[i][0] = appoggioChiamanti[i]["proxy"].id
+      chiamanti[i][1] = appoggioChiamanti[i]["linea"].id
+      chiamanti[i][2] = appoggioChiamanti[i]["file"].id
+      chiamanti[i][3] = i
     }
-    console.log(chiamante)
-    setOpenChiamante(true);
+    console.log(chiamanti)
+    setOpenChiamanti(true);
   };
 
-  const handleCloseChiamante = () => {
-    setOpenChiamante(false);
+  const handleCloseChiamanti = () => {
+    setOpenChiamanti(false);
   };
 
-  const handleCloseChiamante2 = () => {
+  const handleCloseChiamanti2 = () => {
     //aggiornaUtente();
-    setOpenChiamante(false);
+    setOpenChiamanti(false);
   };
 
   //-------VISUALIZZA TUTTI I DATI-----------------------
@@ -387,7 +447,7 @@ function TestCaseTable() {
                 redirect: "follow",
               };
 
-              fetch(`/api/user` + "?id=" + oldData.id, requestOptions)
+              fetch(`/api/user?id=` + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                   getAllTestCase();
@@ -415,7 +475,7 @@ function TestCaseTable() {
               <div>
                 <ListItem >
                   <Typography className={classes.intestazione} variant="h4">
-                    Modifica TestCase <b>{nomeTitolo}</b>
+                    {modifica===false ? "Visualizza ":"Modifica "} TestCase <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -426,26 +486,26 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={nome != "" ? false : true}
+                      error={nome !== "" ? false : true}
                       onChange={(e) => setNome(e.target.value)}
                       label="Nome"
                       defaultValue={nome}
-                      helperText={nome != "" ? "" : "Il Nome è richiesto"}
+                      helperText={nome !== "" ? "" : "Il Nome è richiesto"}
                       InputProps={{
-                        readOnly: modifica===false ?true:false,
+                        readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={versione != "" ? false : true}
+                      error={versione !== "" ? false : true}
                       onChange={(e) => setVersione(e.target.value)}
                       label="Versione"
                       defaultValue={versione}
-                      helperText={versione != "" ? "" : "Il Cognome è richiesto"}
+                      helperText={versione !== "" ? "" : "Il Cognome è richiesto"}
                       InputProps={{
-                        readOnly: modifica===false ?true:false,
+                        readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
@@ -454,26 +514,26 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={descrizione != "" ? false : true}
+                      error={descrizione !== "" ? false : true}
                       onChange={(e) => setDescrizione(e.target.value)}
                       label="Descrizione"
                       defaultValue={descrizione}
-                      helperText={descrizione != "" ? "" : "Il Cognome è richiesto"}
+                      helperText={descrizione !== "" ? "" : "Il Cognome è richiesto"}
                       InputProps={{
-                        readOnly: modifica===false ?true:false,
+                        readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={durata != "" ? false : true}
+                      error={durata !== "" ? false : true}
                       onChange={(e) => setDurata(e.target.value)}
                       label="Durata"
                       defaultValue={durata}
-                      helperText={durata != "" ? "" : "La Durata è richiesta"}
+                      helperText={durata !== "" ? "" : "La Durata è richiesta"}
                       InputProps={{
-                        readOnly: modifica===false ?true:false,
+                        readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
@@ -482,15 +542,15 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <ButtonClickedGreen
                       size="medium"
-                      nome={ modifica===false ?"vedi chiamato":"modifica chiamato"}
+                      nome={modifica === false ? "vedi chiamato" : "modifica chiamato"}
                       onClick={handleOpenChiamato}
                     />
                   </Col>
                   <Col className={classes.col}>
                     <ButtonClickedGreen
                       size="medium"
-                      nome={ modifica===false ?"vedi chiamanti":"modifica chiamanti"}
-                      onClick={handleOpenChiamante}
+                      nome={modifica === false ? "vedi chiamanti" : "modifica chiamanti"}
+                      onClick={handleOpenChiamanti}
                     />
                   </Col>
                 </Row>
@@ -547,17 +607,17 @@ function TestCaseTable() {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                 { modifica===false ? "":<ButtonClickedGreen
+                  {modifica === false ? "" : <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
                     onClick={handleClose2}
                   />}
-                  
+
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleClose}
                     size="medium"
-                    nome={ modifica===false ?"Indietro":"Annulla"}
+                    nome={modifica === false ? "Indietro" : "Annulla"}
                   />
                 </div>
               </div>
@@ -585,7 +645,7 @@ function TestCaseTable() {
               <div>
                 <ListItem >
                   <Typography className={classes.intestazione} variant="h4">
-                    Modifica Chiamato <b>{nomeTitolo}</b>
+                  {modifica===false ? "Visualizza ":"Modifica "} Chiamato <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -608,7 +668,7 @@ function TestCaseTable() {
                       label="Linea/e N°"
                       defaultValue={chiamato[1]}
                       InputProps={{
-                        readOnly: modifica===false ?true:false,
+                        readOnly: modifica === false ? true : false,
                       }}
                     />
                     {/* {appearGroup.map((gruppo) => (
@@ -623,10 +683,10 @@ function TestCaseTable() {
                       className={classes.textField}
                       // select
                       // onChange={(e) => setNome(e.target.value)}
-                      label="Proxy N°"
+                      label="Outboundproxy N°"
                       defaultValue={chiamato[0]}
                       InputProps={{
-                        readOnly: modifica===false ?true:false,
+                        readOnly: modifica === false ? true : false,
                       }}
                     />
                     {/* {appearGroup.map((gruppo) => (
@@ -639,22 +699,22 @@ function TestCaseTable() {
                 </Row>
                 <Row>
                   <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      // select
-                      // onChange={(e) => setNome(e.target.value)}
-                      label="File N°"
-                      defaultValue={chiamato[2]}
-                      InputProps={{
-                        readOnly: modifica===false ?true:false,
-                      }}
-                    />
-                    {/* {appearGroup.map((gruppo) => (
-                      <MenuItem key={gruppo.id} value={gruppo.id}>
-                        {gruppo.nome}
-                      </MenuItem>
-                    ))}
-                  </TextField> */}
+                  <TextField
+                          className={classes.textField}
+                          select
+                          onChange={(e) => {chiamanti[1]=e.target.value}}
+                          label="Linea N°"
+                          value={chiamanti[1]}
+                          InputProps={{
+                            readOnly: modifica === false ? true : false,
+                          }}
+                        >
+                          {appearLine.map((typeLinea) => (
+                            <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                              {typeLinea.descrizione}
+                            </MenuItem>
+                          ))}
+                        </TextField>
                   </Col>
                 </Row>
               </Form>
@@ -664,17 +724,17 @@ function TestCaseTable() {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  { modifica===false ? "":<ButtonClickedGreen
+                  {modifica === false ? "" : <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
                     onClick={handleCloseChiamato2}
                   />}
-                  
+
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseChiamato}
                     size="medium"
-                    nome={ modifica===false ?"Indietro":"Annulla"}
+                    nome={modifica === false ? "Indietro" : "Annulla"}
                   />
                 </div>
               </div>
@@ -687,68 +747,68 @@ function TestCaseTable() {
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={openChiamante}
-        onClose={handleCloseChiamante}
+        open={openChiamanti}
+        onClose={handleCloseChiamanti}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Fade in={openChiamante}>
+        <Fade in={openChiamanti}>
           <div>
             <Paper className={classes.paperModale} elevation={1}>
               <div>
                 <ListItem >
                   <Typography className={classes.intestazione} variant="h4">
-                    Modifica Chiamanti <b>{nomeTitolo}</b>
+                  {modifica===false ? "Visualizza ":"Modifica "} Chiamanti <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
 
               <Form className={classes.contenutoModale}>
-                {chiamante.map((chiamante) => (
+                {chiamanti.map((chiamanti) => (
                   <>
                     <Typography className={classes.intestazione} variant="h6">
-                      Chiamante <b>{chiamante[3] + 1}</b>
+                      Chiamanti <b>{chiamanti[3] + 1}</b>
                     </Typography>
                     <Row >
                       <Col className={classes.col}>
                         <TextField
                           className={classes.textField}
-                          // select
-                          // onChange={(e) => setNome(e.target.value)}
+                          select
+                          onChange={(e) => {chiamanti[1]=e.target.value}}
                           label="Linea N°"
-                          defaultValue={chiamante[1]}
+                          value={chiamanti[1]}
                           InputProps={{
-                            readOnly: modifica===false ?true:false,
+                            readOnly: modifica === false ? true : false,
                           }}
-                        />
-                        {/* {appearGroup.map((gruppo) => (
-                      <MenuItem key={gruppo.id} value={gruppo.id}>
-                        {gruppo.nome}
-                      </MenuItem>
-                    ))}
-                  </TextField> */}
+                        >
+                          {appearLine.map((typeLinea) => (
+                            <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                              {typeLinea.descrizione}
+                            </MenuItem>
+                          ))}
+                        </TextField>
                       </Col>
                       <Col className={classes.col}>
                         <TextField
                           className={classes.textField}
-                          // select
-                          // onChange={(e) => setNome(e.target.value)}
-                          label="Proxy N°"
-                          defaultValue={chiamante[0]}
+                          select
+                          onChange={(e) => {chiamanti[0]=e.target.value}}
+                          label="Outboundproxy N°"
+                          value={chiamanti[0]}
                           InputProps={{
-                            readOnly: modifica===false ?true:false,
+                            readOnly: modifica === false ? true : false,
                           }}
-                        />
-                        {/* {appearGroup.map((gruppo) => (
-                      <MenuItem key={gruppo.id} value={gruppo.id}>
-                        {gruppo.nome}
-                      </MenuItem>
-                    ))}
-                  </TextField> */}
+                        >
+                        {appearOBP.map((obp) => (
+                            <MenuItem key={obp.id} value={obp.id}>
+                              {obp.descrizione}
+                            </MenuItem>
+                          ))}
+                        </TextField>
                       </Col>
                     </Row>
                     <Row>
@@ -758,17 +818,17 @@ function TestCaseTable() {
                           // select
                           // onChange={(e) => setNome(e.target.value)}
                           label="File N°"
-                          defaultValue={chiamante[2]}
+                          defaultValue={chiamanti[2]}
                           InputProps={{
-                            readOnly: modifica===false ?true:false,
+                            readOnly: modifica === false ? true : false,
                           }}
-                        />
-                        {/* {appearGroup.map((gruppo) => (
-                      <MenuItem key={gruppo.id} value={gruppo.id}>
-                        {gruppo.nome}
-                      </MenuItem>
-                    ))}
-                  </TextField> */}
+                        >
+                        {appearFile.map((obp) => (
+                            <MenuItem key={obp.id} value={obp.id}>
+                              {obp.descrizione}
+                            </MenuItem>
+                          ))}
+                        </TextField>
                       </Col>
                     </Row>
                   </>
@@ -780,17 +840,17 @@ function TestCaseTable() {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  { modifica===false ? "":<ButtonClickedGreen
+                  {modifica === false ? "" : <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
-                    onClick={handleCloseChiamante2}
+                    onClick={handleCloseChiamanti2}
                   />}
-                  
+
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
-                    onClick={handleCloseChiamante}
+                    onClick={handleCloseChiamanti}
                     size="medium"
-                    nome={ modifica===false ?"Indietro":"Annulla"}
+                    nome={modifica === false ? "Indietro" : "Annulla"}
                   />
                 </div>
               </div>

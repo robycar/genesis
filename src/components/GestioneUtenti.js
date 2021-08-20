@@ -38,6 +38,7 @@ const GestioneUtenti = () => {
   const [azienda, setAzienda] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  //const [password, setPassword] = useState("");
   const [level, setLevel] = useState([]);
   const [levelId, setLevelId] = useState();
   const [email, setEmail] = useState("");
@@ -379,7 +380,7 @@ const GestioneUtenti = () => {
                 redirect: "follow",
               };
 
-              fetch(`/api/user` + "?id=" + oldData.id, requestOptions)
+              fetch(`/api/user?id=` + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
                   getAllUsers();
@@ -418,22 +419,22 @@ const GestioneUtenti = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={nome != "" ? false : true}
+                      error={nome !== "" ? false : true}
                       onChange={(e) => setNome(e.target.value)}
                       required
                       label="Nome"
                       defaultValue={nome}
-                      helperText={nome != "" ? "" : "Il Nome è richiesto"}
+                      helperText={nome !== "" ? "" : "Il Nome è richiesto"}
                     />
                   </Col>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={cognome != "" ? false : true}
+                      error={cognome !== "" ? false : true}
                       onChange={(e) => setCognome(e.target.value)}
                       label="Cognome"
                       defaultValue={cognome}
-                      helperText={cognome != "" ? "" : "Il Cognome è richiesto"}
+                      helperText={cognome !== "" ? "" : "Il Cognome è richiesto"}
                     />
                   </Col>
                 </Row>
@@ -458,11 +459,11 @@ const GestioneUtenti = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={azienda != "" ? false : true}
+                      error={azienda !== "" ? false : true}
                       onChange={(e) => setAzienda(e.target.value)}
                       label="Azienda"
                       defaultValue={azienda}
-                      helperText={azienda != "" ? "" : "L'Azienda è richiesta"}
+                      helperText={azienda !== "" ? "" : "L'Azienda è richiesta"}
                     />
                   </Col>
                 </Row>
@@ -470,12 +471,12 @@ const GestioneUtenti = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={username != "" ? false : true}
+                      error={username !== "" ? false : true}
                       onChange={(e) => setUsername(e.target.value)}
                       label="Username"
                       defaultValue={username}
                       helperText={
-                        username != "" ? "" : "L'Username è richiesto"
+                        username !== "" ? "" : "L'Username è richiesto"
                       }
                     />
                   </Col>
@@ -502,11 +503,11 @@ const GestioneUtenti = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={email != "" ? false : true}
+                      error={email !== "" ? false : true}
                       onChange={(e) => setEmail(e.target.value)}
                       label="Email"
                       defaultValue={email}
-                      helperText={email != "" ? "" : "L'Email è richiesto"}
+                      helperText={email !== "" ? "" : "L'Email è richiesto"}
                     />
                   </Col>
                 </Row>

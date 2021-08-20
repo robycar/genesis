@@ -17,8 +17,6 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
 import Linee from "../../components/Linee";
 import { NavLink } from "react-router-dom";
@@ -112,13 +110,9 @@ const useStyles = makeStyles((theme) => ({
 function Editing() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -151,10 +145,9 @@ function Editing() {
         <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
-      <Container maxWidth="lg" className={classes.container}>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
           </div>
@@ -212,8 +205,8 @@ function Editing() {
           <Paper className={classes.paper}>
             <Linee />
           </Paper>
-        </main>
-      </Container>
+        </Container>
+      </main>
     </div>
   );
 }

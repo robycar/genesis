@@ -32,11 +32,8 @@ import {
 } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import InputSelect from "../../components/InputSelect";
 import "../../styles/App.css";
 import DnsIcon from "@material-ui/icons/Dns";
-import SelectBar from "../../components/SelectBar";
-import MultipleSelect from "../../components/MultipleSelect";
 import acccessControl from "../../service/url.js";
 import Alert from "@material-ui/lab/Alert";
 
@@ -142,7 +139,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "24px",
     color: "#66788A",
     lineHeight: "20px",
-    color: "rgba(71, 184, 129, 1)",
     padding: "2%",
     // marginTop: "2%",
   },
@@ -153,9 +149,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   bottone: {
+    marginLeft: "65%",
     marginTop: "2%",
-    marginLeft: "85%",
-    marginBottom: "2%",
   },
   divSelect: {
     padding: "3%",
@@ -296,9 +291,14 @@ function EditingOutboundProxy() {
       // history.push("/dashboard/testcase");
       window.location = "/editing/outboundproxy";
     };
+    if (porta === "" || porta.length < 4 || porta.length > 5) {
+      document.getElementById("alertPorta").style.display = "";
+    }
 
-    if (ipDestinazione !== "" && descrizione !== "" && porta !== "") {
-      console.log(typeLineaId);
+    if (ipDestinazione !== "" && descrizione !== "" && typeLineaId !== "" && (porta === "" || (porta.length > 3 && porta.length < 6))) {
+      if (porta === "") {
+        setPorta("5060");
+      }
       Invia();
     } else {
       if (ipDestinazione === "") {
@@ -311,12 +311,18 @@ function EditingOutboundProxy() {
       } else {
         document.getElementById("alertDescrizione").style.display = "none";
       }
-      if (porta === "" && ipDestinazione !== "" && descrizione !== "") {
-        setPorta("5060");
-        Invia();
-        //document.getElementById("alertPorta").style.display = "";
-      } else {
+      if (porta.length < 4 || porta.length > 5) {
+        document.getElementById("alertPorta").style.display = "";
+        console.log(typeLineaId)
+      }
+      else {
         document.getElementById("alertPorta").style.display = "none";
+      }
+      if (typeLineaId.length === 0) {
+        document.getElementById("alertTypeLinea").style.display = "";
+      }
+      else {
+        document.getElementById("alertTypeLinea").style.display = "none";
       }
     }
   }
@@ -344,22 +350,23 @@ function EditingOutboundProxy() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
         <List>{tertiaryListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List> <Divider />
+        <List>{secondaryListItems}</List>
+        <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
 
-      <Container maxWidth="lg" className={classes.container}>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
 
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
@@ -549,7 +556,7 @@ function EditingOutboundProxy() {
                       value={typeLineaId}
                       onChange={handleChange}
                       input={<Input />}
-                      //MenuProps={MenuProps}
+                    //MenuProps={MenuProps}
                     >
                       {data.map((prova) => {
                         return (
@@ -559,50 +566,41 @@ function EditingOutboundProxy() {
                         );
                       })}
                     </Select>
-                  </FormControl>
-                </Form.Group>
-              </Paper>
-
-              {/* <Paper className={classes.paper} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Type Linea</Form.Label>
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                  >
-                    <Select
-                      multiple
-                      value={typeLineaId}
-                      onChange={handleChange}
-                      input={<Input />}
-                      //MenuProps={MenuProps}
+                    <Alert
+                      severity="error"
+                      id="alertTypeLinea"
+                      style={{ display: "none" }}
                     >
-                      {data.map((name) => (
-                        <MenuItem key={name.id} value={name.id}>
-                          {name.descrizione}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                      Selezionare almeno un TypeLinea
+                    </Alert>
                   </FormControl>
                 </Form.Group>
-                {/* <MultipleSelect className={classes.multipleSelect} /> 
-              </Paper> */}
-
-              <Paper className={classes.paperBottone}>
-                <Divider className={classes.divider} />
-                <div className={classes.bottone}>
-                  <ButtonClickedGreen
-                    className={classes.bottone}
-                    size="medium"
-                    nome="Crea"
-                    onClick={salva}
-                  />
-                </div>
               </Paper>
             </Paper>
+
+
+            <Divider className={classes.divider} />
+            <div className={classes.bottone}>
+              <ButtonClickedGreen
+                className={classes.bottone}
+                size="medium"
+                nome="Crea"
+                onClick={salva}
+              />
+              <Button
+                component={NavLink}
+                className="button-green-disactive"
+                exact
+                to="/editing/outboundproxy"
+                variant="contained"
+                size="medium"
+              >
+                annulla
+              </Button>
+            </div>
           </Paper>
-        </main>
-      </Container>
+        </Container>
+      </main>
     </div>
   );
 }

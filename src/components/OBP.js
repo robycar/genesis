@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MaterialTable, { MTableToolbar } from "material-table";
 import ButtonClickeGreen from "./ButtonClickedGreen";
 import "../styles/App.css";
-import { MenuItem, Button, Paper, Typography } from "@material-ui/core";
+import { MenuItem, Button, Paper, Typography, Select } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
 import acccessControl from "../service/url.js";
@@ -19,7 +19,6 @@ import { Divider } from "@material-ui/core";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
-import Input from "@material-ui/core/Input";
 
 function Obp() {
   const [data, setData] = useState([]);
@@ -34,7 +33,7 @@ function Obp() {
   const [ip4, setIp4] = useState("");
   const [porta, setPorta] = useState();
   const [descrizione, setDescrizione] = useState("");
-  const [typeLinea, setTypeLinea] = useState();
+  const [typeLinea, setTypeLinea] = useState([]);
 
   /*----Get Type Linea ------*/
 
@@ -74,9 +73,11 @@ function Obp() {
         descrizione: descrizione,
         porta: porta === "" ? 5060 : porta,
 
-        typeLinea: {
-          id: typeLinea.id,
-        },
+        // typeLinea: {
+        //   id: typeLinea.id,
+        // },
+
+        typeLinee: typeLinea,
       });
 
       var requestOptions = {
@@ -104,7 +105,7 @@ function Obp() {
     },
     {
       title: "Tipo Linea",
-      field: "typeLinee.id",
+      field: "typeLinee[0].descrizione",
     },
     {
       title: "Porta",
@@ -159,8 +160,20 @@ function Obp() {
 
     setPorta(rowData.porta);
     setDescrizione(rowData.descrizione);
-    setTypeLinea(rowData.typeLinee.id);
+    setTypeLinea([...typeLinea, rowData.typeLinee[0].id]);
     setOpen(true);
+  };
+
+  const handleChange = (event) => {
+    // if (typeLinea.length < 2) {
+    //   setTypeLinea([event.target.value]);
+    // } else {
+    //   setTypeLinea([...typeLinea, event.target.value]);
+    //   [...typeLinea, event.target.value];
+    // }
+    // console.log(typeLinea, "typeLineaId");
+
+    setTypeLinea(event.target.value);
   };
 
   const handleClose2 = () => {
@@ -378,7 +391,7 @@ function Obp() {
             <div>
               <ListItem button>
                 <Typography className={classes.intestazione} variant="h4">
-                  Modifica l'<b>OBP n°{id}</b>
+                  Modifica l'<b>OBP nÂ°{id}</b>
                 </Typography>
               </ListItem>
               <Divider className={classes.divider} />
@@ -461,12 +474,16 @@ function Obp() {
               <Row className={classes.row}>
                 <Col className={classes.col}>
                   <TextField
-                    multiple
+                    SelectProps={{
+                      multiple: true,
+                      onChange: handleChange,
+                    }}
+                    select
                     label="Tipo Linea"
-                    value={appearLine}
+                    value={appearLine.id}
                     defaultValue={typeLinea}
-                    input={<Input />}
-                    onChange={(e) => setTypeLinea(e.target.value)}
+                    // onChange={(e) => setTypeLinea(e.target.value)}
+                    onChange={handleChange}
                   >
                     {appearLine.map((typeLinea) => (
                       <MenuItem key={typeLinea.id} value={typeLinea.id}>
@@ -507,7 +524,7 @@ function Obp() {
                     required
                     defaultValue={descrizione}
                     helperText={
-                      descrizione != "" ? "" : "La descrizione è richiesta"
+                      descrizione != "" ? "" : "La descrizione Ã¨ richiesta"
                     }
                   />
                 </Col>

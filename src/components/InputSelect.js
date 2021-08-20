@@ -47,10 +47,6 @@ const useStyles = makeStyles((theme) => ({
 
 function CustomizedSelects(props) {
   const classes = useStyles();
-  const [age, setAge] = React.useState("");
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
   return (
     <FormControl className={classes.margin}>
       <Typography className={classes.titolo}> {props.nome} </Typography>

@@ -1,14 +1,11 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
-import ButtonClickedGreen from "./ButtonClickedGreen";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import InputSelect from "./InputSelect";
 import Backdrop from "@material-ui/core/Backdrop";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import SettingsIcon from "@material-ui/icons/Settings";
-import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import ImageIcon from "@material-ui/icons/Image";
 import IconButton from "@material-ui/core/IconButton";
@@ -56,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "24px",
     color: "#66788A",
     lineHeight: "20px",
-    color: "rgba(71, 184, 129, 1)",
     padding: "2%",
 
     // marginTop: "2%",

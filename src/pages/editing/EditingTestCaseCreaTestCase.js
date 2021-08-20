@@ -18,7 +18,6 @@ import {
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonClickedGreen";
 import { Paper, Typography } from "@material-ui/core";
 import SelectBar from "../../components/SelectBar";
 import CreaItem from "../../components/CreaItem";
@@ -163,9 +162,9 @@ function EditingTestCreaTestCase() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>

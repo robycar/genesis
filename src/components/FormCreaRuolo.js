@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
 import Container from "react-bootstrap/Container";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
@@ -10,6 +9,8 @@ import Row from "react-bootstrap/Row";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import Alert from "@material-ui/lab/Alert";
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 
 function FormCreaRuolo() {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
@@ -127,6 +127,16 @@ function FormCreaRuolo() {
           style={{ display: "flex", justifyContent: "flex-end" }}
         >
           <ButtonClickedGreen size="medium" nome="Crea" onClick={login} />
+          <Button
+              component={NavLink}
+              className="button-green-disactive"
+              exact
+              to="/amministrazione/ruoli"
+              variant="contained"
+              size="medium"
+            >
+              annulla
+            </Button>
         </div>
       </Form>
     </Container>

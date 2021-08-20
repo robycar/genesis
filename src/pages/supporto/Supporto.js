@@ -17,9 +17,6 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import Typography from "@material-ui/core/Typography";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
 import SelectBar from "../../components/SelectBar";
 import { TextareaAutosize } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
@@ -195,9 +192,6 @@ function Supporto() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <div className={classes.root}>
@@ -217,9 +211,9 @@ function Supporto() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>

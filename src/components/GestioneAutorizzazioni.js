@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ButtonClickedBlue from "./ButtonClickedBlue";
 import "../styles/App.css";
 import TransferListRuolo from "./TransferListRuolo";
 
@@ -131,8 +130,7 @@ const useStyles = makeStyles((theme) => ({
 
 function FormCreaRuolo() {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+  
   const [appState, changeState] = useState({
     activeObject: null,
     objects: [
@@ -140,28 +138,12 @@ function FormCreaRuolo() {
       // { id: 2, name: "Gestione Utenti" },
     ],
   });
-  function toggleActive(index) {
-    changeState({ ...appState, activeObject: appState.objects[index] });
 
-    console.log(appState.objects[index].name);
-  }
-
-  function toggleActiveStyles(index) {
-    if (appState.objects[index] === appState.activeObject) {
-      return classes.buttonClickedGreen;
-    } else {
-      return classes.buttonNotClickedGreen;
-    }
-  }
   window.onload = function () {
     document.getElementById("1Gestione Ruoli").click();
   };
   //  ||appState.activeObject === null
-  const [show, setShow] = useState(true);
 
-  function showActive() {
-    setShow(!show);
-  }
   return (
     <>
       <TransferListRuolo />

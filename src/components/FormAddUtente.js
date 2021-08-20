@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "react-bootstrap/Container";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -12,6 +11,8 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { MenuItem } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 
 function FormAddUtente() {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
@@ -397,6 +397,16 @@ function FormAddUtente() {
               Aggiungi
             </button> */}
             <ButtonClickedGreen size="medium" nome="Crea" onClick={addUtente} />
+            <Button
+              component={NavLink}
+              className="button-green-disactive"
+              exact
+              to="/amministrazione/utenze"
+              variant="contained"
+              size="medium"
+            >
+              annulla
+            </Button>
           </div>
         </Form>
       </Container>

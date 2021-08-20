@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from 'react-bootstrap/Container';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,7 +13,6 @@ import { MenuItem } from "@material-ui/core";
 import acccessControl from "../service/url.js";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
 
 function FormCreaRuolo() {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -62,8 +59,6 @@ function FormCreaRuolo() {
   const [utenti, setUtenti] = useState([]);
   const [utenteSel, setUtenteSel] = useState([]);
   const [partecipanti1, setPartecipanti1] = useState([]);
-  const [partecipanti2, setPartecipanti2] = useState([]);
-  const [partecipanti3, setPartecipanti3] = useState([]);
 
   const getUtenti = () => {
     var myHeaders = new Headers();

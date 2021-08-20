@@ -16,8 +16,6 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import GestioneUtenti from "../../components/GestioneUtenti";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
 import { NavLink } from "react-router-dom";
@@ -117,7 +115,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "24px",
     color: "#66788A",
     lineHeight: "20px",
-    color: "rgba(71, 184, 129, 1)",
     padding: "2%",
     // marginTop: "2%",
   },
@@ -134,13 +131,9 @@ const useStyles = makeStyles((theme) => ({
 function AmministrazioneUtenze() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>
@@ -160,9 +153,9 @@ function AmministrazioneUtenze() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>
@@ -173,9 +166,9 @@ function AmministrazioneUtenze() {
         <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
-      <Container maxWidth="lg" className={classes.container}>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
 
           <div className={classes.containerNavbarItem}>
             <NavbarItemAdmin fontSize="large" />
@@ -229,8 +222,8 @@ function AmministrazioneUtenze() {
             <Divider className={classes.divider} />
             <GestioneUtenti />
           </Paper>
-        </main>
-      </Container>
+        </Container>
+      </main>
     </div>
   );
 }

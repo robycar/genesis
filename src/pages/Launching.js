@@ -20,7 +20,6 @@ import {
   quaterListItems,
 } from "../components/listItems";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import SelectBar from "../components/SelectBar";
 import SelectAutocompleteTestCase from "../components/SelectAutocompleteTestCase";
 import SelectAutocompleteTestSuite from "../components/SelectAutocompleteTestSuite";
 
@@ -186,9 +185,9 @@ function Launching() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>

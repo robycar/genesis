@@ -1,13 +1,6 @@
 import React, { useState } from "react";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
 import Container from "react-bootstrap/Container";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import TotalTestSuite from "./TotalTestSuite";
-import TotalTestCase from "./TotalTestCase";
-import TotalLines from "./TotalLines";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
@@ -16,6 +9,7 @@ import ButtonClickedGreen from "./ButtonClickedGreen";
 import Button from "@material-ui/core/Button";
 import acccessControl from "../service/url.js";
 import Alert from "@material-ui/lab/Alert";
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -43,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 
 function FormCreaGruppo() {
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
 
@@ -140,6 +133,16 @@ function FormCreaGruppo() {
           style={{ display: "flex", justifyContent: "flex-end" }}
         >
           <ButtonClickedGreen size="medium" nome="Crea" onClick={putGroup} />
+          <Button
+              component={NavLink}
+              className="button-green-disactive"
+              exact
+              to="/amministrazione/gruppo"
+              variant="contained"
+              size="medium"
+            >
+              annulla
+            </Button>
         </div>
       </Form>
     </Container>

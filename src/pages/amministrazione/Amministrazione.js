@@ -16,8 +16,6 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import { Paper } from "@material-ui/core";
 import GestioneUtenti from "../../components/GestioneUtenti";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
@@ -115,13 +113,9 @@ const useStyles = makeStyles((theme) => ({
 function Amministrazione() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
     <div className={classes.root}>

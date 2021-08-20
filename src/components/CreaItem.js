@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "24px",
     color: "#66788A",
     lineHeight: "20px",
-    color: "rgba(71, 184, 129, 1)",
   },
   icon: {
     color: "rgba(71, 184, 129, 1)",

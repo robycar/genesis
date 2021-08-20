@@ -1,15 +1,8 @@
 import React from "react";
-import MaterialTable, { MTableToolbar } from "material-table";
-import { makeStyles } from "@material-ui/core/styles";
+import MaterialTable from "material-table";
 
-const useStyles = makeStyles((theme) => ({
-  materialTable: {
-    height: "400px",
-  },
-}));
 
 function TestSuiteSelect() {
-  const classes = useStyles();
   const columns = [
       { title: "Nome Test Case", field: "name" },
       { title: "ID Template", field: "template" },
