@@ -10,6 +10,7 @@ import logo from "../../src/assets/logoReply.png";
 import loginImage from "../../src/assets/image.png";
 import { login } from "../service/api";
 import Alert from "@material-ui/lab/Alert";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,6 +81,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
+  let history = useHistory();
   const classes = useStyles();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -97,9 +99,25 @@ export default function Login() {
   const checkRichiesta = (result) => {
     console.log(result);
 
+    const timer = () => {
+      setTimeout(function () {
+        alert("Mancano 5 minuti alla scadenza del token, verrete reindirizzatti automaticamente alla login")
+        setTimeout(function () {
+          history.push("/");
+          localStorage.setItem("token", "")
+        }, 1000 * 60 * 5);
+
+      }, 1000 * 60 * 55);
+    }
+
+    clearTimeout(timer)
+
     if (result.error == null) {
       localStorage.setItem("token", JSON.stringify(result.access_token));
-      window.location = "/dashboard/testcase";
+
+      timer()
+
+      history.push("/dashboard/testcase");
     } else if (result.error.code === "ADMIN-0004") {
       document.getElementById("alertUsername").style.display = "";
     } else {

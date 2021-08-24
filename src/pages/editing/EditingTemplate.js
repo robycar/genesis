@@ -196,7 +196,7 @@ function EditingTemplate() {
             >
               LINEE
             </Button>
-            <Button
+            {/* <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -204,7 +204,7 @@ function EditingTemplate() {
               to="/editing/lineegeneratore"
             >
               LINEE GENERATORE
-            </Button>
+            </Button> */}
             {/* </NavLink> */}
 
             {/* <NavLink exact to="/dashboard/testsuite"> */}

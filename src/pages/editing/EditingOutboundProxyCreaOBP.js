@@ -36,6 +36,9 @@ import "../../styles/App.css";
 import DnsIcon from "@material-ui/icons/Dns";
 import acccessControl from "../../service/url.js";
 import Alert from "@material-ui/lab/Alert";
+import { useHistory } from "react-router-dom";
+import { Checkbox } from "@material-ui/core";
+import { ListItemText } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -196,6 +199,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditingOutboundProxy() {
+  let history = useHistory();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -288,14 +292,18 @@ function EditingOutboundProxy() {
         .catch((error) => console.log("error", error));
 
       // localStorage.setItem("user-info", JSON.stringify(result));
-      // history.push("/dashboard/testcase");
-      window.location = "/editing/outboundproxy";
+      history.push("/editing/outboundproxy");
     };
     if (porta === "" || porta.length < 4 || porta.length > 5) {
       document.getElementById("alertPorta").style.display = "";
     }
 
-    if (ipDestinazione !== "" && descrizione !== "" && typeLineaId !== "" && (porta === "" || (porta.length > 3 && porta.length < 6))) {
+    if (
+      ipDestinazione !== "" &&
+      descrizione !== "" &&
+      typeLineaId !== "" &&
+      (porta === "" || (porta.length > 3 && porta.length < 6))
+    ) {
       if (porta === "") {
         setPorta("5060");
       }
@@ -313,15 +321,13 @@ function EditingOutboundProxy() {
       }
       if (porta.length < 4 || porta.length > 5) {
         document.getElementById("alertPorta").style.display = "";
-        console.log(typeLineaId)
-      }
-      else {
+        console.log(typeLineaId);
+      } else {
         document.getElementById("alertPorta").style.display = "none";
       }
       if (typeLineaId.length === 0) {
         document.getElementById("alertTypeLinea").style.display = "";
-      }
-      else {
+      } else {
         document.getElementById("alertTypeLinea").style.display = "none";
       }
     }
@@ -367,7 +373,6 @@ function EditingOutboundProxy() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
           </div>
@@ -382,7 +387,7 @@ function EditingOutboundProxy() {
             >
               LINEE
             </Button>
-            <Button
+            {/* <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -390,7 +395,7 @@ function EditingOutboundProxy() {
               to="/editing/lineegeneratore"
             >
               LINEE GENERATORE
-            </Button>
+            </Button> */}
             {/* </NavLink> */}
 
             {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -545,7 +550,7 @@ function EditingOutboundProxy() {
 
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
-                  <Form.Label>Type Linea</Form.Label>
+                  <Form.Label>Tipo Linea</Form.Label>
                   <FormControl
                     variant="outlined"
                     className={classes.formControlSelect}
@@ -556,12 +561,18 @@ function EditingOutboundProxy() {
                       value={typeLineaId}
                       onChange={handleChange}
                       input={<Input />}
-                    //MenuProps={MenuProps}
+                      renderValue={(selected) => selected.join(", ")}
+                      //MenuProps={MenuProps}
                     >
                       {data.map((prova) => {
                         return (
                           <MenuItem key={prova.id} value={prova.id}>
-                            {prova.descrizione}
+                            {/* {prova.descrizione} */}
+                            <Checkbox
+                              checked={typeLineaId.indexOf(prova.id) > -1}
+                            />
+
+                            <ListItemText primary={prova.descrizione} />
                           </MenuItem>
                         );
                       })}
@@ -577,7 +588,6 @@ function EditingOutboundProxy() {
                 </Form.Group>
               </Paper>
             </Paper>
-
 
             <Divider className={classes.divider} />
             <div className={classes.bottone}>

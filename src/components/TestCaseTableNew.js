@@ -18,6 +18,8 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 function TestCaseTable() {
 
@@ -385,24 +387,24 @@ function TestCaseTable() {
           pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
         actions={[
-          // {
-          //   icon: () => (
-          //     <div className={classes.buttonRight}>
-          //       <Button
-          //         className="button-green"
-          //         component={NavLink}
-          //         activeClassName="button-green-active"
-          //         exact
-          //         to="/amministrazione/addutente"
-          //       >
-          //         CREA UTENTE
-          //       </Button>
-          //     </div>
-          //   ),
-          //   tooltip: "Load Test Suite",
-          //   //onClick: () => funzioneFor(),
-          //   isFreeAction: true,
-          // },
+          {
+            icon: () => (
+              <div className={classes.buttonRight}>
+                <Button
+                  className="button-green"
+                  component={NavLink}
+                  activeClassName="button-green-active"
+                  exact
+                  to="/editing/testcreatestcase"
+                >
+                  CREA test case
+                </Button>
+              </div>
+            ),
+            tooltip: "Load Test Suite",
+            //onClick: () => funzioneFor(),
+            isFreeAction: true,
+          },
           {
             icon: (dat) => (
               <a>

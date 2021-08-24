@@ -11,6 +11,7 @@ import acccessControl from "../service/url.js";
 import Alert from "@material-ui/lab/Alert";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function FormCreaRuolo() {
+  let history = useHistory();
   const classes = useStyles();
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
@@ -46,7 +48,7 @@ function FormCreaRuolo() {
 
   const checkRichiesta = (result) => {
     if (result.error == null) {
-      window.location = "/amministrazione/ruoli";
+      history.push("/amministrazione/ruoli");
     } else if (result.error.code === "ADMIN-0020") {
       document.getElementById("alertRuolo").style.display = "";
     } else {

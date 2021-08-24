@@ -36,7 +36,6 @@ import acccessControl from "../../service/url";
 import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
-import { useHistory } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -234,9 +233,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function EditingLineaCreaLinea() {
+function EditingTestCreaTestCase() {
   const classes = useStyles();
-  let history = useHistory();
 
   const [data, setData] = useState([]);
   const [openDrawer, setOpenDrawer] = useState([]);
@@ -269,8 +267,8 @@ function EditingLineaCreaLinea() {
   };
 
   const removeTypeLinea = (id) => {
-    alert("id " + id + " rimosso");
-  };
+    alert("id "+id+" rimosso")
+  }
 
   useEffect(() => {
     getTypeId();
@@ -281,7 +279,7 @@ function EditingLineaCreaLinea() {
   const [ip2, setIP2] = useState("");
   const [ip3, setIP3] = useState("");
   const [ip4, setIP4] = useState("");
-  const [numero, setNumero] = useState("");
+  const [Nome, setNome] = useState("");
   const [password, setPassword] = useState("");
   const [porta, setPorta] = useState("");
   const [typeLineaId, setTypeLineaId] = useState(0);
@@ -312,7 +310,7 @@ function EditingLineaCreaLinea() {
       myHeaders.append("Access-Control-Allow-Credentials", "true");
       var raw = JSON.stringify({
         ip: ip,
-        numero: numero,
+        Nome: Nome,
         password: password,
         porta: porta,
         typeLinea: {
@@ -333,12 +331,12 @@ function EditingLineaCreaLinea() {
 
       // localStorage.setItem("user-info", JSON.stringify(result));
       // history.push("/dashboard/testcase");
-      history.push("/editing/linee");
+      window.location = "/editing/linee";
     };
 
     if (
       ip !== "" &&
-      numero !== "" &&
+      Nome !== "" &&
       password !== "" &&
       porta !== "" &&
       porta.length > 3 &&
@@ -353,10 +351,10 @@ function EditingLineaCreaLinea() {
       } else {
         document.getElementById("alertIP").style.display = "none";
       }
-      if (numero === "") {
-        document.getElementById("alertNumero").style.display = "";
+      if (Nome === "") {
+        document.getElementById("alertNome").style.display = "";
       } else {
-        document.getElementById("alertNumero").style.display = "none";
+        document.getElementById("alertNome").style.display = "none";
       }
       if (password === "") {
         document.getElementById("alertPassword").style.display = "";
@@ -372,7 +370,7 @@ function EditingLineaCreaLinea() {
   }
 
   //--------------------MODALI TYPE LINEE---------------------------------
-
+  
   const [open, setOpen] = React.useState(false);
   const [openRemove, setOpenRemove] = React.useState(false);
 
@@ -408,7 +406,7 @@ function EditingLineaCreaLinea() {
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
   const checkRichiesta = (result) => {
     console.log(result);
-    setTypeLineaId(result.id);
+    setTypeLineaId(result.id)
   };
 
   const salva2 = () => {
@@ -432,8 +430,8 @@ function EditingLineaCreaLinea() {
       fetch(`/api/typeLinea`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-          checkRichiesta(result.typeLinea);
-          getTypeId();
+          checkRichiesta(result.typeLinea)
+          getTypeId()
         })
         .catch((error) => console.log("error", error));
 
@@ -448,6 +446,8 @@ function EditingLineaCreaLinea() {
       handleClose2();
     } else {
     }
+
+
   };
 
   return (
@@ -463,10 +463,7 @@ function EditingLineaCreaLinea() {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(
-            classes.drawerPaper,
-            !openDrawer && classes.drawerPaperClose
-          ),
+          paper: clsx(classes.drawerPaper, !openDrawer && classes.drawerPaperClose),
         }}
         open={openDrawer}
       >
@@ -502,7 +499,7 @@ function EditingLineaCreaLinea() {
           >
             LINEE
           </Button>
-          {/* <Button
+          <Button
             className="button-green"
             component={NavLink}
             activeClassName="button-green-active"
@@ -510,7 +507,7 @@ function EditingLineaCreaLinea() {
             to="/editing/lineegeneratore"
           >
             LINEE GENERATORE
-          </Button> */}
+          </Button>
           {/* </NavLink> */}
 
           {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -551,67 +548,34 @@ function EditingLineaCreaLinea() {
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Numero</Form.Label>
+                <Form.Group controlId="form.Nome">
+                  <Form.Label>Nome</Form.Label>
                   <Form.Control
                     className={classes.formControl}
                     type="text"
-                    placeholder="Inserisci Numero"
-                    onChange={(e) => setNumero(e.target.value)}
+                    placeholder="Inserisci Nome"
+                    onChange={(e) => setNome(e.target.value)}
                   />
                   <Alert
                     severity="error"
-                    id="alertNumero"
+                    id="alertNome"
                     style={{ display: "none" }}
                   >
-                    Numero is required!
+                    Nome è richiesto!
                   </Alert>
                 </Form.Group>
               </Paper>
 
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
+                <Form.Group controlId="form.Nome">
                   <Form.Label>IP Linea</Form.Label>
                   <div className={classes.divIp}>
                     <Form.Control
                       className={classes.formControlIp}
                       type="text"
                       placeholder="IP1"
-                      onChange={(e) => {
-                        setIP1(e.target.value);
-                        aggiornaIP();
-                      }}
-                    />{" "}
-                    <Typography className={classes.separatoreIp}>.</Typography>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="text"
-                      placeholder="IP2"
-                      onChange={(e) => {
-                        setIP2(e.target.value);
-                        aggiornaIP();
-                      }}
-                    />{" "}
-                    <Typography className={classes.separatoreIp}>.</Typography>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="text"
-                      placeholder="IP3"
-                      onChange={(e) => {
-                        setIP3(e.target.value);
-                        aggiornaIP();
-                      }}
-                    />{" "}
-                    <Typography className={classes.separatoreIp}>.</Typography>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="text"
-                      placeholder="IP4"
-                      onChange={(e) => {
-                        setIP4(e.target.value);
-                        aggiornaIP();
-                      }}
-                    />{" "}
+                      onChange={(e) => setIP1(e.target.value)}
+                    />
                     <Alert
                       severity="error"
                       id="alertIP"
@@ -624,7 +588,7 @@ function EditingLineaCreaLinea() {
               </Paper>
 
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
+                <Form.Group controlId="form.Nome">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     className={classes.formControl}
@@ -645,7 +609,7 @@ function EditingLineaCreaLinea() {
 
             <Paper className={classes.paperContainer2} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
+                <Form.Group controlId="form.Nome">
                   <Form.Label>Porta</Form.Label>
                   <Form.Control
                     className={classes.formControl}
@@ -665,8 +629,8 @@ function EditingLineaCreaLinea() {
               </Paper>
 
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Tipo Linea</Form.Label>
+                <Form.Group controlId="form.Nome">
+                  <Form.Label>Type Linea</Form.Label>
                   <FormControl
                     variant="outlined"
                     className={classes.formControl}
@@ -675,8 +639,8 @@ function EditingLineaCreaLinea() {
                       id="selectTypeId"
                       value={typeLineaId}
                       onChange={(e) => {
-                        setTypeLineaId(e.target.value);
-                        setTypeLineaDescrizione(e.target.value.descrizione);
+                        setTypeLineaId(e.target.value)
+                        setTypeLineaDescrizione(e.target.value.descrizione)
                       }}
                     >
                       {data.map((typeLinea) => {
@@ -730,19 +694,15 @@ function EditingLineaCreaLinea() {
                                   <ListItemIcon>
                                     <SettingsIcon className={classes.icon} />
                                   </ListItemIcon>
-                                  <Typography
-                                    className={classes.intestazione}
-                                    variant="h5"
-                                  >
-                                    Add Tipo Linea{" "}
+                                  <Typography className={classes.intestazione} variant="h5">
+                                    Add Type Linea{" "}
                                   </Typography>
                                 </ListItem>
                               </div>
 
                               <div className={classes.paperBottom}>
                                 <Typography variant="h11">
-                                  Sei sicuro che il nuovo "Tipo Linea" non è già
-                                  presente?
+                                  Sei sicuro che il nuovo "Type Linea" non è già presente?
                                 </Typography>
 
                                 <div className={classes.divider2}>
@@ -750,12 +710,9 @@ function EditingLineaCreaLinea() {
                                 </div>
 
                                 <div className={classes.bottoni}>
+
                                   <div>
-                                    <Button
-                                      onClick={handleOpen2}
-                                      variant="contained"
-                                      color="secondary"
-                                    >
+                                    <Button onClick={handleOpen2} variant="contained" color="secondary">
                                       Si, prosegui
                                     </Button>
                                     <Modal
@@ -774,36 +731,21 @@ function EditingLineaCreaLinea() {
                                             <div>
                                               <ListItem button>
                                                 <ListItemIcon>
-                                                  <SettingsIcon
-                                                    className={classes.icon}
-                                                  />
+                                                  <SettingsIcon className={classes.icon} />
                                                 </ListItemIcon>
-                                                <Typography
-                                                  className={
-                                                    classes.intestazione
-                                                  }
-                                                  variant="h5"
-                                                >
-                                                  Add Tipo Linea{" "}
+                                                <Typography className={classes.intestazione} variant="h5">
+                                                  Add Type Linea{" "}
                                                 </Typography>
                                               </ListItem>
                                             </div>
 
-                                            <div
-                                              className={classes.paperBottom}
-                                            >
-                                              <form
-                                                className={classes.root}
-                                                noValidate
-                                                autoComplete="off"
-                                              >
+                                            <div className={classes.paperBottom}>
+                                              <form className={classes.root} noValidate autoComplete="off">
                                                 <TextField
                                                   id="outlined-basic"
                                                   label="New Type"
                                                   variant="outlined"
-                                                  onChange={(e) =>
-                                                    setType(e.target.value)
-                                                  }
+                                                  onChange={(e) => setType(e.target.value)}
                                                 />
                                               </form>
 
@@ -812,19 +754,11 @@ function EditingLineaCreaLinea() {
                                               </div>
 
                                               <div className={classes.bottoni}>
-                                                <Button
-                                                  variant="contained"
-                                                  color="secondary"
-                                                  onClick={salva2}
-                                                >
+                                                <Button variant="contained" color="secondary" onClick={salva2}>
                                                   Conferma
                                                 </Button>
 
-                                                <Button
-                                                  variant="contained"
-                                                  onClick={handleClose2}
-                                                  color="primary"
-                                                >
+                                                <Button variant="contained" onClick={handleClose2} color="primary">
                                                   Cancel
                                                 </Button>
                                               </div>
@@ -835,11 +769,7 @@ function EditingLineaCreaLinea() {
                                     </Modal>
                                   </div>
 
-                                  <Button
-                                    variant="contained"
-                                    onClick={handleClose}
-                                    color="primary"
-                                  >
+                                  <Button variant="contained" onClick={handleClose} color="primary">
                                     No
                                   </Button>
                                 </div>
@@ -864,14 +794,11 @@ function EditingLineaCreaLinea() {
                           <div className={classes.paper2}>
                             <Paper>
                               <div>
-                                <ListItem>
+                                <ListItem >
                                   <ListItemIcon>
                                     <SettingsIcon className={classes.icon} />
                                   </ListItemIcon>
-                                  <Typography
-                                    className={classes.intestazione}
-                                    variant="h5"
-                                  >
+                                  <Typography className={classes.intestazione} variant="h5">
                                     Rimuovi TypeLinea{" "}
                                   </Typography>
                                 </ListItem>
@@ -879,13 +806,7 @@ function EditingLineaCreaLinea() {
 
                               <div className={classes.paperBottom}>
                                 <Typography variant="h11">
-                                  Sei sicuro di voler rimuovere il TypeLinea "
-                                  <b>
-                                    {openRemove === true
-                                      ? typeLineaDescrizione
-                                      : ""}
-                                  </b>
-                                  "
+                                  Sei sicuro di voler rimuovere il TypeLinea "<b>{openRemove === true ?typeLineaDescrizione:""}</b>"
                                 </Typography>
 
                                 <div className={classes.divider2}>
@@ -893,30 +814,23 @@ function EditingLineaCreaLinea() {
                                 </div>
 
                                 <div className={classes.bottoni}>
+
                                   <div>
-                                    <Button
-                                      onClick={() =>
-                                        removeTypeLinea(typeLineaId.id)
-                                      }
-                                      variant="contained"
-                                      color="secondary"
-                                    >
+                                    <Button onClick={()=>removeTypeLinea(typeLineaId.id)} variant="contained" color="secondary">
                                       Si, RIMUOVI
                                     </Button>
-                                    <Button
-                                      onClick={handleCloseRemove}
-                                      variant="contained"
-                                      color="primary"
-                                    >
+                                    <Button onClick={handleCloseRemove} variant="contained" color="primary">
                                       annulla
                                     </Button>
-                                  </div>
-                                </div>
-                              </div>
-                            </Paper>
-                          </div>
-                        </Fade>
-                      </Modal>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </Paper>
+                                    </div>
+                                    </Fade>
+                                    </Modal>
+
+                      
                     </div>
                     {/* ------------------------------FINE MODALI-------------------------------------- */}
                   </div>
@@ -949,4 +863,4 @@ function EditingLineaCreaLinea() {
   );
 }
 
-export default EditingLineaCreaLinea;
+export default EditingTestCreaTestCase;

@@ -108,6 +108,7 @@ const useStyles = makeStyles((theme) => ({
   },
   generalPaper: {
     alignItems: "baseline",
+    marginTop: "10px",
   },
   icon: {
     color: "rgba(71, 184, 129, 1)",
@@ -169,7 +170,6 @@ function EditingLineeGeneratore() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
           </div>
@@ -184,7 +184,7 @@ function EditingLineeGeneratore() {
             >
               LINEE
             </Button>
-            <Button
+            {/* <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -192,7 +192,7 @@ function EditingLineeGeneratore() {
               to="/editing/lineegeneratore"
             >
               LINEE GENERATORE
-            </Button>
+            </Button> */}
             {/* </NavLink> */}
 
             {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -224,6 +224,15 @@ function EditingLineeGeneratore() {
               TEST
             </Button>
           </div>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/lineegeneratore"
+          >
+            LINEE GENERATORE
+          </Button>
           <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>
               <ListItemIcon>

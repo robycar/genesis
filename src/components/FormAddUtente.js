@@ -13,6 +13,7 @@ import { MenuItem } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function FormAddUtente() {
+  let history = useHistory();
   const classes = useStyles();
 
   const [nome, setNome] = useState("");
@@ -109,7 +111,7 @@ function FormAddUtente() {
 
   const checkRichiesta = (result) => {
     if (result.error == null) {
-      window.location = "/amministrazione/utenze";
+      history.push("/amministrazione/utenze");
     } else if (result.error.code === "ADMIN-0003") {
       document.getElementById("alertUsername2").style.display = "";
     } else {

@@ -108,6 +108,7 @@ const useStyles = makeStyles((theme) => ({
   },
   generalPaper: {
     alignItems: "baseline",
+    marginTop: "10px",
   },
   icon: {
     color: "rgba(71, 184, 129, 1)",
@@ -125,6 +126,9 @@ const useStyles = makeStyles((theme) => ({
     width: "90%",
     marginLeft: "5%",
     lineHeight: "1px",
+  },
+  marginBottom: {
+    marginBottom: "20px",
   },
 }));
 
@@ -183,7 +187,7 @@ function EditingLinee() {
             >
               LINEE
             </Button>
-            <Button
+            {/* <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -191,7 +195,7 @@ function EditingLinee() {
               to="/editing/lineegeneratore"
             >
               LINEE GENERATORE
-            </Button>
+            </Button> */}
             {/* </NavLink> */}
 
             {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -223,6 +227,15 @@ function EditingLinee() {
               TEST
             </Button>
           </div>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/lineegeneratore"
+          >
+            LINEE GENERATORE
+          </Button>
           <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>
               <ListItemIcon>

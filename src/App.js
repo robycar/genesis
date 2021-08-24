@@ -22,7 +22,7 @@ import AmministrazioneUtenze from "./pages/amministrazione/AmministrazioneUtenze
 import Supporto from "./pages/supporto/Supporto";
 import EditingLineeCreaLinea from "./pages/editing/EditingLineeCreaLinea";
 import EditingTestCase from "./pages/editing/EditingTestCase";
-import EditingTestCaseCreaTestCase from "./pages/editing/EditingTestCaseCreaTestCase";
+import EditingTestCreaTestCase from "./pages/editing/EditingTestCreaTestCase";
 import EditingTestSuite from "./pages/editing/EditingTestSuite";
 import EditingTestSuiteCreaTestSuite from "./pages/editing/EditingTestSuiteCreaTestSuite";
 import AmministrazioneGruppo from "./pages/amministrazione/AmministrazioneGruppo";
@@ -34,6 +34,7 @@ import AmministrazioneViewGruppoAddPartecipante from "./pages/amministrazione/Am
 // import LoginChiara from "./pages/login/LoginChiara";
 import Login from "./pages/Login";
 import EditingLineeGeneratore from "./pages/editing/EditingLineeGeneratore";
+
 
 function App() {
   return (
@@ -80,9 +81,9 @@ function App() {
         <Route path="/editing/testsuite" exact component={EditingTestSuite} />
 
         <Route
-          path="/editing/testcase/createstcase"
+          path="/editing/testcreatestcase"
           exact
-          component={EditingTestCaseCreaTestCase}
+          component={EditingTestCreaTestCase}
         />
         <Route
           path="/editing/testsuite/createstsuite"

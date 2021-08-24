@@ -823,10 +823,10 @@ const SecondStep = () => {
           {
             icon: () => (
               <div className={classes.buttonRight}>
-                <Button className="button-green">AGGIUNGI FILE</Button>
+                <Button className="button-green">UPLOAD</Button>
               </div>
             ),
-            tooltip: "AGGIUNGI FILE",
+            tooltip: "UPLOAD",
             //onClick: () => funzioneFor(),
             onClick: () => handleOpenModalUpload(),
             isFreeAction: true,

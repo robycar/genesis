@@ -34,6 +34,8 @@ import ModaleCreaTemplate from "../../components/ModaleCreaTemplate";
 import Form from "react-bootstrap/Form";
 import acccessControl from "../../service/url.js";
 import VerticalStepper from "../../components/VerticalStepper";
+import { useHistory } from "react-router-dom";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -200,6 +202,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditingTemplateCreaTemplate() {
+  
+  let history = useHistory();
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
@@ -374,7 +379,7 @@ function EditingTemplateCreaTemplate() {
           >
             LINEE
           </Button>
-          <Button
+          {/* <Button
             className="button-green"
             component={NavLink}
             activeClassName="button-green-active"
@@ -382,7 +387,7 @@ function EditingTemplateCreaTemplate() {
             to="/editing/lineegeneratore"
           >
             LINEE GENERATORE
-          </Button>
+          </Button> */}
           {/* </NavLink> */}
 
           {/* <NavLink exact to="/dashboard/testsuite"> */}

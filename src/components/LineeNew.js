@@ -133,8 +133,8 @@ function Linee() {
   const columns = [
     { title: "Id", field: "id" },
     {
-      title: "Numero",
-      field: "numero",
+      title: "Path Csv",
+      field: "pathCsv",
     },
     {
       title: "IP Linea",
@@ -143,10 +143,6 @@ function Linee() {
     {
       title: "Porta",
       field: "porta",
-    },
-    {
-      title: "Password",
-      field: "password",
     },
     {
       title: "Tipo Linea",

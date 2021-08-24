@@ -19,6 +19,9 @@ import { Divider } from "@material-ui/core";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
+import { Checkbox } from "@material-ui/core";
+import { ListItemText } from "@material-ui/core";
+import { CheckBox } from "@material-ui/icons";
 
 function Obp() {
   const [data, setData] = useState([]);
@@ -34,6 +37,8 @@ function Obp() {
   const [porta, setPorta] = useState();
   const [descrizione, setDescrizione] = useState("");
   const [typeLinea, setTypeLinea] = useState([]);
+
+  console.log(appearLine.id);
 
   /*----Get Type Linea ------*/
 
@@ -115,6 +120,13 @@ function Obp() {
       title: "Descrizione",
       field: "descrizione",
     },
+    {
+      title: "Creato da",
+      field: "creato",
+    },    {
+      title: "Modificato da",
+      field: "modificato",
+    },
   ];
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
@@ -162,6 +174,7 @@ function Obp() {
     setDescrizione(rowData.descrizione);
     setTypeLinea([...typeLinea, rowData.typeLinee[0].id]);
     setOpen(true);
+    console.log(typeLinea, "type");
   };
 
   const handleChange = (event) => {
@@ -174,6 +187,10 @@ function Obp() {
     // console.log(typeLinea, "typeLineaId");
 
     setTypeLinea(event.target.value);
+  };
+
+  const handleRenderValue = (selected) => {
+    selected.join(", ");
   };
 
   const handleClose2 = () => {
@@ -477,17 +494,31 @@ function Obp() {
                     SelectProps={{
                       multiple: true,
                       onChange: handleChange,
+                      // renderValue: (selected) => {
+                      //   selected.join(", ");
+                      // },
                     }}
                     select
                     label="Tipo Linea"
                     value={appearLine.id}
                     defaultValue={typeLinea}
-                    // onChange={(e) => setTypeLinea(e.target.value)}
-                    onChange={handleChange}
+                    renderValue={(selected) => {
+                      selected.join(", ");
+                    }}
+                    onChange={(e) => {
+                      setTypeLinea(e.target.value);
+
+                      console.log(typeLinea);
+                    }}
+                    // onChange={handleChange}
                   >
-                    {appearLine.map((typeLinea) => (
-                      <MenuItem key={typeLinea.id} value={typeLinea.id}>
-                        {typeLinea.descrizione}
+                    {appearLine.map((linea) => (
+                      <MenuItem key={linea.id} value={linea.id}>
+                        <Checkbox checked={typeLinea.indexOf(linea.id) > -1} />
+
+                        {linea.descrizione}
+
+                        {/* <ListItemText primary={linea.descrizione} /> */}
                       </MenuItem>
                     ))}
                   </TextField>

@@ -8,7 +8,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import logo from "../assets/logoReply.png";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { ButtonGroup } from "@material-ui/core";
-import {useHistory} from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -113,15 +113,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 function Navbar() {
   const classes = useStyles();
 
-  const history=useHistory()
+  let history=useHistory()
+  
   
   const logOut = () => {
-    localStorage.setItem("token", "")
-    history.push('/')
-  }
+    localStorage.setItem("token", "");
+    history.push("/");
+  };
   return (
     <>
       <CssBaseline />
@@ -153,7 +155,7 @@ function Navbar() {
               </Badge>
             </IconButton>
             <IconButton onClick={logOut}>
-              <ExitToAppIcon  className={classes.exit} />
+              <ExitToAppIcon className={classes.exit} />
             </IconButton>
           </ButtonGroup>
         </div>
