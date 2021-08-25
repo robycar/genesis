@@ -37,6 +37,7 @@ import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
 import { useHistory } from "react-router-dom";
+import EditIcon from '@material-ui/icons/Edit';
 
 const drawerWidth = 240;
 
@@ -287,23 +288,27 @@ function EditingLineaCreaLinea() {
   const [typeLineaId, setTypeLineaId] = useState(0);
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
-  const aggiornaIP = () => {
-    if (
-      ip1 !== "" &&
-      //ip1.length < 5 &&
-      ip2 !== "" &&
-      //ip2.length < 5 &&
-      ip3 !== "" &&
-      //ip3 < 5 &&
-      ip4 !== ""
-      //ip4.length < 5
-    ) {
-      setIP(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
-      console.log(ip, "ip okay");
-    }
-  };
+
 
   function salva() {
+    const aggiornaIP = () => {
+      if (
+        (ip1 >= 0 && ip1 <= 255) &&
+        (ip2 >= 0 && ip2 <= 255) &&
+        (ip3 >= 0 && ip3 <= 255) &&
+        (ip4 >= 0 && ip4 <= 255)
+      ) {
+        setIP(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
+        document.getElementById("alertIP").style.display = "none";
+        document.getElementById("alertNumero").style.display = "none";
+        document.getElementById("alertPassword").style.display = "none";
+        document.getElementById("alertPorta").style.display = "none";
+        document.getElementById("alertTypeLinea").style.display = "none";
+        document.getElementById("alertIP2").style.display = "none";
+      } else {
+        document.getElementById("alertIP2").style.display = "";
+      }
+    };
     const Invia = () => {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
@@ -337,7 +342,10 @@ function EditingLineaCreaLinea() {
     };
 
     if (
-      ip !== "" &&
+      ip1 !== "" &&
+      ip2 !== "" &&
+      ip3 !== "" &&
+      ip4 !== "" &&
       numero !== "" &&
       password !== "" &&
       porta !== "" &&
@@ -345,10 +353,25 @@ function EditingLineaCreaLinea() {
       porta.length < 6 &&
       typeLineaId !== ""
     ) {
-      Invia();
+      aggiornaIP();
       // console.log(ip);
     } else {
-      if (ip === "") {
+      if (ip1 === "") {
+        document.getElementById("alertIP").style.display = "";
+      } else {
+        document.getElementById("alertIP").style.display = "none";
+      }
+      if (ip2 === "") {
+        document.getElementById("alertIP").style.display = "";
+      } else {
+        document.getElementById("alertIP").style.display = "none";
+      }
+      if (ip3 === "") {
+        document.getElementById("alertIP").style.display = "";
+      } else {
+        document.getElementById("alertIP").style.display = "none";
+      }
+      if (ip4 === "") {
         document.getElementById("alertIP").style.display = "";
       } else {
         document.getElementById("alertIP").style.display = "none";
@@ -368,6 +391,11 @@ function EditingLineaCreaLinea() {
       } else {
         document.getElementById("alertPorta").style.display = "none";
       }
+      if (typeLineaId === 0) {
+        document.getElementById("alertTypeLinea").style.display = "";
+      } else {
+        document.getElementById("alertTypeLinea").style.display = "none";
+      }
     }
   }
 
@@ -375,11 +403,11 @@ function EditingLineaCreaLinea() {
 
   const [open, setOpen] = React.useState(false);
   const [openRemove, setOpenRemove] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -387,11 +415,16 @@ function EditingLineaCreaLinea() {
   const handleOpenRemove = () => {
     setOpenRemove(true);
   };
-
   const handleCloseRemove = () => {
     setOpenRemove(false);
   };
 
+  const handleOpenEdit = () => {
+    setOpenEdit(true);
+  };
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+  };
   //--------------------MODAALE 2----------------------------------
 
   const [open2, setOpen2] = React.useState(false);
@@ -555,7 +588,7 @@ function EditingLineaCreaLinea() {
                   <Form.Label>Numero</Form.Label>
                   <Form.Control
                     className={classes.formControl}
-                    type="text"
+                    type="number"
                     placeholder="Inserisci Numero"
                     onChange={(e) => setNumero(e.target.value)}
                   />
@@ -564,7 +597,7 @@ function EditingLineaCreaLinea() {
                     id="alertNumero"
                     style={{ display: "none" }}
                   >
-                    Numero is required!
+                    Il Numero è richiesto!
                   </Alert>
                 </Form.Group>
               </Paper>
@@ -575,51 +608,54 @@ function EditingLineaCreaLinea() {
                   <div className={classes.divIp}>
                     <Form.Control
                       className={classes.formControlIp}
-                      type="text"
+                      type="number"
                       placeholder="IP1"
                       onChange={(e) => {
                         setIP1(e.target.value);
-                        aggiornaIP();
                       }}
                     />{" "}
                     <Typography className={classes.separatoreIp}>.</Typography>
                     <Form.Control
                       className={classes.formControlIp}
-                      type="text"
+                      type="number"
                       placeholder="IP2"
                       onChange={(e) => {
                         setIP2(e.target.value);
-                        aggiornaIP();
                       }}
                     />{" "}
                     <Typography className={classes.separatoreIp}>.</Typography>
                     <Form.Control
                       className={classes.formControlIp}
-                      type="text"
+                      type="number"
                       placeholder="IP3"
                       onChange={(e) => {
                         setIP3(e.target.value);
-                        aggiornaIP();
                       }}
                     />{" "}
                     <Typography className={classes.separatoreIp}>.</Typography>
                     <Form.Control
                       className={classes.formControlIp}
-                      type="text"
+                      type="number"
                       placeholder="IP4"
                       onChange={(e) => {
                         setIP4(e.target.value);
-                        aggiornaIP();
                       }}
                     />{" "}
-                    <Alert
-                      severity="error"
-                      id="alertIP"
-                      style={{ display: "none" }}
-                    >
-                      IP Linea is required!
-                    </Alert>
                   </div>
+                  <Alert
+                    severity="error"
+                    id="alertIP"
+                    style={{ display: "none" }}
+                  >
+                    IP Linea è richiesto!
+                  </Alert>
+                  <Alert
+                    severity="error"
+                    id="alertIP2"
+                    style={{ display: "none" }}
+                  >
+                    I valori dell'IP devono andare da 0 a 255 !
+                  </Alert>
                 </Form.Group>
               </Paper>
 
@@ -637,7 +673,7 @@ function EditingLineaCreaLinea() {
                     id="alertPassword"
                     style={{ display: "none" }}
                   >
-                    Password is required!
+                    La Password è richiesta!
                   </Alert>
                 </Form.Group>
               </Paper>
@@ -687,6 +723,13 @@ function EditingLineaCreaLinea() {
                         );
                       })}
                     </Select>
+                    <Alert
+                      severity="error"
+                      id="alertTypeLinea"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare il Tipo di Linea
+                    </Alert>
                   </FormControl>
                   <div className={classes.modaleAddLinea}>
                     {/* ----------------------------MODALI----------------------------------------*/}
@@ -712,6 +755,18 @@ function EditingLineaCreaLinea() {
                       >
                         TYPE
                       </Button>
+                      <br />
+                      <br />
+                      <Button
+                        onClick={handleOpenEdit}
+                        variant="contained"
+                        style={{ backgroundColor: "#ffc107" }}
+                        startIcon={<EditIcon />}
+                        size="small"
+                      >
+                        TYPE
+                      </Button>
+                      {/*------------------MODALE AGGIUNGI TYPE--------------- */}
                       <Modal
                         className={classes.modal}
                         open={open}
@@ -905,6 +960,81 @@ function EditingLineaCreaLinea() {
                                     </Button>
                                     <Button
                                       onClick={handleCloseRemove}
+                                      variant="contained"
+                                      color="primary"
+                                    >
+                                      annulla
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </Paper>
+                          </div>
+                        </Fade>
+                      </Modal>
+                      {/*------------------MODALE MODIFICA TYPE--------------- */}
+                      <Modal
+                        className={classes.modal}
+                        open={openEdit}
+                        onClose={handleCloseEdit}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                          timeout: 500,
+                        }}
+                      >
+                        <Fade in={openEdit}>
+                          <div className={classes.paper2}>
+                            <Paper>
+                              <div>
+                                <ListItem>
+                                  <ListItemIcon>
+                                    <SettingsIcon className={classes.icon} />
+                                  </ListItemIcon>
+                                  <Typography
+                                    className={classes.intestazione}
+                                    variant="h5"
+                                  >
+                                    Modifica TypeLinea
+                                  </Typography>
+                                </ListItem>
+                              </div>
+
+                              <div className={classes.paperBottom}>
+                                
+                                <Form.Group controlId="form.Numero">
+                                  <Form.Control
+                                    type="text"
+                                    placeholder="Inserisci in nuovo nome"
+                                    defaultValue={openEdit === true? typeLineaDescrizione : ""}
+                                    //onChange={(e) => setPorta(e.target.value)}
+                                  />
+                                  <Alert
+                                    severity="error"
+                                    id="alertEditType"
+                                    style={{ display: "none" }}
+                                  >
+                                    Inserire il nuovo nome!
+                                  </Alert>
+                                </Form.Group>
+
+                                <div className={classes.divider2}>
+                                  <Divider />
+                                </div>
+
+                                <div className={classes.bottoni}>
+                                  <div>
+                                    <Button
+                                      onClick={() =>
+                                        removeTypeLinea(typeLineaId.id)
+                                      }
+                                      variant="contained"
+                                      color="secondary"
+                                    >
+                                      modifica
+                                    </Button>
+                                    <Button
+                                      onClick={handleCloseEdit}
                                       variant="contained"
                                       color="primary"
                                     >

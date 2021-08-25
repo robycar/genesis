@@ -174,7 +174,6 @@ function EditingTestSuite() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
           </div>
@@ -247,6 +246,15 @@ function EditingTestSuite() {
                 to="/editing/testsuite"
               >
                 TEST SUITE
+              </Button>
+              <Button
+                className="button-green"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testgeneratore"
+              >
+                TEST GENERATORE
               </Button>
             </div>
           </div>

@@ -123,7 +123,8 @@ function Obp() {
     {
       title: "Creato da",
       field: "creato",
-    },    {
+    },
+    {
       title: "Modificato da",
       field: "modificato",
     },
@@ -502,9 +503,9 @@ function Obp() {
                     label="Tipo Linea"
                     value={appearLine.id}
                     defaultValue={typeLinea}
-                    renderValue={(selected) => {
-                      selected.join(", ");
-                    }}
+                    // renderValue={(selected) => {
+                    //   selected.join(", ");
+                    // }}
                     onChange={(e) => {
                       setTypeLinea(e.target.value);
 
@@ -514,7 +515,7 @@ function Obp() {
                   >
                     {appearLine.map((linea) => (
                       <MenuItem key={linea.id} value={linea.id}>
-                        <Checkbox checked={typeLinea.indexOf(linea.id) > -1} />
+                        {/* <Checkbox checked={typeLinea.indexOf(linea.id) > -1} /> */}
 
                         {linea.descrizione}
 

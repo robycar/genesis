@@ -22,7 +22,8 @@ import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
-import TestCaseTableNew from "../../components/TestCaseTableNew";
+//import TestSuiteTable from "../../components/TestSuiteTable";
+import TestSuiteTableNew from "../../components/TestSuiteTableNew";
 
 const drawerWidth = 240;
 
@@ -132,7 +133,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function EditingTestTestCase() {
+function EditingTestGeneratore() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerClose = () => {
@@ -222,7 +223,7 @@ function EditingTestTestCase() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/testcase"
+              to="/editing/testsuite"
             >
               TEST
             </Button>
@@ -230,6 +231,7 @@ function EditingTestTestCase() {
               <Button
                 className="button-green"
                 component={NavLink}
+                variant="contained"
                 activeClassName="button-green-active"
                 exact
                 to="/editing/testcase"
@@ -263,11 +265,11 @@ function EditingTestTestCase() {
               </ListItemIcon>
               <Typography className={classes.titolo}>
                 {" "}
-                Total Test Case{" "}
+                Total Test Suite{" "}
               </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <TestCaseTableNew />
+            <TestSuiteTableNew />
           </Paper>
         </Container>
       </main>
@@ -275,4 +277,4 @@ function EditingTestTestCase() {
   );
 }
 
-export default EditingTestTestCase;
+export default EditingTestGeneratore;

@@ -33,6 +33,8 @@ import SelectBar from "./SelectBar";
 import BackupIcon from "@material-ui/icons/Backup";
 import { useForm } from "react-hook-form";
 import "../styles/App.css";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -1096,8 +1098,106 @@ const SecondStep = () => {
 };
 
 const ThirdStep = () => {
+  const useStyles = makeStyles((theme) => ({
+    margin: {
+      margin: theme.spacing(1),
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(1),
+    },
+  }));
+
+  const classes = useStyles();
+  const [openModalUploadCategory, setOpenModalUploadCategory] =
+    React.useState(false);
+
+  const handleOpenModalUploadCategory = () => {
+    setOpenModalUploadCategory(true);
+  };
+
+  const handleCloseUploadCategory = () => {
+    setOpenModalUploadCategory(false);
+  };
+
   return (
     <div>
+      <Modal
+        className={classes.modal}
+        open={openModalUploadCategory}
+        onClose={handleCloseUploadCategory}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openModalUploadCategory}>
+          <Paper className={classes.paper}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h5">
+                  Carica i files XML
+                </Typography>
+              </ListItem>
+            </div>
+
+            <div className={classes.paperBottom}>
+              {/* <Typography variant="h6">Seleziona Test Case</Typography>
+              <div className={classes.divSelectBar}>
+                <div className={classes.divTextarea}>
+                  <Typography className={classes.contenuto} variant="h11">
+                    Nome del Test
+                  </Typography>
+                </div>
+                <SelectBar nome="Seleziona" classeName={classes.selectBar} />
+              </div>
+
+              <div className={classes.divTextarea}>
+                <Typography className={classes.contenuto} variant="h11">
+                  Descrizione
+                </Typography>
+              </div>
+              <SelectBar nome="Seleziona" classeName={classes.selectBar} /> */}
+
+              <div>
+                <input
+                  type="file"
+                  name="file"
+                  // onChange={changeHandler}
+                  multiple
+                />
+                <div className={classes.bottoni}>
+                  <Button
+                    variant="contained"
+                    onClick={handleCloseUploadCategory}
+                    color="secondary"
+                  >
+                    Aggiorna
+                  </Button>
+                </div>
+              </div>
+
+              {/* <div className={classes.bottoni}>
+                <Button variant="contained" color="secondary">
+                  Schedula Test
+                </Button>
+
+                <Button variant="contained" color="primary">
+                  Carica Test
+                </Button>
+
+                
+              </div> */}
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+      <Fab color="secondary" aria-label="add" className={classes.margin}>
+        <AddIcon onClick={handleOpenModalUploadCategory} />
+      </Fab>
       <main className="flexbox">
         <Board id="board-1" className="board">
           <CardTemplate id="card-1" className="card" draggable="true">

@@ -211,6 +211,7 @@
   margin: 15px !important;
   border: 1px solid #47b881 !important;
   border-radius: 5px !important;
+  height: 400px !important;
 
 
   }
@@ -225,4 +226,18 @@
   
   margin-bottom: 15px !important;
   
+}
+
+.MuiListItem-root.Mui-selected,
+.MuiListItem-root.Mui-selected:hover {
+  background-color: #47b881 !important;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+input[type=number] {
+  -moz-appearance:textfield;
 }

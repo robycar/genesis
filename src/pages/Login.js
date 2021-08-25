@@ -14,7 +14,11 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "10%",
+    // backgroundColor: "yellow",
   },
   image: {
     // backgroundImage: `url(${loginImage})`,
@@ -39,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    // backgroundColor: "red",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -101,21 +106,22 @@ export default function Login() {
 
     const timer = () => {
       setTimeout(function () {
-        alert("Mancano 5 minuti alla scadenza del token, verrete reindirizzatti automaticamente alla login")
+        alert(
+          "Mancano 5 minuti alla scadenza del token, verrete reindirizzatti automaticamente alla login"
+        );
         setTimeout(function () {
           history.push("/");
-          localStorage.setItem("token", "")
+          localStorage.setItem("token", "");
         }, 1000 * 60 * 5);
-
       }, 1000 * 60 * 55);
-    }
+    };
 
-    clearTimeout(timer)
+    clearTimeout(timer);
 
     if (result.error == null) {
       localStorage.setItem("token", JSON.stringify(result.access_token));
 
-      timer()
+      timer();
 
       history.push("/dashboard/testcase");
     } else if (result.error.code === "ADMIN-0004") {
@@ -215,11 +221,6 @@ export default function Login() {
             </div>
           </Paper>
         </div>
-      </Grid>
-      <Grid item xs={false} sm={4} md={7} className={classes.image}>
-        {/* <div className={classes.image}>
-          <img src={loginImage} alt="Logo" />
-        </div> */}
       </Grid>
     </Grid>
   );

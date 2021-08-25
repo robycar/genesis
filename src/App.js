@@ -34,7 +34,7 @@ import AmministrazioneViewGruppoAddPartecipante from "./pages/amministrazione/Am
 // import LoginChiara from "./pages/login/LoginChiara";
 import Login from "./pages/Login";
 import EditingLineeGeneratore from "./pages/editing/EditingLineeGeneratore";
-
+import EditingTestGeneratore from "./pages/editing/EditingTestGeneratore";
 
 function App() {
   return (
@@ -79,6 +79,11 @@ function App() {
         /> */}
         <Route path="/editing/testcase" exact component={EditingTestCase} />
         <Route path="/editing/testsuite" exact component={EditingTestSuite} />
+        <Route
+          path="/editing/testgeneratore"
+          exact
+          component={EditingTestGeneratore}
+        />
 
         <Route
           path="/editing/testcreatestcase"
@@ -121,7 +126,6 @@ function App() {
           exact
           component={AmministrazioneCreaRuolo}
         />
-
         <Route path="/report" exact component={Report} />
         <Route path="/report/testsuite" exact component={ReportTestSuite} />
         <Route path="/report/testcase" exact component={ReportTestCase} />
@@ -144,7 +148,11 @@ function App() {
           exact
           component={AmministrazioneViewGruppoAddPartecipante}
         />
-        <Route path="/editing/lineegeneratore" exact component={EditingLineeGeneratore} />
+        <Route
+          path="/editing/lineegeneratore"
+          exact
+          component={EditingLineeGeneratore}
+        />
         {/* <Route path="/login" exact component={LoginChiara} /> */}
       </Switch>
     </BrowserRouter>

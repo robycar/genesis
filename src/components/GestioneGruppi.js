@@ -130,6 +130,7 @@ const GestioneRuoli = () => {
     {
       title: "Nome",
       field: "nome",
+      defaultSort: "desc",
     },
     {
       title: "Descrizione",
@@ -226,6 +227,7 @@ const GestioneRuoli = () => {
           // selection: true,
           // columnsButton: true,
           filtering: true,
+          sorting: true,
         }}
         editable={{
           onRowDelete: (oldData) =>

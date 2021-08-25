@@ -54,7 +54,7 @@ const TestCaseComplete = () => {
 
   const columns = [
     {
-      title: "ID ",
+      title: "ID",
       field: "id",
     },
     {

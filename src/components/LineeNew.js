@@ -131,7 +131,7 @@ function Linee() {
     if (ip !== "") invia();
   };
   const columns = [
-    { title: "Id", field: "id" },
+    { title: "ID Linea", field: "id" },
     {
       title: "Path Csv",
       field: "pathCsv",
@@ -149,12 +149,12 @@ function Linee() {
       field: "typeLinea.descrizione",
     },
     {
-      title: "Created By",
-      field: "createdBy",
+      title: "Creato da",
+      field: "creatoDa",
     },
     {
-      title: "Modified By",
-      field: "modifiedBy",
+      title: "Modificato da",
+      field: "modificatoDa",
     },
   ];
 

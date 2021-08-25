@@ -518,6 +518,7 @@ function EditingOutboundProxy() {
                     className={classes.formControl}
                     type="number"
                     placeholder="Inserisci Porta"
+                    defaultValue="5060"
                     onChange={(e) => setPorta(e.target.value)}
                   />
                   <Alert
@@ -561,18 +562,19 @@ function EditingOutboundProxy() {
                       value={typeLineaId}
                       onChange={handleChange}
                       input={<Input />}
-                      renderValue={(selected) => selected.join(", ")}
+                      // renderValue={(selected) => selected.join(", ")}
                       //MenuProps={MenuProps}
                     >
                       {data.map((prova) => {
                         return (
                           <MenuItem key={prova.id} value={prova.id}>
                             {/* {prova.descrizione} */}
-                            <Checkbox
+                            {/* <Checkbox
                               checked={typeLineaId.indexOf(prova.id) > -1}
-                            />
+                            /> */}
+                            {prova.descrizione}
 
-                            <ListItemText primary={prova.descrizione} />
+                            {/* <ListItemText primary={prova.descrizione} /> */}
                           </MenuItem>
                         );
                       })}

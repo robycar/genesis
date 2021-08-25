@@ -162,7 +162,7 @@ const GestioneUtenti = () => {
 
   const columns = [
     {
-      title: "ID",
+      title: "ID Utente",
       field: "id",
     },
     {
@@ -356,7 +356,7 @@ const GestioneUtenti = () => {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azione",
           },
         }}
         editable={{
