@@ -248,23 +248,26 @@ function EditingOutboundProxy() {
   const [descrizione, setDescrizione] = useState("");
   const [typeLineaId, setTypeLineaId] = useState([]);
 
-  const aggiornaIP = () => {
-    if (
-      ip1 !== "" &&
-      //ip1.length < 5 &&
-      ip2 !== "" &&
-      //ip2.length < 5 &&
-      ip3 !== "" &&
-      //ip3 < 5 &&
-      ip4 !== ""
-      // ip4.length < 5
-    ) {
-      setIPDestinazione(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
-      console.log(ipDestinazione, "ip okay");
-    }
-  };
-
   function salva() {
+    const aggiornaIP = () => {
+      if (
+        (ip1 >= 0 && ip1 <= 255) &&
+        (ip2 >= 0 && ip2 <= 255) &&
+        (ip3 >= 0 && ip3 <= 255) &&
+        (ip4 >= 0 && ip4 <= 255)
+      ) {
+        setIPDestinazione(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
+        document.getElementById("alertIP").style.display = "none";
+        document.getElementById("alertNumero").style.display = "none";
+        document.getElementById("alertPassword").style.display = "none";
+        document.getElementById("alertPorta").style.display = "none";
+        document.getElementById("alertTypeLinea").style.display = "none";
+        document.getElementById("alertIP2").style.display = "none";
+        Invia()
+      } else {
+        document.getElementById("alertIP2").style.display = "";
+      }
+    };
     const Invia = () => {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
@@ -299,7 +302,10 @@ function EditingOutboundProxy() {
     }
 
     if (
-      ipDestinazione !== "" &&
+      ip1 !== "" &&
+      ip2 !== "" &&
+      ip3 !== "" &&
+      ip4 !== "" &&
       descrizione !== "" &&
       typeLineaId !== "" &&
       (porta === "" || (porta.length > 3 && porta.length < 6))
@@ -307,12 +313,23 @@ function EditingOutboundProxy() {
       if (porta === "") {
         setPorta("5060");
       }
-      Invia();
+      aggiornaIP();
     } else {
-      if (ipDestinazione === "") {
+      if (ip1 === "" || ip2 === "" || ip3 === "" || ip4 === "") {
         document.getElementById("alertIP").style.display = "";
       } else {
         document.getElementById("alertIP").style.display = "none";
+      }
+      if (
+        (ip1 >= 0 && ip1 <= 255) &&
+        (ip2 >= 0 && ip2 <= 255) &&
+        (ip3 >= 0 && ip3 <= 255) &&
+        (ip4 >= 0 && ip4 <= 255)
+      ) {
+        setIPDestinazione(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
+        document.getElementById("alertIP2").style.display = "none";
+      } else {
+        document.getElementById("alertIP2").style.display = "";
       }
       if (descrizione === "") {
         document.getElementById("alertDescrizione").style.display = "";
@@ -439,50 +456,48 @@ function EditingOutboundProxy() {
             </ListItem>
             <Divider className={classes.divider} />
 
-            <Paper className={classes.generalContainer} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>IP Proxy Address</Form.Label>
-                  <div className={classes.divIp}>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="text"
-                      placeholder="IP1"
-                      onChange={(e) => {
-                        setIP1(e.target.value);
-                        aggiornaIP();
-                      }}
-                    />{" "}
-                    <Typography className={classes.separatoreIp}>.</Typography>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="text"
-                      placeholder="IP2"
-                      onChange={(e) => {
-                        setIP2(e.target.value);
-                        aggiornaIP();
-                      }}
-                    />{" "}
-                    <Typography className={classes.separatoreIp}>.</Typography>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="text"
-                      placeholder="IP3"
-                      onChange={(e) => {
-                        setIP3(e.target.value);
-                        aggiornaIP();
-                      }}
-                    />{" "}
-                    <Typography className={classes.separatoreIp}>.</Typography>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="text"
-                      placeholder="IP4"
-                      onChange={(e) => {
-                        setIP4(e.target.value);
-                        aggiornaIP();
-                      }}
-                    />{" "}
+            <div className={classes.generalContainer}>
+              <Paper className={classes.generalContainer} elevation={0}>
+                <Paper className={classes.divSelect} elevation={0}>
+                  <Form.Group controlId="form.Numero">
+                    <Form.Label>IP Proxy Address</Form.Label>
+                    <div className={classes.divIp}>
+                      <Form.Control
+                        className={classes.formControlIp}
+                        type="text"
+                        placeholder="IP1"
+                        onChange={(e) => {
+                          setIP1(e.target.value);
+                        }}
+                      />{" "}
+                      <Typography className={classes.separatoreIp}>.</Typography>
+                      <Form.Control
+                        className={classes.formControlIp}
+                        type="text"
+                        placeholder="IP2"
+                        onChange={(e) => {
+                          setIP2(e.target.value);
+                        }}
+                      />{" "}
+                      <Typography className={classes.separatoreIp}>.</Typography>
+                      <Form.Control
+                        className={classes.formControlIp}
+                        type="text"
+                        placeholder="IP3"
+                        onChange={(e) => {
+                          setIP3(e.target.value);
+                        }}
+                      />{" "}
+                      <Typography className={classes.separatoreIp}>.</Typography>
+                      <Form.Control
+                        className={classes.formControlIp}
+                        type="text"
+                        placeholder="IP4"
+                        onChange={(e) => {
+                          setIP4(e.target.value);
+                        }}
+                      />{" "}
+                    </div>
                     <Alert
                       severity="error"
                       id="alertIP"
@@ -490,49 +505,55 @@ function EditingOutboundProxy() {
                     >
                       IP Linea is required!
                     </Alert>
-                  </div>
-                </Form.Group>
-              </Paper>
+                    <Alert
+                      severity="error"
+                      id="alertIP2"
+                      style={{ display: "none" }}
+                    >
+                      I valori dell'IP devono andare da 0 a 255 !
+                    </Alert>
+                  </Form.Group>
+                </Paper>
 
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Label>Descrizione</Form.Label>
-                <Form.Control
-                  className={classes.formControl}
-                  type="text"
-                  placeholder="Inserisci Descrizione"
-                  onChange={(e) => setDescrizione(e.target.value)}
-                />
-                <Alert
-                  severity="error"
-                  id="alertDescrizione"
-                  style={{ display: "none" }}
-                >
-                  Descrizione is required!
-                </Alert>
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Porta</Form.Label>
+                <Paper className={classes.divSelect} elevation={0}>
+                  <Form.Label>Descrizione</Form.Label>
                   <Form.Control
                     className={classes.formControl}
-                    type="number"
-                    placeholder="Inserisci Porta"
-                    defaultValue={porta}
-                    onChange={(e) => setPorta(e.target.value)}
+                    type="text"
+                    placeholder="Inserisci Descrizione"
+                    onChange={(e) => setDescrizione(e.target.value)}
                   />
                   <Alert
                     severity="error"
-                    id="alertPorta"
+                    id="alertDescrizione"
                     style={{ display: "none" }}
                   >
-                    La lunghezza della porta deve essere compresa tra 4 e 5
-                    valori!
+                    Descrizione is required!
                   </Alert>
-                </Form.Group>
-              </Paper>
+                </Paper>
 
-              {/* <Paper className={classes.paper} elevation={0}>
+                <Paper className={classes.divSelect} elevation={0}>
+                  <Form.Group controlId="form.Numero">
+                    <Form.Label>Porta</Form.Label>
+                    <Form.Control
+                      className={classes.formControl}
+                      type="number"
+                      placeholder="Inserisci Porta"
+                      defaultValue={porta}
+                      onChange={(e) => setPorta(e.target.value)}
+                    />
+                    <Alert
+                      severity="error"
+                      id="alertPorta"
+                      style={{ display: "none" }}
+                    >
+                      La lunghezza della porta deve essere compresa tra 4 e 5
+                      valori!
+                    </Alert>
+                  </Form.Group>
+                </Paper>
+
+                {/* <Paper className={classes.paper} elevation={0}>
                 <Form.Label className={classes.label2}>Porta</Form.Label>
                 <Form.Control
                   className={classes.formControl}
@@ -549,48 +570,48 @@ function EditingOutboundProxy() {
                 </Alert>
               </Paper> */}
 
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Tipo Linea</Form.Label>
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControlSelect}
-                  >
-                    <Select
-                      multiple
-                      className={classes.select}
-                      value={typeLineaId}
-                      onChange={handleChange}
-                      input={<Input />}
+                <Paper className={classes.divSelect} elevation={0}>
+                  <Form.Group controlId="form.Numero">
+                    <Form.Label>Tipo Linea</Form.Label>
+                    <FormControl
+                      variant="outlined"
+                      className={classes.formControlSelect}
+                    >
+                      <Select
+                        multiple
+                        className={classes.select}
+                        value={typeLineaId}
+                        onChange={handleChange}
+                        input={<Input />}
                       // renderValue={(selected) => selected.join(", ")}
                       //MenuProps={MenuProps}
-                    >
-                      {data.map((prova) => {
-                        return (
-                          <MenuItem key={prova.id} value={prova.id}>
-                            {/* {prova.descrizione} */}
-                            {/* <Checkbox
+                      >
+                        {data.map((prova) => {
+                          return (
+                            <MenuItem key={prova.id} value={prova.id}>
+                              {/* {prova.descrizione} */}
+                              {/* <Checkbox
                               checked={typeLineaId.indexOf(prova.id) > -1}
                             /> */}
-                            {prova.descrizione}
+                              {prova.descrizione}
 
-                            {/* <ListItemText primary={prova.descrizione} /> */}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                    <Alert
-                      severity="error"
-                      id="alertTypeLinea"
-                      style={{ display: "none" }}
-                    >
-                      Selezionare almeno un TypeLinea
-                    </Alert>
-                  </FormControl>
-                </Form.Group>
+                              {/* <ListItemText primary={prova.descrizione} /> */}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                      <Alert
+                        severity="error"
+                        id="alertTypeLinea"
+                        style={{ display: "none" }}
+                      >
+                        Selezionare almeno un TypeLinea
+                      </Alert>
+                    </FormControl>
+                  </Form.Group>
+                </Paper>
               </Paper>
-            </Paper>
-
+            </div>
             <Divider className={classes.divider} />
             <div className={classes.bottone}>
               <ButtonClickedGreen

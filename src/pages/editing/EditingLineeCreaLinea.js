@@ -322,7 +322,7 @@ function EditingLineaCreaLinea() {
         password: password,
         porta: porta,
         typeLinea: {
-          id: typeLineaId,
+          id: typeLineaId.id
         },
       });
 
@@ -335,6 +335,7 @@ function EditingLineaCreaLinea() {
 
       fetch(`/api/linea`, requestOptions)
         .then((response) => response.json())
+        .then((result)=> console.log(result))
         .catch((error) => console.log("error", error));
 
       // localStorage.setItem("user-info", JSON.stringify(result));
