@@ -45,6 +45,7 @@ const TestRunningTable = () => {
     {
       title: "ID",
       field: "id",
+      defaultSort:"desc"
     },
     {
       title: "Nome",
@@ -116,7 +117,7 @@ const TestRunningTable = () => {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
         

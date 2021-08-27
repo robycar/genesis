@@ -59,6 +59,7 @@ const TestSuiteCaricatiTable = () => {
     {
       title: "Launcher",
       field: "launcher",
+      defaultSort:"desc"
     },
     {
       title: "Name TS",
@@ -216,7 +217,7 @@ const TestSuiteCaricatiTable = () => {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
         // components={{

@@ -219,9 +219,9 @@ function EditingTestGeneratore() {
               TEMPLATE
             </Button>
             <Button
-              className="button-green"
+              className="button-green-active"
               component={NavLink}
-              activeClassName="button-green-active"
+              activeClassName="button-green"
               exact
               to="/editing/testsuite"
             >

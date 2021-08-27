@@ -36,6 +36,10 @@ import acccessControl from "../../service/url";
 import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import Prova from "../../components/Prova";
 
 const drawerWidth = 240;
 
@@ -153,7 +157,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2%",
   },
   titolo: {
-    marginBottom: "2%",
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "24px",
+    color: "#66788A",
+    lineHeight: "20px",
+    padding: "2%",
+    // marginTop: "2%",
   },
   InputSelect: {
     width: "364.8px",
@@ -233,12 +243,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+//--------------------------FUNZIONI STEPPER------------------------------
+function getSteps() {
+  return ['Inserire nome test e descrizione', 'Impostare Chiamato', 'Impostare Chiamante/i'];
+}
+
+//--------------------------FINE FUNZIONI STEPPER------------------------------
+
 function EditingTestCreaTestCase() {
   const classes = useStyles();
 
   const [data, setData] = useState([]);
+  const [lineaChiamato, setLineaChiamato] = useState();
+  const [OBPChiamato, setOBPChiamato] = useState();
+  const [fileChiamato, setFileChiamato] = useState();
+  const [numChiamanti, setNumChiamanti] = useState();
+  const [appearLinea, setAppearLinea] = useState([]);
+  const [appearOBP, setAppearOBP] = useState([]);
+  const [appearFile, setAppearFile] = useState([]);
   const [openDrawer, setOpenDrawer] = useState([]);
 
+  const appearChiamanti=[{valore:"1"},{valore:"2"},{valore:"3"}]
+
+  let prova1=()=>{
+    console.log("ciao")
+  }
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -266,12 +295,84 @@ function EditingTestCreaTestCase() {
       .catch((error) => console.log("error", error));
   };
 
+  const getLinea = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/linea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLinea(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const getOBP = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/obp`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearOBP(result.list)
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const getFile = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearFile(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   const removeTypeLinea = (id) => {
-    alert("id "+id+" rimosso")
+    alert("id " + id + " rimosso")
   }
 
   useEffect(() => {
     getTypeId();
+    getLinea();
+    getFile();
+    getOBP();
   }, []);
 
   const [ip, setIP] = useState("");
@@ -281,7 +382,7 @@ function EditingTestCreaTestCase() {
   const [ip4, setIP4] = useState("");
   const [Nome, setNome] = useState("");
   const [password, setPassword] = useState("");
-  const [porta, setPorta] = useState("");
+  const [descrizione, setDescrizione] = useState("");
   const [typeLineaId, setTypeLineaId] = useState(0);
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
@@ -312,7 +413,7 @@ function EditingTestCreaTestCase() {
         ip: ip,
         Nome: Nome,
         password: password,
-        porta: porta,
+        descrizione: descrizione,
         typeLinea: {
           id: typeLineaId,
         },
@@ -338,9 +439,7 @@ function EditingTestCreaTestCase() {
       ip !== "" &&
       Nome !== "" &&
       password !== "" &&
-      porta !== "" &&
-      porta.length > 3 &&
-      porta.length < 6 &&
+      descrizione !== "" &&
       typeLineaId !== ""
     ) {
       Invia();
@@ -361,16 +460,16 @@ function EditingTestCreaTestCase() {
       } else {
         document.getElementById("alertPassword").style.display = "none";
       }
-      if (porta === "" || porta.length < 4 || porta.length > 5) {
-        document.getElementById("alertPorta").style.display = "";
+      if (descrizione === "") {
+        document.getElementById("alertDescrizione").style.display = "";
       } else {
-        document.getElementById("alertPorta").style.display = "none";
+        document.getElementById("alertDescrizione").style.display = "none";
       }
     }
   }
 
   //--------------------MODALI TYPE LINEE---------------------------------
-  
+
   const [open, setOpen] = React.useState(false);
   const [openRemove, setOpenRemove] = React.useState(false);
 
@@ -449,6 +548,37 @@ function EditingTestCreaTestCase() {
 
 
   };
+
+  //-----------------------SCRIPT STEPPER------------------------------
+
+  const [activeStep, setActiveStep] = React.useState(0);
+  const steps = getSteps();
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
+  const prova=()=>{
+  var ciao = new Array(0)
+
+      for (let i = 0; i < numChiamanti; i++) {
+        
+          ciao.push("")
+          
+       
+        
+      }
+      console.log(ciao)
+      return( ciao)
+  }
 
   return (
     <div className={classes.root}>
@@ -540,12 +670,15 @@ function EditingTestCreaTestCase() {
           </Button>
         </div>
 
+        {/* ----------------------------CREA TEST CASE---------------------------------------- */}
+
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Linea" />
+          <CreaItem titolo="Crea TestCase" />
 
           <Divider className={classes.divider} />
 
-          <div className={classes.generalContainer}>
+          {/* ------------------------STEP 1--------------------------------- */}
+          <div className={classes.generalContainer} style={{ display: activeStep === 0 ? "" : "none" }}>
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Nome">
@@ -565,281 +698,206 @@ function EditingTestCreaTestCase() {
                   </Alert>
                 </Form.Group>
               </Paper>
+            </Paper>
 
+            <Paper className={classes.paperContainer2} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Nome">
-                  <Form.Label>IP Linea</Form.Label>
-                  <div className={classes.divIp}>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="text"
-                      placeholder="IP1"
-                      onChange={(e) => setIP1(e.target.value)}
-                    />
-                    <Alert
-                      severity="error"
-                      id="alertIP"
-                      style={{ display: "none" }}
-                    >
-                      IP Linea is required!
-                    </Alert>
-                  </div>
-                </Form.Group>
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Nome">
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label>Descrizione</Form.Label>
                   <Form.Control
                     className={classes.formControl}
                     type="text"
-                    placeholder="Inserisci Password"
-                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Inserisci Descrizione"
+                    onChange={(e) => setDescrizione(e.target.value)}
                   />
                   <Alert
                     severity="error"
-                    id="alertPassword"
+                    id="alertDescrizione"
                     style={{ display: "none" }}
                   >
-                    Password is required!
+                    Descizione è richiesta
                   </Alert>
+                </Form.Group>
+              </Paper>
+            </Paper>
+
+          </div>
+          {/* ------------------------STEP 2--------------------------------- */}
+          <div className={classes.generalContainer} style={{ display: activeStep === 1 ? "" : "none" }}>
+          <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Linea</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Select
+                      id="selectLinea"
+                      value={lineaChiamato}
+                      onChange={(e) => setLineaChiamato}
+                    >
+                      {appearLinea.map((linea) => {
+                        return (
+                          <MenuItem key={linea.id} value={linea.id}>
+                            {linea.numero}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertLinea"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare la Linea
+                    </Alert>
+                  </FormControl>
+                </Form.Group>
+
+                <Form.Group >
+                  <Form.Label>OBP</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Select
+                      id="selectOBP"
+                      value={OBPChiamato}
+                      onChange={(e) => setOBPChiamato(e.target.value)}
+                    >
+                      {appearOBP.map((OBP) => {
+                        return (
+                          <MenuItem key={OBP.id} value={OBP.id}>
+                            {OBP.descrizione}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertOBP"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare l'OBP
+                    </Alert>
+                  </FormControl>
                 </Form.Group>
               </Paper>
             </Paper>
 
             <Paper className={classes.paperContainer2} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Nome">
-                  <Form.Label>Porta</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="number"
-                    placeholder="Inserisci Porta"
-                    onChange={(e) => setPorta(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertPorta"
-                    style={{ display: "none" }}
-                  >
-                    La lunghezza della porta deve essere compresa tra 4 e 5
-                    valori!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Nome">
-                  <Form.Label>Type Linea</Form.Label>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>File</Form.Label>
                   <FormControl
                     variant="outlined"
                     className={classes.formControl}
                   >
                     <Select
-                      id="selectTypeId"
-                      value={typeLineaId}
-                      onChange={(e) => {
-                        setTypeLineaId(e.target.value)
-                        setTypeLineaDescrizione(e.target.value.descrizione)
-                      }}
+                      value={fileChiamato}
+                      onChange={(e) => setFileChiamato(e.target.value)}
                     >
-                      {data.map((typeLinea) => {
+                      {appearFile.map((file) => {
                         return (
-                          <MenuItem key={typeLinea.id} value={typeLinea}>
-                            {typeLinea.descrizione}
+                          <MenuItem key={file.id} value={file.id}>
+                            {file.path}
                           </MenuItem>
                         );
                       })}
                     </Select>
+                    <Alert
+                      severity="error"
+                      id="alertFile"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare un File!
+                    </Alert>
                   </FormControl>
-                  <div className={classes.modaleAddLinea}>
-                    {/* ----------------------------MODALI----------------------------------------*/}
+                </Form.Group>
 
-                    <div>
-                      <Button
-                        onClick={handleOpen}
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddIcon />}
-                        size="small"
-                      >
-                        TYPE
-                      </Button>
-                      <br />
-                      <br />
-                      <Button
-                        onClick={handleOpenRemove}
-                        variant="contained"
-                        color="secondary"
-                        startIcon={<RemoveIcon />}
-                        size="small"
-                      >
-                        TYPE
-                      </Button>
-                      <Modal
-                        className={classes.modal}
-                        open={open}
-                        onClose={handleClose}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                          timeout: 500,
-                        }}
-                      >
-                        <Fade in={open}>
-                          <div className={classes.paper2}>
-                            <Paper>
-                              <div>
-                                <ListItem button>
-                                  <ListItemIcon>
-                                    <SettingsIcon className={classes.icon} />
-                                  </ListItemIcon>
-                                  <Typography className={classes.intestazione} variant="h5">
-                                    Add Type Linea{" "}
-                                  </Typography>
-                                </ListItem>
-                              </div>
-
-                              <div className={classes.paperBottom}>
-                                <Typography variant="h11">
-                                  Sei sicuro che il nuovo "Type Linea" non è già presente?
-                                </Typography>
-
-                                <div className={classes.divider2}>
-                                  <Divider />
-                                </div>
-
-                                <div className={classes.bottoni}>
-
-                                  <div>
-                                    <Button onClick={handleOpen2} variant="contained" color="secondary">
-                                      Si, prosegui
-                                    </Button>
-                                    <Modal
-                                      className={classes.modal}
-                                      open={open2}
-                                      onClose={handleClose2}
-                                      closeAfterTransition
-                                      BackdropComponent={Backdrop}
-                                      BackdropProps={{
-                                        timeout: 500,
-                                      }}
-                                    >
-                                      <Fade in={open2}>
-                                        <div className={classes.paper2}>
-                                          <Paper>
-                                            <div>
-                                              <ListItem button>
-                                                <ListItemIcon>
-                                                  <SettingsIcon className={classes.icon} />
-                                                </ListItemIcon>
-                                                <Typography className={classes.intestazione} variant="h5">
-                                                  Add Type Linea{" "}
-                                                </Typography>
-                                              </ListItem>
-                                            </div>
-
-                                            <div className={classes.paperBottom}>
-                                              <form className={classes.root} noValidate autoComplete="off">
-                                                <TextField
-                                                  id="outlined-basic"
-                                                  label="New Type"
-                                                  variant="outlined"
-                                                  onChange={(e) => setType(e.target.value)}
-                                                />
-                                              </form>
-
-                                              <div className={classes.divider2}>
-                                                <Divider />
-                                              </div>
-
-                                              <div className={classes.bottoni}>
-                                                <Button variant="contained" color="secondary" onClick={salva2}>
-                                                  Conferma
-                                                </Button>
-
-                                                <Button variant="contained" onClick={handleClose2} color="primary">
-                                                  Cancel
-                                                </Button>
-                                              </div>
-                                            </div>
-                                          </Paper>
-                                        </div>
-                                      </Fade>
-                                    </Modal>
-                                  </div>
-
-                                  <Button variant="contained" onClick={handleClose} color="primary">
-                                    No
-                                  </Button>
-                                </div>
-                              </div>
-                            </Paper>
-                          </div>
-                        </Fade>
-                      </Modal>
-
-                      {/*------------------MODALE RIMUOVI TYPE--------------- */}
-                      <Modal
-                        className={classes.modal}
-                        open={openRemove}
-                        onClose={handleCloseRemove}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                          timeout: 500,
-                        }}
-                      >
-                        <Fade in={openRemove}>
-                          <div className={classes.paper2}>
-                            <Paper>
-                              <div>
-                                <ListItem >
-                                  <ListItemIcon>
-                                    <SettingsIcon className={classes.icon} />
-                                  </ListItemIcon>
-                                  <Typography className={classes.intestazione} variant="h5">
-                                    Rimuovi TypeLinea{" "}
-                                  </Typography>
-                                </ListItem>
-                              </div>
-
-                              <div className={classes.paperBottom}>
-                                <Typography variant="h11">
-                                  Sei sicuro di voler rimuovere il TypeLinea "<b>{openRemove === true ?typeLineaDescrizione:""}</b>"
-                                </Typography>
-
-                                <div className={classes.divider2}>
-                                  <Divider />
-                                </div>
-
-                                <div className={classes.bottoni}>
-
-                                  <div>
-                                    <Button onClick={()=>removeTypeLinea(typeLineaId.id)} variant="contained" color="secondary">
-                                      Si, RIMUOVI
-                                    </Button>
-                                    <Button onClick={handleCloseRemove} variant="contained" color="primary">
-                                      annulla
-                                    </Button>
-                                    </div>
-                                    </div>
-                                    </div>
-                                    </Paper>
-                                    </div>
-                                    </Fade>
-                                    </Modal>
-
-                      
-                    </div>
-                    {/* ------------------------------FINE MODALI-------------------------------------- */}
-                  </div>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Quanti chiamanti vuoi inserire?</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Select
+                      value={numChiamanti}
+                      onChange={(e) => setNumChiamanti(e.target.value)}
+                    >
+                      {appearChiamanti.map((chiamanti) => {
+                        return (
+                          <MenuItem key={chiamanti.valore} value={chiamanti.valore}>
+                            {chiamanti.valore}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertFile"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare un File!
+                    </Alert>
+                  </FormControl>
                 </Form.Group>
               </Paper>
-            </Paper>
+            </Paper> 
           </div>
+          {/* ------------------------STEP 3--------------------------------- */}
+          <div className={classes.generalContainer} style={{ display: activeStep === 2 ? "" : "none" }}>
+            <Typography className={classes.titolo}> Chiamante/i </Typography>
+
+            {/* <Prova nome={prova1}/> */}
+{/*             
+            {for (let index = 0; index < array.length; index++) {
+              const element = array[index];
+              
+            }} */}
+            {appearFile.map(()=>{
+              <Prova nome={prova1}/>
+            })}
+
+          </div>
+
           <Divider className={classes.divider} />
-          <div className={classes.bottone}>
+
+          {/* -----------------------------------BOTTONI STEP------------------------------------ */}
+          <div className={classes.root}>
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <div>
+              {activeStep === steps.length ? (
+                <div>
+                  <Typography className={classes.instructions}>All steps completed</Typography>
+                  <Button onClick={handleReset}>Reset</Button>
+                </div>
+              ) : (
+                <div>
+                  <div>
+                    <Button
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      className={classes.backButton}
+                    >
+                      Back
+                    </Button>
+                    <Button variant="contained" color="primary" onClick={handleNext}>
+                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          {/* <div className={classes.bottone}>
             <ButtonClickedGreen
               className={classes.bottone}
               size="medium"
@@ -856,7 +914,7 @@ function EditingTestCreaTestCase() {
             >
               annulla
             </Button>
-          </div>
+          </div> */}
         </Paper>
       </main>
     </div>

@@ -299,7 +299,7 @@ const GestioneRuoli = () => {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
       />

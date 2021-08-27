@@ -131,7 +131,7 @@ function Linee() {
     if (ip !== "") invia();
   };
   const columns = [
-    { title: "ID Linea", field: "id" },
+    { title: "ID Linea", field: "id",defaultSort:"desc" },
     {
       title: "Path Csv",
       field: "pathCsv",
@@ -140,6 +140,15 @@ function Linee() {
       title: "IP Linea",
       field: "ip",
     },
+
+    {
+      title: "Numero",
+      field: "numero",
+    },{
+      title: "Password",
+      field: "password",
+    },
+
     {
       title: "Porta",
       field: "porta",
@@ -369,7 +378,7 @@ function Linee() {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
       />

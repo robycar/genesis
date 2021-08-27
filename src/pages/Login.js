@@ -11,6 +11,12 @@ import loginImage from "../../src/assets/image.png";
 import { login } from "../service/api";
 import Alert from "@material-ui/lab/Alert";
 import { useHistory } from "react-router-dom";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import SignUp from "./SignUp";
+import { Link } from "@material-ui/core";
+import ForgotPassword from "./ForgotPassword";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +42,8 @@ const useStyles = makeStyles((theme) => ({
   forgotPassword: {
     // marginBottom: "9%",
     color: "rgba(158, 160, 165, 1)",
-    marginLeft: "70%",
+    marginTop: "10%",
+    // marginLeft: "70%",
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -76,12 +83,23 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   button: {
-    marginTop: "7%",
+    marginTop: "3%",
   },
   signUp: {
-    marginTop: "30%",
+    marginTop: "10%",
     display: "flex",
     flexDirection: "column",
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paperModal: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   },
 }));
 
@@ -120,6 +138,7 @@ export default function Login() {
 
     if (result.error == null) {
       localStorage.setItem("token", JSON.stringify(result.access_token));
+      localStorage.setItem("username", JSON.stringify(result.username));
 
       timer();
 
@@ -135,6 +154,23 @@ export default function Login() {
     (async () => {
       checkRichiesta(await login(username, password));
     })();
+  };
+  const [open, setOpen] = React.useState(false);
+  const [openResetPassword, setOpenResetPassword] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpenResetPassword = () => {
+    setOpenResetPassword(true);
+  };
+
+  const handleCloseResetPassword = () => {
+    setOpenResetPassword(false);
   };
 
   return (
@@ -156,10 +192,10 @@ export default function Login() {
           <Paper className={classes.subpaper1} elevation={0}>
             <div className="subtitle">
               <Typography variant="h5" className={classes.intestazione1}>
-                Sign up to Reply
+                Sign in to Reply
               </Typography>
               <Typography variant="body1" className={classes.intestazione2}>
-                Sign up on the internal platform
+                Sign in on the internal platform
               </Typography>
             </div>
             <Alert
@@ -197,11 +233,7 @@ export default function Login() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
-            <div className={classes.forgotPassword}>
-              <Typography variant="body2" color="rgba(158, 160, 165, 1)">
-                Forgot Password?
-              </Typography>
-            </div>
+
             <Button
               className={classes.button}
               type="submit"
@@ -215,9 +247,69 @@ export default function Login() {
             </Button>
 
             <div className={classes.signUp}>
-              <Button size="small" color="rgba(158, 160, 165, 1)">
+              <Button variant="outlined" color="primary" onClick={handleOpen}>
                 Or Sign up
               </Button>
+              <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                className={classes.modal}
+                open={open}
+                onClose={handleClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                  timeout: 500,
+                }}
+              >
+                <Fade in={open}>
+                  <div className={classes.paperModal}>
+                    <SignUp />
+                    {/* <h2 id="transition-modal-title">Transition modal</h2>
+                    <p id="transition-modal-description">
+                      react-transition-group animates me.
+                    </p> */}
+                  </div>
+                </Fade>
+              </Modal>
+              <div className={classes.forgotPassword}>
+                {/* <Typography variant="body2" color="rgba(158, 160, 165, 1)">
+                Forgot Password?
+              </Typography> */}
+                <Grid container justifyContent="flex-end">
+                  <Grid item>
+                    <Link
+                      href="#"
+                      variant="body2"
+                      onClick={handleOpenResetPassword}
+                    >
+                      Forgot Password?
+                    </Link>
+                    <Modal
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      className={classes.modal}
+                      open={openResetPassword}
+                      onClose={handleCloseResetPassword}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={openResetPassword}>
+                        <div className={classes.paperModal}>
+                          <ForgotPassword />
+                          {/* <h2 id="transition-modal-title">Transition modal</h2>
+                    <p id="transition-modal-description">
+                      react-transition-group animates me.
+                    </p> */}
+                        </div>
+                      </Fade>
+                    </Modal>
+                  </Grid>
+                </Grid>
+              </div>
             </div>
           </Paper>
         </div>

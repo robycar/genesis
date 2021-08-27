@@ -103,7 +103,7 @@ function Obp() {
   };
 
   const columns = [
-    { title: "ID OBP", field: "id" },
+    { title: "ID OBP", field: "id", defaultSort:"desc" },
     {
       title: "Proxy IP Address",
       field: "ipDestinazione",
@@ -321,6 +321,7 @@ function Obp() {
         data={data}
         columns={columns}
         options={{
+          sorting: true,
           actionsColumnIndex: -1,
           search: true,
           exportButton: true,
@@ -388,7 +389,7 @@ function Obp() {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
       />

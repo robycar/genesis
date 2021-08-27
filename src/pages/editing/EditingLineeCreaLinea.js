@@ -305,6 +305,7 @@ function EditingLineaCreaLinea() {
         document.getElementById("alertPorta").style.display = "none";
         document.getElementById("alertTypeLinea").style.display = "none";
         document.getElementById("alertIP2").style.display = "none";
+        Invia()
       } else {
         document.getElementById("alertIP2").style.display = "";
       }
@@ -356,31 +357,27 @@ function EditingLineaCreaLinea() {
       aggiornaIP();
       // console.log(ip);
     } else {
-      if (ip1 === "") {
+      if (ip1 === "" || ip2 === "" || ip3 === "" || ip4 === "") {
         document.getElementById("alertIP").style.display = "";
       } else {
         document.getElementById("alertIP").style.display = "none";
       }
-      if (ip2 === "") {
-        document.getElementById("alertIP").style.display = "";
-      } else {
-        document.getElementById("alertIP").style.display = "none";
-      }
-      if (ip3 === "") {
-        document.getElementById("alertIP").style.display = "";
-      } else {
-        document.getElementById("alertIP").style.display = "none";
-      }
-      if (ip4 === "") {
-        document.getElementById("alertIP").style.display = "";
-      } else {
-        document.getElementById("alertIP").style.display = "none";
-      }
-      if (numero === "") {
-        document.getElementById("alertNumero").style.display = "";
-      } else {
-        document.getElementById("alertNumero").style.display = "none";
-      }
+      if (
+        (ip1 >= 0 && ip1 <= 255) &&
+        (ip2 >= 0 && ip2 <= 255) &&
+        (ip3 >= 0 && ip3 <= 255) &&
+        (ip4 >= 0 && ip4 <= 255)
+        ) {
+          setIP(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
+          document.getElementById("alertIP2").style.display = "none";
+        } else {
+          document.getElementById("alertIP2").style.display = "";
+        }
+        if (numero === "") {
+          document.getElementById("alertNumero").style.display = "";
+        } else {
+          document.getElementById("alertNumero").style.display = "none";
+        }
       if (password === "") {
         document.getElementById("alertPassword").style.display = "";
       } else {
@@ -752,6 +749,7 @@ function EditingLineaCreaLinea() {
                         color="secondary"
                         startIcon={<RemoveIcon />}
                         size="small"
+                        disabled={typeLineaId === 0 ? true : false}
                       >
                         TYPE
                       </Button>
@@ -763,6 +761,7 @@ function EditingLineaCreaLinea() {
                         style={{ backgroundColor: "#ffc107" }}
                         startIcon={<EditIcon />}
                         size="small"
+                        disabled={typeLineaId === 0 ? true : false}
                       >
                         TYPE
                       </Button>
@@ -1001,13 +1000,13 @@ function EditingLineaCreaLinea() {
                               </div>
 
                               <div className={classes.paperBottom}>
-                                
+
                                 <Form.Group controlId="form.Numero">
                                   <Form.Control
                                     type="text"
                                     placeholder="Inserisci in nuovo nome"
-                                    defaultValue={openEdit === true? typeLineaDescrizione : ""}
-                                    //onChange={(e) => setPorta(e.target.value)}
+                                    defaultValue={openEdit === true ? typeLineaDescrizione : ""}
+                                  //onChange={(e) => setPorta(e.target.value)}
                                   />
                                   <Alert
                                     severity="error"

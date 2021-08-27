@@ -114,7 +114,7 @@ export const tertiaryListItems = (
 
 export const quaterListItems = (
   <div className="nav-link">
-    <ListItem
+    {/* <ListItem
       button
       component={NavLink}
       activeClassName="nav-active"
@@ -125,10 +125,10 @@ export const quaterListItems = (
         <LockOpenIcon />
       </ListItemIcon>
       <ListItemText primary="Login" />
-    </ListItem>
+    </ListItem> */}
     <div className="versione">
       <hr />
-      Versione 0.0.6
+      Versione 0.0.5
     </div>
   </div>
 );

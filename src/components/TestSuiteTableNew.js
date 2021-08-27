@@ -10,7 +10,7 @@ import ModalDescriptionTestSuite from "./ModalDescriptionTestSuite";
 
 function TestSuiteTable() {
   const columns = [
-      { title: "Nome Test", field: "name" },
+      { title: "Nome Test", field: "name", defaultSort:"desc"},
       { title: "Template", field: "template" },
       { title: "Modified By", field: "modifiedBy" },
       {
@@ -126,7 +126,7 @@ function TestSuiteTable() {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
 

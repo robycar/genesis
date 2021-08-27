@@ -176,9 +176,9 @@ function EditingLineeGeneratore() {
 
           <div className={classes.buttonContainer}>
             <Button
-              className="button-green"
+              className="button-green-active"
               component={NavLink}
-              activeClassName="button-green-active"
+              activeClassName="button-green"
               exact
               to="/editing/linee"
             >
@@ -224,6 +224,15 @@ function EditingLineeGeneratore() {
               TEST
             </Button>
           </div>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/linee"
+          >
+            LINEE SIMULATORE
+          </Button>
           <Button
             className="button-green"
             component={NavLink}

@@ -56,6 +56,7 @@ const TestSuiteComplete = () => {
     {
       title: "ID ",
       field: "id",
+      defaultSort:"desc"
     },
     {
       title: "Launcher",
@@ -171,6 +172,7 @@ const TestSuiteComplete = () => {
         data={data}
         columns={columns}
         options={{
+          sorting: true,
           tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
@@ -198,7 +200,7 @@ const TestSuiteComplete = () => {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
       />

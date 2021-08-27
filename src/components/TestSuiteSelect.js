@@ -10,7 +10,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 
 const columns = [
-  { id: "name", label: "Nome Test Case", minWidth: 150 },
+  { id: "name", label: "Nome Test Case", minWidth: 150,defaultSort:"desc" },
   { id: "IdTemplate", label: "ID Template", minWidth: 150, align: "center" },
   {
     id: "IdCreated",

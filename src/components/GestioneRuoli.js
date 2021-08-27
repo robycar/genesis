@@ -278,6 +278,11 @@ const GestioneRuoli = () => {
             position: "row",
           },
         ]}
+        localization={{
+          header: {
+            actions: "Azioni",
+          },
+        }}
       />
       <Modal
         aria-labelledby="transition-modal-title"

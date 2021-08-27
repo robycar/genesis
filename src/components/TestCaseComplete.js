@@ -56,6 +56,7 @@ const TestCaseComplete = () => {
     {
       title: "ID",
       field: "id",
+      defaultSort:"desc"
     },
     {
       title: "Launcher",
@@ -196,7 +197,7 @@ const TestCaseComplete = () => {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
       />

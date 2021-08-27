@@ -223,7 +223,32 @@ const GestioneUtenti = () => {
     aggiornaUtente();
     setOpen(false);
   };
+  const Delete = (oldData) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
+    var raw = JSON.stringify({
+      id: oldData.id,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/user?id=` + oldData.id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getAllUsers();
+      })
+      .catch((error) => console.log("error", error));
+  }
+  
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -320,6 +345,7 @@ const GestioneUtenti = () => {
         data={data}
         columns={columns}
         options={{
+          sorting: true,
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
@@ -346,48 +372,24 @@ const GestioneUtenti = () => {
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
-          {
+          rowData => (
+            {
             icon: () => <EditIcon />,
             tooltip: "Edit",
             onClick: (event, rowData) => handleOpen(rowData),
-
             position: "row",
-          },
+          }),
+          rowData => ({
+            icon: 'delete',
+            tooltip: 'Delete User',
+            onClick: (event, rowData) => Delete(rowData),
+            disabled: (rowData.level.nome === "ADMIN") || (rowData.username === localStorage.getItem("username"))
+          }),
         ]}
         localization={{
           header: {
-            actions: "Azione",
+            actions: "Azioni",
           },
-        }}
-        editable={{
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              //Backend call
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-              var raw = JSON.stringify({
-                id: oldData.id,
-              });
-
-              var requestOptions = {
-                method: "DELETE",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
-
-              fetch(`/api/user?id=` + oldData.id, requestOptions)
-                .then((response) => response.json())
-                .then((result) => {
-                  getAllUsers();
-                  resolve();
-                })
-                .catch((error) => console.log("error", error));
-            }),
         }}
       />
       <Modal

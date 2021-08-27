@@ -35,6 +35,12 @@ import { useForm } from "react-hook-form";
 import "../styles/App.css";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import Grid from "@material-ui/core/Grid";
+import { DragDropContext } from "react-beautiful-dnd";
+import Column from "./Column";
+import { FormControl } from "@material-ui/core";
+import { InputLabel } from "@material-ui/core";
+import Select from "@material-ui/core/Select";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -554,7 +560,7 @@ const FirstStep = () => {
   );
 };
 
-const SecondStep = () => {
+const ThirdStep = () => {
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
   if (bearer != null) {
@@ -818,7 +824,7 @@ const SecondStep = () => {
         // parentChildData={(row, rows) => rows.find((a) => a.id === row.parentId)}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
         actions={[
@@ -835,47 +841,49 @@ const SecondStep = () => {
           },
           {
             icon: () => <EditIcon />,
-            tooltip: "Edit",
-            onClick: (event, rowData) => handleOpen(rowData),
+            // EDIT FUNCTION
+            // tooltip: "Edit",
+            // onClick: (event, rowData) => handleOpen(rowData),
 
-            position: "row",
+            // position: "row",
           },
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
-        editable={{
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              //Backend call
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
+        // DELETE FUNCTION
+        // editable={{
+        //   onRowDelete: (oldData) =>
+        //     new Promise((resolve, reject) => {
+        //       //Backend call
+        //       var myHeaders = new Headers();
+        //       myHeaders.append("Authorization", bearer);
+        //       myHeaders.append("Content-Type", "application/json");
+        //       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+        //       myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-              var raw = JSON.stringify({
-                id: oldData.id,
-              });
+        //       var raw = JSON.stringify({
+        //         id: oldData.id,
+        //       });
 
-              var requestOptions = {
-                method: "DELETE",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
+        //       var requestOptions = {
+        //         method: "DELETE",
+        //         headers: myHeaders,
+        //         body: raw,
+        //         redirect: "follow",
+        //       };
 
-              fetch(`/api/user` + "?id=" + oldData.id, requestOptions)
-                .then((response) => response.json())
-                .then((result) => {
-                  getAllTemplate();
-                  resolve();
-                })
-                .catch((error) => console.log("error", error));
-            }),
-        }}
+        //       fetch(`/api/user` + "?id=" + oldData.id, requestOptions)
+        //         .then((response) => response.json())
+        //         .then((result) => {
+        //           getAllTemplate();
+        //           resolve();
+        //         })
+        //         .catch((error) => console.log("error", error));
+        //     }),
+        // }}
       />
       <Modal
         className={classes.modal}
@@ -1097,19 +1105,77 @@ const SecondStep = () => {
   );
 };
 
-const ThirdStep = () => {
+const SecondStep = () => {
   const useStyles = makeStyles((theme) => ({
+    paper: {
+      width: 500,
+      backgroundColor: theme.palette.background.paper,
+      // border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
     margin: {
       margin: theme.spacing(1),
     },
     extendedIcon: {
       marginRight: theme.spacing(1),
     },
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    paperModale: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      width: "fit-content",
+      height: "80%",
+    },
+    paperBottom: {
+      padding: "2%",
+      backgrounColor: "#FFFFFF",
+      //justifyContent: "center",
+      flexDirection: "column",
+      marginTop: "5%",
+    },
+    bottoni: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-around",
+      marginLeft: "55px",
+      marginTop: "4%",
+      marginBottom: "2%",
+    },
+    intestazione: {
+      color: "#47B881",
+      marginTop: "5%",
+      flexDirection: "row",
+    },
+    icon: {
+      transform: "scale(1.8)",
+      color: "#47B881",
+      marginTop: "9px",
+    },
+    selectBar: {
+      width: "50%",
+      height: "100",
+      marginTop: "50px",
+    },
+    divTextarea: {
+      marginTop: "20px",
+    },
   }));
 
   const classes = useStyles();
   const [openModalUploadCategory, setOpenModalUploadCategory] =
     React.useState(false);
+  const [test, setTest] = React.useState("");
 
   const handleOpenModalUploadCategory = () => {
     setOpenModalUploadCategory(true);
@@ -1118,9 +1184,104 @@ const ThirdStep = () => {
   const handleCloseUploadCategory = () => {
     setOpenModalUploadCategory(false);
   };
+  const handleChange = (event) => {
+    setTest(event.target.value);
+  };
+
+  const initialColumns = {
+    Files: {
+      id: "Files",
+      list: [
+        { id: "1", text: "file1" },
+        { id: "2", text: "file2" },
+        { id: "3", text: "file3" },
+        { id: "4", text: "file4" },
+      ],
+    },
+    Chiamato: {
+      id: "Chiamato",
+      list: [
+        // { id: "5", text: "text5" },
+        // { id: "6", text: "text6" },
+      ],
+    },
+    Chiamanti: {
+      id: "Chiamanti",
+      list: [],
+    },
+  };
+
+  const [columns, setColumns] = useState(initialColumns);
+
+  const onDragEnd = ({ source, destination }) => {
+    // Make sure we have a valid destination
+    if (destination === undefined || destination === null) return null;
+
+    // Make sure we're actually moving the item
+    if (
+      source.droppableId === destination.droppableId &&
+      destination.index === source.index
+    )
+      return null;
+
+    // Set start and end variables
+    const start = columns[source.droppableId];
+    const end = columns[destination.droppableId];
+
+    // If start is the same as end, we're in the same column
+    if (start === end) {
+      // Move the item within the list
+      // Start by making a new list without the dragged item
+      console.log(start);
+      const newList = start.list.filter((_, idx) => idx !== source.index);
+
+      // Then insert the item at the right location
+      newList.splice(destination.index, 0, start.list[source.index]);
+
+      // Then create a new copy of the column object
+      const newCol = {
+        id: start.id,
+        list: newList,
+      };
+
+      // Update the state
+      setColumns((state) => ({ ...state, [newCol.id]: newCol }));
+      return null;
+    } else {
+      // If start is different from end, we need to update multiple columns
+      // Filter the start list like before
+      const newStartList = start.list.filter((_, idx) => idx !== source.index);
+
+      // Create a new start column
+      const newStartCol = {
+        id: start.id,
+        list: newStartList,
+      };
+
+      // Make a new end list array
+      const newEndList = end.list;
+
+      // Insert the item into the end list
+      newEndList.splice(destination.index, 0, start.list[source.index]);
+
+      // Create a new end column
+      const newEndCol = {
+        id: end.id,
+        list: newEndList,
+      };
+
+      // Update the state
+      setColumns((state) => ({
+        ...state,
+        [newStartCol.id]: newStartCol,
+        [newEndCol.id]: newEndCol,
+      }));
+      return null;
+    }
+  };
 
   return (
-    <div>
+    <>
       <Modal
         className={classes.modal}
         open={openModalUploadCategory}
@@ -1139,58 +1300,43 @@ const ThirdStep = () => {
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
                 <Typography className={classes.intestazione} variant="h5">
-                  Carica i files XML
+                  Aggiungi una Categoria
                 </Typography>
               </ListItem>
             </div>
 
             <div className={classes.paperBottom}>
-              {/* <Typography variant="h6">Seleziona Test Case</Typography>
-              <div className={classes.divSelectBar}>
-                <div className={classes.divTextarea}>
-                  <Typography className={classes.contenuto} variant="h11">
-                    Nome del Test
-                  </Typography>
-                </div>
-                <SelectBar nome="Seleziona" classeName={classes.selectBar} />
-              </div>
+              <Typography variant="h6">Seleziona Una categoria</Typography>
 
               <div className={classes.divTextarea}>
                 <Typography className={classes.contenuto} variant="h11">
-                  Descrizione
+                  Categoria
                 </Typography>
               </div>
-              <SelectBar nome="Seleziona" classeName={classes.selectBar} /> */}
+              {/* <SelectBar nome="Seleziona" classeName={classes.selectBar} /> */}
+              <FormControl variant="outlined" className={classes.selectBar}>
+                <InputLabel
+                  className={classes.inputLabel}
+                  id="demo-simple-select-outlined-label"
+                ></InputLabel>
+                <Select
+                  onChange={handleChange}
+                  // label="Age"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Prova1</MenuItem>
+                  <MenuItem value={20}>Prova2</MenuItem>
+                  <MenuItem value={30}>Prova3</MenuItem>
+                </Select>
+              </FormControl>
 
-              <div>
-                <input
-                  type="file"
-                  name="file"
-                  // onChange={changeHandler}
-                  multiple
-                />
-                <div className={classes.bottoni}>
-                  <Button
-                    variant="contained"
-                    onClick={handleCloseUploadCategory}
-                    color="secondary"
-                  >
-                    Aggiorna
-                  </Button>
-                </div>
-              </div>
-
-              {/* <div className={classes.bottoni}>
-                <Button variant="contained" color="secondary">
-                  Schedula Test
-                </Button>
-
+              <div className={classes.bottoni}>
                 <Button variant="contained" color="primary">
-                  Carica Test
+                  Aggiungi
                 </Button>
-
-                
-              </div> */}
+              </div>
             </div>
           </Paper>
         </Fade>
@@ -1198,19 +1344,18 @@ const ThirdStep = () => {
       <Fab color="secondary" aria-label="add" className={classes.margin}>
         <AddIcon onClick={handleOpenModalUploadCategory} />
       </Fab>
-      <main className="flexbox">
-        <Board id="board-1" className="board">
-          <CardTemplate id="card-1" className="card" draggable="true">
-            <p>Chiamato</p>
-          </CardTemplate>
-        </Board>
-
-        <Board id="board-2" className="board">
-          <CardTemplate id="card-2" className="card" draggable="true">
-            <p>Chiamate</p>
-          </CardTemplate>
-        </Board>
-      </main>
-    </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Grid container direction={"row"} justify={"center"}>
+          {Object.values(columns).map((column) => {
+            console.log(column);
+            return (
+              <Grid item>
+                <Column column={column} key={column.id} />
+              </Grid>
+            );
+          })}
+        </Grid>
+      </DragDropContext>
+    </>
   );
 };

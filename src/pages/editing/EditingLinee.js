@@ -232,10 +232,20 @@ function EditingLinee() {
             component={NavLink}
             activeClassName="button-green-active"
             exact
+            to="/editing/linee"
+          >
+            LINEE SIMULATORE
+          </Button>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
             to="/editing/lineegeneratore"
           >
             LINEE GENERATORE
           </Button>
+
           <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>
               <ListItemIcon>

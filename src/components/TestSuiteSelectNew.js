@@ -5,8 +5,15 @@ import MaterialTable from "material-table";
 function TestSuiteSelect() {
   const columns = [
       { title: "Nome Test Case", field: "name" },
-      { title: "ID Template", field: "template" },
-      { title: "Modified By", field: "modifiedBy" },
+      { 
+        title: "ID Template", 
+        defaultSort:"desc",
+        field: "template" ,
+      },
+      { 
+        title: "Modified By", 
+        field: "modifiedBy" 
+      },
       {
         title: "Created By",
         field: "createdBy",

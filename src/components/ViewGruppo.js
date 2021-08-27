@@ -15,6 +15,7 @@ const ViewGruppo = () => {
     {
       title: "Username",
       field: "username",
+      defaultSort:"desc"
     },
     {
       title: "Nome",

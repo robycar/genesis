@@ -59,6 +59,7 @@ const TestSchedulatiTable = () => {
     {
       title: "Launcher",
       field: "launcher",
+      defaultSort:"desc"
     },
     {
       title: "Name TS",
@@ -217,7 +218,7 @@ const TestSchedulatiTable = () => {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
       />

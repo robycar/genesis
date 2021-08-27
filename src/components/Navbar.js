@@ -122,6 +122,7 @@ function Navbar() {
   
   const logOut = () => {
     localStorage.setItem("token", "");
+    localStorage.setItem("username", "");
     history.push("/");
   };
   return (

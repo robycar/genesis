@@ -244,7 +244,7 @@ function EditingOutboundProxy() {
   const [ip2, setIP2] = useState("");
   const [ip3, setIP3] = useState("");
   const [ip4, setIP4] = useState("");
-  const [porta, setPorta] = useState("");
+  const [porta, setPorta] = useState("5060");
   const [descrizione, setDescrizione] = useState("");
   const [typeLineaId, setTypeLineaId] = useState([]);
 
@@ -518,7 +518,7 @@ function EditingOutboundProxy() {
                     className={classes.formControl}
                     type="number"
                     placeholder="Inserisci Porta"
-                    defaultValue="5060"
+                    defaultValue={porta}
                     onChange={(e) => setPorta(e.target.value)}
                   />
                   <Alert

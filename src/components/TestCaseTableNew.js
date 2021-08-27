@@ -167,6 +167,7 @@ function TestCaseTable() {
     {
       title: "ID Test",
       field: "id",
+      defaultSort:"desc"
     },
     {
       title: "Nome",
@@ -379,6 +380,7 @@ function TestCaseTable() {
         data={data}
         columns={columns}
         options={{
+          sorting: true,
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
@@ -425,7 +427,7 @@ function TestCaseTable() {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
         editable={{

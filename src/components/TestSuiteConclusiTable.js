@@ -57,6 +57,7 @@ const TestSuiteConclusiTable = () => {
     {
       title: "Launcher",
       field: "launcher",
+      defaultSort:"desc"
     },
     {
       title: "Name TS",
@@ -201,7 +202,7 @@ const TestSuiteConclusiTable = () => {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
         // components={{

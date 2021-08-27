@@ -36,7 +36,7 @@ function Template() {
   };
 
   const columns = [
-    { title: "ID Template", field: "id", editable: "never" },
+    { title: "ID Template", field: "id", editable: "never", defaultSort:"desc" },
     {
       title: "Nome",
       field: "nome",
@@ -144,6 +144,7 @@ function Template() {
         data={data}
         columns={columns}
         options={{
+          sorting: true,
           actionsColumnIndex: -1,
           search: true,
           exportButton: true,
@@ -268,7 +269,7 @@ function Template() {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
         // options={{

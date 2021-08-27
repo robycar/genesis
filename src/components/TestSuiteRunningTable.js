@@ -57,6 +57,8 @@ const TestSuiteRunningTable = () => {
     {
       title: "Launcher",
       field: "launcher",
+      defaultSort:"desc"
+
     },
     {
       title: "Name TS",
@@ -201,7 +203,7 @@ const TestSuiteRunningTable = () => {
         ]}
         localization={{
           header: {
-            actions: "Actions",
+            actions: "Azioni",
           },
         }}
         // components={{
