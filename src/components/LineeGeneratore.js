@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import { MenuItem, Button, Paper, Typography} from "@material-ui/core";
+import {
+  MenuItem,
+  Button,
+  Paper,
+  Typography,
+  Divider,
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
 import acccessControl from "../service/url.js";
@@ -13,24 +19,26 @@ import ListItem from "@material-ui/core/ListItem";
 import TextField from "@material-ui/core/TextField";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { Divider } from "@material-ui/core";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 
-function Obp() {
+function LineeGeneratore() {
   const [data, setData] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
 
   const [id, setId] = useState();
+  const [numero, setNumero] = useState("");
+  let ip;
   const [ip1, setIp1] = useState("");
   const [ip2, setIp2] = useState("");
   const [ip3, setIp3] = useState("");
   const [ip4, setIp4] = useState("");
   const [porta, setPorta] = useState();
-  const [descrizione, setDescrizione] = useState("");
-  const [typeLinea, setTypeLinea] = useState([]);
-  const [open, setOpen] = React.useState(false);
+  const [password, setPassword] = useState("");
+  const [typeLinea, setTypeLinea] = useState();
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   /*----Get Type Linea ------*/
 
@@ -54,121 +62,9 @@ function Obp() {
       .catch((error) => console.log("error", error));
   };
 
-  const aggiornaUtente = () => {
+  // -------get linea-----------
 
-    const invia = () => {
-
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-      var raw = JSON.stringify({
-        id: id,
-        ipDestinazione: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
-        descrizione: descrizione,
-        porta: porta === "" ? 5060 : porta,
-
-        // typeLinea: {
-        //   id: typeLinea.id,
-        // },
-
-        typeLinee: typeLinea,
-      });
-
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/obp`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          getObp();
-        })
-        .catch((error) => console.log("error", error));
-    };
-
-    const aggiornaIP = () => {
-
-      if (
-        (ip1 >= 0 && ip1 <= 255) &&
-        (ip2 >= 0 && ip2 <= 255) &&
-        (ip3 >= 0 && ip3 <= 255) &&
-        (ip4 >= 0 && ip4 <= 255)
-      ) {
-
-        invia()
-        setOpen(false);
-      }
-    };
-
-    if (
-      ip1 !== "" &&
-      ip2 !== "" &&
-      ip3 !== "" &&
-      ip4 !== "" 
-    ) {
-      if (porta === "") {
-        setPorta("5060");
-      }
-      if (descrizione === "") {
-        setDescrizione(" ");
-      }
-
-      aggiornaIP();
-    }
-
-    
-  };
-
-  const columns = [
-    { title: "ID OBP", field: "id", defaultSort:"desc" },
-    {
-      title: "Proxy IP Address",
-      field: "ipDestinazione",
-    },
-    {
-      title: "Tipo Linea",
-      field: "typeLinee[0].descrizione",
-      render: (rowData) => {
-        let prova = "!";
-        for (let index = 0; index < rowData.typeLinee.length; index++) {
-          prova += ", " + rowData.typeLinee[index].descrizione;
-        }
-        // prova.replace("!, ", "");
-        return prova.replace("!, ", "");
-      },
-    },
-    {
-      title: "Porta",
-      field: "porta",
-    },
-    {
-      title: "Descrizione",
-      field: "descrizione",
-    },
-    {
-      title: "Creato da",
-      field: "creato",
-    },
-    {
-      title: "Modificato da",
-      field: "modificato",
-    },
-  ];
-
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-
-  useEffect(() => {
-    getObp();
-    getAppearLine();
-  }, []);
-
-  const getObp = () => {
+  const getLinea = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -180,7 +76,7 @@ function Obp() {
       redirect: "follow",
     };
 
-    fetch(`/api/obp`, requestOptions)
+    fetch(`/api/linea`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -189,11 +85,94 @@ function Obp() {
       .catch((error) => console.log("error", error));
   };
 
+  useEffect(() => {
+    getLinea();
+    getAppearLine();
+  }, []);
+
+  //---------------------AGGIORNA UTENTE-------------------------
+
+  const aggiornaUtente = () => {
+    ip = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
+
+    const invia = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+      var raw = JSON.stringify({
+        id: id,
+        numero: numero,
+        ip: ip,
+        password: password,
+        porta: porta,
+        typeLinea: {
+          id: typeLinea,
+        },
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/linea`, requestOptions)
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          getLinea();
+        })
+        .catch((error) => console.log("error", error));
+    };
+    if (ip !== "") invia();
+  };
+  const columns = [
+    { title: "ID Linea", field: "id",defaultSort:"desc" },
+    {
+      title: "Path Csv",
+      field: "pathCsv",
+    },
+    {
+      title: "IP Linea",
+      field: "ip",
+    },
+    // {
+    //   title: "Numero",
+    //   field: "numero",
+    // },{
+    //   title: "Password",
+    //   field: "password",
+    // },
+
+    {
+      title: "Porta",
+      field: "porta",
+    },
+    {
+      title: "Tipo Linea",
+      field: "typeLinea.descrizione",
+    },
+    {
+      title: "Creato da",
+      field: "creatoDa",
+    },
+    {
+      title: "Modificato da",
+      field: "modificatoDa",
+    },
+  ];
+
+  const [open, setOpen] = React.useState(false);
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
+    setNumero(rowData.numero);
 
-    var ipAppoggio = rowData.ipDestinazione;
+    var ipAppoggio = rowData.ip;
     ipAppoggio = ipAppoggio.split(".");
     setIp1(ipAppoggio[0].replace(".", ""));
     setIp2(ipAppoggio[1].replace(".", ""));
@@ -201,28 +180,15 @@ function Obp() {
     setIp4(ipAppoggio[3]);
 
     setPorta(rowData.porta);
-    setDescrizione(rowData.descrizione);
-    setTypeLinea([...typeLinea, rowData.typeLinee[0].id]);
+    setPassword(rowData.password);
+    setTypeLinea(rowData.typeLinea.id);
     setOpen(true);
-    console.log(typeLinea, "type");
   };
 
-  const handleChange = (event) => {
-    // if (typeLinea.length < 2) {
-    //   setTypeLinea([event.target.value]);
-    // } else {
-    //   setTypeLinea([...typeLinea, event.target.value]);
-    //   [...typeLinea, event.target.value];
-    // }
-    // console.log(typeLinea, "typeLineaId");
-
-    setTypeLinea(event.target.value);
+  const handleClose2 = () => {
+    aggiornaUtente();
+    setOpen(false);
   };
-
-  const handleRenderValue = (selected) => {
-    selected.join(", ");
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -313,12 +279,10 @@ function Obp() {
       width: "128px",
     },
     divIp: {
-      marginTop: "5%",
       display: "flex",
       flexDirection: "row",
       alignItems: "flex-end",
-      marginLeft: "4%",
-      marginBottom: "4",
+      marginLeft: "5%",
     },
     separatoreIp: {
       marginRight: "2%",
@@ -342,11 +306,10 @@ function Obp() {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="Outbound Proxy"
+        title="Total Lines"
         data={data}
         columns={columns}
         options={{
-          sorting: true,
           actionsColumnIndex: -1,
           search: true,
           exportButton: true,
@@ -377,10 +340,10 @@ function Obp() {
                 redirect: "follow",
               };
 
-              fetch(`/api/obp`, requestOptions)
+              fetch(`/api/linea`, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
-                  getObp();
+                  getLinea();
                   resolve();
                 })
                 .catch((error) => console.log("error", error));
@@ -394,13 +357,13 @@ function Obp() {
                 component={NavLink}
                 activeClassName="button-green-active"
                 exact
-                to="/editing/outboundproxy/creaobp"
+                to="/editing/linee/crealinea"
                 startIcon={<AddIcon />}
               >
-                Outbound Proxy{" "}
+                CREA LINEA{" "}
               </Button>
             ),
-            tooltip: "Crea Obp",
+            tooltip: "Crea Linea",
             // onClick: (event, rowData) => alert("Load Test Suite"),
             isFreeAction: true,
           },
@@ -435,18 +398,53 @@ function Obp() {
             <div>
               <ListItem button>
                 <Typography className={classes.intestazione} variant="h4">
-                  Modifica l'<b>OBP n°{id}</b>
+                  Modifica la <b>Linea {id}</b>
                 </Typography>
               </ListItem>
               <Divider className={classes.divider} />
             </div>
 
             <Paper className={classes.paperContent} elevation={0}>
+              <Row className={classes.row}>
+                <Col className={classes.col}>
+                  <TextField
+                    className={classes.textField}
+                    error={numero !== "" ? false : true}
+                    onChange={(e) => setNumero(e.target.value)}
+                    required
+                    label="Numero"
+                    defaultValue={numero}
+                    helperText={numero !== "" ? "" : "Il Numero è richiesto"}
+                  />
+                </Col>
+
+                <Col className={classes.col}>
+                  <TextField
+                    error={
+                      porta !== "" && porta > 1000 && porta < 100000
+                        ? false
+                        : true
+                    }
+                    onChange={(e) => setPorta(e.target.value)}
+                    label="Porta"
+                    type="number"
+                    required
+                    defaultValue={porta}
+                    helperText={
+                      porta !== "" && porta > 1000 && porta < 100000
+                        ? ""
+                        : "La Porta deve essere compresa tra 4 e 5 digit"
+                    }
+                  />
+                </Col>
+              </Row>
+
+              {/* <Row className={classes.row}> */}
               <div className={classes.divIp}>
                 <TextField
                   className={classes.textFieldIp}
                   error={
-                    ip1 <= 255 && ip1 != "" && ip1.length < 4 ? false : true
+                    ip1 <= 255 && ip1 !== "" && ip1.length < 4 ? false : true
                   }
                   onChange={(e) => setIp1(e.target.value)}
                   label="Ip1 Linea"
@@ -454,7 +452,7 @@ function Obp() {
                   required
                   defaultValue={ip1}
                   helperText={
-                    ip1 <= 255 && ip1 != "" && ip1.length < 4
+                    ip1 <= 255 && ip1 !== "" && ip1.length < 4
                       ? ""
                       : "IP richiesto e compreso tra 0 e 255"
                   }
@@ -464,7 +462,7 @@ function Obp() {
                 <TextField
                   className={classes.textFieldIp}
                   error={
-                    ip2 <= 255 && ip2 != "" && ip2.length < 4 ? false : true
+                    ip2 <= 255 && ip2 !== "" && ip2.length < 4 ? false : true
                   }
                   onChange={(e) => setIp2(e.target.value)}
                   label="Ip2 Linea"
@@ -472,7 +470,7 @@ function Obp() {
                   required
                   defaultValue={ip2}
                   helperText={
-                    ip2 <= 255 && ip2 != "" && ip2.length < 4
+                    ip2 <= 255 && ip2 !== "" && ip2.length < 4
                       ? ""
                       : "IP richiesto e compreso tra 0 e 255"
                   }
@@ -482,7 +480,7 @@ function Obp() {
                 <TextField
                   className={classes.textFieldIp}
                   error={
-                    ip3 <= 255 && ip3 != "" && ip3.length < 4 ? false : true
+                    ip3 <= 255 && ip3 !== "" && ip3.length < 4 ? false : true
                   }
                   onChange={(e) => setIp3(e.target.value)}
                   label="Ip3 Linea"
@@ -490,7 +488,7 @@ function Obp() {
                   required
                   defaultValue={ip3}
                   helperText={
-                    ip3 <= 255 && ip3 != "" && ip3.length < 4
+                    ip3 <= 255 && ip3 !== "" && ip3.length < 4
                       ? ""
                       : "IP richiesto e compreso tra 0 e 255"
                   }
@@ -500,7 +498,7 @@ function Obp() {
                 <TextField
                   className={classes.textFieldIp}
                   error={
-                    ip4 <= 255 && ip4 != "" && ip4.length < 4 ? false : true
+                    ip4 <= 255 && ip4 !== "" && ip4.length < 4 ? false : true
                   }
                   onChange={(e) => setIp4(e.target.value)}
                   label="Ip4 Linea"
@@ -508,81 +506,43 @@ function Obp() {
                   required
                   defaultValue={ip4}
                   helperText={
-                    ip4 <= 255 && ip4 != "" && ip4.length < 4
+                    ip4 <= 255 && ip4 !== "" && ip4.length < 4
                       ? ""
                       : "IP richiesto e compreso tra 0 e 255"
                   }
                 />
               </div>
+              {/* </Row>  */}
 
               <Row className={classes.row}>
                 <Col className={classes.col}>
                   <TextField
-                    SelectProps={{
-                      multiple: true,
-                      onChange: handleChange,
-                      // renderValue: (selected) => {
-                      //   selected.join(", ");
-                      // },
-                    }}
+                    error={password !== "" ? false : true}
+                    onChange={(e) => setPassword(e.target.value)}
+                    label="Password"
+                    required
+                    defaultValue={password}
+                    helperText={password !== "" ? "" : "La Password è richiesta"}
+                  />
+                </Col>
+
+                <Col className={classes.col}>
+                  <TextField
                     select
                     label="Tipo Linea"
                     value={appearLine.id}
                     defaultValue={typeLinea}
-                    // renderValue={(selected) => {
-                    //   selected.join(", ");
-                    // }}
-                    onChange={(e) => {
-                      setTypeLinea(e.target.value);
-
-                      console.log(typeLinea);
-                    }}
-                    // onChange={handleChange}
+                    onChange={(e) => setTypeLinea(e.target.value)}
                   >
-                    {appearLine.map((linea) => (
-                      <MenuItem key={linea.id} value={linea.id}>
-                        {/* <Checkbox checked={typeLinea.indexOf(linea.id) > -1} /> */}
-
-                        {linea.descrizione}
-
-                        {/* <ListItemText primary={linea.descrizione} /> */}
+                    {appearLine.map((typeLinea) => (
+                      <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                        {typeLinea.descrizione}
                       </MenuItem>
                     ))}
                   </TextField>
                 </Col>
-
-                <Col className={classes.col}>
-                  <TextField
-                    error={
-                      porta === "" || (porta > 1000 && porta < 100000)
-                        ? false
-                        : true
-                    }
-                    onChange={(e) => setPorta(e.target.value)}
-                    placeholder="5060"
-                    label="Porta"
-                    type="number"
-                    required
-                    defaultValue={porta}
-                    helperText={
-                      porta === "" || (porta > 1000 && porta < 100000)
-                        ? ""
-                        : "Porta compresa tra i 4 e i 5 digit"
-                    }
-                  />
-                </Col>
               </Row>
 
-              <Row className={classes.row}>
-                <Col className={classes.col}>
-                  <TextField
-                    onChange={(e) => setDescrizione(e.target.value)}
-                    label="descrizione"
-                    required
-                    defaultValue={descrizione}
-                  />
-                </Col>
-              </Row>
               <Divider className={classes.divider} />
               <div
                 className={classes.bottone}
@@ -591,8 +551,9 @@ function Obp() {
                 <ButtonClickedGreen
                   size="medium"
                   nome="Aggiorna"
-                  onClick={aggiornaUtente}
+                  onClick={handleClose2}
                 />
+
                 <ButtonNotClickedGreen
                   className={classes.bottoneAnnulla}
                   onClick={handleClose}
@@ -606,4 +567,4 @@ function Obp() {
     </div>
   );
 }
-export default Obp;
+export default LineeGeneratore;

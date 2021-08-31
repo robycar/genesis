@@ -248,7 +248,7 @@ export default function Login() {
 
             <div className={classes.signUp}>
               <Button variant="outlined" color="primary" onClick={handleOpen}>
-                Or Sign up
+                o REGISTRATI
               </Button>
               <Modal
                 aria-labelledby="transition-modal-title"
@@ -283,7 +283,7 @@ export default function Login() {
                       variant="body2"
                       onClick={handleOpenResetPassword}
                     >
-                      Forgot Password?
+                      Password dimenticata?
                     </Link>
                     <Modal
                       aria-labelledby="transition-modal-title"

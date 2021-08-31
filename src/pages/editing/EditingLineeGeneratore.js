@@ -23,6 +23,7 @@ import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import LanguageIcon from "@material-ui/icons/Language";
+import LineeGeneratore from "../../components/LineeGeneratore";
 
 const drawerWidth = 240;
 
@@ -250,7 +251,7 @@ function EditingLineeGeneratore() {
               <Typography className={classes.titolo}> Linee </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <LineeNew />
+            <LineeGeneratore />
           </Paper>
         </Container>
       </main>

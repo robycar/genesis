@@ -132,10 +132,7 @@ function Linee() {
   };
   const columns = [
     { title: "ID Linea", field: "id",defaultSort:"desc" },
-    {
-      title: "Path Csv",
-      field: "pathCsv",
-    },
+
     {
       title: "IP Linea",
       field: "ip",

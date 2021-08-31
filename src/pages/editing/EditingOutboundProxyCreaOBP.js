@@ -37,8 +37,6 @@ import DnsIcon from "@material-ui/icons/Dns";
 import acccessControl from "../../service/url.js";
 import Alert from "@material-ui/lab/Alert";
 import { useHistory } from "react-router-dom";
-import { Checkbox } from "@material-ui/core";
-import { ListItemText } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -207,6 +205,13 @@ function EditingOutboundProxy() {
     setOpen(false);
   };
   const [data, setData] = useState([]);
+  const [ip1, setIP1] = useState("");
+  const [ip2, setIP2] = useState("");
+  const [ip3, setIP3] = useState("");
+  const [ip4, setIP4] = useState("");
+  const [porta, setPorta] = useState("5060");
+  const [descrizione, setDescrizione] = useState(" ");
+  const [typeLineaId, setTypeLineaId] = useState([]);
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
@@ -239,35 +244,9 @@ function EditingOutboundProxy() {
 
   //put descrizione e ip
 
-  const [ipDestinazione, setIPDestinazione] = useState("");
-  const [ip1, setIP1] = useState("");
-  const [ip2, setIP2] = useState("");
-  const [ip3, setIP3] = useState("");
-  const [ip4, setIP4] = useState("");
-  const [porta, setPorta] = useState("5060");
-  const [descrizione, setDescrizione] = useState("");
-  const [typeLineaId, setTypeLineaId] = useState([]);
+
 
   function salva() {
-    const aggiornaIP = () => {
-      if (
-        (ip1 >= 0 && ip1 <= 255) &&
-        (ip2 >= 0 && ip2 <= 255) &&
-        (ip3 >= 0 && ip3 <= 255) &&
-        (ip4 >= 0 && ip4 <= 255)
-      ) {
-        setIPDestinazione(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
-        document.getElementById("alertIP").style.display = "none";
-        document.getElementById("alertNumero").style.display = "none";
-        document.getElementById("alertPassword").style.display = "none";
-        document.getElementById("alertPorta").style.display = "none";
-        document.getElementById("alertTypeLinea").style.display = "none";
-        document.getElementById("alertIP2").style.display = "none";
-        Invia()
-      } else {
-        document.getElementById("alertIP2").style.display = "";
-      }
-    };
     const Invia = () => {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
@@ -276,7 +255,7 @@ function EditingOutboundProxy() {
       myHeaders.append("Access-Control-Allow-Credentials", "true");
 
       var raw = JSON.stringify({
-        ipDestinazione: ipDestinazione,
+        ipDestinazione: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
         descrizione: descrizione,
         porta: porta,
         typeLinee: typeLineaId,
@@ -294,24 +273,40 @@ function EditingOutboundProxy() {
         //.then((result) => console.log(result))
         .catch((error) => console.log("error", error));
 
-      // localStorage.setItem("user-info", JSON.stringify(result));
       history.push("/editing/outboundproxy");
     };
-    if (porta === "" || porta.length < 4 || porta.length > 5) {
-      document.getElementById("alertPorta").style.display = "";
-    }
+
+    const aggiornaIP = () => {
+      if (
+        (ip1 >= 0 && ip1 <= 255) &&
+        (ip2 >= 0 && ip2 <= 255) &&
+        (ip3 >= 0 && ip3 <= 255) &&
+        (ip4 >= 0 && ip4 <= 255)
+      ) {
+        document.getElementById("alertIP").style.display = "none";
+        document.getElementById("alertPorta").style.display = "none";
+        document.getElementById("alertTypeLinea").style.display = "none";
+        document.getElementById("alertIP2").style.display = "none";
+
+        Invia()
+      } else {
+        document.getElementById("alertIP2").style.display = "";
+      }
+    };
 
     if (
       ip1 !== "" &&
       ip2 !== "" &&
       ip3 !== "" &&
       ip4 !== "" &&
-      descrizione !== "" &&
       typeLineaId !== "" &&
       (porta === "" || (porta.length > 3 && porta.length < 6))
     ) {
       if (porta === "") {
         setPorta("5060");
+      }
+      if (descrizione === "") {
+        setDescrizione(" ");
       }
       aggiornaIP();
     } else {
@@ -326,15 +321,9 @@ function EditingOutboundProxy() {
         (ip3 >= 0 && ip3 <= 255) &&
         (ip4 >= 0 && ip4 <= 255)
       ) {
-        setIPDestinazione(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
         document.getElementById("alertIP2").style.display = "none";
       } else {
         document.getElementById("alertIP2").style.display = "";
-      }
-      if (descrizione === "") {
-        document.getElementById("alertDescrizione").style.display = "";
-      } else {
-        document.getElementById("alertDescrizione").style.display = "none";
       }
       if (porta.length < 4 || porta.length > 5) {
         document.getElementById("alertPorta").style.display = "";
@@ -503,7 +492,7 @@ function EditingOutboundProxy() {
                       id="alertIP"
                       style={{ display: "none" }}
                     >
-                      IP Linea is required!
+                      IP Linea è richiesto!
                     </Alert>
                     <Alert
                       severity="error"
@@ -523,13 +512,6 @@ function EditingOutboundProxy() {
                     placeholder="Inserisci Descrizione"
                     onChange={(e) => setDescrizione(e.target.value)}
                   />
-                  <Alert
-                    severity="error"
-                    id="alertDescrizione"
-                    style={{ display: "none" }}
-                  >
-                    Descrizione is required!
-                  </Alert>
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>

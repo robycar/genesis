@@ -284,46 +284,28 @@ function EditingLineaCreaLinea() {
   const [ip4, setIP4] = useState("");
   const [numero, setNumero] = useState("");
   const [password, setPassword] = useState("");
-  const [porta, setPorta] = useState("");
+  let porta ="5060";
   const [typeLineaId, setTypeLineaId] = useState(0);
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
 
 
   function salva() {
-    const aggiornaIP = () => {
-      if (
-        (ip1 >= 0 && ip1 <= 255) &&
-        (ip2 >= 0 && ip2 <= 255) &&
-        (ip3 >= 0 && ip3 <= 255) &&
-        (ip4 >= 0 && ip4 <= 255)
-      ) {
-        setIP(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
-        document.getElementById("alertIP").style.display = "none";
-        document.getElementById("alertNumero").style.display = "none";
-        document.getElementById("alertPassword").style.display = "none";
-        document.getElementById("alertPorta").style.display = "none";
-        document.getElementById("alertTypeLinea").style.display = "none";
-        document.getElementById("alertIP2").style.display = "none";
-        Invia()
-      } else {
-        document.getElementById("alertIP2").style.display = "";
-      }
-    };
     const Invia = () => {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
       myHeaders.append("Access-Control-Allow-Credentials", "true");
+
       var raw = JSON.stringify({
-        ip: ip,
-        numero: numero,
-        password: password,
+        ip: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
+        numero:numero,
+        password:password,
         porta: porta,
         typeLinea: {
-          id: typeLineaId.id
-        },
+          id:typeLineaId.id,
+        }
       });
 
       var requestOptions = {
@@ -335,12 +317,30 @@ function EditingLineaCreaLinea() {
 
       fetch(`/api/linea`, requestOptions)
         .then((response) => response.json())
-        .then((result)=> console.log(result))
+        //.then((result) => console.log(result))
         .catch((error) => console.log("error", error));
 
-      // localStorage.setItem("user-info", JSON.stringify(result));
-      // history.push("/dashboard/testcase");
       history.push("/editing/linee");
+    };
+
+    const aggiornaIP = () => {
+      if (
+        (ip1 >= 0 && ip1 <= 255) &&
+        (ip2 >= 0 && ip2 <= 255) &&
+        (ip3 >= 0 && ip3 <= 255) &&
+        (ip4 >= 0 && ip4 <= 255)
+      ) {
+        document.getElementById("alertIP").style.display = "none";
+        document.getElementById("alertPorta").style.display = "none";
+        document.getElementById("alertTypeLinea").style.display = "none";
+        document.getElementById("alertNumero").style.display = "none";
+        document.getElementById("alertPassword").style.display = "none";
+        document.getElementById("alertIP2").style.display = "none";
+
+        Invia()
+      } else {
+        document.getElementById("alertIP2").style.display = "";
+      }
     };
 
     if (
@@ -348,16 +348,17 @@ function EditingLineaCreaLinea() {
       ip2 !== "" &&
       ip3 !== "" &&
       ip4 !== "" &&
+      typeLineaId !== 0 &&
       numero !== "" &&
       password !== "" &&
-      porta !== "" &&
-      porta.length > 3 &&
-      porta.length < 6 &&
-      typeLineaId !== ""
+      (porta === "" || (porta.length > 3 && porta.length < 6))
     ) {
+      if (porta.length === 0) {
+        porta="5060";
+      }
       aggiornaIP();
-      // console.log(ip);
     } else {
+      
       if (ip1 === "" || ip2 === "" || ip3 === "" || ip4 === "") {
         document.getElementById("alertIP").style.display = "";
       } else {
@@ -368,172 +369,173 @@ function EditingLineaCreaLinea() {
         (ip2 >= 0 && ip2 <= 255) &&
         (ip3 >= 0 && ip3 <= 255) &&
         (ip4 >= 0 && ip4 <= 255)
-        ) {
-          setIP(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
-          document.getElementById("alertIP2").style.display = "none";
-        } else {
-          document.getElementById("alertIP2").style.display = "";
-        }
-        if (numero === "") {
-          document.getElementById("alertNumero").style.display = "";
-        } else {
-          document.getElementById("alertNumero").style.display = "none";
-        }
-      if (password === "") {
-        document.getElementById("alertPassword").style.display = "";
+      ) {
+        document.getElementById("alertIP2").style.display = "none";
       } else {
-        document.getElementById("alertPassword").style.display = "none";
+        document.getElementById("alertIP2").style.display = "";
       }
-      if (porta === "" || porta.length < 4 || porta.length > 5) {
-        document.getElementById("alertPorta").style.display = "";
-      } else {
+      if (porta.length === 0 || (porta.length >= 4 && porta.length <=5)) {
         document.getElementById("alertPorta").style.display = "none";
+      } else {
+        document.getElementById("alertPorta").style.display = "";
       }
       if (typeLineaId === 0) {
         document.getElementById("alertTypeLinea").style.display = "";
       } else {
         document.getElementById("alertTypeLinea").style.display = "none";
       }
+      if (numero === "") {
+        document.getElementById("alertNumero").style.display = "";
+      } else {
+        document.getElementById("alertNumero").style.display = "none";
+      }
+      if (password === "") {
+        document.getElementById("alertPassword").style.display = "";
+      } else {
+        document.getElementById("alertPassword").style.display = "none";
+      }
     }
   }
 
-  //--------------------MODALI TYPE LINEE---------------------------------
 
-  const [open, setOpen] = React.useState(false);
-  const [openRemove, setOpenRemove] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+//--------------------MODALI TYPE LINEE---------------------------------
 
-  const handleOpenRemove = () => {
-    setOpenRemove(true);
-  };
-  const handleCloseRemove = () => {
-    setOpenRemove(false);
-  };
+const [open, setOpen] = React.useState(false);
+const [openRemove, setOpenRemove] = React.useState(false);
+const [openEdit, setOpenEdit] = React.useState(false);
 
-  const handleOpenEdit = () => {
-    setOpenEdit(true);
-  };
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-  };
-  //--------------------MODAALE 2----------------------------------
+const handleOpen = () => {
+  setOpen(true);
+};
+const handleClose = () => {
+  setOpen(false);
+};
 
-  const [open2, setOpen2] = React.useState(false);
-  const [type, setType] = React.useState("");
+const handleOpenRemove = () => {
+  setOpenRemove(true);
+};
+const handleCloseRemove = () => {
+  setOpenRemove(false);
+};
 
-  const handleOpen2 = () => {
-    setOpen2(true);
-  };
+const handleOpenEdit = () => {
+  setOpenEdit(true);
+};
+const handleCloseEdit = () => {
+  setOpenEdit(false);
+};
+//--------------------MODAALE 2----------------------------------
 
-  const handleClose2 = () => {
-    setOpen2(false);
-  };
+const [open2, setOpen2] = React.useState(false);
+const [type, setType] = React.useState("");
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-  const checkRichiesta = (result) => {
-    console.log(result);
-    setTypeLineaId(result.id);
-  };
+const handleOpen2 = () => {
+  setOpen2(true);
+};
 
-  const salva2 = () => {
-    const Invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-      var raw = JSON.stringify({
-        descrizione: type,
-      });
+const handleClose2 = () => {
+  setOpen2(false);
+};
 
-      var requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
+const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+const checkRichiesta = (result) => {
+  console.log(result);
+  setTypeLineaId(result.id);
+};
 
-      fetch(`/api/typeLinea`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          checkRichiesta(result.typeLinea);
-          getTypeId();
-        })
-        .catch((error) => console.log("error", error));
+const salva2 = () => {
+  const Invia = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    var raw = JSON.stringify({
+      descrizione: type,
+    });
 
-      // localStorage.setItem("user-info", JSON.stringify(result));
-      // history.push("/dashboard/testcase");
-      //window.location = "/editing/linee";
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
     };
 
-    if (type !== "") {
-      Invia();
-      handleClose();
-      handleClose2();
-    } else {
-    }
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        checkRichiesta(result.typeLinea);
+        getTypeId();
+      })
+      .catch((error) => console.log("error", error));
+
+    // localStorage.setItem("user-info", JSON.stringify(result));
+    // history.push("/dashboard/testcase");
+    //window.location = "/editing/linee";
   };
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, openDrawer && classes.appBarShift)}
-      >
-        <Navbar />
-      </AppBar>
+  if (type !== "") {
+    Invia();
+    handleClose();
+    handleClose2();
+  } else {
+  }
+};
 
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(
-            classes.drawerPaper,
-            !openDrawer && classes.drawerPaperClose
-          ),
-        }}
-        open={openDrawer}
-      >
-        <div className={classes.toolbarIcon}>
-          {/* <IconButton onClick={handleDrawerClose}>
+return (
+  <div className={classes.root}>
+    <CssBaseline />
+    <AppBar
+      position="absolute"
+      className={clsx(classes.appBar, openDrawer && classes.appBarShift)}
+    >
+      <Navbar />
+    </AppBar>
+
+    <Drawer
+      variant="permanent"
+      classes={{
+        paper: clsx(
+          classes.drawerPaper,
+          !openDrawer && classes.drawerPaperClose
+        ),
+      }}
+      open={openDrawer}
+    >
+      <div className={classes.toolbarIcon}>
+        {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton> */}
-        </div>
-        <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{tertiaryListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
-        <Divider />
-        <List>{quaterListItems}</List>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
+      </div>
+      <Divider />
+      <List>{mainListItems}</List>
+      <Divider />
+      <List>{tertiaryListItems}</List>
+      <Divider />
+      <List>{secondaryListItems}</List>
+      <Divider />
+      <List>{quaterListItems}</List>
+    </Drawer>
+    <main className={classes.content}>
+      <div className={classes.appBarSpacer} />
 
-        <Container maxWidth="lg" className={classes.container}>
-          <div className={classes.containerNavbarItem}>
-            <NavbarItemEdit fontSize="large" />
-          </div>
-        </Container>
-        <div className={classes.buttonContainer}>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/linee"
-          >
-            LINEE
-          </Button>
-          {/* <Button
+      <Container maxWidth="lg" className={classes.container}>
+        <div className={classes.containerNavbarItem}>
+          <NavbarItemEdit fontSize="large" />
+        </div>
+      </Container>
+      <div className={classes.buttonContainer}>
+        <Button
+          className="button-green"
+          component={NavLink}
+          activeClassName="button-green-active"
+          exact
+          to="/editing/linee"
+        >
+          LINEE
+        </Button>
+        {/* <Button
             className="button-green"
             component={NavLink}
             activeClassName="button-green-active"
@@ -542,541 +544,542 @@ function EditingLineaCreaLinea() {
           >
             LINEE GENERATORE
           </Button> */}
-          {/* </NavLink> */}
+        {/* </NavLink> */}
 
-          {/* <NavLink exact to="/dashboard/testsuite"> */}
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/outboundproxy"
-          >
-            OUTBOUND PROXY
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/template"
-          >
-            TEMPLATE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/testcase"
-          >
-            TEST
-          </Button>
-        </div>
+        {/* <NavLink exact to="/dashboard/testsuite"> */}
+        <Button
+          className="button-green"
+          component={NavLink}
+          activeClassName="button-green-active"
+          exact
+          to="/editing/outboundproxy"
+        >
+          OUTBOUND PROXY
+        </Button>
+        <Button
+          className="button-green"
+          component={NavLink}
+          activeClassName="button-green-active"
+          exact
+          to="/editing/template"
+        >
+          TEMPLATE
+        </Button>
+        <Button
+          className="button-green"
+          component={NavLink}
+          activeClassName="button-green-active"
+          exact
+          to="/editing/testcase"
+        >
+          TEST
+        </Button>
+      </div>
 
-        <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Linea" />
+      <Paper className={classes.paper} elevation={2}>
+        <CreaItem titolo="Crea Linea" />
 
-          <Divider className={classes.divider} />
+        <Divider className={classes.divider} />
 
-          <div className={classes.generalContainer}>
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Numero</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="number"
-                    placeholder="Inserisci Numero"
-                    onChange={(e) => setNumero(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertNumero"
-                    style={{ display: "none" }}
-                  >
-                    Il Numero è richiesto!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>IP Linea</Form.Label>
-                  <div className={classes.divIp}>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="number"
-                      placeholder="IP1"
-                      onChange={(e) => {
-                        setIP1(e.target.value);
-                      }}
-                    />{" "}
-                    <Typography className={classes.separatoreIp}>.</Typography>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="number"
-                      placeholder="IP2"
-                      onChange={(e) => {
-                        setIP2(e.target.value);
-                      }}
-                    />{" "}
-                    <Typography className={classes.separatoreIp}>.</Typography>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="number"
-                      placeholder="IP3"
-                      onChange={(e) => {
-                        setIP3(e.target.value);
-                      }}
-                    />{" "}
-                    <Typography className={classes.separatoreIp}>.</Typography>
-                    <Form.Control
-                      className={classes.formControlIp}
-                      type="number"
-                      placeholder="IP4"
-                      onChange={(e) => {
-                        setIP4(e.target.value);
-                      }}
-                    />{" "}
-                  </div>
-                  <Alert
-                    severity="error"
-                    id="alertIP"
-                    style={{ display: "none" }}
-                  >
-                    IP Linea è richiesto!
-                  </Alert>
-                  <Alert
-                    severity="error"
-                    id="alertIP2"
-                    style={{ display: "none" }}
-                  >
-                    I valori dell'IP devono andare da 0 a 255 !
-                  </Alert>
-                </Form.Group>
-              </Paper>
-
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertPassword"
-                    style={{ display: "none" }}
-                  >
-                    La Password è richiesta!
-                  </Alert>
-                </Form.Group>
-              </Paper>
+        <div className={classes.generalContainer}>
+          <Paper className={classes.paperContainer1} elevation={0}>
+            <Paper className={classes.divSelect} elevation={0}>
+              <Form.Group controlId="form.Numero">
+                <Form.Label>Numero</Form.Label>
+                <Form.Control
+                  className={classes.formControl}
+                  type="number"
+                  placeholder="Inserisci Numero"
+                  onChange={(e) => setNumero(e.target.value)}
+                />
+                <Alert
+                  severity="error"
+                  id="alertNumero"
+                  style={{ display: "none" }}
+                >
+                  Il Numero è richiesto!
+                </Alert>
+              </Form.Group>
             </Paper>
 
-            <Paper className={classes.paperContainer2} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Porta</Form.Label>
+            <Paper className={classes.divSelect} elevation={0}>
+              <Form.Group controlId="form.Numero">
+                <Form.Label>IP Linea</Form.Label>
+                <div className={classes.divIp}>
                   <Form.Control
-                    className={classes.formControl}
+                    className={classes.formControlIp}
                     type="number"
-                    placeholder="Inserisci Porta"
-                    onChange={(e) => setPorta(e.target.value)}
-                  />
+                    placeholder="IP1"
+                    onChange={(e) => {
+                      setIP1(e.target.value);
+                    }}
+                  />{" "}
+                  <Typography className={classes.separatoreIp}>.</Typography>
+                  <Form.Control
+                    className={classes.formControlIp}
+                    type="number"
+                    placeholder="IP2"
+                    onChange={(e) => {
+                      setIP2(e.target.value);
+                    }}
+                  />{" "}
+                  <Typography className={classes.separatoreIp}>.</Typography>
+                  <Form.Control
+                    className={classes.formControlIp}
+                    type="number"
+                    placeholder="IP3"
+                    onChange={(e) => {
+                      setIP3(e.target.value);
+                    }}
+                  />{" "}
+                  <Typography className={classes.separatoreIp}>.</Typography>
+                  <Form.Control
+                    className={classes.formControlIp}
+                    type="number"
+                    placeholder="IP4"
+                    onChange={(e) => {
+                      setIP4(e.target.value);
+                    }}
+                  />{" "}
+                </div>
+                <Alert
+                  severity="error"
+                  id="alertIP"
+                  style={{ display: "none" }}
+                >
+                  IP Linea è richiesto!
+                </Alert>
+                <Alert
+                  severity="error"
+                  id="alertIP2"
+                  style={{ display: "none" }}
+                >
+                  I valori dell'IP devono andare da 0 a 255 !
+                </Alert>
+              </Form.Group>
+            </Paper>
+
+            <Paper className={classes.divSelect} elevation={0}>
+              <Form.Group controlId="form.Numero">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  className={classes.formControl}
+                  type="text"
+                  placeholder="Inserisci Password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <Alert
+                  severity="error"
+                  id="alertPassword"
+                  style={{ display: "none" }}
+                >
+                  La Password è richiesta!
+                </Alert>
+              </Form.Group>
+            </Paper>
+          </Paper>
+
+          <Paper className={classes.paperContainer2} elevation={0}>
+            <Paper className={classes.divSelect} elevation={0}>
+              <Form.Group controlId="form.Numero">
+                <Form.Label>Porta</Form.Label>
+                <Form.Control
+                  className={classes.formControl}
+                  type="number"
+                  placeholder="5060"
+                  defaultValue={porta}
+                  onChange={(e) => porta = e.target.value}
+                />
+                <Alert
+                  severity="error"
+                  id="alertPorta"
+                  style={{ display: "none" }}
+                >
+                  La lunghezza della porta deve essere compresa tra 4 e 5
+                  valori!
+                </Alert>
+              </Form.Group>
+            </Paper>
+
+            <Paper className={classes.divSelect} elevation={0}>
+              <Form.Group controlId="form.Numero">
+                <Form.Label>Tipo Linea</Form.Label>
+                <FormControl
+                  variant="outlined"
+                  className={classes.formControl}
+                >
+                  <Select
+                    id="selectTypeId"
+                    value={typeLineaId}
+                    onChange={(e) => {
+                      setTypeLineaId(e.target.value);
+                      setTypeLineaDescrizione(e.target.value.descrizione);
+                    }}
+                  >
+                    {data.map((typeLinea) => {
+                      return (
+                        <MenuItem key={typeLinea.id} value={typeLinea}>
+                          {typeLinea.descrizione}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
                   <Alert
                     severity="error"
-                    id="alertPorta"
+                    id="alertTypeLinea"
                     style={{ display: "none" }}
                   >
-                    La lunghezza della porta deve essere compresa tra 4 e 5
-                    valori!
+                    Selezionare il Tipo di Linea
                   </Alert>
-                </Form.Group>
-              </Paper>
+                </FormControl>
+                <div className={classes.modaleAddLinea}>
+                  {/* ----------------------------MODALI----------------------------------------*/}
 
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Tipo Linea</Form.Label>
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                  >
-                    <Select
-                      id="selectTypeId"
-                      value={typeLineaId}
-                      onChange={(e) => {
-                        setTypeLineaId(e.target.value);
-                        setTypeLineaDescrizione(e.target.value.descrizione);
+                  <div>
+                    <Button
+                      onClick={handleOpen}
+                      variant="contained"
+                      color="primary"
+                      startIcon={<AddIcon />}
+                      size="small"
+                    >
+                      TYPE
+                    </Button>
+                    <br />
+                    <br />
+                    <Button
+                      onClick={handleOpenRemove}
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<RemoveIcon />}
+                      size="small"
+                      disabled={typeLineaId === 0 ? true : false}
+                    >
+                      TYPE
+                    </Button>
+                    <br />
+                    <br />
+                    <Button
+                      onClick={handleOpenEdit}
+                      variant="contained"
+                      style={{ backgroundColor: "#ffc107" }}
+                      startIcon={<EditIcon />}
+                      size="small"
+                      disabled={typeLineaId === 0 ? true : false}
+                    >
+                      TYPE
+                    </Button>
+                    {/*------------------MODALE AGGIUNGI TYPE--------------- */}
+                    <Modal
+                      className={classes.modal}
+                      open={open}
+                      onClose={handleClose}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
                       }}
                     >
-                      {data.map((typeLinea) => {
-                        return (
-                          <MenuItem key={typeLinea.id} value={typeLinea}>
-                            {typeLinea.descrizione}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                    <Alert
-                      severity="error"
-                      id="alertTypeLinea"
-                      style={{ display: "none" }}
-                    >
-                      Selezionare il Tipo di Linea
-                    </Alert>
-                  </FormControl>
-                  <div className={classes.modaleAddLinea}>
-                    {/* ----------------------------MODALI----------------------------------------*/}
+                      <Fade in={open}>
+                        <div className={classes.paper2}>
+                          <Paper>
+                            <div>
+                              <ListItem button>
+                                <ListItemIcon>
+                                  <SettingsIcon className={classes.icon} />
+                                </ListItemIcon>
+                                <Typography
+                                  className={classes.intestazione}
+                                  variant="h5"
+                                >
+                                  Add Tipo Linea{" "}
+                                </Typography>
+                              </ListItem>
+                            </div>
 
-                    <div>
-                      <Button
-                        onClick={handleOpen}
-                        variant="contained"
-                        color="primary"
-                        startIcon={<AddIcon />}
-                        size="small"
-                      >
-                        TYPE
-                      </Button>
-                      <br />
-                      <br />
-                      <Button
-                        onClick={handleOpenRemove}
-                        variant="contained"
-                        color="secondary"
-                        startIcon={<RemoveIcon />}
-                        size="small"
-                        disabled={typeLineaId === 0 ? true : false}
-                      >
-                        TYPE
-                      </Button>
-                      <br />
-                      <br />
-                      <Button
-                        onClick={handleOpenEdit}
-                        variant="contained"
-                        style={{ backgroundColor: "#ffc107" }}
-                        startIcon={<EditIcon />}
-                        size="small"
-                        disabled={typeLineaId === 0 ? true : false}
-                      >
-                        TYPE
-                      </Button>
-                      {/*------------------MODALE AGGIUNGI TYPE--------------- */}
-                      <Modal
-                        className={classes.modal}
-                        open={open}
-                        onClose={handleClose}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                          timeout: 500,
-                        }}
-                      >
-                        <Fade in={open}>
-                          <div className={classes.paper2}>
-                            <Paper>
-                              <div>
-                                <ListItem button>
-                                  <ListItemIcon>
-                                    <SettingsIcon className={classes.icon} />
-                                  </ListItemIcon>
-                                  <Typography
-                                    className={classes.intestazione}
-                                    variant="h5"
-                                  >
-                                    Add Tipo Linea{" "}
-                                  </Typography>
-                                </ListItem>
+                            <div className={classes.paperBottom}>
+                              <Typography variant="h11">
+                                Sei sicuro che il nuovo "Tipo Linea" non è già
+                                presente?
+                              </Typography>
+
+                              <div className={classes.divider2}>
+                                <Divider />
                               </div>
 
-                              <div className={classes.paperBottom}>
-                                <Typography variant="h11">
-                                  Sei sicuro che il nuovo "Tipo Linea" non è già
-                                  presente?
-                                </Typography>
+                              <div className={classes.bottoni}>
+                                <div>
+                                  <Button
+                                    onClick={handleOpen2}
+                                    variant="contained"
+                                    color="secondary"
+                                  >
+                                    Si, prosegui
+                                  </Button>
+                                  <Modal
+                                    className={classes.modal}
+                                    open={open2}
+                                    onClose={handleClose2}
+                                    closeAfterTransition
+                                    BackdropComponent={Backdrop}
+                                    BackdropProps={{
+                                      timeout: 500,
+                                    }}
+                                  >
+                                    <Fade in={open2}>
+                                      <div className={classes.paper2}>
+                                        <Paper>
+                                          <div>
+                                            <ListItem button>
+                                              <ListItemIcon>
+                                                <SettingsIcon
+                                                  className={classes.icon}
+                                                />
+                                              </ListItemIcon>
+                                              <Typography
+                                                className={
+                                                  classes.intestazione
+                                                }
+                                                variant="h5"
+                                              >
+                                                Add Tipo Linea{" "}
+                                              </Typography>
+                                            </ListItem>
+                                          </div>
 
-                                <div className={classes.divider2}>
-                                  <Divider />
+                                          <div
+                                            className={classes.paperBottom}
+                                          >
+                                            <form
+                                              className={classes.root}
+                                              noValidate
+                                              autoComplete="off"
+                                            >
+                                              <TextField
+                                                id="outlined-basic"
+                                                label="New Type"
+                                                variant="outlined"
+                                                onChange={(e) =>
+                                                  setType(e.target.value)
+                                                }
+                                              />
+                                            </form>
+
+                                            <div className={classes.divider2}>
+                                              <Divider />
+                                            </div>
+
+                                            <div className={classes.bottoni}>
+                                              <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                onClick={salva2}
+                                              >
+                                                Conferma
+                                              </Button>
+
+                                              <Button
+                                                variant="contained"
+                                                onClick={handleClose2}
+                                                color="primary"
+                                              >
+                                                Cancel
+                                              </Button>
+                                            </div>
+                                          </div>
+                                        </Paper>
+                                      </div>
+                                    </Fade>
+                                  </Modal>
                                 </div>
 
-                                <div className={classes.bottoni}>
-                                  <div>
-                                    <Button
-                                      onClick={handleOpen2}
-                                      variant="contained"
-                                      color="secondary"
-                                    >
-                                      Si, prosegui
-                                    </Button>
-                                    <Modal
-                                      className={classes.modal}
-                                      open={open2}
-                                      onClose={handleClose2}
-                                      closeAfterTransition
-                                      BackdropComponent={Backdrop}
-                                      BackdropProps={{
-                                        timeout: 500,
-                                      }}
-                                    >
-                                      <Fade in={open2}>
-                                        <div className={classes.paper2}>
-                                          <Paper>
-                                            <div>
-                                              <ListItem button>
-                                                <ListItemIcon>
-                                                  <SettingsIcon
-                                                    className={classes.icon}
-                                                  />
-                                                </ListItemIcon>
-                                                <Typography
-                                                  className={
-                                                    classes.intestazione
-                                                  }
-                                                  variant="h5"
-                                                >
-                                                  Add Tipo Linea{" "}
-                                                </Typography>
-                                              </ListItem>
-                                            </div>
+                                <Button
+                                  variant="contained"
+                                  onClick={handleClose}
+                                  color="primary"
+                                >
+                                  No
+                                </Button>
+                              </div>
+                            </div>
+                          </Paper>
+                        </div>
+                      </Fade>
+                    </Modal>
 
-                                            <div
-                                              className={classes.paperBottom}
-                                            >
-                                              <form
-                                                className={classes.root}
-                                                noValidate
-                                                autoComplete="off"
-                                              >
-                                                <TextField
-                                                  id="outlined-basic"
-                                                  label="New Type"
-                                                  variant="outlined"
-                                                  onChange={(e) =>
-                                                    setType(e.target.value)
-                                                  }
-                                                />
-                                              </form>
+                    {/*------------------MODALE RIMUOVI TYPE--------------- */}
+                    <Modal
+                      className={classes.modal}
+                      open={openRemove}
+                      onClose={handleCloseRemove}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={openRemove}>
+                        <div className={classes.paper2}>
+                          <Paper>
+                            <div>
+                              <ListItem>
+                                <ListItemIcon>
+                                  <SettingsIcon className={classes.icon} />
+                                </ListItemIcon>
+                                <Typography
+                                  className={classes.intestazione}
+                                  variant="h5"
+                                >
+                                  Rimuovi TypeLinea{" "}
+                                </Typography>
+                              </ListItem>
+                            </div>
 
-                                              <div className={classes.divider2}>
-                                                <Divider />
-                                              </div>
+                            <div className={classes.paperBottom}>
+                              <Typography variant="h11">
+                                Sei sicuro di voler rimuovere il TypeLinea "
+                                <b>
+                                  {openRemove === true
+                                    ? typeLineaDescrizione
+                                    : ""}
+                                </b>
+                                "
+                              </Typography>
 
-                                              <div className={classes.bottoni}>
-                                                <Button
-                                                  variant="contained"
-                                                  color="secondary"
-                                                  onClick={salva2}
-                                                >
-                                                  Conferma
-                                                </Button>
+                              <div className={classes.divider2}>
+                                <Divider />
+                              </div>
 
-                                                <Button
-                                                  variant="contained"
-                                                  onClick={handleClose2}
-                                                  color="primary"
-                                                >
-                                                  Cancel
-                                                </Button>
-                                              </div>
-                                            </div>
-                                          </Paper>
-                                        </div>
-                                      </Fade>
-                                    </Modal>
-                                  </div>
-
+                              <div className={classes.bottoni}>
+                                <div>
                                   <Button
+                                    onClick={() =>
+                                      removeTypeLinea(typeLineaId.id)
+                                    }
                                     variant="contained"
-                                    onClick={handleClose}
+                                    color="secondary"
+                                  >
+                                    Si, RIMUOVI
+                                  </Button>
+                                  <Button
+                                    onClick={handleCloseRemove}
+                                    variant="contained"
                                     color="primary"
                                   >
-                                    No
+                                    annulla
                                   </Button>
                                 </div>
                               </div>
-                            </Paper>
-                          </div>
-                        </Fade>
-                      </Modal>
-
-                      {/*------------------MODALE RIMUOVI TYPE--------------- */}
-                      <Modal
-                        className={classes.modal}
-                        open={openRemove}
-                        onClose={handleCloseRemove}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                          timeout: 500,
-                        }}
-                      >
-                        <Fade in={openRemove}>
-                          <div className={classes.paper2}>
-                            <Paper>
-                              <div>
-                                <ListItem>
-                                  <ListItemIcon>
-                                    <SettingsIcon className={classes.icon} />
-                                  </ListItemIcon>
-                                  <Typography
-                                    className={classes.intestazione}
-                                    variant="h5"
-                                  >
-                                    Rimuovi TypeLinea{" "}
-                                  </Typography>
-                                </ListItem>
-                              </div>
-
-                              <div className={classes.paperBottom}>
-                                <Typography variant="h11">
-                                  Sei sicuro di voler rimuovere il TypeLinea "
-                                  <b>
-                                    {openRemove === true
-                                      ? typeLineaDescrizione
-                                      : ""}
-                                  </b>
-                                  "
+                            </div>
+                          </Paper>
+                        </div>
+                      </Fade>
+                    </Modal>
+                    {/*------------------MODALE MODIFICA TYPE--------------- */}
+                    <Modal
+                      className={classes.modal}
+                      open={openEdit}
+                      onClose={handleCloseEdit}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={openEdit}>
+                        <div className={classes.paper2}>
+                          <Paper>
+                            <div>
+                              <ListItem>
+                                <ListItemIcon>
+                                  <SettingsIcon className={classes.icon} />
+                                </ListItemIcon>
+                                <Typography
+                                  className={classes.intestazione}
+                                  variant="h5"
+                                >
+                                  Modifica TypeLinea
                                 </Typography>
+                              </ListItem>
+                            </div>
 
-                                <div className={classes.divider2}>
-                                  <Divider />
-                                </div>
+                            <div className={classes.paperBottom}>
 
-                                <div className={classes.bottoni}>
-                                  <div>
-                                    <Button
-                                      onClick={() =>
-                                        removeTypeLinea(typeLineaId.id)
-                                      }
-                                      variant="contained"
-                                      color="secondary"
-                                    >
-                                      Si, RIMUOVI
-                                    </Button>
-                                    <Button
-                                      onClick={handleCloseRemove}
-                                      variant="contained"
-                                      color="primary"
-                                    >
-                                      annulla
-                                    </Button>
-                                  </div>
-                                </div>
+                              <Form.Group controlId="form.Numero">
+                                <Form.Control
+                                  type="text"
+                                  placeholder="Inserisci in nuovo nome"
+                                  defaultValue={openEdit === true ? typeLineaDescrizione : ""}
+                                //onChange={(e) => setPorta(e.target.value)}
+                                />
+                                <Alert
+                                  severity="error"
+                                  id="alertEditType"
+                                  style={{ display: "none" }}
+                                >
+                                  Inserire il nuovo nome!
+                                </Alert>
+                              </Form.Group>
+
+                              <div className={classes.divider2}>
+                                <Divider />
                               </div>
-                            </Paper>
-                          </div>
-                        </Fade>
-                      </Modal>
-                      {/*------------------MODALE MODIFICA TYPE--------------- */}
-                      <Modal
-                        className={classes.modal}
-                        open={openEdit}
-                        onClose={handleCloseEdit}
-                        closeAfterTransition
-                        BackdropComponent={Backdrop}
-                        BackdropProps={{
-                          timeout: 500,
-                        }}
-                      >
-                        <Fade in={openEdit}>
-                          <div className={classes.paper2}>
-                            <Paper>
-                              <div>
-                                <ListItem>
-                                  <ListItemIcon>
-                                    <SettingsIcon className={classes.icon} />
-                                  </ListItemIcon>
-                                  <Typography
-                                    className={classes.intestazione}
-                                    variant="h5"
+
+                              <div className={classes.bottoni}>
+                                <div>
+                                  <Button
+                                    onClick={() =>
+                                      removeTypeLinea(typeLineaId.id)
+                                    }
+                                    variant="contained"
+                                    color="secondary"
                                   >
-                                    Modifica TypeLinea
-                                  </Typography>
-                                </ListItem>
-                              </div>
-
-                              <div className={classes.paperBottom}>
-
-                                <Form.Group controlId="form.Numero">
-                                  <Form.Control
-                                    type="text"
-                                    placeholder="Inserisci in nuovo nome"
-                                    defaultValue={openEdit === true ? typeLineaDescrizione : ""}
-                                  //onChange={(e) => setPorta(e.target.value)}
-                                  />
-                                  <Alert
-                                    severity="error"
-                                    id="alertEditType"
-                                    style={{ display: "none" }}
+                                    modifica
+                                  </Button>
+                                  <Button
+                                    onClick={handleCloseEdit}
+                                    variant="contained"
+                                    color="primary"
                                   >
-                                    Inserire il nuovo nome!
-                                  </Alert>
-                                </Form.Group>
-
-                                <div className={classes.divider2}>
-                                  <Divider />
-                                </div>
-
-                                <div className={classes.bottoni}>
-                                  <div>
-                                    <Button
-                                      onClick={() =>
-                                        removeTypeLinea(typeLineaId.id)
-                                      }
-                                      variant="contained"
-                                      color="secondary"
-                                    >
-                                      modifica
-                                    </Button>
-                                    <Button
-                                      onClick={handleCloseEdit}
-                                      variant="contained"
-                                      color="primary"
-                                    >
-                                      annulla
-                                    </Button>
-                                  </div>
+                                    annulla
+                                  </Button>
                                 </div>
                               </div>
-                            </Paper>
-                          </div>
-                        </Fade>
-                      </Modal>
-                    </div>
-                    {/* ------------------------------FINE MODALI-------------------------------------- */}
+                            </div>
+                          </Paper>
+                        </div>
+                      </Fade>
+                    </Modal>
                   </div>
-                </Form.Group>
-              </Paper>
+                  {/* ------------------------------FINE MODALI-------------------------------------- */}
+                </div>
+              </Form.Group>
             </Paper>
-          </div>
-          <Divider className={classes.divider} />
-          <div className={classes.bottone}>
-            <ButtonClickedGreen
-              className={classes.bottone}
-              size="medium"
-              nome="Crea"
-              onClick={salva}
-            />
-            <Button
-              component={NavLink}
-              className="button-green-disactive"
-              exact
-              to="/editing/linee"
-              variant="contained"
-              size="medium"
-            >
-              annulla
-            </Button>
-          </div>
-        </Paper>
-      </main>
-    </div>
-  );
+          </Paper>
+        </div>
+        <Divider className={classes.divider} />
+        <div className={classes.bottone}>
+          <ButtonClickedGreen
+            className={classes.bottone}
+            size="medium"
+            nome="Crea"
+            onClick={salva}
+          />
+          <Button
+            component={NavLink}
+            className="button-green-disactive"
+            exact
+            to="/editing/linee"
+            variant="contained"
+            size="medium"
+          >
+            annulla
+          </Button>
+        </div>
+      </Paper>
+    </main>
+  </div>
+);
 }
 
 export default EditingLineaCreaLinea;
