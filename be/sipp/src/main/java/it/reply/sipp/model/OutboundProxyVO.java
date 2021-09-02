@@ -22,6 +22,8 @@ public class OutboundProxyVO extends BaseEntity {
   public static final int IP_DESTINAZIONE_LENGTH = 1000; //?? 1000 caratteri per un indirizzo ip???
   
   public static final int DESCRIZIONE_LENGTH = 2000;
+  
+  public static final int DEFAULT_PORT = 5060;
 
   @Id
   @Column(name="ID_OBP")

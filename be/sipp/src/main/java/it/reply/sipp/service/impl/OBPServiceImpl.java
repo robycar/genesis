@@ -79,6 +79,9 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
     vo.setDescrizione(proxyDTO.getDescrizione());
     vo.setIpDestinazione(proxyDTO.getIpDestinazione());
     vo.setPorta(proxyDTO.getPorta());
+    if (vo.getPorta() == null) {
+      vo.setPorta(OutboundProxyVO.DEFAULT_PORT);
+    }
     
     if (proxyDTO.getTypeLinee() != null) {
     
