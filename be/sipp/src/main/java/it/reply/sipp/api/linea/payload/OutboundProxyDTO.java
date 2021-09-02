@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import it.reply.sipp.api.admin.payload.GruppoDTO;
 import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.OutboundProxyVO;
 
@@ -23,6 +24,8 @@ public class OutboundProxyDTO extends TrackedDTO {
   private String descrizione;
   
   private Integer porta;
+  
+  private GruppoDTO gruppo;
   
   private List<TypeLineaDTO> typeLinee;
   
@@ -45,6 +48,7 @@ public class OutboundProxyDTO extends TrackedDTO {
           .map(typeLineaVO -> new TypeLineaDTO(typeLineaVO))
           .collect(Collectors.toList());
      }
+    this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
   }
   
   @Override
@@ -54,7 +58,7 @@ public class OutboundProxyDTO extends TrackedDTO {
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "porta", porta);
     writeField(sb, "typeLinee", typeLinee);
-    
+    writeField(sb, "gruppo", gruppo);
     super.writeFields(sb);
   }
 
@@ -96,6 +100,14 @@ public class OutboundProxyDTO extends TrackedDTO {
 
   public void setTypeLinee(List<TypeLineaDTO> typeLinee) {
     this.typeLinee = typeLinee;
+  }
+
+  public GruppoDTO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoDTO gruppo) {
+    this.gruppo = gruppo;
   }
 
 }

@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -40,6 +42,10 @@ public class TemplateVO extends BaseEntity {
   
   @Column(name="DESCRIZIONE", length = DESCRIZIONE_LENGTH)
   private String descrizione;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name="ID_GRUPPO")
+  private GruppoVO gruppo;
   
   @OneToMany(mappedBy = "template", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @OrderBy("order")
@@ -94,6 +100,14 @@ public class TemplateVO extends BaseEntity {
 
   public void setDescrizione(String descrizione) {
     this.descrizione = descrizione;
+  }
+
+  public GruppoVO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoVO gruppo) {
+    this.gruppo = gruppo;
   }
 
 }

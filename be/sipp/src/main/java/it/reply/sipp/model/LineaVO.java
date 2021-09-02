@@ -41,6 +41,10 @@ public class LineaVO extends BaseEntity {
 	@JoinColumn(name="ID_TYPE_LINEA")
 	private TypeLineaVO typeLinea;
 	
+	@ManyToOne
+	@JoinColumn(name="ID_GRUPPO")
+	private GruppoVO gruppo;
+	
 	public LineaVO() {
 	}
 
@@ -91,5 +95,13 @@ public class LineaVO extends BaseEntity {
 	public void setTypeLinea(TypeLineaVO typeLinea) {
 		this.typeLinea = typeLinea;
 	}
+
+  public GruppoVO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoVO gruppo) {
+    this.gruppo = gruppo;
+  }
 
 }

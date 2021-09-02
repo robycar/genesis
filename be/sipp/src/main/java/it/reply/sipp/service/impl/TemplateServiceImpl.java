@@ -51,12 +51,12 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     }
     
     TemplateVO vo = new TemplateVO();
-    vo.init(getUsername());
+    vo.init(currentUsername());
     vo.setDurata(dto.getDurata());
     vo.setNome(dto.getNome());
     vo.setTypeTemplate(dto.getTypeTemplate());
     vo.setDescrizione(dto.getDescrizione());
-
+    vo.setGruppo(currentGroup());
     return new TemplateDTO(templateRepository.save(vo));
     
   }
@@ -77,7 +77,7 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     logger.debug("ener updateTemplate");
     
     TemplateVO vo = readVO(dto.getId());
-    
+    checkGroup(vo.getGruppo(), AppError.TEMPLATE_EDIT_WRONG_GROUP);
     if (dto.getNome() != null && !dto.getNome().equals(vo.getNome())) {
       final Long levelId = vo.getId();
       Optional<Long> existingTemplateId = templateRepository.findByNome(dto.getNome())
@@ -89,7 +89,7 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
       vo.setNome(dto.getNome());
     }
     checkVersion(vo, dto.getVersion(), "template", vo.getId());
-    vo.modifiedBy(getUsername());
+    vo.modifiedBy(currentUsername());
     
     if (dto.getDurata() != null) {
       vo.setDurata(dto.getDurata());
@@ -229,6 +229,7 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     logger.debug("enter removeTemplate");
     
     TemplateVO templateVO = readVO(id);
+    checkGroup(templateVO.getGruppo(), AppError.TEMPLATE_DELETE_WRONG_GROUP);
     templateRepository.delete(templateVO);
     fileSystemRepository.deleteAllByScopeAndIdRef(FileSystemScope.TEMPLATE, templateVO.getId());
   }

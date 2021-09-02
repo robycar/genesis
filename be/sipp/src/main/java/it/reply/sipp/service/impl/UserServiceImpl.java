@@ -220,7 +220,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 			userVO.setAzienda(userDTO.getAzienda());
 		}
 		
-		userVO.modifiedBy(getUsername());
+		userVO.modifiedBy(currentUsername());
 		
 		userRepository.saveAndFlush(userVO);
 		
@@ -243,7 +243,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		
 		userVO.setPassword(passwordEncoder.encode(password));
 		 
-		userVO.init(getUsername());
+		userVO.init(currentUsername());
 		
 		userVO = userRepository.saveAndFlush(userVO);
 		logger.debug("exit addUser");
@@ -257,7 +257,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
     UserVO userVO = readVO(id);
     logger.info("Tentativo di eliminare l'utente {}: {}", userVO.getId(), userVO.getUsername());
 
-    if (getUsername().equals(userVO.getUsername())) {
+    if (currentUsername().equals(userVO.getUsername())) {
       throw makeError(HttpStatus.BAD_REQUEST, AppError.USER_DELETE_HIMSELF, userVO.getUsername());
     }
 

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -43,6 +44,10 @@ public class OutboundProxyVO extends BaseEntity {
     joinColumns = @JoinColumn(name="ID_OBP"),
     inverseJoinColumns = @JoinColumn(name="ID_TYPE_LINEA"))
   private Set<TypeLineaVO> typeLinee;
+  
+  @ManyToOne
+  @JoinColumn(name = "ID_GRUPPO", nullable = false)
+  private GruppoVO gruppo;
   
   public OutboundProxyVO() {
   }
@@ -89,6 +94,14 @@ public class OutboundProxyVO extends BaseEntity {
 
   public void setTypeLinee(Set<TypeLineaVO> typeLinee) {
     this.typeLinee = typeLinee;
+  }
+
+  public GruppoVO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoVO gruppo) {
+    this.gruppo = gruppo;
   }
 
 }

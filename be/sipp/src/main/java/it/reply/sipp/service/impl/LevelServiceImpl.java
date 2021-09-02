@@ -74,7 +74,7 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 		LevelVO vo = new LevelVO();
 		vo.setNome(dto.getNome());
 		vo.setDescrizione(dto.getDescrizione());
-		vo.init(getUsername());
+		vo.init(currentUsername());
 		
 		vo = levelRepository.saveAndFlush(vo);
 		logger.debug("exit addLevel");
@@ -138,7 +138,7 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 			}
 		}
 		
-		vo.modifiedBy(getUsername());
+		vo.modifiedBy(currentUsername());
 		
 		vo = levelRepository.saveAndFlush(vo);
 		

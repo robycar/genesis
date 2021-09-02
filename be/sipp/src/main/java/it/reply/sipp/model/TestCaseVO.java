@@ -53,6 +53,10 @@ public class TestCaseVO extends BaseEntity {
   @ManyToOne(optional = true)
   @JoinColumn(name="FILE_SYSTEM_ID_CHIAMATO")
   private FileSystemVO fileChiamato;
+  
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name="ID_GRUPPO", nullable = false)
+  private GruppoVO gruppo;
 
   @OneToMany(mappedBy = "testCase", cascade = CascadeType.REMOVE)
   @OrderBy("numLinea")
@@ -131,6 +135,14 @@ public class TestCaseVO extends BaseEntity {
 
   public void setTemplate(TemplateVO template) {
     this.template = template;
+  }
+
+  public GruppoVO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoVO gruppo) {
+    this.gruppo = gruppo;
   }
 
 }

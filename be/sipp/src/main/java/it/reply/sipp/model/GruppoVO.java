@@ -28,7 +28,8 @@ public class GruppoVO extends BaseEntity {
 	
 	@Column(name="DESCRIZIONE", length = DESCRIZIONE_LENGTH)
 	private String descrizione;
-	
+
+
 	public GruppoVO() {
 	}
 	

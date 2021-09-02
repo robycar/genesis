@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import it.reply.sipp.AppError;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.model.BaseEntity;
+import it.reply.sipp.model.GruppoVO;
+import it.reply.sipp.model.repository.GruppoRepository;
 
 public abstract class AbstractService {
 
@@ -22,12 +24,19 @@ public abstract class AbstractService {
 	@Autowired
 	private MessageSource messageSource;
 	
+	@Autowired
+	private GruppoRepository gruppoRepository;
+	
 	
 	public AbstractService() {
 	}
 	
 	protected MessageSource getMessageSource() {
 		return this.messageSource;
+	}
+	
+	protected GruppoRepository getGruppoRepository() {
+	  return this.gruppoRepository;
 	}
 	
 	protected String errorMessage(AppError error, Object... args) {
@@ -58,10 +67,19 @@ public abstract class AbstractService {
 		return new ApplicationException(statusCode, error.getErrorCode(), errorMessage);
 	}
 	
-	protected String getUsername() {
+	protected String currentUsername() {
 	  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	  if (authentication != null) {
 	    return authentication.getName();
+	  }
+	  return null;
+	}
+	
+	protected GruppoVO currentGroup() throws ApplicationException {
+	  String username = currentUsername();
+	  if (username != null) {
+	    return getGruppoRepository().findByUsername(username)
+	        .orElseThrow(() -> makeError(HttpStatus.INTERNAL_SERVER_ERROR, AppError.MISSING_GROUP_OF_SESSION_USER, username));
 	  }
 	  return null;
 	}
@@ -71,4 +89,12 @@ public abstract class AbstractService {
       throw makeError(HttpStatus.CONFLICT, AppError.ENTITY_MODIFIED, vo.getModifiedBy(), vo.getModifiedDate(), entityName, id);
     }
   }
+  
+  protected void checkGroup(GruppoVO expectedGroup, AppError appError) throws ApplicationException {
+    if (!expectedGroup.getId().equals(currentGroup().getId())) {
+      throw makeError(HttpStatus.BAD_REQUEST, appError);
+    }
+  }
+  
+
 }

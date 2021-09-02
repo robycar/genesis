@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,6 +86,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 		vo.setNumero(dto.getNumero());
 		vo.setPassword(dto.getPassword());
 		vo.setPorta(dto.getPorta());
+		vo.setGruppo(currentGroup());
 
 		TypeLineaVO typeLineaVO = readTypeLineaVO(dto.getTypeLinea().getId());
 		Optional<LineaVO> existingLinea = lineaRepository.findByNumeroAndTypeLinea(vo.getNumero(), typeLineaVO);
@@ -98,7 +98,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 
 		}
 
-		vo.init(getUsername());
+		vo.init(currentUsername());
 		
 		vo = lineaRepository.saveAndFlush(vo);
 
@@ -124,7 +124,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
       vo.setDescrizione(dto.getDescrizione());
     }
     
-    vo.modifiedBy(getUsername());
+    vo.modifiedBy(currentUsername());
     
     vo = typeLineaRepository.saveAndFlush(vo);
     
@@ -137,7 +137,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 
 		logger.debug("enter updateLinea");
 		LineaVO lineaVO = readLineaVO(lineaDTO.getId());
-		
+		checkGroup(lineaVO.getGruppo(), AppError.LINEA_EDIT_WRONG_GROUP);
 		//TODO: Abilitare checkVersion(lineaVO, lineaDTO.getVersion(), "LineaVO", lineaVO.getId());
 
 		if (lineaDTO.getNumero() != null || lineaDTO.getTypeLinea() != null) {
@@ -171,7 +171,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 			lineaVO.setPorta(lineaDTO.getPorta());
 		}
 
-		lineaVO.modifiedBy(getUsername());
+		lineaVO.modifiedBy(currentUsername());
 		
 		lineaRepository.saveAndFlush(lineaVO);
 
@@ -181,13 +181,12 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 
 	@Override
 	public void removeLinea(Long id) throws ApplicationException {
+	  
 		// TODO: Verificare se la linea è attualmente in uso
-
-		try {
-			lineaRepository.deleteById(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw makeError(HttpStatus.NOT_FOUND, AppError.LINEA_NOT_FOUND, id);
-		}
+	  logger.debug("enter removeLinea");
+	  LineaVO lineaVO = readLineaVO(id);
+	  checkGroup(lineaVO.getGruppo(), AppError.LINEA_DELETE_WRONG_GROUP);
+	  lineaRepository.delete(lineaVO);
 	}
 
   @Override
@@ -220,7 +219,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     }
     
     TypeLineaVO vo = new TypeLineaVO();
-    vo.init(getUsername());
+    vo.init(currentUsername());
         
     vo.setDescrizione(dto.getDescrizione());
     vo = typeLineaRepository.saveAndFlush(vo);
