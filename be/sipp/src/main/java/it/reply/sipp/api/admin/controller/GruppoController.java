@@ -97,6 +97,7 @@ public class GruppoController extends AbstractController {
 		gruppoVO.setId(request.getId());
 		gruppoVO.setNome(request.getNome());
 		gruppoVO.setDescrizione(request.getDescrizione());
+		gruppoVO.setVersion(request.getVersion() == null ? 0 : request.getVersion());
 		
 		GruppoUpdateResponse response = new GruppoUpdateResponse();
 		

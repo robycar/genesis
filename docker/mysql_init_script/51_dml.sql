@@ -23,17 +23,17 @@ INSERT INTO `FUNZIONE` (`CODICE`, `NOME`, `DESCRIZIONE`) VALUES
 ('test.delete', 'Elimina Test Case', 'Consente di eliminare un test case')
 ;
 
-INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`) VALUES
-(2,	'Descrizione livello admin',	'ADMIN'),
-(4,	'Regional',	'Lead Operations Manager'),
-(6,	'Descrizione Level 5',	'Level 6');
+INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(2,	'Descrizione livello admin',	'ADMIN', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(4,	'Regional',	'Lead Operations Manager', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(5,	'Descrizione Level 5',	'Level 5', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
-INSERT INTO `GRUPPO` (`ID_GRUPPO`, `DESCRIZIONE`, `GRUPPO`) VALUES
-(1,	'g1',	'g1'),
-(2,	'Forward',	'Central Integration Designer');
+INSERT INTO `GRUPPO` (`ID_GRUPPO`, `DESCRIZIONE`, `GRUPPO`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(1,	'g1',	'g1', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(2,	'Forward',	'Central Integration Designer', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
-INSERT INTO `UTENZE` (`ID_UTENZA`, `USERNAME`, `PASSWORD`, `ID_LEVEL`, `ID_GROUP`, `NOME`, `COGNOME`, `AZIENDA`, `EMAIL`) VALUES
-(1, 'test',	'{noop}test',	2,	1,	'nome',	'cognome',	'azienda',	'test@test.it');
+INSERT INTO `UTENZE` (`ID_UTENZA`, `USERNAME`, `PASSWORD`, `ID_LEVEL`, `ID_GROUP`, `NOME`, `COGNOME`, `AZIENDA`, `EMAIL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(1, 'test',	'{noop}test',	2,	1,	'nome',	'cognome',	'azienda',	'test@test.it', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
 INSERT INTO AUTORIZZAZIONE_LEVEL(ID_LEVEL, FUNZIONE_CODICE)
 SELECT L.ID_LEVEL, F.CODICE
@@ -43,19 +43,19 @@ WHERE LEVEL = 'ADMIN'
 AND AL.ID_LEVEL IS NULL
 ;
 
-INSERT INTO `TYPE_LINEE` (`ID_TYPE_LINEA`, `DESCRIZIONE`) VALUES
-(1,	'descrizione type linea 1'),
-(2,	'descrizione type linea 2');
+INSERT INTO `TYPE_LINEE` (`ID_TYPE_LINEA`, `DESCRIZIONE`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(1,	'descrizione type linea 1', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(2,	'descrizione type linea 2', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
-INSERT INTO `LINEE` (`ID_LINEA`, `NUMERO`, `ID_TYPE_LINEA`, `IP_LINEA`, `PORTA`, `PASSWORD`) VALUES
-(1,	'90-400-754-1037',	1,	'240.195.169.235',	924,	'IdZtVacO4inAlAw'),
-(2,	'9042382',	1,	'241.88.251.202',	224,	'passwordSegreta');
+INSERT INTO `LINEE` (`ID_LINEA`, `ID_GRUPPO`, `NUMERO`, `ID_TYPE_LINEA`, `IP_LINEA`, `PORTA`, `PASSWORD`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(1,	1, '90-400-754-1037',	1,	'240.195.169.235',	924,	'IdZtVacO4inAlAw', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(2,	1, '9042382',	1,	'241.88.251.202',	224,	'passwordSegreta', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
 
 -- 2021-08-09 Solo per prepopolare alcuni file per lo sviluppo sui template
 
-INSERT INTO `TEMPLATE` (`ID_TEMPLATE`, `VERSION`, `NOME`, `DURATA`, `TYPE_TEMPLATE`, `MODIFIED_BY`, `MODIFIED_WHEN`, `CREATED_BY`, `CREATED_WHEN`, `DESCRIZIONE`) VALUES
-(1,	21,	'Template 1',	57,	'bohh',	'test',	'2021-08-09 20:01:13',	'test',	'2021-08-06 18:41:30',	'Descrizione molto lunga per il template 1');
+INSERT INTO `TEMPLATE` (`ID_TEMPLATE`, `ID_GRUPPO`, `VERSION`, `NOME`, `DURATA`, `TYPE_TEMPLATE`, `MODIFIED_BY`, `MODIFIED_WHEN`, `CREATED_BY`, `CREATED_WHEN`, `DESCRIZIONE`) VALUES
+(1,	1, 21,	'Template 1',	57,	'bohh',	'test',	'2021-08-09 20:01:13',	'test',	'2021-08-06 18:41:30',	'Descrizione molto lunga per il template 1');
 
 INSERT INTO `FILE_SYSTEM` (`ID`, `VERSION`, `SCOPE`, `ID_REF`, `PATH`, `MODIFIED_BY`, `CREATED_BY`, `MODIFIED_WHEN`, `CREATED_WHEN`, `CONTENT_TYPE`, `CONTENT`) VALUES
 (1,	0,	'TEMPLATE',	1,	'file1.xml',	'roby',	'roby',	'2021-08-09 11:03:10',	'2021-08-09 11:03:10',	'application/xml',	'<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n	xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\n	<modelVersion>4.0.0</modelVersion>\n	<parent>\n		<groupId>org.springframework.boot</groupId>\n		<artifactId>spring-boot-starter-parent</artifactId>\n		<version>2.5.0</version>\n		<relativePath/> <!-- lookup parent from repository -->\n	</parent>\n	<groupId>it.reply.sipp</groupId>\n	<artifactId>sipp</artifactId>\n	<version>0.0.1-SNAPSHOT</version>\n	<packaging>war</packaging>\n	<name>sipp</name>\n	<description>Sipp project</description>\n	<properties>\n		<java.version>11</java.version>\n	</properties>\n	<dependencies>\n		<dependency>\n			<groupId>org.springframework.boot</groupId>\n			<artifactId>spring-boot-starter-data-jdbc</artifactId>\n		</dependency>\n		<dependency>\n			<groupId>org.springframework.boot</groupId>\n			<artifactId>spring-boot-starter-data-jpa</artifactId>\n		</dependency>\n		<dependency>\n			<groupId>org.springframework.boot</groupId>\n			<artifactId>spring-boot-starter-security</artifactId>\n		</dependency>\n		<dependency>\n			<groupId>org.springframework.boot</groupId>\n			<artifactId>spring-boot-starter-web</artifactId>\n		</dependency>\n\n		<dependency>\n			<groupId>org.springframework.boot</groupId>\n			<artifactId>spring-boot-devtools</artifactId>\n			<scope>runtime</scope>\n			<optional>true</optional>\n		</dependency>\n		<dependency>\n			<groupId>mysql</groupId>\n			<artifactId>mysql-connector-java</artifactId>\n			<scope>runtime</scope>\n		</dependency>\n		<dependency>\n			<groupId>org.springframework.boot</groupId>\n			<artifactId>spring-boot-starter-tomcat</artifactId>\n			<scope>provided</scope>\n		</dependency>\n		<dependency>\n			<groupId>org.springframework.boot</groupId>\n			<artifactId>spring-boot-starter-test</artifactId>\n			<scope>test</scope>\n		</dependency>\n		<dependency>\n			<groupId>org.springframework.security</groupId>\n			<artifactId>spring-security-test</artifactId>\n			<scope>test</scope>\n		</dependency>\n		<dependency>\n			<groupId>com.auth0</groupId>\n			<artifactId>java-jwt</artifactId>\n			<version>3.16.0</version>\n		</dependency>\n		<dependency>\n			<groupId>org.springframework.boot</groupId>\n			<artifactId>spring-boot-starter-validation</artifactId>\n		</dependency>\n		<dependency>\n			<groupId>org.apache.commons</groupId>\n			<artifactId>commons-lang3</artifactId>\n		</dependency>\n	</dependencies>\n\n	<build>\n		<plugins>\n			<plugin>\n				<groupId>org.springframework.boot</groupId>\n				<artifactId>spring-boot-maven-plugin</artifactId>\n			</plugin>\n		</plugins>\n	</build>\n\n</project>\n'),

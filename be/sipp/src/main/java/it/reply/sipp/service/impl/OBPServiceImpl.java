@@ -75,9 +75,14 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
   public OutboundProxyDTO createProxy(OutboundProxyDTO proxyDTO) throws ApplicationException {
     logger.debug("enter createProxy");
     OutboundProxyVO vo = new OutboundProxyVO();
+    vo.init(currentUsername());
+    vo.setGruppo(currentGroup());
     vo.setDescrizione(proxyDTO.getDescrizione());
     vo.setIpDestinazione(proxyDTO.getIpDestinazione());
     vo.setPorta(proxyDTO.getPorta());
+    if (vo.getPorta() == null) {
+      vo.setPorta(OutboundProxyVO.DEFAULT_PORT);
+    }
     
     if (proxyDTO.getTypeLinee() != null) {
     
@@ -101,7 +106,8 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
   public OutboundProxyDTO updateProxy(OutboundProxyDTO proxyDTO) throws ApplicationException {
     
     OutboundProxyVO vo = readProxyVO(proxyDTO.getId());
-
+    checkGroup(vo.getGruppo(), AppError.OBP_EDIT_WRONG_GROUP);
+    checkVersion(vo, proxyDTO.getVersion(), "OutboundProxyVO", vo.getId());
     if (proxyDTO.getTypeLinee() != null) {
       if (proxyDTO.getTypeLinee().isEmpty()) {
         vo.getTypeLinee().clear();
@@ -140,6 +146,7 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
       vo.setPorta(proxyDTO.getPorta());
     }
     
+    vo.modifiedBy(currentUsername());
     
     vo = oBPRepository.saveAndFlush(vo);
     logger.debug("exit updateProxy");
@@ -167,6 +174,7 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
   public void removProxy(Long id) throws ApplicationException {
     logger.debug("enter removeProxy");
     OutboundProxyVO proxyVO = readProxyVO(id);
+    checkGroup(proxyVO.getGruppo(), AppError.OBP_DELETE_WRONG_GROUP);
     oBPRepository.delete(proxyVO);
     logger.debug("exit removeProxy");
   }

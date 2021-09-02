@@ -5,10 +5,10 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.Size;
 
-import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.UserVO;
 
-public class UserDTO extends DTO {
+public class UserDTO extends TrackedDTO {
 
 	private static final long serialVersionUID = 7380820112751434618L;
 
@@ -39,6 +39,7 @@ public class UserDTO extends DTO {
 	}
 	
 	public UserDTO(UserVO vo) {
+	  super(vo);
 		this.id = vo.getId();
 		this.username = vo.getUsername();
 		this.cognome = vo.getCognome();

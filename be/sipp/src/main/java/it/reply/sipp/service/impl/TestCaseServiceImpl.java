@@ -88,7 +88,8 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     
     TestCaseVO vo = new TestCaseVO();
     vo.setTemplate(templateVO);
-    vo.init(getUsername());
+    vo.init(currentUsername());
+    vo.setGruppo(currentGroup());
     vo.setNome(dto.getNome());
     vo.setDescrizione(dto.getDescrizione());
     
@@ -178,10 +179,9 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   public void removeTestCase(long id) throws ApplicationException {
     logger.debug("enter removeTestCase");
     TestCaseVO testCaseVO = readVO(id);
+    checkGroup(testCaseVO.getGruppo(), AppError.TEST_CASE_DELETE_WRONG_GROUP);
     
     testCaseRepository.delete(testCaseVO);
-    
-    
   }
 
   private TestCaseVO readVO(long id) throws ApplicationException {
@@ -202,6 +202,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     logger.debug("enter updateTestCase");
     
     TestCaseVO vo = readVO(dto.getId());
+    checkGroup(vo.getGruppo(), AppError.TEST_CASE_EDIT_WRONG_GROUP);
     checkVersion(vo, dto.getVersion(), "TestCaseVO", vo.getId());
     if (dto.getChiamanti() != null) {
       if (dto.getChiamanti().size() > vo.getLineeChiamanti().size()) {
@@ -246,13 +247,11 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
       vo.setExpectedDuration(dto.getExpectedDuration());
     }
 
-    vo.modifiedBy(getUsername());
+    vo.modifiedBy(currentUsername());
     
     vo = testCaseRepository.saveAndFlush(vo);
     
     return new TestCaseDTO(vo, true);
   }
-  
-  
-  
+
 }

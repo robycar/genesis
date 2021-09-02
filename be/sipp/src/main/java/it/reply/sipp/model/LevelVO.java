@@ -1,6 +1,5 @@
 package it.reply.sipp.model;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="LEVEL")
-public class LevelVO implements Serializable {
+public class LevelVO extends BaseEntity {
 
 	private static final long serialVersionUID = -5771684324058623918L;
 

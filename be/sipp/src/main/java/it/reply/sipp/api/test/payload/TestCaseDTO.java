@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import it.reply.sipp.api.admin.payload.GruppoDTO;
 import it.reply.sipp.api.files.payload.FileDTO;
 import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.api.linea.payload.LineaDTO;
@@ -34,6 +35,8 @@ public class TestCaseDTO extends TrackedDTO {
   private List<TestCaseLineaDTO> chiamanti;
   
   private TemplateDTO template;
+  
+  private GruppoDTO gruppo;
 
   public TestCaseDTO() {
   }
@@ -52,6 +55,7 @@ public class TestCaseDTO extends TrackedDTO {
     this.nome = vo.getNome();
     this.descrizione = vo.getDescrizione();
     this.expectedDuration = vo.getExpectedDuration();
+    this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
     if (includeLinee) {
       
       this.chiamato = new TestCaseLineaDTO();
@@ -83,6 +87,7 @@ public class TestCaseDTO extends TrackedDTO {
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "chiamato", chiamato);
     writeField(sb, "chiamanti", chiamanti);
+    writeField(sb, "gruppo", gruppo);
     super.writeFields(sb);
   }
 
@@ -140,6 +145,14 @@ public class TestCaseDTO extends TrackedDTO {
 
   public void setTemplate(TemplateDTO template) {
     this.template = template;
+  }
+
+  public GruppoDTO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoDTO gruppo) {
+    this.gruppo = gruppo;
   }
   
 }

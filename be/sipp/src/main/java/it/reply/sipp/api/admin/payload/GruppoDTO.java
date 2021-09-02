@@ -2,10 +2,10 @@ package it.reply.sipp.api.admin.payload;
 
 import javax.validation.constraints.NotNull;
 
-import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.GruppoVO;
 
-public class GruppoDTO extends DTO {
+public class GruppoDTO extends TrackedDTO {
 
 	private static final long serialVersionUID = 790868777509335605L;
 
@@ -20,6 +20,7 @@ public class GruppoDTO extends DTO {
 	}
 	
 	public GruppoDTO(GruppoVO vo) {
+	  super(vo);
 		this.id = vo.getId();
 		this.nome = vo.getNome();
 		this.descrizione = vo.getDescrizione();

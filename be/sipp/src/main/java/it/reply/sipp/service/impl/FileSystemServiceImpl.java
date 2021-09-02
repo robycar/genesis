@@ -84,7 +84,7 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     FileSystemVO fileVO = fileSystemRepository.findByScopeAndIdRefAndPath(scope, idRef, path.toString())
         .orElseGet(() -> {
           FileSystemVO vo = new FileSystemVO();
-          vo.init(getUsername());
+          vo.init(currentUsername());
           vo.setIdRef(idRef);
           vo.setScope(scope);
           vo.setPath(path.toString());
@@ -208,7 +208,7 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
       FileSystemVO t = targetMap.get(f.getPath());
       if (t == null) {
         t = new FileSystemVO();
-        t.init(getUsername());
+        t.init(currentUsername());
         t.setScope(targetScope);
         t.setIdRef(targetId);
         t.setPath(f.getPath());

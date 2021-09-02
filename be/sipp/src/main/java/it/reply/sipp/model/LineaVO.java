@@ -1,7 +1,5 @@
 package it.reply.sipp.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="LINEE")
-public class LineaVO implements Serializable {
+public class LineaVO extends BaseEntity {
 
 	private static final long serialVersionUID = 5640543985054718699L;
 
@@ -42,6 +40,10 @@ public class LineaVO implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="ID_TYPE_LINEA")
 	private TypeLineaVO typeLinea;
+	
+	@ManyToOne
+	@JoinColumn(name="ID_GRUPPO")
+	private GruppoVO gruppo;
 	
 	public LineaVO() {
 	}
@@ -93,5 +95,13 @@ public class LineaVO implements Serializable {
 	public void setTypeLinea(TypeLineaVO typeLinea) {
 		this.typeLinea = typeLinea;
 	}
+
+  public GruppoVO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoVO gruppo) {
+    this.gruppo = gruppo;
+  }
 
 }

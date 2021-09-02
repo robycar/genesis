@@ -25,6 +25,9 @@ public class LevelUpdateRequest extends PayloadRequest {
 	private String descrizione;
 	
 	private Set<String> funzioni;
+	
+	//TODO: Abilitare @NotNull al recepimento del FE
+	private Integer version;
 
 	public LevelUpdateRequest() {
 	}
@@ -61,15 +64,25 @@ public class LevelUpdateRequest extends PayloadRequest {
 		this.funzioni = funzioni;
 	}
 
-	@Override
+	
+	public Integer getVersion() {
+    return version;
+  }
+
+  public void setVersion(Integer version) {
+    this.version = version;
+  }
+
+  @Override
 	protected void writeFields(StringBuilder sb) {
 		writeField(sb, "id", id);
 		writeField(sb, "nome", nome);
+		writeField(sb, "version", version);
 		writeField(sb, "descrizione", descrizione);
 		writeField(sb, "funzioni", funzioni);
-		
 		super.writeFields(sb);
 	}
 
+	
 	
 }

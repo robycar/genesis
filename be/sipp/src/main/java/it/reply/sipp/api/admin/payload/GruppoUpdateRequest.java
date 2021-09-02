@@ -17,6 +17,9 @@ public class GruppoUpdateRequest extends PayloadRequest {
 	
 	private String descrizione;
 	
+	//TODO Rendere @NotNull dopo il recepimento del FE
+	private Integer version;
+	
 	public GruppoUpdateRequest() {
 	}
 
@@ -52,5 +55,13 @@ public class GruppoUpdateRequest extends PayloadRequest {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
+
+  public Integer getVersion() {
+    return version;
+  }
+
+  public void setVersion(Integer version) {
+    this.version = version;
+  }
 
 }

@@ -5,10 +5,11 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 
-import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.api.admin.payload.GruppoDTO;
+import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.LineaVO;
 
-public class LineaDTO extends DTO {
+public class LineaDTO extends TrackedDTO {
 
 	private static final long serialVersionUID = -7062059016489551231L;
 
@@ -23,6 +24,8 @@ public class LineaDTO extends DTO {
 	
 	private Integer porta;
 	
+	private GruppoDTO gruppo;
+	
 	@Size(max = LineaVO.PASSWORD_LENGTH)
 	private String password;
 
@@ -36,12 +39,14 @@ public class LineaDTO extends DTO {
   }
 
   public LineaDTO(LineaVO vo) {
+    super(vo);
 		this.id = vo.getId();
 		this.ip = vo.getIp();
 		this.numero = vo.getNumero();
 		this.password = vo.getPassword();
 		this.porta = vo.getPorta();
 		this.typeLinea = vo.getTypeLinea() == null ? null : new TypeLineaDTO(vo.getTypeLinea());
+		this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
 	}
 
 	public Long getId() {
@@ -92,7 +97,15 @@ public class LineaDTO extends DTO {
 		this.typeLinea = typeLinea;
 	}
 
-	@Override
+	public GruppoDTO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoDTO gruppo) {
+    this.gruppo = gruppo;
+  }
+
+  @Override
 	protected void writeFields(StringBuilder sb) {
 		writeField(sb, "id", id);
 		writeField(sb, "numero", numero);
@@ -100,6 +113,7 @@ public class LineaDTO extends DTO {
 		writeField(sb, "password", password == null ? null : StringUtils.repeat('*', password.length()));
 		writeField(sb, "porta", porta);
 		writeField(sb, "typeLinea", typeLinea);
+		writeField(sb, "gruppo", gruppo);
 		super.writeFields(sb);
 	}
 

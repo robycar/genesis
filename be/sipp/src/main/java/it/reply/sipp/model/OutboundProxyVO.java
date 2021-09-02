@@ -1,6 +1,5 @@
 package it.reply.sipp.model;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -12,17 +11,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="OUTBOUNDPROXY")
-public class OutboundProxyVO implements Serializable {
+public class OutboundProxyVO extends BaseEntity {
 
   private static final long serialVersionUID = -7526571090910948837L;
 
   public static final int IP_DESTINAZIONE_LENGTH = 1000; //?? 1000 caratteri per un indirizzo ip???
   
   public static final int DESCRIZIONE_LENGTH = 2000;
+  
+  public static final int DEFAULT_PORT = 5060;
 
   @Id
   @Column(name="ID_OBP")
@@ -42,6 +44,10 @@ public class OutboundProxyVO implements Serializable {
     joinColumns = @JoinColumn(name="ID_OBP"),
     inverseJoinColumns = @JoinColumn(name="ID_TYPE_LINEA"))
   private Set<TypeLineaVO> typeLinee;
+  
+  @ManyToOne
+  @JoinColumn(name = "ID_GRUPPO", nullable = false)
+  private GruppoVO gruppo;
   
   public OutboundProxyVO() {
   }
@@ -88,6 +94,14 @@ public class OutboundProxyVO implements Serializable {
 
   public void setTypeLinee(Set<TypeLineaVO> typeLinee) {
     this.typeLinee = typeLinee;
+  }
+
+  public GruppoVO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoVO gruppo) {
+    this.gruppo = gruppo;
   }
 
 }

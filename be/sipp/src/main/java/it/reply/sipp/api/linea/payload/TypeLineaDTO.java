@@ -3,10 +3,10 @@ package it.reply.sipp.api.linea.payload;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.TypeLineaVO;
 
-public class TypeLineaDTO extends DTO {
+public class TypeLineaDTO extends TrackedDTO {
 
 	private static final long serialVersionUID = -8330436483869012939L;
 
@@ -24,6 +24,7 @@ public class TypeLineaDTO extends DTO {
 	}
 
 	public TypeLineaDTO(TypeLineaVO vo) {
+	  super(vo);
 		this.id = vo.getId();
 		this.descrizione = vo.getDescrizione();
 	}

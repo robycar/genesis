@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.util.LinkedMultiValueMap;
 
+import it.reply.sipp.api.admin.payload.GruppoDTO;
 import it.reply.sipp.api.files.payload.FileDTO;
 import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.TemplateVO;
@@ -28,6 +29,8 @@ public class TemplateDTO extends TrackedDTO {
   @Size(max=TemplateVO.DESCRIZIONE_LENGTH)
   private String descrizione;
 
+  private GruppoDTO gruppo;
+  
   List<FileDTO> folder;
   
   LinkedMultiValueMap<String, TemplateFileDTO> fileLinks;
@@ -46,7 +49,7 @@ public class TemplateDTO extends TrackedDTO {
     this.durata = vo.getDurata();
     this.typeTemplate = vo.getTypeTemplate();
     this.descrizione = vo.getDescrizione();
-    
+    this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
   }
 
   public Long getId() {
@@ -105,6 +108,14 @@ public class TemplateDTO extends TrackedDTO {
     this.fileLinks = fileLinks;
   }
 
+  public GruppoDTO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoDTO gruppo) {
+    this.gruppo = gruppo;
+  }
+
   @Override
   protected void writeFields(StringBuilder sb) {
     writeField(sb, "id", id);
@@ -114,6 +125,7 @@ public class TemplateDTO extends TrackedDTO {
     writeField(sb, "folder", folder);
     writeField(sb, "fileLinks", fileLinks);
     writeField(sb, "descrizione", descrizione);
+    writeField(sb, "gruppo", gruppo);
     super.writeFields(sb);
   }
   

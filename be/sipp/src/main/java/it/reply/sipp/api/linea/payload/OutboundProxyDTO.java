@@ -6,10 +6,11 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.api.admin.payload.GruppoDTO;
+import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.OutboundProxyVO;
 
-public class OutboundProxyDTO extends DTO {
+public class OutboundProxyDTO extends TrackedDTO {
 
   private static final long serialVersionUID = -4051201619704486838L;
 
@@ -24,6 +25,8 @@ public class OutboundProxyDTO extends DTO {
   
   private Integer porta;
   
+  private GruppoDTO gruppo;
+  
   private List<TypeLineaDTO> typeLinee;
   
   public OutboundProxyDTO() {
@@ -34,6 +37,7 @@ public class OutboundProxyDTO extends DTO {
   }
 
   public OutboundProxyDTO(OutboundProxyVO vo) {
+    super(vo);
     this.descrizione = vo.getDescrizione();
     this.id = vo.getId();
     this.ipDestinazione = vo.getIpDestinazione();
@@ -44,6 +48,7 @@ public class OutboundProxyDTO extends DTO {
           .map(typeLineaVO -> new TypeLineaDTO(typeLineaVO))
           .collect(Collectors.toList());
      }
+    this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
   }
   
   @Override
@@ -53,7 +58,7 @@ public class OutboundProxyDTO extends DTO {
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "porta", porta);
     writeField(sb, "typeLinee", typeLinee);
-    
+    writeField(sb, "gruppo", gruppo);
     super.writeFields(sb);
   }
 
@@ -95,6 +100,14 @@ public class OutboundProxyDTO extends DTO {
 
   public void setTypeLinee(List<TypeLineaDTO> typeLinee) {
     this.typeLinee = typeLinee;
+  }
+
+  public GruppoDTO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoDTO gruppo) {
+    this.gruppo = gruppo;
   }
 
 }

@@ -2,8 +2,9 @@ package it.reply.sipp.api.linea.payload;
 
 import java.util.List;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import it.reply.sipp.api.generic.payload.PayloadRequest;
@@ -19,8 +20,9 @@ public class OBPAddRequest extends PayloadRequest {
   
   @Size(max = OutboundProxyVO.DESCRIZIONE_LENGTH)
   private String descrizione;
-  
-  @NotNull(message = "Il campo porta &egrave; obbligatorio")
+
+  @Min(value = 1)
+  @Max(value = 65535)
   private Integer porta;
   
   private List<TypeLineaDTO> typeLinee;
