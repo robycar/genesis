@@ -256,9 +256,11 @@ public class UserServiceImpl extends AbstractService implements UserService {
     
     UserVO userVO = readVO(id);
     logger.info("Tentativo di eliminare l'utente {}: {}", userVO.getId(), userVO.getUsername());
-    
-    //TODO: Verificare le condizioni per cui non si puo' eliminare l'utente.
-    //TODO: Un utente puo' eliminare se stesso?
+
+    if (getUsername().equals(userVO.getUsername())) {
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.USER_DELETE_HIMSELF, userVO.getUsername());
+    }
+
     userRepository.delete(userVO);
 
   }
