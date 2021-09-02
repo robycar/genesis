@@ -1,7 +1,5 @@
 package it.reply.sipp.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="LINEE")
-public class LineaVO implements Serializable {
+public class LineaVO extends BaseEntity {
 
 	private static final long serialVersionUID = 5640543985054718699L;
 

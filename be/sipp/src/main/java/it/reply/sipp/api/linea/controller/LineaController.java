@@ -97,6 +97,7 @@ public class LineaController extends AbstractController {
 			lineaDTO.setTypeLinea(
 					request.getTypeLinea() != null && request.getTypeLinea().getId() != null ? request.getTypeLinea()
 							: null);
+			lineaDTO.setVersion(request.getVersion());
 
 			lineaDTO = lineaService.updateLinea(lineaDTO);
 			logger.debug("Linea modificata: {}", lineaDTO);
@@ -112,8 +113,8 @@ public class LineaController extends AbstractController {
 	
 	@PreAuthorize("hasAuthority('FUN_linea.delete')")
 	@DeleteMapping("")
-	public ResponseEntity<PayloadResponse> remove(@Valid @RequestBody(required=true) LineaRemoveRequest request) {
-		logger.info("enter remove({})", request);
+	public ResponseEntity<PayloadResponse> removeLinea(@Valid @RequestBody(required=true) LineaRemoveRequest request) {
+		logger.info("enter removeLinea({})", request);
 		
 		PayloadResponse response = new PayloadResponse();
 		

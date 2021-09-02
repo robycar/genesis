@@ -18,6 +18,7 @@ import it.reply.sipp.api.generic.service.AbstractService;
 import it.reply.sipp.api.linea.payload.LineaDTO;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
 import it.reply.sipp.model.LineaVO;
+import it.reply.sipp.model.OutboundProxyVO;
 import it.reply.sipp.model.TypeLineaVO;
 import it.reply.sipp.model.repository.LineaRepository;
 import it.reply.sipp.model.repository.TypeLineaRepository;
@@ -97,17 +98,47 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 
 		}
 
+		vo.init(getUsername());
+		
 		vo = lineaRepository.saveAndFlush(vo);
 
 		logger.debug("exit createLinea");
 		return new LineaDTO(vo);
 	}
 
+  @Override
+  public TypeLineaDTO updateTypeLinea(TypeLineaDTO dto) throws ApplicationException {
+    logger.debug("enter updateTypeLinea");
+    TypeLineaVO vo = readTypeLineaVO(dto.getId());
+    
+    checkVersion(vo, dto.getVersion(), "TypeLineaDTO", vo.getId());
+    
+    if (dto.getDescrizione() != null && !dto.getDescrizione().equalsIgnoreCase(vo.getDescrizione())) {
+      Optional<Long> existingVOId = typeLineaRepository.findByDescrizione(dto.getDescrizione())
+          .filter(v -> v.getId().equals(dto.getId()))
+          .map(v -> v.getId());
+      if (existingVOId.isPresent()) {
+        throw makeError(HttpStatus.CONFLICT, AppError.TYPE_LINEA_ALRADY_EXISTS, dto.getDescrizione());
+      }
+      
+      vo.setDescrizione(dto.getDescrizione());
+    }
+    
+    vo.modifiedBy(getUsername());
+    
+    vo = typeLineaRepository.saveAndFlush(vo);
+    
+    return new TypeLineaDTO(vo);
+  }
+
+
 	@Override
 	public LineaDTO updateLinea(LineaDTO lineaDTO) throws ApplicationException {
 
 		logger.debug("enter updateLinea");
 		LineaVO lineaVO = readLineaVO(lineaDTO.getId());
+		
+		//TODO: Abilitare checkVersion(lineaVO, lineaDTO.getVersion(), "LineaVO", lineaVO.getId());
 
 		if (lineaDTO.getNumero() != null || lineaDTO.getTypeLinea() != null) {
 			String numero = lineaDTO.getNumero() != null ? lineaDTO.getNumero() : lineaVO.getNumero();
@@ -140,6 +171,8 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 			lineaVO.setPorta(lineaDTO.getPorta());
 		}
 
+		lineaVO.modifiedBy(getUsername());
+		
 		lineaRepository.saveAndFlush(lineaVO);
 
 		logger.debug("exit updateLinea");
@@ -175,7 +208,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     }
     return result;
   }
-
+  
   @Override
   public TypeLineaDTO createTypeLinea(TypeLineaDTO dto) throws ApplicationException {
     logger.debug("enter createTypeLinea");
@@ -187,6 +220,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     }
     
     TypeLineaVO vo = new TypeLineaVO();
+    vo.init(getUsername());
         
     vo.setDescrizione(dto.getDescrizione());
     vo = typeLineaRepository.saveAndFlush(vo);
@@ -198,6 +232,33 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
   public LineaDTO readLinea(long id) throws ApplicationException {
     logger.debug("enter readLinea");
     return new LineaDTO(readLineaVO(id));
+  }
+
+  @Override
+  public TypeLineaDTO readTypeLinea(long id) throws ApplicationException {
+    logger.debug("enter readTypeLinea");
+    
+    TypeLineaVO vo = readTypeLineaVO(id);
+    return new TypeLineaDTO(vo);
+  }
+
+  @Override
+  public void removeTypeLinea(long id) throws ApplicationException {
+    logger.debug("enter removeTypeLinea");
+    
+    TypeLineaVO vo = readTypeLineaVO(id);
+    long numLinee = lineaRepository.countByTypeLinea(vo);
+    if (numLinee > 0) {
+      logger.warn("Il tentativo di eliminare il TypeLinea {} e' bloccato perche' utilizzato da {} Linee", vo.getId(), numLinee);
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.TYPE_LINEA_USED_IN_DELETE);
+    }
+    
+    for (OutboundProxyVO proxy: vo.getProxies()) {
+      proxy.getTypeLinee().remove(vo);
+    }
+    
+    typeLineaRepository.delete(vo);
+    
   }
 
 }

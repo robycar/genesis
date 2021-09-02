@@ -29,6 +29,9 @@ public class LineaUpdateRequest extends PayloadRequest {
 	
 	@Valid
 	private TypeLineaDTO typeLinea;
+	
+	//TODO: Abilitare @NotNull
+	private Integer version;
 
 	public LineaUpdateRequest() {
 	}
@@ -81,7 +84,16 @@ public class LineaUpdateRequest extends PayloadRequest {
 		this.typeLinea = typeLinea;
 	}
 
-	@Override
+	
+	public Integer getVersion() {
+    return version;
+  }
+
+  public void setVersion(Integer version) {
+    this.version = version;
+  }
+
+  @Override
 	protected void writeFields(StringBuilder sb) {
 		writeField(sb, "id", id);
 		writeField(sb, "ip", ip);
@@ -89,6 +101,7 @@ public class LineaUpdateRequest extends PayloadRequest {
 		writeField(sb, "password", password == null ? null : StringUtils.repeat('*', password.length()));
 		writeField(sb, "porta", porta);
 		writeField(sb, "typeLinea", typeLinea);
+		writeField(sb, "version", version);
 		super.writeFields(sb);
 	}
 

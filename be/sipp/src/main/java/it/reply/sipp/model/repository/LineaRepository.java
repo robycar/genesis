@@ -11,4 +11,6 @@ public interface LineaRepository extends JpaRepository<LineaVO, Long> {
 
 	Optional<LineaVO> findByNumeroAndTypeLinea(String numero, TypeLineaVO typeLineaVO);
 
+  long countByTypeLinea(TypeLineaVO typeLinea);
+
 }

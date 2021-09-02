@@ -65,6 +65,8 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
 					GruppoVO.DESCRIZIONE_LENGTH, vo.getDescrizione());
 		}
 		
+		vo.init(getUsername());
+		
 		vo = gruppoRepository.save(vo);
 		
 		return vo;
@@ -89,6 +91,10 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
 	public GruppoVO updateGruppo(GruppoVO gruppoIn) throws ApplicationException {
 
 		GruppoVO vo = readVO(gruppoIn.getId());
+		
+		//TODO: Abilitare dopo il recepimento del FE
+		//checkVersion(vo, gruppoIn.getVersion(), "Gruppo", gruppoIn.getId());
+		
 		if (gruppoIn.getNome() != null) {
 			vo.setNome(gruppoIn.getNome());
 			if (vo.getNome().length() > GruppoVO.NOME_LENGTH) {
@@ -117,6 +123,8 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
 						GruppoVO.DESCRIZIONE_LENGTH, vo.getDescrizione());
 			}
 		}
+		
+		vo.modifiedBy(getUsername());
 		
 		return gruppoRepository.save(vo);
 	}

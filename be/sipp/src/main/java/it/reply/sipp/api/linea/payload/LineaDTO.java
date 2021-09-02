@@ -5,10 +5,10 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
 
-import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.LineaVO;
 
-public class LineaDTO extends DTO {
+public class LineaDTO extends TrackedDTO {
 
 	private static final long serialVersionUID = -7062059016489551231L;
 
@@ -36,6 +36,7 @@ public class LineaDTO extends DTO {
   }
 
   public LineaDTO(LineaVO vo) {
+    super(vo);
 		this.id = vo.getId();
 		this.ip = vo.getIp();
 		this.numero = vo.getNumero();

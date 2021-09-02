@@ -74,6 +74,7 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 		LevelVO vo = new LevelVO();
 		vo.setNome(dto.getNome());
 		vo.setDescrizione(dto.getDescrizione());
+		vo.init(getUsername());
 		
 		vo = levelRepository.saveAndFlush(vo);
 		logger.debug("exit addLevel");
@@ -91,6 +92,9 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 		logger.debug("enter updateLevel({})", dto);
 		
 		LevelVO vo = readVO(dto.getId());
+		//TODO: Abilitare dopo il recepimento del FE
+		//checkVersion(vo, dto.getVersion(), "Level", vo.getId());
+		
 		final Long levelId = vo.getId();
 		if (dto.getNome() != null && !dto.getNome().equals(vo.getNome())) {
 			Optional<LevelVO> existingLevel = levelRepository.findByNome(dto.getNome())
@@ -133,6 +137,8 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 				}
 			}
 		}
+		
+		vo.modifiedBy(getUsername());
 		
 		vo = levelRepository.saveAndFlush(vo);
 		

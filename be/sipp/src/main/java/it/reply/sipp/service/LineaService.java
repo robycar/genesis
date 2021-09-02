@@ -77,5 +77,28 @@ public interface LineaService {
   LineaDTO readLinea(long id) throws ApplicationException;
   
   LineaVO readLineaVO(long id) throws ApplicationException;
+
+  /**
+   * Legge i dati relativi ad un TypeLinea
+   * @param id l'identificatore del TypeLinea da leggere
+   * @return Il TypeLinea letto
+   * @throws ApplicationException in caso di errori
+   */
+  TypeLineaDTO readTypeLinea(long id) throws ApplicationException;
+
+  /**
+   * Modifica un TypeLinea con tutti i campi non nulli presenti in {@code typeLineaDTO}
+   * @param typeLineaDTO il typeLinea da modifica 
+   * @return Il TypeLinea modificato
+   * @throws ApplicationException in caso di errori
+   */
+  TypeLineaDTO updateTypeLinea(TypeLineaDTO typeLineaDTO) throws ApplicationException;
+
+  /**
+   * Elimina un TypeLinea esistente dal sistema.
+   * @param id l'identificatore del type linea da rimuovere
+   * @throws ApplicationException in caso di errori
+   */
+  void removeTypeLinea(long id) throws ApplicationException;
 	
 }

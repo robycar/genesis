@@ -24,6 +24,7 @@ import it.reply.sipp.api.admin.payload.LevelDTO;
 import it.reply.sipp.api.admin.payload.LevelListResponse;
 import it.reply.sipp.api.admin.payload.LevelRemoveRequest;
 import it.reply.sipp.api.admin.payload.LevelRetrieveResponse;
+import it.reply.sipp.api.admin.payload.LevelUpdateLevelResponse;
 import it.reply.sipp.api.admin.payload.LevelUpdateRequest;
 import it.reply.sipp.api.generic.controller.AbstractController;
 import it.reply.sipp.api.generic.exception.ApplicationException;
@@ -80,7 +81,7 @@ public class LevelController extends AbstractController {
 	
 	@PreAuthorize("hasAuthority('FUN_level.edit')")
 	@PostMapping("")
-	public ResponseEntity<PayloadResponse> updateLevel(@Valid @RequestBody LevelUpdateRequest request) {
+	public ResponseEntity<LevelUpdateLevelResponse> updateLevel(@Valid @RequestBody LevelUpdateRequest request) {
 		
 		LevelDTO levelDTO = new LevelDTO();
 		levelDTO.setId(request.getId());
@@ -88,10 +89,13 @@ public class LevelController extends AbstractController {
 		levelDTO.setDescrizione(request.getDescrizione());
 		levelDTO.setFunzioni(request.getFunzioni());
 		
-		PayloadResponse response = new PayloadResponse();
+		LevelUpdateLevelResponse response = new LevelUpdateLevelResponse();
 		
 		try {
-			levelService.updateLevel(levelDTO);
+			LevelVO vo = levelService.updateLevel(levelDTO);
+			
+			response.setLevel(new LevelDTO(vo));
+			
 			return ResponseEntity.ok().body(response);
 		} catch (ApplicationException e) {
 			return handleException(e, response);

@@ -75,6 +75,7 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
   public OutboundProxyDTO createProxy(OutboundProxyDTO proxyDTO) throws ApplicationException {
     logger.debug("enter createProxy");
     OutboundProxyVO vo = new OutboundProxyVO();
+    vo.init(getUsername());
     vo.setDescrizione(proxyDTO.getDescrizione());
     vo.setIpDestinazione(proxyDTO.getIpDestinazione());
     vo.setPorta(proxyDTO.getPorta());
@@ -101,7 +102,7 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
   public OutboundProxyDTO updateProxy(OutboundProxyDTO proxyDTO) throws ApplicationException {
     
     OutboundProxyVO vo = readProxyVO(proxyDTO.getId());
-
+    checkVersion(vo, proxyDTO.getVersion(), "OutboundProxyVO", vo.getId());
     if (proxyDTO.getTypeLinee() != null) {
       if (proxyDTO.getTypeLinee().isEmpty()) {
         vo.getTypeLinee().clear();
@@ -140,6 +141,7 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
       vo.setPorta(proxyDTO.getPorta());
     }
     
+    vo.modifiedBy(getUsername());
     
     vo = oBPRepository.saveAndFlush(vo);
     logger.debug("exit updateProxy");

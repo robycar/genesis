@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import it.reply.sipp.api.generic.payload.DTO;
+import it.reply.sipp.api.generic.payload.TrackedDTO;
 import it.reply.sipp.model.FunzioneVO;
 import it.reply.sipp.model.LevelVO;
 
-public class LevelDTO extends DTO {
+public class LevelDTO extends TrackedDTO {
 
 	private static final long serialVersionUID = 4924529927827320047L;
 
@@ -34,6 +34,7 @@ public class LevelDTO extends DTO {
 	}
 
 	public LevelDTO(LevelVO vo, Set<FunzioneVO> funzioniVO) {
+	  super(vo);
     this.id = vo.getId();
     this.descrizione = vo.getDescrizione();
     this.nome = vo.getNome();

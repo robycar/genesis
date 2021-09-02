@@ -24,6 +24,9 @@ public class OBPUpdateRequest extends PayloadRequest {
   private Integer porta;
   
   private List<TypeLineaDTO> typeLinee;
+  
+  //TODO Abilitare @NotNull
+  private Integer version;
 
 
   public OBPUpdateRequest() {
@@ -32,6 +35,7 @@ public class OBPUpdateRequest extends PayloadRequest {
   @Override
   protected void writeFields(StringBuilder sb) {
     writeField(sb, "id", id);
+    writeField(sb, "version", version);
     writeField(sb, "ipDestinazione", ipDestinazione);
     writeField(sb, "porta", porta);
     writeField(sb, "descrizione", descrizione);
@@ -77,6 +81,14 @@ public class OBPUpdateRequest extends PayloadRequest {
 
   public void setTypeLinee(List<TypeLineaDTO> typeLinee) {
     this.typeLinee = typeLinee;
+  }
+
+  public Integer getVersion() {
+    return version;
+  }
+
+  public void setVersion(Integer version) {
+    this.version = version;
   }
 
   

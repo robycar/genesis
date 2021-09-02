@@ -1,6 +1,5 @@
 package it.reply.sipp.model;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="OUTBOUNDPROXY")
-public class OutboundProxyVO implements Serializable {
+public class OutboundProxyVO extends BaseEntity {
 
   private static final long serialVersionUID = -7526571090910948837L;
 

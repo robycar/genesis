@@ -96,6 +96,7 @@ public class OBPController extends AbstractController {
       proxyDTO.setIpDestinazione(request.getIpDestinazione());
       proxyDTO.setPorta(request.getPorta());
       proxyDTO.setTypeLinee(request.getTypeLinee());
+      proxyDTO.setVersion(request.getVersion());
       
       proxyDTO = oBPService.updateProxy(proxyDTO);
       logger.debug("Modificato il proxy {}", proxyDTO);

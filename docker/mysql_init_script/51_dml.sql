@@ -23,17 +23,17 @@ INSERT INTO `FUNZIONE` (`CODICE`, `NOME`, `DESCRIZIONE`) VALUES
 ('test.delete', 'Elimina Test Case', 'Consente di eliminare un test case')
 ;
 
-INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`) VALUES
-(2,	'Descrizione livello admin',	'ADMIN'),
-(4,	'Regional',	'Lead Operations Manager'),
-(6,	'Descrizione Level 5',	'Level 6');
+INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(2,	'Descrizione livello admin',	'ADMIN', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(4,	'Regional',	'Lead Operations Manager', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(5,	'Descrizione Level 5',	'Level 5', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
-INSERT INTO `GRUPPO` (`ID_GRUPPO`, `DESCRIZIONE`, `GRUPPO`) VALUES
-(1,	'g1',	'g1'),
-(2,	'Forward',	'Central Integration Designer');
+INSERT INTO `GRUPPO` (`ID_GRUPPO`, `DESCRIZIONE`, `GRUPPO`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(1,	'g1',	'g1', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(2,	'Forward',	'Central Integration Designer', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
-INSERT INTO `UTENZE` (`ID_UTENZA`, `USERNAME`, `PASSWORD`, `ID_LEVEL`, `ID_GROUP`, `NOME`, `COGNOME`, `AZIENDA`, `EMAIL`) VALUES
-(1, 'test',	'{noop}test',	2,	1,	'nome',	'cognome',	'azienda',	'test@test.it');
+INSERT INTO `UTENZE` (`ID_UTENZA`, `USERNAME`, `PASSWORD`, `ID_LEVEL`, `ID_GROUP`, `NOME`, `COGNOME`, `AZIENDA`, `EMAIL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(1, 'test',	'{noop}test',	2,	1,	'nome',	'cognome',	'azienda',	'test@test.it', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
 INSERT INTO AUTORIZZAZIONE_LEVEL(ID_LEVEL, FUNZIONE_CODICE)
 SELECT L.ID_LEVEL, F.CODICE
@@ -43,13 +43,13 @@ WHERE LEVEL = 'ADMIN'
 AND AL.ID_LEVEL IS NULL
 ;
 
-INSERT INTO `TYPE_LINEE` (`ID_TYPE_LINEA`, `DESCRIZIONE`) VALUES
-(1,	'descrizione type linea 1'),
-(2,	'descrizione type linea 2');
+INSERT INTO `TYPE_LINEE` (`ID_TYPE_LINEA`, `DESCRIZIONE`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(1,	'descrizione type linea 1', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(2,	'descrizione type linea 2', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
-INSERT INTO `LINEE` (`ID_LINEA`, `NUMERO`, `ID_TYPE_LINEA`, `IP_LINEA`, `PORTA`, `PASSWORD`) VALUES
-(1,	'90-400-754-1037',	1,	'240.195.169.235',	924,	'IdZtVacO4inAlAw'),
-(2,	'9042382',	1,	'241.88.251.202',	224,	'passwordSegreta');
+INSERT INTO `LINEE` (`ID_LINEA`, `NUMERO`, `ID_TYPE_LINEA`, `IP_LINEA`, `PORTA`, `PASSWORD`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(1,	'90-400-754-1037',	1,	'240.195.169.235',	924,	'IdZtVacO4inAlAw', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
+(2,	'9042382',	1,	'241.88.251.202',	224,	'passwordSegreta', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
 
 -- 2021-08-09 Solo per prepopolare alcuni file per lo sviluppo sui template

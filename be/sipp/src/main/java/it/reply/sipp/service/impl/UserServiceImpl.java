@@ -134,6 +134,9 @@ public class UserServiceImpl extends AbstractService implements UserService {
 				.orElseThrow(()-> makeError(HttpStatus.NOT_FOUND, 
 						AppError.USER_NOT_FOUND, userId));
 
+		//TODO: Abilitare dopo che il FE lo abbia recepito
+		//checkVersion(userVO, userDTO.getVersion(), "user", userVO.getId());
+		
 		if (userDTO.getGruppo() != null && userDTO.getGruppo().getId() != null) {
 			userVO.setGruppo(gruppoService.readVO(userDTO.getGruppo().getId()));
 		}
@@ -217,6 +220,8 @@ public class UserServiceImpl extends AbstractService implements UserService {
 			userVO.setAzienda(userDTO.getAzienda());
 		}
 		
+		userVO.modifiedBy(getUsername());
+		
 		userRepository.saveAndFlush(userVO);
 		
 	}
@@ -237,6 +242,8 @@ public class UserServiceImpl extends AbstractService implements UserService {
 		}
 		
 		userVO.setPassword(passwordEncoder.encode(password));
+		 
+		userVO.init(getUsername());
 		
 		userVO = userRepository.saveAndFlush(userVO);
 		logger.debug("exit addUser");

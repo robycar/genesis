@@ -1,17 +1,19 @@
 package it.reply.sipp.model;
 
-import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="TYPE_LINEE")
-public class TypeLineaVO implements Serializable {
+public class TypeLineaVO extends BaseEntity {
 
 	public static final int DESCRIZIONE_LENGTH = 1000;
 
@@ -24,6 +26,11 @@ public class TypeLineaVO implements Serializable {
 
 	@Column(name = "DESCRIZIONE", length = DESCRIZIONE_LENGTH)
 	private String descrizione;
+	
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "typeLinee")
+	private Set<OutboundProxyVO> proxies;
+	
+	
 	
 	public TypeLineaVO() {
 	}
@@ -43,6 +50,14 @@ public class TypeLineaVO implements Serializable {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
+
+  public Set<OutboundProxyVO> getProxies() {
+    return proxies;
+  }
+
+  public void setProxies(Set<OutboundProxyVO> proxies) {
+    this.proxies = proxies;
+  }
 
   @Override
   public int hashCode() {
