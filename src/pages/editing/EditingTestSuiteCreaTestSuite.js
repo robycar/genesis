@@ -259,24 +259,24 @@ function EditingTestTestSuiteCreaTestSuite() {
                 </Typography>
                 <InputSelect />
               </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
+              {/* <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   ID Utenza{" "}
                 </Typography>
                 <InputSelect />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
+              </Paper> */}
+              {/* <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Data Creazione{" "}
                 </Typography>
                 <InputSelect />
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
+              </Paper> */}
+              {/* <Paper className={classes.divSelect} elevation={0}>
                 <Typography className={classes.label} variant="h11">
                   Path{" "}
                 </Typography>
                 <InputSelect />
-              </Paper>
+              </Paper> */}
             </Paper>
 
             <Paper className={classes.paperContainer2} elevation={2}>

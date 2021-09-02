@@ -4,10 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   button: {
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "white",
       color: "#47B881",
-  },
+    },
     backgroundColor: "#47B881",
     color: "white",
     border: "1px solid #47B881",
@@ -26,6 +26,7 @@ function ButtonClickedGreen(props) {
       variant="contained"
       size="large"
       onClick={props.onClick}
+      disabled={props.disabled}
     >
       {props.nome}
     </Button>

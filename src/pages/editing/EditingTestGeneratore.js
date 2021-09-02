@@ -23,7 +23,7 @@ import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
 //import TestSuiteTable from "../../components/TestSuiteTable";
-import TestSuiteTableNew from "../../components/TestSuiteTableNew";
+import TestGeneratoreTableNew from "../../components/TestGeneratoreTableNew";
 
 const drawerWidth = 240;
 
@@ -265,11 +265,11 @@ function EditingTestGeneratore() {
               </ListItemIcon>
               <Typography className={classes.titolo}>
                 {" "}
-                Total Test Suite{" "}
+                Total Test Generatore{" "}
               </Typography>
             </ListItem>
             <Divider className={classes.divider} />
-            <TestSuiteTableNew />
+            <TestGeneratoreTableNew />
           </Paper>
         </Container>
       </main>

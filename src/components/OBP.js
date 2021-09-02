@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import { MenuItem, Button, Paper, Typography} from "@material-ui/core";
+import { MenuItem, Button, Paper, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
 import acccessControl from "../service/url.js";
@@ -55,9 +55,7 @@ function Obp() {
   };
 
   const aggiornaUtente = () => {
-
     const invia = () => {
-
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
       myHeaders.append("Content-Type", "application/json");
@@ -93,25 +91,22 @@ function Obp() {
     };
 
     const aggiornaIP = () => {
-
       if (
-        (ip1 >= 0 && ip1 <= 255) &&
-        (ip2 >= 0 && ip2 <= 255) &&
-        (ip3 >= 0 && ip3 <= 255) &&
-        (ip4 >= 0 && ip4 <= 255)
+        ip1 >= 0 &&
+        ip1 <= 255 &&
+        ip2 >= 0 &&
+        ip2 <= 255 &&
+        ip3 >= 0 &&
+        ip3 <= 255 &&
+        ip4 >= 0 &&
+        ip4 <= 255
       ) {
-
-        invia()
+        invia();
         setOpen(false);
       }
     };
 
-    if (
-      ip1 !== "" &&
-      ip2 !== "" &&
-      ip3 !== "" &&
-      ip4 !== "" 
-    ) {
+    if (ip1 !== "" && ip2 !== "" && ip3 !== "" && ip4 !== "") {
       if (porta === "") {
         setPorta("5060");
       }
@@ -121,12 +116,10 @@ function Obp() {
 
       aggiornaIP();
     }
-
-    
   };
 
   const columns = [
-    { title: "ID OBP", field: "id", defaultSort:"desc" },
+    { title: "ID OBP", field: "id", defaultSort: "desc" },
     {
       title: "Proxy IP Address",
       field: "ipDestinazione",
@@ -188,7 +181,6 @@ function Obp() {
       })
       .catch((error) => console.log("error", error));
   };
-
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
@@ -444,6 +436,7 @@ function Obp() {
             <Paper className={classes.paperContent} elevation={0}>
               <div className={classes.divIp}>
                 <TextField
+                  type="number"
                   className={classes.textFieldIp}
                   error={
                     ip1 <= 255 && ip1 != "" && ip1.length < 4 ? false : true
@@ -588,11 +581,34 @@ function Obp() {
                 className={classes.bottone}
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
-                <ButtonClickedGreen
-                  size="medium"
-                  nome="Aggiorna"
-                  onClick={aggiornaUtente}
-                />
+                {ip1 <= 255 &&
+                ip1 !== "" &&
+                ip1.length < 4 &&
+                ip2 <= 255 &&
+                ip2 !== "" &&
+                ip2.length < 4 &&
+                ip3 <= 255 &&
+                ip3 !== "" &&
+                ip3.length < 4 &&
+                ip4 <= 255 &&
+                ip4 !== "" &&
+                ip4.length < 4 &&
+                porta > 1000 &&
+                porta < 100000 ? (
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Aggiorna"
+                    onClick={aggiornaUtente}
+                  />
+                ) : (
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Aggiorna"
+                    onClick={aggiornaUtente}
+                    disabled="true"
+                  />
+                )}
+
                 <ButtonNotClickedGreen
                   className={classes.bottoneAnnulla}
                   onClick={handleClose}

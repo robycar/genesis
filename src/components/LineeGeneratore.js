@@ -131,7 +131,7 @@ function LineeGeneratore() {
     if (ip !== "") invia();
   };
   const columns = [
-    { title: "ID Linea", field: "id",defaultSort:"desc" },
+    { title: "ID Linea", field: "id", defaultSort: "desc" },
     {
       title: "Path Csv",
       field: "pathCsv",
@@ -357,10 +357,10 @@ function LineeGeneratore() {
                 component={NavLink}
                 activeClassName="button-green-active"
                 exact
-                to="/editing/linee/crealinea"
+                to="/editing/linee/crealineageneratore"
                 startIcon={<AddIcon />}
               >
-                CREA LINEA{" "}
+                LINEA GENERATORE{" "}
               </Button>
             ),
             tooltip: "Crea Linea",
@@ -406,8 +406,10 @@ function LineeGeneratore() {
 
             <Paper className={classes.paperContent} elevation={0}>
               <Row className={classes.row}>
-                <Col className={classes.col}>
+                {/* NUMERO */}
+                {/* <Col className={classes.col}>
                   <TextField
+                    type="number"
                     className={classes.textField}
                     error={numero !== "" ? false : true}
                     onChange={(e) => setNumero(e.target.value)}
@@ -416,7 +418,7 @@ function LineeGeneratore() {
                     defaultValue={numero}
                     helperText={numero !== "" ? "" : "Il Numero è richiesto"}
                   />
-                </Col>
+                </Col> */}
 
                 <Col className={classes.col}>
                   <TextField
@@ -515,16 +517,19 @@ function LineeGeneratore() {
               {/* </Row>  */}
 
               <Row className={classes.row}>
-                <Col className={classes.col}>
+                {/* PASSWORD */}
+                {/* <Col className={classes.col}>
                   <TextField
                     error={password !== "" ? false : true}
                     onChange={(e) => setPassword(e.target.value)}
                     label="Password"
                     required
                     defaultValue={password}
-                    helperText={password !== "" ? "" : "La Password è richiesta"}
+                    helperText={
+                      password !== "" ? "" : "La Password è richiesta"
+                    }
                   />
-                </Col>
+                </Col> */}
 
                 <Col className={classes.col}>
                   <TextField
@@ -548,11 +553,37 @@ function LineeGeneratore() {
                 className={classes.bottone}
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
-                <ButtonClickedGreen
-                  size="medium"
-                  nome="Aggiorna"
-                  onClick={handleClose2}
-                />
+                {ip1 <= 255 &&
+                ip1 !== "" &&
+                ip1.length < 4 &&
+                ip2 <= 255 &&
+                ip2 !== "" &&
+                ip2.length < 4 &&
+                ip3 <= 255 &&
+                ip3 !== "" &&
+                ip3.length < 4 &&
+                ip4 <= 255 &&
+                ip4 !== "" &&
+                ip4.length < 4 &&
+                password !== "" &&
+                numero !== "" &&
+                porta !== "" &&
+                porta > 1000 &&
+                porta < 100000 ? (
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Aggiorna"
+                    onClick={handleClose2}
+                    // disabled={handleBtn}
+                  />
+                ) : (
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Aggiorna"
+                    onClick={handleClose2}
+                    disabled="true"
+                  />
+                )}
 
                 <ButtonNotClickedGreen
                   className={classes.bottoneAnnulla}

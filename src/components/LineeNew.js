@@ -131,7 +131,7 @@ function Linee() {
     if (ip !== "") invia();
   };
   const columns = [
-    { title: "ID Linea", field: "id",defaultSort:"desc" },
+    { title: "ID Linea", field: "id", defaultSort: "desc" },
 
     {
       title: "IP Linea",
@@ -141,7 +141,8 @@ function Linee() {
     {
       title: "Numero",
       field: "numero",
-    },{
+    },
+    {
       title: "Password",
       field: "password",
     },
@@ -165,6 +166,7 @@ function Linee() {
   ];
 
   const [open, setOpen] = React.useState(false);
+  // const [btnDisabled, setBtnDisabled] = useState(true);
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
@@ -190,6 +192,34 @@ function Linee() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  // const [btnDisabled, setBtnDisabled] = useState(false);
+
+  // const handleBtn = () => {
+  //   if (
+  //     ip1 <= 255 &&
+  //     ip1 !== "" &&
+  //     ip1.length < 4 &&
+  //     ip2 <= 255 &&
+  //     ip2 !== "" &&
+  //     ip2.length < 4 &&
+  //     ip3 <= 255 &&
+  //     ip3 !== "" &&
+  //     ip3.length < 4 &&
+  //     ip4 <= 255 &&
+  //     ip4 !== "" &&
+  //     ip4.length < 4 &&
+  //     password !== "" &&
+  //     numero !== "" &&
+  //     porta !== "" &&
+  //     porta > 1000 &&
+  //     porta < 100000
+  //   ) {
+  //     setBtnDisabled(false);
+  //   } else {
+  //     setBtnDisabled(true);
+  //   }
+  // };
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -358,7 +388,7 @@ function Linee() {
                 to="/editing/linee/crealinea"
                 startIcon={<AddIcon />}
               >
-                CREA LINEA{" "}
+                LINEA SIMULATORE{" "}
               </Button>
             ),
             tooltip: "Crea Linea",
@@ -406,6 +436,7 @@ function Linee() {
               <Row className={classes.row}>
                 <Col className={classes.col}>
                   <TextField
+                    type="number"
                     className={classes.textField}
                     error={numero !== "" ? false : true}
                     onChange={(e) => setNumero(e.target.value)}
@@ -520,7 +551,9 @@ function Linee() {
                     label="Password"
                     required
                     defaultValue={password}
-                    helperText={password !== "" ? "" : "La Password è richiesta"}
+                    helperText={
+                      password !== "" ? "" : "La Password è richiesta"
+                    }
                   />
                 </Col>
 
@@ -546,11 +579,37 @@ function Linee() {
                 className={classes.bottone}
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
-                <ButtonClickedGreen
-                  size="medium"
-                  nome="Aggiorna"
-                  onClick={handleClose2}
-                />
+                {ip1 <= 255 &&
+                ip1 !== "" &&
+                ip1.length < 4 &&
+                ip2 <= 255 &&
+                ip2 !== "" &&
+                ip2.length < 4 &&
+                ip3 <= 255 &&
+                ip3 !== "" &&
+                ip3.length < 4 &&
+                ip4 <= 255 &&
+                ip4 !== "" &&
+                ip4.length < 4 &&
+                password !== "" &&
+                numero !== "" &&
+                porta !== "" &&
+                porta > 1000 &&
+                porta < 100000 ? (
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Aggiorna"
+                    onClick={handleClose2}
+                    // disabled={handleBtn}
+                  />
+                ) : (
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Aggiorna"
+                    onClick={handleClose2}
+                    disabled="true"
+                  />
+                )}
 
                 <ButtonNotClickedGreen
                   className={classes.bottoneAnnulla}

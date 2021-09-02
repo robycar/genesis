@@ -35,6 +35,7 @@ import AmministrazioneViewGruppoAddPartecipante from "./pages/amministrazione/Am
 import Login from "./pages/Login";
 import EditingLineeGeneratore from "./pages/editing/EditingLineeGeneratore";
 import EditingTestGeneratore from "./pages/editing/EditingTestGeneratore";
+import EditingLineaCreaLineaGeneratore from "./pages/editing/EditingLineaCreaLineaGeneratore";
 
 function App() {
   return (
@@ -83,6 +84,11 @@ function App() {
           path="/editing/testgeneratore"
           exact
           component={EditingTestGeneratore}
+        />
+        <Route
+          path="/editing/linee/crealineageneratore"
+          exact
+          component={EditingLineaCreaLineaGeneratore}
         />
 
         <Route

@@ -14,6 +14,7 @@ import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Form from "react-bootstrap/Form";
 import Input from "@material-ui/core/Input";
+import Col from "react-bootstrap/Col";
 import {
   mainListItems,
   secondaryListItems,
@@ -150,21 +151,24 @@ const useStyles = makeStyles((theme) => ({
   },
 
   bottone: {
-    marginLeft: "65%",
-    marginTop: "2%",
+    marginLeft: "75%",
+    // marginTop: "2%",
+    // marginBottom: "2%",
+    padding: "2%",
   },
   divSelect: {
     padding: "3%",
+    width: "52%",
     // height: "115.6px",
   },
 
   multipleSelect: {
     width: "284px",
   },
-  fromControl: {
+  formControl: {
     margin: theme.spacing(1),
     // width: "20vw",
-    width: "200px",
+    width: "300px",
     display: "flex",
   },
   formControlIp: {
@@ -174,7 +178,8 @@ const useStyles = makeStyles((theme) => ({
   divIp: {
     display: "flex",
     flexDirection: "row",
-    alignItems: "flex-end",
+    //alignItems: "flex-end",
+    alignItems: "center",
   },
   separatoreIp: {
     marginBottom: "2%",
@@ -184,8 +189,10 @@ const useStyles = makeStyles((theme) => ({
   },
   generalContainer: {
     display: "flex",
-    marginTop: "5%",
-    flexDirection: "column",
+    // marginTop: "5%",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: "4%",
   },
   formControlSelect: {
     display: "flex",
@@ -244,8 +251,6 @@ function EditingOutboundProxy() {
 
   //put descrizione e ip
 
-
-
   function salva() {
     const Invia = () => {
       var myHeaders = new Headers();
@@ -275,20 +280,29 @@ function EditingOutboundProxy() {
 
       history.push("/editing/outboundproxy");
     };
+    console.log(ip1 !== "", "ip1");
+    console.log(ip2 !== "", "ip2");
+    console.log(ip3 !== "", "ip3");
+    console.log(ip4 !== "", "ip4");
+    console.log(typeLineaId !== 0, "TipoLinea");
 
     const aggiornaIP = () => {
       if (
-        (ip1 >= 0 && ip1 <= 255) &&
-        (ip2 >= 0 && ip2 <= 255) &&
-        (ip3 >= 0 && ip3 <= 255) &&
-        (ip4 >= 0 && ip4 <= 255)
+        ip1 >= 0 &&
+        ip1 <= 255 &&
+        ip2 >= 0 &&
+        ip2 <= 255 &&
+        ip3 >= 0 &&
+        ip3 <= 255 &&
+        ip4 >= 0 &&
+        ip4 <= 255
       ) {
         document.getElementById("alertIP").style.display = "none";
         document.getElementById("alertPorta").style.display = "none";
         document.getElementById("alertTypeLinea").style.display = "none";
         document.getElementById("alertIP2").style.display = "none";
 
-        Invia()
+        Invia();
       } else {
         document.getElementById("alertIP2").style.display = "";
       }
@@ -308,6 +322,7 @@ function EditingOutboundProxy() {
       if (descrizione === "") {
         setDescrizione(" ");
       }
+
       aggiornaIP();
     } else {
       if (ip1 === "" || ip2 === "" || ip3 === "" || ip4 === "") {
@@ -316,10 +331,14 @@ function EditingOutboundProxy() {
         document.getElementById("alertIP").style.display = "none";
       }
       if (
-        (ip1 >= 0 && ip1 <= 255) &&
-        (ip2 >= 0 && ip2 <= 255) &&
-        (ip3 >= 0 && ip3 <= 255) &&
-        (ip4 >= 0 && ip4 <= 255)
+        ip1 >= 0 &&
+        ip1 <= 255 &&
+        ip2 >= 0 &&
+        ip2 <= 255 &&
+        ip3 >= 0 &&
+        ip3 <= 255 &&
+        ip4 >= 0 &&
+        ip4 <= 255
       ) {
         document.getElementById("alertIP2").style.display = "none";
       } else {
@@ -445,8 +464,8 @@ function EditingOutboundProxy() {
             </ListItem>
             <Divider className={classes.divider} />
 
-            <div className={classes.generalContainer}>
-              <Paper className={classes.generalContainer} elevation={0}>
+            <Paper className={classes.generalContainer} elevation={0}>
+              <Col>
                 <Paper className={classes.divSelect} elevation={0}>
                   <Form.Group controlId="form.Numero">
                     <Form.Label>IP Proxy Address</Form.Label>
@@ -459,7 +478,9 @@ function EditingOutboundProxy() {
                           setIP1(e.target.value);
                         }}
                       />{" "}
-                      <Typography className={classes.separatoreIp}>.</Typography>
+                      <Typography className={classes.separatoreIp}>
+                        .
+                      </Typography>
                       <Form.Control
                         className={classes.formControlIp}
                         type="text"
@@ -468,7 +489,9 @@ function EditingOutboundProxy() {
                           setIP2(e.target.value);
                         }}
                       />{" "}
-                      <Typography className={classes.separatoreIp}>.</Typography>
+                      <Typography className={classes.separatoreIp}>
+                        .
+                      </Typography>
                       <Form.Control
                         className={classes.formControlIp}
                         type="text"
@@ -477,7 +500,9 @@ function EditingOutboundProxy() {
                           setIP3(e.target.value);
                         }}
                       />{" "}
-                      <Typography className={classes.separatoreIp}>.</Typography>
+                      <Typography className={classes.separatoreIp}>
+                        .
+                      </Typography>
                       <Form.Control
                         className={classes.formControlIp}
                         type="text"
@@ -492,7 +517,7 @@ function EditingOutboundProxy() {
                       id="alertIP"
                       style={{ display: "none" }}
                     >
-                      IP Linea è richiesto!
+                      IP Linea is required!
                     </Alert>
                     <Alert
                       severity="error"
@@ -505,15 +530,41 @@ function EditingOutboundProxy() {
                 </Paper>
 
                 <Paper className={classes.divSelect} elevation={0}>
-                  <Form.Label>Descrizione</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Descrizione"
-                    onChange={(e) => setDescrizione(e.target.value)}
-                  />
+                  <Form.Group controlId="form.Numero">
+                    <Form.Label>Tipo Linea</Form.Label>
+                    <FormControl
+                      variant="outlined"
+                      className={classes.formControlSelect}
+                    >
+                      <Select
+                        multiple
+                        className={classes.select}
+                        value={typeLineaId}
+                        onChange={handleChange}
+                        input={<Input />}
+                        //MenuProps={MenuProps}
+                      >
+                        {data.map((prova) => {
+                          return (
+                            <MenuItem key={prova.id} value={prova.id}>
+                              {prova.descrizione}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                      <Alert
+                        severity="error"
+                        id="alertTypeLinea"
+                        style={{ display: "none" }}
+                      >
+                        Selezionare almeno un TypeLinea
+                      </Alert>
+                    </FormControl>
+                  </Form.Group>
                 </Paper>
+              </Col>
 
+              <Col>
                 <Paper className={classes.divSelect} elevation={0}>
                   <Form.Group controlId="form.Numero">
                     <Form.Label>Porta</Form.Label>
@@ -553,47 +604,24 @@ function EditingOutboundProxy() {
               </Paper> */}
 
                 <Paper className={classes.divSelect} elevation={0}>
-                  <Form.Group controlId="form.Numero">
-                    <Form.Label>Tipo Linea</Form.Label>
-                    <FormControl
-                      variant="outlined"
-                      className={classes.formControlSelect}
-                    >
-                      <Select
-                        multiple
-                        className={classes.select}
-                        value={typeLineaId}
-                        onChange={handleChange}
-                        input={<Input />}
-                      // renderValue={(selected) => selected.join(", ")}
-                      //MenuProps={MenuProps}
-                      >
-                        {data.map((prova) => {
-                          return (
-                            <MenuItem key={prova.id} value={prova.id}>
-                              {/* {prova.descrizione} */}
-                              {/* <Checkbox
-                              checked={typeLineaId.indexOf(prova.id) > -1}
-                            /> */}
-                              {prova.descrizione}
-
-                              {/* <ListItemText primary={prova.descrizione} /> */}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                      <Alert
-                        severity="error"
-                        id="alertTypeLinea"
-                        style={{ display: "none" }}
-                      >
-                        Selezionare almeno un TypeLinea
-                      </Alert>
-                    </FormControl>
-                  </Form.Group>
+                  <Form.Label>Descrizione</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Descrizione"
+                    onChange={(e) => setDescrizione(e.target.value)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertDescrizione"
+                    style={{ display: "none" }}
+                  >
+                    Descrizione is required!
+                  </Alert>
                 </Paper>
-              </Paper>
-            </div>
+              </Col>
+            </Paper>
+
             <Divider className={classes.divider} />
             <div className={classes.bottone}>
               <ButtonClickedGreen
@@ -610,7 +638,7 @@ function EditingOutboundProxy() {
                 variant="contained"
                 size="medium"
               >
-                annulla
+                Annulla
               </Button>
             </div>
           </Paper>
