@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
+import Grid from "@material-ui/core/Grid";
 import { MenuItem, Button, Paper, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
@@ -146,11 +147,11 @@ function Obp() {
     },
     {
       title: "Creato da",
-      field: "creato",
+      field: "descrizione",
     },
     {
       title: "Modificato da",
-      field: "modificato",
+      field: "descrizione",
     },
   ];
 
@@ -231,6 +232,13 @@ function Obp() {
       alignItems: "center",
       justifyContent: "center",
     },
+    paperGrid:{ 
+      margin: theme.spacing(8, 4),
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center"
+    },
+   
     paperTop: {
       height: "20%",
       display: "flex",
@@ -279,13 +287,16 @@ function Obp() {
       alignItems: "center",
       justifyContent: "center",
     },
-    paperModale: {
-      backgroundColor: theme.palette.background.paper,
-      border: "2px solid #000",
-      boxShadow: theme.shadows[5],
-      padding: "4%",
-      width: "fit-content",
-      height: "80%",
+    // paperModale: {
+    //   backgroundColor: theme.palette.background.paper,
+    //   border: "2px solid #000",
+    //   boxShadow: theme.shadows[5],
+    //   padding: "4%",
+    //   width: "fit-content",
+    //   height: "80%",
+    // },
+    grid:{
+      padding: "5%",
     },
     col: {
       padding: "5%",
@@ -324,8 +335,11 @@ function Obp() {
       width: "80px",
     },
     paperContent: {
-      marginTop: "1%",
-      marginBottom: "1%",
+      width: "80%",
+      display: "flex",
+      padding: "4%",
+      flexDirection: "column",
+      
     },
   }));
   const classes = useStyles();
@@ -423,8 +437,9 @@ function Obp() {
         }}
       >
         <Fade in={open}>
-          <Paper className={classes.paperModale} elevation={1}>
-            <div>
+        <Grid  item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
+          {/* <Paper className={classes.paperModale} elevation={1}> */}
+          <div className={classes.paperGrid}>
               <ListItem button>
                 <Typography className={classes.intestazione} variant="h4">
                   Modifica l'<b>OBP n°{id}</b>
@@ -616,7 +631,8 @@ function Obp() {
                 />
               </div>
             </Paper>
-          </Paper>
+          {/* </Paper> */}
+        </Grid>
         </Fade>
       </Modal>
     </div>

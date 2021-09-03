@@ -284,7 +284,8 @@ function EditingOutboundProxy() {
     console.log(ip2 !== "", "ip2");
     console.log(ip3 !== "", "ip3");
     console.log(ip4 !== "", "ip4");
-    console.log(typeLineaId !== 0, "TipoLinea");
+    console.log(typeLineaId.length !== 0, "TipoLinea");
+    console.log(typeLineaId, "tipoLinea");
 
     const aggiornaIP = () => {
       if (
@@ -313,7 +314,7 @@ function EditingOutboundProxy() {
       ip2 !== "" &&
       ip3 !== "" &&
       ip4 !== "" &&
-      typeLineaId !== "" &&
+      typeLineaId.length !== 0 &&
       (porta === "" || (porta.length > 3 && porta.length < 6))
     ) {
       if (porta === "") {
@@ -472,7 +473,7 @@ function EditingOutboundProxy() {
                     <div className={classes.divIp}>
                       <Form.Control
                         className={classes.formControlIp}
-                        type="text"
+                        type="number"
                         placeholder="IP1"
                         onChange={(e) => {
                           setIP1(e.target.value);
@@ -483,7 +484,7 @@ function EditingOutboundProxy() {
                       </Typography>
                       <Form.Control
                         className={classes.formControlIp}
-                        type="text"
+                        type="number"
                         placeholder="IP2"
                         onChange={(e) => {
                           setIP2(e.target.value);
@@ -494,7 +495,7 @@ function EditingOutboundProxy() {
                       </Typography>
                       <Form.Control
                         className={classes.formControlIp}
-                        type="text"
+                        type="number"
                         placeholder="IP3"
                         onChange={(e) => {
                           setIP3(e.target.value);
@@ -505,7 +506,7 @@ function EditingOutboundProxy() {
                       </Typography>
                       <Form.Control
                         className={classes.formControlIp}
-                        type="text"
+                        type="number"
                         placeholder="IP4"
                         onChange={(e) => {
                           setIP4(e.target.value);

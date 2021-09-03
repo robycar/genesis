@@ -84,6 +84,38 @@ function TestGeneratoreTable() {
           // columnsButton: true,
           // filtering: true,
         }}
+
+        editable={{
+          onRowDelete: (oldData) =>
+            new Promise((resolve, reject) => {
+              //Backend call
+              var myHeaders = new Headers();
+              // myHeaders.append("Authorization", bearer);
+              // myHeaders.append("Content-Type", "application/json");
+              // myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+              // myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+              var raw = JSON.stringify({
+                id: oldData.id,
+              });
+
+              var requestOptions = {
+                method: "DELETE",
+                headers: myHeaders,
+                body: raw,
+                redirect: "follow",
+              };
+
+              // fetch(`/api/obp`, requestOptions)
+              //   .then((response) => response.json())
+              //   .then((result) => {
+              //     getObp();
+              //     resolve();
+              //   })
+              //   .catch((error) => console.log("error", error));
+            }),
+        }}
+
         actions={[
           {
             icon: () => (
@@ -109,20 +141,20 @@ function TestGeneratoreTable() {
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
           },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Delete",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: () => <ModalDescriptionTestSuite />,
-            tooltip: "Image",
-            // onClick: (event, rowData) =>
-            // alert("Ho cliccato " + rowData.launcher),
-            // position: "row",
-          },
+          // {
+          //   icon: () => <DeleteIcon />,
+          //   tooltip: "Delete",
+          //   onClick: (event, rowData) =>
+          //     alert("Ho cliccato " + rowData.launcher),
+          //   position: "row",
+          // },
+          // {
+          //   icon: () => <ModalDescriptionTestSuite />,
+          //   tooltip: "Image",
+          //   // onClick: (event, rowData) =>
+          //   // alert("Ho cliccato " + rowData.launcher),
+          //   // position: "row",
+          // },
         ]}
         localization={{
           header: {

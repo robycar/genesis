@@ -220,6 +220,9 @@
 
   }
 
+.MuiTableCell-head{
+  font-weight: bold!important;  
+}
 
 .flexbox .board .card {
   padding: 15px 25px !important;

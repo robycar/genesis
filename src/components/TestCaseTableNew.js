@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import { Paper, Typography } from "@material-ui/core";
+
+
+
+import { IconButton, Paper, Typography } from "@material-ui/core";
 import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
@@ -15,6 +18,7 @@ import TextField from "@material-ui/core/TextField";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import GetAppIcon from '@material-ui/icons/GetApp';
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
@@ -32,17 +36,17 @@ function TestCaseTable() {
 
   const [data, setData] = useState([]);
   const [testCase, setTestCase] = useState([]);
-
   const [id, setId] = useState();
   const [nomeTitolo, setNomeTitolo] = useState("");
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [versione, setVersione] = useState();
   const [durata, setDurata] = useState();
-  const [creatoDa, setCreatoDa] = useState("");
-  const [modificatoDa, setModificatoDa] = useState("");
-  const [dataCreazione, setDataCreazione] = useState("");
-  const [dataModifica, setDataModifica] = useState("");
+  const [template, setTemplate] = useState(""); 
+  const [createdBy, setCreatedBy] = useState("");
+  const [modifiedBy, setModifiedBy] = useState("");
+  const [creationDate, setCreationDate] = useState("");
+  const [modifiedDate, setModifiedDate] = useState("");
   const [chiamato, setChiamato] = useState([]);
   const [chiamanti, setChiamanti] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
@@ -115,7 +119,7 @@ function TestCaseTable() {
       })
       .catch((error) => console.log("error", error));
   };
-//--------------GET LINE------------------------------
+//--------------GET OBP------------------------------
   const getAppearOBP = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -136,7 +140,7 @@ function TestCaseTable() {
       .catch((error) => console.log("error", error));
   };
 
-//--------------GET FILE------------------------------
+//--------------GET TEMPLATE------------------------------
   const getAppearFile = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -198,6 +202,10 @@ function TestCaseTable() {
       title: "Modificato da",
       field: "modifiedBy",
     },
+    {
+      title: "Template",
+      field: "template"
+    }
 
   
   ];
@@ -223,10 +231,10 @@ function TestCaseTable() {
     setDescrizione(rowData.descrizione);
     setVersione(rowData.version);
     setDurata(rowData.expectedDuration);
-    setCreatoDa(rowData.createdBy);
-    setModificatoDa(rowData.modifiedBy);
-    setDataCreazione(rowData.creationDate);
-    setDataModifica(rowData.modifiedDate);
+    setCreatedBy(rowData.createdBy);
+    setModifiedBy(rowData.modifiedBy);
+    setCreationDate(rowData.creationDate);
+    setModifiedDate(rowData.modifiedDate);
     getTestCaseById(rowData.id)
 
 
@@ -422,6 +430,9 @@ fetch(`/api/testcase`, requestOptions)
       justifyContent: "center",
 
     },
+    iconButton: {
+      marginTop: "2%"
+    },
     divider: {
       marginTop: "3%",
       marginBottom: "5",
@@ -566,7 +577,7 @@ fetch(`/api/testcase`, requestOptions)
               <div>
                 <ListItem >
                   <Typography className={classes.intestazione} variant="h4">
-                    {modifica===false ? "Visualizza ":"Modifica "} TestCase <b>{nomeTitolo}</b>
+                    {modifica===false ? "Visualizza ":"Modifica "} Test Case <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -574,34 +585,49 @@ fetch(`/api/testcase`, requestOptions)
 
               <Form className={classes.contenutoModale}>
                 <Row >
-                  <Col className={classes.col}>
-                    <TextField
+                
+                <Col className={classes.col}>
+                                     <TextField
                       className={classes.textField}
                       error={nome !== "" ? false : true}
                       onChange={(e) => setNome(e.target.value)}
                       label="Nome"
                       defaultValue={nome}
-                      helperText={nome !== "" ? "" : "Il Nome è richiesto"}
+                      helperText={nome !== "" ? "" : "Il nome è richiesto"}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={nome !== "" ? false : true}
+                      onChange={(e) => setNome(e.target.value)}
+                      label="Status"
+                      defaultValue={nome.replace("Eseguito Spesso", "")}
+                      helperText={nome !== "" ? "" : "Lo status è richiesto"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
+                  </Row>
+
+                  <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       error={versione !== "" ? false : true}
                       onChange={(e) => setVersione(e.target.value)}
-                      label="Versione"
+                      label="Last Result"
                       defaultValue={versione}
-                      helperText={versione !== "" ? "" : "Inserire versione"}
+                      //helperText={versione !== "" ? "" : "Inserire versione"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
-                </Row>
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -615,14 +641,56 @@ fetch(`/api/testcase`, requestOptions)
                       }}
                     />
                   </Col>
+                </Row>
+
+                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={durata !== "" ? false : true}
-                      onChange={(e) => setDurata(e.target.value)}
-                      label="Durata"
-                      defaultValue={durata}
-                      helperText={durata !== "" ? "" : "La Durata è richiesta"}
+                      onChange={(e) => setCreatedBy(e.target.value)}
+                      label="Creato Da"
+                      defaultValue={createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      onChange={(e) => setCreationDate(e.target.value)}
+                      label="Data di creazione"
+                      defaultValue={creationDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={modifiedDate !== "" ? false : true}
+                      onChange={(e) => setModifiedDate(e.target.value)}
+                      label="Data di Modifica"
+                      defaultValue={modifiedDate}
+                      helperText={modifiedDate !== "" ? "" : "La data di modifica è richiesta"}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={template !== "" ? false : true}
+                      onChange={(e) => setTemplate(e.target.value)}
+                      label="Template"
+                      defaultValue={template}
+                      //helperText={template !== "" ? "" : "La Durata è richiesta"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -645,12 +713,17 @@ fetch(`/api/testcase`, requestOptions)
                     />
                   </Col>
                 </Row>
+                
+
                 <Row>
                   <Col className={classes.col}>
                     <TextField
+                      label="Test Suite"
+                      type=""
+                      //onChange={(e) => setCreationDate(e.target.value)}
+                     // defaultValur={creationDate}
+                      defaultValue={descrizione.replace("test suite 1", "")}
                       className={classes.textField}
-                      label="Creato Da"
-                      defaultValue={creatoDa}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -659,36 +732,72 @@ fetch(`/api/testcase`, requestOptions)
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      label="Modificato Da"
-                      defaultValue={modificatoDa}
+                      //onChange={(e) => setModifiedBy(e.target.value)}
+                      label="Opzioni"
+                      defaultValue={descrizione.replace("Lanciata almeno una volta", "")}
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
                 </Row>
-
                 <Row>
                   <Col className={classes.col}>
                     <TextField
-                      label="Data Creazione"
-                      type="datetime-local"
-                      defaultValue={dataCreazione.replace(".000+00:00", "")}
                       className={classes.textField}
+                     
+                      label="Last Start Date"
+                      defaultValue={creationDate.replace(".000+00:00", "")}
+                   
                       InputProps={{
-                        readOnly: true,
+                        readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      label="Data Modifica"
-                      defaultValue={dataModifica}
+                    
+                      label="Last End Date"
+                      defaultValue={creationDate.replace(".000+00:00", "")}
+                   
                       InputProps={{
-                        readOnly: true,
+                        readOnly: modifica === false ? true : false,
                       }}
                     />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                                          label="Report"
+                      defaultValue={descrizione.replace("www.reportistica.it", "")}
+                   
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                    
+                      label="XML"
+                      defaultValue={descrizione.replace("File", "")}
+                   
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                 <label htmlFor="icon-button-file">
+        <IconButton 
+        className={classes.iconButton}
+        color="primary" aria-label="download xml" component="span">
+          <GetAppIcon />
+        </IconButton>
+      </label>
+                
                   </Col>
                 </Row>
               </Form>
@@ -756,7 +865,7 @@ fetch(`/api/testcase`, requestOptions)
                       // select
                       // onChange={(e) => setNome(e.target.value)}
 
-                      label="Linea/e N°"
+                      label="IP Linea/e N°"
                       defaultValue={chiamato[1]}
                       InputProps={{
                         readOnly: modifica === false ? true : false,

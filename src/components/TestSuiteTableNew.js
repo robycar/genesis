@@ -584,15 +584,19 @@ fetch(`/api/testcase`, requestOptions)
 
               <Form className={classes.contenutoModale}>
                 <Row>
-                <Col className={classes.col}>
-                   <Paper className={classes.divInputRadio} elevation={0}>
-                   <TextField 
-                className={classes.textField}
-               label="Status"
-                  /> 
-                  <InputRadio />
-                </Paper>
-                  </Col>
+                  <Col  className={classes.col}>
+                <TextField
+                      className={classes.textField}
+                      error={nome !== "" ? false : true}
+                      onChange={(e) => setNome(e.target.value)}
+                      label="Status"
+                      defaultValue={nome.replace("Eseguito Spesso", "")}
+                      helperText={nome !== "" ? "" : "Lo status è richiesto"}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                    </Col>
                   <Col className={classes.col}>
                 <TextField
                        className={classes.textField}
@@ -742,7 +746,7 @@ fetch(`/api/testcase`, requestOptions)
                     <TextField
                       label="Report"
                       type=""
-                      // defaultValue={dataCreazione.replace(".000+00:00", "")}
+                      defaultValue={descrizione.replace("www.linkreport.it", "")}
                       className={classes.textField}
                       InputProps={{
                         readOnly: true,
