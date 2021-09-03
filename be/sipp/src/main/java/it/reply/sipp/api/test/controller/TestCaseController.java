@@ -31,9 +31,11 @@ import it.reply.sipp.api.test.payload.TestCaseUpdateResponse;
 import it.reply.sipp.service.TestCaseService;
 
 @RestController
-@RequestMapping("/api/testcase")
+@RequestMapping(TestCaseController.API_PATH)
 public class TestCaseController extends AbstractController {
 
+  public static final String API_PATH = "/api/testcase"; 
+  
   @Autowired
   private TestCaseService testCaseService;
   

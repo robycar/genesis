@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.reply.sipp.AppError;
 import it.reply.sipp.api.generic.exception.ApplicationException;
+import it.reply.sipp.api.generic.payload.ConnectionDTO;
 import it.reply.sipp.api.generic.service.AbstractService;
 import it.reply.sipp.api.linea.payload.LineaDTO;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
@@ -22,6 +23,8 @@ import it.reply.sipp.model.TypeLineaVO;
 import it.reply.sipp.model.repository.LineaRepository;
 import it.reply.sipp.model.repository.TypeLineaRepository;
 import it.reply.sipp.service.LineaService;
+import it.reply.sipp.service.TestCaseService;
+import it.reply.sipp.service.dto.LineaReadLineaResponse;
 
 @Service
 @Transactional(rollbackFor = ApplicationException.class)
@@ -32,7 +35,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 
 	@Autowired
 	private LineaRepository lineaRepository;
-
+	
 	public LineaServiceImpl() {
 	}
 
@@ -227,10 +230,22 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     return new TypeLineaDTO(vo);
   }
 
+  @Autowired
+  private TestCaseService testCaseService;
+  
   @Override
-  public LineaDTO readLinea(long id) throws ApplicationException {
+  public LineaReadLineaResponse readLinea(long id) throws ApplicationException {
     logger.debug("enter readLinea");
-    return new LineaDTO(readLineaVO(id));
+    LineaVO lineaVO = readLineaVO(id);
+    
+    
+    LineaReadLineaResponse response = new LineaReadLineaResponse();
+    response.setLinea(new LineaDTO(lineaVO));
+    
+    List<Long> testCaseConnected = testCaseService.findTestCaseIdUsingLine(lineaVO);
+    response.setConnections(List.of(new ConnectionDTO("testcase", testCaseConnected)));
+    
+    return response;
   }
 
   @Override

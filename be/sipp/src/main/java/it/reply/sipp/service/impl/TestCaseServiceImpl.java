@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ import it.reply.sipp.api.test.payload.TestCaseDTO;
 import it.reply.sipp.api.test.payload.TestCaseLineaDTO;
 import it.reply.sipp.model.FileSystemScope;
 import it.reply.sipp.model.FileSystemVO;
+import it.reply.sipp.model.LineaVO;
 import it.reply.sipp.model.TemplateFileCategory;
 import it.reply.sipp.model.TemplateFileVO;
 import it.reply.sipp.model.TemplateVO;
@@ -252,6 +254,17 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     vo = testCaseRepository.saveAndFlush(vo);
     
     return new TestCaseDTO(vo, true);
+  }
+
+  @Override
+  public List<Long> findTestCaseIdUsingLine(LineaVO lineaVO) {
+    logger.debug("enter findTestCaseUsingLine");
+    Set<Long> testCasePerChiamato = testCaseRepository.findIdByLineaChiamato(lineaVO);
+    
+    Set<Long> result = testCaseRepository.findIdByLineaChiamante(lineaVO);
+    result.addAll(testCasePerChiamato);
+    
+    return new ArrayList<>(result);
   }
 
 }

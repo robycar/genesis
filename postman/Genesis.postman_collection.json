@@ -1729,7 +1729,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 2\r\n}",
+							"raw": "{\r\n    \"id\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3926,7 +3926,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"ip\": \"{{$randomIP}}\",\r\n    \"numero\": \"{{$randomPhoneNumberExt}}\",\r\n    \"password\": \"{{$randomPassword}}\",\r\n    \"porta\": \"{{$randomInt}}\",\r\n    \"typeLinea\": {\r\n        \"id\": 3\r\n    }\r\n}",
+							"raw": "{\r\n    \"ip\": \"{{$randomIP}}\",\r\n    \"numero\": \"{{$randomPhoneNumberExt}}\",\r\n    \"password\": \"{{$randomPassword}}\",\r\n    \"porta\": \"{{$randomInt}}\",\r\n    \"typeLinea\": {\r\n        \"id\": 1\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4128,100 +4128,19 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{contextUrl}}/api/linea/3",
+							"raw": "{{contextUrl}}/api/linea/1",
 							"host": [
 								"{{contextUrl}}"
 							],
 							"path": [
 								"api",
 								"linea",
-								"3"
+								"1"
 							]
 						},
 						"description": "Recupera i dati di una singola linea.\r\nPermessi: linea.view"
 					},
 					"response": [
-						{
-							"name": "linea_get_by_id success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{contextUrl}}/api/linea/1",
-									"host": [
-										"{{contextUrl}}"
-									],
-									"path": [
-										"api",
-										"linea",
-										"1"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Vary",
-									"value": "Access-Control-Request-Method"
-								},
-								{
-									"key": "Vary",
-									"value": "Access-Control-Request-Headers"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "1; mode=block"
-								},
-								{
-									"key": "Cache-Control",
-									"value": "no-cache, no-store, max-age=0, must-revalidate"
-								},
-								{
-									"key": "Pragma",
-									"value": "no-cache"
-								},
-								{
-									"key": "Expires",
-									"value": "0"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "DENY"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 13 Aug 2021 14:48:59 GMT"
-								},
-								{
-									"key": "Keep-Alive",
-									"value": "timeout=60"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": null,\n    \"linea\": {\n        \"id\": 1,\n        \"numero\": \"90-400-754-1037\",\n        \"ip\": \"240.195.169.235\",\n        \"porta\": 924,\n        \"password\": \"IdZtVacO4inAlAw\",\n        \"typeLinea\": {\n            \"id\": 1,\n            \"descrizione\": \"descrizione type linea 1\"\n        }\n    }\n}"
-						},
 						{
 							"name": "linea_get_by_id not found",
 							"originalRequest": {
@@ -4302,6 +4221,87 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"error\": {\n        \"code\": \"LINEA-0002\",\n        \"description\": \"Linea non trovata: 10\"\n    },\n    \"linea\": null\n}"
+						},
+						{
+							"name": "linea_get_by_id success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/linea/1",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"linea",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 03 Sep 2021 09:03:46 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"linea\": {\n        \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n        \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n        \"modifiedBy\": \"init\",\n        \"createdBy\": \"init\",\n        \"version\": 1,\n        \"id\": 1,\n        \"numero\": \"90-400-754-1037\",\n        \"ip\": \"240.195.169.235\",\n        \"porta\": 924,\n        \"gruppo\": {\n            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"modifiedBy\": \"init\",\n            \"createdBy\": \"init\",\n            \"version\": 1,\n            \"id\": 1,\n            \"nome\": \"g1\",\n            \"descrizione\": \"g1\"\n        },\n        \"password\": \"IdZtVacO4inAlAw\",\n        \"typeLinea\": {\n            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"modifiedBy\": \"init\",\n            \"createdBy\": \"init\",\n            \"version\": 1,\n            \"id\": 1,\n            \"descrizione\": \"descrizione type linea 1\"\n        }\n    },\n    \"connections\": [\n        {\n            \"type\": \"testcase\",\n            \"items\": [\n                1\n            ],\n            \"count\": 1\n        }\n    ]\n}"
 						}
 					]
 				},
@@ -6952,14 +6952,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{contextUrl}}/api/testcase/11",
+							"raw": "{{contextUrl}}/api/testcase/1",
 							"host": [
 								"{{contextUrl}}"
 							],
 							"path": [
 								"api",
 								"testcase",
-								"11"
+								"1"
 							]
 						},
 						"description": "Recupera un TestCase a partire dal suo identificatore.\r\nPermessi: test.view"
