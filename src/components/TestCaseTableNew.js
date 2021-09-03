@@ -6,6 +6,7 @@ import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
+import AddIcon from "@material-ui/icons/Add";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -50,7 +51,7 @@ function TestCaseTable() {
 
 
 
-  //-----------GET USER----------------------
+  //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
     var myHeaders = new Headers();
 
@@ -178,13 +179,27 @@ function TestCaseTable() {
       field: "descrizione",
     },
     {
-      title: "Versione",
+      title: "Template",
       field: "version",
     },
     {
-      title: "Durata",
-      field: "expectedDuration",
-    }
+      title: "Data Creazione",
+      field: "creationDate",
+    },
+    {
+      title: "Data Modifica",
+      field: "modifiedDate",
+    },
+    {
+      title: "Creato da",
+      field: "createdBy",
+    },
+    {
+      title: "Modificato da",
+      field: "modifiedBy",
+    },
+
+  
   ];
 
   const [open, setOpen] = React.useState(false);
@@ -272,6 +287,77 @@ function TestCaseTable() {
     setOpenChiamanti(false);
   };
 
+  //-------AGGIORNA TEST CASE----------------------------
+
+const aggiornaTestCase = () => {
+
+var myHeaders = new Headers();
+myHeaders.append("Authorization",bearer);
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+var raw = JSON.stringify({
+  id: id,
+  version: 2,
+  expectedDuration: 57,
+  nome: nome,
+  descrizione: descrizione,
+  chiamato: {
+    linea: {
+      id: id
+    },
+    proxy: {
+      id: 1
+    }
+  },
+  chiamanti: [
+    {
+      linea: {
+        id: id
+      },
+      proxy: {
+        id: id
+      }
+    },
+    {
+      linea: {
+        id: id
+      },
+      proxy: {
+        id: id
+      }
+    },
+    {
+      linea: {
+        id : id
+      },
+      proxy: {
+        id: id
+      }
+    }
+  ]
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch(`/api/testcase`, requestOptions)
+  .then(response => response.json())
+  .then((response) => {
+    console.log(response);
+    getAllTestCase();
+  })
+  .catch(error => console.log('error', error));
+  };
+
+
+
+ 
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
 
@@ -398,12 +484,13 @@ function TestCaseTable() {
                   activeClassName="button-green-active"
                   exact
                   to="/editing/testcreatestcase"
+                  startIcon={<AddIcon />}
                 >
-                  CREA test case
+                    TEST CASE
                 </Button>
               </div>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Load Test Case",
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
@@ -507,7 +594,7 @@ function TestCaseTable() {
                       onChange={(e) => setVersione(e.target.value)}
                       label="Versione"
                       defaultValue={versione}
-                      helperText={versione !== "" ? "" : "Il Cognome è richiesto"}
+                      helperText={versione !== "" ? "" : "Inserire versione"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -522,7 +609,7 @@ function TestCaseTable() {
                       onChange={(e) => setDescrizione(e.target.value)}
                       label="Descrizione"
                       defaultValue={descrizione}
-                      helperText={descrizione !== "" ? "" : "Il Cognome è richiesto"}
+                      helperText={descrizione !== "" ? "" : "La descrizione è richiesta"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}

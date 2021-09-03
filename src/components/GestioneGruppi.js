@@ -250,7 +250,15 @@ const GestioneRuoli = () => {
               };
 
               fetch(`/api/group?id=` + oldData.id, requestOptions)
-                .then((response) => response.json())
+                .then((response) => {
+                  if (response.status === 200) {
+                    return response.json();
+                  } else if (response.status === 400) {
+                    return alert(
+                      "Non può essere eliminato un gruppo associato a un utente esistente"
+                    );
+                  }
+                })
                 .then((result) => {
                   getGruppi();
                   resolve();

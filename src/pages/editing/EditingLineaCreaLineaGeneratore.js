@@ -233,9 +233,20 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "6%",
     marginBottom: "5%",
   },
+  input: {
+    display: "none",
+  },
+  formGroupPath: {
+    display: "flex",
+    flexDirection: "column",
+    marginLeft: "1%",
+  },
+  divBottoneSfoglia: {
+    marginTop: "1%",
+  },
 }));
 
-function EditingLineaCreaLinea() {
+function EditingLineaCreaLineaGeneratore() {
   const classes = useStyles();
   let history = useHistory();
 
@@ -284,10 +295,10 @@ function EditingLineaCreaLinea() {
   const [ip4, setIP4] = useState("");
   const [numero, setNumero] = useState("");
   const [password, setPassword] = useState("");
-  let porta = "5060";
+  const [porta, setPorta] = useState("5060");
   const [typeLineaId, setTypeLineaId] = useState(0);
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
-  console.log(typeLineaId);
+
   function salva() {
     const Invia = () => {
       var myHeaders = new Headers();
@@ -363,7 +374,6 @@ function EditingLineaCreaLinea() {
       if (porta.length === 0) {
         porta = "5060";
       }
-
       aggiornaIP();
     } else {
       if (ip1 === "" || ip2 === "" || ip3 === "" || ip4 === "") {
@@ -399,17 +409,6 @@ function EditingLineaCreaLinea() {
         document.getElementById("alertPorta").style.display = "none";
       } else {
         document.getElementById("alertPorta").style.display = "";
-      }
-      if (numero === "") {
-        document.getElementById("alertNumero").style.display = "";
-      } else {
-        document.getElementById("alertNumero").style.display = "none";
-        document.getElementById("alertNumero2").style.display = "none";
-      }
-      if (password === "") {
-        document.getElementById("alertPassword").style.display = "";
-      } else {
-        document.getElementById("alertPassword").style.display = "none";
       }
     }
   }
@@ -598,13 +597,13 @@ function EditingLineaCreaLinea() {
         </div>
 
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Linea" />
+          <CreaItem titolo="Crea Linea Generatore" />
 
           <Divider className={classes.divider} />
 
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
+              {/* <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Numero</Form.Label>
                   <Form.Control
@@ -620,15 +619,8 @@ function EditingLineaCreaLinea() {
                   >
                     Il Numero è richiesto!
                   </Alert>
-                  <Alert
-                    severity="error"
-                    id="alertNumero2"
-                    style={{ display: "none" }}
-                  >
-                    Il Numero inserito è gia associato ad un'altra Linea!
-                  </Alert>
                 </Form.Group>
-              </Paper>
+              </Paper> */}
 
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
@@ -688,21 +680,43 @@ function EditingLineaCreaLinea() {
               </Paper>
 
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
+                <Form.Group
+                  controlId="form.Numero"
+                  className={classes.formGroupPath}
+                >
+                  <Form.Label>Path CSV</Form.Label>
+                  <input
+                    accept="image/*"
+                    className={classes.input}
+                    id="contained-button-file"
+                    multiple
+                    type="file"
+                  />
+                  <label htmlFor="contained-button-file">
+                    <div className={classes.divBottoneSfoglia}>
+                      <Button
+                        className="button-green"
+                        variant="contained"
+                        component="span"
+                        size="small"
+                      >
+                        Sfoglia
+                      </Button>
+                    </div>
+                  </label>
+                  {/* <Form.Control
                     className={classes.formControl}
                     type="text"
                     placeholder="Inserisci Password"
                     onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Alert
+                  /> */}
+                  {/* <Alert
                     severity="error"
                     id="alertPassword"
                     style={{ display: "none" }}
                   >
                     La Password è richiesta!
-                  </Alert>
+                  </Alert> */}
                 </Form.Group>
               </Paper>
             </Paper>
@@ -714,9 +728,9 @@ function EditingLineaCreaLinea() {
                   <Form.Control
                     className={classes.formControl}
                     type="number"
-                    placeholder="5060"
+                    placeholder="Inserisci Porta"
                     defaultValue={porta}
-                    onChange={(e) => (porta = e.target.value)}
+                    onChange={(e) => setPorta(e.target.value)}
                   />
                   <Alert
                     severity="error"
@@ -1113,4 +1127,4 @@ function EditingLineaCreaLinea() {
   );
 }
 
-export default EditingLineaCreaLinea;
+export default EditingLineaCreaLineaGeneratore;

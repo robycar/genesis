@@ -128,7 +128,7 @@ export const quaterListItems = (
     </ListItem> */}
     <div className="versione">
       <hr />
-      Versione 0.0.7
+      Versione 0.0.8
     </div>
   </div>
 );

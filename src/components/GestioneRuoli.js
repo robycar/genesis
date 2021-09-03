@@ -223,6 +223,7 @@ const GestioneRuoli = () => {
           sorting: true,
         }}
         editable={{
+          isDeletable:(row)=>row.nome!=="ADMIN",
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               //Backend call
@@ -318,7 +319,8 @@ const GestioneRuoli = () => {
                         onChange={(e) => setNome(e.target.value)}
                         required
                         label="Nome"
-                        defaultValue={nome}
+                        defaultValue= {nome }
+                        disabled={nome === "ADMIN" ? true :  false}
                         helperText={nome !== "" ? "" : "Il Nome è richiesto"}
                       />
                     </Col>
@@ -330,7 +332,7 @@ const GestioneRuoli = () => {
                         onChange={(e) => setDescrizione(e.target.value)}
                         required
                         label="Descrizione"
-                        defaultValue="Inserisci descrizione"
+                        defaultValue={descrizione}
                         helperText={
                           descrizione !== "" ? "" : "La descrizione è richiesta"
                         }
