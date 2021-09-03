@@ -29,6 +29,7 @@ import it.reply.sipp.api.linea.payload.LineaUpdateRequest;
 import it.reply.sipp.api.linea.payload.LineaUpdateResponse;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
 import it.reply.sipp.service.LineaService;
+import it.reply.sipp.service.dto.LineaReadLineaResponse;
 
 @RestController
 @RequestMapping("/api/linea")
@@ -135,8 +136,10 @@ public class LineaController extends AbstractController {
     
     LineaRetrieveResponse response = new LineaRetrieveResponse();
     try {
-      LineaDTO result = lineaService.readLinea(id);
-      response.setLinea(result);
+      LineaReadLineaResponse lineaReadResponse = lineaService.readLinea(id);
+
+      response.setLinea(lineaReadResponse.getLinea());
+      response.setConnections(lineaReadResponse.getConnections());
       return ResponseEntity.ok(response);
     } catch (ApplicationException e) {
       return handleException(e, response);

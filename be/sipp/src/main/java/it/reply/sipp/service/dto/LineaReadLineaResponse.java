@@ -1,26 +1,19 @@
-package it.reply.sipp.api.linea.payload;
+package it.reply.sipp.service.dto;
 
 import java.util.List;
 
 import it.reply.sipp.api.generic.payload.ConnectionDTO;
-import it.reply.sipp.api.generic.payload.PayloadResponse;
+import it.reply.sipp.api.linea.payload.LineaDTO;
 
-public class LineaRetrieveResponse extends PayloadResponse {
+public class LineaReadLineaResponse extends ServiceResponse {
 
-  private static final long serialVersionUID = -8709859144444352329L;
-  
+  private static final long serialVersionUID = 8388718500625563947L;
+
   private LineaDTO linea;
   
   private List<ConnectionDTO> connections;
   
-  public LineaRetrieveResponse() {
-  }
-
-  @Override
-  protected void writeFields(StringBuilder sb) {
-    writeField(sb, "linea", linea);
-    writeField(sb, "connections", connections);
-    super.writeFields(sb);
+  public LineaReadLineaResponse() {
   }
 
   public LineaDTO getLinea() {
@@ -39,4 +32,5 @@ public class LineaRetrieveResponse extends PayloadResponse {
     this.connections = connections;
   }
 
+  
 }

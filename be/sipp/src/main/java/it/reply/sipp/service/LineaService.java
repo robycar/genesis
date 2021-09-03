@@ -7,6 +7,7 @@ import it.reply.sipp.api.linea.payload.LineaDTO;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
 import it.reply.sipp.model.LineaVO;
 import it.reply.sipp.model.TypeLineaVO;
+import it.reply.sipp.service.dto.LineaReadLineaResponse;
 
 public interface LineaService {
 
@@ -71,10 +72,10 @@ public interface LineaService {
   /**
    * Ottiene i dati relativi ad una linea a partire dal suo identificatore.
    * @param id l'identificatore della linea
-   * @return la linea letta
+   * @return la linea letta e l'elenco delle connessioni
    * @throws ApplicationException in caso di errori
    */
-  LineaDTO readLinea(long id) throws ApplicationException;
+  LineaReadLineaResponse readLinea(long id) throws ApplicationException;
   
   LineaVO readLineaVO(long id) throws ApplicationException;
 
