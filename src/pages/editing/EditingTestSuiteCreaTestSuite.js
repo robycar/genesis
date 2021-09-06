@@ -9,6 +9,8 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
+import Form from "react-bootstrap/Form";
+import Alert from "@material-ui/lab/Alert";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
@@ -125,6 +127,7 @@ const useStyles = makeStyles((theme) => ({
     width: "500px",
     height: "660px",
     marginLeft: "5%",
+    overflow: "auto",
   },
   divSelect: {
     marginTop: "3%",
@@ -248,40 +251,53 @@ function EditingTestTestSuiteCreaTestSuite() {
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={2}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Name{" "}
-                </Typography>
-                <InputSelect />
+              <Form.Group controlId="form.Numero">
+                  <Form.Label>Nome</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Nome"
+                    //onChange={(e) => setNome(e.target.value)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertNome"
+                    style={{ display: "none" }}
+                  >
+                    Il Nome è richiesto!
+                  </Alert>
+                </Form.Group>
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Descrizione{" "}
-                </Typography>
-                <InputSelect />
+              <Form.Group controlId="form.Numero">
+                  <Form.Label>Descrizione</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Descrizione"
+                   // onChange={(e) => setDescrizione(e.target.value)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertDescrizione"
+                    style={{ display: "none" }}
+                  >
+                    La Descrizione è richiesta!
+                  </Alert>
+                </Form.Group>
               </Paper>
-              {/* <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  ID Utenza{" "}
-                </Typography>
-                <InputSelect />
-              </Paper> */}
-              {/* <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Data Creazione{" "}
-                </Typography>
-                <InputSelect />
-              </Paper> */}
-              {/* <Paper className={classes.divSelect} elevation={0}>
-                <Typography className={classes.label} variant="h11">
-                  Path{" "}
-                </Typography>
-                <InputSelect />
-              </Paper> */}
-            </Paper>
+                       </Paper>
 
             <Paper className={classes.paperContainer2} elevation={2}>
               <Typography>Seleziona i Test Case da associare:</Typography>
               <TestSuiteSelectNew className={classes.testSuiteSelect} />
+              <Alert
+                        severity="error"
+                        id="alertTestCase"
+                        style={{ display: "none" }}
+                      >
+                        Selezionare almeno un Test Case da associare!
+                      </Alert>
             </Paper>
           </div>
           <Divider className={classes.divider} />

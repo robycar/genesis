@@ -292,6 +292,7 @@ function Template() {
                 })
                 .catch((error) => console.log("error", error));
             }),
+          isDeletable: (row) => false,
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               //backend call
@@ -540,14 +541,9 @@ function Template() {
                 </Row>
                 <Row>
                   <Col className={classes.col}>
-                   
-                      <Link
-                        href="#"
-                        variant="body2"
-                      >
-                        Download files
-                      </Link>
-                    
+                    <Link href="#" variant="body2">
+                      Download files
+                    </Link>
                   </Col>
                 </Row>
               </Form>

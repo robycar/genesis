@@ -33,7 +33,7 @@ function TestSuiteTable() {
 
   const [data, setData] = useState([]);
   const [testCase, setTestCase] = useState([]);
-
+const [file, setFile] = useState([]);
   const [id, setId] = useState();
   const [opzioni, setOpzioni] = useState("")
   const [nomeTitolo, setNomeTitolo] = useState("");
@@ -206,6 +206,10 @@ function TestSuiteTable() {
       title: "Durata",
       field: "modifiedBy",
     },
+    {
+      title: "Template",
+  field: "file",
+}
 
   
   ];
@@ -237,6 +241,7 @@ function TestSuiteTable() {
     setModificatoDa(rowData.modifiedBy);
     setDataCreazione(rowData.creationDate);
     setDataModifica(rowData.modifiedDate);
+    setFile(rowData.file);
     getTestCaseById(rowData.id)
 
 
@@ -484,49 +489,6 @@ fetch(`/api/testcase`, requestOptions)
           searchFieldAlignment: "left",
           pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
-        actions={[
-          {
-            icon: () => (
-              <div className={classes.buttonRight}>
-                <Button
-                  className="button-green"
-                  component={NavLink}
-                  activeClassName="button-green-active"
-                  exact
-                  to="/editing/testsuite/createstsuite"
-                  startIcon={<AddIcon />}
-                >
-                    TEST SUITE
-                </Button>
-              </div>
-            ),
-            tooltip: "Load Test Suite",
-            //onClick: () => funzioneFor(),
-            isFreeAction: true,
-          },
-          {
-            icon: (dat) => (
-              <a>
-                <VisibilityIcon />
-              </a>
-            ),
-            tooltip: "Visualizza tutti i dati",
-            position: "row",
-            onClick: (event, rowData) => openVisualizza(rowData),
-          },
-          {
-            icon: () => <EditIcon />,
-            tooltip: "Modifica",
-            onClick: (event, rowData) => openModifica(rowData),
-
-            position: "row",
-          },
-        ]}
-        localization={{
-          header: {
-            actions: "Azioni",
-          },
-        }}
         editable={{
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
@@ -548,15 +510,63 @@ fetch(`/api/testcase`, requestOptions)
                 redirect: "follow",
               };
 
-              fetch(`/api/user?id=` + oldData.id, requestOptions)
+              fetch(`/api/testcase`, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
-                  getAllTestCase();
+                  getAllTestCase()
                   resolve();
                 })
                 .catch((error) => console.log("error", error));
             }),
-        }}
+          }}
+        actions={[
+          {
+            icon: () => (
+              <div className={classes.buttonRight}>
+                <Button
+                  className="button-green"
+                  component={NavLink}
+                  activeClassName="button-green-active"
+                  exact
+                  to="/editing/testsuite/createstsuite"
+                  startIcon={<AddIcon />}
+                >
+                    TEST SUITE
+                </Button>
+              </div>
+            ),
+            tooltip: "Load Test Suite",
+            //onClick: () => funzioneFor(),
+            isFreeAction: true,
+          },
+          {
+            icon: () => (
+              <a>
+                <VisibilityIcon />
+              </a>
+            ),
+            tooltip: "Visualizza tutti i dati",
+            position: "row",
+            onClick: (event, rowData) => openVisualizza(rowData),
+          },
+          {
+            icon: () => <EditIcon />,
+            tooltip: "Modifica",
+            onClick: (event, rowData) => openModifica(rowData),
+
+            position: "row",
+          },
+         
+        ]}
+        localization={{
+          header: {
+            actions: "Azioni",
+          },
+        }}    
+        // options={{
+        //   selection: true
+        // }}
+        // onSelectionChange={(rows) => alert('You selected ' + rows.length + ' rows')}    
       />
       <Modal
         aria-labelledby="transition-modal-title"

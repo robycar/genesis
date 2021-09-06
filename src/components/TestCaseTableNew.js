@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-
-
-
 import { IconButton, Paper, Typography } from "@material-ui/core";
 import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
@@ -28,12 +25,7 @@ import Button from "@material-ui/core/Button";
 
 function TestCaseTable() {
 
-  let bearer = `Bearer ${localStorage.getItem("token")}`;
-
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
-
+  const [file, setFile] = useState([]); 
   const [data, setData] = useState([]);
   const [testCase, setTestCase] = useState([]);
   const [id, setId] = useState();
@@ -42,7 +34,7 @@ function TestCaseTable() {
   const [descrizione, setDescrizione] = useState("");
   const [versione, setVersione] = useState();
   const [durata, setDurata] = useState();
-  const [template, setTemplate] = useState(""); 
+  const [template, setTemplate] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [modifiedBy, setModifiedBy] = useState("");
   const [creationDate, setCreationDate] = useState("");
@@ -54,11 +46,16 @@ function TestCaseTable() {
   const [appearFile, setAppearFile] = useState([]);
 
 
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+
+  
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
     var myHeaders = new Headers();
-
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
@@ -99,7 +96,7 @@ function TestCaseTable() {
       })
       .catch((error) => console.log("error", error));
   };
-//--------------GET LINE------------------------------
+  //--------------GET LINE------------------------------
   const getAppearLine = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -119,7 +116,7 @@ function TestCaseTable() {
       })
       .catch((error) => console.log("error", error));
   };
-//--------------GET OBP------------------------------
+  //--------------GET OBP------------------------------
   const getAppearOBP = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -140,7 +137,7 @@ function TestCaseTable() {
       .catch((error) => console.log("error", error));
   };
 
-//--------------GET TEMPLATE------------------------------
+  //--------------GET TEMPLATE------------------------------
   const getAppearFile = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -172,7 +169,7 @@ function TestCaseTable() {
     {
       title: "ID Test",
       field: "id",
-      defaultSort:"desc"
+      defaultSort: "desc"
     },
     {
       title: "Nome",
@@ -182,10 +179,10 @@ function TestCaseTable() {
       title: "Descrizione",
       field: "descrizione",
     },
-    {
-      title: "Template",
-      field: "version",
-    },
+    // {
+    //   title: "Template",
+    //   field: "version",
+    // },
     {
       title: "Data Creazione",
       field: "creationDate",
@@ -204,10 +201,10 @@ function TestCaseTable() {
     },
     {
       title: "Template",
-      field: "template"
+      field: "file"
     }
 
-  
+
   ];
 
   const [open, setOpen] = React.useState(false);
@@ -297,75 +294,75 @@ function TestCaseTable() {
 
   //-------AGGIORNA TEST CASE----------------------------
 
-const aggiornaTestCase = () => {
+  const aggiornaTestCase = () => {
 
-var myHeaders = new Headers();
-myHeaders.append("Authorization",bearer);
-myHeaders.append("Content-Type", "application/json");
-myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-myHeaders.append("Access-Control-Allow-Credentials", "true");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-var raw = JSON.stringify({
-  id: id,
-  version: 2,
-  expectedDuration: 57,
-  nome: nome,
-  descrizione: descrizione,
-  chiamato: {
-    linea: {
-      id: id
-    },
-    proxy: {
-      id: 1
-    }
-  },
-  chiamanti: [
-    {
-      linea: {
-        id: id
+    var raw = JSON.stringify({
+      id: id,
+      version: 2,
+      expectedDuration: 57,
+      nome: nome,
+      descrizione: descrizione,
+      chiamato: {
+        linea: {
+          id: id
+        },
+        proxy: {
+          id: 1
+        }
       },
-      proxy: {
-        id: id
-      }
-    },
-    {
-      linea: {
-        id: id
-      },
-      proxy: {
-        id: id
-      }
-    },
-    {
-      linea: {
-        id : id
-      },
-      proxy: {
-        id: id
-      }
-    }
-  ]
-});
+      chiamanti: [
+        {
+          linea: {
+            id: id
+          },
+          proxy: {
+            id: id
+          }
+        },
+        {
+          linea: {
+            id: id
+          },
+          proxy: {
+            id: id
+          }
+        },
+        {
+          linea: {
+            id: id
+          },
+          proxy: {
+            id: id
+          }
+        }
+      ]
+    });
 
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
 
-fetch(`/api/testcase`, requestOptions)
-  .then(response => response.json())
-  .then((response) => {
-    console.log(response);
-    getAllTestCase();
-  })
-  .catch(error => console.log('error', error));
+    fetch(`/api/testcase`, requestOptions)
+      .then(response => response.json())
+      .then((response) => {
+        console.log(response);
+        getAllTestCase();
+      })
+      .catch(error => console.log('error', error));
   };
+  // invia(); 
 
 
 
- 
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
 
@@ -497,7 +494,7 @@ fetch(`/api/testcase`, requestOptions)
                   to="/editing/testcreatestcase"
                   startIcon={<AddIcon />}
                 >
-                    TEST CASE
+                  TEST CASE
                 </Button>
               </div>
             ),
@@ -577,7 +574,7 @@ fetch(`/api/testcase`, requestOptions)
               <div>
                 <ListItem >
                   <Typography className={classes.intestazione} variant="h4">
-                    {modifica===false ? "Visualizza ":"Modifica "} Test Case <b>{nomeTitolo}</b>
+                    {modifica === false ? "Visualizza " : "Modifica "} Test Case <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -585,9 +582,9 @@ fetch(`/api/testcase`, requestOptions)
 
               <Form className={classes.contenutoModale}>
                 <Row >
-                
-                <Col className={classes.col}>
-                                     <TextField
+
+                  <Col className={classes.col}>
+                    <TextField
                       className={classes.textField}
                       error={nome !== "" ? false : true}
                       onChange={(e) => setNome(e.target.value)}
@@ -598,7 +595,7 @@ fetch(`/api/testcase`, requestOptions)
                         readOnly: modifica === false ? true : false,
                       }}
                     />
-                </Col>
+                  </Col>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -612,9 +609,9 @@ fetch(`/api/testcase`, requestOptions)
                       }}
                     />
                   </Col>
-                  </Row>
+                </Row>
 
-                  <Row>
+                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -713,7 +710,7 @@ fetch(`/api/testcase`, requestOptions)
                     />
                   </Col>
                 </Row>
-                
+
 
                 <Row>
                   <Col className={classes.col}>
@@ -721,7 +718,7 @@ fetch(`/api/testcase`, requestOptions)
                       label="Test Suite"
                       type=""
                       //onChange={(e) => setCreationDate(e.target.value)}
-                     // defaultValur={creationDate}
+                      // defaultValur={creationDate}
                       defaultValue={descrizione.replace("test suite 1", "")}
                       className={classes.textField}
                       InputProps={{
@@ -745,10 +742,10 @@ fetch(`/api/testcase`, requestOptions)
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                     
+
                       label="Last Start Date"
                       defaultValue={creationDate.replace(".000+00:00", "")}
-                   
+
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -757,10 +754,10 @@ fetch(`/api/testcase`, requestOptions)
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                    
+
                       label="Last End Date"
                       defaultValue={creationDate.replace(".000+00:00", "")}
-                   
+
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -771,9 +768,9 @@ fetch(`/api/testcase`, requestOptions)
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                                          label="Report"
+                      label="Report"
                       defaultValue={descrizione.replace("www.reportistica.it", "")}
-                   
+
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -782,22 +779,22 @@ fetch(`/api/testcase`, requestOptions)
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                    
+
                       label="XML"
                       defaultValue={descrizione.replace("File", "")}
-                   
+
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
-                 <label htmlFor="icon-button-file">
-        <IconButton 
-        className={classes.iconButton}
-        color="primary" aria-label="download xml" component="span">
-          <GetAppIcon />
-        </IconButton>
-      </label>
-                
+                    <label htmlFor="icon-button-file">
+                      <IconButton
+                        className={classes.iconButton}
+                        color="primary" aria-label="download xml" component="span">
+                        <GetAppIcon />
+                      </IconButton>
+                    </label>
+
                   </Col>
                 </Row>
               </Form>
@@ -845,7 +842,7 @@ fetch(`/api/testcase`, requestOptions)
               <div>
                 <ListItem >
                   <Typography className={classes.intestazione} variant="h4">
-                  {modifica===false ? "Visualizza ":"Modifica "} Chiamato <b>{nomeTitolo}</b>
+                    {modifica === false ? "Visualizza " : "Modifica "} Chiamato <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -899,22 +896,22 @@ fetch(`/api/testcase`, requestOptions)
                 </Row>
                 <Row>
                   <Col className={classes.col}>
-                  <TextField
-                          className={classes.textField}
-                          select
-                          onChange={(e) => {chiamanti[1]=e.target.value}}
-                          label="Linea N°"
-                          value={chiamanti[1]}
-                          InputProps={{
-                            readOnly: modifica === false ? true : false,
-                          }}
-                        >
-                          {appearLine.map((typeLinea) => (
-                            <MenuItem key={typeLinea.id} value={typeLinea.id}>
-                              {typeLinea.descrizione}
-                            </MenuItem>
-                          ))}
-                        </TextField>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      onChange={(e) => { chiamanti[1] = e.target.value }}
+                      label="Linea N°"
+                      value={chiamanti[1]}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    >
+                      {appearLine.map((typeLinea) => (
+                        <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                          {typeLinea.descrizione}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   </Col>
                 </Row>
               </Form>
@@ -961,7 +958,7 @@ fetch(`/api/testcase`, requestOptions)
               <div>
                 <ListItem >
                   <Typography className={classes.intestazione} variant="h4">
-                  {modifica===false ? "Visualizza ":"Modifica "} Chiamanti <b>{nomeTitolo}</b>
+                    {modifica === false ? "Visualizza " : "Modifica "} Chiamanti <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -978,7 +975,7 @@ fetch(`/api/testcase`, requestOptions)
                         <TextField
                           className={classes.textField}
                           select
-                          onChange={(e) => {chiamanti[1]=e.target.value}}
+                          onChange={(e) => { chiamanti[1] = e.target.value }}
                           label="Linea N°"
                           value={chiamanti[1]}
                           InputProps={{
@@ -996,14 +993,14 @@ fetch(`/api/testcase`, requestOptions)
                         <TextField
                           className={classes.textField}
                           select
-                          onChange={(e) => {chiamanti[0]=e.target.value}}
+                          onChange={(e) => { chiamanti[0] = e.target.value }}
                           label="Outboundproxy N°"
                           value={chiamanti[0]}
                           InputProps={{
                             readOnly: modifica === false ? true : false,
                           }}
                         >
-                        {appearOBP.map((obp) => (
+                          {appearOBP.map((obp) => (
                             <MenuItem key={obp.id} value={obp.id}>
                               {obp.descrizione}
                             </MenuItem>
@@ -1023,7 +1020,7 @@ fetch(`/api/testcase`, requestOptions)
                             readOnly: modifica === false ? true : false,
                           }}
                         >
-                        {appearFile.map((obp) => (
+                          {appearFile.map((obp) => (
                             <MenuItem key={obp.id} value={obp.id}>
                               {obp.descrizione}
                             </MenuItem>
@@ -1060,5 +1057,6 @@ fetch(`/api/testcase`, requestOptions)
       </Modal>
     </div>
   );
+                          
 }
 export default TestCaseTable;

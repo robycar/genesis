@@ -1,239 +1,194 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
+import acccessControl from "../service/url.js";
 
 
 function TestSuiteSelect() {
+
+  let bearer = `Bearer ${localStorage.getItem("token")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+
+  const [data, setData] = useState([]);
+  const [testCase, setTestCase] = useState([]);
+  const [id, setId] = useState();
+  const [nomeTitolo, setNomeTitolo] = useState("");
+  const [nome, setNome] = useState("");
+  const [descrizione, setDescrizione] = useState("");
+  const [versione, setVersione] = useState();
+  const [durata, setDurata] = useState();
+  const [template, setTemplate] = useState(""); 
+  const [createdBy, setCreatedBy] = useState("");
+  const [modifiedBy, setModifiedBy] = useState("");
+  const [creationDate, setCreationDate] = useState("");
+  const [modifiedDate, setModifiedDate] = useState("");
+  const [chiamato, setChiamato] = useState([]);
+  const [chiamanti, setChiamanti] = useState([]);
+  const [appearLine, setAppearLine] = useState([]);
+  const [appearOBP, setAppearOBP] = useState([]);
+  const [appearFile, setAppearFile] = useState([]);
+  const [open, setOpen] = React.useState(false);
+
+
+
+  //-----------GET TEST CASE----------------------
+  const getAllTestCase = () => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  //--------------TEST CASE BY ID-----------------------
+  const getTestCaseById = (id) => {
+    var myHeaders = new Headers();
+
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase/` + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTestCase(result.testCase);
+        setOpen(true);
+      })
+      .catch((error) => console.log("error", error));
+  };
+//--------------GET LINE------------------------------
+  const getAppearLine = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLine(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+//--------------GET OBP------------------------------
+  const getAppearOBP = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/obp`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearOBP(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+//--------------GET TEMPLATE------------------------------
+  const getAppearFile = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearFile(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestCase();
+    getAppearLine();
+    getAppearOBP();
+    getAppearFile();
+  }, []);
+
+
   const columns = [
-      { title: "Nome Test Case", field: "name" },
-      { 
-        title: "ID Template", 
-        defaultSort:"desc",
-        field: "template" ,
-      },
-      { 
-        title: "Modified By", 
-        field: "modifiedBy" 
-      },
-      {
-        title: "Created By",
-        field: "createdBy",
-      },
-      { title: "N° Linea Chiamante", field: "lineaChiamante" },
+    {
+      title: "ID Test",
+      field: "id",
+      defaultSort:"desc"
+    },
+    {
+      title: "Nome",
+      field: "nome",
+    },
+    {
+      title: "Descrizione",
+      field: "descrizione",
+    },
+    // {
+    //   title: "Template",
+    //   field: "version",
+    // },
+    {
+      title: "Data Creazione",
+      field: "creationDate",
+    },
+    {
+      title: "Data Modifica",
+      field: "modifiedDate",
+    },
+    {
+      title: "Creato da",
+      field: "createdBy",
+    },
+    {
+      title: "Modificato da",
+      field: "modifiedBy",
+    },
+    {
+      title: "Template",
+      field: "template"
+    }
+  
+  ];
 
-      { title: "N° Linea Chiamato", field: "lineaChiamato" },
-      { title: "N° Linea Chiamante 2", field: "lineaChiamante2" },
-      { title: "N° Linea Chiamante 3", field: "lineaChiamante3" },
-      { title: "Tipo Linea Chiamante", field: "tipoLineaChiamante" },
-      { title: "Tipo Linea Chiamato", field: "tipoLineaChiamato" },
-      { title: "Tipo Linea Chiamante2", field: "tipoLineaChiamante2" },
-      { title: "Tipo Linea Chiamante3", field: "tipoLineaChiamante3" },
-      { title: "Opb Chiamante", field: "opbChiamante" },
-      { title: "Opb Chiamato", field: "opbChiamato" },
-      { title: "Opb Chiamante 3", field: "opbChiamante2" },
-      { title: "Opb Chiamante 3", field: "opbChiamante3" },
-    ],
-    data = [
-      {
-        name: "Test suite 1",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-      {
-        name: "Test suite 11",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-
-      {
-        name: "Test suite 19",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-      {
-        name: "Test suite 21",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-      {
-        name: "Test suite 14",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-      {
-        name: "Test suite 195",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-      {
-        name: "Test suite 1",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-      {
-        name: "Test suite 15",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-      {
-        name: "Test suite 25",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-      {
-        name: "Test suite 1",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-      {
-        name: "Test suite 24",
-        idTemplate: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        lineaChiamante: "xxxx",
-        lineaChiamato: "kfguiggf",
-        lineaChiamate2: "",
-        lineaChiamate3: "",
-        tipoLineaChiamante: "",
-        tipoLineaChiamato: "",
-        tipoLIneaChiamante2: "",
-        tipoLineaChiamante3: "",
-        opbChiamante: "",
-        opbChiamato: "",
-        opbChiamante2: "",
-        opbChiamante3: "",
-      },
-    ];
-
+    
   return (
     <div>
       <MaterialTable

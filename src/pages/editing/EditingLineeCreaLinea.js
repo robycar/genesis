@@ -270,14 +270,62 @@ function EditingLineaCreaLinea() {
   };
 
   const removeTypeLinea = (id) => {
-    alert("id " + id + " rimosso");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: id,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => getTypeId())
+
+    handleCloseRemove()
   };
+
+  const editTypeLinea = (typeLinea) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: typeLinea.id,
+      version: typeLinea.version,
+      descrizione: typeLineaDescrizione !== "" ? typeLineaDescrizione : typeLinea.descrizione,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getTypeId()
+      })
+      handleCloseEdit()
+  }
 
   useEffect(() => {
     getTypeId();
   }, []);
 
-  const [ip, setIP] = useState("");
   const [ip1, setIP1] = useState("");
   const [ip2, setIP2] = useState("");
   const [ip3, setIP3] = useState("");
@@ -287,7 +335,7 @@ function EditingLineaCreaLinea() {
   let porta = "5060";
   const [typeLineaId, setTypeLineaId] = useState(0);
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
-  console.log(typeLineaId);
+
   function salva() {
     const Invia = () => {
       var myHeaders = new Headers();
@@ -442,8 +490,8 @@ function EditingLineaCreaLinea() {
   };
   //--------------------MODAALE 2----------------------------------
 
-  const [open2, setOpen2] = React.useState(false);
-  const [type, setType] = React.useState("");
+  const [open2, setOpen2] = useState(false);
+  const [type, setType] = useState("");
 
   const handleOpen2 = () => {
     setOpen2(true);
@@ -454,8 +502,8 @@ function EditingLineaCreaLinea() {
   };
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
   const checkRichiesta = (result) => {
-    console.log(result);
     setTypeLineaId(result.id);
   };
 
@@ -1032,24 +1080,17 @@ function EditingLineaCreaLinea() {
                               </div>
 
                               <div className={classes.paperBottom}>
-                                <Form.Group controlId="form.Numero">
+                                <Form.Group controlId="form.Descrizione">
                                   <Form.Control
                                     type="text"
-                                    placeholder="Inserisci in nuovo nome"
+                                    placeholder="Modifica descrizione"
                                     defaultValue={
                                       openEdit === true
                                         ? typeLineaDescrizione
                                         : ""
                                     }
-                                    //onChange={(e) => setPorta(e.target.value)}
+                                  onChange={(e) => setTypeLineaDescrizione(e.target.value)}
                                   />
-                                  <Alert
-                                    severity="error"
-                                    id="alertEditType"
-                                    style={{ display: "none" }}
-                                  >
-                                    Inserire il nuovo nome!
-                                  </Alert>
                                 </Form.Group>
 
                                 <div className={classes.divider2}>
@@ -1060,7 +1101,7 @@ function EditingLineaCreaLinea() {
                                   <div>
                                     <Button
                                       onClick={() =>
-                                        removeTypeLinea(typeLineaId.id)
+                                        editTypeLinea(typeLineaId)
                                       }
                                       variant="contained"
                                       color="secondary"

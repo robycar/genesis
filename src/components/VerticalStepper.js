@@ -95,6 +95,7 @@ export default function VerticalLinearStepper() {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    // salva();
   };
 
   const handleBack = () => {
@@ -308,7 +309,7 @@ const FirstStep = () => {
                 className={classes.formControl}
                 type="text"
                 placeholder="Inserisci nome"
-                //onChange={(e) => setNome(e.target.value)}
+                onChange={(e) => setNome(e.target.value)}
               />
               <Alert
                 severity="error"
@@ -557,6 +558,261 @@ const FirstStep = () => {
         </Button>
       </div>
     </Paper>
+  );
+};
+
+const SecondStep = () => {
+  const useStyles = makeStyles((theme) => ({
+    paper: {
+      width: 500,
+      backgroundColor: theme.palette.background.paper,
+      // border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    margin: {
+      margin: theme.spacing(1),
+    },
+    extendedIcon: {
+      marginRight: theme.spacing(1),
+    },
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    paperModale: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      width: "fit-content",
+      height: "80%",
+    },
+    paperBottom: {
+      padding: "2%",
+      backgrounColor: "#FFFFFF",
+      //justifyContent: "center",
+      flexDirection: "column",
+      marginTop: "5%",
+    },
+    bottoni: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-around",
+      marginLeft: "55px",
+      marginTop: "4%",
+      marginBottom: "2%",
+    },
+    intestazione: {
+      color: "#47B881",
+      marginTop: "5%",
+      flexDirection: "row",
+    },
+    icon: {
+      transform: "scale(1.8)",
+      color: "#47B881",
+      marginTop: "9px",
+    },
+    selectBar: {
+      width: "50%",
+      height: "100",
+      marginTop: "50px",
+    },
+    divTextarea: {
+      marginTop: "20px",
+    },
+  }));
+
+  const classes = useStyles();
+  const [openModalUploadCategory, setOpenModalUploadCategory] =
+    React.useState(false);
+  const [test, setTest] = React.useState("");
+
+  const handleOpenModalUploadCategory = () => {
+    setOpenModalUploadCategory(true);
+  };
+
+  const handleCloseUploadCategory = () => {
+    setOpenModalUploadCategory(false);
+  };
+  const handleChange = (event) => {
+    setTest(event.target.value);
+  };
+
+  const initialColumns = {
+    Files: {
+      id: "Files",
+      list: [
+        { id: "1", text: "file1" },
+        { id: "2", text: "file2" },
+        { id: "3", text: "file3" },
+        { id: "4", text: "file4" },
+      ],
+    },
+    Chiamato: {
+      id: "Chiamato",
+      list: [
+        // { id: "5", text: "text5" },
+        // { id: "6", text: "text6" },
+      ],
+    },
+    Chiamanti: {
+      id: "Chiamanti",
+      list: [],
+    },
+  };
+
+  const [columns, setColumns] = useState(initialColumns);
+
+  const onDragEnd = ({ source, destination }) => {
+    // Make sure we have a valid destination
+    if (destination === undefined || destination === null) return null;
+
+    // Make sure we're actually moving the item
+    if (
+      source.droppableId === destination.droppableId &&
+      destination.index === source.index
+    )
+      return null;
+
+    // Set start and end variables
+    const start = columns[source.droppableId];
+    const end = columns[destination.droppableId];
+
+    // If start is the same as end, we're in the same column
+    if (start === end) {
+      // Move the item within the list
+      // Start by making a new list without the dragged item
+      console.log(start);
+      const newList = start.list.filter((_, idx) => idx !== source.index);
+
+      // Then insert the item at the right location
+      newList.splice(destination.index, 0, start.list[source.index]);
+
+      // Then create a new copy of the column object
+      const newCol = {
+        id: start.id,
+        list: newList,
+      };
+
+      // Update the state
+      setColumns((state) => ({ ...state, [newCol.id]: newCol }));
+      return null;
+    } else {
+      // If start is different from end, we need to update multiple columns
+      // Filter the start list like before
+      const newStartList = start.list.filter((_, idx) => idx !== source.index);
+
+      // Create a new start column
+      const newStartCol = {
+        id: start.id,
+        list: newStartList,
+      };
+
+      // Make a new end list array
+      const newEndList = end.list;
+
+      // Insert the item into the end list
+      newEndList.splice(destination.index, 0, start.list[source.index]);
+
+      // Create a new end column
+      const newEndCol = {
+        id: end.id,
+        list: newEndList,
+      };
+
+      // Update the state
+      setColumns((state) => ({
+        ...state,
+        [newStartCol.id]: newStartCol,
+        [newEndCol.id]: newEndCol,
+      }));
+      return null;
+    }
+  };
+
+  return (
+    <>
+      <Modal
+        className={classes.modal}
+        open={openModalUploadCategory}
+        onClose={handleCloseUploadCategory}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openModalUploadCategory}>
+          <Paper className={classes.paper}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h5">
+                  Aggiungi una Categoria
+                </Typography>
+              </ListItem>
+            </div>
+
+            <div className={classes.paperBottom}>
+              <Typography variant="h6">Seleziona Una categoria</Typography>
+
+              <div className={classes.divTextarea}>
+                <Typography className={classes.contenuto} variant="h11">
+                  Categoria
+                </Typography>
+              </div>
+              {/* <SelectBar nome="Seleziona" classeName={classes.selectBar} /> */}
+              <FormControl variant="outlined" className={classes.selectBar}>
+                <InputLabel
+                  className={classes.inputLabel}
+                  id="demo-simple-select-outlined-label"
+                ></InputLabel>
+                <Select
+                  onChange={handleChange}
+                  // label="Age"
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Prova1</MenuItem>
+                  <MenuItem value={20}>Prova2</MenuItem>
+                  <MenuItem value={30}>Prova3</MenuItem>
+                </Select>
+              </FormControl>
+
+              <div className={classes.bottoni}>
+                <Button variant="contained" color="primary">
+                  Aggiungi
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+      <Fab color="secondary" aria-label="add" className={classes.margin}>
+        <AddIcon onClick={handleOpenModalUploadCategory} />
+      </Fab>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Grid container direction={"row"} justify={"center"}>
+          {Object.values(columns).map((column) => {
+            console.log(column);
+            return (
+              <Grid item>
+                <Column column={column} key={column.id} />
+              </Grid>
+            );
+          })}
+        </Grid>
+      </DragDropContext>
+    </>
   );
 };
 
@@ -1105,257 +1361,4 @@ const ThirdStep = () => {
   );
 };
 
-const SecondStep = () => {
-  const useStyles = makeStyles((theme) => ({
-    paper: {
-      width: 500,
-      backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    margin: {
-      margin: theme.spacing(1),
-    },
-    extendedIcon: {
-      marginRight: theme.spacing(1),
-    },
-    modal: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    paperModale: {
-      backgroundColor: theme.palette.background.paper,
-      border: "2px solid #000",
-      boxShadow: theme.shadows[5],
-      padding: "5%",
-      width: "fit-content",
-      height: "80%",
-    },
-    paperBottom: {
-      padding: "2%",
-      backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
-      flexDirection: "column",
-      marginTop: "5%",
-    },
-    bottoni: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-around",
-      marginLeft: "55px",
-      marginTop: "4%",
-      marginBottom: "2%",
-    },
-    intestazione: {
-      color: "#47B881",
-      marginTop: "5%",
-      flexDirection: "row",
-    },
-    icon: {
-      transform: "scale(1.8)",
-      color: "#47B881",
-      marginTop: "9px",
-    },
-    selectBar: {
-      width: "50%",
-      height: "100",
-      marginTop: "50px",
-    },
-    divTextarea: {
-      marginTop: "20px",
-    },
-  }));
 
-  const classes = useStyles();
-  const [openModalUploadCategory, setOpenModalUploadCategory] =
-    React.useState(false);
-  const [test, setTest] = React.useState("");
-
-  const handleOpenModalUploadCategory = () => {
-    setOpenModalUploadCategory(true);
-  };
-
-  const handleCloseUploadCategory = () => {
-    setOpenModalUploadCategory(false);
-  };
-  const handleChange = (event) => {
-    setTest(event.target.value);
-  };
-
-  const initialColumns = {
-    Files: {
-      id: "Files",
-      list: [
-        { id: "1", text: "file1" },
-        { id: "2", text: "file2" },
-        { id: "3", text: "file3" },
-        { id: "4", text: "file4" },
-      ],
-    },
-    Chiamato: {
-      id: "Chiamato",
-      list: [
-        // { id: "5", text: "text5" },
-        // { id: "6", text: "text6" },
-      ],
-    },
-    Chiamanti: {
-      id: "Chiamanti",
-      list: [],
-    },
-  };
-
-  const [columns, setColumns] = useState(initialColumns);
-
-  const onDragEnd = ({ source, destination }) => {
-    // Make sure we have a valid destination
-    if (destination === undefined || destination === null) return null;
-
-    // Make sure we're actually moving the item
-    if (
-      source.droppableId === destination.droppableId &&
-      destination.index === source.index
-    )
-      return null;
-
-    // Set start and end variables
-    const start = columns[source.droppableId];
-    const end = columns[destination.droppableId];
-
-    // If start is the same as end, we're in the same column
-    if (start === end) {
-      // Move the item within the list
-      // Start by making a new list without the dragged item
-      console.log(start);
-      const newList = start.list.filter((_, idx) => idx !== source.index);
-
-      // Then insert the item at the right location
-      newList.splice(destination.index, 0, start.list[source.index]);
-
-      // Then create a new copy of the column object
-      const newCol = {
-        id: start.id,
-        list: newList,
-      };
-
-      // Update the state
-      setColumns((state) => ({ ...state, [newCol.id]: newCol }));
-      return null;
-    } else {
-      // If start is different from end, we need to update multiple columns
-      // Filter the start list like before
-      const newStartList = start.list.filter((_, idx) => idx !== source.index);
-
-      // Create a new start column
-      const newStartCol = {
-        id: start.id,
-        list: newStartList,
-      };
-
-      // Make a new end list array
-      const newEndList = end.list;
-
-      // Insert the item into the end list
-      newEndList.splice(destination.index, 0, start.list[source.index]);
-
-      // Create a new end column
-      const newEndCol = {
-        id: end.id,
-        list: newEndList,
-      };
-
-      // Update the state
-      setColumns((state) => ({
-        ...state,
-        [newStartCol.id]: newStartCol,
-        [newEndCol.id]: newEndCol,
-      }));
-      return null;
-    }
-  };
-
-  return (
-    <>
-      <Modal
-        className={classes.modal}
-        open={openModalUploadCategory}
-        onClose={handleCloseUploadCategory}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={openModalUploadCategory}>
-          <Paper className={classes.paper}>
-            <div>
-              <ListItem button>
-                <ListItemIcon>
-                  <BackupIcon className={classes.icon} />
-                </ListItemIcon>
-                <Typography className={classes.intestazione} variant="h5">
-                  Aggiungi una Categoria
-                </Typography>
-              </ListItem>
-            </div>
-
-            <div className={classes.paperBottom}>
-              <Typography variant="h6">Seleziona Una categoria</Typography>
-
-              <div className={classes.divTextarea}>
-                <Typography className={classes.contenuto} variant="h11">
-                  Categoria
-                </Typography>
-              </div>
-              {/* <SelectBar nome="Seleziona" classeName={classes.selectBar} /> */}
-              <FormControl variant="outlined" className={classes.selectBar}>
-                <InputLabel
-                  className={classes.inputLabel}
-                  id="demo-simple-select-outlined-label"
-                ></InputLabel>
-                <Select
-                  onChange={handleChange}
-                  // label="Age"
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Prova1</MenuItem>
-                  <MenuItem value={20}>Prova2</MenuItem>
-                  <MenuItem value={30}>Prova3</MenuItem>
-                </Select>
-              </FormControl>
-
-              <div className={classes.bottoni}>
-                <Button variant="contained" color="primary">
-                  Aggiungi
-                </Button>
-              </div>
-            </div>
-          </Paper>
-        </Fade>
-      </Modal>
-      <Fab color="secondary" aria-label="add" className={classes.margin}>
-        <AddIcon onClick={handleOpenModalUploadCategory} />
-      </Fab>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Grid container direction={"row"} justify={"center"}>
-          {Object.values(columns).map((column) => {
-            console.log(column);
-            return (
-              <Grid item>
-                <Column column={column} key={column.id} />
-              </Grid>
-            );
-          })}
-        </Grid>
-      </DragDropContext>
-    </>
-  );
-};
