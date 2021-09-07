@@ -320,7 +320,7 @@ const GestioneRuoli = () => {
                         required
                         label="Nome"
                         defaultValue= {nome }
-                        disabled={nome === "ADMIN" ? true :  false}
+                        disabled={nome === "ADMIN" || nome === "admin" || nome === "Admin" ? true :  false}
                         helperText={nome !== "" ? "" : "Il Nome è richiesto"}
                       />
                     </Col>

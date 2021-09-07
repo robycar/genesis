@@ -18,11 +18,13 @@ import { Divider } from "@material-ui/core";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
-
+// import { version } from "react-dom";
+import { identifier } from "@babel/types";
+ 
 function Obp() {
   const [data, setData] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
-
+ 
   const [id, setId] = useState();
   const [ip1, setIp1] = useState("");
   const [ip2, setIp2] = useState("");
@@ -32,21 +34,22 @@ function Obp() {
   const [descrizione, setDescrizione] = useState("");
   const [typeLinea, setTypeLinea] = useState([]);
   const [open, setOpen] = React.useState(false);
-
+  const [version, SetVersion] = React.useState(0);
+ 
   /*----Get Type Linea ------*/
-
+ 
   const getAppearLine = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
+ 
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
-
+ 
     fetch(`/api/typeLinea`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -54,7 +57,7 @@ function Obp() {
       })
       .catch((error) => console.log("error", error));
   };
-
+ 
   const aggiornaUtente = () => {
     const invia = () => {
       var myHeaders = new Headers();
@@ -62,27 +65,28 @@ function Obp() {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
       myHeaders.append("Access-Control-Allow-Credentials", "true");
-
+ 
       var raw = JSON.stringify({
         id: id,
+        version: version,
         ipDestinazione: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
         descrizione: descrizione,
         porta: porta === "" ? 5060 : porta,
-
+ 
         // typeLinea: {
         //   id: typeLinea.id,
         // },
-
+ 
         typeLinee: typeLinea,
       });
-
+ 
       var requestOptions = {
         method: "POST",
         headers: myHeaders,
         body: raw,
         redirect: "follow",
       };
-
+ 
       fetch(`/api/obp`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
@@ -90,7 +94,7 @@ function Obp() {
         })
         .catch((error) => console.log("error", error));
     };
-
+ 
     const aggiornaIP = () => {
       if (
         ip1 >= 0 &&
@@ -106,7 +110,7 @@ function Obp() {
         setOpen(false);
       }
     };
-
+ 
     if (ip1 !== "" && ip2 !== "" && ip3 !== "" && ip4 !== "") {
       if (porta === "") {
         setPorta("5060");
@@ -114,11 +118,11 @@ function Obp() {
       if (descrizione === "") {
         setDescrizione(" ");
       }
-
+ 
       aggiornaIP();
     }
   };
-
+ 
   const columns = [
     { title: "ID OBP", field: "id", defaultSort: "desc" },
     {
@@ -146,34 +150,46 @@ function Obp() {
       field: "descrizione",
     },
     {
+      title: "Data di creazione",
+      field: "creationDate",
+    },
+    {
+      title: "Data di modifica",
+      field: "modifiedDate",
+    },
+    {
       title: "Creato da",
-      field: "descrizione",
+      field: "createdBy",
     },
     {
       title: "Modificato da",
-      field: "descrizione",
+      field: "modifiedBy",
+    },
+    {
+      title: "Versione",
+      field: "version",
     },
   ];
-
+ 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-
+ 
   useEffect(() => {
     getObp();
     getAppearLine();
   }, []);
-
+ 
   const getObp = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
+ 
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
-
+ 
     fetch(`/api/obp`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -182,24 +198,25 @@ function Obp() {
       })
       .catch((error) => console.log("error", error));
   };
-
+ 
   const handleOpen = (rowData) => {
     setId(rowData.id);
-
+ 
     var ipAppoggio = rowData.ipDestinazione;
     ipAppoggio = ipAppoggio.split(".");
     setIp1(ipAppoggio[0].replace(".", ""));
     setIp2(ipAppoggio[1].replace(".", ""));
     setIp3(ipAppoggio[2].replace(".", ""));
     setIp4(ipAppoggio[3]);
-
+ 
     setPorta(rowData.porta);
     setDescrizione(rowData.descrizione);
+    SetVersion(rowData.version);
     setTypeLinea([...typeLinea, rowData.typeLinee[0].id]);
     setOpen(true);
     console.log(typeLinea, "type");
   };
-
+ 
   const handleChange = (event) => {
     // if (typeLinea.length < 2) {
     //   setTypeLinea([event.target.value]);
@@ -208,18 +225,18 @@ function Obp() {
     //   [...typeLinea, event.target.value];
     // }
     // console.log(typeLinea, "typeLineaId");
-
+ 
     setTypeLinea(event.target.value);
   };
-
+ 
   const handleRenderValue = (selected) => {
     selected.join(", ");
   };
-
+ 
   const handleClose = () => {
     setOpen(false);
   };
-
+ 
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -232,13 +249,13 @@ function Obp() {
       alignItems: "center",
       justifyContent: "center",
     },
-    paperGrid:{ 
+    paperGrid: {
       margin: theme.spacing(8, 4),
       display: "flex",
       flexDirection: "column",
-      alignItems: "center"
+      alignItems: "center",
     },
-   
+ 
     paperTop: {
       height: "20%",
       display: "flex",
@@ -295,7 +312,7 @@ function Obp() {
     //   width: "fit-content",
     //   height: "80%",
     // },
-    grid:{
+    grid: {
       padding: "5%",
     },
     col: {
@@ -339,11 +356,10 @@ function Obp() {
       display: "flex",
       padding: "4%",
       flexDirection: "column",
-      
     },
   }));
   const classes = useStyles();
-
+ 
   return (
     <div>
       <MaterialTable
@@ -371,18 +387,18 @@ function Obp() {
               myHeaders.append("Content-Type", "application/json");
               myHeaders.append("Access-Control-Allow-Origin", acccessControl);
               myHeaders.append("Access-Control-Allow-Credentials", "true");
-
+ 
               var raw = JSON.stringify({
                 id: oldData.id,
               });
-
+ 
               var requestOptions = {
                 method: "DELETE",
                 headers: myHeaders,
                 body: raw,
                 redirect: "follow",
               };
-
+ 
               fetch(`/api/obp`, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
@@ -414,7 +430,7 @@ function Obp() {
             icon: () => <EditIcon />,
             tooltip: "Edit",
             onClick: (event, rowData) => handleOpen(rowData),
-
+ 
             position: "row",
           },
         ]}
@@ -437,9 +453,17 @@ function Obp() {
         }}
       >
         <Fade in={open}>
-        <Grid  item xs={12} sm={8} md={6} component={Paper} elevation={6} square>
-          {/* <Paper className={classes.paperModale} elevation={1}> */}
-          <div className={classes.paperGrid}>
+          <Grid
+            item
+            xs={12}
+            sm={8}
+            md={6}
+            component={Paper}
+            elevation={6}
+            square
+          >
+            {/* <Paper className={classes.paperModale} elevation={1}> */}
+            <div className={classes.paperGrid}>
               <ListItem button>
                 <Typography className={classes.intestazione} variant="h4">
                   Modifica l'<b>OBP n°{id}</b>
@@ -447,7 +471,7 @@ function Obp() {
               </ListItem>
               <Divider className={classes.divider} />
             </div>
-
+ 
             <Paper className={classes.paperContent} elevation={0}>
               <div className={classes.divIp}>
                 <TextField
@@ -468,7 +492,7 @@ function Obp() {
                   }
                 />
                 <Typography className={classes.separatoreIp}>.</Typography>
-
+ 
                 <TextField
                   className={classes.textFieldIp}
                   error={
@@ -486,7 +510,7 @@ function Obp() {
                   }
                 />
                 <Typography className={classes.separatoreIp}>.</Typography>
-
+ 
                 <TextField
                   className={classes.textFieldIp}
                   error={
@@ -504,7 +528,7 @@ function Obp() {
                   }
                 />
                 <Typography className={classes.separatoreIp}>.</Typography>
-
+ 
                 <TextField
                   className={classes.textFieldIp}
                   error={
@@ -522,7 +546,7 @@ function Obp() {
                   }
                 />
               </div>
-
+ 
               <Row className={classes.row}>
                 <Col className={classes.col}>
                   <TextField
@@ -542,7 +566,7 @@ function Obp() {
                     // }}
                     onChange={(e) => {
                       setTypeLinea(e.target.value);
-
+ 
                       console.log(typeLinea);
                     }}
                     // onChange={handleChange}
@@ -550,15 +574,15 @@ function Obp() {
                     {appearLine.map((linea) => (
                       <MenuItem key={linea.id} value={linea.id}>
                         {/* <Checkbox checked={typeLinea.indexOf(linea.id) > -1} /> */}
-
+ 
                         {linea.descrizione}
-
+ 
                         {/* <ListItemText primary={linea.descrizione} /> */}
                       </MenuItem>
                     ))}
                   </TextField>
                 </Col>
-
+ 
                 <Col className={classes.col}>
                   <TextField
                     error={
@@ -580,7 +604,7 @@ function Obp() {
                   />
                 </Col>
               </Row>
-
+ 
               <Row className={classes.row}>
                 <Col className={classes.col}>
                   <TextField
@@ -623,7 +647,7 @@ function Obp() {
                     disabled="true"
                   />
                 )}
-
+ 
                 <ButtonNotClickedGreen
                   className={classes.bottoneAnnulla}
                   onClick={handleClose}
@@ -631,8 +655,8 @@ function Obp() {
                 />
               </div>
             </Paper>
-          {/* </Paper> */}
-        </Grid>
+            {/* </Paper> */}
+          </Grid>
         </Fade>
       </Modal>
     </div>

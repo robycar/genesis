@@ -7,6 +7,15 @@ import { NavLink } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ModalDescriptionTestSuite from "./ModalDescriptionTestSuite";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import ModalDescriptionTestGeneratore from "../components/ModalDescriptionTestGeneratore"
+
+
+const openVisualizza = (rowData) => {
+  // setModifica(false)
+  // handleOpen(rowData)
+}
+
 
 function TestGeneratoreTable() {
   const columns = [
@@ -124,7 +133,7 @@ function TestGeneratoreTable() {
                 component={NavLink}
                 activeClassName="button-green-active"
                 exact
-                to="/editing/testsuite/createstsuite"
+                to="/editing/testcreatestgeneratore"
                 startIcon={<AddIcon />}
               >
                 TEST GENERATORE{" "}
@@ -134,6 +143,18 @@ function TestGeneratoreTable() {
             // onClick: (event, rowData) => alert("Load Test Suite"),
             isFreeAction: true,
           },
+
+          // {
+          //   icon: (dat) => (
+          //     <a>
+          //       <VisibilityIcon />
+          //     </a>
+          //   ),
+          //   tooltip: "Visualizza tutti i dati",
+          //   position: "row",
+          //   onClick: (event, rowData) => openVisualizza(rowData),
+          // },
+
           {
             icon: () => <EditIcon />,
             tooltip: "Edit",
@@ -148,13 +169,13 @@ function TestGeneratoreTable() {
           //     alert("Ho cliccato " + rowData.launcher),
           //   position: "row",
           // },
-          // {
-          //   icon: () => <ModalDescriptionTestSuite />,
-          //   tooltip: "Image",
-          //   // onClick: (event, rowData) =>
-          //   // alert("Ho cliccato " + rowData.launcher),
-          //   // position: "row",
-          // },
+          {
+            icon: () => <ModalDescriptionTestGeneratore />,
+            tooltip: "Imagenee",
+            // onClick: (event, rowData) =>
+            // alert("Ho cliccato " + rowData.launcher),
+            // position: "row",
+          },
         ]}
         localization={{
           header: {

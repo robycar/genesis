@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,13 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import TextField from "@material-ui/core/TextField";
-
+import { Typography, Fade } from "@material-ui/core";
 import {
   mainListItems,
   secondaryListItems,
@@ -26,15 +20,26 @@ import {
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import { Paper } from "@material-ui/core";
+import { MenuItem, Paper } from "@material-ui/core";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import ModaleCreaTemplate from "../../components/ModaleCreaTemplate";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
-import acccessControl from "../../service/url.js";
-import VerticalStepper from "../../components/VerticalStepper";
-import { useHistory } from "react-router-dom";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import SettingsIcon from "@material-ui/icons/Settings";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
+import acccessControl from "../../service/url";
+import TextField from "@material-ui/core/TextField";
+import Backdrop from "@material-ui/core/Backdrop";
+import Modal from "@material-ui/core/Modal";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import Prova from "../../components/Prova";
 
 const drawerWidth = 240;
 
@@ -124,17 +129,18 @@ const useStyles = makeStyles((theme) => ({
   },
   generalContainer: {
     display: "flex",
+    flexDirection: "column",
     marginTop: "5%",
   },
   paperContainer1: {
     display: "flex",
-    flexDirection: "column",
-    // padding: "20px",
+    flexDirection: "row",
+    padding: "20px",
     marginRight: "8%",
   },
   paperContainer2: {
     flexDirection: "column",
-    // padding: "20px",
+    padding: "20px",
     marginBottom: "10%",
   },
   divSelect: {
@@ -152,7 +158,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2%",
   },
   titolo: {
-    marginBottom: "2%",
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "24px",
+    color: "#66788A",
+    lineHeight: "20px",
+    padding: "2%",
+    // marginTop: "2%",
   },
   InputSelect: {
     width: "364.8px",
@@ -187,155 +199,437 @@ const useStyles = makeStyles((theme) => ({
     padding: "2%",
     alignItems: "center",
   },
-  containerTextField: {
+
+  paper2: {
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(4, 6, 3),
+  },
+  modal: {
     display: "flex",
-    flexWrap: "wrap",
+    marginBottom: "5%",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
+
+  paperBottom: {
+    display: "flex",
+    flexDirection: "column",
+    backgrounColor: "#FFFFFF",
+    justifyContent: "center",
+    marginTop: "5%",
+    marginBottom: "2px",
+    padding: "5%",
   },
-  picker: {
-    marginLeft: "3%",
+
+  intestazione: {
+    color: "#47B881",
+    marginTop: "5%",
+  },
+  icon: {
+    transform: "scale(1.8)",
+    color: "#47B881",
+    marginTop: "8px",
+  },
+  bottoni: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  divider2: {
+    marginTop: "6%",
+    marginBottom: "5%",
   },
 }));
 
+//--------------------------FUNZIONI STEPPER------------------------------
+function getSteps() {
+  return [
+    "Inserire nome test e descrizione",
+    "Impostare Chiamato",
+    "Impostare Chiamante/i",
+    "Template",
+  ];
+}
+
+//--------------------------FINE FUNZIONI STEPPER------------------------------
+
 function EditingTemplateCreaTemplate() {
-  
-  let history = useHistory();
-  
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+
+  const [data, setData] = useState([]);
+  // const [lineaChiamato, setLineaChiamato] = useState();
+  // const [lineaChiamante, setLineaChiamante] = useState();
+  // const [OBPChiamato, setOBPChiamato] = useState();
+  // const [OBPChiamante, setOBPChiamante] = useState();
+  // const [template, setTemplate] = useState();
+
+  // const [fileChiamato, setFileChiamato] = useState();
+  // const [numChiamanti, setNumChiamanti] = useState();
+  // const [appearLinea, setAppearLinea] = useState([]);
+  // const [appearOBP, setAppearOBP] = useState([]);
+  // const [appearTemplate, setAppearTemplate] = useState([]);
+
+  // const [appearFile, setAppearFile] = useState([]);
+  const [openDrawer, setOpenDrawer] = useState([]);
+
+  // const appearChiamanti = [{ valore: "1" }, { valore: "2" }, { valore: "3" }];
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const getTypeId = () => {
+    var myHeaders = new Headers();
 
-  //   const [data, setData] = useState([]);
-  //   const [id, setid] = useState("");
-  const [nome, setNome] = useState("");
-  const [durata, setDurata] = useState("");
-  const [typeTemplate, setTypeTemplate] = useState("");
-  const [descrizione, setDescrizione] = useState("");
-  const [version, setVersion] = useState("");
-  const [createdBy, setCreatedBy] = useState("");
-  const [modifiedBy, setModifiedBy] = useState("");
-  const [creationDate, setCreationDate] = useState("");
-  const [modifiedDate, setModifiedDate] = useState("");
-  //   const [selectedDate, setSelectedDate] = useState("" );
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   const handleDateChange = (date) => {
-  //     setSelectedDate(date);
+    // console.log(bearer.toString());
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  // const getLinea = () => {
+  //   var myHeaders = new Headers();
+
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  //   // console.log(bearer.toString());
+
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
   //   };
 
-  const todayDate = new Date(
-    new Date().toString().split("GMT")[0] + " UTC"
-  ).toISOString();
+  //   fetch(`/api/linea`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setAppearLinea(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
+
+  // const getOBP = () => {
+  //   var myHeaders = new Headers();
+
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  //   // console.log(bearer.toString());
+
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
+
+  //   fetch(`/api/obp`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setAppearOBP(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
+  // const getTemplate = () => {
+  //   var myHeaders = new Headers();
+
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  //   // console.log(bearer.toString());
+
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
+
+  //   fetch(`/api/template`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setAppearTemplate(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
+
+  // const getFile = () => {
+  //   var myHeaders = new Headers();
+
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  //   // console.log(bearer.toString());
+
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
+
+  //   fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setAppearFile(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
+
+  const removeTypeLinea = (id) => {
+    alert("id " + id + " rimosso");
+  };
+
+  useEffect(() => {
+    // getTypeId();
+    // getLinea();
+    // getFile();
+    // getOBP();
+    // getTemplate();
+  }, []);
+
+  // const [ip, setIP] = useState("");
+  // const [ip1, setIP1] = useState("");
+  // const [ip2, setIP2] = useState("");
+  // const [ip3, setIP3] = useState("");
+  // const [ip4, setIP4] = useState("");
+  // const [typeLineaId, setTypeLineaId] = useState(0);
+  const [nome, setNome] = useState("");
+  const [durata, setDurata] = useState(0);
+  const [descrizione, setDescrizione] = useState("");
+  const [tipoTemplate, setTipoTemplate] = useState("");
+  // const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
+
+  const [nextDisabled, setNextDisabled] = useState(true);
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const disabilitaNext = () => {
+    if (activeStep === 0) {
+      if (
+        nome === "" ||
+        durata === "" ||
+        tipoTemplate === ""
+      ) {
+        setNextDisabled(true);
+      } else {
+        setNextDisabled(false);
+      }
+      // } else if (activeStep === 1) {
+      //   if (
+      //     lineaChiamato === null ||
+      //     OBPChiamato === null ||
+      //     numChiamanti === null
+      //   ) {
+      //     setNextDisabled(true);
+      //   } else {
+      //     setNextDisabled(false);
+      //   }
+      // } else if (activeStep === 2) {
+      //   if (lineaChiamante === null || OBPChiamante === null) {
+      //     setNextDisabled(true);
+      //   } else {
+      //     setNextDisabled(false);
+      //   }
+      // }
+      // // da correggere a servizio pronto
+      // else if (activeStep === 3) {
+      //   if (template === "") {
+      //     setNextDisabled(true);
+      //   } else {
+      //     setNextDisabled(false);
+      //   }
+    }
+  };
 
   function salva() {
     const Invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-      var raw = JSON.stringify({
-        nome: nome,
-        durata: durata,
-        descrizione: descrizione,
-        typeTemplate: typeTemplate,
-        version: version,
-        // id: id,
-        creationDate: todayDate,
-        // creationDate: creationDate,
-        modifiedDate: modifiedDate,
-        modifiedBy: modifiedBy,
-        createdBy: createdBy,
-      });
-
-      var requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/template`, requestOptions)
-        .then((response) => response.json())
-        //.then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
-      // localStorage.setItem("user-info", JSON.stringify(result));
-      // history.push("/dashboard/testcase");
-      window.location = "/editing/template";
+      // var myHeaders = new Headers();
+      // myHeaders.append("Authorization", bearer);
+      // myHeaders.append("Content-Type", "application/json");
+      // myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      // myHeaders.append("Access-Control-Allow-Credentials", "true");
+      // var raw = JSON.stringify({
+      //   // ip: ip,
+      //   Nome: nome,
+      //   // password: password,
+      //   descrizione: descrizione,
+      //   // typeLinea: {
+      //   //   id: typeLineaId,
+      //   // },
+      // });
+      // var requestOptions = {
+      //   method: "PUT",
+      //   headers: myHeaders,
+      //   body: raw,
+      //   redirect: "follow",
+      // };
+      // fetch(`/api/linea`, requestOptions)
+      //   .then((response) => response.json())
+      //   .catch((error) => console.log("error", error));
+      // // localStorage.setItem("user-info", JSON.stringify(result));
+      // // history.push("/dashboard/testcase");
+      // window.location = "/editing/linee";
     };
 
     if (
       nome !== "" &&
       durata !== "" &&
-      typeTemplate !== "" &&
       descrizione !== "" &&
-      version !== "" &&
-      createdBy !== "" &&
-      modifiedBy !== "" &&
-      creationDate !== "" &&
-      modifiedDate !== ""
+      tipoTemplate !== ""
     ) {
       Invia();
       // console.log(ip);
     } else {
       if (nome === "") {
+        document.getElementById("alertIP").style.display = "";
+      } else {
+        document.getElementById("alertIP").style.display = "none";
+      }
+      if (durata === "") {
         document.getElementById("alertNome").style.display = "";
       } else {
         document.getElementById("alertNome").style.display = "none";
       }
-      if (durata === "") {
-        document.getElementById("alertDurata").style.display = "";
-      } else {
-        document.getElementById("alertDurata").style.display = "none";
-      }
-      if (typeTemplate === "") {
-        document.getElementById("alertTypeTemplate").style.display = "";
-      } else {
-        document.getElementById("alertTypeTemplate").style.display = "none";
-      }
       if (descrizione === "") {
+        document.getElementById("alertPassword").style.display = "";
+      } else {
+        document.getElementById("alertPassword").style.display = "none";
+      }
+      if (tipoTemplate === "") {
         document.getElementById("alertDescrizione").style.display = "";
       } else {
         document.getElementById("alertDescrizione").style.display = "none";
       }
-      if (version === "") {
-        document.getElementById("alertVersion").style.display = "";
-      } else {
-        document.getElementById("alertVersion").style.display = "none";
-      }
-      if (createdBy === "") {
-        document.getElementById("alertCreatedBy").style.display = "";
-      } else {
-        document.getElementById("alertCreatedBy").style.display = "none";
-      }
-      if (modifiedBy === "") {
-        document.getElementById("alertModifiedBy").style.display = "";
-      } else {
-        document.getElementById("alertModifiedBy").style.display = "none";
-      }
-      if (creationDate === "") {
-        document.getElementById("alertCreationDate").style.display = "";
-      } else {
-        document.getElementById("alertCreationDate").style.display = "none";
-      }
     }
   }
+
+  //--------------------MODALI TYPE LINEE---------------------------------
+
+  const [open, setOpen] = React.useState(false);
+  const [openRemove, setOpenRemove] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpenRemove = () => {
+    setOpenRemove(true);
+  };
+
+  const handleCloseRemove = () => {
+    setOpenRemove(false);
+  };
+
+  //--------------------MODAALE 2----------------------------------
+
+  const [open2, setOpen2] = React.useState(false);
+  const [type, setType] = React.useState("");
+
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  // const checkRichiesta = (result) => {
+  //   console.log(result);
+  //   setTypeLineaId(result.id);
+  // };
+
+  const salva2 = () => {
+    const Invia = () => {
+      // var myHeaders = new Headers();
+      // myHeaders.append("Authorization", bearer);
+      // myHeaders.append("Content-Type", "application/json");
+      // myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      // myHeaders.append("Access-Control-Allow-Credentials", "true");
+      // var raw = JSON.stringify({
+      //   descrizione: type,
+      // });
+      // var requestOptions = {
+      //   method: "PUT",
+      //   headers: myHeaders,
+      //   body: raw,
+      //   redirect: "follow",
+      // };
+      // fetch(`/api/typeLinea`, requestOptions)
+      //   .then((response) => response.json())
+      //   .then((result) => {
+      //     checkRichiesta(result.typeLinea);
+      //     getTypeId();
+      //   })
+      //   .catch((error) => console.log("error", error));
+      // localStorage.setItem("user-info", JSON.stringify(result));
+      // history.push("/dashboard/testcase");
+      //window.location = "/editing/linee";
+    };
+
+    if (type !== "") {
+      Invia();
+      handleClose();
+      handleClose2();
+    } else {
+    }
+  };
+
+  //-----------------------SCRIPT STEPPER------------------------------
+
+  const steps = getSteps();
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
+  // const prova = () => {
+  //   var ciao = new Array(0);
+
+  //   for (let i = 0; i < numChiamanti; i++) {
+  //     ciao.push("");
+  //   }
+  //   console.log(ciao);
+  //   return ciao;
+  // };
 
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
         position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
+        className={clsx(classes.appBar, openDrawer && classes.appBarShift)}
       >
         <Navbar />
       </AppBar>
@@ -343,9 +637,12 @@ function EditingTemplateCreaTemplate() {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          paper: clsx(
+            classes.drawerPaper,
+            !openDrawer && classes.drawerPaperClose
+          ),
         }}
-        open={open}
+        open={openDrawer}
       >
         <div className={classes.toolbarIcon}>
           {/* <IconButton onClick={handleDrawerClose}>
@@ -379,7 +676,7 @@ function EditingTemplateCreaTemplate() {
           >
             LINEE
           </Button>
-          {/* <Button
+          <Button
             className="button-green"
             component={NavLink}
             activeClassName="button-green-active"
@@ -387,7 +684,7 @@ function EditingTemplateCreaTemplate() {
             to="/editing/lineegeneratore"
           >
             LINEE GENERATORE
-          </Button> */}
+          </Button>
           {/* </NavLink> */}
 
           {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -419,7 +716,363 @@ function EditingTemplateCreaTemplate() {
             TEST
           </Button>
         </div>
-        <VerticalStepper />
+
+        {/* ----------------------------CREA TEST generatore---------------------------------------- */}
+
+        <Paper className={classes.paper} elevation={2}>
+          <CreaItem titolo="Crea Template" />
+
+          <Divider className={classes.divider} />
+
+          {/* ------------------------STEP 1--------------------------------- */}
+          <div
+            className={classes.generalContainer}
+            style={{ display: activeStep === 0 ? "" : "none" }}
+          >
+            <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Nome" required>
+                  <Form.Label>Nome</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Nome"
+                    onChange={(e) => {
+                      setNome(e.target.value);
+                      disabilitaNext();
+                    }}
+                    required
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertNome"
+                    style={{ display: "none" }}
+                  >
+                    Nome è richiesto!
+                  </Alert>
+                </Form.Group>
+              </Paper>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Nome">
+                  <Form.Label>Durata</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="number"
+                    placeholder="Inserisci Durata"
+                    onChange={(e) => {
+                      setDurata(e.target.value);
+                      disabilitaNext();
+                    }}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertDescrizione"
+                    style={{ display: "none" }}
+                  >
+                    Durata è richiesta
+                  </Alert>
+                </Form.Group>
+              </Paper>
+            </Paper>
+
+            <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Nome">
+                  <Form.Label>Descrizione</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Descrizione"
+                    onChange={(e) => {
+                      setDescrizione(e.target.value);
+                      disabilitaNext();
+                    }}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertDescrizione"
+                    style={{ display: "none" }}
+                  >
+                    Descizione è richiesta
+                  </Alert>
+                </Form.Group>
+              </Paper>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Nome" required>
+                  <Form.Label>Tipo template</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Tipo template"
+                    onChange={(e) => {
+                      setTipoTemplate(e.target.value);
+                      disabilitaNext();
+                    }}
+                    required
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertNome"
+                    style={{ display: "none" }}
+                  >
+                    Nome è richiesto!
+                  </Alert>
+                </Form.Group>
+              </Paper>
+            </Paper>
+          </div>
+
+          {/* ------------------------STEP 2--------------------------------- */}
+          <div
+            className={classes.generalContainer}
+            style={{ display: activeStep === 1 ? "" : "none" }}
+          >
+            <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Linea chiamato</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Select
+                      id="selectLinea"
+                      // value={lineaChiamato}
+                      // onChange={(e) => setLineaChiamato}
+                    >
+                      {/* {appearLinea.map((linea) => {
+                        return (
+                          <MenuItem key={linea.id} value={linea.id}>
+                            {linea.numero}
+                          </MenuItem>
+                        );
+                      })} */}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertLinea"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare la Linea
+                    </Alert>
+                  </FormControl>
+                </Form.Group>
+              </Paper>
+            </Paper>
+
+            <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group>
+                  <Form.Label>OBP chiamato</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                    required
+                  >
+                    <Select
+                      id="selectOBP"
+                      // value={OBPChiamato}
+                      // onChange={(e) => setOBPChiamato(e.target.value)}
+                      required
+                    >
+                      {/* {appearOBP.map((OBP) => {
+                        return (
+                          <MenuItem key={OBP.id} value={OBP.id}>
+                            {OBP.descrizione}
+                          </MenuItem>
+                        );
+                      })} */}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertOBP"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare l'OBP chiamato
+                    </Alert>
+                  </FormControl>
+                </Form.Group>
+              </Paper>
+            </Paper>
+          </div>
+          {/* ------------------------STEP 3--------------------------------- */}
+          <div
+            className={classes.generalContainer}
+            style={{ display: activeStep === 2 ? "" : "none" }}
+          >
+            <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Linea chiamante n</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Select
+                      id="selectLinea"
+                      // value={lineaChiamante}
+                      // onChange={(e) => setLineaChiamante}
+                    >
+                      {/* da correggere quando avremo le linee chiamanti */}
+                      {/* {appearLinea.map((linea) => {
+                        return (
+                          <MenuItem key={linea.id} value={linea.id}>
+                            {linea.numero}
+                          </MenuItem>
+                        );
+                      })} */}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertLinea"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare la Linea chiamente
+                    </Alert>
+                  </FormControl>
+                </Form.Group>
+              </Paper>
+            </Paper>
+
+            <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group>
+                  <Form.Label>OBP chiamante n</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                    required
+                  >
+                    <Select
+                      id="selectOBP"
+                      // value={OBPChiamante}
+                      // onChange={(e) => setOBPChiamante(e.target.value)}
+                      required
+                    >
+                      {/* {appearOBP.map((OBP) => {
+                        return (
+                          <MenuItem key={OBP.id} value={OBP.id}>
+                            {OBP.descrizione}
+                          </MenuItem>
+                        );
+                      })} */}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertOBP"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare l'OBP chiamante
+                    </Alert>
+                  </FormControl>
+                </Form.Group>
+              </Paper>
+            </Paper>
+          </div>
+
+          {/* ------------------------STEP 4--------------------------------- */}
+          <div
+            className={classes.generalContainer}
+            style={{ display: activeStep === 3 ? "" : "none" }}
+          >
+            <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group>
+                  <Form.Label>Template</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                    required
+                  >
+                    {/* da sistemare quando ci sarà il servizio */}
+                    <Select
+                      id="selectOBP"
+                      // value={template}
+                      // onChange={(e) => setTemplate(e.target.value)}
+                      required
+                    >
+                      {/* {appearTemplate.map((template) => {
+                        return (
+                          <MenuItem key={template.id} value={template.id}>
+                            {template.nome}
+                          </MenuItem>
+                        );
+                      })} */}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertOBP"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare il template
+                    </Alert>
+                  </FormControl>
+                </Form.Group>
+              </Paper>
+            </Paper>
+          </div>
+          <Divider className={classes.divider} />
+
+          {/* -----------------------------------BOTTONI STEP------------------------------------ */}
+          <div className={classes.root}>
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <div>
+              {activeStep === steps.length ? (
+                <div>
+                  <Typography className={classes.instructions}>
+                    All steps completed
+                  </Typography>
+                  <Button onClick={handleReset}>Reset</Button>
+                </div>
+              ) : (
+                <div>
+                  <div>
+                    <Button
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      className={classes.backButton}
+                    >
+                      Back
+                    </Button>
+
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                      disabled={nextDisabled}
+                    >
+                      {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          {/* <div className={classes.bottone}>
+            <ButtonClickedGreen
+              className={classes.bottone}
+              size="medium"
+              nome="Crea"
+              onClick={salva}
+            />
+            <Button
+              component={NavLink}
+              className="button-green-disactive"
+              exact
+              to="/editing/linee"
+              variant="contained"
+              size="medium"
+            >
+              annulla
+            </Button>
+          </div> */}
+        </Paper>
       </main>
     </div>
   );

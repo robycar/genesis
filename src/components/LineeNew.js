@@ -26,7 +26,8 @@ import { makeStyles } from "@material-ui/core/styles";
 function Linee() {
   const [data, setData] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
-
+  const [createdBy, setCreatedBy] = useState(""); 
+  const [modifiedBy, setModifiedBy] = useState("");
   const [id, setId] = useState();
   const [numero, setNumero] = useState("");
   let ip;
@@ -157,11 +158,11 @@ function Linee() {
     },
     {
       title: "Creato da",
-      field: "creatoDa",
+      field: "createdBy",
     },
     {
       title: "Modificato da",
-      field: "modificatoDa",
+      field: "modifiedBy",
     },
   ];
 

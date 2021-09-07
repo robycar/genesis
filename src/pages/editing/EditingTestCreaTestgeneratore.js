@@ -245,12 +245,12 @@ const useStyles = makeStyles((theme) => ({
 
 //--------------------------FUNZIONI STEPPER------------------------------
 function getSteps() {
-  return ['Inserire nome test e descrizione', 'Impostare Chiamato', 'Impostare Chiamante/i'];
+  return ['Inserire nome test e descrizione', 'Impostare Chiamato', 'Impostare Chiamante/i' , 'Template'];
 }
 
 //--------------------------FINE FUNZIONI STEPPER------------------------------
 
-function EditingTestCreaTestCase() {
+function EditingTestCreaTestgeneratore() {
   const classes = useStyles();
 
   const [data, setData] = useState([]);
@@ -263,9 +263,9 @@ function EditingTestCreaTestCase() {
   const [appearFile, setAppearFile] = useState([]);
   const [openDrawer, setOpenDrawer] = useState([]);
 
-  const appearChiamanti = [{ valore: "1" }, { valore: "2" }, { valore: "3" }]
+  const appearChiamanti=[{valore:"1"},{valore:"2"},{valore:"3"}]
 
-  let prova1 = () => {
+  let prova1=()=>{
     console.log("ciao")
   }
   const handleDrawerClose = () => {
@@ -566,51 +566,17 @@ function EditingTestCreaTestCase() {
     setActiveStep(0);
   };
 
-  const prova = () => {
-    var ciao = new Array(0)
+  const prova=()=>{
+  var ciao = new Array(0)
 
-    for (let i = 0; i < numChiamanti; i++) {
-
-      ciao.push("")
-
-
-
-    }
-    console.log(ciao)
-    return (ciao)
+      for (let i = 0; i < numChiamanti; i++) {
+        
+        ciao.push("")
+       
+      }
+      console.log(ciao)
+      return( ciao)
   }
-
-  // const disabilitaNext = () => {
-  //   if (activeStep === 0) {
-  //     if (nome === "") {
-  //       setNextDisabled(true);
-  //     } else {
-  //       setNextDisabled(false)
-  //     }
-  //   }
-  //   else if (activeStep === 1) {
-  //     if ((lineaChiamato === null) || (OBPChiamato === null)) {
-  //       setNextDisabled(true);
-  //     } else {
-  //       setNextDisabled(false)
-  //     }
-  //   }
-  //   else if (activeStep === 2) {
-  //     if ((lineaChiamante === null) || (OBPChiamante === null)) {
-  //       setNextDisabled(true);
-  //     } else {
-  //       setNextDisabled(false)
-  //     }
-  //   }
-  //   // da correggere a servizio pronto
-  //   else if (activeStep === 3) {
-  //     if ((template === "")) {
-  //       setNextDisabled(true);
-  //     } else {
-  //       setNextDisabled(false)
-  //     }
-  //   }
-  // }
 
   return (
     <div className={classes.root}>
@@ -702,10 +668,10 @@ function EditingTestCreaTestCase() {
           </Button>
         </div>
 
-        {/* ----------------------------CREA TEST CASE---------------------------------------- */}
+        {/* ----------------------------CREA TEST generatore---------------------------------------- */}
 
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea TestCase" />
+          <CreaItem titolo="Crea Test Generatore" />
 
           <Divider className={classes.divider} />
 
@@ -713,16 +679,14 @@ function EditingTestCreaTestCase() {
           <div className={classes.generalContainer} style={{ display: activeStep === 0 ? "" : "none" }}>
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Nome">
+                <Form.Group controlId="form.Nome" required>
                   <Form.Label>Nome</Form.Label>
                   <Form.Control
                     className={classes.formControl}
                     type="text"
                     placeholder="Inserisci Nome"
-                    onChange={(e) => {
-                      setNome(e.target.value)
-                      // disabilitaNext()
-                    }}
+                    onChange={(e) => setNome(e.target.value)}
+                    required
                   />
                   <Alert
                     severity="error"
@@ -759,7 +723,7 @@ function EditingTestCreaTestCase() {
           </div>
           {/* ------------------------STEP 2--------------------------------- */}
           <div className={classes.generalContainer} style={{ display: activeStep === 1 ? "" : "none" }}>
-            <Paper className={classes.paperContainer1} elevation={0}>
+          <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Linea</Form.Label>
@@ -789,21 +753,19 @@ function EditingTestCreaTestCase() {
                     </Alert>
                   </FormControl>
                 </Form.Group>
-              </Paper>
-            </Paper>
 
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group >
                   <Form.Label>OBP</Form.Label>
                   <FormControl
                     variant="outlined"
                     className={classes.formControl}
+                    required
                   >
                     <Select
                       id="selectOBP"
                       value={OBPChiamato}
                       onChange={(e) => setOBPChiamato(e.target.value)}
+                      required
                     >
                       {appearOBP.map((OBP) => {
                         return (
@@ -825,23 +787,143 @@ function EditingTestCreaTestCase() {
               </Paper>
             </Paper>
 
+            <Paper className={classes.paperContainer2} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Quanti chiamanti vuoi inserire?</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Select
+                      value={numChiamanti}
+                      onChange={(e) => setNumChiamanti(e.target.value)}
+                      defaultValue={1}
+                    >
+                      {appearChiamanti.map((chiamanti) => {
+                        return (
+                          <MenuItem key={chiamanti.valore} value={chiamanti.valore}>
+                            {chiamanti.valore}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertFile"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare numero chiamanti!
+                    </Alert>
+                  </FormControl>
+                </Form.Group>
+              </Paper>
+            </Paper> 
           </div>
           {/* ------------------------STEP 3--------------------------------- */}
           <div className={classes.generalContainer} style={{ display: activeStep === 2 ? "" : "none" }}>
-            <Typography className={classes.titolo}> Chiamante/i </Typography>
+          
+          <Form.Group controlId="form.Numero">
+            <Form.Label>Linea</Form.Label>
+            <FormControl
+              variant="outlined"
+              className={classes.formControl}
+            >
+              <Select
+                id="selectLinea"
+                value={lineaChiamato}
+                onChange={(e) => setLineaChiamato}
+              >
+                {appearLinea.map((linea) => {
+                  return (
+                    <MenuItem key={linea.id} value={linea.id}>
+                      {linea.numero}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              <Alert
+                severity="error"
+                id="alertLinea"
+                style={{ display: "none" }}
+              >
+                Selezionare la Linea
+              </Alert>
+            </FormControl>
+          </Form.Group>
 
-            {/* <Prova nome={prova1}/> */}
-            {/*             
-            {for (let index = 0; index < array.length; index++) {
-              const element = array[index];
-              
-            }} */}
-            {appearFile.map(() => {
-              <Prova nome={prova1} />
-            })}
+          <Form.Group >
+            <Form.Label>OBP</Form.Label>
+            <FormControl
+              variant="outlined"
+              className={classes.formControl}
+              required
+            >
+              <Select
+                id="selectOBP"
+                value={OBPChiamato}
+                onChange={(e) => setOBPChiamato(e.target.value)}
+                required
+              >
+                {appearOBP.map((OBP) => {
+                  return (
+                    <MenuItem key={OBP.id} value={OBP.id}>
+                      {OBP.descrizione}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              <Alert
+                severity="error"
+                id="alertOBP"
+                style={{ display: "none" }}
+              >
+                Selezionare l'OBP
+              </Alert>
+            </FormControl>
+          </Form.Group>
 
           </div>
 
+          {/* ------------------------STEP 4--------------------------------- */}
+
+          <div className={classes.generalContainer} style={{ display: activeStep === 3 ? "" : "none" }}>
+            <Form.Group >
+              <Form.Label>Template</Form.Label>
+              <FormControl
+                variant="outlined"
+                className={classes.formControl}
+                required
+              >
+
+                {/* da sistemare quando ci sarà il servizio */}
+                <Select
+                  id="selectOBP"
+                  value={OBPChiamato}
+                  onChange={(e) => setOBPChiamato(e.target.value)}
+                  required
+                >
+                  {appearOBP.map((OBP) => {
+                    return (
+                      <MenuItem key={OBP.id} value={OBP.id}>
+                        {OBP.descrizione}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+                <Alert
+                  severity="error"
+                  id="alertOBP"
+                  style={{ display: "none" }}
+                >
+                  Selezionare l'OBP
+                </Alert>
+              </FormControl>
+            </Form.Group>
+              
+
+
+          </div>
           <Divider className={classes.divider} />
 
           {/* -----------------------------------BOTTONI STEP------------------------------------ */}
@@ -901,4 +983,4 @@ function EditingTestCreaTestCase() {
   );
 }
 
-export default EditingTestCreaTestCase;
+export default EditingTestCreaTestgeneratore;

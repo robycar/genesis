@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
 import InputRadio from "./InputRadio";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { Paper, Typography } from "@material-ui/core";
 import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
@@ -24,7 +25,6 @@ import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
 function TestSuiteTable() {
-
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
   if (bearer != null) {
@@ -33,9 +33,9 @@ function TestSuiteTable() {
 
   const [data, setData] = useState([]);
   const [testCase, setTestCase] = useState([]);
-const [file, setFile] = useState([]);
+  const [file, setFile] = useState([]);
   const [id, setId] = useState();
-  const [opzioni, setOpzioni] = useState("")
+  const [opzioni, setOpzioni] = useState("");
   const [nomeTitolo, setNomeTitolo] = useState("");
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
@@ -52,8 +52,6 @@ const [file, setFile] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [appearFile, setAppearFile] = useState([]);
-
-
 
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
@@ -99,7 +97,7 @@ const [file, setFile] = useState([]);
       })
       .catch((error) => console.log("error", error));
   };
-//--------------GET LINE------------------------------
+  //--------------GET LINE------------------------------
   const getAppearLine = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -119,7 +117,7 @@ const [file, setFile] = useState([]);
       })
       .catch((error) => console.log("error", error));
   };
-//--------------GET LINE------------------------------
+  //--------------GET LINE------------------------------
   const getAppearOBP = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -140,7 +138,7 @@ const [file, setFile] = useState([]);
       .catch((error) => console.log("error", error));
   };
 
-//--------------GET FILE------------------------------
+  //--------------GET FILE------------------------------
   const getAppearFile = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -172,7 +170,7 @@ const [file, setFile] = useState([]);
     {
       title: "ID Test",
       field: "id",
-      defaultSort:"desc"
+      defaultSort: "desc",
     },
     {
       title: "Nome",
@@ -208,25 +206,25 @@ const [file, setFile] = useState([]);
     },
     {
       title: "Template",
-  field: "file",
-}
-
-  
+      field: "file",
+    },
   ];
 
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
   const [openChiamato, setOpenChiamato] = React.useState(false);
   const [openChiamanti, setOpenChiamanti] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [idElemento, setIdElemento] = React.useState(0);
 
   const openModifica = (rowData) => {
     setModifica(true);
-    handleOpen(rowData)
-  }
+    handleOpen(rowData);
+  };
   const openVisualizza = (rowData) => {
-    setModifica(false)
-    handleOpen(rowData)
-  }
+    setModifica(false);
+    handleOpen(rowData);
+  };
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
@@ -242,9 +240,47 @@ const [file, setFile] = useState([]);
     setDataCreazione(rowData.creationDate);
     setDataModifica(rowData.modifiedDate);
     setFile(rowData.file);
-    getTestCaseById(rowData.id)
+    getTestCaseById(rowData.id);
+  };
 
+  //------------ funzione cancella
 
+  const functionDelete = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: idElemento,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getAllTestCase();
+      })
+      .catch((error) => console.log("error", error));
+    handleCloseDelete();
+  };
+
+  //------------ funzione apri modale
+
+  const handleOpenDelete = () => {
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
   };
 
   const handleClose = () => {
@@ -258,12 +294,11 @@ const [file, setFile] = useState([]);
   //-----------MODALE CHIAMATO------------------
   const handleOpenChiamato = () => {
     var appoggioChiamato;
-    appoggioChiamato = Object.values(testCase.chiamato)
+    appoggioChiamato = Object.values(testCase.chiamato);
     for (let i = 0; i < appoggioChiamato.length; i++) {
-      chiamato.push(appoggioChiamato[i].id)
-
+      chiamato.push(appoggioChiamato[i].id);
     }
-    console.log(chiamato)
+    console.log(chiamato);
     setOpenChiamato(true);
   };
 
@@ -278,18 +313,18 @@ const [file, setFile] = useState([]);
   //---------MODALE CHIAMANTi--------------------
   const handleOpenChiamanti = () => {
     var appoggioChiamanti;
-    appoggioChiamanti = testCase.chiamanti
+    appoggioChiamanti = testCase.chiamanti;
 
     for (let i = 0; i < appoggioChiamanti.length; i++) {
-      chiamanti[i] = [0, 0, 0, 0]
+      chiamanti[i] = [0, 0, 0, 0];
     }
     for (let i = 0; i < appoggioChiamanti.length; i++) {
-      chiamanti[i][0] = appoggioChiamanti[i]["proxy"].id
-      chiamanti[i][1] = appoggioChiamanti[i]["linea"].id
-      chiamanti[i][2] = appoggioChiamanti[i]["file"].id
-      chiamanti[i][3] = i
+      chiamanti[i][0] = appoggioChiamanti[i]["proxy"].id;
+      chiamanti[i][1] = appoggioChiamanti[i]["linea"].id;
+      chiamanti[i][2] = appoggioChiamanti[i]["file"].id;
+      chiamanti[i][3] = i;
     }
-    console.log(chiamanti)
+    console.log(chiamanti);
     setOpenChiamanti(true);
   };
 
@@ -304,77 +339,72 @@ const [file, setFile] = useState([]);
 
   //-------AGGIORNA TEST CASE----------------------------
 
-const aggiornaTestCase = () => {
+  const aggiornaTestCase = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-var myHeaders = new Headers();
-myHeaders.append("Authorization",bearer);
-myHeaders.append("Content-Type", "application/json");
-myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-var raw = JSON.stringify({
-  id: id,
-  version: 2,
-  expectedDuration: 57,
-  nome: nome,
-  descrizione: descrizione,
-  chiamato: {
-    linea: {
-      id: id
-    },
-    proxy: {
-      id: 1
-    }
-  },
-  chiamanti: [
-    {
-      linea: {
-        id: id
+    var raw = JSON.stringify({
+      id: id,
+      version: 2,
+      expectedDuration: 57,
+      nome: nome,
+      descrizione: descrizione,
+      chiamato: {
+        linea: {
+          id: id,
+        },
+        proxy: {
+          id: 1,
+        },
       },
-      proxy: {
-        id: id
-      }
-    },
-    {
-      linea: {
-        id: id
-      },
-      proxy: {
-        id: id
-      }
-    },
-    {
-      linea: {
-        id : id
-      },
-      proxy: {
-        id: id
-      }
-    }
-  ]
-});
+      chiamanti: [
+        {
+          linea: {
+            id: id,
+          },
+          proxy: {
+            id: id,
+          },
+        },
+        {
+          linea: {
+            id: id,
+          },
+          proxy: {
+            id: id,
+          },
+        },
+        {
+          linea: {
+            id: id,
+          },
+          proxy: {
+            id: id,
+          },
+        },
+      ],
+    });
 
-var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: raw,
-  redirect: 'follow'
-};
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
-fetch(`/api/testcase`, requestOptions)
-  .then(response => response.json())
-  .then((response) => {
-    console.log(response);
-    getAllTestCase();
-  })
-  .catch(error => console.log('error', error));
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        getAllTestCase();
+      })
+      .catch((error) => console.log("error", error));
   };
 
-
-
- 
   //-------VISUALIZZA TUTTI I DATI-----------------------
-
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -401,9 +431,7 @@ fetch(`/api/testcase`, requestOptions)
       flexDirection: "column",
       marginTop: "5%",
     },
-    divSelectBar: {
-      
-    },
+    divSelectBar: {},
     selectBar: {
       width: "50%",
       height: "100",
@@ -435,7 +463,6 @@ fetch(`/api/testcase`, requestOptions)
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-
     },
     divider: {
       marginTop: "3%",
@@ -448,14 +475,23 @@ fetch(`/api/testcase`, requestOptions)
       padding: "5%",
       height: 700,
       width: 800,
-      position: "relative"
+      position: "relative",
+    },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: 400,
+      width: 500,
+      position: "relative",
     },
     contenutoModale: {
       height: 370,
-      overflowX: "hidden"
+      overflowX: "hidden",
     },
     buttonModale: {
-      bottom: 0
+      bottom: 0,
     },
     col: {
       padding: "5%",
@@ -468,6 +504,9 @@ fetch(`/api/testcase`, requestOptions)
     },
     bottoneAnnulla: {
       width: "128px",
+    },
+    typography: {
+      padding: "3%",
     },
   }));
 
@@ -489,36 +528,6 @@ fetch(`/api/testcase`, requestOptions)
           searchFieldAlignment: "left",
           pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
-        editable={{
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              //Backend call
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-              var raw = JSON.stringify({
-                id: oldData.id,
-              });
-
-              var requestOptions = {
-                method: "DELETE",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
-
-              fetch(`/api/testcase`, requestOptions)
-                .then((response) => response.json())
-                .then((result) => {
-                  getAllTestCase()
-                  resolve();
-                })
-                .catch((error) => console.log("error", error));
-            }),
-          }}
         actions={[
           {
             icon: () => (
@@ -531,7 +540,7 @@ fetch(`/api/testcase`, requestOptions)
                   to="/editing/testsuite/createstsuite"
                   startIcon={<AddIcon />}
                 >
-                    TEST SUITE
+                  TEST SUITE
                 </Button>
               </div>
             ),
@@ -556,18 +565,24 @@ fetch(`/api/testcase`, requestOptions)
 
             position: "row",
           },
-         
+          {
+            icon: () => <DeleteIcon />,
+            tooltip: "Remove all selected users",
+            onClick: (event, rowData) => {
+              handleOpenDelete();
+              setIdElemento(rowData.id);
+            },
+          },
         ]}
         localization={{
           header: {
             actions: "Azioni",
           },
-        }}    
-        // options={{
-        //   selection: true
-        // }}
-        // onSelectionChange={(rows) => alert('You selected ' + rows.length + ' rows')}    
+        }}
+        
       />
+      {/*------------------ MODALE VISUALIZZA/MODIFICA -------------*/}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -584,9 +599,10 @@ fetch(`/api/testcase`, requestOptions)
           <div>
             <Paper className={classes.paperModale} elevation={1}>
               <div>
-                <ListItem >
+                <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    {modifica===false ? "Visualizza ":"Modifica "} TestCase <b>{nomeTitolo}</b>
+                    {modifica === false ? "Visualizza " : "Modifica "} Test
+                    Suite <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -594,8 +610,8 @@ fetch(`/api/testcase`, requestOptions)
 
               <Form className={classes.contenutoModale}>
                 <Row>
-                  <Col  className={classes.col}>
-                <TextField
+                  <Col className={classes.col}>
+                    <TextField
                       className={classes.textField}
                       error={nome !== "" ? false : true}
                       onChange={(e) => setNome(e.target.value)}
@@ -606,22 +622,22 @@ fetch(`/api/testcase`, requestOptions)
                         readOnly: modifica === false ? true : false,
                       }}
                     />
-                    </Col>
+                  </Col>
                   <Col className={classes.col}>
-                <TextField
-                       className={classes.textField}
-                       error={versione !== "" ? false : true}
-                       onChange={(e) => setVersione(e.target.value)}
-                       label="Last Percentage OK"
-                       defaultValue={versione}
-                       helperText={versione !== "" ? "" : "Inserire percentage"}
-                       InputProps={{
-                         readOnly: modifica === false ? true : false,
-                       }}
-                    />         
-                </Col>
-                <Col className={classes.col}>
-                <TextField
+                    <TextField
+                      className={classes.textField}
+                      error={versione !== "" ? false : true}
+                      onChange={(e) => setVersione(e.target.value)}
+                      label="Last Percentage OK"
+                      defaultValue={versione}
+                      helperText={versione !== "" ? "" : "Inserire percentage"}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
                       className={classes.textField}
                       error={versione !== "" ? false : true}
                       onChange={(e) => setVersione(e.target.value)}
@@ -631,25 +647,24 @@ fetch(`/api/testcase`, requestOptions)
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
-                    />         
-                </Col>
-                <Col className={classes.col}>
-                  
-                <TextField
-                    className={classes.textField}
-                    error={descrizione !== "" ? false : true}
-                    onChange={(e) => setDescrizione(e.target.value)}
-                    label="Opzioni"
-                    defaultValue={descrizione}
-                    helperText={descrizione !== "" ? "" : "Opzione richiesta"}
-                    InputProps={{
-                      readOnly: modifica === false ? true : false,
-                    }}
-                    />         
-                </Col>
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={descrizione !== "" ? false : true}
+                      onChange={(e) => setDescrizione(e.target.value)}
+                      label="Opzioni"
+                      defaultValue={descrizione}
+                      helperText={descrizione !== "" ? "" : "Opzione richiesta"}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
                 </Row>
 
-                <Row >
+                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -685,14 +700,16 @@ fetch(`/api/testcase`, requestOptions)
                       onChange={(e) => setDescrizione(e.target.value)}
                       label="Descrizione"
                       defaultValue={descrizione}
-                      helperText={descrizione !== "" ? "" : "La descrizione è richiesta"}
+                      helperText={
+                        descrizione !== "" ? "" : "La descrizione è richiesta"
+                      }
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
                   <Col className={classes.col}>
-                  <TextField
+                    <TextField
                       label="Last Result"
                       type="datetime-local"
                       defaultValue={dataCreazione.replace(".000+00:00", "")}
@@ -715,7 +732,7 @@ fetch(`/api/testcase`, requestOptions)
                     /> */}
                   </Col>
                 </Row>
-               
+
                 <Row>
                   <Col className={classes.col}>
                     <TextField
@@ -727,7 +744,7 @@ fetch(`/api/testcase`, requestOptions)
                       }}
                     />
                   </Col>
-                <Col className={classes.col}>
+                  <Col className={classes.col}>
                     <TextField
                       label="Data Creazione"
                       type="datetime-local"
@@ -741,7 +758,6 @@ fetch(`/api/testcase`, requestOptions)
                 </Row>
 
                 <Row>
-                  
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -756,7 +772,10 @@ fetch(`/api/testcase`, requestOptions)
                     <TextField
                       label="Report"
                       type=""
-                      defaultValue={descrizione.replace("www.linkreport.it", "")}
+                      defaultValue={descrizione.replace(
+                        "www.linkreport.it",
+                        ""
+                      )}
                       className={classes.textField}
                       InputProps={{
                         readOnly: true,
@@ -764,7 +783,6 @@ fetch(`/api/testcase`, requestOptions)
                     />
                   </Col>
                 </Row>
-
               </Form>
               <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
@@ -772,11 +790,15 @@ fetch(`/api/testcase`, requestOptions)
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  {modifica === false ? "" : <ButtonClickedGreen
-                    size="medium"
-                    nome="Aggiorna"
-                    onClick={handleClose2}
-                  />}
+                  {modifica === false ? (
+                    ""
+                  ) : (
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      onClick={handleClose2}
+                    />
+                  )}
 
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
@@ -806,22 +828,21 @@ fetch(`/api/testcase`, requestOptions)
       >
         <Fade in={openChiamato}>
           <div>
-            <Paper className={classes.paperModale} >
+            <Paper className={classes.paperModale}>
               <div>
-                <ListItem >
+                <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                  {modifica===false ? "Visualizza ":"Modifica "} Chiamato <b>{nomeTitolo}</b>
+                    {modifica === false ? "Visualizza " : "Modifica "} Chiamato{" "}
+                    <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
 
               <Form className={classes.contenutoModale}>
-
-                <Row >
-                  {chiamato.forEach(element => {
-                    <TextField className={classes.textField} label="prova" />
-
+                <Row>
+                  {chiamato.forEach((element) => {
+                    <TextField className={classes.textField} label="prova" />;
                   })}
 
                   <Col className={classes.col}>
@@ -864,22 +885,24 @@ fetch(`/api/testcase`, requestOptions)
                 </Row>
                 <Row>
                   <Col className={classes.col}>
-                  <TextField
-                          className={classes.textField}
-                          select
-                          onChange={(e) => {chiamanti[1]=e.target.value}}
-                          label="Linea N°"
-                          value={chiamanti[1]}
-                          InputProps={{
-                            readOnly: modifica === false ? true : false,
-                          }}
-                        >
-                          {appearLine.map((typeLinea) => (
-                            <MenuItem key={typeLinea.id} value={typeLinea.id}>
-                              {typeLinea.descrizione}
-                            </MenuItem>
-                          ))}
-                        </TextField>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      onChange={(e) => {
+                        chiamanti[1] = e.target.value;
+                      }}
+                      label="Linea N°"
+                      value={chiamanti[1]}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    >
+                      {appearLine.map((typeLinea) => (
+                        <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                          {typeLinea.descrizione}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   </Col>
                 </Row>
               </Form>
@@ -889,11 +912,15 @@ fetch(`/api/testcase`, requestOptions)
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  {modifica === false ? "" : <ButtonClickedGreen
-                    size="medium"
-                    nome="Aggiorna"
-                    onClick={handleCloseChiamato2}
-                  />}
+                  {modifica === false ? (
+                    ""
+                  ) : (
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      onClick={handleCloseChiamato2}
+                    />
+                  )}
 
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
@@ -924,9 +951,10 @@ fetch(`/api/testcase`, requestOptions)
           <div>
             <Paper className={classes.paperModale} elevation={1}>
               <div>
-                <ListItem >
+                <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                  {modifica===false ? "Visualizza ":"Modifica "} Chiamanti <b>{nomeTitolo}</b>
+                    {modifica === false ? "Visualizza " : "Modifica "} Chiamanti{" "}
+                    <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -938,12 +966,14 @@ fetch(`/api/testcase`, requestOptions)
                     <Typography className={classes.intestazione} variant="h6">
                       Chiamanti <b>{chiamanti[3] + 1}</b>
                     </Typography>
-                    <Row >
+                    <Row>
                       <Col className={classes.col}>
                         <TextField
                           className={classes.textField}
                           select
-                          onChange={(e) => {chiamanti[1]=e.target.value}}
+                          onChange={(e) => {
+                            chiamanti[1] = e.target.value;
+                          }}
                           label="Linea N°"
                           value={chiamanti[1]}
                           InputProps={{
@@ -961,14 +991,16 @@ fetch(`/api/testcase`, requestOptions)
                         <TextField
                           className={classes.textField}
                           select
-                          onChange={(e) => {chiamanti[0]=e.target.value}}
+                          onChange={(e) => {
+                            chiamanti[0] = e.target.value;
+                          }}
                           label="Outboundproxy N°"
                           value={chiamanti[0]}
                           InputProps={{
                             readOnly: modifica === false ? true : false,
                           }}
                         >
-                        {appearOBP.map((obp) => (
+                          {appearOBP.map((obp) => (
                             <MenuItem key={obp.id} value={obp.id}>
                               {obp.descrizione}
                             </MenuItem>
@@ -988,7 +1020,7 @@ fetch(`/api/testcase`, requestOptions)
                             readOnly: modifica === false ? true : false,
                           }}
                         >
-                        {appearFile.map((obp) => (
+                          {appearFile.map((obp) => (
                             <MenuItem key={obp.id} value={obp.id}>
                               {obp.descrizione}
                             </MenuItem>
@@ -1005,17 +1037,72 @@ fetch(`/api/testcase`, requestOptions)
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  {modifica === false ? "" : <ButtonClickedGreen
-                    size="medium"
-                    nome="Aggiorna"
-                    onClick={handleCloseChiamanti2}
-                  />}
+                  {modifica === false ? (
+                    ""
+                  ) : (
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      onClick={handleCloseChiamanti2}
+                    />
+                  )}
 
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseChiamanti}
                     size="medium"
                     nome={modifica === false ? "Indietro" : "Annulla"}
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+      {/* ------------------------MODALE DELETE--------------------- */}
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                <Typography className={classes.intestazione} variant="h4">
+                    Elimina Test                    Suite <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography variant="h6" className={classes.typography}>
+                  L'eliminazione del Test Suite selezionato, comporterà la
+                  cancellazione dei Test Case ad esso associati. 
+                  <br/>
+                  Si vuole
+                  procedere?{" "}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={functionDelete}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
                   />
                 </div>
               </div>
