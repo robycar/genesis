@@ -1,5 +1,7 @@
 package it.reply.sipp.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -19,6 +21,7 @@ import it.reply.sipp.AppError;
 import it.reply.sipp.api.files.payload.FileDTO;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.generic.service.AbstractService;
+import it.reply.sipp.api.test.payload.TemplateCreateFullRequest;
 import it.reply.sipp.api.test.payload.TemplateDTO;
 import it.reply.sipp.api.test.payload.TemplateFileDTO;
 import it.reply.sipp.model.FileSystemScope;
@@ -28,6 +31,7 @@ import it.reply.sipp.model.TemplateFileVO;
 import it.reply.sipp.model.TemplateVO;
 import it.reply.sipp.model.repository.FileSystemRepository;
 import it.reply.sipp.model.repository.TemplateRepository;
+import it.reply.sipp.service.FileSystemService;
 import it.reply.sipp.service.TemplateService;
 
 @Service
@@ -61,6 +65,91 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     
   }
 
+  @Autowired
+  private FileSystemService fileSystemService;
+  
+  @Override
+  public TemplateDTO createAndPopulateTemplate(TemplateCreateFullRequest dto) throws ApplicationException {
+    logger.debug("enter createAndPopulateTemplate");
+    
+    Optional<TemplateVO> existing = templateRepository.findByNome(dto.getNome());
+    if (existing.isPresent()) {
+      throw makeError(HttpStatus.CONFLICT, AppError.TEMPLATE_NAME_ALRADY_EXISTS, dto.getNome());
+    }
+
+    TemplateVO vo = new TemplateVO();
+    vo.init(currentUsername());
+    vo.setDurata(dto.getDurata());
+    vo.setNome(dto.getNome());
+    vo.setTypeTemplate(dto.getTypeTemplate());
+    vo.setDescrizione(dto.getDescrizione());
+    vo.setGruppo(currentGroup());
+    
+    vo = templateRepository.save(vo);
+    
+    //Aggiungo i file
+    if (dto.getFile() != null) {
+      logger.debug("storing {} files", dto.getFile().size());
+      fileSystemService.upload(FileSystemScope.TEMPLATE, vo.getId(), dto.getFile());
+    }
+
+    //Collego chiamante chiamato ai file
+    List<FileSystemVO> templateFolder = fileSystemRepository.findByScopeAndIdRef(FileSystemScope.TEMPLATE, vo.getId());
+    Map<String, FileSystemVO> savedFiles = new HashMap<>();
+    for (FileSystemVO fileVO: templateFolder) {
+      savedFiles.put(fileVO.getPath(), fileVO);
+    }
+    
+    if (vo.getFiles() == null) {
+      vo.setFiles(new ArrayList<>(4));
+    }
+    
+    if (dto.getChiamato() != null) {
+      FileSystemVO fileSystemVO = savedFiles.get(dto.getChiamato());
+      if (fileSystemVO == null) {
+        logger.error("Campo chiamato del template in fase di creazione fa riferimento ad un file inesistente: {}", dto.getChiamato());
+        throw makeError(HttpStatus.NOT_FOUND, AppError.FS_FILE_NOT_FOUND, dto.getChiamato());
+      }
+      
+      TemplateFileVO templateFileVO = new TemplateFileVO();
+      templateFileVO.setCategory(TemplateFileCategory.CHIAMATO);
+      templateFileVO.setFile(fileSystemVO);
+      templateFileVO.setOrder(1);
+      templateFileVO.setTemplate(vo);
+      
+      vo.getFiles().add(templateFileVO);
+
+    }
+    
+    if (dto.getChiamanti() != null) {
+      int order=1;
+      for (String chiamante: dto.getChiamanti()) {
+        FileSystemVO fileSystemVO = savedFiles.get(chiamante);
+        if (fileSystemVO == null) {
+          logger.error("Campo chiamante del template, in fase di creazione, fa riferimenti ad un file inesistente: {}" , chiamante);
+          throw makeError(HttpStatus.NOT_FOUND, AppError.FS_FILE_NOT_FOUND, chiamante);
+        }
+        
+        TemplateFileVO templateFileVO = new TemplateFileVO();
+        templateFileVO.setCategory(TemplateFileCategory.CHIAMANTE);
+        templateFileVO.setFile(fileSystemVO);
+        templateFileVO.setOrder(order++);
+        templateFileVO.setTemplate(vo);
+        
+        vo.getFiles().add(templateFileVO);
+      }
+    }
+    
+    vo = templateRepository.save(vo);
+    
+    TemplateDTO result = new TemplateDTO(vo);
+    mapFileLinks(result, vo);
+    
+    return result;
+    
+  }
+  
+  
   @Override
   public List<TemplateDTO> listTemplate() throws ApplicationException {
     logger.debug("enter listTemplate");
@@ -233,5 +322,7 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     templateRepository.delete(templateVO);
     fileSystemRepository.deleteAllByScopeAndIdRef(FileSystemScope.TEMPLATE, templateVO.getId());
   }
+
+
   
 }

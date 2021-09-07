@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +23,8 @@ import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.generic.payload.PayloadResponse;
 import it.reply.sipp.api.test.payload.TemplateAddRequest;
 import it.reply.sipp.api.test.payload.TemplateAddResponse;
+import it.reply.sipp.api.test.payload.TemplateCreateFullRequest;
+import it.reply.sipp.api.test.payload.TemplateCreateFullResponse;
 import it.reply.sipp.api.test.payload.TemplateDTO;
 import it.reply.sipp.api.test.payload.TemplateListResponse;
 import it.reply.sipp.api.test.payload.TemplateRemoveRequest;
@@ -74,7 +77,22 @@ public class TemplateController extends AbstractController {
 
   
   @PutMapping
-  @PreAuthorize("hasAuthority('FUN_template.edit')")
+  @PreAuthorize("hasAuthority('FUN_template.create')")
+  public ResponseEntity<TemplateCreateFullResponse> createFull(@Valid @ModelAttribute TemplateCreateFullRequest request) {
+    logger.info("enter createFull({})", request);
+    TemplateCreateFullResponse response = new TemplateCreateFullResponse();
+    try {
+      TemplateDTO templateDTO = templateService.createAndPopulateTemplate(request);
+      response.setTemplate(templateDTO);
+      return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+    
+  }
+  
+  @PutMapping("/api/templatesingolo")
+  @PreAuthorize("hasAuthority('FUN_template.create')")
   public ResponseEntity<TemplateAddResponse> add(@Valid @RequestBody(required=true) TemplateAddRequest request) {
     logger.info("enter add({})", request);
     
