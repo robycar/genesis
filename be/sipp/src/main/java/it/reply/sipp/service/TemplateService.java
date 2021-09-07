@@ -3,6 +3,7 @@ package it.reply.sipp.service;
 import java.util.List;
 
 import it.reply.sipp.api.generic.exception.ApplicationException;
+import it.reply.sipp.api.test.payload.TemplateCreateFullRequest;
 import it.reply.sipp.api.test.payload.TemplateDTO;
 import it.reply.sipp.model.TemplateVO;
 
@@ -17,6 +18,15 @@ public interface TemplateService {
    */
   TemplateDTO createTemplate(TemplateDTO dto) throws ApplicationException;
 
+  /**
+   * Crea un nuovo template e lo popola con i file contenuti nel dto di richiesta
+   * @param request il DTO di richiesta
+   * 
+   * @return il template creato
+   * @throws ApplicationException in caso di errori
+   */
+  TemplateDTO createAndPopulateTemplate(TemplateCreateFullRequest requestDTO) throws ApplicationException;
+  
   /**
    * Recupera l'elenco dei template definiti nel sistema
    * @return l'elenco dei template
@@ -50,5 +60,7 @@ public interface TemplateService {
   void removeTemplate(long id) throws ApplicationException;
 
   TemplateVO readVO(long id) throws ApplicationException;
+
+  
 
 }

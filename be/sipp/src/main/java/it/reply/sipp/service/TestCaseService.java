@@ -5,6 +5,7 @@ import java.util.List;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.test.payload.TestCaseDTO;
 import it.reply.sipp.model.LineaVO;
+import it.reply.sipp.model.TestCaseVO;
 
 public interface TestCaseService {
 
@@ -19,5 +20,7 @@ public interface TestCaseService {
   TestCaseDTO updateTestCase(TestCaseDTO testCaseDTO) throws ApplicationException;
 
   List<Long> findTestCaseIdUsingLine(LineaVO lineaVO);
+
+  TestCaseVO readVO(long id) throws ApplicationException;
 
 }
