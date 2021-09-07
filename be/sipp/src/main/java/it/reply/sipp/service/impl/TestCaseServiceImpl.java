@@ -186,7 +186,8 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     testCaseRepository.delete(testCaseVO);
   }
 
-  private TestCaseVO readVO(long id) throws ApplicationException {
+  @Override
+  public TestCaseVO readVO(long id) throws ApplicationException {
     return testCaseRepository.findById(id)
         .orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_NOT_FOUND, id));
   }

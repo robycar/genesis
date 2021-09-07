@@ -21,6 +21,7 @@ import it.reply.sipp.model.repository.LineaRepository;
 import it.reply.sipp.model.repository.OBPRepository;
 import it.reply.sipp.model.repository.TemplateRepository;
 import it.reply.sipp.model.repository.TestCaseRepository;
+import it.reply.sipp.model.repository.TestSuiteRepository;
 import it.reply.sipp.model.repository.UserRepository;
 import it.reply.sipp.service.GruppoService;
 
@@ -45,6 +46,9 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
   
   @Autowired
   private TestCaseRepository testCaseRepository;
+  
+  @Autowired
+  private TestSuiteRepository testSuiteRepository;
 	
 	public GruppoServiceImpl() {
 	}
@@ -175,6 +179,13 @@ public class GruppoServiceImpl extends AbstractService implements GruppoService 
     count = testCaseRepository.countByGruppo(gruppo);
     if (count > 0) {
       logger.error("Trovati {} test case che appartengono al gruppo {}: {}",
+          count, id, gruppo.getNome());
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.GROUP_NOT_EMPTY_IN_DELETE);
+    }
+    
+    count = testSuiteRepository.countByGruppo(gruppo);
+    if (count > 0) {
+      logger.error("Trovate {} test suite che appartengono al gruppo {}: {}",
           count, id, gruppo.getNome());
       throw makeError(HttpStatus.BAD_REQUEST, AppError.GROUP_NOT_EMPTY_IN_DELETE);
     }

@@ -20,7 +20,11 @@ INSERT INTO `FUNZIONE` (`CODICE`, `NOME`, `DESCRIZIONE`) VALUES
 ('template.delete', 'Elimina test Template', 'Consente di eliminare i template dei test definiti nel sistema'),
 ('test.view', 'Mostra Test Case', 'Consente di accedere ai test case'),
 ('test.edit', 'Modifica Test Case', 'Consente di modificare un test case'),
-('test.delete', 'Elimina Test Case', 'Consente di eliminare un test case')
+('test.delete', 'Elimina Test Case', 'Consente di eliminare un test case'),
+('testsuite.view', 'Mostra Test Suite', 'Consente di accedere ad una test suite'),
+('testsuite.edit', 'Modifica Test Suite', 'Consente di modificare una test suite esistente'),
+('testsuite.create', 'Crea Test Suite', 'Consente di creare una nuova test suite'),
+('testsuite.delete', 'Elimina Test Suite', 'Consente di eliminare una test suite esistente')
 ;
 
 INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
