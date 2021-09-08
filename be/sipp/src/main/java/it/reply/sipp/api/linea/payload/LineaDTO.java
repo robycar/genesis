@@ -48,6 +48,18 @@ public class LineaDTO extends TrackedDTO {
 		this.typeLinea = vo.getTypeLinea() == null ? null : new TypeLineaDTO(vo.getTypeLinea());
 		this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
 	}
+  
+  public String getCampiConcatenati() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(this.numero).append(" - ")
+      .append(this.ip).append(" : ")
+      .append(this.porta).append(" - ");
+    if (this.typeLinea != null) {
+      sb.append(this.typeLinea.getDescrizione());
+    }
+    
+    return sb.toString();
+  }
 
 	public Long getId() {
 		return id;

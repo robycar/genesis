@@ -51,6 +51,14 @@ public class OutboundProxyDTO extends TrackedDTO {
     this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
   }
   
+  public String getCampiConcatenati() {
+    return new StringBuilder()
+        .append(this.ipDestinazione)
+        .append(" - ")
+        .append(this.porta)
+        .toString();
+  }
+  
   @Override
   protected void writeFields(StringBuilder sb) {
     writeField(sb, "id", id);
