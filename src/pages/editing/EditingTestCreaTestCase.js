@@ -36,9 +36,9 @@ import acccessControl from "../../service/url";
 import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
 import Prova from "../../components/Prova";
 
 const drawerWidth = 240;
@@ -241,11 +241,19 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "6%",
     marginBottom: "5%",
   },
+  buttonTestContainer: {
+    marginTop: "2%",
+  },
+  
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
 function getSteps() {
-  return ['Inserire nome test e descrizione', 'Impostare Chiamato', 'Impostare Chiamante/i'];
+  return [
+    "Inserire nome test e descrizione",
+    "Impostare Chiamato",
+    "Impostare Chiamante/i",
+  ];
 }
 
 //--------------------------FINE FUNZIONI STEPPER------------------------------
@@ -263,15 +271,16 @@ function EditingTestCreaTestCase() {
   const [appearFile, setAppearFile] = useState([]);
   const [openDrawer, setOpenDrawer] = useState([]);
 
-  const appearChiamanti = [{ valore: "1" }, { valore: "2" }, { valore: "3" }]
+  const appearChiamanti = [{ valore: "1" }, { valore: "2" }, { valore: "3" }];
 
   let prova1 = () => {
-    console.log("ciao")
-  }
+    console.log("ciao");
+  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
+  /*------------ get type linea--------*/
   const getTypeId = () => {
     var myHeaders = new Headers();
 
@@ -294,6 +303,8 @@ function EditingTestCreaTestCase() {
       })
       .catch((error) => console.log("error", error));
   };
+
+  /*------- get linea -----------*/
 
   const getLinea = () => {
     var myHeaders = new Headers();
@@ -318,6 +329,8 @@ function EditingTestCreaTestCase() {
       .catch((error) => console.log("error", error));
   };
 
+  /*--------- get obp ---------*/
+
   const getOBP = () => {
     var myHeaders = new Headers();
 
@@ -336,10 +349,12 @@ function EditingTestCreaTestCase() {
     fetch(`/api/obp`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setAppearOBP(result.list)
+        setAppearOBP(result.list);
       })
       .catch((error) => console.log("error", error));
   };
+
+  /*-------- get template ---------*/
 
   const getFile = () => {
     var myHeaders = new Headers();
@@ -365,8 +380,8 @@ function EditingTestCreaTestCase() {
   };
 
   const removeTypeLinea = (id) => {
-    alert("id " + id + " rimosso")
-  }
+    alert("id " + id + " rimosso");
+  };
 
   useEffect(() => {
     getTypeId();
@@ -505,7 +520,7 @@ function EditingTestCreaTestCase() {
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
   const checkRichiesta = (result) => {
     console.log(result);
-    setTypeLineaId(result.id)
+    setTypeLineaId(result.id);
   };
 
   const salva2 = () => {
@@ -529,8 +544,8 @@ function EditingTestCreaTestCase() {
       fetch(`/api/typeLinea`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-          checkRichiesta(result.typeLinea)
-          getTypeId()
+          checkRichiesta(result.typeLinea);
+          getTypeId();
         })
         .catch((error) => console.log("error", error));
 
@@ -545,8 +560,6 @@ function EditingTestCreaTestCase() {
       handleClose2();
     } else {
     }
-
-
   };
 
   //-----------------------SCRIPT STEPPER------------------------------
@@ -567,50 +580,14 @@ function EditingTestCreaTestCase() {
   };
 
   const prova = () => {
-    var ciao = new Array(0)
+    var ciao = new Array(0);
 
     for (let i = 0; i < numChiamanti; i++) {
-
-      ciao.push("")
-
-
-
+      ciao.push("");
     }
-    console.log(ciao)
-    return (ciao)
-  }
-
-  // const disabilitaNext = () => {
-  //   if (activeStep === 0) {
-  //     if (nome === "") {
-  //       setNextDisabled(true);
-  //     } else {
-  //       setNextDisabled(false)
-  //     }
-  //   }
-  //   else if (activeStep === 1) {
-  //     if ((lineaChiamato === null) || (OBPChiamato === null)) {
-  //       setNextDisabled(true);
-  //     } else {
-  //       setNextDisabled(false)
-  //     }
-  //   }
-  //   else if (activeStep === 2) {
-  //     if ((lineaChiamante === null) || (OBPChiamante === null)) {
-  //       setNextDisabled(true);
-  //     } else {
-  //       setNextDisabled(false)
-  //     }
-  //   }
-  //   // da correggere a servizio pronto
-  //   else if (activeStep === 3) {
-  //     if ((template === "")) {
-  //       setNextDisabled(true);
-  //     } else {
-  //       setNextDisabled(false)
-  //     }
-  //   }
-  // }
+    console.log(ciao);
+    return ciao;
+  };
 
   return (
     <div className={classes.root}>
@@ -625,7 +602,10 @@ function EditingTestCreaTestCase() {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(classes.drawerPaper, !openDrawer && classes.drawerPaperClose),
+          paper: clsx(
+            classes.drawerPaper,
+            !openDrawer && classes.drawerPaperClose
+          ),
         }}
         open={openDrawer}
       >
@@ -700,17 +680,49 @@ function EditingTestCreaTestCase() {
           >
             TEST
           </Button>
+          <div className={classes.buttonTestContainer}>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testCreaTestCase"
+            >
+              TEST CASE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testsuite"
+            >
+              TEST SUITE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testgeneratore"
+            >
+              TEST GENERATORE
+            </Button>
+          </div>
         </div>
 
         {/* ----------------------------CREA TEST CASE---------------------------------------- */}
 
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea TestCase" />
+          <CreaItem titolo="Crea Test Case" />
 
           <Divider className={classes.divider} />
 
           {/* ------------------------STEP 1--------------------------------- */}
-          <div className={classes.generalContainer} style={{ display: activeStep === 0 ? "" : "none" }}>
+          <div
+            className={classes.generalContainer}
+            style={{ display: activeStep === 0 ? "" : "none" }}
+          >
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Nome">
@@ -719,10 +731,7 @@ function EditingTestCreaTestCase() {
                     className={classes.formControl}
                     type="text"
                     placeholder="Inserisci Nome"
-                    onChange={(e) => {
-                      setNome(e.target.value)
-                      // disabilitaNext()
-                    }}
+                    onChange={(e) => setNome(e.target.value)}
                   />
                   <Alert
                     severity="error"
@@ -755,10 +764,12 @@ function EditingTestCreaTestCase() {
                 </Form.Group>
               </Paper>
             </Paper>
-
           </div>
           {/* ------------------------STEP 2--------------------------------- */}
-          <div className={classes.generalContainer} style={{ display: activeStep === 1 ? "" : "none" }}>
+          <div
+            className={classes.generalContainer}
+            style={{ display: activeStep === 1 ? "" : "none" }}
+          >
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
@@ -789,12 +800,8 @@ function EditingTestCreaTestCase() {
                     </Alert>
                   </FormControl>
                 </Form.Group>
-              </Paper>
-            </Paper>
 
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group >
+                <Form.Group>
                   <Form.Label>OBP</Form.Label>
                   <FormControl
                     variant="outlined"
@@ -825,9 +832,74 @@ function EditingTestCreaTestCase() {
               </Paper>
             </Paper>
 
+            <Paper className={classes.paperContainer2} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>File</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Select
+                      value={fileChiamato}
+                      onChange={(e) => setFileChiamato(e.target.value)}
+                    >
+                      {appearFile.map((file) => {
+                        return (
+                          <MenuItem key={file.id} value={file.id}>
+                            {file.path}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertFile"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare un File!
+                    </Alert>
+                  </FormControl>
+                </Form.Group>
+
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Quanti chiamanti vuoi inserire?</Form.Label>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <Select
+                      value={numChiamanti}
+                      onChange={(e) => setNumChiamanti(e.target.value)}
+                    >
+                      {appearChiamanti.map((chiamanti) => {
+                        return (
+                          <MenuItem
+                            key={chiamanti.valore}
+                            value={chiamanti.valore}
+                          >
+                            {chiamanti.valore}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertFile"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare un File!
+                    </Alert>
+                  </FormControl>
+                </Form.Group>
+              </Paper>
+            </Paper>
           </div>
           {/* ------------------------STEP 3--------------------------------- */}
-          <div className={classes.generalContainer} style={{ display: activeStep === 2 ? "" : "none" }}>
+          <div
+            className={classes.generalContainer}
+            style={{ display: activeStep === 2 ? "" : "none" }}
+          >
             <Typography className={classes.titolo}> Chiamante/i </Typography>
 
             {/* <Prova nome={prova1}/> */}
@@ -837,15 +909,26 @@ function EditingTestCreaTestCase() {
               
             }} */}
             {appearFile.map(() => {
-              <Prova nome={prova1} />
+              <Prova nome={prova1} />;
             })}
-
           </div>
 
           <Divider className={classes.divider} />
 
           {/* -----------------------------------BOTTONI STEP------------------------------------ */}
           <div className={classes.root}>
+            <div>
+              <Button
+                variant="contained"
+                color="secondary"
+                component={NavLink}
+                exact
+                to="/editing/testcase"
+                //className={classes.}
+              >
+                Annulla
+              </Button>
+            </div>
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map((label) => (
                 <Step key={label}>
@@ -856,7 +939,9 @@ function EditingTestCreaTestCase() {
             <div>
               {activeStep === steps.length ? (
                 <div>
-                  <Typography className={classes.instructions}>All steps completed</Typography>
+                  <Typography className={classes.instructions}>
+                    All steps completed
+                  </Typography>
                   <Button onClick={handleReset}>Reset</Button>
                 </div>
               ) : (
@@ -869,8 +954,12 @@ function EditingTestCreaTestCase() {
                     >
                       Back
                     </Button>
-                    <Button variant="contained" color="primary" onClick={handleNext}>
-                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                    >
+                      {activeStep === steps.length - 1 ? "Finish" : "Next"}
                     </Button>
                   </div>
                 </div>

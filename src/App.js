@@ -36,7 +36,7 @@ import Login from "./pages/Login";
 import EditingLineeGeneratore from "./pages/editing/EditingLineeGeneratore";
 import EditingTestGeneratore from "./pages/editing/EditingTestGeneratore";
 import EditingLineaCreaLineaGeneratore from "./pages/editing/EditingLineaCreaLineaGeneratore";
-import EditingTestCreaTestgeneratore from "./pages/editing/EditingTestCreaTestgeneratore";
+import EditingTestGeneratoreCreaTestGeneratore from "./pages/editing/EditingTestGeneratoreCreaTestGeneratore";
 
 function App() {
   return (
@@ -99,9 +99,9 @@ function App() {
         />
 
         <Route
-          path="/editing/testcreatestgeneratore"
+          path="/editing/testgeneratore/createstgeneratore"
           exact
-          component={EditingTestCreaTestgeneratore}
+          component={EditingTestGeneratoreCreaTestGeneratore}
         />
 
 

@@ -248,6 +248,8 @@ function TestCaseTable() {
     setOpen(false);
   };
 
+  /*---------MODALE DELETE-------*/
+
   const functionDelete = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -277,12 +279,14 @@ function TestCaseTable() {
 
   //------------ funzione apri modale
 
-  const handleOpenDelete = () => {
+  const handleOpenDelete = (rowData) => {
+    setNome(rowData.nome);
     setOpenDelete(true);
   };
 
   //---------- funzione chiudi modale
   const handleCloseDelete = () => {
+   
     setOpenDelete(false);
   };
 
@@ -395,8 +399,7 @@ function TestCaseTable() {
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
       .then((response) => {
-        console.log("ho cliccato");
-        getAllTestCase();
+               getAllTestCase();
       })
       .catch((error) => console.log("error", error));
   };
@@ -438,7 +441,7 @@ function TestCaseTable() {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
-      height: 400,
+      height: "fit-content",
       width: 500,
       position: "relative",
     },
@@ -570,9 +573,9 @@ function TestCaseTable() {
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Remove all selected users",
+            tooltip: "Remove all selected test",
             onClick: (event, rowData) => {
-              handleOpenDelete();
+              handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
           },
@@ -1134,12 +1137,12 @@ function TestCaseTable() {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Elimina Test Case <b>{nomeTitolo}</b>
+                    Elimina Test Case <b>{nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography variant="h6" className={classes.typography}>
+                <Typography className={classes.typography}>
                   L'eliminazione del Test Case selezionato, comporterà la
                   cancellazione dei Test Suite ad esso collegati.
                   <br />

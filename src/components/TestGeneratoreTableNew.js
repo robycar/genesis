@@ -1,180 +1,581 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import { NavLink } from "react-router-dom";
+import { IconButton, Paper, Typography } from "@material-ui/core";
+import acccessControl from "../service/url.js";
+import Divider from "@material-ui/core/Divider";
+import { MenuItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import ModalDescriptionTestSuite from "./ModalDescriptionTestSuite";
+import AddIcon from "@material-ui/icons/Add";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import ListItem from "@material-ui/core/ListItem";
+import TextField from "@material-ui/core/TextField";
+import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import GetAppIcon from "@material-ui/icons/GetApp";
+import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import ModalDescriptionTestGeneratore from "../components/ModalDescriptionTestGeneratore"
-
-
-const openVisualizza = (rowData) => {
-  // setModifica(false)
-  // handleOpen(rowData)
-}
-
-
-function TestGeneratoreTable() {
+import { NavLink } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+ 
+function TestGeneratoreTableNew() {
+  const [file, setFile] = useState([]);
+  const [data, setData] = useState([]);
+  const [testCase, setTestCase] = useState([]);
+  const [id, setId] = useState();
+  const [nomeTitolo, setNomeTitolo] = useState("");
+  const [nome, setNome] = useState("");
+  const [descrizione, setDescrizione] = useState("");
+  const [version, setVersion] = useState();
+  const [expectedDuration, setExpectedDuration] = useState();
+  const [durata, setDurata] = useState();
+  const [template, setTemplate] = useState("");
+  const [createdBy, setCreatedBy] = useState("");
+  const [modifiedBy, setModifiedBy] = useState("");
+  const [creationDate, setCreationDate] = useState("");
+  const [modifiedDate, setModifiedDate] = useState("");
+  const [chiamato, setChiamato] = useState([]);
+  const [chiamanti, setChiamanti] = useState([]);
+  const [appearLine, setAppearLine] = useState([]);
+  const [appearOBP, setAppearOBP] = useState([]);
+  const [appearFile, setAppearFile] = useState([]);
+ 
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+ 
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+ 
+  //-----------GET TEST CASE----------------------
+  const getAllTestCase = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+ 
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+ 
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+ 
+  //--------------TEST CASE BY ID-----------------------
+  const getTestCaseById = (id) => {
+    var myHeaders = new Headers();
+ 
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+ 
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+ 
+    fetch(`/api/testcase/` + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTestCase(result.testCase);
+        setOpen(true);
+      })
+      .catch((error) => console.log("error", error));
+  };
+  //--------------GET LINE------------------------------
+  const getAppearLine = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+ 
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+ 
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLine(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+  //--------------GET OBP------------------------------
+  const getAppearOBP = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+ 
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+ 
+    fetch(`/api/obp`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearOBP(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+ 
+  //--------------GET TEMPLATE------------------------------
+  const getAppearFile = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+ 
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+ 
+    fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearFile(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+ 
+  useEffect(() => {
+    getAllTestCase();
+    getAppearLine();
+    getAppearOBP();
+    getAppearFile();
+  }, []);
+ 
   const columns = [
-      { title: "Nome Test", field: "name", defaultSort:"desc"},
-      { title: "Template", field: "template" },
-      { title: "Modifcato da", field: "modifiedBy" },
-      {
-        title: "Creato da",
-        field: "createdBy",
-      },
-      { title: "Descrizione", field: "description" },
-
-      { title: "Azienda", field: "azienda" },
-    ],
-    data = [
-      {
-        name: "Test generatore 1",
-        template: "xxx",
-        modifiedBy: "utente1",
-        createdBy: "utente1",
-        description: "xxxx",
-        azienda: "kfguiggf",
-      },
-      {
-        name: "Test generatore 2",
-        template: "xxx",
-        modifiedBy: "utente2",
-        createdBy: "utente3",
-        description: "xxxx",
-        azienda: "kfguiggf",
-      },
-
-      {
-        name: "Test generatore 3",
-        template: "xxx",
-        modifiedBy: "utente4",
-        createdBy: "utente5",
-        description: "xxxx",
-        azienda: "kfguiggf",
-      },
-
-      {
-        name: "Test generatore 4",
-        template: "xxx",
-        modifiedBy: "utente6",
-        createdBy: "utente7",
-        description: "xxxx",
-        azienda: "kfguiggf",
-      },
-      {
-        name: "Test generatore 5",
-        template: "xxx",
-        modifiedBy: "utente8",
-        createdBy: "utente9",
-        description: "xxxx",
-        azienda: "kfguiggf",
-      },
-    ];
-
+    {
+      title: "Nome Test",
+      field: "id",
+      defaultSort: "desc",
+    },
+    {
+      title: "Azienda",
+      field: "nome",
+    },
+    {
+      title: "Descrizione",
+      field: "descrizione",
+    },
+    // {
+    //   title: "Durata Attesa",
+    //   field: "expectedDuration",
+    // },
+    // {
+    //   title: "Versione",
+    //   field: "version",
+    // },
+    {
+      title: "Data Creazione",
+      field: "creationDate",
+    },
+    {
+      title: "Data Modifica",
+      field: "modifiedDate",
+    },
+    {
+      title: "Creato da",
+      field: "createdBy",
+    },
+    {
+      title: "Modificato da",
+      field: "modifiedBy",
+    },
+    {
+      title: "Template",
+      field: "file",
+    },
+    
+  ];
+ 
+  const [open, setOpen] = React.useState(false);
+  const [modifica, setModifica] = React.useState(false);
+  const [openChiamato, setOpenChiamato] = React.useState(false);
+  const [openChiamanti, setOpenChiamanti] = React.useState(false);
+  const [idElemento, setIdElemento] = React.useState(0);
+  const [openDelete, setOpenDelete] = React.useState(false);
+ 
+  const openModifica = (rowData) => {
+    setModifica(true);
+    handleOpen(rowData);
+  };
+  const openVisualizza = (rowData) => {
+    setModifica(false);
+    handleOpen(rowData);
+  };
+ 
+  const handleOpen = (rowData) => {
+    setId(rowData.id);
+    setNomeTitolo(rowData.nome);
+    setNome(rowData.nome);
+    setDescrizione(rowData.descrizione);
+    setVersion(rowData.version);
+    setExpectedDuration(rowData);
+    setDurata(rowData.expectedDuration);
+    setCreatedBy(rowData.createdBy);
+    setModifiedBy(rowData.modifiedBy);
+    setCreationDate(rowData.creationDate);
+    setModifiedDate(rowData.modifiedDate);
+    getTestCaseById(rowData.id);
+  };
+ 
+  const handleClose = () => {
+    setOpen(false);
+  };
+ 
+  const handleClose2 = () => {
+    aggiornaTestCase();
+    setOpen(false);
+  };
+ 
+  const functionDelete = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+ 
+    var raw = JSON.stringify({
+      id: idElemento,
+    });
+ 
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+ 
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getAllTestCase();
+      })
+      .catch((error) => console.log("error", error));
+    handleCloseDelete();
+  };
+ 
+  //------------ funzione apri modale
+ 
+  const handleOpenDelete = () => {
+    setOpenDelete(true);
+  };
+ 
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+ 
+  //-----------MODALE CHIAMATO------------------
+  const handleOpenChiamato = () => {
+    var appoggioChiamato;
+    appoggioChiamato = Object.values(testCase.chiamato);
+    for (let i = 0; i < appoggioChiamato.length; i++) {
+      chiamato.push(appoggioChiamato[i].id);
+    }
+    console.log(chiamato);
+    setOpenChiamato(true);
+  };
+ 
+  const handleCloseChiamato = () => {
+    setOpenChiamato(false);
+  };
+ 
+  const handleCloseChiamato2 = () => {
+    //aggiornaUtente();
+    setOpenChiamato(false);
+  };
+  //---------MODALE CHIAMANTi--------------------
+  const handleOpenChiamanti = () => {
+    var appoggioChiamanti;
+    appoggioChiamanti = testCase.chiamanti;
+ 
+    for (let i = 0; i < appoggioChiamanti.length; i++) {
+      chiamanti[i] = [0, 0, 0, 0];
+    }
+    for (let i = 0; i < appoggioChiamanti.length; i++) {
+      chiamanti[i][0] = appoggioChiamanti[i]["proxy"].id;
+      chiamanti[i][1] = appoggioChiamanti[i]["linea"].id;
+      chiamanti[i][2] = appoggioChiamanti[i]["file"].id;
+      chiamanti[i][3] = i;
+    }
+    console.log(chiamanti);
+    setOpenChiamanti(true);
+  };
+ 
+  const handleCloseChiamanti = () => {
+    setOpenChiamanti(false);
+  };
+ 
+  const handleCloseChiamanti2 = () => {
+    //aggiornaUtente();
+    setOpenChiamanti(false);
+  };
+ 
+  //-------AGGIORNA TEST CASE----------------------------
+ 
+  const aggiornaTestCase = () => {
+ 
+    const invia = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+ 
+    var raw = JSON.stringify({
+      id: id,
+      version: version,
+      expectedDuration: expectedDuration,
+      nome: nome,
+      descrizione: descrizione,
+      // chiamato: {
+      //   linea: {
+      //     id: id,
+      //   },
+      //   proxy: {
+      //     id: 1,
+      //   },
+      // },
+      // chiamanti: [
+      //   {
+      //     linea: {
+      //       id: id,
+      //     },
+      //     proxy: {
+      //       id: id,
+      //     },
+      //   },
+      //   {
+      //     linea: {
+      //       id: id,
+      //     },
+      //     proxy: {
+      //       id: id,
+      //     },
+      //   },
+      //   {
+      //     linea: {
+      //       id: id,
+      //     },
+      //     proxy: {
+      //       id: id,
+      //     },
+      //   },
+      // ],
+    });
+ 
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+ 
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((response) => {
+        console.log("ho cliccato");
+        getAllTestCase();
+      })
+      .catch((error) => console.log("error", error));
+  };
+  invia();
+};
+ 
+  //-------VISUALIZZA TUTTI I DATI-----------------------
+ 
+  const useStyles = makeStyles((theme) => ({
+    paper: {
+      width: 500,
+      backgroundColor: theme.palette.background.paper,
+      // border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    paperTop: {
+      height: "20%",
+      display: "flex",
+      alignItems: "center",
+      //opacity: "25%",
+    },
+    paperBottom: {
+      padding: "2%",
+      backgrounColor: "#FFFFFF",
+      //justifyContent: "center",
+      flexDirection: "column",
+      marginTop: "5%",
+    },
+    divSelectBar: {
+      marginTop: "25px",
+    },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: 400,
+      width: 500,
+      position: "relative",
+    },
+    typography: {
+      padding: "3%",
+    },
+    selectBar: {
+      width: "50%",
+      height: "100",
+      marginTop: "50px",
+    },
+    divTextarea: {
+      marginTop: "20px",
+    },
+    intestazione: {
+      color: "#47B881",
+      marginTop: "5%",
+      flexDirection: "row",
+      marginBottom: "5%",
+    },
+    icon: {
+      transform: "scale(1.8)",
+      color: "#47B881",
+      marginTop: "9px",
+    },
+    bottone: {
+      // display: "flex",
+      // alignItems: "center",
+      // justifyContent: "space-around",
+      marginLeft: "55px",
+      marginTop: "4%",
+      marginBottom: "2%",
+    },
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    iconButton: {
+      marginTop: "2%",
+    },
+    divider: {
+      marginTop: "3%",
+      marginBottom: "5",
+    },
+    paperModale: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: 700,
+      width: 800,
+      position: "relative",
+    },
+    contenutoModale: {
+      height: 370,
+      overflowX: "hidden",
+    },
+    buttonModale: {
+      bottom: 0,
+    },
+    col: {
+      padding: "5%",
+    },
+    row: {
+      width: "600px",
+    },
+    textField: {
+      width: "200px",
+    },
+    bottoneAnnulla: {
+      width: "128px",
+    },
+  }));
+ 
+  const classes = useStyles();
+ 
   return (
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="Total Test Generatore"
+        title="Test Generatore"
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
+          sorting: true,
           actionsColumnIndex: -1,
           search: true,
-          exportButton: true,
           searchFieldVariant: "outlined",
+          filtering: true,
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
-          // filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
-
-        editable={{
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              //Backend call
-              var myHeaders = new Headers();
-              // myHeaders.append("Authorization", bearer);
-              // myHeaders.append("Content-Type", "application/json");
-              // myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              // myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-              var raw = JSON.stringify({
-                id: oldData.id,
-              });
-
-              var requestOptions = {
-                method: "DELETE",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
-
-              // fetch(`/api/obp`, requestOptions)
-              //   .then((response) => response.json())
-              //   .then((result) => {
-              //     getObp();
-              //     resolve();
-              //   })
-              //   .catch((error) => console.log("error", error));
-            }),
-        }}
-
         actions={[
           {
             icon: () => (
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testcreatestgeneratore"
-                startIcon={<AddIcon />}
-              >
-                TEST GENERATORE{" "}
-              </Button>
+              <div className={classes.buttonRight}>
+                <Button
+                  className="button-green"
+                  component={NavLink}
+                  activeClassName="button-green-active"
+                  exact
+                  to="/editing/testgeneratore/createstgeneratore"
+                  startIcon={<AddIcon />}
+                >
+                  TEST GENERATORE
+                </Button>
+              </div>
             ),
-            tooltip: "Load Test Suite",
-            // onClick: (event, rowData) => alert("Load Test Suite"),
+            tooltip: "Load Test Case",
+            //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
-
-          // {
-          //   icon: (dat) => (
-          //     <a>
-          //       <VisibilityIcon />
-          //     </a>
-          //   ),
-          //   tooltip: "Visualizza tutti i dati",
-          //   position: "row",
-          //   onClick: (event, rowData) => openVisualizza(rowData),
-          // },
-
+          {
+            icon: (dat) => (
+              <a>
+                <VisibilityIcon />
+              </a>
+            ),
+            tooltip: "Visualizza tutti i dati",
+            position: "row",
+            onClick: (event, rowData) => openVisualizza(rowData),
+          },
           {
             icon: () => <EditIcon />,
-            tooltip: "Edit",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            tooltip: "Modifica",
+            onClick: (event, rowData) => openModifica(rowData),
             position: "row",
           },
-          // {
-          //   icon: () => <DeleteIcon />,
-          //   tooltip: "Delete",
-          //   onClick: (event, rowData) =>
-          //     alert("Ho cliccato " + rowData.launcher),
-          //   position: "row",
-          // },
           {
-            icon: () => <ModalDescriptionTestGeneratore />,
-            tooltip: "Imagenee",
-            // onClick: (event, rowData) =>
-            // alert("Ho cliccato " + rowData.launcher),
-            // position: "row",
+            icon: () => <DeleteIcon />,
+            tooltip: "Remove all selected users",
+            onClick: (event, rowData) => {
+              handleOpenDelete();
+              setIdElemento(rowData.id);
+            },
           },
         ]}
         localization={{
@@ -182,21 +583,649 @@ function TestGeneratoreTable() {
             actions: "Azioni",
           },
         }}
-
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
+ 
+      {/*------------------ MODALE VISUALIZZA/MODIFICA -------------*/}
+ 
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    {modifica === false ? "Visualizza " : "Modifica "} Test Case{" "}
+                    <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+ 
+              <Form className={classes.contenutoModale}>
+                <Row>
+
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={nome !== "" ? false : true}
+                      onChange={(e) => setNome(e.target.value)}
+                      label="Nome test"
+                      defaultValue={nome}
+                      helperText={nome !== "" ? "" : "Il nome è richiesto"}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+
+                  <Col className={classes.col} >
+                    <TextField
+                      className={classes.textField}
+                      error={nome !== "" ? false : true}
+                      onChange={(e) => setNome(e.target.value)}
+                      label="descrizione"
+                      defaultValue={nome.replace("Eseguito Spesso", "")}
+                      helperText={nome !== "" ? "" : "la descrizione è richiesta"}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+
+                </Row>
+ 
+                <Row>
+
+
+                  <Col className={classes.col} style={{display : modifica === false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      error={descrizione !== "" ? false : true}
+                      onChange={(e) => setDescrizione(e.target.value)}
+                      label="linea chiamante "
+                      defaultValue={descrizione}
+                      helperText={
+                        descrizione !== "" ? "" : "La linea chiamante è richiesta"
+                      }
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col} style={{display : modifica === false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      error={descrizione !== "" ? false : true}
+                      onChange={(e) => setDescrizione(e.target.value)}
+                      label="linea chiamato "
+                      defaultValue={descrizione}
+                      helperText={
+                        descrizione !== "" ? "" : "La linea chiamanto è richiesta"
+                      }
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+
+
+                </Row>
+ 
+              <Row>
+
+                <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      onChange={(e) => setCreatedBy(e.target.value)}
+                      label="path CSV chiamato --scaricabile"
+                      defaultValue={createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      onChange={(e) => setCreatedBy(e.target.value)}
+                      label="path CSV chiamante --scaricabile"
+                      defaultValue={createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      onChange={(e) => setCreatedBy(e.target.value)}
+                      label="Creato Da "
+                      defaultValue={createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      onChange={(e) => setCreationDate(e.target.value)}
+                      label="Data di creazione "
+                      defaultValue={creationDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+
+                </Row>
+
+                {/* <Row>
+                  <Col className={classes.col}>
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome={
+                        modifica === false
+                          ? "vedi chiamato"
+                          : "modifica chiamato"
+                      }
+                      onClick={handleOpenChiamato}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome={
+                        modifica === false
+                          ? "vedi chiamanti"
+                          : "modifica chiamanti"
+                      }
+                      onClick={handleOpenChiamanti}
+                    />
+                  </Col>
+                </Row> */}
+ 
+              <Row>
+
+                <Col className={classes.col} style={{display : modifica === false ? "none" : "flex",}}>
+                  <TextField
+                    className={classes.textField}
+                    error={modifiedDate !== "" ? false : true}
+                    onChange={(e) => setModifiedDate(e.target.value)}
+                    label="OBP chiamante "
+                    defaultValue={modifiedDate}
+                    helperText={
+                      modifiedDate !== ""
+                        ? ""
+                        : "La OBP chiamante è richiesta"
+                    }
+                    InputProps={{
+                      readOnly: modifica === false ? true : false,
+                    }}
+                  />
+                </Col>
+
+                <Col className={classes.col} style={{display : modifica === false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      error={modifiedDate !== "" ? false : true}
+                      onChange={(e) => setModifiedDate(e.target.value)}
+                      label="OBP chiamato "
+                      defaultValue={modifiedDate}
+                      helperText={
+                        modifiedDate !== ""
+                          ? ""
+                          : "La OBP chiamato è richiesta"
+                      }
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+ 
+              </Row>
+ 
+ 
+                <Row>
+                  <Col className={classes.col}  style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      label="last start date "
+                      type=""
+                      //onChange={(e) => setCreationDate(e.target.value)}
+                      // defaultValur={creationDate}
+                      defaultValue={creationDate.replace(".000+00:00", "")}
+                      className={classes.textField}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+
+                  <Col className={classes.col}  style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      //onChange={(e) => setModifiedBy(e.target.value)}
+                      label="last end date "
+                      defaultValue={creationDate.replace(".000+00:00", "")}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      error={version !== "" ? false : true}
+                      onChange={(e) => setVersion(e.target.value)}
+                      // display={{display: modifica === false ? none : flex}}
+                      label="modificato da"
+                      defaultValue={version}
+                      //helperText={versione !== "" ? "" : "Inserire versione"}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}  style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      label="data modifica "
+                      defaultValue={creationDate.replace(".000+00:00", "")}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+
+                </Row>
+
+                <Row>
+                  
+                <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      label="durata "
+                      defaultValue={"30 secondi"}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col> 
+                  
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={template !== "" ? false : true}
+                      onChange={(e) => setTemplate(e.target.value)}
+                      label="Template ---su show scaricabile"
+                      defaultValue={template}
+                      //helperText={template !== "" ? "" : "La Durata è richiesta"}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}  style={{display : modifica !== false ? "none" : "flex",}}>
+                    <TextField
+                      className={classes.textField}
+                      label="last result"
+                      defaultValue={descrizione.replace(
+                        "www.reportistica.it",
+                        ""
+                      )}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+
+                </Row>
+
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  {modifica === false ? (
+                    ""
+                  ) : (
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      onClick={handleClose2}
+                    />
+                  )}
+ 
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleClose}
+                    size="medium"
+                    nome={modifica === false ? "Indietro" : "Annulla"}
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+ 
+      {/* ------------------------MODALE CHIAMATO--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamato}
+        onClose={handleCloseChiamato}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamato}>
+          <div>
+            <Paper className={classes.paperModale}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    {modifica === false ? "Visualizza " : "Modifica "} Chiamato{" "}
+                    <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+ 
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  {chiamato.forEach((element) => {
+                    <TextField className={classes.textField} label="prova" />;
+                  })}
+ 
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      // select
+                      // onChange={(e) => setNome(e.target.value)}
+ 
+                      label="IP Linea/e N°"
+                      defaultValue={chiamato[1]}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                    {/* {appearGroup.map((gruppo) => (
+                      <MenuItem key={gruppo.id} value={gruppo.id}>
+                        {gruppo.nome}
+                      </MenuItem>
+                    ))}
+                  </TextField> */}
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      // select
+                      // onChange={(e) => setNome(e.target.value)}
+                      label="Outboundproxy N°"
+                      defaultValue={chiamato[0]}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                    {/* {appearGroup.map((gruppo) => (
+                      <MenuItem key={gruppo.id} value={gruppo.id}>
+                        {gruppo.nome}
+                      </MenuItem>
+                    ))}
+                  </TextField> */}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      onChange={(e) => {
+                        chiamanti[1] = e.target.value;
+                      }}
+                      label="Linea N°"
+                      value={chiamanti[1]}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    >
+                      {appearLine.map((typeLinea) => (
+                        <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                          {typeLinea.descrizione}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  {modifica === false ? (
+                    ""
+                  ) : (
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      onClick={handleCloseChiamato2}
+                    />
+                  )}
+ 
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamato}
+                    size="medium"
+                    nome={modifica === false ? "Indietro" : "Annulla"}
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+      {/* ------------------------MODALE CHIAMANTi--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamanti}
+        onClose={handleCloseChiamanti}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamanti}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    {modifica === false ? "Visualizza " : "Modifica "} Chiamanti{" "}
+                    <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+ 
+              <Form className={classes.contenutoModale}>
+                {chiamanti.map((chiamanti) => (
+                  <>
+                    <Typography className={classes.intestazione} variant="h6">
+                      Chiamanti <b>{chiamanti[3] + 1}</b>
+                    </Typography>
+                    <Row>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          select
+                          onChange={(e) => {
+                            chiamanti[1] = e.target.value;
+                          }}
+                          label="Linea N°"
+                          value={chiamanti[1]}
+                          InputProps={{
+                            readOnly: modifica === false ? true : false,
+                          }}
+                        >
+                          {appearLine.map((typeLinea) => (
+                            <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                              {typeLinea.descrizione}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Col>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          select
+                          onChange={(e) => {
+                            chiamanti[0] = e.target.value;
+                          }}
+                          label="Outboundproxy N°"
+                          value={chiamanti[0]}
+                          InputProps={{
+                            readOnly: modifica === false ? true : false,
+                          }}
+                        >
+                          {appearOBP.map((obp) => (
+                            <MenuItem key={obp.id} value={obp.id}>
+                              {obp.descrizione}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          // select
+                          // onChange={(e) => setNome(e.target.value)}
+                          label="File N°"
+                          defaultValue={chiamanti[2]}
+                          InputProps={{
+                            readOnly: modifica === false ? true : false,
+                          }}
+                        >
+                          {appearFile.map((obp) => (
+                            <MenuItem key={obp.id} value={obp.id}>
+                              {obp.descrizione}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Col>
+                    </Row>
+                  </>
+                ))}
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  {modifica === false ? (
+                    ""
+                  ) : (
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      onClick={handleCloseChiamanti2}
+                    />
+                  )}
+ 
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamanti}
+                    size="medium"
+                    nome={modifica === false ? "Indietro" : "Annulla"}
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+      {/* ------------------------MODALE DELETE--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Elimina Test Case <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+ 
+                <Typography variant="h6" className={classes.typography}>
+                  L'eliminazione del Test Case selezionato, comporterà la
+                  cancellazione dei Test Suite ad esso collegati.
+                  <br />
+                  Si vuole procedere?{" "}
+                </Typography>
+ 
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={functionDelete}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 }
-export default TestGeneratoreTable;
+export default TestGeneratoreTableNew;
+ 

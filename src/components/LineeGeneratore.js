@@ -12,6 +12,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
 import acccessControl from "../service/url.js";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -24,9 +25,11 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 
 function LineeGeneratore() {
+
   const [data, setData] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
-
+  const [modifiedBy, setModifiedBy] = useState("");
+  const [createdBy, setCreatedBy] = useState("");
   const [id, setId] = useState();
   const [numero, setNumero] = useState("");
   let ip;
@@ -130,11 +133,12 @@ function LineeGeneratore() {
     };
     if (ip !== "") invia();
   };
+
   const columns = [
     { title: "ID Linea", field: "id", defaultSort: "desc" },
     {
       title: "Path Csv",
-      field: "pathCsv",
+      field: "password",
     },
     {
       title: "IP Linea",
@@ -158,19 +162,23 @@ function LineeGeneratore() {
     },
     {
       title: "Creato da",
-      field: "creatoDa",
+      field: "createdBy",
     },
     {
       title: "Modificato da",
-      field: "modificatoDa",
+      field: "modifiedBy",
     },
   ];
 
   const [open, setOpen] = React.useState(false);
+  const [idElemento, setIdElemento] = React.useState(0);
+  const [openDelete, setOpenDelete] = React.useState(false);
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
     setNumero(rowData.numero);
+    setCreatedBy(rowData.createdBy);
+    setModifiedBy(rowData.modifiedBy);
 
     var ipAppoggio = rowData.ip;
     ipAppoggio = ipAppoggio.split(".");
@@ -178,7 +186,6 @@ function LineeGeneratore() {
     setIp2(ipAppoggio[1].replace(".", ""));
     setIp3(ipAppoggio[2].replace(".", ""));
     setIp4(ipAppoggio[3]);
-
     setPorta(rowData.porta);
     setPassword(rowData.password);
     setTypeLinea(rowData.typeLinea.id);
@@ -191,6 +198,48 @@ function LineeGeneratore() {
   };
   const handleClose = () => {
     setOpen(false);
+  };
+
+   /*---------MODALE DELETE-------*/
+
+   const functionDelete = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: idElemento,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/linea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getLinea();
+      })
+      .catch((error) => console.log("error", error));
+    handleCloseDelete();
+  };
+
+  //------------ funzione apri modale
+
+  const handleOpenDelete = (rowData) => {
+    setNumero(rowData.numero);
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+   
+    setOpenDelete(false);
   };
 
   const useStyles = makeStyles((theme) => ({
@@ -261,6 +310,18 @@ function LineeGeneratore() {
       width: "fit-content",
       height: "80%",
     },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
+    typography: {
+      padding: "3%",
+    },
     col: {
       padding: "5%",
     },
@@ -319,36 +380,7 @@ function LineeGeneratore() {
           // columnsButton: true,
           filtering: true,
         }}
-        editable={{
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              //Backend call
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-              var raw = JSON.stringify({
-                id: oldData.id,
-              });
-
-              var requestOptions = {
-                method: "DELETE",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
-
-              fetch(`/api/linea`, requestOptions)
-                .then((response) => response.json())
-                .then((result) => {
-                  getLinea();
-                  resolve();
-                })
-                .catch((error) => console.log("error", error));
-            }),
-        }}
+        
         actions={[
           {
             icon: () => (
@@ -374,6 +406,14 @@ function LineeGeneratore() {
 
             position: "row",
           },
+          {
+            icon: () => <DeleteIcon />,
+            tooltip: "Remove all selected test",
+            onClick: (event, rowData) => {
+              handleOpenDelete(rowData);
+              setIdElemento(rowData.id);
+            },
+          },
         ]}
         localization={{
           header: {
@@ -381,6 +421,7 @@ function LineeGeneratore() {
           },
         }}
       />
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -593,6 +634,56 @@ function LineeGeneratore() {
               </div>
             </Paper>
           </Paper>
+        </Fade>
+      </Modal>
+   
+   {/* ------------------------MODALE DELETE--------------------- */}
+   <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Elimina Linea N° <b>{numero}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography  className={classes.typography}>
+                  L'eliminazione della Linea selezionata, comporterà la
+                  cancellazione del Test Generatore ad essa collegato.
+                  <br />
+                  Si vuole procedere?{" "}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={functionDelete}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
     </div>

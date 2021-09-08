@@ -6,7 +6,8 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import logo from "../../src/assets/logoReply.png";
+import logo from "../../src/assets/genesisLogin.png";
+//import logo from "../../src/assets/logoReply.png";
 import loginImage from "../../src/assets/image.png";
 import { login } from "../service/api";
 import Alert from "@material-ui/lab/Alert";
@@ -64,7 +65,14 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
   logo: {
-    height: "50px",
+    height: "20%",
+    width: "50%",
+  },
+  divLogo: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    // marginLeft: "28%"
   },
   subpaper1: {
     width: "80%",
@@ -182,7 +190,7 @@ export default function Login() {
           {/* <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar> */}
-          <div>
+          <div className={classes.divLogo}>
             <img src={logo} alt="Logo" className={classes.logo} />
           </div>
           {/* <Typography component="h1" variant="h5">

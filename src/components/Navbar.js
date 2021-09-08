@@ -5,7 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import logo from "../assets/logoReply.png";
+import logo from "../assets/genesisLogin.png";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { ButtonGroup } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
     height: 240,
   },
   logo: {
-    height: "50px",
+    height: "54px",
   },
   icon: {
     color: "#47B881",

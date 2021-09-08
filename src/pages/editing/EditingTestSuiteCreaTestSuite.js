@@ -134,8 +134,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "4%",
   },
   bottone: {
-    marginLeft: "80%",
+    display: "flex",
+    marginLeft: "60%",
     marginTop: "2%",
+    flexDirection: "row"
   },
   divider: {
     width: "90%",
@@ -143,7 +145,9 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "1px",
     marginTop: "2%",
   },
-  testSuiteSelect: {},
+  buttonTestContainer: {
+    marginTop: "2%",
+  },
 }));
 
 function EditingTestTestSuiteCreaTestSuite() {
@@ -242,6 +246,35 @@ function EditingTestTestSuiteCreaTestSuite() {
           >
             TEST
           </Button>
+          <div className={classes.buttonTestContainer}>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testCreaTestCase"
+            >
+              TEST CASE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testsuite/creaTestSuite"
+            >
+              TEST SUITE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testgeneratore"
+            >
+              TEST GENERATORE
+            </Button>
+          </div>
         </div>
 
         <Paper className={classes.paper} elevation={2}>
@@ -251,7 +284,7 @@ function EditingTestTestSuiteCreaTestSuite() {
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={2}>
               <Paper className={classes.divSelect} elevation={0}>
-              <Form.Group controlId="form.Numero">
+                <Form.Group controlId="form.Numero">
                   <Form.Label>Nome</Form.Label>
                   <Form.Control
                     className={classes.formControl}
@@ -269,13 +302,13 @@ function EditingTestTestSuiteCreaTestSuite() {
                 </Form.Group>
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
-              <Form.Group controlId="form.Numero">
+                <Form.Group controlId="form.Numero">
                   <Form.Label>Descrizione</Form.Label>
                   <Form.Control
                     className={classes.formControl}
                     type="text"
                     placeholder="Inserisci Descrizione"
-                   // onChange={(e) => setDescrizione(e.target.value)}
+                    // onChange={(e) => setDescrizione(e.target.value)}
                   />
                   <Alert
                     severity="error"
@@ -286,28 +319,40 @@ function EditingTestTestSuiteCreaTestSuite() {
                   </Alert>
                 </Form.Group>
               </Paper>
-                       </Paper>
+            </Paper>
 
             <Paper className={classes.paperContainer2} elevation={2}>
               <Typography>Seleziona i Test Case da associare:</Typography>
               <TestSuiteSelectNew className={classes.testSuiteSelect} />
               <Alert
-                        severity="error"
-                        id="alertTestCase"
-                        style={{ display: "none" }}
-                      >
-                        Selezionare almeno un Test Case da associare!
-                      </Alert>
+                severity="error"
+                id="alertTestCase"
+                style={{ display: "none" }}
+              >
+                Selezionare almeno un Test Case da associare!
+              </Alert>
             </Paper>
           </div>
           <Divider className={classes.divider} />
 
           <div className={classes.bottone}>
-            <ButtonClickedGreen
-              className={classes.bottone}
-              size="medium"
-              nome="Crea"
-            />
+            <Button
+              className="button-green"
+              //component={NavLink}
+              activeClassName="button-green-active"
+            >
+              Crea
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testsuite"
+              //className={classes.}
+            >
+              Annulla
+            </Button>
           </div>
         </Paper>
       </main>

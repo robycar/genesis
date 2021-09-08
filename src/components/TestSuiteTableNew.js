@@ -274,7 +274,8 @@ function TestSuiteTable() {
 
   //------------ funzione apri modale
 
-  const handleOpenDelete = () => {
+  const handleOpenDelete = (rowData) => {
+    setNome(rowData.nome)
     setOpenDelete(true);
   };
 
@@ -482,7 +483,7 @@ function TestSuiteTable() {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
-      height: 400,
+      height: "fit-content",
       width: 500,
       position: "relative",
     },
@@ -569,7 +570,7 @@ function TestSuiteTable() {
             icon: () => <DeleteIcon />,
             tooltip: "Remove all selected users",
             onClick: (event, rowData) => {
-              handleOpenDelete();
+              handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
           },
@@ -1078,7 +1079,7 @@ function TestSuiteTable() {
               <div>
                 <ListItem>
                 <Typography className={classes.intestazione} variant="h4">
-                    Elimina Test                    Suite <b>{nomeTitolo}</b>
+                    Elimina Test Suite <b>{nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />

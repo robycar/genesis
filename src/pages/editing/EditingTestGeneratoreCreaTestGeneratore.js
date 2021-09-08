@@ -36,9 +36,9 @@ import acccessControl from "../../service/url";
 import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 import Prova from "../../components/Prova";
 
 const drawerWidth = 240;
@@ -129,12 +129,11 @@ const useStyles = makeStyles((theme) => ({
   },
   generalContainer: {
     display: "flex",
-    flexDirection: "column",
     marginTop: "5%",
   },
   paperContainer1: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     padding: "20px",
     marginRight: "8%",
   },
@@ -242,44 +241,42 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "6%",
     marginBottom: "5%",
   },
-  input: {
-    display: "none",
+  buttonTestContainer: {
+    marginTop: "2%",
   },
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
 function getSteps() {
-  return [
-    "Inserire nome durata tipo template e descrizione",
-    "Carica i files XML",
-    "Gestisci i files XML",
-    // "Template",
-  ];
+  return ['Inserire nome test e descrizione', 'Impostare Chiamato', 'Impostare Chiamante/i' , 'Template'];
 }
 
 //--------------------------FINE FUNZIONI STEPPER------------------------------
 
-function EditingTemplateCreaTemplate() {
+function EditingTestGeneratoreCreaTestGeneratore() {
   const classes = useStyles();
 
   const [data, setData] = useState([]);
+  const [lineaChiamato, setLineaChiamato] = useState();
+  const [lineaChiamante, setLineaChiamante] = useState();
+  const [OBPChiamato, setOBPChiamato] = useState();
+  const [OBPChiamante, setOBPChiamante] = useState();
+  const [template, setTemplate] = useState();
+
+  const [fileChiamato, setFileChiamato] = useState();
+  const [numChiamanti, setNumChiamanti] = useState();
+  const [appearLinea, setAppearLinea] = useState([]);
+  const [appearOBP, setAppearOBP] = useState([]);
+  const [appearTemplate, setAppearTemplate] = useState([]);
+
+  const [appearFile, setAppearFile] = useState([]);
   const [openDrawer, setOpenDrawer] = useState([]);
-  const [nome, setNome] = useState("");
-  const [durata, setDurata] = useState(0);
-  const [descrizione, setDescrizione] = useState("");
-  const [tipoTemplate, setTipoTemplate] = useState("");
-  const [selectedFile, setSelectedFile] = useState();
-  const [isSelected, setIsSelected] = useState(false);
-  const [nextDisabled, setNextDisabled] = useState(true);
-  const [activeStep, setActiveStep] = React.useState(0);
 
-  const changeHandler = (event) => {
-    setSelectedFile(event.target.files[0]);
-    setIsSelected(true);
-  };
+  const appearChiamanti=[{valore:"1"},{valore:"2"},{valore:"3"}]
 
-  const handleSubmission = () => {};
-
+  let prova1=()=>{
+    console.log("ciao")
+  }
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -307,224 +304,230 @@ function EditingTemplateCreaTemplate() {
       .catch((error) => console.log("error", error));
   };
 
-  // const getLinea = () => {
-  //   var myHeaders = new Headers();
+  const getLinea = () => {
+    var myHeaders = new Headers();
 
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   // console.log(bearer.toString());
+    // console.log(bearer.toString());
 
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  //   fetch(`/api/linea`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearLinea(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
+    fetch(`/api/linea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLinea(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
-  // const getOBP = () => {
-  //   var myHeaders = new Headers();
+  const getOBP = () => {
+    var myHeaders = new Headers();
 
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   // console.log(bearer.toString());
+    // console.log(bearer.toString());
 
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  //   fetch(`/api/obp`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearOBP(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
-  // const getTemplate = () => {
-  //   var myHeaders = new Headers();
+    fetch(`/api/obp`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearOBP(result.list)
+      })
+      .catch((error) => console.log("error", error));
+  };
+  const getTemplate = () => {
+    var myHeaders = new Headers();
 
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   // console.log(bearer.toString());
+    // console.log(bearer.toString());
 
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  //   fetch(`/api/template`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearTemplate(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
+    fetch(`/api/template`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearTemplate(result.list)
+      })
+      .catch((error) => console.log("error", error));
+  };
 
-  // const getFile = () => {
-  //   var myHeaders = new Headers();
+  const getFile = () => {
+    var myHeaders = new Headers();
 
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   // console.log(bearer.toString());
+    // console.log(bearer.toString());
 
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  //   fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearFile(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
+    fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearFile(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   const removeTypeLinea = (id) => {
-    alert("id " + id + " rimosso");
-  };
+    alert("id " + id + " rimosso")
+  }
 
   useEffect(() => {
-    // getTypeId();
-    // getLinea();
-    // getFile();
-    // getOBP();
-    // getTemplate();
+    getTypeId();
+    getLinea();
+    getFile();
+    getOBP();
+    getTemplate();
   }, []);
 
-  // const [ip, setIP] = useState("");
-  // const [ip1, setIP1] = useState("");
-  // const [ip2, setIP2] = useState("");
-  // const [ip3, setIP3] = useState("");
-  // const [ip4, setIP4] = useState("");
-  // const [typeLineaId, setTypeLineaId] = useState(0);
+  const [ip, setIP] = useState("");
+  const [ip1, setIP1] = useState("");
+  const [ip2, setIP2] = useState("");
+  const [ip3, setIP3] = useState("");
+  const [ip4, setIP4] = useState("");
+  const [nome, setNome] = useState("");
+  const [password, setPassword] = useState("");
+  const [descrizione, setDescrizione] = useState("");
+  const [typeLineaId, setTypeLineaId] = useState(0);
+  const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
-  // const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
+  const [ nextDisabled , setNextDisabled] = useState(true);
+  const [activeStep, setActiveStep] = React.useState(0);
 
-  const handleChangeName = (e) => {
-    setNome(e.target.value);
-    console.log(e.target.value);
-  };
-  const handleChangeDurata = (e) => {
-    setDurata(e.target.value);
-    console.log(e.target.value);
-  };
-  const handleChangeDescrizione = (e) => {
-    setDescrizione(e.target.value);
-    console.log(e.target.value);
-  };
-  const handleChangeTipoTemplate = (e) => {
-    setTipoTemplate(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const disabilitaNext = () => {
-    if (activeStep === 0) {
-      if (nome === "" || durata === "" || tipoTemplate === "") {
+    const disabilitaNext =() => {
+    if (activeStep === 0 ){
+      if(( nome === "") ){
         setNextDisabled(true);
-      } else {
-        setNextDisabled(false);
+      }else {
+        setNextDisabled(false)
       }
-      // } else if (activeStep === 1) {
-      //   if (
-      //     lineaChiamato === null ||
-      //     OBPChiamato === null ||
-      //     numChiamanti === null
-      //   ) {
-      //     setNextDisabled(true);
-      //   } else {
-      //     setNextDisabled(false);
-      //   }
-      // } else if (activeStep === 2) {
-      //   if (lineaChiamante === null || OBPChiamante === null) {
-      //     setNextDisabled(true);
-      //   } else {
-      //     setNextDisabled(false);
-      //   }
-      // }
-      // // da correggere a servizio pronto
-      // else if (activeStep === 3) {
-      //   if (template === "") {
-      //     setNextDisabled(true);
-      //   } else {
-      //     setNextDisabled(false);
-      //   }
+    }
+    else if( activeStep === 1){
+      if(( lineaChiamato === null)||( OBPChiamato === null )||( numChiamanti === null) ){
+        setNextDisabled(true);
+      }else {
+        setNextDisabled(false)
+      }
+    }
+    else if( activeStep === 2){
+      if(( lineaChiamante === null)||( OBPChiamante === null ) ){
+        setNextDisabled(true);
+      }else {
+        setNextDisabled(false)
+      }
+    }
+    // da correggere a servizio pronto
+    else if( activeStep === 3){
+      if(( template === "")){
+        setNextDisabled(true);
+      }else {
+        setNextDisabled(false)
+      }
+    }
+}
+
+  const aggiornaIP = () => {
+    if (
+      ip1 !== "" &&
+      //ip1.length < 5 &&
+      ip2 !== "" &&
+      //ip2.length < 5 &&
+      ip3 !== "" &&
+      //ip3 < 5 &&
+      ip4 !== ""
+      //ip4.length < 5
+    ) {
+      setIP(ip1 + "." + ip2 + "." + ip3 + "." + ip4);
+      console.log(ip, "ip okay");
     }
   };
 
   function salva() {
     const Invia = () => {
-      // var myHeaders = new Headers();
-      // myHeaders.append("Authorization", bearer);
-      // myHeaders.append("Content-Type", "application/json");
-      // myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      // myHeaders.append("Access-Control-Allow-Credentials", "true");
-      // var raw = JSON.stringify({
-      //   // ip: ip,
-      //   Nome: nome,
-      //   // password: password,
-      //   descrizione: descrizione,
-      //   // typeLinea: {
-      //   //   id: typeLineaId,
-      //   // },
-      // });
-      // var requestOptions = {
-      //   method: "PUT",
-      //   headers: myHeaders,
-      //   body: raw,
-      //   redirect: "follow",
-      // };
-      // fetch(`/api/linea`, requestOptions)
-      //   .then((response) => response.json())
-      //   .catch((error) => console.log("error", error));
-      // // localStorage.setItem("user-info", JSON.stringify(result));
-      // // history.push("/dashboard/testcase");
-      // window.location = "/editing/linee";
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var raw = JSON.stringify({
+        ip: ip,
+        Nome: nome,
+        password: password,
+        descrizione: descrizione,
+        typeLinea: {
+          id: typeLineaId,
+        },
+      });
+
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/linea`, requestOptions)
+        .then((response) => response.json())
+        .catch((error) => console.log("error", error));
+
+      // localStorage.setItem("user-info", JSON.stringify(result));
+      // history.push("/dashboard/testcase");
+      window.location = "/editing/linee";
     };
 
     if (
+      ip !== "" &&
       nome !== "" &&
-      durata !== "" &&
+      password !== "" &&
       descrizione !== "" &&
-      tipoTemplate !== ""
+      typeLineaId !== ""
     ) {
       Invia();
       // console.log(ip);
     } else {
-      if (nome === "") {
+      if (ip === "") {
         document.getElementById("alertIP").style.display = "";
       } else {
         document.getElementById("alertIP").style.display = "none";
       }
-      if (durata === "") {
+      if (nome === "") {
         document.getElementById("alertNome").style.display = "";
       } else {
         document.getElementById("alertNome").style.display = "none";
       }
-      if (descrizione === "") {
+      if (password === "") {
         document.getElementById("alertPassword").style.display = "";
       } else {
         document.getElementById("alertPassword").style.display = "none";
       }
-      if (tipoTemplate === "") {
+      if (descrizione === "") {
         document.getElementById("alertDescrizione").style.display = "";
       } else {
         document.getElementById("alertDescrizione").style.display = "none";
@@ -567,34 +570,37 @@ function EditingTemplateCreaTemplate() {
   };
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-  // const checkRichiesta = (result) => {
-  //   console.log(result);
-  //   setTypeLineaId(result.id);
-  // };
+  const checkRichiesta = (result) => {
+    console.log(result);
+    setTypeLineaId(result.id)
+  };
 
   const salva2 = () => {
     const Invia = () => {
-      // var myHeaders = new Headers();
-      // myHeaders.append("Authorization", bearer);
-      // myHeaders.append("Content-Type", "application/json");
-      // myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      // myHeaders.append("Access-Control-Allow-Credentials", "true");
-      // var raw = JSON.stringify({
-      //   descrizione: type,
-      // });
-      // var requestOptions = {
-      //   method: "PUT",
-      //   headers: myHeaders,
-      //   body: raw,
-      //   redirect: "follow",
-      // };
-      // fetch(`/api/typeLinea`, requestOptions)
-      //   .then((response) => response.json())
-      //   .then((result) => {
-      //     checkRichiesta(result.typeLinea);
-      //     getTypeId();
-      //   })
-      //   .catch((error) => console.log("error", error));
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var raw = JSON.stringify({
+        descrizione: type,
+      });
+
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/typeLinea`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          checkRichiesta(result.typeLinea)
+          getTypeId()
+        })
+        .catch((error) => console.log("error", error));
+
       // localStorage.setItem("user-info", JSON.stringify(result));
       // history.push("/dashboard/testcase");
       //window.location = "/editing/linee";
@@ -606,10 +612,13 @@ function EditingTemplateCreaTemplate() {
       handleClose2();
     } else {
     }
+
+
   };
 
   //-----------------------SCRIPT STEPPER------------------------------
 
+  
   const steps = getSteps();
 
   const handleNext = () => {
@@ -624,15 +633,17 @@ function EditingTemplateCreaTemplate() {
     setActiveStep(0);
   };
 
-  // const prova = () => {
-  //   var ciao = new Array(0);
+  const prova=()=>{
+  var ciao = new Array(0)
 
-  //   for (let i = 0; i < numChiamanti; i++) {
-  //     ciao.push("");
-  //   }
-  //   console.log(ciao);
-  //   return ciao;
-  // };
+      for (let i = 0; i < numChiamanti; i++) {
+        
+        ciao.push("")
+       
+      }
+      console.log(ciao)
+      return( ciao)
+  }
 
   return (
     <div className={classes.root}>
@@ -647,10 +658,7 @@ function EditingTemplateCreaTemplate() {
       <Drawer
         variant="permanent"
         classes={{
-          paper: clsx(
-            classes.drawerPaper,
-            !openDrawer && classes.drawerPaperClose
-          ),
+          paper: clsx(classes.drawerPaper, !openDrawer && classes.drawerPaperClose),
         }}
         open={openDrawer}
       >
@@ -725,20 +733,46 @@ function EditingTemplateCreaTemplate() {
           >
             TEST
           </Button>
+          <div className={classes.buttonTestContainer}>
+              <Button
+                className="button-green"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testCreaTestCase"
+              >
+                TEST CASE
+              </Button>
+              <Button
+                className="button-green"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testsuite"
+              >
+                TEST SUITE
+              </Button>
+              <Button
+                className="button-green"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testgeneratore/createstgeneratore"
+              >
+                TEST GENERATORE
+              </Button>
+            </div>
         </div>
 
         {/* ----------------------------CREA TEST generatore---------------------------------------- */}
 
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Template" />
+          <CreaItem titolo="Crea Test Generatore" />
 
           <Divider className={classes.divider} />
 
           {/* ------------------------STEP 1--------------------------------- */}
-          <div
-            className={classes.generalContainer}
-            style={{ display: activeStep === 0 ? "" : "none" }}
-          >
+          <div className={classes.generalContainer} style={{ display: activeStep === 0 ? "" : "none" }}>
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Nome" required>
@@ -747,10 +781,9 @@ function EditingTemplateCreaTemplate() {
                     className={classes.formControl}
                     type="text"
                     placeholder="Inserisci Nome"
-                    onChange={(e) => {
-                      handleChangeName(e);
-                      disabilitaNext();
-                    }}
+                    onChange={(e) =>   { 
+                      setNome(e.target.value)   
+                      disabilitaNext()  }}
                     required
                   />
                   <Alert
@@ -759,27 +792,6 @@ function EditingTemplateCreaTemplate() {
                     style={{ display: "none" }}
                   >
                     Nome è richiesto!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Nome">
-                  <Form.Label>Durata</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="number"
-                    placeholder="Inserisci Durata"
-                    onChange={(e) => {
-                      handleChangeDurata(e);
-                      disabilitaNext();
-                    }}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertDescrizione"
-                    style={{ display: "none" }}
-                  >
-                    Durata è richiesta
                   </Alert>
                 </Form.Group>
               </Paper>
@@ -794,9 +806,8 @@ function EditingTemplateCreaTemplate() {
                     type="text"
                     placeholder="Inserisci Descrizione"
                     onChange={(e) => {
-                      handleChangeDescrizione(e);
-                      disabilitaNext();
-                    }}
+                      setDescrizione(e.target.value)
+                      disabilitaNext()  }}
                   />
                   <Alert
                     severity="error"
@@ -807,99 +818,38 @@ function EditingTemplateCreaTemplate() {
                   </Alert>
                 </Form.Group>
               </Paper>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Nome" required>
-                  <Form.Label>Tipo template</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Tipo template"
-                    onChange={(e) => {
-                      handleChangeTipoTemplate(e);
-                      disabilitaNext();
-                    }}
-                    required
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertNome"
-                    style={{ display: "none" }}
-                  >
-                    Nome è richiesto!
-                  </Alert>
-                </Form.Group>
-              </Paper>
             </Paper>
-          </div>
 
-          {/* ------------------------STEP 2--------------------------------- */}
-          <div
-            className={classes.generalContainer}
-            style={{ display: activeStep === 1 ? "" : "none" }}
-          >
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Upload">
-                  <input
-                    className={classes.input}
-                    multiple
-                    type="file"
-                    name="file"
-                    onChange={changeHandler}
-                  />
-                  <label htmlFor="contained-button-file">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      component="span"
-                      onClick={handleSubmission}
-                    >
-                      Upload
-                    </Button>
-                  </label>
-                  {/* <input
-                    accept="image/*"
-                    className={classes.input}
-                    id="icon-button-file"
-                    type="file"
-                  /> */}
-                </Form.Group>
-              </Paper>
-            </Paper>
           </div>
-          {/* ------------------------STEP 3--------------------------------- */}
-          <div
-            className={classes.generalContainer}
-            style={{ display: activeStep === 2 ? "" : "none" }}
-          >
-            <Paper className={classes.paperContainer1} elevation={0}>
+          {/* ------------------------STEP 2--------------------------------- */}
+          <div className={classes.generalContainer} style={{ display: activeStep === 1 ? "" : "none" }}>
+          <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
-                  <Form.Label>Linea chiamante n</Form.Label>
+                  <Form.Label>Linea chiamato</Form.Label>
                   <FormControl
                     variant="outlined"
                     className={classes.formControl}
                   >
                     <Select
                       id="selectLinea"
-                      // value={lineaChiamante}
-                      // onChange={(e) => setLineaChiamante}
+                      value={lineaChiamato}
+                      onChange={(e) => setLineaChiamato}
                     >
-                      {/* da correggere quando avremo le linee chiamanti */}
-                      {/* {appearLinea.map((linea) => {
+                      {appearLinea.map((linea) => {
                         return (
                           <MenuItem key={linea.id} value={linea.id}>
                             {linea.numero}
                           </MenuItem>
                         );
-                      })} */}
+                      })}
                     </Select>
                     <Alert
                       severity="error"
                       id="alertLinea"
                       style={{ display: "none" }}
                     >
-                      Selezionare la Linea chiamente
+                      Selezionare la Linea
                     </Alert>
                   </FormControl>
                 </Form.Group>
@@ -908,8 +858,9 @@ function EditingTemplateCreaTemplate() {
 
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group>
-                  <Form.Label>OBP chiamante n</Form.Label>
+              
+                <Form.Group >
+                  <Form.Label>OBP chiamato</Form.Label>
                   <FormControl
                     variant="outlined"
                     className={classes.formControl}
@@ -917,59 +868,133 @@ function EditingTemplateCreaTemplate() {
                   >
                     <Select
                       id="selectOBP"
-                      // value={OBPChiamante}
-                      // onChange={(e) => setOBPChiamante(e.target.value)}
+                      value={OBPChiamato}
+                      onChange={(e) => setOBPChiamato(e.target.value)}
                       required
                     >
-                      {/* {appearOBP.map((OBP) => {
+                      {appearOBP.map((OBP) => {
                         return (
                           <MenuItem key={OBP.id} value={OBP.id}>
                             {OBP.descrizione}
                           </MenuItem>
                         );
-                      })} */}
+                      })}
                     </Select>
                     <Alert
                       severity="error"
                       id="alertOBP"
                       style={{ display: "none" }}
                     >
-                      Selezionare l'OBP chiamante
+                      Selezionare l'OBP chiamato
                     </Alert>
                   </FormControl>
                 </Form.Group>
               </Paper>
             </Paper>
+
+          </div>
+          {/* ------------------------STEP 3--------------------------------- */}
+          <div className={classes.generalContainer} style={{ display: activeStep === 2 ? "" : "none" }}>
+          
+      <Paper className={classes.paperContainer1} elevation={0}>
+        <Paper className={classes.divSelect} elevation={0}>
+          <Form.Group controlId="form.Numero">
+            <Form.Label>Linea chiamante n</Form.Label>
+            <FormControl
+              variant="outlined"
+              className={classes.formControl}
+            >
+              <Select
+                id="selectLinea"
+                value={lineaChiamante}
+                onChange={(e) => setLineaChiamante}
+              >
+
+                {/* da correggere quando avremo le linee chiamanti */}
+                {appearLinea.map((linea) => {
+                  return (
+                    <MenuItem key={linea.id} value={linea.id}>
+                      {linea.numero}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              <Alert
+                severity="error"
+                id="alertLinea"
+                style={{ display: "none" }}
+              >
+                Selezionare la Linea chiamente
+              </Alert>
+            </FormControl>
+          </Form.Group>
+          </Paper>
+            </Paper>
+
+          
+      <Paper className={classes.paperContainer1} elevation={0}>
+        <Paper className={classes.divSelect} elevation={0}>
+          <Form.Group >
+            <Form.Label>OBP chiamante n</Form.Label>
+            <FormControl
+              variant="outlined"
+              className={classes.formControl}
+              required
+            >
+              <Select
+                id="selectOBP"
+                value={OBPChiamante}
+                onChange={(e) => setOBPChiamante(e.target.value)}
+                required
+              >
+                {appearOBP.map((OBP) => {
+                  return (
+                    <MenuItem key={OBP.id} value={OBP.id}>
+                      {OBP.descrizione}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              <Alert
+                severity="error"
+                id="alertOBP"
+                style={{ display: "none" }}
+              >
+                Selezionare l'OBP chiamante
+              </Alert>
+            </FormControl>
+          </Form.Group>
+        </Paper>
+      </Paper>
+
           </div>
 
           {/* ------------------------STEP 4--------------------------------- */}
-          <div
-            className={classes.generalContainer}
-            style={{ display: activeStep === 3 ? "" : "none" }}
-          >
-            <Paper className={classes.paperContainer1} elevation={0}>
+          <div className={classes.generalContainer} style={{ display: activeStep === 3 ? "" : "none" }}>
+          <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group>
+                <Form.Group >
                   <Form.Label>Template</Form.Label>
                   <FormControl
                     variant="outlined"
                     className={classes.formControl}
                     required
                   >
+
                     {/* da sistemare quando ci sarà il servizio */}
                     <Select
                       id="selectOBP"
-                      // value={template}
-                      // onChange={(e) => setTemplate(e.target.value)}
+                      value={template}
+                      onChange={(e) => setTemplate(e.target.value)}
                       required
                     >
-                      {/* {appearTemplate.map((template) => {
+                      {appearTemplate.map((template) => {
                         return (
                           <MenuItem key={template.id} value={template.id}>
                             {template.nome}
                           </MenuItem>
                         );
-                      })} */}
+                      })}
                     </Select>
                     <Alert
                       severity="error"
@@ -982,11 +1007,25 @@ function EditingTemplateCreaTemplate() {
                 </Form.Group>
               </Paper>
             </Paper>
+
+
           </div>
           <Divider className={classes.divider} />
 
           {/* -----------------------------------BOTTONI STEP------------------------------------ */}
           <div className={classes.root}>
+          <div>
+              <Button
+                variant="contained"
+                color="secondary"
+                component={NavLink}
+                exact
+                to="/editing/testgeneratore"
+                //className={classes.}
+              >
+                Annulla
+              </Button>
+            </div>
             <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map((label) => (
                 <Step key={label}>
@@ -997,9 +1036,7 @@ function EditingTemplateCreaTemplate() {
             <div>
               {activeStep === steps.length ? (
                 <div>
-                  <Typography className={classes.instructions}>
-                    All steps completed
-                  </Typography>
+                  <Typography className={classes.instructions}>All steps completed</Typography>
                   <Button onClick={handleReset}>Reset</Button>
                 </div>
               ) : (
@@ -1013,13 +1050,9 @@ function EditingTemplateCreaTemplate() {
                       Back
                     </Button>
 
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleNext}
-                      disabled={nextDisabled}
-                    >
-                      {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                    
+                    <Button variant="contained" color="primary" onClick={handleNext} disabled = { nextDisabled } >
+                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                     </Button>
                   </div>
                 </div>
@@ -1050,4 +1083,4 @@ function EditingTemplateCreaTemplate() {
   );
 }
 
-export default EditingTemplateCreaTemplate;
+export default EditingTestGeneratoreCreaTestGeneratore;
