@@ -19,7 +19,11 @@ public class GruppoDTO extends TrackedDTO {
 	public GruppoDTO() {
 	}
 	
-	public GruppoDTO(GruppoVO vo) {
+	public GruppoDTO(@NotNull Long id) {
+    this.id = id;
+  }
+
+  public GruppoDTO(GruppoVO vo) {
 	  super(vo);
 		this.id = vo.getId();
 		this.nome = vo.getNome();

@@ -1,5 +1,6 @@
 package it.reply.sipp.api.linea.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -25,6 +26,8 @@ import it.reply.sipp.api.linea.payload.OBPListRequest;
 import it.reply.sipp.api.linea.payload.OBPListResponse;
 import it.reply.sipp.api.linea.payload.OBPRemoveRequest;
 import it.reply.sipp.api.linea.payload.OBPRetrieveResponse;
+import it.reply.sipp.api.linea.payload.OBPSearchRequest;
+import it.reply.sipp.api.linea.payload.OBPSearchResponse;
 import it.reply.sipp.api.linea.payload.OBPUpdateRequest;
 import it.reply.sipp.api.linea.payload.OBPUpdateResponse;
 import it.reply.sipp.api.linea.payload.OutboundProxyDTO;
@@ -134,5 +137,29 @@ public class OBPController extends AbstractController {
     } catch (ApplicationException e) {
       return handleException(e, response);
     }
+  }
+  
+  @PostMapping("search")
+  public ResponseEntity<OBPSearchResponse> search(@Valid @RequestBody(required=true)OBPSearchRequest request) {
+    logger.info("enter search({})", request);
+    OBPSearchResponse response = new OBPSearchResponse();
+    try {
+      OutboundProxyDTO dto = new OutboundProxyDTO();
+      dto.setId(request.getId());
+      dto.setDescrizione(request.getDescrizione());
+      dto.setGruppo(request.getGruppo());
+      dto.setIpDestinazione(request.getIpDestinazione());
+      dto.setPorta(request.getPorta());
+      if (request.getTypeLinea() != null) {
+        dto.setTypeLinee(Collections.singletonList(request.getTypeLinea()));
+      }
+
+      List<OutboundProxyDTO> result = oBPService.searchProxy(dto);
+      response.setList(result);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+    
   }
 }

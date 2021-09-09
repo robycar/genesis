@@ -55,5 +55,7 @@ public interface OBPService {
   void removProxy(Long id) throws ApplicationException;
 
   OutboundProxyVO readProxyVO(long id) throws ApplicationException;
+
+  List<OutboundProxyDTO> searchProxy(OutboundProxyDTO proxyDTO) throws ApplicationException;
   
 }
