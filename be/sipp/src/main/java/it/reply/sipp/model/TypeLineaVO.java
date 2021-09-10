@@ -30,12 +30,14 @@ public class TypeLineaVO extends BaseEntity {
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "typeLinee")
 	private Set<OutboundProxyVO> proxies;
 	
-	
-	
 	public TypeLineaVO() {
 	}
 
-	public Long getId() {
+	public TypeLineaVO(Long id) {
+    this.id = id;
+  }
+
+  public Long getId() {
 		return id;
 	}
 

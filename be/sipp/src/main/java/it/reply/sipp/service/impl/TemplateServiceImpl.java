@@ -7,9 +7,13 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
@@ -24,6 +28,7 @@ import it.reply.sipp.api.generic.service.AbstractService;
 import it.reply.sipp.api.test.payload.TemplateCreateFullRequest;
 import it.reply.sipp.api.test.payload.TemplateDTO;
 import it.reply.sipp.api.test.payload.TemplateFileDTO;
+import it.reply.sipp.api.test.payload.TemplateSearchRequest;
 import it.reply.sipp.model.FileSystemScope;
 import it.reply.sipp.model.FileSystemVO;
 import it.reply.sipp.model.TemplateFileCategory;
@@ -321,6 +326,49 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     checkGroup(templateVO.getGruppo(), AppError.TEMPLATE_DELETE_WRONG_GROUP);
     templateRepository.delete(templateVO);
     fileSystemRepository.deleteAllByScopeAndIdRef(FileSystemScope.TEMPLATE, templateVO.getId());
+  }
+
+
+  private static Predicate<TemplateFileVO> isChiamante() {
+    return f -> f.getCategory().equals(TemplateFileCategory.CHIAMANTE);
+  }
+  
+  private static Predicate<TemplateFileVO> isChiamato() {
+    return f -> f.getCategory().equals(TemplateFileCategory.CHIAMATO);
+  }
+  
+  @Override
+  public List<TemplateDTO> search(TemplateSearchRequest dto) throws ApplicationException {
+    logger.debug("enter search");
+    TemplateVO vo = new TemplateVO();
+    vo.setId(dto.getId());
+    vo.setNome(dto.getNome());
+    vo.setDurata(dto.getDurata());
+    vo.setDescrizione(dto.getDescrizione());
+    vo.setTypeTemplate(dto.getTypeTemplate());
+
+    List<TemplateVO> result = templateRepository.findAll(Example.of(vo, 
+        ExampleMatcher.matchingAll()
+          .withIgnorePaths("version")
+          ));
+
+    Stream<TemplateVO> sresult = result.stream();
+
+    //Restituisci solo i template che hanno il numero dei chiamanti indicati 
+    // nella condizionedi ricerca
+    if (dto.getNumChiamanti() != null) {
+      sresult = sresult.filter( s -> 
+        s.getFiles().stream().filter(isChiamante()).count() == dto.getNumChiamanti()
+      );
+    }
+    
+    if (dto.getNumChiamati() != null) {
+      sresult = sresult.filter(s ->
+        s.getFiles().stream().filter(isChiamato()).count() == dto.getNumChiamati()
+      );
+    }
+    
+    return sresult.map(s -> new TemplateDTO(s)).collect(Collectors.toList());
   }
 
 

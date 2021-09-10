@@ -29,6 +29,8 @@ import it.reply.sipp.api.test.payload.TemplateDTO;
 import it.reply.sipp.api.test.payload.TemplateListResponse;
 import it.reply.sipp.api.test.payload.TemplateRemoveRequest;
 import it.reply.sipp.api.test.payload.TemplateRetrieveResponse;
+import it.reply.sipp.api.test.payload.TemplateSearchRequest;
+import it.reply.sipp.api.test.payload.TemplateSearchResponse;
 import it.reply.sipp.api.test.payload.TemplateUpdateRequest;
 import it.reply.sipp.api.test.payload.TemplateUpdateResponse;
 import it.reply.sipp.service.TemplateService;
@@ -149,6 +151,7 @@ public class TemplateController extends AbstractController {
   }
   
   @DeleteMapping
+  @PreAuthorize("hasAuthority('FUN_template.delete')")
   public ResponseEntity<PayloadResponse> remove(@Valid @RequestBody TemplateRemoveRequest request) {
     logger.info("enter remove({})", request);
     PayloadResponse response = new PayloadResponse();
@@ -161,6 +164,20 @@ public class TemplateController extends AbstractController {
     }
     
     
+  }
+  
+  @PostMapping("search")
+  @PreAuthorize("hasAuthority('FUN_template.view')")
+  public ResponseEntity<TemplateSearchResponse> search(@Valid @RequestBody TemplateSearchRequest request) {
+    logger.info("enter search({})", request);
+    TemplateSearchResponse response = new TemplateSearchResponse();
+    try {
+      List<TemplateDTO> result = templateService.search(request);
+      response.setList(result);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
   }
   
 }

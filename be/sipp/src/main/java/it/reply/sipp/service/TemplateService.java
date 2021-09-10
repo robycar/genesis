@@ -5,6 +5,7 @@ import java.util.List;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.test.payload.TemplateCreateFullRequest;
 import it.reply.sipp.api.test.payload.TemplateDTO;
+import it.reply.sipp.api.test.payload.TemplateSearchRequest;
 import it.reply.sipp.model.TemplateVO;
 
 public interface TemplateService {
@@ -60,6 +61,8 @@ public interface TemplateService {
   void removeTemplate(long id) throws ApplicationException;
 
   TemplateVO readVO(long id) throws ApplicationException;
+
+  List<TemplateDTO> search(TemplateSearchRequest request) throws ApplicationException;
 
   
 

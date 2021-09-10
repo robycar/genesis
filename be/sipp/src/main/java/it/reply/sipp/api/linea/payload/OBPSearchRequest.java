@@ -1,20 +1,15 @@
 package it.reply.sipp.api.linea.payload;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import it.reply.sipp.api.admin.payload.GruppoDTO;
-import it.reply.sipp.api.generic.payload.TrackedDTO;
+import it.reply.sipp.api.generic.payload.PayloadRequest;
 import it.reply.sipp.model.OutboundProxyVO;
 
-public class OutboundProxyDTO extends TrackedDTO {
+public class OBPSearchRequest extends PayloadRequest {
 
-  private static final long serialVersionUID = -4051201619704486838L;
+  private static final long serialVersionUID = 8677097619715074359L;
 
-  @NotNull
   private Long id;
 
   @Size(max = OutboundProxyVO.IP_DESTINAZIONE_LENGTH)
@@ -27,46 +22,19 @@ public class OutboundProxyDTO extends TrackedDTO {
   
   private GruppoDTO gruppo;
   
-  private List<TypeLineaDTO> typeLinee;
+  private TypeLineaDTO typeLinea;
   
-  public OutboundProxyDTO() {
+  public OBPSearchRequest() {
   }
 
-  public OutboundProxyDTO(@NotNull Long id) {
-    this.id = id;
-  }
-
-  public OutboundProxyDTO(OutboundProxyVO vo) {
-    super(vo);
-    this.descrizione = vo.getDescrizione();
-    this.id = vo.getId();
-    this.ipDestinazione = vo.getIpDestinazione();
-    this.porta = vo.getPorta();
-    if (vo.getTypeLinee() != null) {
-      this.typeLinee = vo.getTypeLinee()
-          .stream()
-          .map(typeLineaVO -> new TypeLineaDTO(typeLineaVO))
-          .collect(Collectors.toList());
-     }
-    this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
-  }
-  
-  public String getCampiConcatenati() {
-    return new StringBuilder()
-        .append(this.ipDestinazione)
-        .append(" - ")
-        .append(this.porta)
-        .toString();
-  }
-  
   @Override
   protected void writeFields(StringBuilder sb) {
     writeField(sb, "id", id);
     writeField(sb, "ipDestinazione", ipDestinazione);
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "porta", porta);
-    writeField(sb, "typeLinee", typeLinee);
     writeField(sb, "gruppo", gruppo);
+    writeField(sb, "typeLinea", typeLinea);
     super.writeFields(sb);
   }
 
@@ -102,20 +70,20 @@ public class OutboundProxyDTO extends TrackedDTO {
     this.porta = porta;
   }
 
-  public List<TypeLineaDTO> getTypeLinee() {
-    return typeLinee;
-  }
-
-  public void setTypeLinee(List<TypeLineaDTO> typeLinee) {
-    this.typeLinee = typeLinee;
-  }
-
   public GruppoDTO getGruppo() {
     return gruppo;
   }
 
   public void setGruppo(GruppoDTO gruppo) {
     this.gruppo = gruppo;
+  }
+
+  public TypeLineaDTO getTypeLinea() {
+    return typeLinea;
+  }
+
+  public void setTypeLinea(TypeLineaDTO typeLinea) {
+    this.typeLinea = typeLinea;
   }
 
 }

@@ -6,9 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,8 @@ import it.reply.sipp.AppError;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.generic.service.AbstractService;
 import it.reply.sipp.api.linea.payload.OutboundProxyDTO;
+import it.reply.sipp.api.linea.payload.TypeLineaDTO;
+import it.reply.sipp.model.GruppoVO;
 import it.reply.sipp.model.OutboundProxyVO;
 import it.reply.sipp.model.TypeLineaVO;
 import it.reply.sipp.model.repository.OBPRepository;
@@ -177,6 +181,44 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
     checkGroup(proxyVO.getGruppo(), AppError.OBP_DELETE_WRONG_GROUP);
     oBPRepository.delete(proxyVO);
     logger.debug("exit removeProxy");
+  }
+
+
+  @Override
+  public List<OutboundProxyDTO> searchProxy(OutboundProxyDTO dto) throws ApplicationException {
+    logger.debug("enter searchProxy");
+    OutboundProxyVO vo = new OutboundProxyVO();
+    vo.setDescrizione(dto.getDescrizione());
+    if (dto.getGruppo() != null && dto.getGruppo().getId() != null) {
+      vo.setGruppo(new GruppoVO(dto.getGruppo().getId()));
+    }
+    vo.setId(dto.getId());
+    vo.setIpDestinazione(dto.getIpDestinazione());
+    vo.setPorta(dto.getPorta());
+
+    
+    List<OutboundProxyVO> result = oBPRepository.findAll(Example.of(vo,
+        ExampleMatcher.matchingAll().withIgnorePaths("version", "gruppo.version")));
+    
+    Stream<OutboundProxyVO> sresult = result.stream();
+    if (dto.getTypeLinee() != null && ! dto.getTypeLinee().isEmpty()) {
+      TypeLineaDTO tlDTO = dto.getTypeLinee().get(0);
+      if (tlDTO != null && tlDTO.getId() != null) {
+        sresult = sresult.filter(v -> {
+          for (TypeLineaVO tlVO: v.getTypeLinee()) {
+            if (tlVO.getId().equals(tlDTO.getId())) {
+              return true;
+            }
+          }
+          return false;
+        });
+      }
+    }
+    
+    return sresult
+        .map(s -> new OutboundProxyDTO(s))
+        .collect(Collectors.toList());
+    
   }
 
 }
