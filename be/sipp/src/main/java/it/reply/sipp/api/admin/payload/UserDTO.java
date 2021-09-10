@@ -3,6 +3,7 @@ package it.reply.sipp.api.admin.payload;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 import it.reply.sipp.api.generic.payload.TrackedDTO;
@@ -27,6 +28,7 @@ public class UserDTO extends TrackedDTO {
 	private String azienda;
 	
 	@Size(max = UserVO.EMAIL_LENGTH)
+	@Email
 	private String email;
 	
 	private LevelDTO level;

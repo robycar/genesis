@@ -350,6 +350,9 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     }
     
     for (OutboundProxyVO proxy: vo.getProxies()) {
+      if (proxy.getTypeLinee().size() == 1) {
+        throw makeError(HttpStatus.BAD_REQUEST, AppError.TYPE_LINEA_DELETE_OBP_EMPTY, proxy.getId());
+      }
       proxy.getTypeLinee().remove(vo);
     }
     
