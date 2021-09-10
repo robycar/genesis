@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    boxShadow: "none",
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -1154,7 +1155,7 @@ function EditingLineaCreaLinea() {
                           </div>
                         </Fade>
                       </Modal>
-                      {/*------------------MODALE RIMUOVI TYPE--------------- */}
+                      {/*------------------MODALE ERRORE TYPE--------------- */}
                       <Modal
                         className={classes.modal}
                         open={openWarning}

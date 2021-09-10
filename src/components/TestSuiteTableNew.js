@@ -87,10 +87,10 @@ if (bearer != null) {
       title: "Descrizione",
       field: "descrizione",
     },
-    {
-      title: "Versione",
-      field: "version",
-    },
+    // {
+    //   title: "Versione",
+    //   field: "version",
+    // },
     {
       title: "Data Creazione",
       field: "creationDate",
@@ -107,10 +107,10 @@ if (bearer != null) {
       title: "Modificato da",
       field: "modifiedBy",
     },
-    {
-      title: "Gruppo",
-      field: "",
-    },
+    // {
+    //   title: "Gruppo",
+    //   field: "",
+    // },
     {
       title: "Test Cases",
       field: "testCases",
@@ -127,8 +127,7 @@ if (bearer != null) {
     handleOpen(rowData);
   };
   const openVisualizza = (rowData) => {
-    console.log("ciao")
-    setModifica(false);
+       setModifica(false);
     handleOpen(rowData);
   };
 

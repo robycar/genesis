@@ -7,6 +7,7 @@ import { NavLink } from "react-router-dom";
 import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -363,8 +364,9 @@ const GestioneUtenti = () => {
                   activeClassName="button-green-active"
                   exact
                   to="/amministrazione/addutente"
+                  startIcon={<AddIcon />}
                 >
-                  CREA UTENTE
+                  UTENTE
                 </Button>
               </div>
             ),

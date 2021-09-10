@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    boxShadow: "none",
+    //boxShadow: "none",
   },
   toolbarIcon: {
     display: "flex",
@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    boxShadow: "none",
   },
   appBarShift: {
     marginLeft: drawerWidth,

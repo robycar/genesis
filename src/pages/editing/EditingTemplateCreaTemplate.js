@@ -41,6 +41,8 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Prova from "../../components/Prova";
 import { blue } from "@material-ui/core/colors";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 const drawerWidth = 240;
 
@@ -64,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    boxShadow: "none",
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -258,6 +261,8 @@ function getSteps() {
   return [
     "Inserire nome durata tipo template e descrizione",
     "Carica i files XML",
+    "Impostare Chiamato",
+    "Impostare Chiamante/i",
     "Gestisci i files XML",
     // "Template",
   ];
@@ -278,6 +283,12 @@ function EditingTemplateCreaTemplate() {
   const [isSelected, setIsSelected] = useState(false);
   const [nextDisabled, setNextDisabled] = useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
+  const [chiamato, setChiamato] = useState("");
+  const [chiamanteUno, setChiamanteUno] = useState("");
+  const [chiamanteDue, setChiamanteDue] = useState("");
+  const [qntChiamanti, setQntChiamanti] = useState([]);
+  const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
+  let arrAppoggio = qntChiamanti;
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files);
@@ -287,130 +298,12 @@ function EditingTemplateCreaTemplate() {
   };
 
   const arrayValue = Object.values(selectedFile);
-  console.log(arrayValue);
+  console.log(arrayValue[0]);
 
   const handleSubmission = () => {};
 
   const handleDrawerClose = () => {
     setOpen(false);
-  };
-
-  const getTypeId = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  // const getLinea = () => {
-  //   var myHeaders = new Headers();
-
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   // console.log(bearer.toString());
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`/api/linea`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearLinea(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
-
-  // const getOBP = () => {
-  //   var myHeaders = new Headers();
-
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   // console.log(bearer.toString());
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`/api/obp`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearOBP(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
-  // const getTemplate = () => {
-  //   var myHeaders = new Headers();
-
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   // console.log(bearer.toString());
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`/api/template`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearTemplate(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
-
-  // const getFile = () => {
-  //   var myHeaders = new Headers();
-
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   // console.log(bearer.toString());
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearFile(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
-
-  const removeTypeLinea = (id) => {
-    alert("id " + id + " rimosso");
   };
 
   useEffect(() => {
@@ -420,15 +313,6 @@ function EditingTemplateCreaTemplate() {
     // getOBP();
     // getTemplate();
   }, []);
-
-  // const [ip, setIP] = useState("");
-  // const [ip1, setIP1] = useState("");
-  // const [ip2, setIP2] = useState("");
-  // const [ip3, setIP3] = useState("");
-  // const [ip4, setIP4] = useState("");
-  // const [typeLineaId, setTypeLineaId] = useState(0);
-
-  // const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
   const handleChangeName = (e) => {
     setNome(e.target.value);
@@ -443,6 +327,16 @@ function EditingTemplateCreaTemplate() {
     setTipoTemplate(e.target.value);
   };
 
+  const handleChangeChiamato = (e) => {
+    setChiamato(e.target.value);
+  };
+  const handleChangeChiamanteUno = (e) => {
+    setChiamanteUno(e.target.value);
+  };
+  const handleChangeChiamanteDue = (e) => {
+    setChiamanteDue(e.target.value);
+  };
+
   useEffect(() => {
     if (activeStep === 0) {
       if (nome === "" || durata === 0 || tipoTemplate === "") {
@@ -453,42 +347,84 @@ function EditingTemplateCreaTemplate() {
     }
   }, [nome, durata, tipoTemplate]);
 
-  function salva() {
-    const Invia = () => {
-      //PUT API
+  const Invia = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var formdata = new FormData();
+    formdata.append("nome", nome);
+    formdata.append("durata", durata);
+    formdata.append("tipoTemplate", tipoTemplate);
+    formdata.append("descrizione", descrizione);
+    formdata.append("chiamato", chiamato);
+    formdata.append("chiamanti", qntChiamanti[0].linea);
+    formdata.append("chiamanti", qntChiamanti[1].linea);
+    formdata.append("file", arrayValue[0], arrayValue[0].name);
+    formdata.append("file", arrayValue[1], arrayValue[1].name);
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: formdata,
+      redirect: "follow",
     };
 
-    if (
-      nome !== "" &&
-      durata !== "" &&
-      descrizione !== "" &&
-      tipoTemplate !== ""
-    ) {
-      Invia();
-      // console.log(ip);
-    } else {
-      if (nome === "") {
-        document.getElementById("alertIP").style.display = "";
-      } else {
-        document.getElementById("alertIP").style.display = "none";
-      }
-      if (durata === "") {
-        document.getElementById("alertNome").style.display = "";
-      } else {
-        document.getElementById("alertNome").style.display = "none";
-      }
-      if (descrizione === "") {
-        document.getElementById("alertPassword").style.display = "";
-      } else {
-        document.getElementById("alertPassword").style.display = "none";
-      }
-      if (tipoTemplate === "") {
-        document.getElementById("alertDescrizione").style.display = "";
-      } else {
-        document.getElementById("alertDescrizione").style.display = "none";
-      }
-    }
-  }
+    fetch(`/api/template`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+
+    window.location = "/editing/template";
+  };
+
+  // if (
+  //   nome !== "" &&
+  //   durata !== "" &&
+  //   descrizione !== "" &&
+  //   tipoTemplate !== ""
+  // ) {
+  //   Invia();
+  //   // console.log(ip);
+  // } else {
+  //   if (nome === "") {
+  //     document.getElementById("alertIP").style.display = "";
+  //   } else {
+  //     document.getElementById("alertIP").style.display = "none";
+  //   }
+  //   if (durata === "") {
+  //     document.getElementById("alertNome").style.display = "";
+  //   } else {
+  //     document.getElementById("alertNome").style.display = "none";
+  //   }
+  //   if (descrizione === "") {
+  //     document.getElementById("alertPassword").style.display = "";
+  //   } else {
+  //     document.getElementById("alertPassword").style.display = "none";
+  //   }
+  //   if (tipoTemplate === "") {
+  //     document.getElementById("alertDescrizione").style.display = "";
+  //   } else {
+  //     document.getElementById("alertDescrizione").style.display = "none";
+  //   }
+  // }
+
+  //-------------------------CHIAMANTI E CHIAMATO --------------------------
+
+  const addArr = () => {
+    arrAppoggio.push({ linea: 0, proxy: 0, index: arrAppoggio.length });
+    setQntChiamanti(arrAppoggio);
+    setNChiamanti(qntChiamanti.length);
+    console.log(qntChiamanti);
+  };
+
+  const removeArr = () => {
+    arrAppoggio.pop();
+    setQntChiamanti(arrAppoggio);
+    setNChiamanti(qntChiamanti.length);
+    console.log(qntChiamanti);
+  };
 
   //--------------------MODALI TYPE LINEE---------------------------------
 
@@ -548,7 +484,10 @@ function EditingTemplateCreaTemplate() {
   const steps = getSteps();
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep + 2 === steps.length) {
+      Invia();
+    } else setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    // disabilitaNext();
   };
 
   const handleBack = () => {
@@ -760,13 +699,14 @@ function EditingTemplateCreaTemplate() {
           >
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Upload">
+                <>
                   <input
                     // accept=".xml"
                     className={classes.input}
                     id="contained-button-file"
                     multiple
                     type="file"
+                    name="file"
                     onChange={changeHandler}
                   />
                   <label htmlFor="contained-button-file">
@@ -779,41 +719,55 @@ function EditingTemplateCreaTemplate() {
                       Upload
                     </Button>
                   </label>
-                </Form.Group>
+                </>
               </Paper>
-              <h2>Files</h2>
-              <div className={classes.fileContainer}>
-                {arrayValue.map((file, index) => {
-                  return (
-                    <div key={index} id={index}>
-                      <p>{file.name}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className={classes.fileContainer} >
-                
-              </div>
             </Paper>
           </div>
 
-          {/* {appearTemplate.map((template) => {
-                        return (
-                          <MenuItem key={template.id} value={template.id}>
-                            {template.nome}
-                          </MenuItem>
-                        );
-                      })} */}
           {/* ------------------------STEP 3--------------------------------- */}
           <div
             className={classes.generalContainer}
             style={{ display: activeStep === 2 ? "" : "none" }}
           >
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                {/* Inserimento tabella gestione dati */}
-              </Paper>
-            </Paper>
+            <div className={classes.bodyContainer}>
+              <>
+                <Typography className={classes.intestazione} variant="h6">
+                  Chiamato
+                </Typography>
+                <Row>
+                  <Col className={classes.col}>
+                    <Form.Group controlId="form.Numero">
+                      <Form.Label>Seleziona il file del Chiamato</Form.Label>
+                      <FormControl
+                        variant="outlined"
+                        className={classes.formControl}
+                      >
+                        <Select
+                          id="selectLinea"
+                          value={chiamato}
+                          onChange={(e) => handleChangeChiamato(e)}
+                        >
+                          {arrayValue.map((file) => {
+                            return (
+                              <MenuItem key={file.name} value={file.name}>
+                                {file.name}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                        <Alert
+                          severity="error"
+                          id="alertLinea"
+                          style={{ display: "none" }}
+                        >
+                          Selezionare il file del Chiamato
+                        </Alert>
+                      </FormControl>
+                    </Form.Group>
+                  </Col>
+                </Row>
+              </>
+            </div>
           </div>
 
           {/* ------------------------STEP 4--------------------------------- */}
@@ -821,41 +775,89 @@ function EditingTemplateCreaTemplate() {
             className={classes.generalContainer}
             style={{ display: activeStep === 3 ? "" : "none" }}
           >
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group>
-                  <Form.Label>Template</Form.Label>
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                    required
-                  >
-                    {/* da sistemare quando ci sarà il servizio */}
-                    <Select
-                      id="selectOBP"
-                      // value={template}
-                      // onChange={(e) => setTemplate(e.target.value)}
-                      required
-                    >
-                      {/* {appearTemplate.map((template) => {
-                        return (
-                          <MenuItem key={template.id} value={template.id}>
-                            {template.nome}
-                          </MenuItem>
-                        );
-                      })} */}
-                    </Select>
-                    <Alert
-                      severity="error"
-                      id="alertOBP"
-                      style={{ display: "none" }}
-                    >
-                      Selezionare il template
-                    </Alert>
-                  </FormControl>
-                </Form.Group>
-              </Paper>
-            </Paper>
+            <div className={classes.bodyContainer}>
+              <div className={classes.bodyContainer}>
+                {qntChiamanti.map((index) => {
+                  return (
+                    <div>
+                      <>
+                        <Typography
+                          className={classes.intestazione}
+                          variant="h6"
+                        >
+                          Chiamante <b>{index.index + 1}</b>
+                        </Typography>
+                        <Row>
+                          <Col className={classes.col}>
+                            <Form.Group controlId="form.Numero">
+                              <Form.Label>
+                                Seleziona il file del Chiamate{" "}
+                                <b>{index.index + 1}</b>{" "}
+                              </Form.Label>
+                              <FormControl
+                                variant="outlined"
+                                className={classes.formControl}
+                              >
+                                <Select
+                                  id="selectLinea"
+                                  value={qntChiamanti.index}
+                                  defaultValue={index.linea}
+                                  onChange={(e) => {
+                                    arrAppoggio[index.index].linea =
+                                      e.target.value;
+                                    setQntChiamanti(arrAppoggio);
+                                  }}
+                                >
+                                  {arrayValue.map((file) => {
+                                    return (
+                                      <MenuItem
+                                        key={file.name}
+                                        value={file.name}
+                                      >
+                                        {file.name}
+                                      </MenuItem>
+                                    );
+                                  })}
+                                </Select>
+                                <Alert
+                                  severity="error"
+                                  id="alertLinea"
+                                  style={{ display: "none" }}
+                                >
+                                  Selezionare la Linea
+                                </Alert>
+                              </FormControl>
+                            </Form.Group>
+                          </Col>
+                        </Row>
+                      </>
+                    </div>
+                  );
+                })}
+              </div>
+              Quanti chiamanti vuoi inserire &nbsp;&nbsp;&nbsp;
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<RemoveIcon />}
+                onClick={removeArr}
+                disabled={nChiamanti < 1 ? true : false}
+              />
+              &nbsp;&nbsp;&nbsp;
+              <TextField
+                type="number"
+                style={{ width: "10px" }}
+                value={nChiamanti}
+              />
+              &nbsp;&nbsp;&nbsp;
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AddIcon />}
+                onClick={addArr}
+                disabled={nChiamanti > 2 ? true : false}
+              />
+            </div>
           </div>
           <Divider className={classes.divider} />
 

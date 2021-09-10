@@ -66,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    boxShadow: "none",
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -670,7 +671,7 @@ return (
                         {appearLinea.map((linea) => {
                           return (
                             <MenuItem key={linea.id} value={linea.id}>
-                              {linea.numero}
+                              {linea.campiConcatenati}
                             </MenuItem>
                           );
                         })}
@@ -700,7 +701,7 @@ return (
                         {appearOBP.map((OBP) => {
                           return (
                             <MenuItem key={OBP.id} value={OBP.id}>
-                              {OBP.descrizione}
+                              {OBP.campiConcatenati}
                             </MenuItem>
                           );
                         })}
@@ -750,7 +751,7 @@ return (
                               {appearLinea.map((linea) => {
                                 return (
                                   <MenuItem key={linea.id} value={linea.id}>
-                                    {linea.numero}
+                                    {linea.campiConcatenati}
                                   </MenuItem>
                                 );
                               })}
@@ -785,7 +786,7 @@ return (
                               {appearOBP.map((OBP) => {
                                 return (
                                   <MenuItem key={OBP.id} value={OBP.id}>
-                                    {OBP.descrizione}
+                                    {OBP.campiConcatenati}
                                   </MenuItem>
                                 );
                               })}

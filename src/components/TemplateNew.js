@@ -366,9 +366,9 @@ function Template() {
           // selection: true,
           // columnsButton: true,
           filtering: true,
-          headerStyle: {
-            backgroundColor: "#f50057",
-          },
+          // headerStyle: {
+          //   backgroundColor: "#f50057",
+          // },
         }}
         
         actions={[

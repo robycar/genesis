@@ -205,6 +205,9 @@ function TestSuiteSelect() {
           },
         }}
         options={{
+          fixedColumns:{
+            left: 2
+          },
           //tableLayout: "fixed",
           pageSizeOptions: [5],
           actionsColumnIndex: -1,

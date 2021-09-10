@@ -23,6 +23,8 @@ import Row from "react-bootstrap/Row";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 function Linee() {
   const useStyles = makeStyles((theme) => ({
@@ -294,10 +296,18 @@ function Linee() {
   const [idElemento, setIdElemento] = React.useState(0);
   const [openDelete, setOpenDelete] = React.useState(false);
 
+  
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
+
+  const handleCloseWarning = () =>{
+    setOpenWarning(false)
+  }
+
   // const [btnDisabled, setBtnDisabled] = useState(true);
 
   const handleOpen = (rowData) => {
-    
+
     setId(rowData.id);
     setNumero(rowData.numero);
 
@@ -344,7 +354,17 @@ function Linee() {
     fetch(`/api/linea`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getLinea();
+        if (result.error !== null) {
+          setOpenWarning(true)
+          if (result.error.code === "LINEA-0006") {
+            setWarning("Impossibile eliminare il Tipo Linea perche appartiene a una Linea o a un OBP")
+          } else {
+            setWarning("Codice errore: " + result.error.code + " Descrizione: " + result.code.description)
+          }
+        } else {
+          setOpenWarning(false)
+          getLinea();
+        }
       })
       .catch((error) => console.log("error", error));
     handleCloseDelete();
@@ -620,27 +640,27 @@ function Linee() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 {ip1 <= 255 &&
-                ip1 !== "" &&
-                ip1.length < 4 &&
-                ip2 <= 255 &&
-                ip2 !== "" &&
-                ip2.length < 4 &&
-                ip3 <= 255 &&
-                ip3 !== "" &&
-                ip3.length < 4 &&
-                ip4 <= 255 &&
-                ip4 !== "" &&
-                ip4.length < 4 &&
-                password !== "" &&
-                numero !== "" &&
-                porta !== "" &&
-                porta > 1000 &&
-                porta < 100000 ? (
+                  ip1 !== "" &&
+                  ip1.length < 4 &&
+                  ip2 <= 255 &&
+                  ip2 !== "" &&
+                  ip2.length < 4 &&
+                  ip3 <= 255 &&
+                  ip3 !== "" &&
+                  ip3.length < 4 &&
+                  ip4 <= 255 &&
+                  ip4 !== "" &&
+                  ip4.length < 4 &&
+                  password !== "" &&
+                  numero !== "" &&
+                  porta !== "" &&
+                  porta > 1000 &&
+                  porta < 100000 ? (
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
                     onClick={handleClose2}
-                    // disabled={handleBtn}
+                  // disabled={handleBtn}
                   />
                 ) : (
                   <ButtonClickedGreen
@@ -710,6 +730,61 @@ function Linee() {
           </div>
         </Fade>
       </Modal>
+
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div className={classes.paper2}>
+            <Paper>
+              <div>
+                <ListItem>
+                  <ListItemIcon>
+                    <SettingsIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h5"
+                  >
+                    ERRORE{" "}
+                  </Typography>
+                </ListItem>
+              </div>
+
+              <div className={classes.paperBottom}>
+                <Typography variant="h11">
+                  {warning}
+                </Typography>
+
+                <div className={classes.divider2}>
+                  <Divider />
+                </div>
+
+                <div className={classes.bottoni}>
+                  <div>
+                    <Button
+                      onClick={handleCloseWarning}
+                      variant="contained"
+                      color="primary"
+                    >
+                      OK
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
     </div>
   );
 }

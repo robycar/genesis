@@ -67,7 +67,7 @@ function LineeGeneratore() {
 
   // -------get linea-----------
 
-  const getLinea = () => {
+  const getLineaGeneratore = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -79,7 +79,7 @@ function LineeGeneratore() {
       redirect: "follow",
     };
 
-    fetch(`/api/linea`, requestOptions)
+    fetch(`/api/lineageneratore`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -89,13 +89,13 @@ function LineeGeneratore() {
   };
 
   useEffect(() => {
-    getLinea();
+    getLineaGeneratore();
     getAppearLine();
   }, []);
 
   //---------------------AGGIORNA UTENTE-------------------------
 
-  const aggiornaUtente = () => {
+  const aggiornaLineaGeneratore = () => {
     ip = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
 
     const invia = () => {
@@ -107,13 +107,12 @@ function LineeGeneratore() {
 
       var raw = JSON.stringify({
         id: id,
-        numero: numero,
+        version: 1,
         ip: ip,
-        password: password,
         porta: porta,
         typeLinea: {
           id: typeLinea,
-        },
+        }
       });
 
       var requestOptions = {
@@ -123,11 +122,11 @@ function LineeGeneratore() {
         redirect: "follow",
       };
 
-      fetch(`/api/linea`, requestOptions)
+      fetch(`/api/lineageratore`, requestOptions)
         .then((response) => response.json())
         .then((response) => {
           console.log(response);
-          getLinea();
+          getLineaGeneratore();
         })
         .catch((error) => console.log("error", error));
     };
@@ -138,7 +137,7 @@ function LineeGeneratore() {
     { title: "ID Linea", field: "id", defaultSort: "desc" },
     {
       title: "Path Csv",
-      field: "password",
+      field: "pathCsv",
     },
     {
       title: "IP Linea",
@@ -193,7 +192,7 @@ function LineeGeneratore() {
   };
 
   const handleClose2 = () => {
-    aggiornaUtente();
+    aggiornaLineaGeneratore();
     setOpen(false);
   };
   const handleClose = () => {
@@ -220,10 +219,10 @@ function LineeGeneratore() {
       redirect: "follow",
     };
 
-    fetch(`/api/linea`, requestOptions)
+    fetch(`/api/lineageneratore`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getLinea();
+        getLineaGeneratore();
       })
       .catch((error) => console.log("error", error));
     handleCloseDelete();

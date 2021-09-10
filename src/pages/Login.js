@@ -24,8 +24,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "10%",
-    // backgroundColor: "yellow",
+    //marginTop: "10%",
+    height: "80vh",
+    padding: "4%"
+    //backgroundColor: "yellow",
   },
   image: {
     // backgroundImage: `url(${loginImage})`,
@@ -47,11 +49,12 @@ const useStyles = makeStyles((theme) => ({
     // marginLeft: "70%",
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(3, 1),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    // backgroundColor: "red",
+    //height: "80%",
+    //backgroundColor: "red",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -65,8 +68,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
   logo: {
-    height: "20%",
-    width: "50%",
+    height: "20vh",
+    //width: "50%",
   },
   divLogo: {
     display: "flex",
@@ -109,6 +112,10 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  generalPaper: {
+  
+        
+  }
 }));
 
 export default function Login() {
@@ -185,7 +192,7 @@ export default function Login() {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
 
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid className={classes.generalPaper} item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           {/* <Avatar className={classes.avatar}>
             <LockOutlinedIcon />

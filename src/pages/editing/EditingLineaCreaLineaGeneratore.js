@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    boxShadow: "none",
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -343,6 +344,7 @@ function EditingLineaCreaLineaGeneratore() {
     getTypeId();
   }, []);
 
+  const [ip, setIp] = useState("");
   const [ip1, setIP1] = useState("");
   const [ip2, setIP2] = useState("");
   const [ip3, setIP3] = useState("");
@@ -361,24 +363,24 @@ function EditingLineaCreaLineaGeneratore() {
       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
       myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      var raw = JSON.stringify({
-        ip: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
-        numero: numero,
-        password: password,
-        porta: porta,
-        typeLinea: {
-          id: typeLineaId.id,
-        },
-      });
+      var formdata = new FormData();
+      formdata.append("ip", ip);
+      formdata.append("porta", porta);
+      formdata.append("typeLinea.id", typeLineaId);
+      // formdata.append(
+      //   "pathCSV",
+      //   fileInput.files[0],
+      //   "/C:/Users/chiar/OneDrive/Desktop/TEST_FUNZIONALI_GENESIS_v2.5.xlsx"
+      // );
 
       var requestOptions = {
         method: "PUT",
         headers: myHeaders,
-        body: raw,
+        body: formdata,
         redirect: "follow",
       };
 
-      fetch(`/api/linea`, requestOptions)
+      fetch(`/api/lineageneratore`, requestOptions)
         .then((response) => response.json())
         .then((result) =>
           result.error !== null
@@ -405,8 +407,8 @@ function EditingLineaCreaLineaGeneratore() {
         document.getElementById("alertPorta").style.display = "none";
         document.getElementById("alertTypeLinea").style.display = "none";
         document.getElementById("alertNumero").style.display = "none";
-        document.getElementById("alertNumero2").style.display = "none";
-        document.getElementById("alertPassword").style.display = "none";
+        // document.getElementById("alertNumero2").style.display = "none";
+        // document.getElementById("alertPassword").style.display = "none";
         document.getElementById("alertIP2").style.display = "none";
 
         Invia();
@@ -421,8 +423,7 @@ function EditingLineaCreaLineaGeneratore() {
       ip3 !== "" &&
       ip4 !== "" &&
       typeLineaId !== 0 &&
-      numero !== "" &&
-      password !== "" &&
+      
       (porta === "" || (porta.length > 3 && porta.length < 6))
     ) {
       if (porta.length === 0) {
@@ -465,17 +466,17 @@ function EditingLineaCreaLineaGeneratore() {
       } else {
         document.getElementById("alertPorta").style.display = "";
       }
-      if (numero === "") {
-        document.getElementById("alertNumero").style.display = "";
-      } else {
-        document.getElementById("alertNumero").style.display = "none";
-        document.getElementById("alertNumero2").style.display = "none";
-      }
-      if (password === "") {
-        document.getElementById("alertPassword").style.display = "";
-      } else {
-        document.getElementById("alertPassword").style.display = "none";
-      }
+      // if (numero === "") {
+      //   document.getElementById("alertNumero").style.display = "";
+      // } else {
+      //   document.getElementById("alertNumero").style.display = "none";
+      //   document.getElementById("alertNumero2").style.display = "none";
+      // }
+      // if (password === "") {
+      //   document.getElementById("alertPassword").style.display = "";
+      // } else {
+      //   document.getElementById("alertPassword").style.display = "none";
+      // }
     }
   }
 
@@ -672,13 +673,13 @@ function EditingLineaCreaLineaGeneratore() {
         </div>
 
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Linea Simulatore" />
+          <CreaItem titolo="Crea Linea Generatore" />
 
           <Divider className={classes.divider} />
 
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
+              {/* <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Numero</Form.Label>
                   <Form.Control
@@ -702,7 +703,7 @@ function EditingLineaCreaLineaGeneratore() {
                     Il Numero inserito è gia associato ad un'altra Linea!
                   </Alert>
                 </Form.Group>
-              </Paper>
+              </Paper> */}
 
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
@@ -761,7 +762,7 @@ function EditingLineaCreaLineaGeneratore() {
                 </Form.Group>
               </Paper>
 
-              <Paper className={classes.divSelect} elevation={0}>
+              {/* <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Password</Form.Label>
                   <Form.Control
@@ -778,7 +779,7 @@ function EditingLineaCreaLineaGeneratore() {
                     La Password è richiesta!
                   </Alert>
                 </Form.Group>
-              </Paper>
+              </Paper> */}
             </Paper>
 
             <Paper className={classes.paperContainer2} elevation={0}>
