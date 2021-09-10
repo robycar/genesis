@@ -10,18 +10,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import it.reply.sipp.AppError;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.generic.payload.ConnectionDTO;
 import it.reply.sipp.api.generic.service.AbstractService;
 import it.reply.sipp.api.linea.payload.LineaDTO;
+import it.reply.sipp.api.linea.payload.LineaGeneratoreDTO;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
+import it.reply.sipp.model.FileSystemScope;
+import it.reply.sipp.model.FileSystemVO;
+import it.reply.sipp.model.LineaGeneratoreVO;
 import it.reply.sipp.model.LineaVO;
 import it.reply.sipp.model.OutboundProxyVO;
 import it.reply.sipp.model.TypeLineaVO;
+import it.reply.sipp.model.repository.LineaGeneratoreRepository;
 import it.reply.sipp.model.repository.LineaRepository;
 import it.reply.sipp.model.repository.TypeLineaRepository;
+import it.reply.sipp.service.FileSystemService;
 import it.reply.sipp.service.LineaService;
 import it.reply.sipp.service.TestCaseService;
 import it.reply.sipp.service.dto.LineaReadLineaResponse;
@@ -35,6 +42,12 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 
 	@Autowired
 	private LineaRepository lineaRepository;
+	
+	@Autowired
+	private LineaGeneratoreRepository lineaGeneratoreRepository;
+	
+	@Autowired
+	private FileSystemService fileSystemService;
 	
 	public LineaServiceImpl() {
 	}
@@ -72,9 +85,42 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 		List<LineaDTO> result = lineaRepository.findAll().stream().map(vo -> new LineaDTO(vo))
 				.collect(Collectors.toList());
 
-		logger.debug("exit listLinee");
 		return result;
 	}
+
+  @Override
+  public List<LineaGeneratoreDTO> listLineeGeneratore() throws ApplicationException {
+    logger.debug("enter listLineeGeneratore");
+
+    return lineaGeneratoreRepository.findAll()
+      .stream()
+      .map(vo -> new LineaGeneratoreDTO(vo))
+      .collect(Collectors.toList());
+  }
+	
+  @Override
+  public LineaGeneratoreDTO createAndPopulateLineaGeneratore(LineaGeneratoreDTO dto, MultipartFile pathCSV)
+      throws ApplicationException {
+    logger.debug("enter createAndPopulateLineaGeneratore");
+    
+    LineaGeneratoreVO vo = new LineaGeneratoreVO();
+    vo.init(currentUsername());
+    
+    vo.setIp(dto.getIp());
+    vo.setPorta(dto.getPorta());
+    vo.setTypeLinea(readTypeLineaVO(dto.getTypeLinea().getId()));
+    
+    vo = lineaGeneratoreRepository.save(vo);
+
+    if (pathCSV != null) {
+      FileSystemVO fsVO = fileSystemService.saveFile(FileSystemScope.LINEA_GENERATORE, vo.getId(), pathCSV);
+      vo.setPathCSV(fsVO);
+      vo = lineaGeneratoreRepository.save(vo);
+    }
+    lineaGeneratoreRepository.flush();
+    return new LineaGeneratoreDTO(vo);
+    
+  }
 
 	@Override
 	public LineaDTO createLinea(LineaDTO dto) throws ApplicationException {
@@ -134,8 +180,36 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     return new TypeLineaDTO(vo);
   }
 
+  @Override
+  public LineaGeneratoreDTO updateLineaGeneratore(LineaGeneratoreDTO dto) throws ApplicationException {
+    logger.debug("enter updateLineaGeneratore");
+    
+    LineaGeneratoreVO vo = readLineaGeneratoreVO(dto.getId());
+    checkVersion(vo, dto.getVersion(), "LineaGeneratoreVO", vo.getId());
 
-	@Override
+    if (dto.getTypeLinea() != null && dto.getTypeLinea().getId() != null) {
+      vo.setTypeLinea(readTypeLineaVO(dto.getTypeLinea().getId()));
+    }
+    
+    if (dto.getIp() != null) {
+      vo.setIp(dto.getIp());
+    }
+    if (dto.getPorta() != null) {
+      vo.setPorta(dto.getPorta());
+    }
+    
+    vo = lineaGeneratoreRepository.saveAndFlush(vo);
+    
+    return new LineaGeneratoreDTO(vo);
+    
+  }
+  
+	private LineaGeneratoreVO readLineaGeneratoreVO(long id) throws ApplicationException {
+	  return lineaGeneratoreRepository.findById(id)
+	      .orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.LINEA_GENERATORE_NOT_FOUND, id));
+  }
+
+  @Override
 	public LineaDTO updateLinea(LineaDTO lineaDTO) throws ApplicationException {
 
 		logger.debug("enter updateLinea");
@@ -182,6 +256,14 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 		return new LineaDTO(lineaVO);
 	}
 
+  @Override
+  public void removeLineaGeneratore(long id) throws ApplicationException {
+    //TODO: Verificare se la linea generatore e' attualmente in uso
+    logger.debug("enter removeLineaGeneratore");
+    LineaGeneratoreVO lineaGeneratoreVO = readLineaGeneratoreVO(id);
+    lineaGeneratoreRepository.delete(lineaGeneratoreVO);
+  }
+  
 	@Override
 	public void removeLinea(Long id) throws ApplicationException {
 	  
@@ -274,5 +356,18 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     typeLineaRepository.delete(vo);
     
   }
+
+  @Override
+  public LineaGeneratoreDTO readLineaGeneratore(long id) throws ApplicationException {
+    LineaGeneratoreVO lineaVO = readLineaGeneratoreVO(id);
+    return new LineaGeneratoreDTO(lineaVO);
+  }
+
+
+
+
+
+
+
 
 }

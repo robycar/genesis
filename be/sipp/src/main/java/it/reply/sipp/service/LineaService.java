@@ -2,8 +2,11 @@ package it.reply.sipp.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.linea.payload.LineaDTO;
+import it.reply.sipp.api.linea.payload.LineaGeneratoreDTO;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
 import it.reply.sipp.model.LineaVO;
 import it.reply.sipp.model.TypeLineaVO;
@@ -101,5 +104,14 @@ public interface LineaService {
    * @throws ApplicationException in caso di errori
    */
   void removeTypeLinea(long id) throws ApplicationException;
-	
+
+  List<LineaGeneratoreDTO> listLineeGeneratore() throws ApplicationException;
+
+  LineaGeneratoreDTO createAndPopulateLineaGeneratore(LineaGeneratoreDTO lineaDTO, MultipartFile pathCSV) throws ApplicationException;
+
+  LineaGeneratoreDTO updateLineaGeneratore(LineaGeneratoreDTO lineaDTO) throws ApplicationException;
+
+  void removeLineaGeneratore(long id) throws ApplicationException;
+
+  LineaGeneratoreDTO readLineaGeneratore(long id) throws ApplicationException;
 }

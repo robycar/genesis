@@ -9,6 +9,7 @@ INSERT INTO `FUNZIONE` (`CODICE`, `NOME`, `DESCRIZIONE`) VALUES
 ('linea.delete',	'Elimina linea',	'Consente di eliminare una linea'),
 ('linea.edit',	'Modifica linea',	'consente di modificare una linea'),
 ('linea.view',	'Mostra le linee',	'Consente di accedere alle linee presenti nel sistema'),
+('linea.create', 'Creazione linea', 'Creazione linea'),
 ('obp.delete',	'Elimina Outbound Proxy',	'Consente di eliminare un Outbound Proxy'),
 ('obp.edit',	'Modifica Outbound Proxy',	'Consente di creare o modificare un Outbound Proxy'),
 ('obp.view',	'Mostra gli Outbound Proxy',	'Consente di accedere agli Outbound Proxy definiti nel sistema'),
@@ -25,7 +26,11 @@ INSERT INTO `FUNZIONE` (`CODICE`, `NOME`, `DESCRIZIONE`) VALUES
 ('testsuite.view', 'Mostra Test Suite', 'Consente di accedere ad una test suite'),
 ('testsuite.edit', 'Modifica Test Suite', 'Consente di modificare una test suite esistente'),
 ('testsuite.create', 'Crea Test Suite', 'Consente di creare una nuova test suite'),
-('testsuite.delete', 'Elimina Test Suite', 'Consente di eliminare una test suite esistente')
+('testsuite.delete', 'Elimina Test Suite', 'Consente di eliminare una test suite esistente'),
+('lineagen.view', 'Visualizza Linea Generatore', 'Visualizza Linea Generatore'),
+('lineagen.create', 'Creazione Linea Generatore', 'Creazione Linea Generatore'),
+('lineagen.edit', 'Modifica Linea Generatore', 'Modifica Linea Generatore'),
+('lineagen.delete', 'Elimina Linea Generatore', 'Elimina Linea Generatore')
 ;
 
 INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES

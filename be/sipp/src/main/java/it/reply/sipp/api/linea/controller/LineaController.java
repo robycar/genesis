@@ -44,7 +44,7 @@ public class LineaController extends AbstractController {
 	@GetMapping("")
 	@PreAuthorize("hasAuthority('FUN_linea.view')")
 	public ResponseEntity<LineaListResponse> list() {
-
+	  logger.info("enter list()");
 		LineaListResponse response = new LineaListResponse();
 		try {
 			List<LineaDTO> result = lineaService.listLinee();
@@ -57,7 +57,7 @@ public class LineaController extends AbstractController {
 	}
 
 	@PutMapping("")
-	@PreAuthorize("hasAuthority('FUN_linea.edit')")
+	@PreAuthorize("hasAuthority('FUN_linea.create')")
 	public ResponseEntity<LineaAddResponse> add(@Valid @RequestBody(required = true) LineaAddRequest request) {
 		logger.info("enter add({})", request);
 

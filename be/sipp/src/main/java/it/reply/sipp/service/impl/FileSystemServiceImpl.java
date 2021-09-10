@@ -31,6 +31,7 @@ import it.reply.sipp.model.FileSystemVO;
 import it.reply.sipp.model.TemplateFileVO;
 import it.reply.sipp.model.TemplateVO;
 import it.reply.sipp.model.repository.FileSystemRepository;
+import it.reply.sipp.model.repository.LineaGeneratoreRepository;
 import it.reply.sipp.model.repository.TemplateRepository;
 import it.reply.sipp.service.FileSystemService;
 
@@ -74,7 +75,7 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
 
   private static final Path root = Path.of("");
   
-  private FileSystemVO saveFile(FileSystemScope scope, long idRef, MultipartFile file) throws ApplicationException {
+  public FileSystemVO saveFile(FileSystemScope scope, long idRef, MultipartFile file) throws ApplicationException {
     logger.debug("enter saveFile");
     
     logger.debug("OriginalFileName: {}, ContentType: {}", file.getOriginalFilename(), file.getContentType());
@@ -126,10 +127,17 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     
   }
 
+  @Autowired
+  private LineaGeneratoreRepository lineaGeneratoreRepository;
+  
   private BaseEntity checkFolderExists(FileSystemScope scope, long idRef) throws ApplicationException {
     logger.debug("enter checkFolderExists");
     if (scope.equals(FileSystemScope.TEMPLATE)) {
       return templateRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEMPLATE_NOT_FOUND, idRef));
+    }
+    
+    if (scope.equals(FileSystemScope.LINEA_GENERATORE)) {
+      return lineaGeneratoreRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.LINEA_GENERATORE_NOT_FOUND, idRef));
     }
 
     //TODO: return test
@@ -188,6 +196,8 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
       break;
     case TEST:
       break;
+    case LINEA_GENERATORE:
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.FS_PREVENT_DELETE_USED_FILE);
     }
     
     fileSystemRepository.delete(fileVO);

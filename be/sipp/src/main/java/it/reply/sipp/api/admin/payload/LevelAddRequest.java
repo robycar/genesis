@@ -1,5 +1,8 @@
 package it.reply.sipp.api.admin.payload;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
@@ -17,6 +20,8 @@ public class LevelAddRequest extends PayloadRequest {
 	
 	@Length(max=LevelVO.DESCRIZIONE_LENGTH)
 	private String descrizione;
+	
+	private Set<String> funzioni;
 
 	public LevelAddRequest() {
 	}
@@ -37,11 +42,19 @@ public class LevelAddRequest extends PayloadRequest {
 		this.descrizione = descrizione;
 	}
 
-	@Override
+  public Set<String> getFunzioni() {
+    return funzioni;
+  }
+
+  public void setFunzioni(Set<String> funzioni) {
+    this.funzioni = funzioni;
+  }
+
+  @Override
 	protected void writeFields(StringBuilder sb) {
 		writeField(sb, "nome", nome);
 		writeField(sb, "descrizione", descrizione);
-		
+		writeField(sb, "funzioni", funzioni);
 		super.writeFields(sb);
 	}
 	

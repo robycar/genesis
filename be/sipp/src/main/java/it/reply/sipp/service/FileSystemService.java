@@ -32,4 +32,14 @@ public interface FileSystemService {
    */
   List<Pair<FileSystemVO, FileSystemVO>> copyFilesThroughScope(FileSystemScope sourceScope, long sourceId, FileSystemScope targetScope, long targetId) throws ApplicationException;
 
+  /**
+   * Uso interno: Salva un file senza i controlli eseguito da upload
+   * @param scope
+   * @param idRef
+   * @param file
+   * @return
+   * @throws ApplicationException
+   */
+  FileSystemVO saveFile(FileSystemScope scope, long idRef, MultipartFile file) throws ApplicationException;
+
 }
