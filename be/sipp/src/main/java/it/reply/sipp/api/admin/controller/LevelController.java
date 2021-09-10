@@ -1,7 +1,6 @@
 package it.reply.sipp.api.admin.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -29,7 +28,6 @@ import it.reply.sipp.api.admin.payload.LevelUpdateRequest;
 import it.reply.sipp.api.generic.controller.AbstractController;
 import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.generic.payload.PayloadResponse;
-import it.reply.sipp.model.LevelVO;
 import it.reply.sipp.service.LevelService;
 
 @RestController
@@ -47,10 +45,7 @@ public class LevelController extends AbstractController {
 	public ResponseEntity<LevelListResponse> list() {
 		logger.info("enter list");
 		
-		List<LevelDTO> livelli = levelService.listLivelli()
-			.stream()
-			.map(vo -> new LevelDTO(vo))
-			.collect(Collectors.toUnmodifiableList());
+		List<LevelDTO> livelli = levelService.listLivelli();
 		logger.debug("Recuperati {} livelli da db", livelli.size());
 			
 		LevelListResponse response = new LevelListResponse();
@@ -69,9 +64,10 @@ public class LevelController extends AbstractController {
 			LevelDTO dto = new LevelDTO();
 			dto.setNome(request.getNome());
 			dto.setDescrizione(request.getDescrizione());
+			dto.setFunzioni(request.getFunzioni());
 			
-			LevelVO vo = levelService.addLevel(dto);
-			response.setLevel(new LevelDTO(vo));
+			dto = levelService.addLevel(dto);
+			response.setLevel(dto);
 			return ResponseEntity.status(HttpStatus.CREATED).body(response);
 			
 		} catch (ApplicationException e) {
@@ -92,9 +88,9 @@ public class LevelController extends AbstractController {
 		LevelUpdateLevelResponse response = new LevelUpdateLevelResponse();
 		
 		try {
-			LevelVO vo = levelService.updateLevel(levelDTO);
+			LevelDTO result = levelService.updateLevel(levelDTO);
 			
-			response.setLevel(new LevelDTO(vo));
+			response.setLevel(result);
 			
 			return ResponseEntity.ok().body(response);
 		} catch (ApplicationException e) {

@@ -1,10 +1,12 @@
 package it.reply.sipp.service.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +61,7 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 
 	
 	@Override
-	public LevelVO addLevel(LevelDTO dto) throws ApplicationException {
+	public LevelDTO addLevel(LevelDTO dto) throws ApplicationException {
 		logger.debug("enter addLevel");
 		
 		if (dto.getId() != null) {
@@ -70,25 +72,38 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 		if (existingLevel.isPresent()) {
 			throw makeError(HttpStatus.CONFLICT, AppError.LEVEL_ALRADY_EXISTS, dto.getNome());
 		}
+		List<FunzioneVO> funzioniVO = null;
+		if (dto.getFunzioni() != null && !dto.getFunzioni().isEmpty()) {
+		  HashSet<String> nuoveFunzioni = new HashSet<>(dto.getFunzioni());
+		   funzioniVO = funzioneRepository.findAllById(dto.getFunzioni());
+		   funzioniVO.forEach(f -> nuoveFunzioni.remove(f.getCodice()));
+		   if (!nuoveFunzioni.isEmpty()) {
+		     throw makeError(HttpStatus.NOT_FOUND, AppError.FUNZIONI_NOT_FOUND, nuoveFunzioni);
+		   }
+		}
 		
 		LevelVO vo = new LevelVO();
 		vo.setNome(dto.getNome());
 		vo.setDescrizione(dto.getDescrizione());
 		vo.init(currentUsername());
+		if (funzioniVO != null) {
+		  vo.setFunzioni(new HashSet<>(funzioniVO));
+		}
 		
 		vo = levelRepository.saveAndFlush(vo);
-		logger.debug("exit addLevel");
-		return vo;
+		return new LevelDTO(vo, vo.getFunzioni());
 	}
 
 	@Override
-	public List<LevelVO> listLivelli() {
+	public List<LevelDTO> listLivelli() {
 		logger.debug("enter listLivelli");
-		return levelRepository.findAll();
+		return levelRepository.findAll()
+		    .stream().map(vo -> new LevelDTO(vo))
+		    .collect(Collectors.toList());
 	}
 
 	@Override
-	public LevelVO updateLevel(LevelDTO dto) throws ApplicationException {
+	public LevelDTO updateLevel(LevelDTO dto) throws ApplicationException {
 		logger.debug("enter updateLevel({})", dto);
 		
 		LevelVO vo = readVO(dto.getId());
@@ -142,8 +157,7 @@ public class LevelServiceImpl extends AbstractService implements LevelService {
 		
 		vo = levelRepository.saveAndFlush(vo);
 		
-		logger.debug("exit updateLevel");
-		return vo;
+		return new LevelDTO(vo, vo.getFunzioni());
 	}
 
 	@Override

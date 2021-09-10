@@ -33,13 +33,13 @@ public interface LevelService  {
 	 * @return il livello aggiunto
 	 * @throws ApplicationException in caso di errori
 	 */
-	LevelVO addLevel(LevelDTO dto) throws ApplicationException;
+	LevelDTO addLevel(LevelDTO dto) throws ApplicationException;
 
 	/**
 	 * Recupera l'elenco dei livelli presenti nel sistema.
 	 * @return la lista dei livelli recuperati
 	 */
-	List<LevelVO> listLivelli();
+	List<LevelDTO> listLivelli();
 
 	/**
 	 * Modifica i dati di un livello. Il livello &egrave; identificato
@@ -49,7 +49,7 @@ public interface LevelService  {
 	 * @return il livello modificato
 	 * @throws ApplicationException in caso di errori
 	 */
-	LevelVO updateLevel(LevelDTO levelDto) throws ApplicationException;
+	LevelDTO updateLevel(LevelDTO levelDto) throws ApplicationException;
 
 	/**
 	 * Rimuove un livello dal sistema

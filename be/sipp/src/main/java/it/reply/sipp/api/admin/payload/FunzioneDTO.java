@@ -13,6 +13,8 @@ public class FunzioneDTO extends DTO {
 	
 	private String descrizione;
 	
+	private Boolean reserved;
+	
 	public FunzioneDTO() {
 	}
 	
@@ -20,6 +22,7 @@ public class FunzioneDTO extends DTO {
 		this.codice = vo.getCodice();
 		this.descrizione = vo.getDescrizione();
 		this.nome = vo.getNome();
+		this.reserved = vo.getReserved();
 	}
 
 	public String getCodice() {
@@ -46,9 +49,18 @@ public class FunzioneDTO extends DTO {
 		this.descrizione = descrizione;
 	}
 
-	@Override
+	public Boolean getReserved() {
+    return reserved;
+  }
+
+  public void setReserved(Boolean reserved) {
+    this.reserved = reserved;
+  }
+
+  @Override
 	protected void writeFields(StringBuilder sb) {
 		writeField(sb, "codice", codice);
+		writeField(sb, "reserved", reserved);
 		writeField(sb, "nome", nome);
 		writeField(sb, "descrizione", descrizione);
 		

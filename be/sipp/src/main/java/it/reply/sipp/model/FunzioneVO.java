@@ -19,6 +19,8 @@ public class FunzioneVO implements Serializable {
 	
 	private String descrizione;
 	
+	private Boolean reserved;
+	
 	public FunzioneVO() {
 	}
 
@@ -46,7 +48,15 @@ public class FunzioneVO implements Serializable {
 		this.codice = code;
 	}
 
-	@Override
+	public Boolean getReserved() {
+    return reserved;
+  }
+
+  public void setReserved(Boolean reserved) {
+    this.reserved = reserved;
+  }
+
+  @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
