@@ -219,6 +219,9 @@ const useStyles = makeStyles((theme) => ({
     color: "#47B881",
     marginTop: "5%",
   },
+  input: {
+    display: "none",
+  },
   icon: {
     transform: "scale(1.8)",
     color: "#47B881",
@@ -233,8 +236,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "6%",
     marginBottom: "5%",
   },
-  input: {
-    display: "none",
+  buttonTestContainer: {
+    marginTop: "2%",
   },
   formGroupPath: {
     display: "flex",
@@ -281,21 +284,72 @@ function EditingLineaCreaLineaGeneratore() {
   };
 
   const removeTypeLinea = (id) => {
-    alert("id " + id + " rimosso");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: id,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => getTypeId());
+
+    handleCloseRemove();
+  };
+
+  const editTypeLinea = (typeLinea) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: typeLinea.id,
+      version: typeLinea.version,
+      descrizione:
+        typeLineaDescrizione !== ""
+          ? typeLineaDescrizione
+          : typeLinea.descrizione,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/typeLinea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getTypeId();
+      });
+    handleCloseEdit();
   };
 
   useEffect(() => {
     getTypeId();
   }, []);
 
-  const [ip, setIP] = useState("");
   const [ip1, setIP1] = useState("");
   const [ip2, setIP2] = useState("");
   const [ip3, setIP3] = useState("");
   const [ip4, setIP4] = useState("");
   const [numero, setNumero] = useState("");
   const [password, setPassword] = useState("");
-  const [porta, setPorta] = useState("5060");
+  let porta = "5060";
   const [typeLineaId, setTypeLineaId] = useState(0);
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
@@ -374,6 +428,7 @@ function EditingLineaCreaLineaGeneratore() {
       if (porta.length === 0) {
         porta = "5060";
       }
+
       aggiornaIP();
     } else {
       if (ip1 === "" || ip2 === "" || ip3 === "" || ip4 === "") {
@@ -410,6 +465,17 @@ function EditingLineaCreaLineaGeneratore() {
       } else {
         document.getElementById("alertPorta").style.display = "";
       }
+      if (numero === "") {
+        document.getElementById("alertNumero").style.display = "";
+      } else {
+        document.getElementById("alertNumero").style.display = "none";
+        document.getElementById("alertNumero2").style.display = "none";
+      }
+      if (password === "") {
+        document.getElementById("alertPassword").style.display = "";
+      } else {
+        document.getElementById("alertPassword").style.display = "none";
+      }
     }
   }
 
@@ -441,8 +507,8 @@ function EditingLineaCreaLineaGeneratore() {
   };
   //--------------------MODAALE 2----------------------------------
 
-  const [open2, setOpen2] = React.useState(false);
-  const [type, setType] = React.useState("");
+  const [open2, setOpen2] = useState(false);
+  const [type, setType] = useState("");
 
   const handleOpen2 = () => {
     setOpen2(true);
@@ -453,8 +519,8 @@ function EditingLineaCreaLineaGeneratore() {
   };
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
   const checkRichiesta = (result) => {
-    console.log(result);
     setTypeLineaId(result.id);
   };
 
@@ -555,18 +621,6 @@ function EditingLineaCreaLineaGeneratore() {
           >
             LINEE
           </Button>
-          {/* <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/lineegeneratore"
-          >
-            LINEE GENERATORE
-          </Button> */}
-          {/* </NavLink> */}
-
-          {/* <NavLink exact to="/dashboard/testsuite"> */}
           <Button
             className="button-green"
             component={NavLink}
@@ -594,16 +648,37 @@ function EditingLineaCreaLineaGeneratore() {
           >
             TEST
           </Button>
+
+          <div className={classes.buttonTestContainer}>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/linee/crealinea"
+            >
+              LINEE SIMULATORE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/lineegeneratore"
+            >
+              LINEE GENERATORE
+            </Button>
+          </div>
         </div>
 
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Linea Generatore" />
+          <CreaItem titolo="Crea Linea Simulatore" />
 
           <Divider className={classes.divider} />
 
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
-              {/* <Paper className={classes.divSelect} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>Numero</Form.Label>
                   <Form.Control
@@ -619,8 +694,15 @@ function EditingLineaCreaLineaGeneratore() {
                   >
                     Il Numero è richiesto!
                   </Alert>
+                  <Alert
+                    severity="error"
+                    id="alertNumero2"
+                    style={{ display: "none" }}
+                  >
+                    Il Numero inserito è gia associato ad un'altra Linea!
+                  </Alert>
                 </Form.Group>
-              </Paper> */}
+              </Paper>
 
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
@@ -680,6 +762,48 @@ function EditingLineaCreaLineaGeneratore() {
               </Paper>
 
               <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertPassword"
+                    style={{ display: "none" }}
+                  >
+                    La Password è richiesta!
+                  </Alert>
+                </Form.Group>
+              </Paper>
+            </Paper>
+
+            <Paper className={classes.paperContainer2} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Porta</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="number"
+                    placeholder="5060"
+                    defaultValue={porta}
+                    onChange={(e) => (porta = e.target.value)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertPorta"
+                    style={{ display: "none" }}
+                  >
+                    La lunghezza della porta deve essere compresa tra 4 e 5
+                    valori!
+                  </Alert>
+                </Form.Group>
+              </Paper>
+
+              <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group
                   controlId="form.Numero"
                   className={classes.formGroupPath}
@@ -704,42 +828,6 @@ function EditingLineaCreaLineaGeneratore() {
                       </Button>
                     </div>
                   </label>
-                  {/* <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  /> */}
-                  {/* <Alert
-                    severity="error"
-                    id="alertPassword"
-                    style={{ display: "none" }}
-                  >
-                    La Password è richiesta!
-                  </Alert> */}
-                </Form.Group>
-              </Paper>
-            </Paper>
-
-            <Paper className={classes.paperContainer2} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Porta</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="number"
-                    placeholder="Inserisci Porta"
-                    defaultValue={porta}
-                    onChange={(e) => setPorta(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertPorta"
-                    style={{ display: "none" }}
-                  >
-                    La lunghezza della porta deve essere compresa tra 4 e 5
-                    valori!
-                  </Alert>
                 </Form.Group>
               </Paper>
 
@@ -1046,24 +1134,19 @@ function EditingLineaCreaLineaGeneratore() {
                               </div>
 
                               <div className={classes.paperBottom}>
-                                <Form.Group controlId="form.Numero">
+                                <Form.Group controlId="form.Descrizione">
                                   <Form.Control
                                     type="text"
-                                    placeholder="Inserisci in nuovo nome"
+                                    placeholder="Modifica descrizione"
                                     defaultValue={
                                       openEdit === true
                                         ? typeLineaDescrizione
                                         : ""
                                     }
-                                    //onChange={(e) => setPorta(e.target.value)}
+                                    onChange={(e) =>
+                                      setTypeLineaDescrizione(e.target.value)
+                                    }
                                   />
-                                  <Alert
-                                    severity="error"
-                                    id="alertEditType"
-                                    style={{ display: "none" }}
-                                  >
-                                    Inserire il nuovo nome!
-                                  </Alert>
                                 </Form.Group>
 
                                 <div className={classes.divider2}>
@@ -1073,9 +1156,7 @@ function EditingLineaCreaLineaGeneratore() {
                                 <div className={classes.bottoni}>
                                   <div>
                                     <Button
-                                      onClick={() =>
-                                        removeTypeLinea(typeLineaId.id)
-                                      }
+                                      onClick={() => editTypeLinea(typeLineaId)}
                                       variant="contained"
                                       color="secondary"
                                     >

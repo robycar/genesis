@@ -40,6 +40,7 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Prova from "../../components/Prova";
+import { blue } from "@material-ui/core/colors";
 
 const drawerWidth = 240;
 
@@ -245,6 +246,11 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: "none",
   },
+  fileContainer: {
+    border: "1px solid blue",
+    height: "100%",
+    width: "100%",
+  },
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
@@ -268,15 +274,20 @@ function EditingTemplateCreaTemplate() {
   const [durata, setDurata] = useState(0);
   const [descrizione, setDescrizione] = useState("");
   const [tipoTemplate, setTipoTemplate] = useState("");
-  const [selectedFile, setSelectedFile] = useState();
+  const [selectedFile, setSelectedFile] = useState([]);
   const [isSelected, setIsSelected] = useState(false);
   const [nextDisabled, setNextDisabled] = useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
 
   const changeHandler = (event) => {
-    setSelectedFile(event.target.files[0]);
+    setSelectedFile(event.target.files);
     setIsSelected(true);
+
+    console.log(event.target.files);
   };
+
+  const arrayValue = Object.values(selectedFile);
+  console.log(arrayValue);
 
   const handleSubmission = () => {};
 
@@ -421,83 +432,30 @@ function EditingTemplateCreaTemplate() {
 
   const handleChangeName = (e) => {
     setNome(e.target.value);
-    console.log(e.target.value);
   };
   const handleChangeDurata = (e) => {
     setDurata(e.target.value);
-    console.log(e.target.value);
   };
   const handleChangeDescrizione = (e) => {
     setDescrizione(e.target.value);
-    console.log(e.target.value);
   };
   const handleChangeTipoTemplate = (e) => {
     setTipoTemplate(e.target.value);
-    console.log(e.target.value);
   };
 
-  const disabilitaNext = () => {
+  useEffect(() => {
     if (activeStep === 0) {
-      if (nome === "" || durata === "" || tipoTemplate === "") {
+      if (nome === "" || durata === 0 || tipoTemplate === "") {
         setNextDisabled(true);
       } else {
         setNextDisabled(false);
       }
-      // } else if (activeStep === 1) {
-      //   if (
-      //     lineaChiamato === null ||
-      //     OBPChiamato === null ||
-      //     numChiamanti === null
-      //   ) {
-      //     setNextDisabled(true);
-      //   } else {
-      //     setNextDisabled(false);
-      //   }
-      // } else if (activeStep === 2) {
-      //   if (lineaChiamante === null || OBPChiamante === null) {
-      //     setNextDisabled(true);
-      //   } else {
-      //     setNextDisabled(false);
-      //   }
-      // }
-      // // da correggere a servizio pronto
-      // else if (activeStep === 3) {
-      //   if (template === "") {
-      //     setNextDisabled(true);
-      //   } else {
-      //     setNextDisabled(false);
-      //   }
     }
-  };
+  }, [nome, durata, tipoTemplate]);
 
   function salva() {
     const Invia = () => {
-      // var myHeaders = new Headers();
-      // myHeaders.append("Authorization", bearer);
-      // myHeaders.append("Content-Type", "application/json");
-      // myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      // myHeaders.append("Access-Control-Allow-Credentials", "true");
-      // var raw = JSON.stringify({
-      //   // ip: ip,
-      //   Nome: nome,
-      //   // password: password,
-      //   descrizione: descrizione,
-      //   // typeLinea: {
-      //   //   id: typeLineaId,
-      //   // },
-      // });
-      // var requestOptions = {
-      //   method: "PUT",
-      //   headers: myHeaders,
-      //   body: raw,
-      //   redirect: "follow",
-      // };
-      // fetch(`/api/linea`, requestOptions)
-      //   .then((response) => response.json())
-      //   .catch((error) => console.log("error", error));
-      // // localStorage.setItem("user-info", JSON.stringify(result));
-      // // history.push("/dashboard/testcase");
-      // window.location = "/editing/linee";
+      //PUT API
     };
 
     if (
@@ -574,30 +532,7 @@ function EditingTemplateCreaTemplate() {
 
   const salva2 = () => {
     const Invia = () => {
-      // var myHeaders = new Headers();
-      // myHeaders.append("Authorization", bearer);
-      // myHeaders.append("Content-Type", "application/json");
-      // myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      // myHeaders.append("Access-Control-Allow-Credentials", "true");
-      // var raw = JSON.stringify({
-      //   descrizione: type,
-      // });
-      // var requestOptions = {
-      //   method: "PUT",
-      //   headers: myHeaders,
-      //   body: raw,
-      //   redirect: "follow",
-      // };
-      // fetch(`/api/typeLinea`, requestOptions)
-      //   .then((response) => response.json())
-      //   .then((result) => {
-      //     checkRichiesta(result.typeLinea);
-      //     getTypeId();
-      //   })
-      //   .catch((error) => console.log("error", error));
-      // localStorage.setItem("user-info", JSON.stringify(result));
-      // history.push("/dashboard/testcase");
-      //window.location = "/editing/linee";
+      //PUT
     };
 
     if (type !== "") {
@@ -623,16 +558,6 @@ function EditingTemplateCreaTemplate() {
   const handleReset = () => {
     setActiveStep(0);
   };
-
-  // const prova = () => {
-  //   var ciao = new Array(0);
-
-  //   for (let i = 0; i < numChiamanti; i++) {
-  //     ciao.push("");
-  //   }
-  //   console.log(ciao);
-  //   return ciao;
-  // };
 
   return (
     <div className={classes.root}>
@@ -749,7 +674,6 @@ function EditingTemplateCreaTemplate() {
                     placeholder="Inserisci Nome"
                     onChange={(e) => {
                       handleChangeName(e);
-                      disabilitaNext();
                     }}
                     required
                   />
@@ -771,7 +695,6 @@ function EditingTemplateCreaTemplate() {
                     placeholder="Inserisci Durata"
                     onChange={(e) => {
                       handleChangeDurata(e);
-                      disabilitaNext();
                     }}
                   />
                   <Alert
@@ -795,7 +718,6 @@ function EditingTemplateCreaTemplate() {
                     placeholder="Inserisci Descrizione"
                     onChange={(e) => {
                       handleChangeDescrizione(e);
-                      disabilitaNext();
                     }}
                   />
                   <Alert
@@ -816,7 +738,6 @@ function EditingTemplateCreaTemplate() {
                     placeholder="Inserisci Tipo template"
                     onChange={(e) => {
                       handleChangeTipoTemplate(e);
-                      disabilitaNext();
                     }}
                     required
                   />
@@ -841,10 +762,11 @@ function EditingTemplateCreaTemplate() {
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Upload">
                   <input
+                    // accept=".xml"
                     className={classes.input}
+                    id="contained-button-file"
                     multiple
                     type="file"
-                    name="file"
                     onChange={changeHandler}
                   />
                   <label htmlFor="contained-button-file">
@@ -857,16 +779,31 @@ function EditingTemplateCreaTemplate() {
                       Upload
                     </Button>
                   </label>
-                  {/* <input
-                    accept="image/*"
-                    className={classes.input}
-                    id="icon-button-file"
-                    type="file"
-                  /> */}
                 </Form.Group>
               </Paper>
+              <h2>Files</h2>
+              <div className={classes.fileContainer}>
+                {arrayValue.map((file, index) => {
+                  return (
+                    <div key={index} id={index}>
+                      <p>{file.name}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className={classes.fileContainer} >
+                
+              </div>
             </Paper>
           </div>
+
+          {/* {appearTemplate.map((template) => {
+                        return (
+                          <MenuItem key={template.id} value={template.id}>
+                            {template.nome}
+                          </MenuItem>
+                        );
+                      })} */}
           {/* ------------------------STEP 3--------------------------------- */}
           <div
             className={classes.generalContainer}
@@ -874,70 +811,7 @@ function EditingTemplateCreaTemplate() {
           >
             <Paper className={classes.paperContainer1} elevation={0}>
               <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Linea chiamante n</Form.Label>
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                  >
-                    <Select
-                      id="selectLinea"
-                      // value={lineaChiamante}
-                      // onChange={(e) => setLineaChiamante}
-                    >
-                      {/* da correggere quando avremo le linee chiamanti */}
-                      {/* {appearLinea.map((linea) => {
-                        return (
-                          <MenuItem key={linea.id} value={linea.id}>
-                            {linea.numero}
-                          </MenuItem>
-                        );
-                      })} */}
-                    </Select>
-                    <Alert
-                      severity="error"
-                      id="alertLinea"
-                      style={{ display: "none" }}
-                    >
-                      Selezionare la Linea chiamente
-                    </Alert>
-                  </FormControl>
-                </Form.Group>
-              </Paper>
-            </Paper>
-
-            <Paper className={classes.paperContainer1} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group>
-                  <Form.Label>OBP chiamante n</Form.Label>
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                    required
-                  >
-                    <Select
-                      id="selectOBP"
-                      // value={OBPChiamante}
-                      // onChange={(e) => setOBPChiamante(e.target.value)}
-                      required
-                    >
-                      {/* {appearOBP.map((OBP) => {
-                        return (
-                          <MenuItem key={OBP.id} value={OBP.id}>
-                            {OBP.descrizione}
-                          </MenuItem>
-                        );
-                      })} */}
-                    </Select>
-                    <Alert
-                      severity="error"
-                      id="alertOBP"
-                      style={{ display: "none" }}
-                    >
-                      Selezionare l'OBP chiamante
-                    </Alert>
-                  </FormControl>
-                </Form.Group>
+                {/* Inserimento tabella gestione dati */}
               </Paper>
             </Paper>
           </div>

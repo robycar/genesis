@@ -3,6 +3,7 @@ import MaterialTable from "material-table";
 import "../styles/App.css";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
+import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { Paper, Typography, Link } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
@@ -28,14 +29,14 @@ function Template() {
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   const [id, setId] = useState();
-  const [versione, setVersione] = useState();
+  const [version, setVersion] = useState();
   const [nome, setNome] = useState();
   const [durata, setDurata] = useState();
-  const [creatoDa, setCreatoDa] = useState("");
-  const [modificatoDa, setModificatoDa] = useState("");
-  const [dataModifica, setDataModifica] = useState("");
-  const [dataCreazione, setDataCreazione] = useState("");
-  const [tipoTemplate, setTipoTemplate] = useState("");
+  const [createdBy, setCreatedBy] = useState("");
+  const [modifiedBy, setModifiedBy] = useState("");
+  const [modifiedDate, setModifiedDate] = useState("");
+  const [creationDate, setCreationDate] = useState("");
+  const [typeTemplate, setTypeTemplate] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [nomeTitolo, setNomeTitolo] = useState("");
 
@@ -62,6 +63,11 @@ function Template() {
       .catch((error) => console.log("error", error));
   };
 
+  useEffect(() => {
+    getTemplate();
+  }, []);
+
+
   const columns = [
     {
       title: "ID Template",
@@ -73,25 +79,26 @@ function Template() {
       title: "Nome",
       field: "nome",
     },
-    {
-      title: "Data modifica",
-      field: "modifiedDate",
-    },
-    {
-      title: "Data creazione",
-      field: "creationDate",
-    },
-    {
-      title: "Modificato da",
-      field: "modifiedBy",
-    },
-    {
-      title: "Creato da",
-      field: "createdBy",
-    },
+    // {
+    //   title: "Data modifica",
+    //   field: "modifiedDate",
+    // },
+    // {
+    //   title: "Data creazione",
+    //   field: "creationDate",
+    // },
+    // {
+    //   title: "Modificato da",
+    //   field: "modifiedBy",
+    // },
+    // {
+    //   title: "Creato da",
+    //   field: "createdBy",
+    // },
     {
       title: "Versione",
       field: "version",
+      editable: "never",
     },
     {
       title: "Tipo",
@@ -109,31 +116,131 @@ function Template() {
 
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [idElemento, setIdElemento] = React.useState(0);
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
     setNomeTitolo(rowData.nome);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
-    setVersione(rowData.version);
+    setVersion(rowData.version);
     setDurata(rowData.durata);
-    setCreatoDa(rowData.createdBy);
-    setModificatoDa(rowData.modifiedBy);
-    setDataCreazione(rowData.creationDate);
-    setDataModifica(rowData.modifiedDate);
-    setTipoTemplate(rowData.typeTemplate);
-
+    setCreatedBy(rowData.createdBy);
+    setModifiedBy(rowData.modifiedBy);
+    setCreationDate(rowData.creationDate);
+    setModifiedDate(rowData.modifiedDate);
+    setTypeTemplate(rowData.typeTemplate);
     setOpen(true);
+  };
+
+  const openModifica = (rowData) => {
+    setModifica(true);
+    handleOpen(rowData);
+  };
+  const openVisualizza = (rowData) => {
+       setModifica(false);
+    handleOpen(rowData);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  useEffect(() => {
-    getTemplate();
-  }, []);
+  const handleClose2 = () => {
+    aggiornaTemplate();
+    setOpen(false);
+  };
 
+  //------------ FUNZIONE DELETE ------------
+
+  const functionDelete = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: idElemento,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/template`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getTemplate();
+      })
+      .catch((error) => console.log("error", error));
+    handleCloseDelete();
+  };
+
+  //------------ funzione apri modale
+
+  const handleOpenDelete = (rowData) => {
+    setNome(rowData.nome);
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  
+  //-------AGGIORNA TEST SUITE----------------------------
+
+  const aggiornaTemplate = () => {
+
+    const invia = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: id,
+      version: version,
+      nome: nome,
+      durata: durata,
+      typeTemplate: typeTemplate,
+      // fileLinks: {
+      //   CHIAMATO: [
+      //     {
+      //       id: id.chiamato
+      //     }
+      //   ],
+      //   CHIAMANTE: [
+      //    id: id.chiamante
+      //   ]
+      // }
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/template`, requestOptions)
+      .then((response) => response.json())
+      .then((response) => {
+        getTemplate();
+      })
+      .catch((error) => console.log("error", error));
+  };
+  invia();
+};
+
+  
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -207,6 +314,15 @@ function Template() {
       width: 800,
       position: "relative",
     },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
     contenutoModale: {
       height: 370,
       overflowX: "hidden",
@@ -225,6 +341,9 @@ function Template() {
     },
     bottoneAnnulla: {
       width: "128px",
+    },
+    typography: {
+      padding: "3%",
     },
   }));
 
@@ -251,77 +370,7 @@ function Template() {
             backgroundColor: "#f50057",
           },
         }}
-        editable={{
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve, reject) => {
-              //Backend call
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-              var raw = JSON.stringify({
-                id: id,
-                version: versione,
-                nome: nome,
-                durata: durata,
-                createdBy: creatoDa,
-                modifiedBy: modificatoDa,
-                modifiedDate: dataModifica,
-                creationDate: dataCreazione,
-                typeTemplate: tipoTemplate,
-                descrizione: descrizione,
-                // folder: newData.folder,
-                // fileLinks: {},
-              });
-
-              var requestOptions = {
-                method: "POST",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
-
-              fetch(`/api/template`, requestOptions)
-                .then((response) => response.json())
-                .then((response) => {
-                  console.log(response);
-                  getTemplate();
-                  resolve();
-                })
-                .catch((error) => console.log("error", error));
-            }),
-          isDeletable: (row) => false,
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              //backend call
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-              var raw = JSON.stringify({
-                id: oldData.id,
-              });
-
-              var requestOptions = {
-                method: "DELETE",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
-
-              fetch(`/api/template`, requestOptions)
-                .then((response) => response.json())
-                .then((result) => {
-                  getTemplate();
-                  resolve();
-                })
-                .catch((error) => console.log("error", error));
-            }),
-        }}
+        
         actions={[
           // {
           //   icon: () => (
@@ -371,6 +420,20 @@ function Template() {
             position: "row",
             onClick: (event, rowData) => handleOpen(rowData),
           },
+          {
+            icon: () => <EditIcon />,
+            tooltip: "Modifica",
+            onClick: (event, rowData) => openModifica(rowData),
+            position: "row",
+          },
+          {
+            icon: () => <DeleteIcon />,
+            tooltip: "Remove all selected test",
+            onClick: (event, rowData) => {
+              handleOpenDelete(rowData);
+              setIdElemento(rowData.id);
+            },
+          },
         ]}
         localization={{
           header: {
@@ -384,6 +447,7 @@ function Template() {
         // }}
       />
 
+{/*-------------- MODALE MODIFICA/VISUALIZZA---------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -427,11 +491,11 @@ function Template() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={versione !== "" ? false : true}
-                      onChange={(e) => setVersione(e.target.value)}
+                      error={version !== "" ? false : true}
+                      onChange={(e) => setVersion(e.target.value)}
                       label="Versione"
-                      defaultValue={versione}
-                      helperText={versione !== "" ? "" : "Inserire versione"}
+                      defaultValue={version}
+                      helperText={version !== "" ? "" : "Inserire versione"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -497,7 +561,7 @@ function Template() {
                     <TextField
                       className={classes.textField}
                       label="Creato Da"
-                      defaultValue={creatoDa}
+                      defaultValue={createdBy}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -507,7 +571,7 @@ function Template() {
                     <TextField
                       className={classes.textField}
                       label="Modificato Da"
-                      defaultValue={modificatoDa}
+                      defaultValue={modifiedBy}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -520,7 +584,7 @@ function Template() {
                     <TextField
                       label="Data Creazione"
                       type="datetime-local"
-                      defaultValue={dataCreazione.replace(".000+00:00", "")}
+                      defaultValue={creationDate.replace(".000+00:00", "")}
                       className={classes.textField}
                       InputProps={{
                         readOnly: true,
@@ -532,7 +596,7 @@ function Template() {
                       className={classes.textField}
                       label="Data Modifica"
                       type="datetime-local"
-                      defaultValue={dataModifica.replace(".000+00:00", "")}
+                      defaultValue={modifiedDate.replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -575,6 +639,57 @@ function Template() {
           </div>
         </Fade>
       </Modal>
+   
+ {/* ------------------------MODALE DELETE--------------------- */}
+
+ <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Elimina Template <b>{nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography variant="h6" className={classes.typography}>
+                  L'eliminazione del Template selezionato, comporterà la
+                  cancellazione dei Test Case ad esso associati.
+                  <br />
+                  Si vuole procedere?{" "}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={functionDelete}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>   
     </div>
   );
 }

@@ -233,6 +233,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "6%",
     marginBottom: "5%",
   },
+  buttonTestContainer: {
+    marginTop: "2%",
+  },
 }));
 
 function EditingLineaCreaLinea() {
@@ -241,11 +244,16 @@ function EditingLineaCreaLinea() {
 
   const [data, setData] = useState([]);
   const [openDrawer, setOpenDrawer] = useState([]);
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
+  const handleOpenWarning = () =>{
+    setOpenWarning(false)
+  }
   const getTypeId = () => {
     var myHeaders = new Headers();
 
@@ -289,9 +297,23 @@ function EditingLineaCreaLinea() {
 
     fetch(`/api/typeLinea`, requestOptions)
       .then((response) => response.json())
-      .then((result) => getTypeId())
+      .then((result) => {
 
-    handleCloseRemove()
+        if (result.error !== null) {
+          setOpenWarning(true)
+          if (result.error.code === "LINEA-0006") {
+            setWarning("Impossibile eliminare il Tipo Linea perche appartiene a una Linea o a un OBP")
+          } else {
+            setWarning("Codice errore: " + result.error.code + " Descrizione: " + result.code.description)
+          }
+        } else {
+          setOpenWarning(false)
+          getTypeId()
+        }
+
+      })
+
+    handleCloseRemove();
   };
 
   const editTypeLinea = (typeLinea) => {
@@ -304,7 +326,10 @@ function EditingLineaCreaLinea() {
     var raw = JSON.stringify({
       id: typeLinea.id,
       version: typeLinea.version,
-      descrizione: typeLineaDescrizione !== "" ? typeLineaDescrizione : typeLinea.descrizione,
+      descrizione:
+        typeLineaDescrizione !== ""
+          ? typeLineaDescrizione
+          : typeLinea.descrizione,
     });
 
     var requestOptions = {
@@ -317,10 +342,10 @@ function EditingLineaCreaLinea() {
     fetch(`/api/typeLinea`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getTypeId()
-      })
-      handleCloseEdit()
-  }
+        getTypeId();
+      });
+    handleCloseEdit();
+  };
 
   useEffect(() => {
     getTypeId();
@@ -604,19 +629,7 @@ function EditingLineaCreaLinea() {
           >
             LINEE
           </Button>
-          {/* <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/lineegeneratore"
-          >
-            LINEE GENERATORE
-          </Button> */}
-          {/* </NavLink> */}
-
-          {/* <NavLink exact to="/dashboard/testsuite"> */}
-          <Button
+                    <Button
             className="button-green"
             component={NavLink}
             activeClassName="button-green-active"
@@ -643,10 +656,31 @@ function EditingLineaCreaLinea() {
           >
             TEST
           </Button>
+        
+        <div className={classes.buttonTestContainer}>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/linee/crealinea"
+          >
+            LINEE SIMULATORE
+          </Button>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/lineegeneratore"
+          >
+            LINEE GENERATORE
+          </Button>
+        </div>
         </div>
 
         <Paper className={classes.paper} elevation={2}>
-          <CreaItem titolo="Crea Linea" />
+          <CreaItem titolo="Crea Linea Simulatore" />
 
           <Divider className={classes.divider} />
 
@@ -1089,7 +1123,7 @@ function EditingLineaCreaLinea() {
                                         ? typeLineaDescrizione
                                         : ""
                                     }
-                                  onChange={(e) => setTypeLineaDescrizione(e.target.value)}
+                                    onChange={(e) => setTypeLineaDescrizione(e.target.value)}
                                   />
                                 </Form.Group>
 
@@ -1100,9 +1134,7 @@ function EditingLineaCreaLinea() {
                                 <div className={classes.bottoni}>
                                   <div>
                                     <Button
-                                      onClick={() =>
-                                        editTypeLinea(typeLineaId)
-                                      }
+                                      onClick={() => editTypeLinea(typeLineaId)}
                                       variant="contained"
                                       color="secondary"
                                     >
@@ -1114,6 +1146,59 @@ function EditingLineaCreaLinea() {
                                       color="primary"
                                     >
                                       annulla
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </Paper>
+                          </div>
+                        </Fade>
+                      </Modal>
+                      {/*------------------MODALE RIMUOVI TYPE--------------- */}
+                      <Modal
+                        className={classes.modal}
+                        open={openWarning}
+                        onClose={handleOpenWarning}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                          timeout: 500,
+                        }}
+                      >
+                        <Fade in={openWarning}>
+                          <div className={classes.paper2}>
+                            <Paper>
+                              <div>
+                                <ListItem>
+                                  <ListItemIcon>
+                                    <SettingsIcon className={classes.icon} />
+                                  </ListItemIcon>
+                                  <Typography
+                                    className={classes.intestazione}
+                                    variant="h5"
+                                  >
+                                    ERRORE{" "}
+                                  </Typography>
+                                </ListItem>
+                              </div>
+
+                              <div className={classes.paperBottom}>
+                                <Typography variant="h11">
+                                  {warning}
+                                </Typography>
+
+                                <div className={classes.divider2}>
+                                  <Divider />
+                                </div>
+
+                                <div className={classes.bottoni}>
+                                  <div>
+                                    <Button
+                                      onClick={handleOpenWarning}
+                                      variant="contained"
+                                      color="primary"
+                                    >
+                                      OK
                                     </Button>
                                   </div>
                                 </div>

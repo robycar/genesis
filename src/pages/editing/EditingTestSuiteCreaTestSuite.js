@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Form from "react-bootstrap/Form";
 import Alert from "@material-ui/lab/Alert";
+import acccessControl from "../../service/url";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
@@ -111,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     marginBottom: "20px",
+    marginLeft: "1%",
   },
   generalContainer: {
     display: "flex",
@@ -118,13 +120,14 @@ const useStyles = makeStyles((theme) => ({
   },
   paperContainer1: {
     flexDirection: "column",
+    padding: "1%"
     // padding: "20px",
   },
   paperContainer2: {
     // marginTop: "2%",
     flexDirection: "column",
     padding: "2%",
-    width: "500px",
+    width: "80%",
     height: "660px",
     marginLeft: "5%",
     overflow: "auto",
@@ -137,7 +140,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     marginLeft: "60%",
     marginTop: "2%",
-    flexDirection: "row"
+    flexDirection: "row",
   },
   divider: {
     width: "90%",
@@ -153,10 +156,62 @@ const useStyles = makeStyles((theme) => ({
 function EditingTestTestSuiteCreaTestSuite() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [nome, setNome] = useState("");
+  const [descrizione, setDescrizione] = useState("");
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+
+
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  function salva() {
+    const Invia = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+      var raw = JSON.stringify({
+        nome: nome,
+        descrizione: descrizione,
+      });
+
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/testsuite`, requestOptions)
+        .then((response) => response.json())
+        .catch((error) => console.log("error", error));
+
+      // localStorage.setItem("user-info", JSON.stringify(result));
+      // history.push("/dashboard/testcase");
+      // window.location = "/editing/testsuite";
+    };
+
+    if (nome !== "" && descrizione !== "") {
+      Invia();
+    
+    } else {
+      if (nome === "") {
+        document.getElementById("alertNome").style.display = "";
+      } else {
+        document.getElementById("alertIP").style.display = "none";
+      }
+      if (descrizione === "") {
+        document.getElementById("alertDescrizione").style.display = "";
+      } else {
+        document.getElementById("alertDescrizione").style.display = "none";
+      }
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -207,18 +262,7 @@ function EditingTestTestSuiteCreaTestSuite() {
           >
             LINEE
           </Button>
-          {/* <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/lineegeneratore"
-            >
-              LINEE GENERATORE
-            </Button> */}
-          {/* </NavLink> */}
 
-          {/* <NavLink exact to="/dashboard/testsuite"> */}
           <Button
             className="button-green"
             component={NavLink}
@@ -290,7 +334,7 @@ function EditingTestTestSuiteCreaTestSuite() {
                     className={classes.formControl}
                     type="text"
                     placeholder="Inserisci Nome"
-                    //onChange={(e) => setNome(e.target.value)}
+                    onChange={(e) => setNome(e.target.value)}
                   />
                   <Alert
                     severity="error"
@@ -308,7 +352,7 @@ function EditingTestTestSuiteCreaTestSuite() {
                     className={classes.formControl}
                     type="text"
                     placeholder="Inserisci Descrizione"
-                    // onChange={(e) => setDescrizione(e.target.value)}
+                    onChange={(e) => setDescrizione(e.target.value)}
                   />
                   <Alert
                     severity="error"

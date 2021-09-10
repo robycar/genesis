@@ -169,6 +169,7 @@ function TestCaseTable() {
       title: "ID Test",
       field: "id",
       defaultSort: "desc",
+      editable: "never",
     },
     {
       title: "Nome",
@@ -178,14 +179,14 @@ function TestCaseTable() {
       title: "Descrizione",
       field: "descrizione",
     },
-    {
-      title: "Durata Attesa",
-      field: "expectedDuration",
-    },
-    {
-      title: "Versione",
-      field: "version",
-    },
+    // {
+    //   title: "Durata Attesa",
+    //   field: "expectedDuration",
+    // },
+    // {
+    //   title: "Versione",
+    //   field: "version",
+    // },
     {
       title: "Data Creazione",
       field: "creationDate",
@@ -286,7 +287,6 @@ function TestCaseTable() {
 
   //---------- funzione chiudi modale
   const handleCloseDelete = () => {
-   
     setOpenDelete(false);
   };
 
@@ -339,72 +339,71 @@ function TestCaseTable() {
   //-------AGGIORNA TEST CASE----------------------------
 
   const aggiornaTestCase = () => {
-
     const invia = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var raw = JSON.stringify({
-      id: id,
-      version: version,
-      expectedDuration: expectedDuration,
-      nome: nome,
-      descrizione: descrizione,
-      // chiamato: {
-      //   linea: {
-      //     id: id,
-      //   },
-      //   proxy: {
-      //     id: 1,
-      //   },
-      // },
-      // chiamanti: [
-      //   {
-      //     linea: {
-      //       id: id,
-      //     },
-      //     proxy: {
-      //       id: id,
-      //     },
-      //   },
-      //   {
-      //     linea: {
-      //       id: id,
-      //     },
-      //     proxy: {
-      //       id: id,
-      //     },
-      //   },
-      //   {
-      //     linea: {
-      //       id: id,
-      //     },
-      //     proxy: {
-      //       id: id,
-      //     },
-      //   },
-      // ],
-    });
+      var raw = JSON.stringify({
+        id: id,
+        version: version,
+        expectedDuration: expectedDuration,
+        nome: nome,
+        descrizione: descrizione,
+        // chiamato: {
+        //   linea: {
+        //     id: id,
+        //   },
+        //   proxy: {
+        //     id: 1,
+        //   },
+        // },
+        // chiamanti: [
+        //   {
+        //     linea: {
+        //       id: id,
+        //     },
+        //     proxy: {
+        //       id: id,
+        //     },
+        //   },
+        //   {
+        //     linea: {
+        //       id: id,
+        //     },
+        //     proxy: {
+        //       id: id,
+        //     },
+        //   },
+        //   {
+        //     linea: {
+        //       id: id,
+        //     },
+        //     proxy: {
+        //       id: id,
+        //     },
+        //   },
+        // ],
+      });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/testcase`, requestOptions)
+        .then((response) => response.json())
+        .then((response) => {
+          getAllTestCase();
+        })
+        .catch((error) => console.log("error", error));
     };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-               getAllTestCase();
-      })
-      .catch((error) => console.log("error", error));
+    invia();
   };
-  invia();
-};
 
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
