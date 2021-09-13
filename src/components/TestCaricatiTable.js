@@ -173,7 +173,7 @@ const TestCaricatiTable = () => {
 
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title=" Total Test Case Schedulati"
+        title=" Total Test Case Caricati"
         data={data}
         columns={columns}
         options={{

@@ -457,9 +457,9 @@ function TestCaseTable() {
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
+      
       flexDirection: "row",
-      marginBottom: "5%",
+      
     },
     icon: {
       transform: "scale(1.8)",
@@ -467,12 +467,8 @@ function TestCaseTable() {
       marginTop: "9px",
     },
     bottone: {
-      // display: "flex",
-      // alignItems: "center",
-      // justifyContent: "space-around",
       marginLeft: "55px",
-      marginTop: "4%",
-      marginBottom: "2%",
+      marginTop: "5%",
     },
     modal: {
       display: "flex",
@@ -491,7 +487,7 @@ function TestCaseTable() {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
-      height: 700,
+      height: "fit-content",
       width: 800,
       position: "relative",
     },
@@ -503,7 +499,8 @@ function TestCaseTable() {
       bottom: 0,
     },
     col: {
-      padding: "5%",
+      padding: "3%",
+      height: "106px"
     },
     row: {
       width: "600px",
@@ -513,6 +510,9 @@ function TestCaseTable() {
     },
     bottoneAnnulla: {
       width: "128px",
+    },
+    textField: {
+      width: "200px",
     },
   }));
 

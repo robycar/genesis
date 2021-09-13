@@ -29,7 +29,7 @@ export default function TotalPlannedDaylyTestCase() {
   return (
     <React.Fragment>
       <Typography className={classes.title}>
-        TOTAL PLANNED DAYLY TEST CASE
+        TOTAL TEST CASE GIORNALIERI 
       </Typography>
       <Typography
         component="p"

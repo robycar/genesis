@@ -56,6 +56,7 @@ export const mainListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
+      disabled={localStorage.getItem("ruolo") !== '"ADMIN"'}
       to="/amministrazione/utenze"
     >
       <ListItemIcon>
@@ -128,7 +129,7 @@ export const quaterListItems = (
     </ListItem> */}
     <div className="versione">
       <hr />
-      Versione 0.0.6
+      Versione 1.0.0
     </div>
   </div>
 );

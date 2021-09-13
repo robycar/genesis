@@ -70,7 +70,7 @@ const TestRunningTable = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="TestCase"
+        title="Total Test Case Running"
         data={data}
         columns={columns}
         options={{

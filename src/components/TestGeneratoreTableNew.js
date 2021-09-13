@@ -23,7 +23,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
- 
+
 function TestGeneratoreTableNew() {
   const [file, setFile] = useState([]);
   const [data, setData] = useState([]);
@@ -45,26 +45,26 @@ function TestGeneratoreTableNew() {
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [appearFile, setAppearFile] = useState([]);
- 
+
   let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
- 
+
   if (bearer != null) {
     bearer = bearer.replace(/"/g, "");
   }
- 
+
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
+
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
- 
+
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -72,21 +72,21 @@ function TestGeneratoreTableNew() {
       })
       .catch((error) => console.log("error", error));
   };
- 
+
   //--------------TEST CASE BY ID-----------------------
   const getTestCaseById = (id) => {
     var myHeaders = new Headers();
- 
+
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
+
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
- 
+
     fetch(`/api/testcase/` + id, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -101,13 +101,13 @@ function TestGeneratoreTableNew() {
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
+
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
- 
+
     fetch(`/api/typeLinea`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -121,13 +121,13 @@ function TestGeneratoreTableNew() {
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
+
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
- 
+
     fetch(`/api/obp`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -135,20 +135,20 @@ function TestGeneratoreTableNew() {
       })
       .catch((error) => console.log("error", error));
   };
- 
+
   //--------------GET TEMPLATE------------------------------
   const getAppearFile = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
+
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
- 
+
     fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -156,14 +156,14 @@ function TestGeneratoreTableNew() {
       })
       .catch((error) => console.log("error", error));
   };
- 
+
   useEffect(() => {
     getAllTestCase();
     getAppearLine();
     getAppearOBP();
     getAppearFile();
   }, []);
- 
+
   const columns = [
     {
       title: "Nome Test",
@@ -206,16 +206,15 @@ function TestGeneratoreTableNew() {
       title: "Template",
       field: "file",
     },
-    
   ];
- 
+
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
   const [openChiamato, setOpenChiamato] = React.useState(false);
   const [openChiamanti, setOpenChiamanti] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
   const [openDelete, setOpenDelete] = React.useState(false);
- 
+
   const openModifica = (rowData) => {
     setModifica(true);
     handleOpen(rowData);
@@ -224,7 +223,7 @@ function TestGeneratoreTableNew() {
     setModifica(false);
     handleOpen(rowData);
   };
- 
+
   const handleOpen = (rowData) => {
     setId(rowData.id);
     setNomeTitolo(rowData.nome);
@@ -239,34 +238,34 @@ function TestGeneratoreTableNew() {
     setModifiedDate(rowData.modifiedDate);
     getTestCaseById(rowData.id);
   };
- 
+
   const handleClose = () => {
     setOpen(false);
   };
- 
+
   const handleClose2 = () => {
     aggiornaTestCase();
     setOpen(false);
   };
- 
+
   const functionDelete = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
+
     var raw = JSON.stringify({
       id: idElemento,
     });
- 
+
     var requestOptions = {
       method: "DELETE",
       headers: myHeaders,
       body: raw,
       redirect: "follow",
     };
- 
+
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -275,18 +274,18 @@ function TestGeneratoreTableNew() {
       .catch((error) => console.log("error", error));
     handleCloseDelete();
   };
- 
+
   //------------ funzione apri modale
- 
+
   const handleOpenDelete = () => {
     setOpenDelete(true);
   };
- 
+
   //---------- funzione chiudi modale
   const handleCloseDelete = () => {
     setOpenDelete(false);
   };
- 
+
   //-----------MODALE CHIAMATO------------------
   const handleOpenChiamato = () => {
     var appoggioChiamato;
@@ -297,11 +296,11 @@ function TestGeneratoreTableNew() {
     console.log(chiamato);
     setOpenChiamato(true);
   };
- 
+
   const handleCloseChiamato = () => {
     setOpenChiamato(false);
   };
- 
+
   const handleCloseChiamato2 = () => {
     //aggiornaUtente();
     setOpenChiamato(false);
@@ -310,7 +309,7 @@ function TestGeneratoreTableNew() {
   const handleOpenChiamanti = () => {
     var appoggioChiamanti;
     appoggioChiamanti = testCase.chiamanti;
- 
+
     for (let i = 0; i < appoggioChiamanti.length; i++) {
       chiamanti[i] = [0, 0, 0, 0];
     }
@@ -323,89 +322,88 @@ function TestGeneratoreTableNew() {
     console.log(chiamanti);
     setOpenChiamanti(true);
   };
- 
+
   const handleCloseChiamanti = () => {
     setOpenChiamanti(false);
   };
- 
+
   const handleCloseChiamanti2 = () => {
     //aggiornaUtente();
     setOpenChiamanti(false);
   };
- 
+
   //-------AGGIORNA TEST CASE----------------------------
- 
+
   const aggiornaTestCase = () => {
- 
     const invia = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
-    var raw = JSON.stringify({
-      id: id,
-      version: version,
-      expectedDuration: expectedDuration,
-      nome: nome,
-      descrizione: descrizione,
-      // chiamato: {
-      //   linea: {
-      //     id: id,
-      //   },
-      //   proxy: {
-      //     id: 1,
-      //   },
-      // },
-      // chiamanti: [
-      //   {
-      //     linea: {
-      //       id: id,
-      //     },
-      //     proxy: {
-      //       id: id,
-      //     },
-      //   },
-      //   {
-      //     linea: {
-      //       id: id,
-      //     },
-      //     proxy: {
-      //       id: id,
-      //     },
-      //   },
-      //   {
-      //     linea: {
-      //       id: id,
-      //     },
-      //     proxy: {
-      //       id: id,
-      //     },
-      //   },
-      // ],
-    });
- 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+      var raw = JSON.stringify({
+        id: id,
+        version: version,
+        expectedDuration: expectedDuration,
+        nome: nome,
+        descrizione: descrizione,
+        // chiamato: {
+        //   linea: {
+        //     id: id,
+        //   },
+        //   proxy: {
+        //     id: 1,
+        //   },
+        // },
+        // chiamanti: [
+        //   {
+        //     linea: {
+        //       id: id,
+        //     },
+        //     proxy: {
+        //       id: id,
+        //     },
+        //   },
+        //   {
+        //     linea: {
+        //       id: id,
+        //     },
+        //     proxy: {
+        //       id: id,
+        //     },
+        //   },
+        //   {
+        //     linea: {
+        //       id: id,
+        //     },
+        //     proxy: {
+        //       id: id,
+        //     },
+        //   },
+        // ],
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/testcase`, requestOptions)
+        .then((response) => response.json())
+        .then((response) => {
+          console.log("ho cliccato");
+          getAllTestCase();
+        })
+        .catch((error) => console.log("error", error));
     };
- 
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        console.log("ho cliccato");
-        getAllTestCase();
-      })
-      .catch((error) => console.log("error", error));
+    invia();
   };
-  invia();
-};
- 
+
   //-------VISUALIZZA TUTTI I DATI-----------------------
- 
+
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -456,9 +454,9 @@ function TestGeneratoreTableNew() {
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
+      
       flexDirection: "row",
-      marginBottom: "5%",
+      
     },
     icon: {
       transform: "scale(1.8)",
@@ -466,12 +464,9 @@ function TestGeneratoreTableNew() {
       marginTop: "9px",
     },
     bottone: {
-      // display: "flex",
-      // alignItems: "center",
-      // justifyContent: "space-around",
       marginLeft: "55px",
-      marginTop: "4%",
-      marginBottom: "2%",
+      marginTop: "5%",
+      // marginBottom: "2%",
     },
     modal: {
       display: "flex",
@@ -490,7 +485,7 @@ function TestGeneratoreTableNew() {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
-      height: 700,
+      height: "fit-content",
       width: 800,
       position: "relative",
     },
@@ -498,11 +493,10 @@ function TestGeneratoreTableNew() {
       height: 370,
       overflowX: "hidden",
     },
-    buttonModale: {
-      bottom: 0,
-    },
+    
     col: {
-      padding: "5%",
+      padding: "3%",
+      height: "106px"
     },
     row: {
       width: "600px",
@@ -514,9 +508,9 @@ function TestGeneratoreTableNew() {
       width: "128px",
     },
   }));
- 
+
   const classes = useStyles();
- 
+
   return (
     <div>
       <MaterialTable
@@ -549,7 +543,7 @@ function TestGeneratoreTableNew() {
                 </Button>
               </div>
             ),
-            tooltip: "Load Test Case",
+            tooltip: "Load Test Generatoree",
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
@@ -584,9 +578,9 @@ function TestGeneratoreTableNew() {
           },
         }}
       />
- 
+
       {/*------------------ MODALE VISUALIZZA/MODIFICA -------------*/}
- 
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -605,16 +599,15 @@ function TestGeneratoreTableNew() {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    {modifica === false ? "Visualizza " : "Modifica "} Test Case{" "}
+                    {modifica === false ? "Visualizza " : "Modifica "} Test Generatore{" "}
                     <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
- 
+
               <Form className={classes.contenutoModale}>
                 <Row>
-
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -629,26 +622,28 @@ function TestGeneratoreTableNew() {
                     />
                   </Col>
 
-                  <Col className={classes.col} >
+                  <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       error={nome !== "" ? false : true}
                       onChange={(e) => setNome(e.target.value)}
                       label="descrizione"
                       defaultValue={nome.replace("Eseguito Spesso", "")}
-                      helperText={nome !== "" ? "" : "la descrizione è richiesta"}
+                      helperText={
+                        nome !== "" ? "" : "la descrizione è richiesta"
+                      }
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
-
                 </Row>
- 
+
                 <Row>
-
-
-                  <Col className={classes.col} style={{display : modifica === false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica === false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       error={descrizione !== "" ? false : true}
@@ -656,14 +651,19 @@ function TestGeneratoreTableNew() {
                       label="linea chiamante "
                       defaultValue={descrizione}
                       helperText={
-                        descrizione !== "" ? "" : "La linea chiamante è richiesta"
+                        descrizione !== ""
+                          ? ""
+                          : "La linea chiamante è richiesta"
                       }
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
-                  <Col className={classes.col} style={{display : modifica === false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica === false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       error={descrizione !== "" ? false : true}
@@ -671,20 +671,22 @@ function TestGeneratoreTableNew() {
                       label="linea chiamato "
                       defaultValue={descrizione}
                       helperText={
-                        descrizione !== "" ? "" : "La linea chiamanto è richiesta"
+                        descrizione !== ""
+                          ? ""
+                          : "La linea chiamanto è richiesta"
                       }
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
-
-
                 </Row>
- 
-              <Row>
 
-                <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                <Row>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       onChange={(e) => setCreatedBy(e.target.value)}
@@ -695,7 +697,10 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-                  <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       onChange={(e) => setCreatedBy(e.target.value)}
@@ -706,7 +711,10 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-                  <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       onChange={(e) => setCreatedBy(e.target.value)}
@@ -717,7 +725,10 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-                  <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       onChange={(e) => setCreationDate(e.target.value)}
@@ -728,7 +739,6 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-
                 </Row>
 
                 {/* <Row>
@@ -755,28 +765,33 @@ function TestGeneratoreTableNew() {
                     />
                   </Col>
                 </Row> */}
- 
-              <Row>
 
-                <Col className={classes.col} style={{display : modifica === false ? "none" : "flex",}}>
-                  <TextField
-                    className={classes.textField}
-                    error={modifiedDate !== "" ? false : true}
-                    onChange={(e) => setModifiedDate(e.target.value)}
-                    label="OBP chiamante "
-                    defaultValue={modifiedDate}
-                    helperText={
-                      modifiedDate !== ""
-                        ? ""
-                        : "La OBP chiamante è richiesta"
-                    }
-                    InputProps={{
-                      readOnly: modifica === false ? true : false,
-                    }}
-                  />
-                </Col>
+                <Row>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica === false ? "none" : "flex" }}
+                  >
+                    <TextField
+                      className={classes.textField}
+                      error={modifiedDate !== "" ? false : true}
+                      onChange={(e) => setModifiedDate(e.target.value)}
+                      label="OBP chiamante "
+                      defaultValue={modifiedDate}
+                      helperText={
+                        modifiedDate !== ""
+                          ? ""
+                          : "La OBP chiamante è richiesta"
+                      }
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
 
-                <Col className={classes.col} style={{display : modifica === false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica === false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       error={modifiedDate !== "" ? false : true}
@@ -784,21 +799,20 @@ function TestGeneratoreTableNew() {
                       label="OBP chiamato "
                       defaultValue={modifiedDate}
                       helperText={
-                        modifiedDate !== ""
-                          ? ""
-                          : "La OBP chiamato è richiesta"
+                        modifiedDate !== "" ? "" : "La OBP chiamato è richiesta"
                       }
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
- 
-              </Row>
- 
- 
+                </Row>
+
                 <Row>
-                  <Col className={classes.col}  style={{display : modifica !== false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       label="last start date "
                       type=""
@@ -812,7 +826,10 @@ function TestGeneratoreTableNew() {
                     />
                   </Col>
 
-                  <Col className={classes.col}  style={{display : modifica !== false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       //onChange={(e) => setModifiedBy(e.target.value)}
@@ -826,7 +843,10 @@ function TestGeneratoreTableNew() {
                 </Row>
 
                 <Row>
-                <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       error={version !== "" ? false : true}
@@ -840,7 +860,10 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-                  <Col className={classes.col}  style={{display : modifica !== false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       label="data modifica "
@@ -850,12 +873,13 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-
                 </Row>
 
                 <Row>
-                  
-                <Col className={classes.col} style={{display : modifica !== false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       label="durata "
@@ -864,8 +888,8 @@ function TestGeneratoreTableNew() {
                         readOnly: true,
                       }}
                     />
-                  </Col> 
-                  
+                  </Col>
+
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -879,11 +903,13 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-
                 </Row>
 
                 <Row>
-                  <Col className={classes.col}  style={{display : modifica !== false ? "none" : "flex",}}>
+                  <Col
+                    className={classes.col}
+                    style={{ display: modifica !== false ? "none" : "flex" }}
+                  >
                     <TextField
                       className={classes.textField}
                       label="last result"
@@ -896,39 +922,35 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-
                 </Row>
-
               </Form>
-              <div className={classes.buttonModale}>
-                <Divider className={classes.divider} />
-                <div
-                  className={classes.bottone}
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                  {modifica === false ? (
-                    ""
-                  ) : (
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome="Aggiorna"
-                      onClick={handleClose2}
-                    />
-                  )}
- 
-                  <ButtonNotClickedGreen
-                    className={classes.bottoneAnnulla}
-                    onClick={handleClose}
+              <Divider className={classes.divider} />
+              <div
+                className={classes.bottone}
+                style={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                {modifica === false ? (
+                  ""
+                ) : (
+                  <ButtonClickedGreen
                     size="medium"
-                    nome={modifica === false ? "Indietro" : "Annulla"}
+                    nome="Aggiorna"
+                    onClick={handleClose2}
                   />
-                </div>
+                )}
+
+                <ButtonNotClickedGreen
+                  className={classes.bottoneAnnulla}
+                  onClick={handleClose}
+                  size="medium"
+                  nome={modifica === false ? "Indietro" : "Annulla"}
+                />
               </div>
             </Paper>
           </div>
         </Fade>
       </Modal>
- 
+
       {/* ------------------------MODALE CHIAMATO--------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
@@ -954,19 +976,19 @@ function TestGeneratoreTableNew() {
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
- 
+
               <Form className={classes.contenutoModale}>
                 <Row>
                   {chiamato.forEach((element) => {
                     <TextField className={classes.textField} label="prova" />;
                   })}
- 
+
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       // select
                       // onChange={(e) => setNome(e.target.value)}
- 
+
                       label="IP Linea/e N°"
                       defaultValue={chiamato[1]}
                       InputProps={{
@@ -1037,7 +1059,7 @@ function TestGeneratoreTableNew() {
                       onClick={handleCloseChiamato2}
                     />
                   )}
- 
+
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseChiamato}
@@ -1075,7 +1097,7 @@ function TestGeneratoreTableNew() {
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
- 
+
               <Form className={classes.contenutoModale}>
                 {chiamanti.map((chiamanti) => (
                   <>
@@ -1162,7 +1184,7 @@ function TestGeneratoreTableNew() {
                       onClick={handleCloseChiamanti2}
                     />
                   )}
- 
+
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseChiamanti}
@@ -1193,18 +1215,18 @@ function TestGeneratoreTableNew() {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Elimina Test Case <b>{nomeTitolo}</b>
+                    Elimina Test Generatore <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
- 
+
                 <Typography variant="h6" className={classes.typography}>
-                  L'eliminazione del Test Case selezionato, comporterà la
+                  L'eliminazione del Test Generatore selezionato, comporterà la
                   cancellazione dei Test Suite ad esso collegati.
                   <br />
                   Si vuole procedere?{" "}
                 </Typography>
- 
+
                 <Divider className={classes.divider} />
                 <div
                   className={classes.bottone}
@@ -1228,4 +1250,3 @@ function TestGeneratoreTableNew() {
   );
 }
 export default TestGeneratoreTableNew;
- 

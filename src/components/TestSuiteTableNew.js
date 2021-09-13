@@ -263,7 +263,6 @@ if (bearer != null) {
       flexDirection: "column",
       marginTop: "5%",
     },
-    divSelectBar: {},
     selectBar: {
       width: "50%",
       height: "100",
@@ -274,9 +273,9 @@ if (bearer != null) {
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
+      
       flexDirection: "row",
-      marginBottom: "5%",
+      
     },
     icon: {
       transform: "scale(1.8)",
@@ -284,12 +283,9 @@ if (bearer != null) {
       marginTop: "9px",
     },
     bottone: {
-      // display: "flex",
-      // alignItems: "center",
-      // justifyContent: "space-around",
       marginLeft: "55px",
-      marginTop: "4%",
-      marginBottom: "2%",
+      marginTop: "5%",
+      // marginBottom: "2%",
     },
     modal: {
       display: "flex",
@@ -305,7 +301,7 @@ if (bearer != null) {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
-      height: 700,
+      height: "fit-content",
       width: 800,
       position: "relative",
     },
@@ -326,7 +322,8 @@ if (bearer != null) {
       bottom: 0,
     },
     col: {
-      padding: "5%",
+      padding: "3%",
+      height: "106px"
     },
     row: {
       width: "600px",
@@ -446,7 +443,7 @@ if (bearer != null) {
                       error={id !== "" ? false : true}
                       onChange={(e) => setId(e.target.value)}
                       label="Id"
-                      // defaultValue={nome.replace("Eseguito Spesso", "")}
+                      defaultValue={id}
                       // helperText={nome !== "" ? "" : "Lo status è richiesto"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
@@ -460,7 +457,7 @@ if (bearer != null) {
                       onChange={(e) => setNome(e.target.value)}
                       label="Nome"
                       defaultValue={nome}
-                     helperText={nome !== "" ? "" : "Inserire gruppo"}
+                     helperText={nome !== "" ? "" : "Inserire Nome"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}

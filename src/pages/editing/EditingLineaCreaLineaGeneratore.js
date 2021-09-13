@@ -665,7 +665,7 @@ function EditingLineaCreaLineaGeneratore() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/editing/lineegeneratore"
+              to="/editing/linee/crealineageneratore"
             >
               LINEE GENERATORE
             </Button>

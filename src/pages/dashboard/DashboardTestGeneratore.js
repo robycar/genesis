@@ -17,13 +17,12 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import Orders from "../../components/Orders";
+import OrdersTestGeneratore from "../../components/OrdersTestGeneratore";
 import Navbar from "../../components/Navbar";
 import NavbarItem from "../../components/NavbarItem";
 import Button from "@material-ui/core/Button";
 import Card from "../../components/Card";
 import { NavLink } from "react-router-dom";
-import "../../styles/App.css";
 
 
 const drawerWidth = 240;
@@ -133,14 +132,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     marginTop: "0px",
   },
-
   active: {
     backgroundColor: "#47B881",
     color: "white",
   },
 }));
 
-function Dashboard() {
+function DashboardTestGeneratore() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerClose = () => {
@@ -165,9 +163,9 @@ function Dashboard() {
         open={open}
       >
         <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
         <Divider />
         <List>{mainListItems}</List>
@@ -218,7 +216,8 @@ function Dashboard() {
               Test Suite
             </Button>
             {/* </NavLink> */}
-            <Button
+          
+          <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -227,14 +226,14 @@ function Dashboard() {
             >
               Test Generatore
             </Button>
-          </div>
+            </div>
           <Grid container spacing={3}>
             <Card />
 
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <OrdersTestGeneratore />
               </Paper>
             </Grid>
           </Grid>
@@ -244,4 +243,6 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default DashboardTestGeneratore;
+
+// DashboardTestCaseContainer

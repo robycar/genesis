@@ -216,6 +216,15 @@ function DashboardTestSuite() {
               Test suite
             </Button>
             {/* </NavLink> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/dashboard/testgeneratore"
+            >
+              Test Generatore
+            </Button>
           </div>
           <Grid container spacing={3}>
             <Card />

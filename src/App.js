@@ -7,6 +7,7 @@ import ReportTestCase from "./pages/report/ReportTestCase";
 //import Supporto from "./pages/Supporto";
 import DashboardTestCase from "./pages/dashboard/DashboardTestCase";
 import DashboardTestSuite from "./pages/dashboard/DashboardTestSuite";
+import DashboardTestGeneratore from "./pages/dashboard/DashboardTestGeneratore";
 import Documentation from "./pages/Documentation";
 import ProvaModale from "./pages/ProvaModale";
 import EditingLinee from "./pages/editing/EditingLinee";
@@ -49,6 +50,11 @@ function App() {
           path="/dashboard/testsuite"
           exact
           component={DashboardTestSuite}
+        />
+         <Route
+          path="/dashboard/testgeneratore"
+          exact
+          component={DashboardTestGeneratore}
         />
         <Route path="/launching" exact component={Launching} />
         <Route path="/editing" exact component={Editing} />

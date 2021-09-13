@@ -43,6 +43,7 @@ import Prova from "../../components/Prova";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { file } from "@babel/types";
+import { useHistory } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -248,6 +249,9 @@ const useStyles = makeStyles((theme) => ({
   buttonTestContainer: {
     marginTop: "2%",
   },
+  buttonTestContainer: {
+    marginTop: "2%",
+  },
   
 }));
 
@@ -259,6 +263,7 @@ function getSteps() {
 //--------------------------FINE FUNZIONI STEPPER------------------------------
 
 function EditingTestCreaTestCase() {
+  let history = useHistory();
   const classes = useStyles();
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
@@ -269,7 +274,7 @@ function EditingTestCreaTestCase() {
   const [OBPChiamato, setOBPChiamato] = useState(0);
   const [appearLinea, setAppearLinea] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
-  const [appearFile, setAppearFile] = useState([]);
+  const [appearTemplete, setAppearTemplete] = useState([]);
 
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
@@ -277,7 +282,15 @@ function EditingTestCreaTestCase() {
   const [qntChiamanti, setQntChiamanti] = useState([]);
   const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
   let arrAppoggio = qntChiamanti;
+  const [lineaChiamante1 , setLineaChiamante1] = useState(false);
+  const [lineaChiamante2 , setLineaChiamante2] = useState(false);
+  const [lineaChiamante3 , setLineaChiamante3] = useState(false);
+  const [proxyChiamante1 , setProxyChiamante1] = useState(false);
+  const [proxyChiamante2 , setProxyChiamante2] = useState(false);
+  const [proxyChiamante3 , setProxyChiamante3] = useState(false);
 
+  const [templete , setTemplete] = useState(0)
+  
   const [nextDisabled, setNextDisabled] = useState(true);
 
 
@@ -333,7 +346,7 @@ function EditingTestCreaTestCase() {
 
   /*-------- get template ---------*/
 
-  const getFile = () => {
+  const getTemplete = () => {
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
@@ -348,10 +361,10 @@ function EditingTestCreaTestCase() {
       redirect: "follow",
     };
 
-    fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
+    fetch(`/api/template`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setAppearFile(result.list);
+        setAppearTemplete(result.list);
       })
       .catch((error) => console.log("error", error));
   };
@@ -370,7 +383,7 @@ function EditingTestCreaTestCase() {
     myHeaders.append("Access-Control-Allow-Credentials", "true");
     var raw = JSON.stringify({
       nome: nome,
-      template: 1,
+      template: templete,
       descrizione: descrizione === "" ? " ": descrizione,
       expectedDuration: 57,
       chiamato: {
@@ -389,11 +402,8 @@ function EditingTestCreaTestCase() {
 
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
+      .then((result) => history.push("/editing/testcase"))
       .catch((error) => console.log("error", error));
-
-    // localStorage.setItem("user-info", JSON.stringify(result));
-    // // history.push("/dashboard/testcase");
-    window.location = "/editing/testcase";
 
 
   };
@@ -409,7 +419,6 @@ function EditingTestCreaTestCase() {
       Invia();
     } else
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      disabilitaNext()
   };
 
   const handleBack = () => {
@@ -417,47 +426,10 @@ function EditingTestCreaTestCase() {
   };
 
 
-
-
-  const disabilitaNext = () => {
-    if (activeStep === 0) {
-      if (nome === "") {
-        setNextDisabled(true);
-      } else {
-        setNextDisabled(false)
-      }
-    }
-    else if (activeStep === 1) {
-      if ((lineaChiamato === null) || (OBPChiamato === null)) {
-        setNextDisabled(true);
-      } else {
-        setNextDisabled(false)
-      }
-    }
-    // else if (activeStep === 2) {
-    //   if ((lineaChiamante === null) || (OBPChiamante === null)) {
-    //     setNextDisabled(true);
-    //   } else {
-    //     setNextDisabled(false)
-    //   }
-    // }
-    // // da correggere a servizio pronto
-    // else if (activeStep === 3) {
-    //   if ((template === "")) {
-    //     setNextDisabled(true);
-    //   } else {
-    //     setNextDisabled(false)
-    //   }
-    // }
-  }
-
-
-
   const addArr = () => {
     arrAppoggio.push({ linea: 0, proxy: 0, index: arrAppoggio.length })
     setQntChiamanti(arrAppoggio);
     setNChiamanti(qntChiamanti.length)
-    console.log(qntChiamanti)
   };
 
   const removeArr = () => {
@@ -465,6 +437,24 @@ function EditingTestCreaTestCase() {
     setQntChiamanti(arrAppoggio);
     setNChiamanti(qntChiamanti.length)
     console.log(qntChiamanti)
+
+    switch (qntChiamanti.length) {
+      case 0:
+        setLineaChiamante1(false)
+        setProxyChiamante1(false)
+        break;
+      case 1:
+        setLineaChiamante2(false)
+        setProxyChiamante2(false)
+        break;
+      case 2:
+        setLineaChiamante3(false)
+        setProxyChiamante3(false)
+        break;
+    
+      default:
+        break;
+    }
   };
 
   const handleChangeName = (e) => {
@@ -483,24 +473,9 @@ function EditingTestCreaTestCase() {
 
   useEffect(() => {
     getLinea();
-    getFile();
+    getTemplete();
     getOBP();
-
-    if (activeStep === 0) {
-      if (nome === "") {
-        setNextDisabled(true);
-      } else {
-        setNextDisabled(false)
-      }
-    }
-    else if (activeStep === 1) {
-      if ((lineaChiamato === 0) || (OBPChiamato === 0)) {
-        setNextDisabled(true);
-      } else {
-        setNextDisabled(false)
-      }
-    }
-    }, [nome, lineaChiamato, OBPChiamato, nextDisabled ]);
+    }, [ qntChiamanti ]);
 
 
 return (
@@ -552,15 +527,7 @@ return (
         >
           LINEE
         </Button>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/lineegeneratore"
-        >
-          LINEE GENERATORE
-        </Button>
+       
         {/* </NavLink> */}
 
         {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -591,12 +558,41 @@ return (
         >
           TEST
         </Button>
+        <div className={classes.buttonTestContainer}>
+              <Button
+                className="button-green"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testcreatestcase"
+              >
+                TEST CASE
+              </Button>
+              <Button
+                className="button-green"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testsuite"
+              >
+                TEST SUITE
+              </Button>
+              <Button
+                className="button-green"
+                component={NavLink}
+                activeClassName="button-green-active"
+                exact
+                to="/editing/testgeneratore"
+              >
+                TEST GENERATORE
+              </Button>
+            </div>
       </div>
 
       {/* ----------------------------CREA TEST CASE---------------------------------------- */}
 
       <Paper className={classes.paper} elevation={2}>
-        <CreaItem titolo="Crea TestCase" />
+        <CreaItem titolo="Crea Test Case" />
 
         <Divider className={classes.divider} />
 
@@ -640,7 +636,7 @@ return (
                   id="alertDescrizione"
                   style={{ display: "none" }}
                 >
-                  Descizione è richiesta
+                  Descrizione è richiesta
                 </Alert>
               </Form.Group>
             </Paper>
@@ -688,7 +684,7 @@ return (
                 </Col>
                 <Col className={classes.col}>
                   <Form.Group >
-                    <Form.Label>OBP</Form.Label>
+                    <Form.Label style={{color: lineaChiamato === 0 ? "grey" : "black"}}>OBP</Form.Label>
                     <FormControl
                       variant="outlined"
                       className={classes.formControl}
@@ -697,6 +693,7 @@ return (
                         id="selectOBP"
                         value={OBPChiamato}
                         onChange={(e) => handleChangeOBPChiamato(e)}
+                        disabled={lineaChiamato === 0}
                       >
                         {appearOBP.map((OBP) => {
                           return (
@@ -746,6 +743,8 @@ return (
                               onChange={(e) => {
                                 arrAppoggio[index.index].linea = e.target.value
                                 setQntChiamanti(arrAppoggio);
+                                console.log(qntChiamanti)
+                                index.index === 0 ? setLineaChiamante1(true) : index.index === 1 ? setLineaChiamante2(true) : index.index === 2 ? setLineaChiamante3(true) : setLineaChiamante1(false)
                               }}
                             >
                               {appearLinea.map((linea) => {
@@ -768,7 +767,9 @@ return (
                       </Col>
                       <Col className={classes.col}>
                         <Form.Group >
-                          <Form.Label>OBP</Form.Label>
+                          <Form.Label style={{
+                                color : (index.index === 0 ? lineaChiamante1 === false ? "grey" : "black" : index.index === 1 ? lineaChiamante2 === false ? "grey" : "black" : index.index === 2 ? lineaChiamante3 === false ? "grey" : "black" : false)
+                              }}>OBP</Form.Label>
                           <FormControl
                             variant="outlined"
                             className={classes.formControl}
@@ -777,9 +778,10 @@ return (
                               id="selectOBP"
                               value={qntChiamanti.index}
                               defaultValue={index.proxy}
+                              disabled={index.index === 0 ? lineaChiamante1 === false : index.index === 1 ? lineaChiamante2 === false : index.index === 2 ? lineaChiamante3 === false : false}
                               onChange={(e) => {
-                                console.log("yes", index)
                                 arrAppoggio[index.index].proxy = e.target.value
+                                index.index === 0 ? setProxyChiamante1(true) : index.index === 1 ? setProxyChiamante2(true) : index.index === 2 ? setProxyChiamante3(true) : setProxyChiamante1(false)
                                 setQntChiamanti(arrAppoggio);
                               }}
                             >
@@ -829,7 +831,7 @@ return (
               color="primary"
               startIcon={<AddIcon />}
               onClick={addArr}
-              disabled={nChiamanti > 2 ? true : false}
+              disabled={nChiamanti < 3 && nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === false ? true : false : nChiamanti === 2 ? proxyChiamante2 === false ? true :false : false ? false : true}
             />
           </div>
 
@@ -856,13 +858,13 @@ return (
                       >
                         <Select
                           id="selectLinea"
-                          value={file}
-                          onChange={(e) => { }}
+                          value={templete}
+                          onChange={(e) => setTemplete(e.target.value)}
                         >
-                          {appearFile.map((file) => {
+                          {appearTemplete.map((templete) => {
                             return (
-                              <MenuItem key={file.id} value={file.id}>
-                                {file.path}
+                              <MenuItem key={templete.id} value={templete.id}>
+                                {templete.nome}
                               </MenuItem>
                             );
                           })}
@@ -899,13 +901,12 @@ return (
               <div>
                 <div>
                   <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
+                    onClick={() => {activeStep === 0 ? history.push("/editing/testcase") : handleBack()}}
                     className={classes.backButton}
                   >
-                    Indietro
+                    {activeStep === 0 ? 'annulla' : 'indietro'}
                   </Button>
-                  <Button disabled={nextDisabled} variant="contained" color="primary" onClick={handleNext}>
+                  <Button disabled={activeStep === 0 && nome === "" ? true : activeStep === 1 && OBPChiamato === 0 ? true : activeStep === 2 && (nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === false ? true : false : nChiamanti === 2 ? proxyChiamante2 === false ? true : false : nChiamanti === 3 ? proxyChiamante3 === false ? true : false : false) ? true : activeStep === 3 && templete === 0   } variant="contained" color="primary" onClick={handleNext}>
                     {activeStep === steps.length - 1 ? 'Crea' : 'Avanti'}
                   </Button>
                 </div>

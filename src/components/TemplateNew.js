@@ -79,38 +79,38 @@ function Template() {
       title: "Nome",
       field: "nome",
     },
-    // {
-    //   title: "Data modifica",
-    //   field: "modifiedDate",
-    // },
-    // {
-    //   title: "Data creazione",
-    //   field: "creationDate",
-    // },
-    // {
-    //   title: "Modificato da",
-    //   field: "modifiedBy",
-    // },
-    // {
-    //   title: "Creato da",
-    //   field: "createdBy",
-    // },
+    {
+      title: "Descrizione",
+      field: "descrizione",
+    },
+    {
+      title: "Tipo Template",
+      field: "typeTemplate",
+    },
+    {
+      title: "Durata",
+      field: "durata",
+    },
     {
       title: "Versione",
       field: "version",
       editable: "never",
     },
     {
-      title: "Tipo",
-      field: "typeTemplate",
+      title: "Data modifica",
+      field: "modifiedDate",
     },
     {
-      title: "Descrizione",
-      field: "descrizione",
+      title: "Data creazione",
+      field: "creationDate",
     },
     {
-      title: "Durata",
-      field: "durata",
+      title: "Modificato da",
+      field: "modifiedBy",
+    },
+    {
+      title: "Creato da",
+      field: "createdBy",
     },
   ];
 
@@ -331,7 +331,8 @@ function Template() {
       bottom: 0,
     },
     col: {
-      padding: "5%",
+      padding: "3%",
+      height: "106px"
     },
     row: {
       width: "600px",
@@ -488,7 +489,7 @@ function Template() {
                       }}
                     />
                   </Col>
-                  <Col className={classes.col}>
+                  {/* <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       error={version !== "" ? false : true}
@@ -500,7 +501,7 @@ function Template() {
                         readOnly: modifica === false ? true : false,
                       }}
                     />
-                  </Col>
+                  </Col> */}
                 </Row>
                 <Row>
                   <Col className={classes.col}>

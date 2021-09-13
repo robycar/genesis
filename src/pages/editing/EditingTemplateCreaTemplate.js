@@ -284,21 +284,22 @@ function EditingTemplateCreaTemplate() {
   const [nextDisabled, setNextDisabled] = useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const [chiamato, setChiamato] = useState("");
-  const [chiamanteUno, setChiamanteUno] = useState("");
-  const [chiamanteDue, setChiamanteDue] = useState("");
+  const [chiamanti, setChiamanti] = useState("");
   const [qntChiamanti, setQntChiamanti] = useState([]);
   const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
+
   let arrAppoggio = qntChiamanti;
+  var arrayChiamanti = [];
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files);
     setIsSelected(true);
 
-    console.log(event.target.files);
+    // console.log(event.target.files);
   };
 
   const arrayValue = Object.values(selectedFile);
-  console.log(arrayValue[0]);
+  // console.log(arrayValue[0]);
 
   const handleSubmission = () => {};
 
@@ -330,12 +331,6 @@ function EditingTemplateCreaTemplate() {
   const handleChangeChiamato = (e) => {
     setChiamato(e.target.value);
   };
-  const handleChangeChiamanteUno = (e) => {
-    setChiamanteUno(e.target.value);
-  };
-  const handleChangeChiamanteDue = (e) => {
-    setChiamanteDue(e.target.value);
-  };
 
   useEffect(() => {
     if (activeStep === 0) {
@@ -345,7 +340,23 @@ function EditingTemplateCreaTemplate() {
         setNextDisabled(false);
       }
     }
-  }, [nome, durata, tipoTemplate]);
+
+    if (activeStep === 1) {
+      if (arrayValue.length === 0) {
+        setNextDisabled(true);
+      } else {
+        setNextDisabled(false);
+      }
+    }
+
+    if (activeStep === 2) {
+      if (chiamato === "") {
+        setNextDisabled(true);
+      } else {
+        setNextDisabled(false);
+      }
+    }
+  }, [nome, durata, tipoTemplate, arrayValue, chiamato]);
 
   const Invia = () => {
     var myHeaders = new Headers();
@@ -356,7 +367,7 @@ function EditingTemplateCreaTemplate() {
     var formdata = new FormData();
     formdata.append("nome", nome);
     formdata.append("durata", durata);
-    formdata.append("tipoTemplate", tipoTemplate);
+    formdata.append("typeTemplate", tipoTemplate);
     formdata.append("descrizione", descrizione);
     formdata.append("chiamato", chiamato);
     formdata.append("chiamanti", qntChiamanti[0].linea);
@@ -417,13 +428,14 @@ function EditingTemplateCreaTemplate() {
     setQntChiamanti(arrAppoggio);
     setNChiamanti(qntChiamanti.length);
     console.log(qntChiamanti);
+    console.log(qntChiamanti[0].linea, "Quantita");
   };
 
   const removeArr = () => {
     arrAppoggio.pop();
     setQntChiamanti(arrAppoggio);
     setNChiamanti(qntChiamanti.length);
-    console.log(qntChiamanti);
+    // console.log(qntChiamanti);
   };
 
   //--------------------MODALI TYPE LINEE---------------------------------
@@ -773,7 +785,9 @@ function EditingTemplateCreaTemplate() {
           {/* ------------------------STEP 4--------------------------------- */}
           <div
             className={classes.generalContainer}
-            style={{ display: activeStep === 3 ? "" : "none" }}
+            style={{
+              display: activeStep === 3 ? "" : "none",
+            }}
           >
             <div className={classes.bodyContainer}>
               <div className={classes.bodyContainer}>
@@ -805,7 +819,11 @@ function EditingTemplateCreaTemplate() {
                                   onChange={(e) => {
                                     arrAppoggio[index.index].linea =
                                       e.target.value;
+
+                                    setChiamanti(e.target.value);
                                     setQntChiamanti(arrAppoggio);
+                                    arrayChiamanti.push(chiamanti);
+                                    console.log(arrayChiamanti);
                                   }}
                                 >
                                   {arrayValue.map((file) => {
@@ -855,7 +873,13 @@ function EditingTemplateCreaTemplate() {
                 color="primary"
                 startIcon={<AddIcon />}
                 onClick={addArr}
-                disabled={nChiamanti > 2 ? true : false}
+                disabled={
+                  nChiamanti > 2
+                    ? true
+                    : false || (nChiamanti === 1 && chiamanti === "")
+                    ? true
+                    : false
+                }
               />
             </div>
           </div>

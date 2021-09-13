@@ -65,9 +65,7 @@ function Linee() {
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
       flexDirection: "row",
-      marginBottom: "5%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -96,10 +94,20 @@ function Linee() {
       height: "80%",
     },
     col: {
-      padding: "5%",
+      padding: "3%",
+    },
+    colIp: {
+      width: "110px",
+      padding: "3%",
+      height: "106px"
     },
     row: {
       width: "600px",
+    },
+    rowIp: {
+      width: "600px",
+      display: "flex",
+      flexDirection: "row",
     },
     textField: {
       width: "200px",
@@ -112,22 +120,19 @@ function Linee() {
     bottoneAnnulla: {
       width: "128px",
     },
-    divIp: {
-      display: "flex",
-      flexDirection: "row",
-      alignItems: "flex-end",
-      marginLeft: "5%",
-    },
+  
     separatoreIp: {
-      marginRight: "2%",
-      marginLeft: "2%",
+      display: "flex",
+      alignItems: "center",
+      // marginRight: "2%",
+      // marginLeft: "2%",
       // marginBottom: "2%",
       fontWeight: "600px",
       lineHeigth: "2%",
       //fontSize: "2px",
     },
     textFieldIp: {
-      width: "80px",
+      width: "110px",
     },
     paperContent: {
       marginTop: "1%",
@@ -307,7 +312,6 @@ function Linee() {
   // const [btnDisabled, setBtnDisabled] = useState(true);
 
   const handleOpen = (rowData) => {
-
     setId(rowData.id);
     setNumero(rowData.numero);
 
@@ -528,96 +532,102 @@ function Linee() {
                 </Col>
               </Row>
 
-              {/* <Row className={classes.row}> */}
-              <div className={classes.divIp}>
-                <TextField
-                  className={classes.textFieldIp}
-                  error={
-                    ip1 <= 255 && ip1 !== "" && ip1.length < 4 ? false : true
-                  }
-                  onChange={(e) => setIp1(e.target.value)}
-                  label="Ip1 Linea"
-                  type="number"
-                  required
-                  defaultValue={ip1}
-                  helperText={
-                    ip1 <= 255 && ip1 !== "" && ip1.length < 4
-                      ? ""
-                      : "IP richiesto e compreso tra 0 e 255"
-                  }
-                />
-                <Typography className={classes.separatoreIp}>.</Typography>
-
-                <TextField
-                  className={classes.textFieldIp}
-                  error={
-                    ip2 <= 255 && ip2 !== "" && ip2.length < 4 ? false : true
-                  }
-                  onChange={(e) => setIp2(e.target.value)}
-                  label="Ip2 Linea"
-                  type="number"
-                  required
-                  defaultValue={ip2}
-                  helperText={
-                    ip2 <= 255 && ip2 !== "" && ip2.length < 4
-                      ? ""
-                      : "IP richiesto e compreso tra 0 e 255"
-                  }
-                />
-                <Typography className={classes.separatoreIp}>.</Typography>
-
-                <TextField
-                  className={classes.textFieldIp}
-                  error={
-                    ip3 <= 255 && ip3 !== "" && ip3.length < 4 ? false : true
-                  }
-                  onChange={(e) => setIp3(e.target.value)}
-                  label="Ip3 Linea"
-                  type="number"
-                  required
-                  defaultValue={ip3}
-                  helperText={
-                    ip3 <= 255 && ip3 !== "" && ip3.length < 4
-                      ? ""
-                      : "IP richiesto e compreso tra 0 e 255"
-                  }
-                />
-                <Typography className={classes.separatoreIp}>.</Typography>
-
-                <TextField
-                  className={classes.textFieldIp}
-                  error={
-                    ip4 <= 255 && ip4 !== "" && ip4.length < 4 ? false : true
-                  }
-                  onChange={(e) => setIp4(e.target.value)}
-                  label="Ip4 Linea"
-                  type="number"
-                  required
-                  defaultValue={ip4}
-                  helperText={
-                    ip4 <= 255 && ip4 !== "" && ip4.length < 4
-                      ? ""
-                      : "IP richiesto e compreso tra 0 e 255"
-                  }
-                />
-              </div>
-              {/* </Row>  */}
-
-              <Row className={classes.row}>
-                <Col className={classes.col}>
+              <Row className={classes.rowIp}>
+                <Col className={classes.colIp}>
                   <TextField
-                    error={password !== "" ? false : true}
-                    onChange={(e) => setPassword(e.target.value)}
-                    label="Password"
+                    className={classes.textFieldIp}
+                    error={
+                      ip1 <= 255 && ip1 !== "" && ip1.length < 4 ? false : true
+                    }
+                    onChange={(e) => setIp1(e.target.value)}
+                    label="Ip1 Linea"
+                    type="number"
                     required
-                    defaultValue={password}
+                    defaultValue={ip1}
                     helperText={
-                      password !== "" ? "" : "La Password è richiesta"
+                      ip1 <= 255 && ip1 !== "" && ip1.length < 4
+                        ? ""
+                        : "IP compreso tra 0 e 255"
                     }
                   />
                 </Col>
+                <Typography className={classes.separatoreIp}>.</Typography>
 
-                <Col className={classes.col}>
+                <Col className={classes.colIp}>
+                  <TextField
+                    className={classes.textFieldIp}
+                    error={
+                      ip2 <= 255 && ip2 !== "" && ip2.length < 4 ? false : true
+                    }
+                    onChange={(e) => setIp2(e.target.value)}
+                    label="Ip2 Linea"
+                    type="number"
+                    required
+                    defaultValue={ip2}
+                    helperText={
+                      ip2 <= 255 && ip2 !== "" && ip2.length < 4
+                        ? ""
+                        : "IP compreso tra 0 e 255"
+                    }
+                  />
+                </Col>
+                <Typography className={classes.separatoreIp}>.</Typography>
+
+                <Col className={classes.colIp}>
+                  <TextField
+                    className={classes.textFieldIp}
+                    error={
+                      ip3 <= 255 && ip3 !== "" && ip3.length < 4 ? false : true
+                    }
+                    onChange={(e) => setIp3(e.target.value)}
+                    label="Ip3 Linea"
+                    type="number"
+                    required
+                    defaultValue={ip3}
+                    helperText={
+                      ip3 <= 255 && ip3 !== "" && ip3.length < 4
+                        ? ""
+                        : "IP compreso tra 0 e 255"
+                    }
+                  />
+                </Col>
+                <Typography className={classes.separatoreIp}>.</Typography>
+
+                <Col className={classes.colIp}>
+                  <TextField
+                    className={classes.textFieldIp}
+                    error={
+                      ip4 <= 255 && ip4 !== "" && ip4.length < 4 ? false : true
+                    }
+                    onChange={(e) => setIp4(e.target.value)}
+                    label="Ip4 Linea"
+                    type="number"
+                    required
+                    defaultValue={ip4}
+                    helperText={
+                      ip4 <= 255 && ip4 !== "" && ip4.length < 4
+                        ? ""
+                        : "IP compreso tra 0 e 255"
+                    }
+                  />
+                </Col>
+              </Row>
+
+              <Row className={classes.row}>
+                <Col className={classes.colIp}>
+                  <TextField
+                    type="text"
+                    className={classes.textField}
+                    error={password !== "" ? false : true}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    label="Password"
+                    defaultValue={password}
+                    helperText={password !== "" ? "" : "La Password è richiesta"}
+                  />
+                </Col>
+
+                <Col className={classes.colIp}>
                   <TextField
                     select
                     label="Tipo Linea"
@@ -704,7 +714,7 @@ function Linee() {
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography variant="h6" className={classes.typography}>
+                <Typography className={classes.typography}>
                   L'eliminazione della Linea selezionata, impatterà sui Test
                   Case ad essa collegati. Pertanto, non saranno più applicabili.
                   <br />

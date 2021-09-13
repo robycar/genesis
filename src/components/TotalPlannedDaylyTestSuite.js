@@ -28,7 +28,7 @@ export default function TotalPlannedDaylyTestSuite() {
   return (
     <React.Fragment>
       <Typography className={classes.title}>
-        TOTAL PLANNED DAYLY TEST SUITE
+        TOTAL TEST SUITE GIORNALIERE
       </Typography>
       <Typography
         component="p"

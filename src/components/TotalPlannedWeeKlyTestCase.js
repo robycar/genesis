@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 //import Title from "./Title";
 
-
 const useStyles = makeStyles({
   title: {
     color: "#9500ae",
@@ -30,7 +29,7 @@ export default function TotalPlannedWeeKlyTestCase() {
   return (
     <React.Fragment>
       <Typography className={classes.title}>
-        TOTAL PLANNED WEEKLY TEST CASE
+        TOTAL TEST CASE SETTIMANALI{" "}
       </Typography>
       <Typography
         component="p"

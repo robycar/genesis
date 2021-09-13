@@ -152,7 +152,7 @@ const EnhancedTableToolbar = (props) => {
           </Typography>
           <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>
-            <ButtonClickedBlue nome="Load Test Suite" />
+            <ButtonClickedBlue nome="Load Test Generatore" />
           </div>
         </>
       )}

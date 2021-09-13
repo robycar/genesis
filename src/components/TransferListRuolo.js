@@ -156,12 +156,7 @@ export default function TransferListRuolo() {
         setNomeLevel(result.level.nome);
       })
       .catch((error) => console.log("error", error));
-    // console.log(event.target.value)
-
-    // for (let i = 0; i < funzioniLevel.length; i++) {
-    //   console.log(funzioniLevel[i])
-
-    // }
+    
   };
 
   //---------------MODIFICA FUNZIONI UTENTE-------------------
@@ -251,6 +246,7 @@ export default function TransferListRuolo() {
             <ListItem
               key={value.nome}
               role="listitem"
+              disabled={nomeLevel === "ADMIN"}
               button
               onClick={handleToggle(value.codice)}
             >
