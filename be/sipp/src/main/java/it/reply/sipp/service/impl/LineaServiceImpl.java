@@ -204,7 +204,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     
   }
   
-	private LineaGeneratoreVO readLineaGeneratoreVO(long id) throws ApplicationException {
+	public LineaGeneratoreVO readLineaGeneratoreVO(long id) throws ApplicationException {
 	  return lineaGeneratoreRepository.findById(id)
 	      .orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.LINEA_GENERATORE_NOT_FOUND, id));
   }

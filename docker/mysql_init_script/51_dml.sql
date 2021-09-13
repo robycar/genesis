@@ -30,10 +30,16 @@ INSERT INTO `FUNZIONE` (`CODICE`, `RESERVED`, `NOME`, `DESCRIZIONE`) VALUES
 ('testsuite.view',	0,	'Mostra Test Suite',	'Consente di accedere ad una test suite'),
 ('user.delete',	1,	'Elimina utente',	'Consente di rimuovere un utente dal sistema'),
 ('user.edit',	1,	'Modifica utente',	'Consente di aggiungere o modificare gli utenti che possono accedere al sistema'),
-('user.view',	1,	'Accedi dati utente',	'Consente di accedere ai dati di un altro utente')
+('user.view',	1,	'Accedi dati utente',	'Consente di accedere ai dati di un altro utente'),
+('testgen.delete',	0,	'Elimina Test Generatore',	'Consente di eliminare un test generatore'),
+('testgen.edit',    0,	'Modifica Test Generatore',	'Consente di modificare un test generatore'),
+('testgen.view',    0,	'Mostra Test Generatore',	'Consente di accedere ai test generatore'),
+('testgen.create',  0,	'Creazione Test Generatore',	'Consente di accedere ai test generatore')
+
 ;
 
 INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
+(1, 'test', 'test', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
 (2,	'Descrizione livello admin',	'ADMIN', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
 (4,	'Regional',	'Lead Operations Manager', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
 (5,	'Descrizione Level 5',	'Level 5', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
@@ -43,13 +49,13 @@ INSERT INTO `GRUPPO` (`ID_GRUPPO`, `DESCRIZIONE`, `GRUPPO`, `MODIFIED_WHEN`, `CR
 (2,	'Forward',	'Central Integration Designer', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
 INSERT INTO `UTENZE` (`ID_UTENZA`, `USERNAME`, `PASSWORD`, `ID_LEVEL`, `ID_GROUP`, `NOME`, `COGNOME`, `AZIENDA`, `EMAIL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
-(1, 'test',	'{noop}test',	2,	1,	'nome',	'cognome',	'azienda',	'test@test.it', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
+(1, 'test',	'{noop}test',	1,	1,	'nome',	'cognome',	'azienda',	'test@test.it', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
 INSERT INTO AUTORIZZAZIONE_LEVEL(ID_LEVEL, FUNZIONE_CODICE)
 SELECT L.ID_LEVEL, F.CODICE
 FROM (LEVEL L, FUNZIONE F)
 LEFT JOIN AUTORIZZAZIONE_LEVEL AL ON (AL.ID_LEVEL = L.ID_LEVEL AND AL.FUNZIONE_CODICE=F.CODICE)
-WHERE LEVEL = 'ADMIN'
+WHERE LEVEL = 'test'
 AND AL.ID_LEVEL IS NULL
 ;
 

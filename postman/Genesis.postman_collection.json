@@ -256,7 +256,88 @@
 						},
 						"description": "Recupera le funzioni definite nel sistema"
 					},
-					"response": []
+					"response": [
+						{
+							"name": "funzione_list success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/funzione",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"funzione"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 Sep 2021 15:21:55 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"funzioni\": [\n        {\n            \"codice\": \"group.delete\",\n            \"nome\": \"Elimina gruppo\",\n            \"descrizione\": \"Rimuove un gruppo dal sistema\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"group.edit\",\n            \"nome\": \"Modifica gruppo\",\n            \"descrizione\": \"Consente di modificare un gruppo\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"group.view\",\n            \"nome\": \"Mostra gruppi\",\n            \"descrizione\": \"Consente di accedere ai gruppi di utente\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"level.delete\",\n            \"nome\": \"Elimina livello\",\n            \"descrizione\": \"Consente di eliminare un livello\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"level.edit\",\n            \"nome\": \"Modifica livello\",\n            \"descrizione\": \"Consente di modificare un livello\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"level.view\",\n            \"nome\": \"Mostra i livelli\",\n            \"descrizione\": \"Consente di accedere ai livelli definiti nel sistema\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"linea.create\",\n            \"nome\": \"Creazione linea\",\n            \"descrizione\": \"Creazione linea\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"linea.delete\",\n            \"nome\": \"Elimina linea\",\n            \"descrizione\": \"Consente di eliminare una linea\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"linea.edit\",\n            \"nome\": \"Modifica linea\",\n            \"descrizione\": \"consente di modificare una linea\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"linea.view\",\n            \"nome\": \"Mostra le linee\",\n            \"descrizione\": \"Consente di accedere alle linee presenti nel sistema\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"lineagen.create\",\n            \"nome\": \"Creazione Linea Generatore\",\n            \"descrizione\": \"Creazione Linea Generatore\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"lineagen.delete\",\n            \"nome\": \"Elimina Linea Generatore\",\n            \"descrizione\": \"Elimina Linea Generatore\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"lineagen.edit\",\n            \"nome\": \"Modifica Linea Generatore\",\n            \"descrizione\": \"Modifica Linea Generatore\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"lineagen.view\",\n            \"nome\": \"Visualizza Linea Generatore\",\n            \"descrizione\": \"Visualizza Linea Generatore\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"obp.delete\",\n            \"nome\": \"Elimina Outbound Proxy\",\n            \"descrizione\": \"Consente di eliminare un Outbound Proxy\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"obp.edit\",\n            \"nome\": \"Modifica Outbound Proxy\",\n            \"descrizione\": \"Consente di creare o modificare un Outbound Proxy\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"obp.view\",\n            \"nome\": \"Mostra gli Outbound Proxy\",\n            \"descrizione\": \"Consente di accedere agli Outbound Proxy definiti nel sistema\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"template.create\",\n            \"nome\": \"Crea un Test Template\",\n            \"descrizione\": \"Consente di create un nuovo template per la creazione dei test case\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"template.delete\",\n            \"nome\": \"Elimina test Template\",\n            \"descrizione\": \"Consente di eliminare i template dei test definiti nel sistema\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"template.edit\",\n            \"nome\": \"Modifica Test Template\",\n            \"descrizione\": \"Consente di modificare un template per la creazione dei test case\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"template.view\",\n            \"nome\": \"Mostra test template\",\n            \"descrizione\": \"Consente di visualizzare i test template definiti nel sistema\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"test.delete\",\n            \"nome\": \"Elimina Test Case\",\n            \"descrizione\": \"Consente di eliminare un test case\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"test.edit\",\n            \"nome\": \"Modifica Test Case\",\n            \"descrizione\": \"Consente di modificare un test case\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"test.view\",\n            \"nome\": \"Mostra Test Case\",\n            \"descrizione\": \"Consente di accedere ai test case\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"testsuite.create\",\n            \"nome\": \"Crea Test Suite\",\n            \"descrizione\": \"Consente di creare una nuova test suite\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"testsuite.delete\",\n            \"nome\": \"Elimina Test Suite\",\n            \"descrizione\": \"Consente di eliminare una test suite esistente\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"testsuite.edit\",\n            \"nome\": \"Modifica Test Suite\",\n            \"descrizione\": \"Consente di modificare una test suite esistente\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"testsuite.view\",\n            \"nome\": \"Mostra Test Suite\",\n            \"descrizione\": \"Consente di accedere ad una test suite\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"user.delete\",\n            \"nome\": \"Elimina utente\",\n            \"descrizione\": \"Consente di rimuovere un utente dal sistema\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"user.edit\",\n            \"nome\": \"Modifica utente\",\n            \"descrizione\": \"Consente di aggiungere o modificare gli utenti che possono accedere al sistema\",\n            \"reserved\": false\n        },\n        {\n            \"codice\": \"user.view\",\n            \"nome\": \"Accedi dati utente\",\n            \"descrizione\": \"Consente di accedere ai dati di un altro utente\",\n            \"reserved\": false\n        }\n    ]\n}"
+						}
+					]
 				}
 			]
 		},
@@ -7527,7 +7608,7 @@
 							"formdata": [
 								{
 									"key": "nome",
-									"value": "Template 2",
+									"value": "Template 3",
 									"description": "(string)nome del template",
 									"type": "text"
 								},
@@ -9733,6 +9814,487 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "api/testgen",
+			"item": [
+				{
+					"name": "testgen_list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testgen",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testgen"
+							]
+						},
+						"description": "Recupera l'elenco dei test case.\r\nPermessi: testcase.view"
+					},
+					"response": []
+				},
+				{
+					"name": "testgen_add",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"{{$randomProductName}}\",\r\n    \"template\": 1,\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"lineaChiamante\": 1,\r\n    \"lineaChiamato\": 2,\r\n    \"proxyChiamante\": 1,\r\n    \"proxyChiamato\": 2\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/testgen",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testgen"
+							]
+						},
+						"description": "Crea un nuovo test a partire da un template.\r\nPermessi: testgen.create"
+					},
+					"response": [
+						{
+							"name": "testgen_add success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"{{$randomProductName}}\",\r\n    \"template\": 1,\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"lineaChiamante\": 2,\r\n    \"lineaChiamato\": 4,\r\n    \"proxyChiamante\": 1,\r\n    \"proxyChiamato\": 2\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/testgen",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testgen"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 13 Sep 2021 13:08:28 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"testGeneratore\": {\n        \"modifiedDate\": \"2021-09-13T13:08:27.599+00:00\",\n        \"creationDate\": \"2021-09-13T13:08:27.548+00:00\",\n        \"modifiedBy\": \"test\",\n        \"createdBy\": \"test\",\n        \"version\": 0,\n        \"id\": 1,\n        \"nome\": \"Handcrafted Cotton Chips\",\n        \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n        \"lineaChiamante\": {\n            \"modifiedDate\": \"2021-09-10T10:56:48.000+00:00\",\n            \"creationDate\": \"2021-09-10T10:55:57.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 2,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-09-10T10:56:09.000+00:00\",\n                \"creationDate\": \"2021-09-10T10:56:09.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 34,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/LINEA_GENERATORE/2/34\"\n            }\n        },\n        \"lineaChiamato\": {\n            \"modifiedDate\": \"2021-09-13T10:11:45.000+00:00\",\n            \"creationDate\": \"2021-09-13T10:11:45.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 4,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-09-13T10:11:45.000+00:00\",\n                \"creationDate\": \"2021-09-13T10:11:45.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 36,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/LINEA_GENERATORE/4/36\"\n            }\n        },\n        \"proxyChiamante\": null,\n        \"proxyChiamato\": null,\n        \"template\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "testget_get_by_id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testgen/1",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testgen",
+								"1"
+							]
+						},
+						"description": "Recupera un Test generatore a partire dal suo identificatore.\r\nPermessi: testgen.view"
+					},
+					"response": [
+						{
+							"name": "testget_get_by_id success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/testgen/1",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testgen",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 13 Sep 2021 13:09:51 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"testGeneratore\": {\n        \"modifiedDate\": \"2021-09-13T13:08:28.000+00:00\",\n        \"creationDate\": \"2021-09-13T13:08:28.000+00:00\",\n        \"modifiedBy\": \"test\",\n        \"createdBy\": \"test\",\n        \"version\": 0,\n        \"id\": 1,\n        \"nome\": \"Handcrafted Cotton Chips\",\n        \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n        \"lineaChiamante\": {\n            \"modifiedDate\": \"2021-09-10T10:56:48.000+00:00\",\n            \"creationDate\": \"2021-09-10T10:55:57.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 2,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-09-10T10:56:09.000+00:00\",\n                \"creationDate\": \"2021-09-10T10:56:09.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 34,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/LINEA_GENERATORE/2/34\"\n            }\n        },\n        \"lineaChiamato\": {\n            \"modifiedDate\": \"2021-09-13T10:11:45.000+00:00\",\n            \"creationDate\": \"2021-09-13T10:11:45.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 4,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-09-13T10:11:45.000+00:00\",\n                \"creationDate\": \"2021-09-13T10:11:45.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 36,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/LINEA_GENERATORE/4/36\"\n            }\n        },\n        \"proxyChiamante\": null,\n        \"proxyChiamato\": null,\n        \"template\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "testgen_update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"version\": 1,\r\n    \"nome\": \"Handcrafted Cotton Chips\",\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"lineaChiamante\": {\r\n        \"id\": 2\r\n    },\r\n    \"lineaChiamato\": {\r\n        \"id\": 4\r\n    },\r\n    \"proxyChiamante\": 2,\r\n    \"proxyChiamato\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/testgen",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testgen"
+							]
+						},
+						"description": "Modifica un test generatore esistente identificato dal suo identificatore.\r\nPermessi: testgen.edit"
+					},
+					"response": [
+						{
+							"name": "testgen_update success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"version\": 1,\r\n    \"nome\": \"Handcrafted Cotton Chips\",\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"lineaChiamante\": {\r\n        \"id\": 2\r\n    },\r\n    \"lineaChiamato\": {\r\n        \"id\": 4\r\n    },\r\n    \"proxyChiamante\": 2,\r\n    \"proxyChiamato\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/testgen",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testgen"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 13 Sep 2021 13:16:36 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"testGeneratore\": {\n        \"modifiedDate\": \"2021-09-13T13:16:36.459+00:00\",\n        \"creationDate\": \"2021-09-13T13:08:28.000+00:00\",\n        \"modifiedBy\": \"test\",\n        \"createdBy\": \"test\",\n        \"version\": 1,\n        \"id\": 1,\n        \"nome\": \"Handcrafted Cotton Chips\",\n        \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n        \"lineaChiamante\": {\n            \"modifiedDate\": \"2021-09-10T10:56:48.000+00:00\",\n            \"creationDate\": \"2021-09-10T10:55:57.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 2,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-09-10T10:56:09.000+00:00\",\n                \"creationDate\": \"2021-09-10T10:56:09.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 34,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/LINEA_GENERATORE/2/34\"\n            }\n        },\n        \"lineaChiamato\": {\n            \"modifiedDate\": \"2021-09-13T10:11:45.000+00:00\",\n            \"creationDate\": \"2021-09-13T10:11:45.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 4,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"descrizione\": \"descrizione type linea 1\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-09-13T10:11:45.000+00:00\",\n                \"creationDate\": \"2021-09-13T10:11:45.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 36,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/LINEA_GENERATORE/4/36\"\n            }\n        },\n        \"proxyChiamante\": {\n            \"modifiedDate\": \"2021-09-02T15:09:24.000+00:00\",\n            \"creationDate\": \"2021-09-02T15:09:24.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 2,\n            \"ipDestinazione\": \"163.11.182.31\",\n            \"descrizione\": \"Voluptatem eos ratione cupiditate. Expedita et ea facilis qui sed repellendus ducimus est officiis. Beatae est facilis. Perferendis et eum et. Quia soluta explicabo deserunt incidunt tenetur provident consequatur.\",\n            \"porta\": 545,\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"g1\",\n                \"descrizione\": \"g1\"\n            },\n            \"typeLinee\": [\n                {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"descrizione\": \"descrizione type linea 1\"\n                },\n                {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 2,\n                    \"descrizione\": \"descrizione type linea 2\"\n                }\n            ],\n            \"campiConcatenati\": \"163.11.182.31 - 545\"\n        },\n        \"proxyChiamato\": {\n            \"modifiedDate\": \"2021-09-02T15:09:23.000+00:00\",\n            \"creationDate\": \"2021-09-02T15:09:23.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"ipDestinazione\": \"133.2.251.17\",\n            \"descrizione\": \"Expedita officia officia. Minus suscipit ullam at ea quidem repudiandae. Eveniet ea aut aut ratione quisquam sed eum. Dolore illum delectus. Quis accusantium facilis quia vitae voluptate. Praesentium sit nisi id quaerat quia enim ea expedita veniam.\",\n            \"porta\": 664,\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"g1\",\n                \"descrizione\": \"g1\"\n            },\n            \"typeLinee\": [\n                {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"descrizione\": \"descrizione type linea 1\"\n                },\n                {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 2,\n                    \"descrizione\": \"descrizione type linea 2\"\n                }\n            ],\n            \"campiConcatenati\": \"133.2.251.17 - 664\"\n        },\n        \"template\": null\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "testget_delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/testgen",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testgen"
+							]
+						},
+						"description": "Rimuove un test generatore esistente dal sistema.\r\nPermessi: testgen.delete"
+					},
+					"response": [
+						{
+							"name": "testget_delete failed not found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/testgen",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testgen"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 13 Sep 2021 13:23:54 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"TEST-0017\",\n        \"description\": \"Test generatore non trovato: 2\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"description": "Api per i test generatore"
 		}
 	],
 	"auth": {
