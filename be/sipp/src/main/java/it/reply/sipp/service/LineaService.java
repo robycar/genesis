@@ -8,6 +8,7 @@ import it.reply.sipp.api.generic.exception.ApplicationException;
 import it.reply.sipp.api.linea.payload.LineaDTO;
 import it.reply.sipp.api.linea.payload.LineaGeneratoreDTO;
 import it.reply.sipp.api.linea.payload.TypeLineaDTO;
+import it.reply.sipp.model.LineaGeneratoreVO;
 import it.reply.sipp.model.LineaVO;
 import it.reply.sipp.model.TypeLineaVO;
 import it.reply.sipp.service.dto.LineaReadLineaResponse;
@@ -114,4 +115,6 @@ public interface LineaService {
   void removeLineaGeneratore(long id) throws ApplicationException;
 
   LineaGeneratoreDTO readLineaGeneratore(long id) throws ApplicationException;
+
+  LineaGeneratoreVO readLineaGeneratoreVO(long id) throws ApplicationException;
 }
