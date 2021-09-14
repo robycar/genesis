@@ -22,6 +22,10 @@ public class LoginResponse extends PayloadResponse {
 //	private List<String> roles;
 	private List<String> functions;
 	
+	private Long internalUserId;
+	
+	private ApplicationInfoDTO applicationInfo = new ApplicationInfoDTO();
+	
 	public LoginResponse() {
 	}
 
@@ -65,13 +69,30 @@ public class LoginResponse extends PayloadResponse {
 		this.functions = functions;
 	}
 
+  public Long getInternalUserId() {
+    return internalUserId;
+  }
+
+  public void setInternalUserId(Long internalUserId) {
+    this.internalUserId = internalUserId;
+  }
+
+  public ApplicationInfoDTO getApplicationInfo() {
+    return applicationInfo;
+  }
+
+  public void setApplicationInfo(ApplicationInfoDTO applicationInfo) {
+    this.applicationInfo = applicationInfo;
+  }
+
   @Override
   protected void writeFields(StringBuilder sb) {
     writeField(sb, "accessToken", accessToken);
     writeField(sb, "functions", functions);
     writeField(sb, "tokenType", tokenType);
     writeField(sb, "username", username);
-    
+    writeField(sb, "internalUserId", internalUserId);
+    writeField(sb, "applicationInfo", applicationInfo);
     super.writeFields(sb);
   }
 	

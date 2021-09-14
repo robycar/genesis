@@ -7,12 +7,12 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import it.reply.sipp.api.admin.payload.UserDTO;
 import it.reply.sipp.model.UserVO;
 import it.reply.sipp.model.repository.UserRepository;
 
@@ -25,11 +25,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return userRepository.findByUsername(username)
-		.map(u -> User.builder()
-					.username(u.getUsername())
-					.password(u.getPassword())
-					.authorities(readRolesAndFunctionsForUser(u))
-					.build())
+		.map(u -> new GenesisUser(
+		      u.getUsername(), 
+		      u.getPassword(), 
+		      readRolesAndFunctionsForUser(u),
+		      new UserDTO(u))) 
 		.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 	}
 	
