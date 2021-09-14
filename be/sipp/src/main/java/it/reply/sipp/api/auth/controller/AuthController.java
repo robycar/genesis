@@ -25,6 +25,7 @@ import it.reply.sipp.AppError;
 import it.reply.sipp.api.auth.payload.LoginResponse;
 import it.reply.sipp.api.generic.payload.ErrorInfo;
 import it.reply.sipp.jwt.JWTComponent;
+import it.reply.sipp.security.GenesisUser;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -81,7 +82,12 @@ public class AuthController {
 			response.setAccessToken(token);
 			response.setTokenType(LoginResponse.BEARER);
 			response.setUsername(userDetails.getUsername());
-			
+			if (userDetails instanceof GenesisUser) {
+			  GenesisUser u = (GenesisUser)userDetails;
+			  if (u.getOriginalUser() != null & u.getOriginalUser().getId() != null) {
+			    response.setInternalUserId(u.getOriginalUser().getId());
+			  }
+			}
 			return ResponseEntity.ok(response);
 		} catch (BadCredentialsException bce) {
 		  
