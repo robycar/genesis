@@ -157,7 +157,8 @@ export default function Login() {
 
       timer();
 
-      history.push("/dashboard/testcase");
+      //history.push("/dashboard/testcase");
+      window.location = "/dashboard/testcase";
     } else if (result.error.code === "ADMIN-0004") {
       document.getElementById("alertUsername").style.display = "";
     } else {

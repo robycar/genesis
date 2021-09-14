@@ -27,24 +27,29 @@ import Button from "@material-ui/core/Button";
 function TestGeneratoreTableNew() {
   const [file, setFile] = useState([]);
   const [data, setData] = useState([]);
-  const [testCase, setTestCase] = useState([]);
+  const [testGen, setTestGen] = useState([]);
   const [id, setId] = useState();
   const [nomeTitolo, setNomeTitolo] = useState("");
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
+  const [lastResult, setLastResult] = useState("");
   const [version, setVersion] = useState();
-  const [expectedDuration, setExpectedDuration] = useState();
-  const [durata, setDurata] = useState();
+  const [pathCsv, setPathCsv] = useState([]);
   const [template, setTemplate] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [modifiedBy, setModifiedBy] = useState("");
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
+  const [lastStartDate, setLastStartDate] = useState("");
+  const [lastEndDate, setLastEndDate] = useState("");
+  const [report, setReport] = useState("");
+
   const [chiamato, setChiamato] = useState([]);
   const [chiamanti, setChiamanti] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [appearFile, setAppearFile] = useState([]);
+
 
   let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
@@ -52,8 +57,8 @@ function TestGeneratoreTableNew() {
     bearer = bearer.replace(/"/g, "");
   }
 
-  //-----------GET TEST CASE----------------------
-  const getAllTestCase = () => {
+  //-----------GET TEST GENERATORE----------------------
+  const getAllTestGeneratore = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -65,7 +70,7 @@ function TestGeneratoreTableNew() {
       redirect: "follow",
     };
 
-    fetch(`/api/testcase`, requestOptions)
+    fetch(`/api/testgen`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setData(result.list);
@@ -74,7 +79,7 @@ function TestGeneratoreTableNew() {
   };
 
   //--------------TEST CASE BY ID-----------------------
-  const getTestCaseById = (id) => {
+  const getTestGenById = (id) => {
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
@@ -87,10 +92,10 @@ function TestGeneratoreTableNew() {
       redirect: "follow",
     };
 
-    fetch(`/api/testcase/` + id, requestOptions)
+    fetch(`/api/testgen/` + id, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setTestCase(result.testCase);
+        setTestGen(result.testGen);
         setOpen(true);
       })
       .catch((error) => console.log("error", error));
@@ -158,7 +163,7 @@ function TestGeneratoreTableNew() {
   };
 
   useEffect(() => {
-    getAllTestCase();
+    getAllTestGeneratore();
     getAppearLine();
     getAppearOBP();
     getAppearFile();
@@ -171,40 +176,32 @@ function TestGeneratoreTableNew() {
       defaultSort: "desc",
     },
     {
-      title: "Azienda",
+      title: "Nome",
       field: "nome",
     },
     {
       title: "Descrizione",
       field: "descrizione",
     },
-    // {
-    //   title: "Durata Attesa",
-    //   field: "expectedDuration",
-    // },
-    // {
-    //   title: "Versione",
-    //   field: "version",
-    // },
     {
-      title: "Data Creazione",
-      field: "creationDate",
-    },
-    {
-      title: "Data Modifica",
-      field: "modifiedDate",
+      title: "Template",
+      //field: "template",
     },
     {
       title: "Creato da",
       field: "createdBy",
     },
     {
+      title: "Data Creazione",
+      field: "creationDate",
+    },
+    {
       title: "Modificato da",
       field: "modifiedBy",
     },
     {
-      title: "Template",
-      field: "file",
+      title: "Data Modifica",
+      field: "modifiedDate",
     },
   ];
 
@@ -229,14 +226,14 @@ function TestGeneratoreTableNew() {
     setNomeTitolo(rowData.nome);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
-    setVersion(rowData.version);
-    setExpectedDuration(rowData);
-    setDurata(rowData.expectedDuration);
+    //setVersion(rowData.version);
+    //setTemplate(rowData.template);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
-    getTestCaseById(rowData.id);
+    getTestGenById(rowData.id);
+    //setPathCsv(rowData.pathCsv);
   };
 
   const handleClose = () => {
@@ -244,7 +241,7 @@ function TestGeneratoreTableNew() {
   };
 
   const handleClose2 = () => {
-    aggiornaTestCase();
+    aggiornaTestGen();
     setOpen(false);
   };
 
@@ -266,10 +263,10 @@ function TestGeneratoreTableNew() {
       redirect: "follow",
     };
 
-    fetch(`/api/testcase`, requestOptions)
+    fetch(`/api/testgen`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getAllTestCase();
+        getAllTestGeneratore();
       })
       .catch((error) => console.log("error", error));
     handleCloseDelete();
@@ -287,54 +284,54 @@ function TestGeneratoreTableNew() {
   };
 
   //-----------MODALE CHIAMATO------------------
-  const handleOpenChiamato = () => {
-    var appoggioChiamato;
-    appoggioChiamato = Object.values(testCase.chiamato);
-    for (let i = 0; i < appoggioChiamato.length; i++) {
-      chiamato.push(appoggioChiamato[i].id);
-    }
-    console.log(chiamato);
-    setOpenChiamato(true);
-  };
+  // const handleOpenChiamato = () => {
+  //   var appoggioChiamato;
+  //   appoggioChiamato = Object.values(testGen.chiamato);
+  //   for (let i = 0; i < appoggioChiamato.length; i++) {
+  //     chiamato.push(appoggioChiamato[i].id);
+  //   }
+  //   console.log(chiamato);
+  //   setOpenChiamato(true);
+  // };
 
-  const handleCloseChiamato = () => {
-    setOpenChiamato(false);
-  };
+  // const handleCloseChiamato = () => {
+  //   setOpenChiamato(false);
+  // };
 
-  const handleCloseChiamato2 = () => {
-    //aggiornaUtente();
-    setOpenChiamato(false);
-  };
+  // const handleCloseChiamato2 = () => {
+  //   //aggiornaUtente();
+  //   setOpenChiamato(false);
+  // };
   //---------MODALE CHIAMANTi--------------------
-  const handleOpenChiamanti = () => {
-    var appoggioChiamanti;
-    appoggioChiamanti = testCase.chiamanti;
+  // const handleOpenChiamanti = () => {
+  //   var appoggioChiamanti;
+  //   appoggioChiamanti = testGen.chiamanti;
 
-    for (let i = 0; i < appoggioChiamanti.length; i++) {
-      chiamanti[i] = [0, 0, 0, 0];
-    }
-    for (let i = 0; i < appoggioChiamanti.length; i++) {
-      chiamanti[i][0] = appoggioChiamanti[i]["proxy"].id;
-      chiamanti[i][1] = appoggioChiamanti[i]["linea"].id;
-      chiamanti[i][2] = appoggioChiamanti[i]["file"].id;
-      chiamanti[i][3] = i;
-    }
-    console.log(chiamanti);
-    setOpenChiamanti(true);
-  };
+  //   for (let i = 0; i < appoggioChiamanti.length; i++) {
+  //     chiamanti[i] = [0, 0, 0, 0];
+  //   }
+  //   for (let i = 0; i < appoggioChiamanti.length; i++) {
+  //     chiamanti[i][0] = appoggioChiamanti[i]["proxy"].id;
+  //     chiamanti[i][1] = appoggioChiamanti[i]["linea"].id;
+  //     chiamanti[i][2] = appoggioChiamanti[i]["file"].id;
+  //     chiamanti[i][3] = i;
+  //   }
+  //   console.log(chiamanti);
+  //   setOpenChiamanti(true);
+  // };
 
-  const handleCloseChiamanti = () => {
-    setOpenChiamanti(false);
-  };
+  // const handleCloseChiamanti = () => {
+  //   setOpenChiamanti(false);
+  // };
 
-  const handleCloseChiamanti2 = () => {
-    //aggiornaUtente();
-    setOpenChiamanti(false);
-  };
+  // const handleCloseChiamanti2 = () => {
+  //   //aggiornaUtente();
+  //   setOpenChiamanti(false);
+  // };
 
-  //-------AGGIORNA TEST CASE----------------------------
+  //-------AGGIORNA TEST GENERATORE----------------------------
 
-  const aggiornaTestCase = () => {
+  const aggiornaTestGen = () => {
     const invia = () => {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
@@ -345,43 +342,16 @@ function TestGeneratoreTableNew() {
       var raw = JSON.stringify({
         id: id,
         version: version,
-        expectedDuration: expectedDuration,
         nome: nome,
         descrizione: descrizione,
-        // chiamato: {
-        //   linea: {
-        //     id: id,
-        //   },
-        //   proxy: {
-        //     id: 1,
-        //   },
+        // lineaChiamante: {
+        //   id: id
         // },
-        // chiamanti: [
-        //   {
-        //     linea: {
-        //       id: id,
-        //     },
-        //     proxy: {
-        //       id: id,
-        //     },
-        //   },
-        //   {
-        //     linea: {
-        //       id: id,
-        //     },
-        //     proxy: {
-        //       id: id,
-        //     },
-        //   },
-        //   {
-        //     linea: {
-        //       id: id,
-        //     },
-        //     proxy: {
-        //       id: id,
-        //     },
-        //   },
-        // ],
+        // lineaChiamato: {
+        //   id: id
+        // },
+        // proxyChiamante: proxyChiamante,
+        // proxyChiamato: proxyChiamato
       });
 
       var requestOptions = {
@@ -391,11 +361,11 @@ function TestGeneratoreTableNew() {
         redirect: "follow",
       };
 
-      fetch(`/api/testcase`, requestOptions)
+      fetch(`/api/testgen`, requestOptions)
         .then((response) => response.json())
         .then((response) => {
           console.log("ho cliccato");
-          getAllTestCase();
+          getAllTestGeneratore();
         })
         .catch((error) => console.log("error", error));
     };
@@ -454,9 +424,8 @@ function TestGeneratoreTableNew() {
     },
     intestazione: {
       color: "#47B881",
-      
+
       flexDirection: "row",
-      
     },
     icon: {
       transform: "scale(1.8)",
@@ -493,10 +462,10 @@ function TestGeneratoreTableNew() {
       height: 370,
       overflowX: "hidden",
     },
-    
+
     col: {
       padding: "3%",
-      height: "106px"
+      height: "106px",
     },
     row: {
       width: "600px",
@@ -524,6 +493,7 @@ function TestGeneratoreTableNew() {
           search: true,
           searchFieldVariant: "outlined",
           filtering: true,
+          exportButton: true,
           searchFieldAlignment: "left",
           pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
@@ -543,7 +513,7 @@ function TestGeneratoreTableNew() {
                 </Button>
               </div>
             ),
-            tooltip: "Load Test Generatoree",
+            tooltip: "Load Test Generatore",
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
@@ -599,8 +569,8 @@ function TestGeneratoreTableNew() {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    {modifica === false ? "Visualizza " : "Modifica "} Test Generatore{" "}
-                    <b>{nomeTitolo}</b>
+                    {modifica === false ? "Visualizza " : "Modifica "} Test
+                    Generatore <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -613,9 +583,9 @@ function TestGeneratoreTableNew() {
                       className={classes.textField}
                       error={nome !== "" ? false : true}
                       onChange={(e) => setNome(e.target.value)}
-                      label="Nome test"
+                      label="Nome Test"
                       defaultValue={nome}
-                      helperText={nome !== "" ? "" : "Il nome è richiesto"}
+                      helperText={nome !== "" ? "" : "Il Nome è richiesto"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -623,125 +593,50 @@ function TestGeneratoreTableNew() {
                   </Col>
 
                   <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={nome !== "" ? false : true}
-                      onChange={(e) => setNome(e.target.value)}
-                      label="descrizione"
-                      defaultValue={nome.replace("Eseguito Spesso", "")}
-                      helperText={
-                        nome !== "" ? "" : "la descrizione è richiesta"
-                      }
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica === false ? "none" : "flex" }}
-                  >
-                    <TextField
+                  <TextField
                       className={classes.textField}
                       error={descrizione !== "" ? false : true}
                       onChange={(e) => setDescrizione(e.target.value)}
-                      label="linea chiamante "
+                      label="Descrizione"
                       defaultValue={descrizione}
-                      helperText={
-                        descrizione !== ""
-                          ? ""
-                          : "La linea chiamante è richiesta"
-                      }
+                      helperText={descrizione !== "" ? "" : "La Descrizione è richiesta"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica === false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      className={classes.textField}
-                      error={descrizione !== "" ? false : true}
-                      onChange={(e) => setDescrizione(e.target.value)}
-                      label="linea chiamato "
-                      defaultValue={descrizione}
-                      helperText={
-                        descrizione !== ""
-                          ? ""
-                          : "La linea chiamanto è richiesta"
-                      }
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                </Row>
+                </Row> 
 
                 <Row>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
+                  <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setCreatedBy(e.target.value)}
-                      label="path CSV chiamato --scaricabile"
-                      defaultValue={createdBy}
+                      error={template !== "" ? false : true}
+                      onChange={(e) => setTemplate(e.target.value)}
+                      label="Template"
+                      defaultValue={template}
+                      
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setCreatedBy(e.target.value)}
-                      label="path CSV chiamante --scaricabile"
-                      defaultValue={createdBy}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setCreatedBy(e.target.value)}
-                      label="Creato Da "
-                      defaultValue={createdBy}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setCreationDate(e.target.value)}
-                      label="Data di creazione "
-                      defaultValue={creationDate}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
 
-                {/* <Row>
+                  <Col className={classes.col}>
+                  <TextField
+                      className={classes.textField}
+                      error={pathCsv !== "" ? false : true}
+                      onChange={(e) => setPathCsv(e.target.value)}
+                      label="Path CSV"
+                      defaultValue={pathCsv}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row> 
+
+                 {/* <Row>
                   <Col className={classes.col}>
                     <ButtonClickedGreen
                       size="medium"
@@ -767,123 +662,14 @@ function TestGeneratoreTableNew() {
                 </Row> */}
 
                 <Row>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica === false ? "none" : "flex" }}
-                  >
+                  <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={modifiedDate !== "" ? false : true}
-                      onChange={(e) => setModifiedDate(e.target.value)}
-                      label="OBP chiamante "
-                      defaultValue={modifiedDate}
-                      helperText={
-                        modifiedDate !== ""
-                          ? ""
-                          : "La OBP chiamante è richiesta"
-                      }
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica === false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      className={classes.textField}
-                      error={modifiedDate !== "" ? false : true}
-                      onChange={(e) => setModifiedDate(e.target.value)}
-                      label="OBP chiamato "
-                      defaultValue={modifiedDate}
-                      helperText={
-                        modifiedDate !== "" ? "" : "La OBP chiamato è richiesta"
-                      }
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      label="last start date "
-                      type=""
-                      //onChange={(e) => setCreationDate(e.target.value)}
-                      // defaultValur={creationDate}
-                      defaultValue={creationDate.replace(".000+00:00", "")}
-                      className={classes.textField}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      className={classes.textField}
-                      //onChange={(e) => setModifiedBy(e.target.value)}
-                      label="last end date "
-                      defaultValue={creationDate.replace(".000+00:00", "")}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      className={classes.textField}
-                      error={version !== "" ? false : true}
-                      onChange={(e) => setVersion(e.target.value)}
-                      // display={{display: modifica === false ? none : flex}}
-                      label="modificato da"
-                      defaultValue={version}
-                      //helperText={versione !== "" ? "" : "Inserire versione"}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      className={classes.textField}
-                      label="data modifica "
-                      defaultValue={creationDate.replace(".000+00:00", "")}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
-                    <TextField
-                      className={classes.textField}
-                      label="durata "
-                      defaultValue={"30 secondi"}
+                      error={lastResult !== "" ? false : true}
+                      onChange={(e) => setLastResult(e.target.value)}
+                      label="Last Result"
+                      defaultValue={lastResult}
+                      
                       InputProps={{
                         readOnly: true,
                       }}
@@ -891,38 +677,110 @@ function TestGeneratoreTableNew() {
                   </Col>
 
                   <Col className={classes.col}>
-                    <TextField
+                  <TextField
                       className={classes.textField}
-                      error={template !== "" ? false : true}
-                      onChange={(e) => setTemplate(e.target.value)}
-                      label="Template ---su show scaricabile"
-                      defaultValue={template}
-                      //helperText={template !== "" ? "" : "La Durata è richiesta"}
+                      error={createdBy !== "" ? false : true}
+                      onChange={(e) => setCreatedBy(e.target.value)}
+                      label="Creato da"
+                      defaultValue={createdBy}
                       InputProps={{
-                        readOnly: modifica === false ? true : false,
+                        readOnly: true,
                       }}
                     />
                   </Col>
-                </Row>
+                </Row> 
 
                 <Row>
-                  <Col
-                    className={classes.col}
-                    style={{ display: modifica !== false ? "none" : "flex" }}
-                  >
+                  <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      label="last result"
-                      defaultValue={descrizione.replace(
-                        "www.reportistica.it",
-                        ""
-                      )}
+                      error={creationDate !== "" ? false : true}
+                      onChange={(e) => setCreationDate(e.target.value)}
+                      label="Data Creazione"
+                      defaultValue={creationDate}
+                      
                       InputProps={{
-                        readOnly: modifica === false ? true : false,
+                        readOnly: true,
                       }}
                     />
                   </Col>
+
+                  <Col className={classes.col}>
+                  <TextField
+                      className={classes.textField}
+                      error={modifiedBy !== "" ? false : true}
+                      onChange={(e) => setModifiedBy(e.target.value)}
+                      label="Modificato da"
+                      defaultValue={modifiedBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row> 
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={modifiedDate !== "" ? false : true}
+                      onChange={(e) => setModifiedDate(e.target.value)}
+                      label="Data Modifica"
+                      defaultValue={modifiedDate}
+                      
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+
+                  <Col className={classes.col}>
+                  <TextField
+                      className={classes.textField}
+                      error={lastStartDate !== "" ? false : true}
+                      onChange={(e) => setLastStartDate(e.target.value)}
+                      label="Last Start Date"
+                      defaultValue={lastStartDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row> 
+
+                <Row>
+                <Col className={classes.col}>
+                  <TextField
+                      className={classes.textField}
+                      error={lastEndDate !== "" ? false : true}
+                      onChange={(e) => setLastEndDate(e.target.value)}
+                      label="Last End Date"
+                      defaultValue={lastEndDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+
+                  <Col className={classes.col}>
+                  <TextField
+                      className={classes.textField}
+                      error={report !== "" ? false : true}
+                      onChange={(e) => setReport(e.target.value)}
+                      label="Report"
+                      defaultValue={descrizione.replace(
+                        "www.reportistica.it",
+                        
+                      )}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+              
                 </Row>
+
+               
               </Form>
               <Divider className={classes.divider} />
               <div
@@ -952,7 +810,7 @@ function TestGeneratoreTableNew() {
       </Modal>
 
       {/* ------------------------MODALE CHIAMATO--------------------- */}
-      <Modal
+      {/* <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -986,22 +844,22 @@ function TestGeneratoreTableNew() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      // select
-                      // onChange={(e) => setNome(e.target.value)}
+                      select
+                      onChange={(e) => setNome(e.target.value)}
 
                       label="IP Linea/e N°"
                       defaultValue={chiamato[1]}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
-                    />
-                    {/* {appearGroup.map((gruppo) => (
+                    /> 
+                     {/* {appearGroup.map((gruppo) => (
                       <MenuItem key={gruppo.id} value={gruppo.id}>
                         {gruppo.nome}
                       </MenuItem>
-                    ))}
-                  </TextField> */}
-                  </Col>
+                    ))} */}
+                  
+                  {/* </Col>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -1012,14 +870,14 @@ function TestGeneratoreTableNew() {
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
-                    />
-                    {/* {appearGroup.map((gruppo) => (
+                    />  */}
+                     {/* {appearGroup.map((gruppo) => (
                       <MenuItem key={gruppo.id} value={gruppo.id}>
                         {gruppo.nome}
                       </MenuItem>
-                    ))}
-                  </TextField> */}
-                  </Col>
+                    ))} */}
+                  
+                  {/* </Col>
                 </Row>
                 <Row>
                   <Col className={classes.col}>
@@ -1071,9 +929,9 @@ function TestGeneratoreTableNew() {
             </Paper>
           </div>
         </Fade>
-      </Modal>
+      </Modal> */} 
       {/* ------------------------MODALE CHIAMANTi--------------------- */}
-      <Modal
+      {/* <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -1196,7 +1054,7 @@ function TestGeneratoreTableNew() {
             </Paper>
           </div>
         </Fade>
-      </Modal>
+      </Modal> */}
       {/* ------------------------MODALE DELETE--------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"

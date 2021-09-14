@@ -67,7 +67,6 @@ function Template() {
     getTemplate();
   }, []);
 
-
   const columns = [
     {
       title: "ID Template",
@@ -95,6 +94,7 @@ function Template() {
       title: "Versione",
       field: "version",
       editable: "never",
+      hidden: true,
     },
     {
       title: "Data modifica",
@@ -139,7 +139,7 @@ function Template() {
     handleOpen(rowData);
   };
   const openVisualizza = (rowData) => {
-       setModifica(false);
+    setModifica(false);
     handleOpen(rowData);
   };
 
@@ -193,54 +193,51 @@ function Template() {
     setOpenDelete(false);
   };
 
-  
   //-------AGGIORNA TEST SUITE----------------------------
 
   const aggiornaTemplate = () => {
-
     const invia = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var raw = JSON.stringify({
-      id: id,
-      version: version,
-      nome: nome,
-      durata: durata,
-      typeTemplate: typeTemplate,
-      // fileLinks: {
-      //   CHIAMATO: [
-      //     {
-      //       id: id.chiamato
-      //     }
-      //   ],
-      //   CHIAMANTE: [
-      //    id: id.chiamante
-      //   ]
-      // }
-    });
+      var raw = JSON.stringify({
+        id: id,
+        version: version,
+        nome: nome,
+        durata: durata,
+        typeTemplate: typeTemplate,
+        // fileLinks: {
+        //   CHIAMATO: [
+        //     {
+        //       id: id.chiamato
+        //     }
+        //   ],
+        //   CHIAMANTE: [
+        //    id: id.chiamante
+        //   ]
+        // }
+      });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/template`, requestOptions)
+        .then((response) => response.json())
+        .then((response) => {
+          getTemplate();
+        })
+        .catch((error) => console.log("error", error));
     };
-
-    fetch(`/api/template`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        getTemplate();
-      })
-      .catch((error) => console.log("error", error));
+    invia();
   };
-  invia();
-};
 
-  
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -332,7 +329,7 @@ function Template() {
     },
     col: {
       padding: "3%",
-      height: "106px"
+      height: "106px",
     },
     row: {
       width: "600px",
@@ -371,7 +368,6 @@ function Template() {
           //   backgroundColor: "#f50057",
           // },
         }}
-        
         actions={[
           // {
           //   icon: () => (
@@ -448,7 +444,7 @@ function Template() {
         // }}
       />
 
-{/*-------------- MODALE MODIFICA/VISUALIZZA---------- */}
+      {/*-------------- MODALE MODIFICA/VISUALIZZA---------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -640,10 +636,10 @@ function Template() {
           </div>
         </Fade>
       </Modal>
-   
- {/* ------------------------MODALE DELETE--------------------- */}
 
- <Modal
+      {/* ------------------------MODALE DELETE--------------------- */}
+
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -690,7 +686,7 @@ function Template() {
             </Paper>
           </div>
         </Fade>
-      </Modal>   
+      </Modal>
     </div>
   );
 }

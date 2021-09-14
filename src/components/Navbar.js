@@ -9,6 +9,7 @@ import logo from "../assets/genesisLogin.png";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { ButtonGroup } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+//import { GetRuolo } from "./Variabili";
 
 const drawerWidth = 240;
 
@@ -121,6 +122,12 @@ function Navbar() {
   let history=useHistory()
   
   
+  // const ruolo = (id) => {
+  //   (async () => {
+  //     console.log(await GetRuolo(id));
+  //   })();
+  // };
+
   const logOut = () => {
     localStorage.setItem("token", "");
     localStorage.setItem("username", "");
@@ -151,7 +158,9 @@ function Navbar() {
         <img src={logo} alt="Logo" className={classes.logo} />
         <div className={classes.contentToolbar}>
           <ButtonGroup>
-            <IconButton color="black">
+            <IconButton 
+            // onClick={()=>ruolo(1)} 
+            color="black">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon className={classes.icon} />
               </Badge>

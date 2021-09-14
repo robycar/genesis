@@ -349,11 +349,20 @@ function EditingLineaCreaLineaGeneratore() {
   const [ip2, setIP2] = useState("");
   const [ip3, setIP3] = useState("");
   const [ip4, setIP4] = useState("");
-  const [numero, setNumero] = useState("");
-  const [password, setPassword] = useState("");
+  //const [numero, setNumero] = useState("");
+  //const [password, setPassword] = useState("");
   let porta = "5060";
+  console.log(porta, "sono porta")
   const [typeLineaId, setTypeLineaId] = useState(0);
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
+
+
+
+const ipTotal = ip1 + "." + ip2 + "." + ip3 + "." + ip4; 
+console.log(ipTotal, "io sono ip")
+console.log(typeLineaId, "type linea");
+console.log(typeof ipTotal);
+
 
   function salva() {
     const Invia = () => {
@@ -364,14 +373,11 @@ function EditingLineaCreaLineaGeneratore() {
       myHeaders.append("Access-Control-Allow-Credentials", "true");
 
       var formdata = new FormData();
-      formdata.append("ip", ip);
+      
+      formdata.append("ip", ipTotal);
       formdata.append("porta", porta);
-      formdata.append("typeLinea.id", typeLineaId);
-      // formdata.append(
-      //   "pathCSV",
-      //   fileInput.files[0],
-      //   "/C:/Users/chiar/OneDrive/Desktop/TEST_FUNZIONALI_GENESIS_v2.5.xlsx"
-      // );
+      formdata.append("typeLinea.id", typeLineaId.id);
+      formdata.append("pathCSV", arrayValue[0], arrayValue[0].name);
 
       var requestOptions = {
         method: "PUT",
@@ -382,13 +388,7 @@ function EditingLineaCreaLineaGeneratore() {
 
       fetch(`/api/lineageneratore`, requestOptions)
         .then((response) => response.json())
-        .then((result) =>
-          result.error !== null
-            ? result.error.code === "LINEA-0003"
-              ? (document.getElementById("alertNumero2").style.display = "")
-              : ""
-            : history.push("/editing/linee")
-        )
+        .then((result) => console.log(result))
         .catch((error) => console.log("error", error));
     };
 
@@ -406,8 +406,8 @@ function EditingLineaCreaLineaGeneratore() {
         document.getElementById("alertIP").style.display = "none";
         document.getElementById("alertPorta").style.display = "none";
         document.getElementById("alertTypeLinea").style.display = "none";
-        document.getElementById("alertNumero").style.display = "none";
-        // document.getElementById("alertNumero2").style.display = "none";
+        //document.getElementById("alertNumero").style.display = "none";
+        //document.getElementById("alertNumero2").style.display = "none";
         // document.getElementById("alertPassword").style.display = "none";
         document.getElementById("alertIP2").style.display = "none";
 
@@ -423,7 +423,6 @@ function EditingLineaCreaLineaGeneratore() {
       ip3 !== "" &&
       ip4 !== "" &&
       typeLineaId !== 0 &&
-      
       (porta === "" || (porta.length > 3 && porta.length < 6))
     ) {
       if (porta.length === 0) {
@@ -479,6 +478,21 @@ function EditingLineaCreaLineaGeneratore() {
       // }
     }
   }
+  //------------------- FUNZIONI CARICA PATH ----------------------------
+
+  const [selectedFile, setSelectedFile] = useState([]);
+  const [isSelected, setIsSelected] = useState(false);
+
+  const changeHandler = (event) => {
+    setSelectedFile(event.target.files);
+    setIsSelected(true);
+    console.log(event.target.files);
+  };
+
+  const handleSubmission = () => {};
+
+  const arrayValue = Object.values(selectedFile);
+  console.log(arrayValue);
 
   //--------------------MODALI TYPE LINEE---------------------------------
 
@@ -506,7 +520,8 @@ function EditingLineaCreaLineaGeneratore() {
   const handleCloseEdit = () => {
     setOpenEdit(false);
   };
-  //--------------------MODAALE 2----------------------------------
+
+  //--------------------MODALE 2----------------------------------
 
   const [open2, setOpen2] = useState(false);
   const [type, setType] = useState("");
@@ -810,8 +825,10 @@ function EditingLineaCreaLineaGeneratore() {
                   className={classes.formGroupPath}
                 >
                   <Form.Label>Path CSV</Form.Label>
+
                   <input
                     accept="image/*"
+                    onChange={changeHandler}
                     className={classes.input}
                     id="contained-button-file"
                     multiple
@@ -820,6 +837,7 @@ function EditingLineaCreaLineaGeneratore() {
                   <label htmlFor="contained-button-file">
                     <div className={classes.divBottoneSfoglia}>
                       <Button
+                        onClick={handleSubmission}
                         className="button-green"
                         variant="contained"
                         component="span"
@@ -827,6 +845,9 @@ function EditingLineaCreaLineaGeneratore() {
                       >
                         Sfoglia
                       </Button>
+                      {arrayValue.map((file) => {
+                        return <div>{file.name}</div>;
+                      })}
                     </div>
                   </label>
                 </Form.Group>

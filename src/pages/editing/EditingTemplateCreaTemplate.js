@@ -43,6 +43,7 @@ import Prova from "../../components/Prova";
 import { blue } from "@material-ui/core/colors";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { useHistory } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -263,7 +264,7 @@ function getSteps() {
     "Carica i files XML",
     "Impostare Chiamato",
     "Impostare Chiamante/i",
-    "Gestisci i files XML",
+    // "Gestisci i files XML",
     // "Template",
   ];
 }
@@ -271,6 +272,7 @@ function getSteps() {
 //--------------------------FINE FUNZIONI STEPPER------------------------------
 
 function EditingTemplateCreaTemplate() {
+  let history = useHistory();
   const classes = useStyles();
 
   const [data, setData] = useState([]);
@@ -287,6 +289,9 @@ function EditingTemplateCreaTemplate() {
   const [chiamanti, setChiamanti] = useState("");
   const [qntChiamanti, setQntChiamanti] = useState([]);
   const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
+  const [chiamante1, setChiamante1] = useState(false);
+  const [chiamante2, setChiamante2] = useState(false);
+  const [chiamante3, setChiamante3] = useState(false);
 
   let arrAppoggio = qntChiamanti;
   var arrayChiamanti = [];
@@ -356,7 +361,50 @@ function EditingTemplateCreaTemplate() {
         setNextDisabled(false);
       }
     }
-  }, [nome, durata, tipoTemplate, arrayValue, chiamato]);
+
+    if (activeStep === 3) {
+      if (nChiamanti === 0) {
+        setNextDisabled(true);
+      } else {
+        setNextDisabled(false);
+      }
+    }
+
+    if (activeStep === 3) {
+      if (
+        nChiamanti <= 3 && nChiamanti === 0
+          ? false
+          : nChiamanti === 1
+          ? chiamante1 === false
+            ? true
+            : false
+          : nChiamanti === 2
+          ? chiamante2 === false
+            ? true
+            : false
+          : nChiamanti === 3
+          ? chiamante3 === false
+            ? true
+            : false
+          : false
+          ? false
+          : true
+      ) {
+        setNextDisabled(true);
+      } else {
+        setNextDisabled(false);
+      }
+    }
+  }, [
+    nome,
+    durata,
+    tipoTemplate,
+    arrayValue,
+    chiamato,
+    nChiamanti,
+    chiamante1,
+    chiamante2,
+  ]);
 
   const Invia = () => {
     var myHeaders = new Headers();
@@ -436,6 +484,24 @@ function EditingTemplateCreaTemplate() {
     setQntChiamanti(arrAppoggio);
     setNChiamanti(qntChiamanti.length);
     // console.log(qntChiamanti);
+
+    switch (qntChiamanti.length) {
+      case 0:
+        setChiamante1(false);
+
+        break;
+      case 1:
+        setChiamante2(false);
+
+        break;
+      case 2:
+        setChiamante3(false);
+
+        break;
+
+      default:
+        break;
+    }
   };
 
   //--------------------MODALI TYPE LINEE---------------------------------
@@ -496,7 +562,7 @@ function EditingTemplateCreaTemplate() {
   const steps = getSteps();
 
   const handleNext = () => {
-    if (activeStep + 2 === steps.length) {
+    if (activeStep + 1 === steps.length) {
       Invia();
     } else setActiveStep((prevActiveStep) => prevActiveStep + 1);
     // disabilitaNext();
@@ -822,8 +888,16 @@ function EditingTemplateCreaTemplate() {
 
                                     setChiamanti(e.target.value);
                                     setQntChiamanti(arrAppoggio);
-                                    arrayChiamanti.push(chiamanti);
-                                    console.log(arrayChiamanti);
+                                    // arrayChiamanti.push(chiamanti);
+                                    // console.log(arrayChiamanti);
+
+                                    index.index === 0
+                                      ? setChiamante1(true)
+                                      : index.index === 1
+                                      ? setChiamante2(true)
+                                      : index.index === 2
+                                      ? setChiamante3(true)
+                                      : setChiamante1(false);
                                   }}
                                 >
                                   {arrayValue.map((file) => {
@@ -874,11 +948,19 @@ function EditingTemplateCreaTemplate() {
                 startIcon={<AddIcon />}
                 onClick={addArr}
                 disabled={
-                  nChiamanti > 2
-                    ? true
-                    : false || (nChiamanti === 1 && chiamanti === "")
-                    ? true
+                  nChiamanti < 3 && nChiamanti === 0
+                    ? false
+                    : nChiamanti === 1
+                    ? chiamante1 === false
+                      ? true
+                      : false
+                    : nChiamanti === 2
+                    ? chiamante2 === false
+                      ? true
+                      : false
                     : false
+                    ? false
+                    : true
                 }
               />
             </div>
@@ -906,11 +988,14 @@ function EditingTemplateCreaTemplate() {
                 <div>
                   <div>
                     <Button
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
+                      onClick={() => {
+                        activeStep === 0
+                          ? history.push("/editing/template")
+                          : handleBack();
+                      }}
                       className={classes.backButton}
                     >
-                      Back
+                      {activeStep === 0 ? "annulla" : "indietro"}
                     </Button>
 
                     <Button
@@ -919,7 +1004,7 @@ function EditingTemplateCreaTemplate() {
                       onClick={handleNext}
                       disabled={nextDisabled}
                     >
-                      {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                      {activeStep === steps.length - 1 ? "Crea" : "Avanti"}
                     </Button>
                   </div>
                 </div>

@@ -82,7 +82,7 @@ function LineeGeneratore() {
     fetch(`/api/lineageneratore`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         setData(result.list);
       })
       .catch((error) => console.log("error", error));
@@ -135,10 +135,10 @@ function LineeGeneratore() {
 
   const columns = [
     { title: "ID Linea", field: "id", defaultSort: "desc" },
-    {
-      title: "Path Csv",
-      field: "pathCsv",
-    },
+    // {
+    //   title: "Path Csv",
+    //   field: "pathCsv",
+    // },
     {
       title: "IP Linea",
       field: "ip",

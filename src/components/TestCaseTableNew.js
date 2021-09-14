@@ -72,6 +72,26 @@ function TestCaseTable() {
       })
       .catch((error) => console.log("error", error));
   };
+  //--------------GET TEMPLATE------------------------------
+  const getTemplateById = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/template/` + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   //--------------TEST CASE BY ID-----------------------
   const getTestCaseById = (id) => {
@@ -108,7 +128,7 @@ function TestCaseTable() {
       redirect: "follow",
     };
 
-    fetch(`/api/typeLinea`, requestOptions)
+    fetch(`/api/linea`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setAppearLine(result.list);
@@ -136,32 +156,11 @@ function TestCaseTable() {
       .catch((error) => console.log("error", error));
   };
 
-  //--------------GET TEMPLATE------------------------------
-  const getAppearFile = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearFile(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
 
   useEffect(() => {
     getAllTestCase();
     getAppearLine();
     getAppearOBP();
-    getAppearFile();
   }, []);
 
   const columns = [
@@ -457,9 +456,9 @@ function TestCaseTable() {
     },
     intestazione: {
       color: "#47B881",
-      
+
       flexDirection: "row",
-      
+
     },
     icon: {
       transform: "scale(1.8)",
@@ -527,6 +526,7 @@ function TestCaseTable() {
         columns={columns}
         options={{
           sorting: true,
+          exportButton: true,
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
@@ -631,35 +631,6 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={nome !== "" ? false : true}
-                      onChange={(e) => setNome(e.target.value)}
-                      label="Status"
-                      defaultValue={nome.replace("Eseguito Spesso", "")}
-                      helperText={nome !== "" ? "" : "Lo status è richiesto"}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={version !== "" ? false : true}
-                      onChange={(e) => setVersion(e.target.value)}
-                      label="Last Result"
-                      defaultValue={version}
-                      //helperText={versione !== "" ? "" : "Inserire versione"}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
                       error={descrizione !== "" ? false : true}
                       onChange={(e) => setDescrizione(e.target.value)}
                       label="Descrizione"
@@ -667,64 +638,6 @@ function TestCaseTable() {
                       helperText={
                         descrizione !== "" ? "" : "La descrizione è richiesta"
                       }
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setCreatedBy(e.target.value)}
-                      label="Creato Da"
-                      defaultValue={createdBy}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setCreationDate(e.target.value)}
-                      label="Data di creazione"
-                      defaultValue={creationDate}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={modifiedDate !== "" ? false : true}
-                      onChange={(e) => setModifiedDate(e.target.value)}
-                      label="Data di Modifica"
-                      defaultValue={modifiedDate}
-                      helperText={
-                        modifiedDate !== ""
-                          ? ""
-                          : "La data di modifica è richiesta"
-                      }
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={template !== "" ? false : true}
-                      onChange={(e) => setTemplate(e.target.value)}
-                      label="Template"
-                      defaultValue={template}
-                      //helperText={template !== "" ? "" : "La Durata è richiesta"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -755,16 +668,47 @@ function TestCaseTable() {
                     />
                   </Col>
                 </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Template"
+                      value={console.log(template)}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Creato Da"
+                      value={createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data di creazione"
+                      value={creationDate.replace(".000+00:00", "").replace("T", " | ")}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
 
                 <Row>
                   <Col className={classes.col}>
                     <TextField
-                      label="Test Suite"
-                      type=""
-                      //onChange={(e) => setCreationDate(e.target.value)}
-                      // defaultValur={creationDate}
-                      defaultValue={descrizione.replace("test suite 1", "")}
                       className={classes.textField}
+                      label="Modificato da"
+                      value={modifiedBy}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -773,73 +717,12 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      //onChange={(e) => setModifiedBy(e.target.value)}
-                      label="Opzioni"
-                      defaultValue={descrizione.replace(
-                        "Lanciata almeno una volta",
-                        ""
-                      )}
+                      label="Data di Modifica"
+                      value={modifiedDate.replace(".000+00:00", "").replace("T", " | ")}
                       InputProps={{
                         readOnly: true,
                       }}
                     />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      label="Last Start Date"
-                      defaultValue={creationDate.replace(".000+00:00", "")}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      label="Last End Date"
-                      defaultValue={creationDate.replace(".000+00:00", "")}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      label="Report"
-                      defaultValue={descrizione.replace(
-                        "www.reportistica.it",
-                        ""
-                      )}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      label="XML"
-                      defaultValue={descrizione.replace("File", "")}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                    <label htmlFor="icon-button-file">
-                      <IconButton
-                        className={classes.iconButton}
-                        color="primary"
-                        aria-label="download xml"
-                        component="span"
-                      >
-                        <GetAppIcon />
-                      </IconButton>
-                    </label>
                   </Col>
                 </Row>
               </Form>
@@ -900,65 +783,42 @@ function TestCaseTable() {
 
               <Form className={classes.contenutoModale}>
                 <Row>
-                  {chiamato.forEach((element) => {
-                    <TextField className={classes.textField} label="prova" />;
-                  })}
-
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      // select
-                      // onChange={(e) => setNome(e.target.value)}
-
-                      label="IP Linea/e N°"
-                      defaultValue={chiamato[1]}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                    {/* {appearGroup.map((gruppo) => (
-                      <MenuItem key={gruppo.id} value={gruppo.id}>
-                        {gruppo.nome}
-                      </MenuItem>
-                    ))}
-                  </TextField> */}
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      // select
-                      // onChange={(e) => setNome(e.target.value)}
-                      label="Outboundproxy N°"
-                      defaultValue={chiamato[0]}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                    {/* {appearGroup.map((gruppo) => (
-                      <MenuItem key={gruppo.id} value={gruppo.id}>
-                        {gruppo.nome}
-                      </MenuItem>
-                    ))}
-                  </TextField> */}
-                  </Col>
-                </Row>
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       select
                       onChange={(e) => {
-                        chiamanti[1] = e.target.value;
+                        chiamato[1] = e.target.value;
                       }}
-                      label="Linea N°"
-                      value={chiamanti[1]}
+                      label="Linea"
+                      value={chiamato[1]}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     >
-                      {appearLine.map((typeLinea) => (
-                        <MenuItem key={typeLinea.id} value={typeLinea.id}>
-                          {typeLinea.descrizione}
+                      {appearLine.map((linea) => (
+                        <MenuItem key={linea.id} value={linea.id}>
+                          {linea.campiConcatenati}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      onChange={(e) => {
+                        chiamato[0] = e.target.value;
+                      }}
+                      label="Outboundproxy"
+                      value={chiamato[0]}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    >
+                      {appearOBP.map((obp) => (
+                        <MenuItem key={obp.id} value={obp.id}>
+                          {obp.campiConcatenati}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -1039,9 +899,9 @@ function TestCaseTable() {
                             readOnly: modifica === false ? true : false,
                           }}
                         >
-                          {appearLine.map((typeLinea) => (
-                            <MenuItem key={typeLinea.id} value={typeLinea.id}>
-                              {typeLinea.descrizione}
+                          {appearLine.map((linea) => (
+                            <MenuItem key={linea.id} value={linea.id}>
+                              {linea.campiConcatenati}
                             </MenuItem>
                           ))}
                         </TextField>
@@ -1061,27 +921,7 @@ function TestCaseTable() {
                         >
                           {appearOBP.map((obp) => (
                             <MenuItem key={obp.id} value={obp.id}>
-                              {obp.descrizione}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className={classes.col}>
-                        <TextField
-                          className={classes.textField}
-                          // select
-                          // onChange={(e) => setNome(e.target.value)}
-                          label="File N°"
-                          defaultValue={chiamanti[2]}
-                          InputProps={{
-                            readOnly: modifica === false ? true : false,
-                          }}
-                        >
-                          {appearFile.map((obp) => (
-                            <MenuItem key={obp.id} value={obp.id}>
-                              {obp.descrizione}
+                              {obp.campiConcatenati}
                             </MenuItem>
                           ))}
                         </TextField>

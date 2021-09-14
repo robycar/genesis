@@ -350,6 +350,7 @@ if (bearer != null) {
         columns={columns}
         options={{
           sorting: true,
+          exportButton: true,
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
