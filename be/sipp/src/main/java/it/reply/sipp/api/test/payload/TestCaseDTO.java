@@ -56,6 +56,7 @@ public class TestCaseDTO extends TrackedDTO {
     this.descrizione = vo.getDescrizione();
     this.expectedDuration = vo.getExpectedDuration();
     this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
+    this.template = new TemplateDTO(vo.getTemplate());
     if (includeLinee) {
       
       this.chiamato = new TestCaseLineaDTO();
