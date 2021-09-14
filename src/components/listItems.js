@@ -56,7 +56,7 @@ export const mainListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
-      disabled={localStorage.getItem("ruolo") !== '"ADMIN"'}
+      // disabled={localStorage.getItem("ruolo") !== '"ADMIN"'}
       to="/amministrazione/utenze"
     >
       <ListItemIcon>
