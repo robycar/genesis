@@ -24,6 +24,10 @@ public class LoginResponse extends PayloadResponse {
 	
 	private Long internalUserId;
 	
+	private String currentRole;
+	
+	private String currentGroup;
+	
 	private ApplicationInfoDTO applicationInfo = new ApplicationInfoDTO();
 	
 	public LoginResponse() {
@@ -93,7 +97,26 @@ public class LoginResponse extends PayloadResponse {
     writeField(sb, "username", username);
     writeField(sb, "internalUserId", internalUserId);
     writeField(sb, "applicationInfo", applicationInfo);
+    writeField(sb, "currentGroup", currentGroup);
+    writeField(sb, "currentRole", currentRole);
+    
     super.writeFields(sb);
+  }
+
+  public String getCurrentRole() {
+    return currentRole;
+  }
+
+  public void setCurrentRole(String currentRole) {
+    this.currentRole = currentRole;
+  }
+
+  public String getCurrentGroup() {
+    return currentGroup;
+  }
+
+  public void setCurrentGroup(String currentGroup) {
+    this.currentGroup = currentGroup;
   }
 	
 	

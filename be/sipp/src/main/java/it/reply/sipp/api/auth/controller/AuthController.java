@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.reply.sipp.AppError;
+import it.reply.sipp.api.admin.payload.UserDTO;
 import it.reply.sipp.api.auth.payload.LoginResponse;
 import it.reply.sipp.api.generic.payload.ErrorInfo;
 import it.reply.sipp.jwt.JWTComponent;
@@ -84,8 +85,11 @@ public class AuthController {
 			response.setUsername(userDetails.getUsername());
 			if (userDetails instanceof GenesisUser) {
 			  GenesisUser u = (GenesisUser)userDetails;
-			  if (u.getOriginalUser() != null & u.getOriginalUser().getId() != null) {
-			    response.setInternalUserId(u.getOriginalUser().getId());
+			  UserDTO userDTO = u.getOriginalUser();
+			  if (userDTO != null) {
+			    response.setInternalUserId(userDTO.getId());
+			    response.setCurrentGroup(userDTO.getGruppo().getNome());
+			    response.setCurrentRole(userDTO.getLevel().getNome());
 			  }
 			}
 			return ResponseEntity.ok(response);
