@@ -27,7 +27,7 @@ const GestioneRuoli = () => {
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const useStyles = makeStyles((theme) => ({
     paper: {

@@ -1,6 +1,4 @@
 import React from "react";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
@@ -12,9 +10,20 @@ import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import DescriptionIcon from "@material-ui/icons/Description";
 import "../styles/App.css";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { ListItem, ListItemIcon, Typography } from "@material-ui/core";
+
 
 export const mainListItems = (
+
   <div className="nav-link">
+    <ListItem style={{paddingTop:"0",paddingBottom:"11px"}}>
+      <ListItemIcon>
+        <AccountCircleIcon style={{color:"#66788A"}} fontSize="large" />
+      </ListItemIcon>
+      <Typography style={{fontWeight: 500,fontStyle: "normal",fontSize: "24px",color: "#66788A",lineHeight: "20px",padding: "2%"}}> {localStorage.getItem("username")}</Typography>
+    </ListItem>
+    <hr style={{margin:"0",width:"239px",marginLeft:"-16px"}}/>
     <ListItem
       button
       component={NavLink}
@@ -56,7 +65,7 @@ export const mainListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
-      disabled={localStorage.getItem("username") !== '"test"'}
+      disabled={localStorage.getItem("livello") !== "ADMIN" && localStorage.getItem("livello") !== "test"}
       to="/amministrazione/utenze"
     >
       <ListItemIcon>

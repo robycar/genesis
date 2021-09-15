@@ -51,11 +51,8 @@ function TestGeneratoreTableNew() {
   const [appearFile, setAppearFile] = useState([]);
 
 
-  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
 
   //-----------GET TEST GENERATORE----------------------
   const getAllTestGeneratore = () => {

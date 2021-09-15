@@ -8,6 +8,8 @@ import {
   Typography,
   Divider,
 } from "@material-ui/core";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import SettingsIcon from "@material-ui/icons/Settings";
 import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
 import acccessControl from "../service/url.js";
@@ -25,7 +27,6 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 
 function LineeGeneratore() {
-
   const [data, setData] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
   const [modifiedBy, setModifiedBy] = useState("");
@@ -41,7 +42,7 @@ function LineeGeneratore() {
   const [password, setPassword] = useState("");
   const [typeLinea, setTypeLinea] = useState();
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   /*----Get Type Linea ------*/
 
@@ -112,7 +113,7 @@ function LineeGeneratore() {
         porta: porta,
         typeLinea: {
           id: typeLinea,
-        }
+        },
       });
 
       var requestOptions = {
@@ -199,9 +200,18 @@ function LineeGeneratore() {
     setOpen(false);
   };
 
-   /*---------MODALE DELETE-------*/
+  /*---------- OPEN WARNING DELETE-----------*/
 
-   const functionDelete = () => {
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
+
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
+
+  /*---------MODALE DELETE-------*/
+
+  const functionDelete = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
@@ -222,7 +232,24 @@ function LineeGeneratore() {
     fetch(`/api/lineageneratore`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getLineaGeneratore();
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "LINEA-0006") {
+            setWarning(
+              "Impossibile eliminare la Linea Generatore poichè risulta collegata a uno o più Test Generatore"
+            );
+          } else {
+            setWarning(
+              "Codice errore: " +
+                result.error.code +
+                "Descrizione" +
+                result.code.description
+            );
+          }
+        } else {
+          setOpenWarning(false);
+          getLineaGeneratore();
+        }
       })
       .catch((error) => console.log("error", error));
     handleCloseDelete();
@@ -237,7 +264,6 @@ function LineeGeneratore() {
 
   //---------- funzione chiudi modale
   const handleCloseDelete = () => {
-   
     setOpenDelete(false);
   };
 
@@ -325,7 +351,7 @@ function LineeGeneratore() {
     colIp: {
       width: "110px",
       padding: "3%",
-      height: "106px"
+      height: "106px",
     },
     row: {
       width: "600px",
@@ -346,7 +372,7 @@ function LineeGeneratore() {
     bottoneAnnulla: {
       width: "128px",
     },
-   
+
     separatoreIp: {
       display: "flex",
       alignItems: "center",
@@ -364,7 +390,7 @@ function LineeGeneratore() {
       marginTop: "1%",
       marginBottom: "1%",
     },
-//     
+    //
   }));
   const classes = useStyles();
 
@@ -385,7 +411,6 @@ function LineeGeneratore() {
           // columnsButton: true,
           filtering: true,
         }}
-        
         actions={[
           {
             icon: () => (
@@ -452,7 +477,6 @@ function LineeGeneratore() {
 
             <Paper className={classes.paperContent} elevation={0}>
               <Row className={classes.rowIp}>
-              
                 <Col className={classes.colIp}>
                   <TextField
                     error={
@@ -571,8 +595,6 @@ function LineeGeneratore() {
                 </Col>
               </Row>
 
-              
-
               <Divider className={classes.divider} />
               <div
                 className={classes.bottone}
@@ -620,9 +642,9 @@ function LineeGeneratore() {
           </Paper>
         </Fade>
       </Modal>
-   
-   {/* ------------------------MODALE DELETE--------------------- */}
-   <Modal
+
+      {/* ------------------------MODALE DELETE--------------------- */}
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -644,7 +666,7 @@ function LineeGeneratore() {
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography  className={classes.typography}>
+                <Typography className={classes.typography}>
                   L'eliminazione della Linea selezionata, comporterà la
                   cancellazione del Test Generatore ad essa collegato.
                   <br />
@@ -670,6 +692,61 @@ function LineeGeneratore() {
           </div>
         </Fade>
       </Modal>
+
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div className={classes.paper2}>
+            <Paper>
+              <div>
+                <ListItem>
+                  <ListItemIcon>
+                    <SettingsIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h5"
+                  >
+                    ERRORE{" "}
+                  </Typography>
+                </ListItem>
+              </div>
+
+              <div className={classes.paperBottom}>
+                <Typography variant="h11">
+                  {warning}
+                </Typography>
+
+                <div className={classes.divider2}>
+                  <Divider />
+                </div>
+
+                <div className={classes.bottoni}>
+                  <div>
+                    <Button
+                      onClick={handleCloseWarning}
+                      variant="contained"
+                      color="primary"
+                    >
+                      OK
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
     </div>
   );
 }

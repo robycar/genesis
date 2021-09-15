@@ -527,7 +527,7 @@ function EditingLineaCreaLinea() {
     setOpen2(false);
   };
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const checkRichiesta = (result) => {
     setTypeLineaId(result.id);
@@ -598,11 +598,7 @@ function EditingLineaCreaLinea() {
         }}
         open={openDrawer}
       >
-        <div className={classes.toolbarIcon}>
-          {/* <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton> */}
-        </div>
+        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />

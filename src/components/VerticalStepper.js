@@ -184,7 +184,7 @@
 //   };
 //   const classes = useStyles();
 
-//   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+//   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
 //   const [nome, setNome] = useState("");
 //   const [durata, setDurata] = useState("");
@@ -820,7 +820,7 @@
 //   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
 //   if (bearer != null) {
-//     bearer = bearer.replace(/"/g, "");
+//     bearer = bearer;
 //   }
 
 //   const [data, setData] = useState([]);
@@ -921,7 +921,7 @@
 //       field: "url",
 //     },
 //   ];
-//   // const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+//   // const bearer = `Bearer ${localStorage.getItem("token")}`;
 
 //   const [open, setOpen] = React.useState(false);
 //   const [openModalUpload, setOpenModalUpload] = React.useState(false);

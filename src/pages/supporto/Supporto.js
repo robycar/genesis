@@ -211,11 +211,7 @@ function Supporto() {
         }}
         open={open}
       >
-        <div className={classes.toolbarIcon}>
-          {/* <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton> */}
-        </div>
+        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />

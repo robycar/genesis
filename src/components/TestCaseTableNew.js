@@ -35,22 +35,20 @@ function TestCaseTable() {
   const [version, setVersion] = useState();
   const [expectedDuration, setExpectedDuration] = useState();
   const [durata, setDurata] = useState();
-  const [template, setTemplate] = useState("");
+  const [template, setTemplate] = useState(0);
   const [createdBy, setCreatedBy] = useState("");
   const [modifiedBy, setModifiedBy] = useState("");
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
   const [chiamato, setChiamato] = useState([]);
+  let arrAppoggio = chiamato;
   const [chiamanti, setChiamanti] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [appearFile, setAppearFile] = useState([]);
 
-  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
 
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
@@ -236,6 +234,7 @@ function TestCaseTable() {
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
+    setTemplate("Templete", rowData.template.id);
     getTestCaseById(rowData.id);
   };
 
@@ -673,7 +672,7 @@ function TestCaseTable() {
                     <TextField
                       className={classes.textField}
                       label="Template"
-                      value={console.log(template)}
+                      value={template}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -788,10 +787,14 @@ function TestCaseTable() {
                       className={classes.textField}
                       select
                       onChange={(e) => {
-                        chiamato[1] = e.target.value;
+                        arrAppoggio[1] = e.target.value;
+                        console.log(arrAppoggio)
+                        setChiamato(arrAppoggio)
+                        console.log(chiamato)
                       }}
                       label="Linea"
                       value={chiamato[1]}
+                      defaultValue={chiamato[1]}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}

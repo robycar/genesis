@@ -121,16 +121,12 @@ function Navbar() {
 
   let history=useHistory()
   
-  
-  // const ruolo = (id) => {
-  //   (async () => {
-  //     console.log(await GetRuolo(id));
-  //   })();
-  // };
 
   const logOut = () => {
     localStorage.setItem("token", "");
     localStorage.setItem("username", "");
+    localStorage.setItem("livello", "");
+    localStorage.setItem("gruppo", "");
     history.push("/");
   };
   return (

@@ -171,7 +171,7 @@ function Obp() {
     },
   ];
  
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
  
   useEffect(() => {
     getObp();

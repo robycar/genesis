@@ -51,9 +51,6 @@ function FormAddUtente() {
   // console.warn(level);
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
 
   const [appearGroup, setAppearGroup] = useState([]);
   const [appearLevel, setAppearLevel] = useState([]);

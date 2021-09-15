@@ -247,6 +247,9 @@ const useStyles = makeStyles((theme) => ({
   },
   divBottoneSfoglia: {
     marginTop: "1%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   },
 }));
 
@@ -349,31 +352,20 @@ function EditingLineaCreaLineaGeneratore() {
   const [ip2, setIP2] = useState("");
   const [ip3, setIP3] = useState("");
   const [ip4, setIP4] = useState("");
-  //const [numero, setNumero] = useState("");
-  //const [password, setPassword] = useState("");
-  let porta = "5060";
-  console.log(porta, "sono porta")
+  const [porta, setPorta] = useState("5060");
   const [typeLineaId, setTypeLineaId] = useState(0);
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
-
-
-const ipTotal = ip1 + "." + ip2 + "." + ip3 + "." + ip4; 
-console.log(ipTotal, "io sono ip")
-console.log(typeLineaId, "type linea");
-console.log(typeof ipTotal);
-
+  const ipTotal = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
 
   function salva() {
     const Invia = () => {
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
       myHeaders.append("Access-Control-Allow-Credentials", "true");
 
       var formdata = new FormData();
-      
       formdata.append("ip", ipTotal);
       formdata.append("porta", porta);
       formdata.append("typeLinea.id", typeLineaId.id);
@@ -388,7 +380,13 @@ console.log(typeof ipTotal);
 
       fetch(`/api/lineageneratore`, requestOptions)
         .then((response) => response.json())
-        .then((result) => console.log(result))
+        .then((result) =>
+          result.error !== null
+            ? result.error.code === "LINEA-0003"
+              ? (document.getElementById("alertNumero2").style.display = "")
+              : ""
+            : history.push("/editing/lineegeneratore")
+        )
         .catch((error) => console.log("error", error));
     };
 
@@ -406,11 +404,7 @@ console.log(typeof ipTotal);
         document.getElementById("alertIP").style.display = "none";
         document.getElementById("alertPorta").style.display = "none";
         document.getElementById("alertTypeLinea").style.display = "none";
-        //document.getElementById("alertNumero").style.display = "none";
-        //document.getElementById("alertNumero2").style.display = "none";
-        // document.getElementById("alertPassword").style.display = "none";
         document.getElementById("alertIP2").style.display = "none";
-
         Invia();
       } else {
         document.getElementById("alertIP2").style.display = "";
@@ -426,9 +420,8 @@ console.log(typeof ipTotal);
       (porta === "" || (porta.length > 3 && porta.length < 6))
     ) {
       if (porta.length === 0) {
-        porta = "5060";
+        setPorta("5060");
       }
-
       aggiornaIP();
     } else {
       if (ip1 === "" || ip2 === "" || ip3 === "" || ip4 === "") {
@@ -465,17 +458,6 @@ console.log(typeof ipTotal);
       } else {
         document.getElementById("alertPorta").style.display = "";
       }
-      // if (numero === "") {
-      //   document.getElementById("alertNumero").style.display = "";
-      // } else {
-      //   document.getElementById("alertNumero").style.display = "none";
-      //   document.getElementById("alertNumero2").style.display = "none";
-      // }
-      // if (password === "") {
-      //   document.getElementById("alertPassword").style.display = "";
-      // } else {
-      //   document.getElementById("alertPassword").style.display = "none";
-      // }
     }
   }
   //------------------- FUNZIONI CARICA PATH ----------------------------
@@ -493,6 +475,20 @@ console.log(typeof ipTotal);
 
   const arrayValue = Object.values(selectedFile);
   console.log(arrayValue);
+
+  //----------------- DISABILITA BOTTONE ---------------------
+
+  const [nextDisabled, setNextDisabled] = useState(true);
+
+  useEffect(()=>{
+    if (arrayValue.length === 0) {
+      setNextDisabled(true);
+    } else {
+      setNextDisabled(false);
+    }
+
+  })
+ 
 
   //--------------------MODALI TYPE LINEE---------------------------------
 
@@ -534,7 +530,7 @@ console.log(typeof ipTotal);
     setOpen2(false);
   };
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const checkRichiesta = (result) => {
     setTypeLineaId(result.id);
@@ -605,11 +601,7 @@ console.log(typeof ipTotal);
         }}
         open={openDrawer}
       >
-        <div className={classes.toolbarIcon}>
-          {/* <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton> */}
-        </div>
+        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -694,32 +686,6 @@ console.log(typeof ipTotal);
 
           <div className={classes.generalContainer}>
             <Paper className={classes.paperContainer1} elevation={0}>
-              {/* <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Numero</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="number"
-                    placeholder="Inserisci Numero"
-                    onChange={(e) => setNumero(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertNumero"
-                    style={{ display: "none" }}
-                  >
-                    Il Numero è richiesto!
-                  </Alert>
-                  <Alert
-                    severity="error"
-                    id="alertNumero2"
-                    style={{ display: "none" }}
-                  >
-                    Il Numero inserito è gia associato ad un'altra Linea!
-                  </Alert>
-                </Form.Group>
-              </Paper> */}
-
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Numero">
                   <Form.Label>IP Linea</Form.Label>
@@ -777,48 +743,6 @@ console.log(typeof ipTotal);
                 </Form.Group>
               </Paper>
 
-              {/* <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Password"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertPassword"
-                    style={{ display: "none" }}
-                  >
-                    La Password è richiesta!
-                  </Alert>
-                </Form.Group>
-              </Paper> */}
-            </Paper>
-
-            <Paper className={classes.paperContainer2} elevation={0}>
-              <Paper className={classes.divSelect} elevation={0}>
-                <Form.Group controlId="form.Numero">
-                  <Form.Label>Porta</Form.Label>
-                  <Form.Control
-                    className={classes.formControl}
-                    type="number"
-                    placeholder="5060"
-                    defaultValue={porta}
-                    onChange={(e) => (porta = e.target.value)}
-                  />
-                  <Alert
-                    severity="error"
-                    id="alertPorta"
-                    style={{ display: "none" }}
-                  >
-                    La lunghezza della porta deve essere compresa tra 4 e 5
-                    valori!
-                  </Alert>
-                </Form.Group>
-              </Paper>
-
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group
                   controlId="form.Numero"
@@ -850,6 +774,29 @@ console.log(typeof ipTotal);
                       })}
                     </div>
                   </label>
+                </Form.Group>
+              </Paper>
+            </Paper>
+
+            <Paper className={classes.paperContainer2} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Numero">
+                  <Form.Label>Porta</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="number"
+                    placeholder="5060"
+                    defaultValue={porta}
+                    onChange={(e) => setPorta(e.target.value)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertPorta"
+                    style={{ display: "none" }}
+                  >
+                    La lunghezza della porta deve essere compresa tra 4 e 5
+                    valori!
+                  </Alert>
                 </Form.Group>
               </Paper>
 
@@ -1212,6 +1159,7 @@ console.log(typeof ipTotal);
               size="medium"
               nome="Crea"
               onClick={salva}
+              disabled={nextDisabled}
             />
             <Button
               component={NavLink}

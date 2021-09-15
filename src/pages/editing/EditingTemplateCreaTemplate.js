@@ -255,6 +255,11 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     width: "100%",
   },
+
+  // containerFileUpload: {
+
+    
+  // },
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
@@ -406,6 +411,8 @@ function EditingTemplateCreaTemplate() {
     chiamante2,
   ]);
 
+  // console.log(chiamato, "sono chiamato");
+
   const Invia = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -417,11 +424,26 @@ function EditingTemplateCreaTemplate() {
     formdata.append("durata", durata);
     formdata.append("typeTemplate", tipoTemplate);
     formdata.append("descrizione", descrizione);
-    formdata.append("chiamato", chiamato);
-    formdata.append("chiamanti", qntChiamanti[0].linea);
-    formdata.append("chiamanti", qntChiamanti[1].linea);
-    formdata.append("file", arrayValue[0], arrayValue[0].name);
-    formdata.append("file", arrayValue[1], arrayValue[1].name);
+
+    if (chiamato !== "") {
+      formdata.append("chiamato", chiamato);
+    }
+    if (qntChiamanti[0]?.linea) {
+      formdata.append("chiamanti", qntChiamanti[0].linea);
+      
+    }
+    if (qntChiamanti[1]?.linea) {
+      formdata.append("chiamanti", qntChiamanti[1].linea);
+    }
+    if (arrayValue[0]?.name) {
+      formdata.append("file", arrayValue[0], arrayValue[0].name);
+    }
+    if (arrayValue[1]?.name) {
+      formdata.append("file", arrayValue[1], arrayValue[1].name);
+    }
+    if (arrayValue[1]?.name) {
+      formdata.append("file", arrayValue[2], arrayValue[2].name);
+    }
 
     var requestOptions = {
       method: "PUT",
@@ -435,7 +457,7 @@ function EditingTemplateCreaTemplate() {
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
 
-    window.location = "/editing/template";
+    // window.location = "/editing/template";
   };
 
   // if (
@@ -538,7 +560,7 @@ function EditingTemplateCreaTemplate() {
     setOpen2(false);
   };
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
   // const checkRichiesta = (result) => {
   //   console.log(result);
   //   setTypeLineaId(result.id);
@@ -596,11 +618,7 @@ function EditingTemplateCreaTemplate() {
         }}
         open={openDrawer}
       >
-        <div className={classes.toolbarIcon}>
-          {/* <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton> */}
-        </div>
+        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -628,15 +646,7 @@ function EditingTemplateCreaTemplate() {
           >
             LINEE
           </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/lineegeneratore"
-          >
-            LINEE GENERATORE
-          </Button>
+          
           {/* </NavLink> */}
 
           {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -654,7 +664,7 @@ function EditingTemplateCreaTemplate() {
             component={NavLink}
             activeClassName="button-green-active"
             exact
-            to="/editing/template"
+            to="/editing/template/createmplate"
           >
             TEMPLATE
           </Button>
@@ -794,10 +804,19 @@ function EditingTemplateCreaTemplate() {
                       component="span"
                       onClick={handleSubmission}
                     >
-                      Upload
+                      Carica
                     </Button>
                   </label>
                 </>
+                <div className={classes.containerFileUpload}>
+                  {arrayValue.map((file) => {
+                    return (
+                      <h5 key={file.name} value={file.name}>
+                        {file.name}
+                      </h5>
+                    );
+                  })}
+                </div>
               </Paper>
             </Paper>
           </div>

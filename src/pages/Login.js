@@ -18,6 +18,7 @@ import Fade from "@material-ui/core/Fade";
 import SignUp from "./SignUp";
 import { Link } from "@material-ui/core";
 import ForgotPassword from "./ForgotPassword";
+import { ruolo } from "../service/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -113,8 +114,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
   generalPaper: {
-  
-        
+
+
   }
 }));
 
@@ -135,7 +136,7 @@ export default function Login() {
   }, []);
 
   const checkRichiesta = (result) => {
-    console.log(result);
+
 
     const timer = () => {
       setTimeout(function () {
@@ -152,13 +153,15 @@ export default function Login() {
     clearTimeout(timer);
 
     if (result.error == null) {
-      localStorage.setItem("token", JSON.stringify(result.access_token));
-      localStorage.setItem("username", JSON.stringify(result.username));
+      localStorage.setItem("token", result.access_token);
+      localStorage.setItem("username", result.username);
+      localStorage.setItem("livello", result.currentRole);
+      localStorage.setItem("gruppo", result.currentGroup);
 
       timer();
 
-      //history.push("/dashboard/testcase");
-      window.location = "/dashboard/testcase";
+      window.location = "/dashboard/testcase"
+      //history.push("/dashboard/testcase")
     } else if (result.error.code === "ADMIN-0004") {
       document.getElementById("alertUsername").style.display = "";
     } else {
@@ -171,6 +174,8 @@ export default function Login() {
       checkRichiesta(await login(username, password));
     })();
   };
+
+
   const [open, setOpen] = React.useState(false);
   const [openResetPassword, setOpenResetPassword] = React.useState(false);
   const handleOpen = () => {

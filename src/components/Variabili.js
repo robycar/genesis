@@ -3,7 +3,7 @@ import acccessControl from "../service/url";
 //Ruolo
 export async function GetRuolo(id) {
     
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
   console.log(bearer);
   var myHeaders = new Headers();
   myHeaders.append("Authorization", bearer);

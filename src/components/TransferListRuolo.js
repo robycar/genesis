@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TransferListRuolo() {
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   //---------------------GET LEVEL-------------------------------------------
   const [dataLevel, setDataLevel] = useState([]);

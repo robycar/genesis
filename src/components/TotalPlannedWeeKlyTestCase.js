@@ -29,7 +29,7 @@ export default function TotalPlannedWeeKlyTestCase() {
   return (
     <React.Fragment>
       <Typography className={classes.title}>
-        TOTAL TEST CASE SETTIMANALI{" "}
+        TOTAL TEST CASE PIANIFICATI/SETTIMANA{" "}
       </Typography>
       <Typography
         component="p"
@@ -37,7 +37,7 @@ export default function TotalPlannedWeeKlyTestCase() {
         m={2}
         className={classes.secondTitle}
       >
-        %COMPLETED
+        % COMPLETATI
       </Typography>
       <Typography
         color="textSecondary"
@@ -45,7 +45,7 @@ export default function TotalPlannedWeeKlyTestCase() {
         variant="h5"
         className={classes.secondTitle}
       >
-        %SUCCESS
+        % SUCCESSO
       </Typography>
       {/* <div>
         <Link color="primary" href="#" onClick={preventDefault}>

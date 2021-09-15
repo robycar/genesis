@@ -48,9 +48,6 @@ function FormCreaRuolo() {
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
 
   //prende l'id dall'url e lo usa per fare la get
   let url = new URL(window.location.href);

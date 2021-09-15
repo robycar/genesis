@@ -42,9 +42,6 @@ function FormCreaGruppo() {
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
 
   const checkRichiesta = (result) => {
     if (result.error == null) {

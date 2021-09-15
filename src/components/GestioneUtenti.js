@@ -23,9 +23,6 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 const GestioneUtenti = () => {
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
 
   const [data, setData] = useState([]);
   const [appearGroup, setAppearGroup] = useState([]);
@@ -198,7 +195,7 @@ const GestioneUtenti = () => {
       field: "gruppo.nome",
     },
   ];
-  // const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  // const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const [open, setOpen] = React.useState(false);
 

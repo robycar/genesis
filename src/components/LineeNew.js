@@ -300,8 +300,6 @@ function Linee() {
   const [open, setOpen] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
   const [openDelete, setOpenDelete] = React.useState(false);
-
-  
   const [openWarning, setOpenWarning] = useState(false);
   const [warning, setWarning] = useState("");
 

@@ -16,6 +16,16 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 
 const TestCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
+  const [id, setId] = useState();
+  const [nomeTest, setNomeTest] = useState("");
+  const [loader, setLoader] = useState("");
+  const [dataInizio, setDataInizio] = useState();
+  const [dataFine, setDataFine] = useState();
+  const [status, setStatus] = useState("");
+  const [trace, setTrace] = useState();
+  const [callId, setCallId] = useState();
+  const [report, setReport] = useState("");
+
   const data = [
     {
       launcher: "Adam Denisov",
@@ -57,33 +67,41 @@ const TestCaricatiTable = () => {
 
   const columns = [
     {
-      title: "Launcher",
+      title: "Id",
       field: "launcher",
       defaultSort:"desc"
     },
     {
-      title: "Name TS",
+      title: "Nome Test",
       field: "nameTs",
     },
     {
-      title: "Start Date",
+      title: "Loader",
       field: "startDate",
     },
     {
-      title: "End Date",
+      title: "Data Inizio",
       field: "endDate",
     },
     {
-      title: "Result",
+      title: "Data Fine",
       field: "result",
+    },
+    {
+      title: "Status",
+      field: "trace",
     },
     {
       title: "Trace",
       field: "trace",
     },
     {
-      title: "MOS",
-      field: "mos",
+      title: "Call-Id",
+      field: "trace",
+    },
+    {
+      title: "Report",
+      field: "trace",
     },
   ];
 

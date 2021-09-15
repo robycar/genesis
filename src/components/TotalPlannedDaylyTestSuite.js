@@ -28,7 +28,7 @@ export default function TotalPlannedDaylyTestSuite() {
   return (
     <React.Fragment>
       <Typography className={classes.title}>
-        TOTAL TEST SUITE GIORNALIERE
+        TOTAL TEST SUITE PIANIFICATI/GIORNO
       </Typography>
       <Typography
         component="p"
@@ -36,7 +36,7 @@ export default function TotalPlannedDaylyTestSuite() {
         m={2}
         className={classes.secondTitle}
       >
-        %COMPLETED
+        % COMPLETATI
       </Typography>
       <Typography
         color="textSecondary"
@@ -44,7 +44,7 @@ export default function TotalPlannedDaylyTestSuite() {
         variant="h5"
         className={classes.secondTitle}
       >
-        %SUCCESS
+        % SUCCESSO
       </Typography>
       {/* <div>
         <Link color="primary" href="#" onClick={preventDefault}>

@@ -23,28 +23,27 @@ import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-
-
+import Tooltip from "@material-ui/core/Tooltip";
 
 function TestSuiteTable() {
- 
   const [data, setData] = useState([]);
   const [testCases, setTestCases] = useState([]);
   const [id, setId] = useState();
-   const [nome, setNome] = useState("");
-  const [descrizione, setDescrizione] = useState("");
+  const [nome, setNome] = useState("");
   const [version, setVersion] = useState();
+  const [descrizione, setDescrizione] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [modifiedBy, setModifiedBy] = useState("");
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
+  const [durataComplessiva, setDurataComplessiva] = useState("");
   // const [gruppo, setGruppo] = useState([]);
-  
+
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-if (bearer != null) {
-  bearer = bearer.replace(/"/g, "");
-}
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
 
   //-----------GET TEST SUITE----------------------
   const getAllTestSuite = () => {
@@ -67,11 +66,9 @@ if (bearer != null) {
       .catch((error) => console.log("error", error));
   };
 
-
   useEffect(() => {
     getAllTestSuite();
   }, []);
-
 
   const columns = [
     {
@@ -86,11 +83,19 @@ if (bearer != null) {
     {
       title: "Descrizione",
       field: "descrizione",
+      // width: "5%",
+      // Cell: (dataRow) => {
+      //   return (
+      //     <Tooltip title={dataRow.descrizione_}>{dataRow.descrizione}</Tooltip>
+      //   );
+      // },
     },
-    // {
-    //   title: "Versione",
-    //   field: "version",
-    // },
+    {
+      title: "Descrizione_",
+      field: "descrizione_",
+      width: "5%",
+    },
+
     {
       title: "Data Creazione",
       field: "creationDate",
@@ -107,13 +112,24 @@ if (bearer != null) {
       title: "Modificato da",
       field: "modifiedBy",
     },
-    // {
-    //   title: "Gruppo",
-    //   field: "",
-    // },
     {
-      title: "Test Cases",
-      field: "testCases",
+      title: "Numero di Test Case",
+      field: "testCases[0].nome",
+      // render: (rowData) => {
+      //   let prova = "!";
+      //   for (let index = 0; index < rowData.testCases.length; index++){
+      //     prova += ", " +rowData.testCases[index].nome;
+      //   }
+      //   return prova.replace("!, ", "")
+      // },
+    },
+    {
+      title: "Durata Complessiva",
+      field: "durata",
+    },
+    {
+      title: "Gruppo",
+      field: "gruppo.nome",
     },
   ];
 
@@ -127,7 +143,7 @@ if (bearer != null) {
     handleOpen(rowData);
   };
   const openVisualizza = (rowData) => {
-       setModifica(false);
+    setModifica(false);
     handleOpen(rowData);
   };
 
@@ -136,7 +152,7 @@ if (bearer != null) {
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
-    //setTestCases(rowData.testCases);
+    setTestCases([...testCases, rowData.testCases[0].nome]);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
@@ -154,7 +170,6 @@ if (bearer != null) {
     setOpen(false);
   };
 
- 
   //------------ FUNZIONE DELETE ------------
 
   const functionDelete = () => {
@@ -196,45 +211,42 @@ if (bearer != null) {
     setOpenDelete(false);
   };
 
-  
   //-------AGGIORNA TEST SUITE----------------------------
 
   const aggiornaTestSuite = () => {
-
     const invia = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var raw = JSON.stringify({
-      id: id,
-      version: version,
-      nome: nome,
-      descrizione: descrizione,
-      // testCases: {
-      //   id: testCases,
-      // },
-    });
+      var raw = JSON.stringify({
+        id: id,
+        version: version,
+        nome: nome,
+        descrizione: descrizione,
+        // testCases: {
+        //   id: testCases,
+        // },
+      });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/testsuite`, requestOptions)
+        .then((response) => response.json())
+        .then((response) => {
+          getAllTestSuite();
+        })
+        .catch((error) => console.log("error", error));
     };
-
-    fetch(`/api/testsuite`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        getAllTestSuite();
-      })
-      .catch((error) => console.log("error", error));
+    invia();
   };
-  invia();
-};
-
 
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
@@ -273,9 +285,8 @@ if (bearer != null) {
     },
     intestazione: {
       color: "#47B881",
-      
+
       flexDirection: "row",
-      
     },
     icon: {
       transform: "scale(1.8)",
@@ -323,7 +334,7 @@ if (bearer != null) {
     },
     col: {
       padding: "3%",
-      height: "106px"
+      height: "106px",
     },
     row: {
       width: "600px",
@@ -458,7 +469,7 @@ if (bearer != null) {
                       onChange={(e) => setNome(e.target.value)}
                       label="Nome"
                       defaultValue={nome}
-                     helperText={nome !== "" ? "" : "Inserire Nome"}
+                      helperText={nome !== "" ? "" : "Inserire Nome"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -512,7 +523,7 @@ if (bearer != null) {
                     <TextField
                       className={classes.textField}
                       error={testCases !== "" ? false : true}
-                     // onChange={(e) => setTestCases(e.target.value)}
+                      // onChange={(e) => setTestCases(e.target.value)}
                       label="Test Case"
                       defaultValue={testCases}
                       helperText={testCases !== "" ? "" : "Test Case"}

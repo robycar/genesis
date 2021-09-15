@@ -9,7 +9,7 @@ import acccessControl from "../service/url.js";
 const ViewGruppo = () => {
   const [data, setData] = useState([]);
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const columns = [
     {

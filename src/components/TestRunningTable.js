@@ -7,9 +7,6 @@ import acccessControl from "../service/url.js";
 const TestRunningTable = () => {
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
 
   const [data, setData] = useState([]);
 

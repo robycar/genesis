@@ -24,3 +24,23 @@ export async function login(username, password) {
   result = await result.json();
   return result;
 }
+
+export async function ruolo(id) {
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
+  
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", bearer);
+  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  let result = await fetch(`api/user/`+id, requestOptions);
+
+  result = await result.json();
+  return result;
+}

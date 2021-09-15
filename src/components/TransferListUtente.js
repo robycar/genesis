@@ -70,7 +70,7 @@ export default function TransferListUtente() {
   const sinistra = [];
   const destra = [];
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   //---------------------GET LEVEL-------------------------------------------
   const [dataLevel, setDataLevel] = useState([]);

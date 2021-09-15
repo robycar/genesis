@@ -252,12 +252,14 @@ const useStyles = makeStyles((theme) => ({
   buttonTestContainer: {
     marginTop: "2%",
   },
-  
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
 function getSteps() {
-  return ['Inserire nome test e descrizione', 'Selezionare i Test Case da associare'];
+  return [
+    "Inserire nome test e descrizione",
+    "Selezionare i Test Case da associare",
+  ];
 }
 
 //--------------------------FINE FUNZIONI STEPPER------------------------------
@@ -265,7 +267,7 @@ function getSteps() {
 function EditingTestCreaTestSuite() {
   const classes = useStyles();
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const [openDrawer, setOpenDrawer] = useState([]);
 
@@ -283,7 +285,6 @@ function EditingTestCreaTestSuite() {
   // let arrAppoggio = qntChiamanti;
 
   const [nextDisabled, setNextDisabled] = useState(true);
-
 
   /*------- get linea -----------*/
 
@@ -360,10 +361,6 @@ function EditingTestCreaTestSuite() {
   //     .catch((error) => console.log("error", error));
   // };
 
-
-
-
-
   const Invia = () => {
     //const result = qntChiamanti.map(({ index, ...rest }) => ({ ...rest }));
 
@@ -392,8 +389,6 @@ function EditingTestCreaTestSuite() {
     // localStorage.setItem("user-info", JSON.stringify(result));
     // history.push("/dashboard/testcase");
     window.location = "/editing/testsuite";
-
-
   };
 
   //-----------------------SCRIPT STEPPER------------------------------
@@ -402,27 +397,22 @@ function EditingTestCreaTestSuite() {
   const steps = getSteps();
 
   const handleNext = () => {
-    
     if (activeStep + 1 === steps.length) {
       Invia();
-    } else
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      disabilitaNext()
+    } else setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    disabilitaNext();
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-
-
-
   const disabilitaNext = () => {
     if (activeStep === 0) {
       if (nome === "") {
         setNextDisabled(true);
       } else {
-        setNextDisabled(false)
+        setNextDisabled(false);
       }
     }
     // else if (activeStep === 1) {
@@ -448,8 +438,6 @@ function EditingTestCreaTestSuite() {
     //   }
     // }
   };
-
-
 
   // const addArr = () => {
   //   arrAppoggio.push({ linea: 0, proxy: 0, index: arrAppoggio.length })
@@ -478,17 +466,16 @@ function EditingTestCreaTestSuite() {
   //   setOBPChiamato(e.target.value);
   // };
 
-
   useEffect(() => {
-  getTestCase();
-  //   getFile();
-  //   getOBP();
+    getTestCase();
+    //   getFile();
+    //   getOBP();
 
-   if (activeStep === 0) {
+    if (activeStep === 0) {
       if (nome === "") {
         setNextDisabled(true);
       } else {
-        setNextDisabled(false)
+        setNextDisabled(false);
       }
     }
     // else if (activeStep === 1) {
@@ -498,191 +485,192 @@ function EditingTestCreaTestSuite() {
     //     setNextDisabled(false)
     //   }
     // }
-    }, [nome, nextDisabled ]);
+  }, [nome, nextDisabled]);
 
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, openDrawer && classes.appBarShift)}
+      >
+        <Navbar />
+      </AppBar>
 
-return (
-  <div className={classes.root}>
-    <CssBaseline />
-    <AppBar
-      position="absolute"
-      className={clsx(classes.appBar, openDrawer && classes.appBarShift)}
-    >
-      <Navbar />
-    </AppBar>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(
+            classes.drawerPaper,
+            !openDrawer && classes.drawerPaperClose
+          ),
+        }}
+        open={openDrawer}
+      >
+        <Divider />
+        <List>{mainListItems}</List>
+        <Divider />
+        <List>{tertiaryListItems}</List>
+        <Divider />
+        <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
 
-    <Drawer
-      variant="permanent"
-      classes={{
-        paper: clsx(classes.drawerPaper, !openDrawer && classes.drawerPaperClose),
-      }}
-      open={openDrawer}
-    >
-      <div className={classes.toolbarIcon}>
-        {/* <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton> */}
-      </div>
-      <Divider />
-      <List>{mainListItems}</List>
-      <Divider />
-      <List>{tertiaryListItems}</List>
-      <Divider />
-      <List>{secondaryListItems}</List>
-      <Divider />
-      <List>{quaterListItems}</List>
-    </Drawer>
-    <main className={classes.content}>
-      <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          <div className={classes.containerNavbarItem}>
+            <NavbarItemEdit fontSize="large" />
+          </div>
+        </Container>
+        <div className={classes.buttonContainer}>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/linee"
+          >
+            LINEE
+          </Button>
 
-      <Container maxWidth="lg" className={classes.container}>
-        <div className={classes.containerNavbarItem}>
-          <NavbarItemEdit fontSize="large" />
+          {/* </NavLink> */}
+
+          {/* <NavLink exact to="/dashboard/testsuite"> */}
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/outboundproxy"
+          >
+            OUTBOUND PROXY
+          </Button>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/template"
+          >
+            TEMPLATE
+          </Button>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/testcase"
+          >
+            TEST
+          </Button>
+          <div className={classes.buttonTestContainer}>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testcreatestcase"
+            >
+              TEST CASE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testsuite/creaTestSuite"
+            >
+              TEST SUITE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/testgeneratore"
+            >
+              TEST GENERATORE
+            </Button>
+          </div>
         </div>
-      </Container>
-      <div className={classes.buttonContainer}>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/linee"
-        >
-          LINEE
-        </Button>
-       
-        {/* </NavLink> */}
 
-        {/* <NavLink exact to="/dashboard/testsuite"> */}
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/outboundproxy"
-        >
-          OUTBOUND PROXY
-        </Button>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/template"
-        >
-          TEMPLATE
-        </Button>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/testcase"
-        >
-          TEST
-        </Button>
-        <div className={classes.buttonTestContainer}>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testcreatestcase"
-              >
-                TEST CASE
-              </Button>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testsuite/creaTestSuite"
-              >
-                TEST SUITE
-              </Button>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testgeneratore"
-              >
-                TEST GENERATORE
-              </Button>
-            </div>
-      </div>
+        {/* ----------------------------CREA TEST SUITE---------------------------------------- */}
 
-      {/* ----------------------------CREA TEST SUITE---------------------------------------- */}
+        <Paper className={classes.paper} elevation={2}>
+          <CreaItem titolo="Crea Test Suite" />
 
-      <Paper className={classes.paper} elevation={2}>
-        <CreaItem titolo="Crea Test Suite" />
+          <Divider className={classes.divider} />
 
-        <Divider className={classes.divider} />
-
-        {/* ------------------------STEP 1--------------------------------- */}
-        <div className={classes.generalContainer} style={{ display: activeStep === 0 ? "" : "none" }}>
-          <Paper className={classes.paperContainer1} elevation={0}>
-            <Paper className={classes.divSelect} elevation={0}>
-              <Form.Group controlId="form.Nome">
-                <Form.Label>Nome</Form.Label>
-                <Form.Control
-                  className={classes.formControl}
-                  type="text"
-                  placeholder="Inserisci Nome"
-                  onChange={(e) => {
-                    handleChangeName(e)
-                  }}
-                />
-                <Alert
-                  severity="error"
-                  id="alertNome"
-                  style={{ display: "none" }}
-                >
-                  Nome è richiesto!
-                </Alert>
-              </Form.Group>
+          {/* ------------------------STEP 1--------------------------------- */}
+          <div
+            className={classes.generalContainer}
+            style={{ display: activeStep === 0 ? "" : "none" }}
+          >
+            <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Nome">
+                  <Form.Label>Nome</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Nome"
+                    onChange={(e) => {
+                      handleChangeName(e);
+                    }}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertNome"
+                    style={{ display: "none" }}
+                  >
+                    Nome è richiesto!
+                  </Alert>
+                </Form.Group>
+              </Paper>
             </Paper>
-          </Paper>
 
-          <Paper className={classes.paperContainer2} elevation={0}>
-            <Paper className={classes.divSelect} elevation={0}>
-              <Form.Group controlId="form.Nome">
-                <Form.Label>Descrizione</Form.Label>
-                <Form.Control
-                  className={classes.formControl}
-                  type="text"
-                  placeholder="Inserisci Descrizione"
-                  onChange={(e) => handleChangeDescrizione(e)}
-                />
-                <Alert
-                  severity="error"
-                  id="alertDescrizione"
-                  style={{ display: "none" }}
-                >
-                  Descrizione è richiesta
-                </Alert>
-              </Form.Group>
+            <Paper className={classes.paperContainer2} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Nome">
+                  <Form.Label>Descrizione</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Descrizione"
+                    onChange={(e) => handleChangeDescrizione(e)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertDescrizione"
+                    style={{ display: "none" }}
+                  >
+                    Descrizione è richiesta
+                  </Alert>
+                </Form.Group>
+              </Paper>
             </Paper>
-          </Paper>
-
-        </div>
-        {/* ------------------------STEP 2--------------------------------- */}
-         <div className={classes.generalContainer} style={{ display: activeStep === 1 ? "" : "none" }}>
-
-          <div className={classes.bodyContainer}>
-            <>
-            <Paper className={classes.paperContainer2} elevation={2}>
-              <Typography>Seleziona i Test Case da associare:</Typography>
-              <TestSuiteSelectNew className={classes.testSuiteSelect} />
-              <Alert
-                severity="error"
-                id="alertTestCase"
-                style={{ display: "none" }}
-              >
-                Selezionare almeno un Test Case da associare!
-              </Alert>
-            </Paper>
-              {/* <Typography className={classes.intestazione} variant="h6">
+          </div>
+          {/* ------------------------STEP 2--------------------------------- */}
+          <div
+            className={classes.generalContainer}
+            style={{ display: activeStep === 1 ? "" : "none" }}
+          >
+            <div className={classes.bodyContainer}>
+              <>
+                <Paper className={classes.paperContainer2} elevation={2}>
+                  <Typography>Seleziona i Test Case da associare:</Typography>
+                  <TestSuiteSelectNew className={classes.testSuiteSelect} />
+                  <Alert
+                    severity="error"
+                    id="alertTestCase"
+                    style={{ display: "none" }}
+                  >
+                    Selezionare almeno un Test Case da associare!
+                  </Alert>
+                </Paper>
+                {/* <Typography className={classes.intestazione} variant="h6">
                 Chiamato
               </Typography>
               <Row >
@@ -747,11 +735,11 @@ return (
                   </Form.Group>
                 </Col>
               </Row> */}
-            </>
+              </>
+            </div>
           </div>
-        </div>
-        {/* ------------------------STEP 3--------------------------------- */}
-        {/* <div className={classes.generalContainer} style={{ display: activeStep === 2 ? "" : "none" }}>
+          {/* ------------------------STEP 3--------------------------------- */}
+          {/* <div className={classes.generalContainer} style={{ display: activeStep === 2 ? "" : "none" }}>
 
           <div className={classes.bodyContainer} >
             <div className={classes.bodyContainer}>
@@ -869,8 +857,8 @@ return (
 
         </div> */}
 
-        {/* ------------------------STEP 4--------------------------------- */}
-        {/* <div className={classes.generalContainer} style={{ display: activeStep === 3 ? "" : "none" }}>
+          {/* ------------------------STEP 4--------------------------------- */}
+          {/* <div className={classes.generalContainer} style={{ display: activeStep === 3 ? "" : "none" }}>
           <div className={classes.bodyContainer} >
             <div className={classes.bodyContainer}>
               <>
@@ -911,39 +899,46 @@ return (
               </>
             </div>
           </div>
-        </div> */} 
+        </div> */}
 
-        <Divider className={classes.divider} />
+          <Divider className={classes.divider} />
 
-        {/* -----------------------------------BOTTONI STEP------------------------------------ */}
-        <div className={classes.root}>
-          <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          <div>
-            {activeStep === steps.length ? ("") : (
-              <div>
+          {/* -----------------------------------BOTTONI STEP------------------------------------ */}
+          <div className={classes.root}>
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <div>
+              {activeStep === steps.length ? (
+                ""
+              ) : (
                 <div>
-                  <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    className={classes.backButton}
-                  >
-                    Indietro
-                  </Button>
-                  <Button disabled={nextDisabled} variant="contained" color="primary" onClick={handleNext}>
-                    {activeStep === steps.length - 1 ? 'Crea' : 'Avanti'}
-                  </Button>
+                  <div>
+                    <Button
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      className={classes.backButton}
+                    >
+                      Indietro
+                    </Button>
+                    <Button
+                      disabled={nextDisabled}
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                    >
+                      {activeStep === steps.length - 1 ? "Crea" : "Avanti"}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
-        {/* <div className={classes.bottone}>
+          {/* <div className={classes.bottone}>
             <ButtonClickedGreen
               className={classes.bottone}
               size="medium"
@@ -961,11 +956,10 @@ return (
               annulla
             </Button>
           </div> */}
-      </Paper>
-    </main>
-  </div>
-);
+        </Paper>
+      </main>
+    </div>
+  );
 }
-
 
 export default EditingTestCreaTestSuite;

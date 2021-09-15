@@ -40,7 +40,7 @@ function FormCreaRuolo() {
   let history = useHistory();
   const classes = useStyles();
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");

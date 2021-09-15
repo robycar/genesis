@@ -221,7 +221,7 @@ function EditingOutboundProxy() {
   const [descrizione, setDescrizione] = useState(" ");
   const [typeLineaId, setTypeLineaId] = useState([]);
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const getTypeId = () => {
     var myHeaders = new Headers();
@@ -382,11 +382,7 @@ function EditingOutboundProxy() {
         }}
         open={open}
       >
-        <div className={classes.toolbarIcon}>
-          {/* <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton> */}
-        </div>
+        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />

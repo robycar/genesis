@@ -26,7 +26,7 @@ import acccessControl from "../service/url.js";
 function Template() {
   const [data, setData] = useState([]);
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const [id, setId] = useState();
   const [version, setVersion] = useState();
