@@ -27,6 +27,7 @@ import it.reply.sipp.model.OutboundProxyVO;
 import it.reply.sipp.model.TypeLineaVO;
 import it.reply.sipp.model.repository.LineaGeneratoreRepository;
 import it.reply.sipp.model.repository.LineaRepository;
+import it.reply.sipp.model.repository.TestGeneratoreRepository;
 import it.reply.sipp.model.repository.TypeLineaRepository;
 import it.reply.sipp.service.FileSystemService;
 import it.reply.sipp.service.LineaService;
@@ -48,6 +49,9 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 	
 	@Autowired
 	private FileSystemService fileSystemService;
+	
+	@Autowired
+	private TestGeneratoreRepository testGeneratoreRepository;
 	
 	public LineaServiceImpl() {
 	}
@@ -258,9 +262,13 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 
   @Override
   public void removeLineaGeneratore(long id) throws ApplicationException {
-    //TODO: Verificare se la linea generatore e' attualmente in uso
     logger.debug("enter removeLineaGeneratore");
     LineaGeneratoreVO lineaGeneratoreVO = readLineaGeneratoreVO(id);
+    
+    long occurrence = testGeneratoreRepository.countByLineaChiamanteOrLineaChiamato(lineaGeneratoreVO,lineaGeneratoreVO);
+    if (occurrence > 0) {
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.LINEA_GENERATORE_USED_IN_DELETE);
+    }
     lineaGeneratoreRepository.delete(lineaGeneratoreVO);
   }
   
@@ -271,6 +279,13 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
 	  logger.debug("enter removeLinea");
 	  LineaVO lineaVO = readLineaVO(id);
 	  checkGroup(lineaVO.getGruppo(), AppError.LINEA_DELETE_WRONG_GROUP);
+	  
+	  List<Long> lineaUsedInTestCases = testCaseService.findTestCaseIdUsingLine(lineaVO);
+	  if (!lineaUsedInTestCases.isEmpty()) {
+	    logger.warn("Tentativo di eliminare una linea utilizzata dai test case {}", lineaUsedInTestCases);
+	    throw makeError(HttpStatus.BAD_REQUEST, AppError.LINEA_USED_IN_DELETE);
+	  }
+	  
 	  lineaRepository.delete(lineaVO);
 	}
 
