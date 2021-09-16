@@ -9,7 +9,7 @@
     <version>2.5.0</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
-  <groupId>it.reply.sipp</groupId>
+  <groupId>it.reply.genesis</groupId>
   <artifactId>sipp</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
@@ -88,6 +88,16 @@
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
       <version>1.7</version>
+    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>org.python</groupId> -->
+<!--       <artifactId>jython-standalone</artifactId> -->
+<!--       <version>2.7.2</version> -->
+<!--     </dependency> -->
+    <dependency>
+      <groupId>org.python</groupId>
+      <artifactId>jython-slim</artifactId>
+      <version>2.7.2</version>
     </dependency>
   </dependencies>
 
