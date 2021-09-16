@@ -1,7 +1,7 @@
 import sys
 import os
 
-from it.reply.sipp.agent import TestRunner
+from it.reply.genesis.agent import TestRunner
 
 class MioTestRunner(TestRunner, object):
   def __init__(self):
