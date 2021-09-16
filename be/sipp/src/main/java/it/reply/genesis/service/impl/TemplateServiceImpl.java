@@ -2,6 +2,7 @@ package it.reply.genesis.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -109,12 +110,16 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
       vo.setFiles(new ArrayList<>(4));
     }
     
+    HashSet<String> usedFiles = new HashSet<>(4);
+    
     if (dto.getChiamato() != null) {
       FileSystemVO fileSystemVO = savedFiles.get(dto.getChiamato());
       if (fileSystemVO == null) {
         logger.error("Campo chiamato del template in fase di creazione fa riferimento ad un file inesistente: {}", dto.getChiamato());
         throw makeError(HttpStatus.NOT_FOUND, AppError.FS_FILE_NOT_FOUND, dto.getChiamato());
       }
+      
+      usedFiles.add(fileSystemVO.getPath());
       
       TemplateFileVO templateFileVO = new TemplateFileVO();
       templateFileVO.setCategory(TemplateFileCategory.CHIAMATO);
@@ -133,6 +138,11 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
         if (fileSystemVO == null) {
           logger.error("Campo chiamante del template, in fase di creazione, fa riferimenti ad un file inesistente: {}" , chiamante);
           throw makeError(HttpStatus.NOT_FOUND, AppError.FS_FILE_NOT_FOUND, chiamante);
+        }
+        
+        if (!usedFiles.add(fileSystemVO.getPath())) {
+          logger.error("Campo chiamante del template, in fase di creazione, sta utilizzando lo stesso file utilizzato da un altro chiamante o dal chiamato: {}", fileSystemVO.getPath());
+          throw makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_FILE_MULTIPLE_USE, fileSystemVO.getPath());
         }
         
         TemplateFileVO templateFileVO = new TemplateFileVO();
@@ -211,6 +221,14 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
           updateFileLinks(vo, templateFolder, category, vo.getFiles(), flEntry.getValue());
         }
         
+      }
+    }
+    
+    //Verifico se tra chiamante e chiamato ci sia l'utilizzo dello stesso file
+    HashSet<String> usedFiles = new HashSet<>(4);
+    for (TemplateFileVO tf : vo.getFiles()) {
+      if (!usedFiles.add(tf.getFile().getPath())) {
+        throw makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_FILE_MULTIPLE_USE, tf.getFile().getPath());
       }
     }
 
