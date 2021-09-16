@@ -148,7 +148,7 @@ const EnhancedTableToolbar = (props) => {
             id="tableTitle"
             component="div"
           >
-            Total Test Case
+            Total Test Generatore
           </Typography>
           <SearchBar className={classes.searchBar} />
           <div className={classes.buttonRight}>
@@ -252,10 +252,10 @@ export default function EnhancedTable() {
   const [appState, changeState] = useState({
     activeObject: null,
     objects: [
-      { id: 1, name: "Test Case Caricati" },
-      { id: 2, name: "Test Case Schedulati" },
-      { id: 3, name: "Test Case Running" },
-      { id: 4, name: "Test Case Conclusi" },
+      { id: 1, name: "Test Generatore Caricati" },
+      { id: 2, name: "Test Generatore Schedulati" },
+      { id: 3, name: "Test Generatore Running" },
+      { id: 4, name: "Test Generatore Conclusi" },
     ],
   });
 

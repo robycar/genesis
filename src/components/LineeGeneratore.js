@@ -234,7 +234,7 @@ function LineeGeneratore() {
       .then((result) => {
         if (result.error !== null) {
           setOpenWarning(true);
-          if (result.error.code === "LINEA-0006") {
+          if (result.error.code === "LINEA-0013") {
             setWarning(
               "Impossibile eliminare la Linea Generatore poichè risulta collegata a uno o più Test Generatore"
             );
@@ -286,11 +286,11 @@ function LineeGeneratore() {
       //opacity: "25%",
     },
     paperBottom: {
-      padding: "2%",
       backgrounColor: "#FFFFFF",
       //justifyContent: "center",
       flexDirection: "column",
-      marginTop: "5%",
+      marginLeft: "2%",
+      marginRight: "2%",
     },
     divSelectBar: {
       marginTop: "25px",
@@ -306,19 +306,24 @@ function LineeGeneratore() {
     intestazione: {
       color: "#47B881",
       flexDirection: "row",
+      alignItems: "center",
     },
-    icon: {
-      transform: "scale(1.8)",
-      color: "#47B881",
-      marginTop: "9px",
+    intestazioneModaleError: {
+      color: "#ef5350",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    iconModaleError: {
+      // width: "15%",
+      // height: "15%",
+      marginRight: "4%",
+      transform: "scale(1.9)",
+      color: "#ef5350",
     },
     bottoni: {
       display: "flex",
       alignItems: "center",
-      justifyContent: "space-around",
-      marginLeft: "55px",
-      marginTop: "4%",
-      marginBottom: "2%",
+      justifyContent: "center",
     },
     modal: {
       display: "flex",
@@ -342,6 +347,7 @@ function LineeGeneratore() {
       width: 500,
       position: "relative",
     },
+
     typography: {
       padding: "3%",
     },
@@ -388,6 +394,12 @@ function LineeGeneratore() {
     },
     paperContent: {
       marginTop: "1%",
+      marginBottom: "1%",
+    },
+    divIntestazione: {
+      display: "flex",
+      alignItems: "center",
+      padding: "2%",
       marginBottom: "1%",
     },
     //
@@ -705,48 +717,42 @@ function LineeGeneratore() {
         }}
       >
         <Fade in={openWarning}>
-          <div className={classes.paper2}>
-            <Paper>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
               <div>
-                <ListItem>
-                  <ListItemIcon>
-                    <SettingsIcon className={classes.icon} />
-                  </ListItemIcon>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
                   <Typography
-                    className={classes.intestazione}
+                    className={classes.intestazioneModaleError}
                     variant="h5"
                   >
-                    ERRORE{" "}
+                    ERRORE
                   </Typography>
-                </ListItem>
-              </div>
+                </div>
+                <Divider className={classes.divider} />
 
-              <div className={classes.paperBottom}>
-                <Typography variant="h11">
+                <Typography className={classes.typography}>
                   {warning}
                 </Typography>
 
-                <div className={classes.divider2}>
-                  <Divider />
-                </div>
-
-                <div className={classes.bottoni}>
-                  <div>
-                    <Button
-                      onClick={handleCloseWarning}
-                      variant="contained"
-                      color="primary"
-                    >
-                      OK
-                    </Button>
-                  </div>
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
+                  />
                 </div>
               </div>
             </Paper>
           </div>
         </Fade>
       </Modal>
-
     </div>
   );
 }

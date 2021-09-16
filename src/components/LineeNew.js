@@ -99,7 +99,7 @@ function Linee() {
     colIp: {
       width: "110px",
       padding: "3%",
-      height: "106px"
+      height: "106px",
     },
     row: {
       width: "600px",
@@ -120,7 +120,7 @@ function Linee() {
     bottoneAnnulla: {
       width: "128px",
     },
-  
+
     separatoreIp: {
       display: "flex",
       alignItems: "center",
@@ -143,14 +143,33 @@ function Linee() {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
-      height: 400,
+      height: "fit-content",
       width: 500,
       position: "relative",
     },
     typography: {
       padding: "3%",
     },
+    intestazioneModaleError: {
+      color: "#ef5350",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    iconModaleError: {
+      // width: "15%",
+      // height: "15%",
+      marginRight: "4%",
+      transform: "scale(1.9)",
+      color: "#ef5350",
+    },
+    divIntestazione: {
+      display: "flex",
+      alignItems: "center",
+      padding: "2%",
+      marginBottom: "1%",
+    },
   }));
+
   const classes = useStyles();
 
   const [data, setData] = useState([]);
@@ -303,9 +322,9 @@ function Linee() {
   const [openWarning, setOpenWarning] = useState(false);
   const [warning, setWarning] = useState("");
 
-  const handleCloseWarning = () =>{
-    setOpenWarning(false)
-  }
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
 
   // const [btnDisabled, setBtnDisabled] = useState(true);
 
@@ -357,14 +376,21 @@ function Linee() {
       .then((response) => response.json())
       .then((result) => {
         if (result.error !== null) {
-          setOpenWarning(true)
-          if (result.error.code === "LINEA-0006") {
-            setWarning("Impossibile eliminare il Tipo Linea perche appartiene a una Linea o a un OBP")
+          setOpenWarning(true);
+          if (result.error.code === "LINEA-0014") {
+            setWarning(
+              "Impossibile eliminare la linea selezionata poichè collegata ad uno o più Test Case"
+            );
           } else {
-            setWarning("Codice errore: " + result.error.code + " Descrizione: " + result.code.description)
+            setWarning(
+              "Codice errore: " +
+                result.error.code +
+                " Descrizione: " +
+                result.code.description
+            );
           }
         } else {
-          setOpenWarning(false)
+          setOpenWarning(false);
           getLinea();
         }
       })
@@ -621,7 +647,9 @@ function Linee() {
                     required
                     label="Password"
                     defaultValue={password}
-                    helperText={password !== "" ? "" : "La Password è richiesta"}
+                    helperText={
+                      password !== "" ? "" : "La Password è richiesta"
+                    }
                   />
                 </Col>
 
@@ -648,27 +676,27 @@ function Linee() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 {ip1 <= 255 &&
-                  ip1 !== "" &&
-                  ip1.length < 4 &&
-                  ip2 <= 255 &&
-                  ip2 !== "" &&
-                  ip2.length < 4 &&
-                  ip3 <= 255 &&
-                  ip3 !== "" &&
-                  ip3.length < 4 &&
-                  ip4 <= 255 &&
-                  ip4 !== "" &&
-                  ip4.length < 4 &&
-                  password !== "" &&
-                  numero !== "" &&
-                  porta !== "" &&
-                  porta > 1000 &&
-                  porta < 100000 ? (
+                ip1 !== "" &&
+                ip1.length < 4 &&
+                ip2 <= 255 &&
+                ip2 !== "" &&
+                ip2.length < 4 &&
+                ip3 <= 255 &&
+                ip3 !== "" &&
+                ip3.length < 4 &&
+                ip4 <= 255 &&
+                ip4 !== "" &&
+                ip4.length < 4 &&
+                password !== "" &&
+                numero !== "" &&
+                porta !== "" &&
+                porta > 1000 &&
+                porta < 100000 ? (
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
                     onClick={handleClose2}
-                  // disabled={handleBtn}
+                    // disabled={handleBtn}
                   />
                 ) : (
                   <ButtonClickedGreen
@@ -751,48 +779,42 @@ function Linee() {
         }}
       >
         <Fade in={openWarning}>
-          <div className={classes.paper2}>
-            <Paper>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
               <div>
-                <ListItem>
-                  <ListItemIcon>
-                    <SettingsIcon className={classes.icon} />
-                  </ListItemIcon>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
                   <Typography
-                    className={classes.intestazione}
+                    className={classes.intestazioneModaleError}
                     variant="h5"
                   >
-                    ERRORE{" "}
+                    ERRORE
                   </Typography>
-                </ListItem>
-              </div>
+                </div>
+                <Divider className={classes.divider} />
 
-              <div className={classes.paperBottom}>
-                <Typography variant="h11">
+                <Typography className={classes.typography}>
                   {warning}
                 </Typography>
 
-                <div className={classes.divider2}>
-                  <Divider />
-                </div>
-
-                <div className={classes.bottoni}>
-                  <div>
-                    <Button
-                      onClick={handleCloseWarning}
-                      variant="contained"
-                      color="primary"
-                    >
-                      OK
-                    </Button>
-                  </div>
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
+                  />
                 </div>
               </div>
             </Paper>
           </div>
         </Fade>
       </Modal>
-
     </div>
   );
 }

@@ -44,6 +44,11 @@ import Prova from "../../components/Prova";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { file } from "@babel/types";
+import MaterialTable from "material-table";
+import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const drawerWidth = 240;
 
@@ -252,6 +257,38 @@ const useStyles = makeStyles((theme) => ({
   buttonTestContainer: {
     marginTop: "2%",
   },
+  paperModale: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: "5%",
+    height: "fit-content",
+    width: 800,
+    position: "relative",
+  },
+  contenutoModale: {
+    height: 370,
+    overflowX: "hidden",
+  },
+  buttonModale: {
+    bottom: 0,
+  },
+  col: {
+    padding: "3%",
+    height: "106px",
+  },
+  row: {
+    width: "600px",
+  },
+  textField: {
+    width: "200px",
+  },
+  bottoneAnnulla: {
+    width: "128px",
+  },
+  textField: {
+    width: "200px",
+  },
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
@@ -267,35 +304,47 @@ function getSteps() {
 function EditingTestCreaTestSuite() {
   const classes = useStyles();
 
-  const bearer = `Bearer ${localStorage.getItem("token")}`;
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   const [openDrawer, setOpenDrawer] = useState([]);
-
-  //const [lineaChiamato, setLineaChiamato] = useState(0);
-  // const [OBPChiamato, setOBPChiamato] = useState(0);
-  // const [appearLinea, setAppearLinea] = useState([]);
-  // const [appearOBP, setAppearOBP] = useState([]);
-  // const [appearFile, setAppearFile] = useState([]);
-
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
-
-  // const [qntChiamanti, setQntChiamanti] = useState([]);
-  // const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
-  // let arrAppoggio = qntChiamanti;
-
   const [nextDisabled, setNextDisabled] = useState(true);
+  const [file, setFile] = useState([]);
+  const [data, setData] = useState([]);
+  const [testCase, setTestCase] = useState([]);
+  const [id, setId] = useState();
+  const [nomeTitolo, setNomeTitolo] = useState("");
+  const [version, setVersion] = useState();
+  const [expectedDuration, setExpectedDuration] = useState();
+  const [durata, setDurata] = useState();
+  const [template, setTemplate] = useState("");
+  const [createdBy, setCreatedBy] = useState("");
+  const [modifiedBy, setModifiedBy] = useState("");
+  const [creationDate, setCreationDate] = useState("");
+  const [modifiedDate, setModifiedDate] = useState("");
+  const [chiamato, setChiamato] = useState([]);
+  const [chiamanti, setChiamanti] = useState([]);
+  const [appearLine, setAppearLine] = useState([]);
+  const [appearOBP, setAppearOBP] = useState([]);
+  const [appearFile, setAppearFile] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
 
-  /*------- get linea -----------*/
+  /*------- arrayIdTestCase -----------*/
+  const arrayIdTestCase = [];
+  for (let index = 0; index < selectedRows.length; index++) {
+    const element = selectedRows[index].id;
+    arrayIdTestCase.push(element);
+  }
 
-  const getTestCase = () => {
+  console.log(arrayIdTestCase);
+
+  //-----------GET TEST CASE----------------------
+  const getAllTestCase = () => {
     var myHeaders = new Headers();
-
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
 
     var requestOptions = {
       method: "GET",
@@ -305,65 +354,105 @@ function EditingTestCreaTestSuite() {
 
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
-      // .then((result) => {
-      //   setAppearLinea(result.list);
-      // })
+      .then((result) => {
+        setData(result.list);
+      })
       .catch((error) => console.log("error", error));
   };
 
-  // /*--------- get obp ---------*/
+  //--------------GET TEMPLATE------------------------------
+  const getTemplateById = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  // const getOBP = () => {
-  //   var myHeaders = new Headers();
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+    fetch(`/api/template/` + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
-  //   // console.log(bearer.toString());
+  //--------------TEST CASE BY ID-----------------------
+  const getTestCaseById = (id) => {
+    var myHeaders = new Headers();
 
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   fetch(`/api/obp`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearOBP(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  // /*-------- get template ---------*/
+    fetch(`/api/testcase/` + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTestCase(result.testCase);
+        setOpen(true);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
-  // const getFile = () => {
-  //   var myHeaders = new Headers();
+  //--------------GET LINE------------------------------
+  const getAppearLine = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  //   // console.log(bearer.toString());
+    fetch(`/api/linea`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearLine(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
+  //--------------GET OBP------------------------------
+  const getAppearOBP = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setAppearFile(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
+    fetch(`/api/obp`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearOBP(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestCase();
+    getAppearLine();
+    getAppearOBP();
+  }, []);
+  //-----------CREA TEST SUITE----------------------
   const Invia = () => {
-    //const result = qntChiamanti.map(({ index, ...rest }) => ({ ...rest }));
-
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
@@ -373,6 +462,7 @@ function EditingTestCreaTestSuite() {
     var raw = JSON.stringify({
       nome: nome,
       descrizione: descrizione,
+      testCases: arrayIdTestCase,
     });
 
     var requestOptions = {
@@ -389,6 +479,214 @@ function EditingTestCreaTestSuite() {
     // localStorage.setItem("user-info", JSON.stringify(result));
     // history.push("/dashboard/testcase");
     window.location = "/editing/testsuite";
+  };
+  //-----------------------Data Columns------------------------------
+
+  const columns = [
+    {
+      title: "ID Test",
+      field: "id",
+      defaultSort: "desc",
+      editable: "never",
+    },
+    {
+      title: "Nome",
+      field: "nome",
+    },
+    {
+      title: "Descrizione",
+      field: "descrizione",
+    },
+    // {
+    //   title: "Durata Attesa",
+    //   field: "expectedDuration",
+    // },
+    // {
+    //   title: "Versione",
+    //   field: "version",
+    // },
+    {
+      title: "Data Creazione",
+      field: "creationDate",
+    },
+    {
+      title: "Data Modifica",
+      field: "modifiedDate",
+    },
+    {
+      title: "Creato da",
+      field: "createdBy",
+    },
+    {
+      title: "Modificato da",
+      field: "modifiedBy",
+    },
+    {
+      title: "Template",
+      field: "file",
+    },
+  ];
+
+  const [open, setOpen] = React.useState(false);
+  const [modifica, setModifica] = React.useState(false);
+  const [openChiamato, setOpenChiamato] = React.useState(false);
+  const [openChiamanti, setOpenChiamanti] = React.useState(false);
+  const [idElemento, setIdElemento] = React.useState(0);
+  const [openDelete, setOpenDelete] = React.useState(false);
+
+  const openModifica = (rowData) => {
+    setModifica(true);
+    handleOpen(rowData);
+  };
+  const openVisualizza = (rowData) => {
+    setModifica(false);
+    handleOpen(rowData);
+  };
+
+  const handleOpen = (rowData) => {
+    setId(rowData.id);
+    setNomeTitolo(rowData.nome);
+    setNome(rowData.nome);
+    setDescrizione(rowData.descrizione);
+    setVersion(rowData.version);
+    setExpectedDuration(rowData);
+    setDurata(rowData.expectedDuration);
+    setCreatedBy(rowData.createdBy);
+    setModifiedBy(rowData.modifiedBy);
+    setCreationDate(rowData.creationDate);
+    setModifiedDate(rowData.modifiedDate);
+    getTestCaseById(rowData.id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClose2 = () => {
+    aggiornaTestCase();
+    setOpen(false);
+  };
+
+  /*---------MODALE DELETE-------*/
+
+  const functionDelete = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: idElemento,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getAllTestCase();
+      })
+      .catch((error) => console.log("error", error));
+    handleCloseDelete();
+  };
+
+  //------------ funzione apri modale
+
+  const handleOpenDelete = (rowData) => {
+    setNome(rowData.nome);
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  //-----------MODALE CHIAMATO------------------
+  const handleOpenChiamato = () => {
+    var appoggioChiamato;
+    appoggioChiamato = Object.values(testCase.chiamato);
+    for (let i = 0; i < appoggioChiamato.length; i++) {
+      chiamato.push(appoggioChiamato[i].id);
+    }
+    console.log(chiamato);
+    setOpenChiamato(true);
+  };
+
+  const handleCloseChiamato = () => {
+    setOpenChiamato(false);
+  };
+
+  const handleCloseChiamato2 = () => {
+    //aggiornaUtente();
+    setOpenChiamato(false);
+  };
+  //---------MODALE CHIAMANTi--------------------
+  const handleOpenChiamanti = () => {
+    var appoggioChiamanti;
+    appoggioChiamanti = testCase.chiamanti;
+
+    for (let i = 0; i < appoggioChiamanti.length; i++) {
+      chiamanti[i] = [0, 0, 0, 0];
+    }
+    for (let i = 0; i < appoggioChiamanti.length; i++) {
+      chiamanti[i][0] = appoggioChiamanti[i]["proxy"].id;
+      chiamanti[i][1] = appoggioChiamanti[i]["linea"].id;
+      chiamanti[i][2] = appoggioChiamanti[i]["file"].id;
+      chiamanti[i][3] = i;
+    }
+    console.log(chiamanti);
+    setOpenChiamanti(true);
+  };
+
+  const handleCloseChiamanti = () => {
+    setOpenChiamanti(false);
+  };
+
+  const handleCloseChiamanti2 = () => {
+    //aggiornaUtente();
+    setOpenChiamanti(false);
+  };
+
+  //-------AGGIORNA TEST CASE----------------------------
+
+  const aggiornaTestCase = () => {
+    const invia = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+      var raw = JSON.stringify({
+        id: id,
+        version: version,
+        expectedDuration: expectedDuration,
+        nome: nome,
+        descrizione: descrizione,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/testcase`, requestOptions)
+        .then((response) => response.json())
+        .then((response) => {
+          getAllTestCase();
+        })
+        .catch((error) => console.log("error", error));
+    };
+    invia();
   };
 
   //-----------------------SCRIPT STEPPER------------------------------
@@ -415,43 +713,15 @@ function EditingTestCreaTestSuite() {
         setNextDisabled(false);
       }
     }
-    // else if (activeStep === 1) {
-    //   if (testCase === null) {
+
+    // if (activeStep === 1) {
+    //   if (arrayIdTestCase.length === 0) {
     //     setNextDisabled(true);
     //   } else {
-    //     setNextDisabled(false)
-    //   }
-    // }
-    // else if (activeStep === 2) {
-    //   if ((lineaChiamante === null) || (OBPChiamante === null)) {
-    //     setNextDisabled(true);
-    //   } else {
-    //     setNextDisabled(false)
-    //   }
-    // }
-    // // da correggere a servizio pronto
-    // else if (activeStep === 3) {
-    //   if ((template === "")) {
-    //     setNextDisabled(true);
-    //   } else {
-    //     setNextDisabled(false)
+    //     setNextDisabled(false);
     //   }
     // }
   };
-
-  // const addArr = () => {
-  //   arrAppoggio.push({ linea: 0, proxy: 0, index: arrAppoggio.length })
-  //   setQntChiamanti(arrAppoggio);
-  //   setNChiamanti(qntChiamanti.length)
-  //   console.log(qntChiamanti)
-  // };
-
-  // const removeArr = () => {
-  //   arrAppoggio.pop()
-  //   setQntChiamanti(arrAppoggio);
-  //   setNChiamanti(qntChiamanti.length)
-  //   console.log(qntChiamanti)
-  // };
 
   const handleChangeName = (e) => {
     setNome(e.target.value);
@@ -459,15 +729,9 @@ function EditingTestCreaTestSuite() {
   const handleChangeDescrizione = (e) => {
     setDescrizione(e.target.value);
   };
-  // const handleChangeLineaChiamato = (e) => {
-  //   setLineaChiamato(e.target.value);
-  // };
-  // const handleChangeOBPChiamato = (e) => {
-  //   setOBPChiamato(e.target.value);
-  // };
 
   useEffect(() => {
-    getTestCase();
+    // getTestCase();
     //   getFile();
     //   getOBP();
 
@@ -507,6 +771,11 @@ function EditingTestCreaTestSuite() {
         }}
         open={openDrawer}
       >
+        <div className={classes.toolbarIcon}>
+          {/* <IconButton onClick={handleDrawerClose}>
+            <ChevronLeftIcon />
+          </IconButton> */}
+        </div>
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -661,7 +930,571 @@ function EditingTestCreaTestSuite() {
               <>
                 <Paper className={classes.paperContainer2} elevation={2}>
                   <Typography>Seleziona i Test Case da associare:</Typography>
-                  <TestSuiteSelectNew className={classes.testSuiteSelect} />
+                  <div>
+                    <MaterialTable
+                      style={{ boxShadow: "none" }}
+                      title="Test Case"
+                      data={data}
+                      columns={columns}
+                      onSelectionChange={
+                        (rows) => setSelectedRows(rows)
+                        // for (let i = 0; i < rows.length; i++) {
+                        //   // console.log(rows[i].id);
+                        //   return selectedRows.push(rows[i].id);
+                        // }
+                      }
+                      options={{
+                        selection: true,
+                        sorting: true,
+                        exportButton: true,
+                        actionsColumnIndex: -1,
+                        search: true,
+                        searchFieldVariant: "outlined",
+                        filtering: true,
+                        searchFieldAlignment: "left",
+                        pageSizeOptions: [
+                          5,
+                          10,
+                          20,
+                          { value: data.length, label: "All" },
+                        ],
+                      }}
+                      actions={[
+                        {
+                          icon: () => (
+                            <div className={classes.buttonRight}>
+                              <Button
+                                className="button-green"
+                                component={NavLink}
+                                activeClassName="button-green-active"
+                                exact
+                                to="/editing/testcreatestcase"
+                                startIcon={<AddIcon />}
+                              >
+                                TEST CASE
+                              </Button>
+                            </div>
+                          ),
+                          tooltip: "Load Test Case",
+                          //onClick: () => funzioneFor(),
+                          isFreeAction: true,
+                        },
+                        {
+                          icon: (dat) => (
+                            <a>
+                              <VisibilityIcon />
+                            </a>
+                          ),
+                          tooltip: "Visualizza tutti i dati",
+                          position: "row",
+                          onClick: (event, rowData) => openVisualizza(rowData),
+                        },
+                        {
+                          icon: () => <EditIcon />,
+                          tooltip: "Modifica",
+                          onClick: (event, rowData) => openModifica(rowData),
+                          position: "row",
+                        },
+                        {
+                          icon: () => <DeleteIcon />,
+                          tooltip: "Remove all selected test",
+                          onClick: (event, rowData) => {
+                            handleOpenDelete(rowData);
+                            setIdElemento(rowData.id);
+                          },
+                        },
+                      ]}
+                      localization={{
+                        header: {
+                          actions: "Azioni",
+                        },
+                      }}
+                    />
+
+                    {/*------------------ MODALE VISUALIZZA/MODIFICA -------------*/}
+
+                    <Modal
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      className={classes.modal}
+                      open={open}
+                      onClose={handleClose}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={open}>
+                        <div>
+                          <Paper className={classes.paperModale} elevation={1}>
+                            <div>
+                              <ListItem>
+                                <Typography
+                                  className={classes.intestazione}
+                                  variant="h4"
+                                >
+                                  {modifica === false
+                                    ? "Visualizza "
+                                    : "Modifica "}{" "}
+                                  Test Case <b>{nomeTitolo}</b>
+                                </Typography>
+                              </ListItem>
+                              <Divider className={classes.divider} />
+                            </div>
+
+                            <Form className={classes.contenutoModale}>
+                              <Row>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    error={nome !== "" ? false : true}
+                                    onChange={(e) => setNome(e.target.value)}
+                                    label="Nome"
+                                    defaultValue={nome}
+                                    helperText={
+                                      nome !== "" ? "" : "Il nome è richiesto"
+                                    }
+                                    InputProps={{
+                                      readOnly:
+                                        modifica === false ? true : false,
+                                    }}
+                                  />
+                                </Col>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    error={descrizione !== "" ? false : true}
+                                    onChange={(e) =>
+                                      setDescrizione(e.target.value)
+                                    }
+                                    label="Descrizione"
+                                    defaultValue={descrizione}
+                                    helperText={
+                                      descrizione !== ""
+                                        ? ""
+                                        : "La descrizione è richiesta"
+                                    }
+                                    InputProps={{
+                                      readOnly:
+                                        modifica === false ? true : false,
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className={classes.col}>
+                                  <ButtonClickedGreen
+                                    size="medium"
+                                    nome={
+                                      modifica === false
+                                        ? "vedi chiamato"
+                                        : "modifica chiamato"
+                                    }
+                                    onClick={handleOpenChiamato}
+                                  />
+                                </Col>
+                                <Col className={classes.col}>
+                                  <ButtonClickedGreen
+                                    size="medium"
+                                    nome={
+                                      modifica === false
+                                        ? "vedi chiamanti"
+                                        : "modifica chiamanti"
+                                    }
+                                    onClick={handleOpenChiamanti}
+                                  />
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    label="Template"
+                                    value={console.log(template)}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    label="Creato Da"
+                                    value={createdBy}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    label="Data di creazione"
+                                    value={creationDate
+                                      .replace(".000+00:00", "")
+                                      .replace("T", " | ")}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    label="Modificato da"
+                                    value={modifiedBy}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    label="Data di Modifica"
+                                    value={modifiedDate
+                                      .replace(".000+00:00", "")
+                                      .replace("T", " | ")}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                            </Form>
+                            <div className={classes.buttonModale}>
+                              <Divider className={classes.divider} />
+                              <div
+                                className={classes.bottone}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                }}
+                              >
+                                {modifica === false ? (
+                                  ""
+                                ) : (
+                                  <ButtonClickedGreen
+                                    size="medium"
+                                    nome="Aggiorna"
+                                    onClick={handleClose2}
+                                  />
+                                )}
+
+                                <ButtonNotClickedGreen
+                                  className={classes.bottoneAnnulla}
+                                  onClick={handleClose}
+                                  size="medium"
+                                  nome={
+                                    modifica === false ? "Indietro" : "Annulla"
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </Paper>
+                        </div>
+                      </Fade>
+                    </Modal>
+
+                    {/* ------------------------MODALE CHIAMATO--------------------- */}
+                    <Modal
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      className={classes.modal}
+                      open={openChiamato}
+                      onClose={handleCloseChiamato}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={openChiamato}>
+                        <div>
+                          <Paper className={classes.paperModale}>
+                            <div>
+                              <ListItem>
+                                <Typography
+                                  className={classes.intestazione}
+                                  variant="h4"
+                                >
+                                  {modifica === false
+                                    ? "Visualizza "
+                                    : "Modifica "}{" "}
+                                  Chiamato <b>{nomeTitolo}</b>
+                                </Typography>
+                              </ListItem>
+                              <Divider className={classes.divider} />
+                            </div>
+
+                            <Form className={classes.contenutoModale}>
+                              <Row>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    select
+                                    onChange={(e) => {
+                                      chiamato[1] = e.target.value;
+                                    }}
+                                    label="Linea"
+                                    value={chiamato[1]}
+                                    InputProps={{
+                                      readOnly:
+                                        modifica === false ? true : false,
+                                    }}
+                                  >
+                                    {appearLine.map((linea) => (
+                                      <MenuItem key={linea.id} value={linea.id}>
+                                        {linea.campiConcatenati}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                </Col>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    select
+                                    onChange={(e) => {
+                                      chiamato[0] = e.target.value;
+                                    }}
+                                    label="Outboundproxy"
+                                    value={chiamato[0]}
+                                    InputProps={{
+                                      readOnly:
+                                        modifica === false ? true : false,
+                                    }}
+                                  >
+                                    {appearOBP.map((obp) => (
+                                      <MenuItem key={obp.id} value={obp.id}>
+                                        {obp.campiConcatenati}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                </Col>
+                              </Row>
+                            </Form>
+                            <div className={classes.buttonModale}>
+                              <Divider className={classes.divider} />
+                              <div
+                                className={classes.bottone}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                }}
+                              >
+                                {modifica === false ? (
+                                  ""
+                                ) : (
+                                  <ButtonClickedGreen
+                                    size="medium"
+                                    nome="Aggiorna"
+                                    onClick={handleCloseChiamato2}
+                                  />
+                                )}
+
+                                <ButtonNotClickedGreen
+                                  className={classes.bottoneAnnulla}
+                                  onClick={handleCloseChiamato}
+                                  size="medium"
+                                  nome={
+                                    modifica === false ? "Indietro" : "Annulla"
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </Paper>
+                        </div>
+                      </Fade>
+                    </Modal>
+                    {/* ------------------------MODALE CHIAMANTi--------------------- */}
+                    <Modal
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      className={classes.modal}
+                      open={openChiamanti}
+                      onClose={handleCloseChiamanti}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={openChiamanti}>
+                        <div>
+                          <Paper className={classes.paperModale} elevation={1}>
+                            <div>
+                              <ListItem>
+                                <Typography
+                                  className={classes.intestazione}
+                                  variant="h4"
+                                >
+                                  {modifica === false
+                                    ? "Visualizza "
+                                    : "Modifica "}{" "}
+                                  Chiamanti <b>{nomeTitolo}</b>
+                                </Typography>
+                              </ListItem>
+                              <Divider className={classes.divider} />
+                            </div>
+
+                            <Form className={classes.contenutoModale}>
+                              {chiamanti.map((chiamanti) => (
+                                <>
+                                  <Typography
+                                    className={classes.intestazione}
+                                    variant="h6"
+                                  >
+                                    Chiamanti <b>{chiamanti[3] + 1}</b>
+                                  </Typography>
+                                  <Row>
+                                    <Col className={classes.col}>
+                                      <TextField
+                                        className={classes.textField}
+                                        select
+                                        onChange={(e) => {
+                                          chiamanti[1] = e.target.value;
+                                        }}
+                                        label="Linea N°"
+                                        value={chiamanti[1]}
+                                        InputProps={{
+                                          readOnly:
+                                            modifica === false ? true : false,
+                                        }}
+                                      >
+                                        {appearLine.map((linea) => (
+                                          <MenuItem
+                                            key={linea.id}
+                                            value={linea.id}
+                                          >
+                                            {linea.campiConcatenati}
+                                          </MenuItem>
+                                        ))}
+                                      </TextField>
+                                    </Col>
+                                    <Col className={classes.col}>
+                                      <TextField
+                                        className={classes.textField}
+                                        select
+                                        onChange={(e) => {
+                                          chiamanti[0] = e.target.value;
+                                        }}
+                                        label="Outboundproxy N°"
+                                        value={chiamanti[0]}
+                                        InputProps={{
+                                          readOnly:
+                                            modifica === false ? true : false,
+                                        }}
+                                      >
+                                        {appearOBP.map((obp) => (
+                                          <MenuItem key={obp.id} value={obp.id}>
+                                            {obp.campiConcatenati}
+                                          </MenuItem>
+                                        ))}
+                                      </TextField>
+                                    </Col>
+                                  </Row>
+                                </>
+                              ))}
+                            </Form>
+                            <div className={classes.buttonModale}>
+                              <Divider className={classes.divider} />
+                              <div
+                                className={classes.bottone}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                }}
+                              >
+                                {modifica === false ? (
+                                  ""
+                                ) : (
+                                  <ButtonClickedGreen
+                                    size="medium"
+                                    nome="Aggiorna"
+                                    onClick={handleCloseChiamanti2}
+                                  />
+                                )}
+
+                                <ButtonNotClickedGreen
+                                  className={classes.bottoneAnnulla}
+                                  onClick={handleCloseChiamanti}
+                                  size="medium"
+                                  nome={
+                                    modifica === false ? "Indietro" : "Annulla"
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </Paper>
+                        </div>
+                      </Fade>
+                    </Modal>
+                    {/* ------------------------MODALE DELETE--------------------- */}
+                    <Modal
+                      aria-labelledby="transition-modal-title"
+                      aria-describedby="transition-modal-description"
+                      className={classes.modal}
+                      open={openDelete}
+                      closeAfterTransition
+                      BackdropComponent={Backdrop}
+                      BackdropProps={{
+                        timeout: 500,
+                      }}
+                    >
+                      <Fade in={openDelete}>
+                        <div>
+                          <Paper
+                            className={classes.paperModaleDelete}
+                            elevation={1}
+                          >
+                            <div>
+                              <ListItem>
+                                <Typography
+                                  className={classes.intestazione}
+                                  variant="h4"
+                                >
+                                  Elimina Test Case <b>{nome}</b>
+                                </Typography>
+                              </ListItem>
+                              <Divider className={classes.divider} />
+
+                              <Typography className={classes.typography}>
+                                L'eliminazione del Test Case selezionato,
+                                comporterà la cancellazione dei Test Suite ad
+                                esso collegati.
+                                <br />
+                                Si vuole procedere?{" "}
+                              </Typography>
+
+                              <Divider className={classes.divider} />
+                              <div
+                                className={classes.bottone}
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                }}
+                              >
+                                <ButtonNotClickedGreen
+                                  onClick={functionDelete}
+                                  nome="Elimina"
+                                />
+                                <ButtonNotClickedGreen
+                                  onClick={handleCloseDelete}
+                                  nome="Indietro"
+                                />
+                              </div>
+                            </div>
+                          </Paper>
+                        </div>
+                      </Fade>
+                    </Modal>
+                  </div>
                   <Alert
                     severity="error"
                     id="alertTestCase"
@@ -670,236 +1503,9 @@ function EditingTestCreaTestSuite() {
                     Selezionare almeno un Test Case da associare!
                   </Alert>
                 </Paper>
-                {/* <Typography className={classes.intestazione} variant="h6">
-                Chiamato
-              </Typography>
-              <Row >
-                <Col className={classes.col}>
-                  <Form.Group controlId="form.Numero">
-                    <Form.Label>Linea</Form.Label>
-                    <FormControl
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <Select
-                        id="selectLinea"
-                        value={lineaChiamato}
-                        onChange={(e) => handleChangeLineaChiamato(e)}
-                      >
-                        {appearLinea.map((linea) => {
-                          return (
-                            <MenuItem key={linea.id} value={linea.id}>
-                              {linea.numero}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                      <Alert
-                        severity="error"
-                        id="alertLinea"
-                        style={{ display: "none" }}
-                      >
-                        Selezionare la Linea
-                      </Alert>
-                    </FormControl>
-                  </Form.Group>
-                </Col>
-                <Col className={classes.col}>
-                  <Form.Group >
-                    <Form.Label>OBP</Form.Label>
-                    <FormControl
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <Select
-                        id="selectOBP"
-                        value={OBPChiamato}
-                        onChange={(e) => handleChangeOBPChiamato(e)}
-                      >
-                        {appearOBP.map((OBP) => {
-                          return (
-                            <MenuItem key={OBP.id} value={OBP.id}>
-                              {OBP.descrizione}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                      <Alert
-                        severity="error"
-                        id="alertOBP"
-                        style={{ display: "none" }}
-                      >
-                        Selezionare l'OBP
-                      </Alert>
-                    </FormControl>
-                  </Form.Group>
-                </Col>
-              </Row> */}
               </>
             </div>
           </div>
-          {/* ------------------------STEP 3--------------------------------- */}
-          {/* <div className={classes.generalContainer} style={{ display: activeStep === 2 ? "" : "none" }}>
-
-          <div className={classes.bodyContainer} >
-            <div className={classes.bodyContainer}>
-              {qntChiamanti.map((index) => {
-                return (<div>
-                  <>
-                    <Typography className={classes.intestazione} variant="h6">
-                      Chiamante <b>{index.index + 1}</b>
-                    </Typography>
-                    <Row >
-                      <Col className={classes.col}>
-                        <Form.Group controlId="form.Numero">
-                          <Form.Label>Linea</Form.Label>
-                          <FormControl
-                            variant="outlined"
-                            className={classes.formControl}
-                          >
-                            <Select
-                              id="selectLinea"
-                              value={qntChiamanti.index}
-                              defaultValue={index.linea}
-                              onChange={(e) => {
-                                arrAppoggio[index.index].linea = e.target.value
-                                setQntChiamanti(arrAppoggio);
-                              }}
-                            >
-                              {appearLinea.map((linea) => {
-                                return (
-                                  <MenuItem key={linea.id} value={linea.id}>
-                                    {linea.numero}
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                            <Alert
-                              severity="error"
-                              id="alertLinea"
-                              style={{ display: "none" }}
-                            >
-                              Selezionare la Linea
-                            </Alert>
-                          </FormControl>
-                        </Form.Group>
-                      </Col>
-                      <Col className={classes.col}>
-                        <Form.Group >
-                          <Form.Label>OBP</Form.Label>
-                          <FormControl
-                            variant="outlined"
-                            className={classes.formControl}
-                          >
-                            <Select
-                              id="selectOBP"
-                              value={qntChiamanti.index}
-                              defaultValue={index.proxy}
-                              onChange={(e) => {
-                                console.log("yes", index)
-                                arrAppoggio[index.index].proxy = e.target.value
-                                setQntChiamanti(arrAppoggio);
-                              }}
-                            >
-                              {appearOBP.map((OBP) => {
-                                return (
-                                  <MenuItem key={OBP.id} value={OBP.id}>
-                                    {OBP.descrizione}
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                            <Alert
-                              severity="error"
-                              id="alertOBP"
-                              style={{ display: "none" }}
-                            >
-                              Selezionare l'OBP
-                            </Alert>
-                          </FormControl>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                  </>
-                </div>
-                )
-              })}
-            </div>
-
-
-            Quanti chiamanti vuoi inserire &nbsp;&nbsp;&nbsp;
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<RemoveIcon />}
-              onClick={removeArr}
-              disabled={nChiamanti < 1 ? true : false}
-            />
-            &nbsp;&nbsp;&nbsp;
-            <TextField
-              type="number"
-              style={{ width: "10px" }}
-              value={nChiamanti}
-            />
-            &nbsp;&nbsp;&nbsp;
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={addArr}
-              disabled={nChiamanti > 2 ? true : false}
-            />
-          </div>
-
-
-
-
-
-        </div> */}
-
-          {/* ------------------------STEP 4--------------------------------- */}
-          {/* <div className={classes.generalContainer} style={{ display: activeStep === 3 ? "" : "none" }}>
-          <div className={classes.bodyContainer} >
-            <div className={classes.bodyContainer}>
-              <>
-                <Typography className={classes.intestazione} variant="h6">
-                  Templete
-                </Typography>
-                <Row >
-                  <Col className={classes.col}>
-                    <Form.Group controlId="form.Numero">
-                      <FormControl
-                        variant="outlined"
-                        className={classes.formControl}
-                      >
-                        <Select
-                          id="selectLinea"
-                          value={file}
-                          onChange={(e) => { }}
-                        >
-                          {appearFile.map((file) => {
-                            return (
-                              <MenuItem key={file.id} value={file.id}>
-                                {file.path}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                        <Alert
-                          severity="error"
-                          id="alertLinea"
-                          style={{ display: "none" }}
-                        >
-                          Selezionare la Linea
-                        </Alert>
-                      </FormControl>
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </>
-            </div>
-          </div>
-        </div> */}
 
           <Divider className={classes.divider} />
 
@@ -926,7 +1532,10 @@ function EditingTestCreaTestSuite() {
                       Indietro
                     </Button>
                     <Button
-                      disabled={nextDisabled}
+                      disabled={
+                        nextDisabled ||
+                        (arrayIdTestCase.length === 0 && activeStep === 1)
+                      }
                       variant="contained"
                       color="primary"
                       onClick={handleNext}
@@ -938,24 +1547,6 @@ function EditingTestCreaTestSuite() {
               )}
             </div>
           </div>
-          {/* <div className={classes.bottone}>
-            <ButtonClickedGreen
-              className={classes.bottone}
-              size="medium"
-              nome="Crea"
-              onClick={salva}
-            />
-            <Button
-              component={NavLink}
-              className="button-green-disactive"
-              exact
-              to="/editing/linee"
-              variant="contained"
-              size="medium"
-            >
-              annulla
-            </Button>
-          </div> */}
         </Paper>
       </main>
     </div>

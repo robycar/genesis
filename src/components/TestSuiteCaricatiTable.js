@@ -167,7 +167,7 @@ const TestSuiteCaricatiTable = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title=" Total Test Suite Schedulati"
+        title=" Total Test Suite Caricati"
         data={data}
         columns={columns}
         options={{
@@ -257,7 +257,9 @@ const TestSuiteCaricatiTable = () => {
             </div>
 
             <div className={classes.paperBottom}>
+
               <Typography variant="h6">Seleziona Test Suite</Typography>
+
               <div className={classes.divSelectBar}>
                 <div className={classes.divTextarea}>
                   <Typography className={classes.contenuto} variant="h11">
@@ -266,13 +268,6 @@ const TestSuiteCaricatiTable = () => {
                 </div>
                 <SelectBar nome="Seleziona" classeName={classes.selectBar} />
               </div>
-
-              <div className={classes.divTextarea}>
-                <Typography className={classes.contenuto} variant="h11">
-                  Descrizione
-                </Typography>
-              </div>
-              <SelectBar nome="Seleziona" classeName={classes.selectBar} />
 
               <div className={classes.bottoni}>
                 <Button variant="contained" color="secondary">

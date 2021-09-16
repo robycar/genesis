@@ -268,13 +268,6 @@ const TestSuiteSchedulatiTable = () => {
                 <SelectBar nome="Seleziona" classeName={classes.selectBar} />
               </div>
 
-              <div className={classes.divTextarea}>
-                <Typography className={classes.contenuto} variant="h11">
-                  Descrizione
-                </Typography>
-              </div>
-              <SelectBar nome="Seleziona" classeName={classes.selectBar} />
-
               <div className={classes.bottoni}>
                 <Button variant="contained" color="secondary">
                   Schedula Test

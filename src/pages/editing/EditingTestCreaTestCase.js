@@ -280,8 +280,8 @@ function EditingTestCreaTestCase() {
   const [descrizione, setDescrizione] = useState("");
 
   const [qntChiamanti, setQntChiamanti] = useState([]);
-  const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
   let arrAppoggio = qntChiamanti;
+  const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
   const [lineaChiamante1 , setLineaChiamante1] = useState(false);
   const [lineaChiamante2 , setLineaChiamante2] = useState(false);
   const [lineaChiamante3 , setLineaChiamante3] = useState(false);

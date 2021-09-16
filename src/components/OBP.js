@@ -14,17 +14,18 @@ import ListItem from "@material-ui/core/ListItem";
 import TextField from "@material-ui/core/TextField";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import DeleteIcon from "@material-ui/icons/Delete";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { Divider } from "@material-ui/core";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 // import { version } from "react-dom";
 import { identifier } from "@babel/types";
- 
+
 function Obp() {
   const [data, setData] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
- 
   const [id, setId] = useState();
   const [ip1, setIp1] = useState("");
   const [ip2, setIp2] = useState("");
@@ -35,21 +36,21 @@ function Obp() {
   const [typeLinea, setTypeLinea] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [version, SetVersion] = React.useState(0);
- 
+
   /*----Get Type Linea ------*/
- 
+
   const getAppearLine = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
+
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
- 
+
     fetch(`/api/typeLinea`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -57,7 +58,7 @@ function Obp() {
       })
       .catch((error) => console.log("error", error));
   };
- 
+
   const aggiornaUtente = () => {
     const invia = () => {
       var myHeaders = new Headers();
@@ -65,28 +66,28 @@ function Obp() {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
       myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
+
       var raw = JSON.stringify({
         id: id,
         version: version,
         ipDestinazione: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
         descrizione: descrizione,
         porta: porta === "" ? 5060 : porta,
- 
+
         // typeLinea: {
         //   id: typeLinea.id,
         // },
- 
+
         typeLinee: typeLinea,
       });
- 
+
       var requestOptions = {
         method: "POST",
         headers: myHeaders,
         body: raw,
         redirect: "follow",
       };
- 
+
       fetch(`/api/obp`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
@@ -94,7 +95,7 @@ function Obp() {
         })
         .catch((error) => console.log("error", error));
     };
- 
+
     const aggiornaIP = () => {
       if (
         ip1 >= 0 &&
@@ -110,7 +111,7 @@ function Obp() {
         setOpen(false);
       }
     };
- 
+
     if (ip1 !== "" && ip2 !== "" && ip3 !== "" && ip4 !== "") {
       if (porta === "") {
         setPorta("5060");
@@ -118,11 +119,11 @@ function Obp() {
       if (descrizione === "") {
         setDescrizione(" ");
       }
- 
+
       aggiornaIP();
     }
   };
- 
+
   const columns = [
     { title: "ID OBP", field: "id", defaultSort: "desc" },
     {
@@ -170,26 +171,26 @@ function Obp() {
       field: "version",
     },
   ];
- 
+
   const bearer = `Bearer ${localStorage.getItem("token")}`;
- 
+
   useEffect(() => {
     getObp();
     getAppearLine();
   }, []);
- 
+
   const getObp = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
+
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
       redirect: "follow",
     };
- 
+
     fetch(`/api/obp`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
@@ -198,17 +199,17 @@ function Obp() {
       })
       .catch((error) => console.log("error", error));
   };
- 
+
   const handleOpen = (rowData) => {
     setId(rowData.id);
- 
+
     var ipAppoggio = rowData.ipDestinazione;
     ipAppoggio = ipAppoggio.split(".");
     setIp1(ipAppoggio[0].replace(".", ""));
     setIp2(ipAppoggio[1].replace(".", ""));
     setIp3(ipAppoggio[2].replace(".", ""));
     setIp4(ipAppoggio[3]);
- 
+
     setPorta(rowData.porta);
     setDescrizione(rowData.descrizione);
     SetVersion(rowData.version);
@@ -216,7 +217,7 @@ function Obp() {
     setOpen(true);
     console.log(typeLinea, "type");
   };
- 
+
   const handleChange = (event) => {
     // if (typeLinea.length < 2) {
     //   setTypeLinea([event.target.value]);
@@ -225,18 +226,87 @@ function Obp() {
     //   [...typeLinea, event.target.value];
     // }
     // console.log(typeLinea, "typeLineaId");
- 
+
     setTypeLinea(event.target.value);
   };
- 
+
   const handleRenderValue = (selected) => {
     selected.join(", ");
   };
- 
+
   const handleClose = () => {
     setOpen(false);
   };
- 
+
+  /*-------------- MODALE ERROR ------------*/
+
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
+
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
+
+  /*------------------ MODALE DELETE ---------------------*/
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [idElemento, setIdElemento] = React.useState(0);
+
+  const handleOpenDelete = (rowData) => {
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale ------------
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  const functionDelete = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: idElemento,
+    });
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/obp`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "Internal Server Error") {
+            setWarning(
+              "Impossibile eliminare l'OBP poichè associato ad uno o più Test Case"
+            );
+          } else {
+            setWarning(
+              "Codice errore: " +
+                result.error.code +
+                "Descrizione:" +
+                result.code.description
+            );
+          }
+        } else {
+          setOpenWarning(false);
+          getObp();
+          //resolve();
+        }
+      })
+      .catch((error) => console.log("error", error));
+    handleCloseDelete();
+  };
+
+  /*--------------- LAYOUT ------------*/
+
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -255,7 +325,7 @@ function Obp() {
       flexDirection: "column",
       alignItems: "center",
     },
- 
+
     paperTop: {
       height: "20%",
       display: "flex",
@@ -312,14 +382,14 @@ function Obp() {
       alignItems: "center",
       justifyContent: "center",
     },
-    
+
     col: {
       padding: "3%",
     },
     colIp: {
       width: "110px",
       padding: "3%",
-      height: "106px"
+      height: "106px",
     },
     row: {
       width: "600px",
@@ -340,7 +410,7 @@ function Obp() {
     bottoneAnnulla: {
       width: "128px",
     },
-  
+
     separatoreIp: {
       display: "flex",
       alignItems: "center",
@@ -361,9 +431,36 @@ function Obp() {
     typography: {
       padding: "3%",
     },
+    intestazioneModaleError: {
+      color: "#ef5350",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    iconModaleError: {
+      // width: "15%",
+      // height: "15%",
+      marginRight: "4%",
+      transform: "scale(1.9)",
+      color: "#ef5350",
+    },
+    divIntestazione: {
+      display: "flex",
+      alignItems: "center",
+      padding: "2%",
+      marginBottom: "1%",
+    },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
   }));
   const classes = useStyles();
- 
+
   return (
     <div>
       <MaterialTable
@@ -381,36 +478,6 @@ function Obp() {
           // selection: true,
           // columnsButton: true,
           filtering: true,
-        }}
-        editable={{
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              //Backend call
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
- 
-              var raw = JSON.stringify({
-                id: oldData.id,
-              });
- 
-              var requestOptions = {
-                method: "DELETE",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
- 
-              fetch(`/api/obp`, requestOptions)
-                .then((response) => response.json())
-                .then((result) => {
-                  getObp();
-                  resolve();
-                })
-                .catch((error) => console.log("error", error));
-            }),
         }}
         actions={[
           {
@@ -434,8 +501,16 @@ function Obp() {
             icon: () => <EditIcon />,
             tooltip: "Edit",
             onClick: (event, rowData) => handleOpen(rowData),
- 
+
             position: "row",
+          },
+          {
+            icon: () => <DeleteIcon />,
+            tooltip: "Remove all selected OBP",
+            onClick: (event, rowData) => {
+              handleOpenDelete(rowData);
+              setIdElemento(rowData.id);
+            },
           },
         ]}
         localization={{
@@ -445,7 +520,7 @@ function Obp() {
         }}
       />
 
-       {/*-------MODALE VISUALIZZA/MODIFICA---------*/}
+      {/*-------MODALE VISUALIZZA/MODIFICA---------*/}
 
       <Modal
         aria-labelledby="transition-modal-title"
@@ -460,7 +535,7 @@ function Obp() {
         }}
       >
         <Fade in={open}>
-        <Paper className={classes.paperModale} elevation={1}>
+          <Paper className={classes.paperModale} elevation={1}>
             <div>
               <ListItem button>
                 <Typography className={classes.intestazione} variant="h4">
@@ -469,9 +544,8 @@ function Obp() {
               </ListItem>
               <Divider className={classes.divider} />
             </div>
- 
+
             <Paper className={classes.paperContent} elevation={0}>
-              
               <Row className={classes.rowIp}>
                 <Col className={classes.colIp}>
                   <TextField
@@ -554,8 +628,7 @@ function Obp() {
               </Row>
 
               <Row className={classes.row}>
-               
-              <Col className={classes.col}>
+                <Col className={classes.col}>
                   <TextField
                     error={
                       porta !== "" && porta > 1000 && porta < 100000
@@ -592,7 +665,6 @@ function Obp() {
                 </Col>
               </Row>
 
-
               <Divider className={classes.divider} />
               <div
                 className={classes.bottone}
@@ -625,7 +697,7 @@ function Obp() {
                     disabled="true"
                   />
                 )}
- 
+
                 <ButtonNotClickedGreen
                   className={classes.bottoneAnnulla}
                   onClick={handleClose}
@@ -633,8 +705,106 @@ function Obp() {
                 />
               </div>
             </Paper>
-           
           </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE DELETE--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Elimina OBP <b>{id}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  L'eliminazione del'OBP selezionato, impatterà sui Test
+                  Case ad esso collegati. Pertanto, non saranno più applicabili.
+                  <br />
+                  Si vuole procedere?{" "}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={functionDelete}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
     </div>

@@ -254,10 +254,10 @@ export default function EnhancedTable() {
   const [appState, changeState] = useState({
     activeObject: null,
     objects: [
-      { id: 1, name: "Test Suite Running" },
-      { id: 2, name: "Test Suite Conclusi" },
-      { id: 3, name: "Test Suite Caricati" },
-      { id: 4, name: "Test Suite Schedulati" },
+      { id: 1, name: "Test Suite Caricati"},
+      { id: 2, name: "Test Suite Schedulati"},
+      { id: 3, name: "Test Suite Running" },
+      { id: 4, name: "Test Suite Conclusi"},
     ],
   });
 
@@ -309,19 +309,11 @@ export default function EnhancedTable() {
           <ButtonClickedBlue nome="Test Conclusi" /> */}
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
       </div>
-      {appState.activeObject === null && <TestSuiteRunningTable />}
-      {appState.objects[0] === appState.activeObject && (
-        <TestSuiteRunningTable />
-      )}
-      {appState.objects[1] === appState.activeObject && (
-        <TestSuiteConclusiTable />
-      )}
-      {appState.objects[2] === appState.activeObject && (
-        <TestSuiteCaricatiTable />
-      )}
-      {appState.objects[3] === appState.activeObject && (
-        <TestSuiteSchedulatiTable />
-      )}
+      {appState.activeObject === null && <TestSuiteCaricatiTable />}
+      {appState.objects[2] === appState.activeObject && (<TestSuiteRunningTable />)}
+      {appState.objects[3] === appState.activeObject && (<TestSuiteConclusiTable/>)}
+      {appState.objects[0] === appState.activeObject && (<TestSuiteCaricatiTable />)}
+      {appState.objects[1] === appState.activeObject && (<TestSuiteSchedulatiTable />)}
       {/* <TableContainer>
         <Table
           className={classes.table}

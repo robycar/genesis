@@ -37,6 +37,8 @@ function TestSuiteTable() {
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
   const [durataComplessiva, setDurataComplessiva] = useState("");
+  const [testSuite, setTestSuite] = useState([]);
+
   // const [gruppo, setGruppo] = useState([]);
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -65,10 +67,34 @@ function TestSuiteTable() {
       })
       .catch((error) => console.log("error", error));
   };
+  //------------------------- GET TEST SUITE BY ID ------------------------------
+
+  const getTestSuiteById = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testsuite/` + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTestSuite(result.testSuite);
+        setOpen(true);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   useEffect(() => {
     getAllTestSuite();
   }, []);
+
+  console.log(testSuite.testCases, "sono test suite");
 
   const columns = [
     {
@@ -80,19 +106,10 @@ function TestSuiteTable() {
       title: "Nome",
       field: "nome",
     },
+
     {
       title: "Descrizione",
       field: "descrizione",
-      // width: "5%",
-      // Cell: (dataRow) => {
-      //   return (
-      //     <Tooltip title={dataRow.descrizione_}>{dataRow.descrizione}</Tooltip>
-      //   );
-      // },
-    },
-    {
-      title: "Descrizione_",
-      field: "descrizione_",
       width: "5%",
     },
 
@@ -114,7 +131,7 @@ function TestSuiteTable() {
     },
     {
       title: "Numero di Test Case",
-      field: "testCases[0].nome",
+      field: "testSuite.testCases",
       // render: (rowData) => {
       //   let prova = "!";
       //   for (let index = 0; index < rowData.testCases.length; index++){
@@ -127,14 +144,15 @@ function TestSuiteTable() {
       title: "Durata Complessiva",
       field: "durata",
     },
-    {
-      title: "Gruppo",
-      field: "gruppo.nome",
-    },
+    // {
+    //   title: "Gruppo",
+    //   field: "gruppo.nome",
+    // },
   ];
-
+  // console.log(columns.field);
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
+  const [openTestSuite, SetOpenTestSuite] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
 
@@ -152,13 +170,13 @@ function TestSuiteTable() {
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
-    setTestCases([...testCases, rowData.testCases[0].nome]);
+    // setTestCases([...testCases, rowData.testCases[0].nome]);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
-    setOpen(true);
-    // setGruppo(rowData.gruppo);
+    // setOpen(true);
+    getTestSuiteById(rowData.id);
   };
 
   const handleClose = () => {
@@ -226,9 +244,9 @@ function TestSuiteTable() {
         version: version,
         nome: nome,
         descrizione: descrizione,
-        // testCases: {
-        //   id: testCases,
-        // },
+        // testCases: [
+        //   id
+        // ],
       });
 
       var requestOptions = {
@@ -247,6 +265,29 @@ function TestSuiteTable() {
     };
     invia();
   };
+
+  //-----------MODALE TEST SUITE------------------
+
+  const arrayTestCases = testSuite.testCases;
+
+  // const handleOpenTestSuite= () => {
+  //   var appoggioChiamato;
+  //   appoggioChiamato = Object.values(testCase.chiamato);
+  //   for (let i = 0; i < appoggioChiamato.length; i++) {
+  //     chiamato.push(appoggioChiamato[i].id);
+  //   }
+  //   console.log(chiamato);
+  //   setOpenChiamato(true);
+  // };
+
+  // const handleCloseChiamato = () => {
+  //   setOpenChiamato(false);
+  // };
+
+  // const handleCloseChiamato2 = () => {
+  //   //aggiornaUtente();
+  //   setOpenChiamato(false);
+  // };
 
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
@@ -458,7 +499,8 @@ function TestSuiteTable() {
                       defaultValue={id}
                       // helperText={nome !== "" ? "" : "Lo status è richiesto"}
                       InputProps={{
-                        readOnly: modifica === false ? true : false,
+                        readOnly: modifica === true,
+                        // readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
@@ -506,30 +548,42 @@ function TestSuiteTable() {
                 </Row>
 
                 <Row>
-                  <Col className={classes.col}>
+                  {/* <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       //error={gruppo !== "" ? false : true}
                       //onChange={(e) => setGruppo(e.target.value)}
-                      label="Gruppo"
+                      label="Durata Complessiva"
                       //defaultValue={gruppo}
                       //helperText={gruppo !== "" ? "" : "Il Nome è richiesto"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     />
-                  </Col>
+                  </Col> */}
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       error={testCases !== "" ? false : true}
                       // onChange={(e) => setTestCases(e.target.value)}
-                      label="Test Case"
+                      label="Numero Test Case"
                       defaultValue={testCases}
                       helperText={testCases !== "" ? "" : "Test Case"}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
+                    />
+                  </Col>
+
+                  <Col className={classes.col}>
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome={
+                        modifica === false
+                          ? "Vedi test associati"
+                          : "Modifica test associati"
+                      }
+                      // onClick={handleOpenChiamato}
                     />
                   </Col>
                 </Row>
@@ -616,6 +670,109 @@ function TestSuiteTable() {
           </div>
         </Fade>
       </Modal>
+
+      {/* ------------------------MODALE TEST SUITE--------------------- */}
+      {/* <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamato}
+        onClose={handleCloseChiamato}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamato}>
+          <div>
+            <Paper className={classes.paperModale}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    {modifica === false ? "Visualizza " : "Modifica "} Chiamato{" "}
+                    <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      onChange={(e) => {
+                        arrAppoggio[1] = e.target.value;
+                        console.log(arrAppoggio);
+                        setChiamato(arrAppoggio);
+                        console.log(chiamato);
+                      }}
+                      label="Linea"
+                      value={chiamato[1]}
+                      defaultValue={chiamato[1]}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    >
+                      {appearLine.map((linea) => (
+                        <MenuItem key={linea.id} value={linea.id}>
+                          {linea.campiConcatenati}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      onChange={(e) => {
+                        chiamato[0] = e.target.value;
+                      }}
+                      label="Outboundproxy"
+                      value={chiamato[0]}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    >
+                      {appearOBP.map((obp) => (
+                        <MenuItem key={obp.id} value={obp.id}>
+                          {obp.campiConcatenati}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  {modifica === false ? (
+                    ""
+                  ) : (
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      onClick={handleCloseChiamato2}
+                    />
+                  )}
+
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamato}
+                    size="medium"
+                    nome={modifica === false ? "Indietro" : "Annulla"}
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal> */}
 
       {/* ------------------------MODALE DELETE--------------------- */}
 
