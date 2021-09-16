@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestGeneratoreDTO;
+import it.reply.genesis.model.OutboundProxyVO;
 
 public interface TestGeneratoreService {
 
@@ -16,5 +17,7 @@ public interface TestGeneratoreService {
   TestGeneratoreDTO updateTestGeneratore(TestGeneratoreDTO testDto) throws ApplicationException;
 
   void deleteTestGeneratore(long id) throws ApplicationException;
+
+  List<Long> findTestIdUsingProxy(OutboundProxyVO proxy) throws ApplicationException;
 
 }

@@ -24,6 +24,7 @@ import it.reply.genesis.api.test.payload.TestCaseLineaDTO;
 import it.reply.genesis.model.FileSystemScope;
 import it.reply.genesis.model.FileSystemVO;
 import it.reply.genesis.model.LineaVO;
+import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TemplateFileCategory;
 import it.reply.genesis.model.TemplateFileVO;
 import it.reply.genesis.model.TemplateVO;
@@ -263,6 +264,17 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     Set<Long> testCasePerChiamato = testCaseRepository.findIdByLineaChiamato(lineaVO);
     
     Set<Long> result = testCaseRepository.findIdByLineaChiamante(lineaVO);
+    result.addAll(testCasePerChiamato);
+    
+    return new ArrayList<>(result);
+  }
+
+  @Override
+  public List<Long> findTestCaseIdUsingProxy(OutboundProxyVO proxyVO) {
+    logger.debug("enter findTestIdCaseUsingProxy");
+    Set<Long> testCasePerChiamato = testCaseRepository.findIdByObpChiamato(proxyVO);
+    
+    Set<Long> result = testCaseRepository.findIdByObpChiamante(proxyVO);
     result.addAll(testCasePerChiamato);
     
     return new ArrayList<>(result);

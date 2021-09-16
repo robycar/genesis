@@ -28,6 +28,8 @@ import it.reply.genesis.model.TypeLineaVO;
 import it.reply.genesis.model.repository.OBPRepository;
 import it.reply.genesis.service.LineaService;
 import it.reply.genesis.service.OBPService;
+import it.reply.genesis.service.TestCaseService;
+import it.reply.genesis.service.TestGeneratoreService;
 
 @Service
 @Transactional(rollbackFor = ApplicationException.class)
@@ -38,6 +40,12 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
   
   @Autowired
   private LineaService lineaService;
+  
+  @Autowired
+  private TestCaseService testCaseService;
+  
+  @Autowired
+  private TestGeneratoreService testGeneratoreService;
   
 
   @Override
@@ -179,6 +187,22 @@ public class OBPServiceImpl extends AbstractService implements OBPService {
     logger.debug("enter removeProxy");
     OutboundProxyVO proxyVO = readProxyVO(id);
     checkGroup(proxyVO.getGruppo(), AppError.OBP_DELETE_WRONG_GROUP);
+    
+    List<Long> connections = testCaseService.findTestCaseIdUsingProxy(proxyVO);
+    if (!connections.isEmpty()) {
+      logger.warn("Impedisco l'eliminazione dell'outbound proxy {} utilizzato dai test case {}",
+          id, connections);
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.OBP_USED_IN_DELETE);
+    }
+    
+    connections = testGeneratoreService.findTestIdUsingProxy(proxyVO);
+    if (!connections.isEmpty()) {
+      logger.warn("Impedisco l'eliminazione dell'outbound proxy {} utilizzato dai test generatore {}",
+          id, connections);
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.OBP_USED_IN_DELETE);
+    }
+    
+    
     oBPRepository.delete(proxyVO);
     logger.debug("exit removeProxy");
   }

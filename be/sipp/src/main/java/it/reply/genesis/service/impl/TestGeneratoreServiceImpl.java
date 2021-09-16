@@ -18,6 +18,7 @@ import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.api.test.payload.TestGeneratoreDTO;
 import it.reply.genesis.model.FileSystemScope;
 import it.reply.genesis.model.FileSystemVO;
+import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TemplateVO;
 import it.reply.genesis.model.TestGeneratoreVO;
 import it.reply.genesis.model.repository.TestGeneratoreRepository;
@@ -152,6 +153,12 @@ public class TestGeneratoreServiceImpl extends AbstractService implements TestGe
     
     testGeneratoreRepository.delete(testVO);
     
+  }
+
+  @Override
+  public List<Long> findTestIdUsingProxy(OutboundProxyVO proxy) throws ApplicationException {
+    logger.debug("enter findTestIdUsingProxy");
+    return testGeneratoreRepository.findIdByProxyChiamanteOrChiamato(proxy);
   }
 
 }

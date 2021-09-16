@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import it.reply.genesis.model.GruppoVO;
 import it.reply.genesis.model.LineaVO;
+import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TestCaseVO;
 
 public interface TestCaseRepository extends JpaRepository<TestCaseVO, Long> {
@@ -21,4 +22,9 @@ public interface TestCaseRepository extends JpaRepository<TestCaseVO, Long> {
 
   @Query(value="SELECT DISTINCT t.id from TestCaseVO t JOIN t.lineeChiamanti lc WHERE lc.linea = :linea")
   Set<Long> findIdByLineaChiamante(LineaVO linea);
+
+  Set<Long> findIdByObpChiamato(OutboundProxyVO proxy);
+  
+  @Query(value="SELECT DISTINCT t.id from TestCaseVO t JOIN t.lineeChiamanti lc WHERE lc.outboundProxy = :proxy")
+  Set<Long> findIdByObpChiamante(OutboundProxyVO proxy);
 }
