@@ -241,11 +241,17 @@ function Obp() {
   /*-------------- MODALE ERROR ------------*/
 
   const [openWarning, setOpenWarning] = useState(false);
+  // const [openWarning1, setOpenWarning] = useState(false);
   const [warning, setWarning] = useState("");
+  // const [warning1, setWarning1] = useState("");
 
   const handleCloseWarning = () => {
     setOpenWarning(false);
   };
+
+  // const handleCloseWarning1 = () => {
+  //   setOpenWarning1(false);
+  // };
 
   /*------------------ MODALE DELETE ---------------------*/
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -283,9 +289,14 @@ function Obp() {
       .then((result) => {
         if (result.error !== null) {
           setOpenWarning(true);
-          if (result.error.code === "Internal Server Error") {
+          if (result.error === "Internal Server Error") {
             setWarning(
               "Impossibile eliminare l'OBP poichè associato ad uno o più Test Case"
+            );
+          }
+          if (result.error.code === "LINEA-0010") {
+            setWarning(
+              "Impossibile eliminare un outbound proxy che non appartiene al proprio gruppo"
             );
           } else {
             setWarning(
@@ -733,8 +744,8 @@ function Obp() {
                 <Divider className={classes.divider} />
 
                 <Typography className={classes.typography}>
-                  L'eliminazione del'OBP selezionato, impatterà sui Test
-                  Case ad esso collegati. Pertanto, non saranno più applicabili.
+                  L'eliminazione del'OBP selezionato, impatterà sui Test Case ad
+                  esso collegati. Pertanto, non saranno più applicabili.
                   <br />
                   Si vuole procedere?{" "}
                 </Typography>

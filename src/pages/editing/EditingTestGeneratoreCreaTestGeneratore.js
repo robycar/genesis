@@ -259,7 +259,7 @@ function getSteps() {
   return [
     "Inserire nome test e descrizione",
     "Impostare Chiamato",
-    "Impostare Chiamante/i",
+    "Impostare Chiamante",
     "Selezionare il Template",
   ];
 }
@@ -272,25 +272,15 @@ function EditingTestCreaTestGeneratore() {
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
   const [openDrawer, setOpenDrawer] = useState([]);
   const [lineaChiamato, setLineaChiamato] = useState(0);
+  const [lineaChiamante, setLineaChiamante] = useState(0);
   const [OBPChiamato, setOBPChiamato] = useState(0);
+  const [OBPChiamante, setOBPChiamante] = useState(0);
   const [appearLinea, setAppearLinea] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [appearTemplate, setAppearTemplate] = useState([]);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
-  const [qntChiamanti, setQntChiamanti] = useState([]);
-  const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
-  let arrAppoggio = qntChiamanti;
-  const [lineaChiamante1, setLineaChiamante1] = useState(false);
-  const [lineaChiamante2, setLineaChiamante2] = useState(false);
-  const [lineaChiamante3, setLineaChiamante3] = useState(false);
-  const [proxyChiamante1, setProxyChiamante1] = useState(false);
-  const [proxyChiamante2, setProxyChiamante2] = useState(false);
-  const [proxyChiamante3, setProxyChiamante3] = useState(false);
   const [template, setTemplate] = useState(0);
-  const [lineaChiamante, setLineaChiamante] = useState();
-  const [ip, setIp] = useState();
-  const [nextDisabled, setNextDisabled] = useState(true);
 
   /*------- get linea -----------*/
 
@@ -309,7 +299,7 @@ function EditingTestCreaTestGeneratore() {
       redirect: "follow",
     };
 
-    fetch(`/api/linea`, requestOptions)
+    fetch(`/api/lineageneratore`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setAppearLinea(result.list);
@@ -368,7 +358,6 @@ function EditingTestCreaTestGeneratore() {
   };
 
   const Invia = () => {
-    const result = qntChiamanti.map(({ index, ...rest }) => ({ ...rest }));
 
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -379,17 +368,10 @@ function EditingTestCreaTestGeneratore() {
       nome: nome,
       template: template,
       descrizione: descrizione === "" ? " " : descrizione,
-      lineaChiamante: lineaChiamante.id,
-      lineaChiamato: {},
-      proxyChiamante: {},
-      proxyChiamato: {},
-
-      // expectedDuration: 57,
-      // chiamato: {
-      //   linea: lineaChiamato,
-      //   proxy: OBPChiamato
-      // },
-      // chiamanti: result
+      lineaChiamante: lineaChiamante,
+      lineaChiamato: lineaChiamato,
+      proxyChiamante: OBPChiamante,
+      proxyChiamato: OBPChiamato,
     });
 
     var requestOptions = {
@@ -420,43 +402,6 @@ function EditingTestCreaTestGeneratore() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const addArr = () => {
-    arrAppoggio.push({ linea: 0, proxy: 0, index: arrAppoggio.length });
-    setQntChiamanti(arrAppoggio);
-    setNChiamanti(qntChiamanti.length);
-
-    // const bearer = `Bearer ${localStorage.getItem("token")}`;
-
-    // const checkRichiesta = (result) => {
-    //   console.log(result);
-    //   setTypeLineaId(result.id);
-    };
-
-    const removeArr = () => {
-      arrAppoggio.pop();
-      setQntChiamanti(arrAppoggio);
-      setNChiamanti(qntChiamanti.length);
-      console.log(qntChiamanti);
-
-      switch (qntChiamanti.length) {
-        case 0:
-          setLineaChiamante1(false);
-          setProxyChiamante1(false);
-          break;
-        case 1:
-          setLineaChiamante2(false);
-          setProxyChiamante2(false);
-          break;
-        case 2:
-          setLineaChiamante3(false);
-          setProxyChiamante3(false);
-          break;
-
-        default:
-          break;
-      }
-    };
-
     const handleChangeName = (e) => {
       setNome(e.target.value);
     };
@@ -469,12 +414,18 @@ function EditingTestCreaTestGeneratore() {
     const handleChangeOBPChiamato = (e) => {
       setOBPChiamato(e.target.value);
     };
+    const handleChangeLineaChiamante = (e) => {
+      setLineaChiamante(e.target.value);
+    };
+    const handleChangeOBPChiamante = (e) => {
+      setOBPChiamante(e.target.value);
+    };
 
     useEffect(() => {
       getLineaGeneratore();
       getTemplate();
       getOBP();
-    }, [qntChiamanti]);
+    }, []);
 
     return (
       <div className={classes.root}>
@@ -666,8 +617,8 @@ function EditingTestCreaTestGeneratore() {
                           >
                             {appearLinea.map((linea) => {
                               return (
-                                <MenuItem key={linea.id} value={linea.id}>
-                                  {linea.campiConcatenati}
+                                <MenuItem disabled={linea.id === lineaChiamante} key={linea.id} value={linea.id}>
+                                  {linea.id}
                                 </MenuItem>
                               );
                             })}
@@ -701,10 +652,10 @@ function EditingTestCreaTestGeneratore() {
                             onChange={(e) => handleChangeOBPChiamato(e)}
                             disabled={lineaChiamato === 0}
                           >
-                            {appearOBP.map((OBP) => {
+                            {appearOBP.map((proxy) => {
                               return (
-                                <MenuItem key={OBP.id} value={OBP.id}>
-                                  {OBP.campiConcatenati}
+                                <MenuItem disabled={proxy.id === OBPChiamante} key={proxy.id} value={proxy.id}>
+                                  {proxy.campiConcatenati}
                                 </MenuItem>
                               );
                             })}
@@ -729,176 +680,80 @@ function EditingTestCreaTestGeneratore() {
               style={{ display: activeStep === 2 ? "" : "none" }}
             >
               <div className={classes.bodyContainer}>
-                <div className={classes.bodyContainer}>
-                  {qntChiamanti.map((index) => {
-                    return (
-                      <div>
-                        <>
-                          <Typography
-                            className={classes.intestazione}
-                            variant="h6"
+                <>
+                  <Typography className={classes.intestazione} variant="h6">
+                    Chiamante
+                  </Typography>
+                  <Row>
+                    <Col className={classes.col}>
+                      <Form.Group controlId="form.Numero">
+                        <Form.Label>Linea</Form.Label>
+                        <FormControl
+                          variant="outlined"
+                          className={classes.formControl}
+                        >
+                          <Select
+                            id="selectLinea"
+                            value={lineaChiamante}
+                            onChange={(e) => handleChangeLineaChiamante(e)}
                           >
-                            Chiamante <b>{index.index + 1}</b>
-                          </Typography>
-                          <Row>
-                            <Col className={classes.col}>
-                              <Form.Group controlId="form.Numero">
-                                <Form.Label>Linea</Form.Label>
-                                <FormControl
-                                  variant="outlined"
-                                  className={classes.formControl}
-                                >
-                                  <Select
-                                    id="selectLinea"
-                                    value={qntChiamanti.index}
-                                    defaultValue={index.linea}
-                                    onChange={(e) => {
-                                      arrAppoggio[index.index].linea =
-                                        e.target.value;
-                                      setQntChiamanti(arrAppoggio);
-                                      console.log(qntChiamanti);
-                                      index.index === 0
-                                        ? setLineaChiamante1(true)
-                                        : index.index === 1
-                                        ? setLineaChiamante2(true)
-                                        : index.index === 2
-                                        ? setLineaChiamante3(true)
-                                        : setLineaChiamante1(false);
-                                    }}
-                                  >
-                                    {appearLinea.map((linea) => {
-                                      return (
-                                        <MenuItem
-                                          key={linea.id}
-                                          value={linea.id}
-                                        >
-                                          {linea.campiConcatenati}
-                                        </MenuItem>
-                                      );
-                                    })}
-                                  </Select>
-                                  <Alert
-                                    severity="error"
-                                    id="alertLinea"
-                                    style={{ display: "none" }}
-                                  >
-                                    Selezionare la Linea
-                                  </Alert>
-                                </FormControl>
-                              </Form.Group>
-                            </Col>
-                            <Col className={classes.col}>
-                              <Form.Group>
-                                <Form.Label
-                                  style={{
-                                    color:
-                                      index.index === 0
-                                        ? lineaChiamante1 === false
-                                          ? "grey"
-                                          : "black"
-                                        : index.index === 1
-                                        ? lineaChiamante2 === false
-                                          ? "grey"
-                                          : "black"
-                                        : index.index === 2
-                                        ? lineaChiamante3 === false
-                                          ? "grey"
-                                          : "black"
-                                        : false,
-                                  }}
-                                >
-                                  OBP
-                                </Form.Label>
-                                <FormControl
-                                  variant="outlined"
-                                  className={classes.formControl}
-                                >
-                                  <Select
-                                    id="selectOBP"
-                                    value={qntChiamanti.index}
-                                    defaultValue={index.proxy}
-                                    disabled={
-                                      index.index === 0
-                                        ? lineaChiamante1 === false
-                                        : index.index === 1
-                                        ? lineaChiamante2 === false
-                                        : index.index === 2
-                                        ? lineaChiamante3 === false
-                                        : false
-                                    }
-                                    onChange={(e) => {
-                                      arrAppoggio[index.index].proxy =
-                                        e.target.value;
-                                      index.index === 0
-                                        ? setProxyChiamante1(true)
-                                        : index.index === 1
-                                        ? setProxyChiamante2(true)
-                                        : index.index === 2
-                                        ? setProxyChiamante3(true)
-                                        : setProxyChiamante1(false);
-                                      setQntChiamanti(arrAppoggio);
-                                    }}
-                                  >
-                                    {appearOBP.map((OBP) => {
-                                      return (
-                                        <MenuItem key={OBP.id} value={OBP.id}>
-                                          {OBP.campiConcatenati}
-                                        </MenuItem>
-                                      );
-                                    })}
-                                  </Select>
-                                  <Alert
-                                    severity="error"
-                                    id="alertOBP"
-                                    style={{ display: "none" }}
-                                  >
-                                    Selezionare l'OBP
-                                  </Alert>
-                                </FormControl>
-                              </Form.Group>
-                            </Col>
-                          </Row>
-                        </>
-                      </div>
-                    );
-                  })}
-                </div>
-                Quanti chiamanti vuoi inserire &nbsp;&nbsp;&nbsp;
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  startIcon={<RemoveIcon />}
-                  onClick={removeArr}
-                  disabled={nChiamanti < 1 ? true : false}
-                />
-                &nbsp;&nbsp;&nbsp;
-                <TextField
-                  type="number"
-                  style={{ width: "10px" }}
-                  value={nChiamanti}
-                />
-                &nbsp;&nbsp;&nbsp;
-                <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<AddIcon />}
-                  onClick={addArr}
-                  disabled={
-                    nChiamanti < 3 && nChiamanti === 0
-                      ? false
-                      : nChiamanti === 1
-                      ? proxyChiamante1 === false
-                        ? true
-                        : false
-                      : nChiamanti === 2
-                      ? proxyChiamante2 === false
-                        ? true
-                        : false
-                      : false
-                      ? false
-                      : true
-                  }
-                />
+                            {appearLinea.map((linea) => {
+                              return (
+                                <MenuItem disabled={linea.id === lineaChiamato} key={linea.id} value={linea.id}>
+                                  {linea.id}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                          <Alert
+                            severity="error"
+                            id="alertLinea"
+                            style={{ display: "none" }}
+                          >
+                            Selezionare la Linea
+                          </Alert>
+                        </FormControl>
+                      </Form.Group>
+                    </Col>
+                    <Col className={classes.col}>
+                      <Form.Group>
+                        <Form.Label
+                          style={{
+                            color: lineaChiamante === 0 ? "grey" : "black",
+                          }}
+                        >
+                          OBP
+                        </Form.Label>
+                        <FormControl
+                          variant="outlined"
+                          className={classes.formControl}
+                        >
+                          <Select
+                            id="selectOBP"
+                            value={OBPChiamante}
+                            onChange={(e) => handleChangeOBPChiamante(e)}
+                            disabled={lineaChiamante === 0}
+                          >
+                            {appearOBP.map((proxy) => {
+                              return (
+                                <MenuItem disabled={proxy.id === OBPChiamato} key={proxy.id} value={proxy.id}>
+                                  {proxy.campiConcatenati}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                          <Alert
+                            severity="error"
+                            id="alertOBP"
+                            style={{ display: "none" }}
+                          >
+                            Selezionare l'OBP
+                          </Alert>
+                        </FormControl>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </>
               </div>
             </div>
 
@@ -985,22 +840,7 @@ function EditingTestCreaTestGeneratore() {
                             ? true
                             : activeStep === 1 && OBPChiamato === 0
                             ? true
-                            : activeStep === 2 &&
-                              (nChiamanti === 0
-                                ? false
-                                : nChiamanti === 1
-                                ? proxyChiamante1 === false
-                                  ? true
-                                  : false
-                                : nChiamanti === 2
-                                ? proxyChiamante2 === false
-                                  ? true
-                                  : false
-                                : nChiamanti === 3
-                                ? proxyChiamante3 === false
-                                  ? true
-                                  : false
-                                : false)
+                            : activeStep === 2 && OBPChiamante === 0
                             ? true
                             : activeStep === 3 && template === 0
                         }

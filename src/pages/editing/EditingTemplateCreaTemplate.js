@@ -12,6 +12,7 @@ import Container from "@material-ui/core/Container";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
 import { Typography, Fade } from "@material-ui/core";
+import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import {
   mainListItems,
   secondaryListItems,
@@ -255,11 +256,33 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     width: "100%",
   },
-
-  // containerFileUpload: {
-
-    
-  // },
+  intestazioneModaleError: {
+    color: "#ef5350",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  iconModaleError: {
+    // width: "15%",
+    // height: "15%",
+    marginRight: "4%",
+    transform: "scale(1.9)",
+    color: "#ef5350",
+  },
+  divIntestazione: {
+    display: "flex",
+    alignItems: "center",
+    padding: "2%",
+    marginBottom: "1%",
+  },
+  paperModaleDelete: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: "5%",
+    height: "fit-content",
+    width: 500,
+    position: "relative",
+  },
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
@@ -411,7 +434,15 @@ function EditingTemplateCreaTemplate() {
     chiamante2,
   ]);
 
-  // console.log(chiamato, "sono chiamato");
+  /*----------- MODALE ERROR LOADING FILE ------------*/
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
+
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
+
+  /*-------------- FUNZIONE ADD TEMPLATE --------------*/
 
   const Invia = () => {
     var myHeaders = new Headers();
@@ -430,7 +461,6 @@ function EditingTemplateCreaTemplate() {
     }
     if (qntChiamanti[0]?.linea) {
       formdata.append("chiamanti", qntChiamanti[0].linea);
-      
     }
     if (qntChiamanti[1]?.linea) {
       formdata.append("chiamanti", qntChiamanti[1].linea);
@@ -454,10 +484,27 @@ function EditingTemplateCreaTemplate() {
 
     fetch(`/api/template`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => {
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "TEST-0018") {
+            setWarning(
+              "Impossibile completare l'operazione. Si sta tentando di utilizzare il file più di una volta tra chiamato e chiamanti"
+            );
+          } else {
+            setWarning(
+              "Codice errore :" +
+                result.error.code +
+                "Descrizione " +
+                result.error.description
+            );
+          }
+        } else {
+          setOpenWarning(false);
+        }
+      })
       .catch((error) => console.log("error", error));
-
-    // window.location = "/editing/template";
+    handleCloseWarning();
   };
 
   // if (
@@ -547,7 +594,7 @@ function EditingTemplateCreaTemplate() {
     setOpenRemove(false);
   };
 
-  //--------------------MODAALE 2----------------------------------
+  //--------------------MODALE 2----------------------------------
 
   const [open2, setOpen2] = React.useState(false);
   const [type, setType] = React.useState("");
@@ -618,7 +665,6 @@ function EditingTemplateCreaTemplate() {
         }}
         open={openDrawer}
       >
-        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -646,7 +692,7 @@ function EditingTemplateCreaTemplate() {
           >
             LINEE
           </Button>
-          
+
           {/* </NavLink> */}
 
           {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -1050,6 +1096,56 @@ function EditingTemplateCreaTemplate() {
           </div> */}
         </Paper>
       </main>
+
+      {/*------------------MODALE ERRORE--------------- */}
+
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 }

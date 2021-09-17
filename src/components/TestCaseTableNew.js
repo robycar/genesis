@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import { IconButton, Paper, Typography } from "@material-ui/core";
+import { IconButton, Paper, Typography, Link } from "@material-ui/core";
 import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
@@ -37,16 +37,22 @@ function TestCaseTable() {
   const [version, setVersion] = useState();
   const [expectedDuration, setExpectedDuration] = useState();
   const [durata, setDurata] = useState();
+  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState();
   const [template, setTemplate] = useState(0);
+  const [testSuite, setTestSuite] = useState();
+  const [opzioni, setOpzioni] = useState();
+  const [lastResult, setLastResult] = useState();
+  const [status, setStatus] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [modifiedBy, setModifiedBy] = useState("");
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
   const [chiamato, setChiamato] = useState({});
-  let arrAppoggioChiamato = { linea: 0, proxy: 0};
+  let arrAppoggioChiamato = { linea: 0, proxy: 0 };
   const [chiamanti, setChiamanti] = useState([]);
   let arrAppoggioChiamanti = {};
-  const [prova, setProva]=useState([]);
+  const [prova, setProva] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [appearFile, setAppearFile] = useState([]);
@@ -74,7 +80,6 @@ function TestCaseTable() {
       .catch((error) => console.log("error", error));
   };
 
-
   //--------------TEST CASE BY ID-----------------------
   const getTestCaseById = (id) => {
     var myHeaders = new Headers();
@@ -93,10 +98,10 @@ function TestCaseTable() {
       .then((response) => response.json())
       .then((result) => {
         setTestCase(result.testCase);
-        var p1 =  result.testCase
-        var p2 = p1.chiamanti
-        console.log(p2)
-        setChiamanti(p2)
+        var p1 = result.testCase;
+        var p2 = p1.chiamanti;
+        console.log(p2);
+        setChiamanti(p2);
         setOpen(true);
       })
       .catch((error) => console.log("error", error));
@@ -143,77 +148,73 @@ function TestCaseTable() {
   };
 
   //------------UPDATE CHIAMATO-----------------
-  const updateChiamato = () =>{
-    console.log("prova",chiamato)
+  const updateChiamato = () => {
+    console.log("prova", chiamato);
     var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      var raw = JSON.stringify({
-        id: id,
-        version: version,
-        chiamato:{
-          linea:{
-            id:chiamato.linea
-          },
-          proxy:{
-            id:chiamato.proxy
-          }
-        }
-        
-      });
+    var raw = JSON.stringify({
+      id: id,
+      version: version,
+      chiamato: {
+        linea: {
+          id: chiamato.linea,
+        },
+        proxy: {
+          id: chiamato.proxy,
+        },
+      },
+    });
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
-      fetch(`/api/testcase`, requestOptions)
-        .then((response) => response.json())
-        .then((response) => {
-          getAllTestCase();
-          handleCloseChiamato();
-        })
-        .catch((error) => console.log("error", error));
-    
-  }
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((response) => {
+        getAllTestCase();
+        handleCloseChiamato();
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   //------------UPDATE CHIAMANTE-----------------
-  const updateChiamante = () =>{
-    console.log("prova",chiamanti)
+  const updateChiamante = () => {
+    console.log("prova", chiamanti);
     var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      var raw = JSON.stringify({
-        id: id,
-        version: version,
-        chiamante: chiamanti
-        
-      });
+    var raw = JSON.stringify({
+      id: id,
+      version: version,
+      chiamante: chiamanti,
+    });
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
-      fetch(`/api/testcase`, requestOptions)
-        .then((response) => response.json())
-        .then((response) => {
-          getAllTestCase();
-          handleCloseChiamanti();
-        })
-        .catch((error) => console.log("error", error));
-    
-  }
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((response) => {
+        getAllTestCase();
+        handleCloseChiamanti();
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   useEffect(() => {
     getAllTestCase();
@@ -333,15 +334,15 @@ function TestCaseTable() {
       .then((result) => {
         if (result.error !== null) {
           setOpenWarning(true);
-          if (result.error.code === "TEST-0009") {
+          if (result.error === "TEST-0009") {
             setWarning(
               "Non è possibile eliminare un test case che non appartiene al proprio gruppo"
             );
-            if (result.error.code === "TEST-0009") {
-              setWarning(
-                "Non è possibile eliminare un test case che è legato a una o più Test Suite"
-              );
-            }
+          }
+          if (result.error === "Internal Server Error") {
+            setWarning(
+              "Non è possibile eliminare un test case che è legato a una o più Test Suite"
+            );
           } else {
             setWarning(
               "Codice errore:" +
@@ -375,9 +376,9 @@ function TestCaseTable() {
   const handleOpenChiamato = () => {
     var appoggioChiamato;
     appoggioChiamato = Object.values(testCase.chiamato);
-    arrAppoggioChiamato.linea= appoggioChiamato[1].id;
-    arrAppoggioChiamato.proxy= appoggioChiamato[0].id;
-    setChiamato(arrAppoggioChiamato)
+    arrAppoggioChiamato.linea = appoggioChiamato[1].id;
+    arrAppoggioChiamato.proxy = appoggioChiamato[0].id;
+    setChiamato(arrAppoggioChiamato);
     console.log(chiamato);
     setOpenChiamato(true);
   };
@@ -390,25 +391,24 @@ function TestCaseTable() {
   const handleOpenChiamanti = () => {
     var appoggioChiamanti;
     appoggioChiamanti = testCase.chiamanti;
-    setProva([])
+    setProva([]);
     for (let i = 0; i < appoggioChiamanti.length; i++) {
-      prova.push(i)
-      arrAppoggioChiamanti[i] = {proxy:{id:0}, linea:{id:0}};
+      prova.push(i);
+      arrAppoggioChiamanti[i] = { proxy: { id: 0 }, linea: { id: 0 } };
     }
-    for (let i = 0; i < appoggioChiamanti.length; i++) {      
+    for (let i = 0; i < appoggioChiamanti.length; i++) {
       arrAppoggioChiamanti[i].proxy.id = appoggioChiamanti[i].proxy.id;
       arrAppoggioChiamanti[i].linea.id = appoggioChiamanti[i].linea.id;
       arrAppoggioChiamanti[i].indice = i;
     }
     setChiamanti(arrAppoggioChiamanti);
-    console.log("ciao", arrAppoggioChiamanti)
+    console.log("ciao", arrAppoggioChiamanti);
     setOpenChiamanti(true);
   };
 
   const handleCloseChiamanti = () => {
     setOpenChiamanti(false);
   };
-
 
   //-------AGGIORNA TEST CASE----------------------------
 
@@ -557,8 +557,7 @@ function TestCaseTable() {
       display: "flex",
       alignItems: "center",
       padding: "2%",
-      marginBottom: "1%"
-
+      marginBottom: "1%",
     },
     intestazioneModaleError: {
       color: "#ef5350",
@@ -703,6 +702,34 @@ function TestCaseTable() {
                     />
                   </Col>
                 </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={status !== "" ? false : true}
+                      onChange={(e) => setStatus(e.target.value)}
+                      label="Status"
+                      defaultValue={status}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={template !== "" ? false : true}
+                      onChange={(e) => setTemplate(e.target.value)}
+                      label="Template"
+                      defaultValue={template}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
                 <Row>
                   <Col className={classes.col}>
                     <ButtonClickedGreen
@@ -731,20 +758,10 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      label="Template"
-                      value={template}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      label="Creato Da"
-                      value={createdBy}
+                      error={opzioni !== "" ? false : true}
+                      onChange={(e) => setOpzioni(e.target.value)}
+                      label="Opzioni"
+                      defaultValue={opzioni}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -753,10 +770,10 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      label="Data di creazione"
-                      value={creationDate
-                        .replace(".000+00:00", "")
-                        .replace("T", " | ")}
+                      error={testSuite !== "" ? false : true}
+                      onChange={(e) => setTestSuite(e.target.value)}
+                      label="Test Suite"
+                      defaultValue={testSuite}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -768,6 +785,85 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
+                      error={startDate !== "" ? false : true}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      label="Start Date"
+                      defaultValue={startDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={endDate !== "" ? false : true}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      label="End Date"
+                      defaultValue={endDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      error={lastResult !== "" ? false : true}
+                      onChange={(e) => setLastResult(e.target.value)}
+                      label="Last Result"
+                      value={lastResult}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      //error={report !== "" ? false : true}
+                      //onChange={(e) => setStartDate(e.target.value)}
+                      label="Report"
+                      //defaultValue={startDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      onChange={(e) => setCreatedBy(e.target.value)}
+                      label="Creato Da"
+                      value={createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data di creazione"
+                      onChange={(e) => setCreationDate(e.target.value)}
+                      value={creationDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      onChange={(e) => setModifiedBy(e.target.value)}
                       label="Modificato da"
                       value={modifiedBy}
                       InputProps={{
@@ -779,13 +875,31 @@ function TestCaseTable() {
                     <TextField
                       className={classes.textField}
                       label="Data di Modifica"
-                      value={modifiedDate
-                        .replace(".000+00:00", "")
-                        .replace("T", " | ")}
+                      onChange={(e) => setModifiedDate(e.target.value)}
+                      value={modifiedDate}
                       InputProps={{
                         readOnly: true,
                       }}
                     />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      //error={endDate !== "" ? false : true}
+                      //onChange={(e) => setEndDate(e.target.value)}
+                      label="XML"
+                      //defaultValue={endDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col} style={{ marginTop: "4%" }}>
+                    <Link href="#" variant="body2">
+                      Download XML
+                    </Link>
                   </Col>
                 </Row>
               </Form>
@@ -852,14 +966,14 @@ function TestCaseTable() {
                       select
                       onChange={(e) => {
                         arrAppoggioChiamato.linea = e.target.value;
-                        chiamato.linea= arrAppoggioChiamato.linea
+                        chiamato.linea = arrAppoggioChiamato.linea;
                       }}
                       label="Linea"
                       value={chiamato[1]}
-                      defaultValue={()=>{
-                        var p1 = testCase.chiamato
-                        var p2 = p1.linea 
-                        return p2.id
+                      defaultValue={() => {
+                        var p1 = testCase.chiamato;
+                        var p2 = p1.linea;
+                        return p2.id;
                       }}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
@@ -878,14 +992,14 @@ function TestCaseTable() {
                       select
                       onChange={(e) => {
                         arrAppoggioChiamato.proxy = e.target.value;
-                        chiamato.proxy= arrAppoggioChiamato.proxy
+                        chiamato.proxy = arrAppoggioChiamato.proxy;
                       }}
                       label="Outboundproxy"
                       value={chiamato[0]}
-                      defaultValue={()=>{
-                        var p1 = testCase.chiamato
-                        var p2 = p1.proxy 
-                        return p2.id
+                      defaultValue={() => {
+                        var p1 = testCase.chiamato;
+                        var p2 = p1.proxy;
+                        return p2.id;
                       }}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
@@ -966,18 +1080,18 @@ function TestCaseTable() {
                           className={classes.textField}
                           select
                           label="Linea "
-                          value={()=>{
-                            var p1 = chiamanti.linea
-                            return p1.id
+                          value={() => {
+                            var p1 = chiamanti.linea;
+                            return p1.id;
                           }}
-                          defaultValue={()=>{
-                            var p1 = testCase.chiamanti
-                            var p2 = p1[chiamante].linea 
-                            return p2.id
-                          }}                          
+                          defaultValue={() => {
+                            var p1 = testCase.chiamanti;
+                            var p2 = p1[chiamante].linea;
+                            return p2.id;
+                          }}
                           onChange={(e) => {
                             arrAppoggioChiamanti[0].linea.id = e.target.value;
-                            setChiamanti(arrAppoggioChiamanti)
+                            setChiamanti(arrAppoggioChiamanti);
                           }}
                           InputProps={{
                             readOnly: modifica === false ? true : false,
@@ -995,18 +1109,19 @@ function TestCaseTable() {
                           className={classes.textField}
                           select
                           label="Outboundproxy"
-                          value={()=>{
-                            var p1 = chiamanti.proxy
-                            return p1.id
+                          value={() => {
+                            var p1 = chiamanti.proxy;
+                            return p1.id;
                           }}
-                          defaultValue={()=>{
-                            var p1 = testCase.chiamanti
-                            var p2 = p1[chiamante].proxy 
-                            return p2.id
+                          defaultValue={() => {
+                            var p1 = testCase.chiamanti;
+                            var p2 = p1[chiamante].proxy;
+                            return p2.id;
                           }}
                           onChange={(e) => {
-                            arrAppoggioChiamanti[chiamante].proxy.id = e.target.value;
-                            setChiamanti(arrAppoggioChiamanti)
+                            arrAppoggioChiamanti[chiamante].proxy.id =
+                              e.target.value;
+                            setChiamanti(arrAppoggioChiamanti);
                           }}
                           InputProps={{
                             readOnly: modifica === false ? true : false,
@@ -1131,7 +1246,13 @@ function TestCaseTable() {
                 </Typography>
 
                 <Divider className={classes.divider} />
-                <div style={{ display: "flex", justifyContent: "center", marginTop: "3%" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
                   <ButtonNotClickedGreen
                     onClick={handleCloseWarning}
                     nome="OK"

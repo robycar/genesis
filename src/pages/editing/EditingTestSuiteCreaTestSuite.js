@@ -21,7 +21,7 @@ import {
 import TestSuiteSelectNew from "../../components/TestSuiteSelectNew";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import { MenuItem, Paper } from "@material-ui/core";
+import { MenuItem, Paper, Link } from "@material-ui/core";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -318,6 +318,10 @@ function EditingTestCreaTestSuite() {
   const [version, setVersion] = useState();
   const [expectedDuration, setExpectedDuration] = useState();
   const [durata, setDurata] = useState();
+  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState();
+  const [status, setStatus] = useState();
+  const [lastResult, setLastResult] = useState();
   const [template, setTemplate] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [modifiedBy, setModifiedBy] = useState("");
@@ -533,13 +537,14 @@ function EditingTestCreaTestSuite() {
   const [openChiamanti, setOpenChiamanti] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
   const [openDelete, setOpenDelete] = React.useState(false);
+  const [visualizza, setVisualizza] = useState(false);
 
   const openModifica = (rowData) => {
     setModifica(true);
     handleOpen(rowData);
   };
   const openVisualizza = (rowData) => {
-    setModifica(false);
+    setVisualizza(true);
     handleOpen(rowData);
   };
 
@@ -946,7 +951,6 @@ function EditingTestCreaTestSuite() {
                       options={{
                         selection: true,
                         sorting: true,
-                        exportButton: true,
                         actionsColumnIndex: -1,
                         search: true,
                         searchFieldVariant: "outlined",
@@ -961,25 +965,6 @@ function EditingTestCreaTestSuite() {
                       }}
                       actions={[
                         {
-                          icon: () => (
-                            <div className={classes.buttonRight}>
-                              <Button
-                                className="button-green"
-                                component={NavLink}
-                                activeClassName="button-green-active"
-                                exact
-                                to="/editing/testcreatestcase"
-                                startIcon={<AddIcon />}
-                              >
-                                TEST CASE
-                              </Button>
-                            </div>
-                          ),
-                          tooltip: "Load Test Case",
-                          //onClick: () => funzioneFor(),
-                          isFreeAction: true,
-                        },
-                        {
                           icon: (dat) => (
                             <a>
                               <VisibilityIcon />
@@ -988,20 +973,6 @@ function EditingTestCreaTestSuite() {
                           tooltip: "Visualizza tutti i dati",
                           position: "row",
                           onClick: (event, rowData) => openVisualizza(rowData),
-                        },
-                        {
-                          icon: () => <EditIcon />,
-                          tooltip: "Modifica",
-                          onClick: (event, rowData) => openModifica(rowData),
-                          position: "row",
-                        },
-                        {
-                          icon: () => <DeleteIcon />,
-                          tooltip: "Remove all selected test",
-                          onClick: (event, rowData) => {
-                            handleOpenDelete(rowData);
-                            setIdElemento(rowData.id);
-                          },
                         },
                       ]}
                       localization={{
@@ -1084,6 +1055,34 @@ function EditingTestCreaTestSuite() {
                               </Row>
                               <Row>
                                 <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    error={status !== "" ? false : true}
+                                    onChange={(e) => setStatus(e.target.value)}
+                                    label="Status"
+                                    defaultValue={status}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    error={template !== "" ? false : true}
+                                    onChange={(e) =>
+                                      setTemplate(e.target.value)
+                                    }
+                                    label="Template"
+                                    defaultValue={template}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className={classes.col}>
                                   <ButtonClickedGreen
                                     size="medium"
                                     nome={
@@ -1106,24 +1105,17 @@ function EditingTestCreaTestSuite() {
                                   />
                                 </Col>
                               </Row>
+
                               <Row>
                                 <Col className={classes.col}>
                                   <TextField
                                     className={classes.textField}
-                                    label="Template"
-                                    value={console.log(template)}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    label="Creato Da"
-                                    value={createdBy}
+                                    error={startDate !== "" ? false : true}
+                                    onChange={(e) =>
+                                      setStartDate(e.target.value)
+                                    }
+                                    label="Start Date"
+                                    defaultValue={startDate}
                                     InputProps={{
                                       readOnly: true,
                                     }}
@@ -1132,10 +1124,10 @@ function EditingTestCreaTestSuite() {
                                 <Col className={classes.col}>
                                   <TextField
                                     className={classes.textField}
-                                    label="Data di creazione"
-                                    value={creationDate
-                                      .replace(".000+00:00", "")
-                                      .replace("T", " | ")}
+                                    error={endDate !== "" ? false : true}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                    label="End Date"
+                                    defaultValue={endDate}
                                     InputProps={{
                                       readOnly: true,
                                     }}
@@ -1147,6 +1139,66 @@ function EditingTestCreaTestSuite() {
                                 <Col className={classes.col}>
                                   <TextField
                                     className={classes.textField}
+                                    error={lastResult !== "" ? false : true}
+                                    onChange={(e) =>
+                                      setLastResult(e.target.value)
+                                    }
+                                    label="Last Result"
+                                    value={lastResult}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    //error={report !== "" ? false : true}
+                                    //onChange={(e) => setStartDate(e.target.value)}
+                                    label="Report"
+                                    //defaultValue={startDate}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    onChange={(e) =>
+                                      setCreatedBy(e.target.value)
+                                    }
+                                    label="Creato Da"
+                                    value={createdBy}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    label="Data di creazione"
+                                    onChange={(e) =>
+                                      setCreationDate(e.target.value)
+                                    }
+                                    value={creationDate}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    onChange={(e) =>
+                                      setModifiedBy(e.target.value)
+                                    }
                                     label="Modificato da"
                                     value={modifiedBy}
                                     InputProps={{
@@ -1158,13 +1210,33 @@ function EditingTestCreaTestSuite() {
                                   <TextField
                                     className={classes.textField}
                                     label="Data di Modifica"
-                                    value={modifiedDate
-                                      .replace(".000+00:00", "")
-                                      .replace("T", " | ")}
+                                    onChange={(e) =>
+                                      setModifiedDate(e.target.value)
+                                    }
+                                    value={modifiedDate}
                                     InputProps={{
                                       readOnly: true,
                                     }}
                                   />
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className={classes.col}>
+                                  <TextField
+                                    className={classes.textField}
+                                    //error={endDate !== "" ? false : true}
+                                    //onChange={(e) => setEndDate(e.target.value)}
+                                    label="XML"
+                                    //defaultValue={endDate}
+                                    InputProps={{
+                                      readOnly: true,
+                                    }}
+                                  />
+                                </Col>
+                                <Col className={classes.col} style={{marginTop: "4%"}}>
+                                  <Link href="#" variant="body2">
+                                    Download XML
+                                  </Link>
                                 </Col>
                               </Row>
                             </Form>

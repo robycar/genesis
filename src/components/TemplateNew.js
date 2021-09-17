@@ -94,7 +94,7 @@ function Template() {
       title: "Versione",
       field: "version",
       editable: "never",
-      hidden: true,
+      //hidden: true,
     },
     {
       title: "Data modifica",

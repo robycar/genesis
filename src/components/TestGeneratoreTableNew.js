@@ -27,28 +27,23 @@ import Button from "@material-ui/core/Button";
 function TestGeneratoreTableNew() {
   const [file, setFile] = useState([]);
   const [data, setData] = useState([]);
-  const [testGen, setTestGen] = useState([]);
   const [id, setId] = useState();
   const [nomeTitolo, setNomeTitolo] = useState("");
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
-  const [lastResult, setLastResult] = useState("");
   const [version, setVersion] = useState();
-  const [pathCsv, setPathCsv] = useState([]);
   const [template, setTemplate] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [modifiedBy, setModifiedBy] = useState("");
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
-  const [lastStartDate, setLastStartDate] = useState("");
-  const [lastEndDate, setLastEndDate] = useState("");
-  const [report, setReport] = useState("");
 
-  const [chiamato, setChiamato] = useState([]);
-  const [chiamanti, setChiamanti] = useState([]);
+  const [lineaChiamato, setLineaChiamato] = useState(0);
+  const [lineaChiamante, setLineaChiamante] = useState(0);
+  const [OBPChiamato, setOBPChiamato] = useState(0);
+  const [OBPChiamante, setOBPChiamante] = useState(0);
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
-  const [appearFile, setAppearFile] = useState([]);
 
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -75,28 +70,6 @@ function TestGeneratoreTableNew() {
       .catch((error) => console.log("error", error));
   };
 
-  //--------------TEST CASE BY ID-----------------------
-  const getTestGenById = (id) => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testgen/` + id, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setTestGen(result.testGen);
-        setOpen(true);
-      })
-      .catch((error) => console.log("error", error));
-  };
   //--------------GET LINE------------------------------
   const getAppearLine = () => {
     var myHeaders = new Headers();
@@ -110,7 +83,7 @@ function TestGeneratoreTableNew() {
       redirect: "follow",
     };
 
-    fetch(`/api/typeLinea`, requestOptions)
+    fetch(`/api/lineageneratore`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setAppearLine(result.list);
@@ -138,32 +111,10 @@ function TestGeneratoreTableNew() {
       .catch((error) => console.log("error", error));
   };
 
-  //--------------GET TEMPLATE------------------------------
-  const getAppearFile = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/fs/entityfolder/TEMPLATE/1`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearFile(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
   useEffect(() => {
     getAllTestGeneratore();
     getAppearLine();
     getAppearOBP();
-    getAppearFile();
   }, []);
 
   const columns = [
@@ -182,7 +133,7 @@ function TestGeneratoreTableNew() {
     },
     {
       title: "Template",
-      //field: "template",
+      field: "template.nome",
     },
     {
       title: "Creato da",
@@ -223,14 +174,17 @@ function TestGeneratoreTableNew() {
     setNomeTitolo(rowData.nome);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
-    //setVersion(rowData.version);
-    //setTemplate(rowData.template);
+    setLineaChiamato(rowData.lineaChiamato.id)
+    setLineaChiamante(rowData.lineaChiamante.id)
+    setOBPChiamato(rowData.proxyChiamato.id)
+    setOBPChiamante(rowData.proxyChiamante.id)
+    setVersion(rowData.version);
+    setTemplate(rowData.template);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
-    getTestGenById(rowData.id);
-    //setPathCsv(rowData.pathCsv);
+    setOpen(true)
   };
 
   const handleClose = () => {
@@ -269,62 +223,34 @@ function TestGeneratoreTableNew() {
     handleCloseDelete();
   };
 
-  //------------ funzione apri modale
+  //------------ MODALE DELETE--------------
 
   const handleOpenDelete = () => {
     setOpenDelete(true);
   };
 
-  //---------- funzione chiudi modale
   const handleCloseDelete = () => {
     setOpenDelete(false);
   };
 
   //-----------MODALE CHIAMATO------------------
-  // const handleOpenChiamato = () => {
-  //   var appoggioChiamato;
-  //   appoggioChiamato = Object.values(testGen.chiamato);
-  //   for (let i = 0; i < appoggioChiamato.length; i++) {
-  //     chiamato.push(appoggioChiamato[i].id);
-  //   }
-  //   console.log(chiamato);
-  //   setOpenChiamato(true);
-  // };
+  const handleOpenChiamato = () => {
+    setOpenChiamato(true);
+  };
 
-  // const handleCloseChiamato = () => {
-  //   setOpenChiamato(false);
-  // };
+  const handleCloseChiamato = () => {
+    setOpenChiamato(false);
+  };
 
-  // const handleCloseChiamato2 = () => {
-  //   //aggiornaUtente();
-  //   setOpenChiamato(false);
-  // };
-  //---------MODALE CHIAMANTi--------------------
-  // const handleOpenChiamanti = () => {
-  //   var appoggioChiamanti;
-  //   appoggioChiamanti = testGen.chiamanti;
+  // ---------MODALE CHIAMANTi--------------------
+  const handleOpenChiamanti = () => {
+    setOpenChiamanti(true);
+  };
 
-  //   for (let i = 0; i < appoggioChiamanti.length; i++) {
-  //     chiamanti[i] = [0, 0, 0, 0];
-  //   }
-  //   for (let i = 0; i < appoggioChiamanti.length; i++) {
-  //     chiamanti[i][0] = appoggioChiamanti[i]["proxy"].id;
-  //     chiamanti[i][1] = appoggioChiamanti[i]["linea"].id;
-  //     chiamanti[i][2] = appoggioChiamanti[i]["file"].id;
-  //     chiamanti[i][3] = i;
-  //   }
-  //   console.log(chiamanti);
-  //   setOpenChiamanti(true);
-  // };
+  const handleCloseChiamante = () => {
+    setOpenChiamanti(false);
+  };
 
-  // const handleCloseChiamanti = () => {
-  //   setOpenChiamanti(false);
-  // };
-
-  // const handleCloseChiamanti2 = () => {
-  //   //aggiornaUtente();
-  //   setOpenChiamanti(false);
-  // };
 
   //-------AGGIORNA TEST GENERATORE----------------------------
 
@@ -340,15 +266,7 @@ function TestGeneratoreTableNew() {
         id: id,
         version: version,
         nome: nome,
-        descrizione: descrizione,
-        // lineaChiamante: {
-        //   id: id
-        // },
-        // lineaChiamato: {
-        //   id: id
-        // },
-        // proxyChiamante: proxyChiamante,
-        // proxyChiamato: proxyChiamato
+        descrizione: descrizione === "" ? " " : descrizione
       });
 
       var requestOptions = {
@@ -361,14 +279,79 @@ function TestGeneratoreTableNew() {
       fetch(`/api/testgen`, requestOptions)
         .then((response) => response.json())
         .then((response) => {
-          console.log("ho cliccato");
           getAllTestGeneratore();
+          setOpen(false)
         })
         .catch((error) => console.log("error", error));
     };
     invia();
   };
+  const aggiornaChiamato = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
+    var raw = JSON.stringify({
+      id: id,
+      version: version,
+      lineaChiamato: {
+        id: lineaChiamato
+      },
+      proxyChiamato: {
+        id: OBPChiamato
+      }
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testgen`, requestOptions)
+      .then((response) => response.json())
+      .then((response) => {
+        getAllTestGeneratore();
+        handleCloseChiamato(false)
+      })
+      .catch((error) => console.log("error", error));
+  };
+  const aggiornaChiamante = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: id,
+      version: version,
+      lineaChiamante: {
+        id: lineaChiamante
+      },
+      proxyChiamante: {
+        id: OBPChiamante
+      }
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testgen`, requestOptions)
+      .then((response) => response.json())
+      .then((response) => {
+        getAllTestGeneratore();
+        handleCloseChiamante(false)
+      })
+      .catch((error) => console.log("error", error));
+  }
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
   const useStyles = makeStyles((theme) => ({
@@ -590,7 +573,7 @@ function TestGeneratoreTableNew() {
                   </Col>
 
                   <Col className={classes.col}>
-                  <TextField
+                    <TextField
                       className={classes.textField}
                       error={descrizione !== "" ? false : true}
                       onChange={(e) => setDescrizione(e.target.value)}
@@ -602,38 +585,22 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-                </Row> 
+                </Row>
 
                 <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={template !== "" ? false : true}
-                      onChange={(e) => setTemplate(e.target.value)}
                       label="Template"
-                      defaultValue={template}
-                      
+                      defaultValue={template.nome}
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
+                </Row>
 
-                  <Col className={classes.col}>
-                  <TextField
-                      className={classes.textField}
-                      error={pathCsv !== "" ? false : true}
-                      onChange={(e) => setPathCsv(e.target.value)}
-                      label="Path CSV"
-                      defaultValue={pathCsv}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row> 
-
-                 {/* <Row>
+                <Row>
                   <Col className={classes.col}>
                     <ButtonClickedGreen
                       size="medium"
@@ -656,25 +623,12 @@ function TestGeneratoreTableNew() {
                       onClick={handleOpenChiamanti}
                     />
                   </Col>
-                </Row> */}
+                </Row>
 
                 <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={lastResult !== "" ? false : true}
-                      onChange={(e) => setLastResult(e.target.value)}
-                      label="Last Result"
-                      defaultValue={lastResult}
-                      
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
 
                   <Col className={classes.col}>
-                  <TextField
+                    <TextField
                       className={classes.textField}
                       error={createdBy !== "" ? false : true}
                       onChange={(e) => setCreatedBy(e.target.value)}
@@ -685,9 +639,6 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-                </Row> 
-
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -695,15 +646,18 @@ function TestGeneratoreTableNew() {
                       onChange={(e) => setCreationDate(e.target.value)}
                       label="Data Creazione"
                       defaultValue={creationDate}
-                      
+
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
+                </Row>
+
+                <Row>
 
                   <Col className={classes.col}>
-                  <TextField
+                    <TextField
                       className={classes.textField}
                       error={modifiedBy !== "" ? false : true}
                       onChange={(e) => setModifiedBy(e.target.value)}
@@ -714,9 +668,6 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-                </Row> 
-
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -724,60 +675,15 @@ function TestGeneratoreTableNew() {
                       onChange={(e) => setModifiedDate(e.target.value)}
                       label="Data Modifica"
                       defaultValue={modifiedDate}
-                      
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
 
-                  <Col className={classes.col}>
-                  <TextField
-                      className={classes.textField}
-                      error={lastStartDate !== "" ? false : true}
-                      onChange={(e) => setLastStartDate(e.target.value)}
-                      label="Last Start Date"
-                      defaultValue={lastStartDate}
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
-                </Row> 
-
-                <Row>
-                <Col className={classes.col}>
-                  <TextField
-                      className={classes.textField}
-                      error={lastEndDate !== "" ? false : true}
-                      onChange={(e) => setLastEndDate(e.target.value)}
-                      label="Last End Date"
-                      defaultValue={lastEndDate}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-
-                  <Col className={classes.col}>
-                  <TextField
-                      className={classes.textField}
-                      error={report !== "" ? false : true}
-                      onChange={(e) => setReport(e.target.value)}
-                      label="Report"
-                      defaultValue={descrizione.replace(
-                        "www.reportistica.it",
-                        
-                      )}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-              
                 </Row>
 
-               
+
               </Form>
               <Divider className={classes.divider} />
               <div
@@ -790,7 +696,7 @@ function TestGeneratoreTableNew() {
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
-                    onClick={handleClose2}
+                    onClick={aggiornaTestGen}
                   />
                 )}
 
@@ -807,7 +713,7 @@ function TestGeneratoreTableNew() {
       </Modal>
 
       {/* ------------------------MODALE CHIAMATO--------------------- */}
-      {/* <Modal
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -834,65 +740,41 @@ function TestGeneratoreTableNew() {
 
               <Form className={classes.contenutoModale}>
                 <Row>
-                  {chiamato.forEach((element) => {
-                    <TextField className={classes.textField} label="prova" />;
-                  })}
-
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       select
-                      onChange={(e) => setNome(e.target.value)}
+                      onChange={(e) => setLineaChiamato(e.target.value)}
 
-                      label="IP Linea/e N°"
-                      defaultValue={chiamato[1]}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    /> 
-                     {/* {appearGroup.map((gruppo) => (
-                      <MenuItem key={gruppo.id} value={gruppo.id}>
-                        {gruppo.nome}
-                      </MenuItem>
-                    ))} */}
-                  
-                  {/* </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      // select
-                      // onChange={(e) => setNome(e.target.value)}
-                      label="Outboundproxy N°"
-                      defaultValue={chiamato[0]}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />  */}
-                     {/* {appearGroup.map((gruppo) => (
-                      <MenuItem key={gruppo.id} value={gruppo.id}>
-                        {gruppo.nome}
-                      </MenuItem>
-                    ))} */}
-                  
-                  {/* </Col>
-                </Row>
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      select
-                      onChange={(e) => {
-                        chiamanti[1] = e.target.value;
-                      }}
-                      label="Linea N°"
-                      value={chiamanti[1]}
+                      label="IP Linea"
+                      value={lineaChiamato}
+                      defaultValue={lineaChiamato}
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
                     >
-                      {appearLine.map((typeLinea) => (
-                        <MenuItem key={typeLinea.id} value={typeLinea.id}>
-                          {typeLinea.descrizione}
+                      {appearLine.map((linea) => (
+                        <MenuItem disabled={linea.id === lineaChiamante} key={linea.id} value={linea.id}>
+                          {linea.id}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      onChange={(e) => setOBPChiamato(e.target.value)}
+                      label="Outboundproxy"
+                      value={OBPChiamato}
+                      defaultValue={OBPChiamato}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    >
+                      {appearOBP.map((proxy) => (
+                        <MenuItem disabled={proxy.id === OBPChiamante} key={proxy.id} value={proxy.id}>
+                          {proxy.campiConcatenati}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -911,7 +793,7 @@ function TestGeneratoreTableNew() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      onClick={handleCloseChiamato2}
+                      onClick={aggiornaChiamato}
                     />
                   )}
 
@@ -926,14 +808,14 @@ function TestGeneratoreTableNew() {
             </Paper>
           </div>
         </Fade>
-      </Modal> */} 
+      </Modal>
       {/* ------------------------MODALE CHIAMANTi--------------------- */}
-      {/* <Modal
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={openChiamanti}
-        onClose={handleCloseChiamanti}
+        onClose={handleCloseChiamante}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -946,7 +828,7 @@ function TestGeneratoreTableNew() {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    {modifica === false ? "Visualizza " : "Modifica "} Chiamanti{" "}
+                    {modifica === false ? "Visualizza " : "Modifica "} il Chiamante di{" "}
                     <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
@@ -954,75 +836,49 @@ function TestGeneratoreTableNew() {
               </div>
 
               <Form className={classes.contenutoModale}>
-                {chiamanti.map((chiamanti) => (
-                  <>
-                    <Typography className={classes.intestazione} variant="h6">
-                      Chiamanti <b>{chiamanti[3] + 1}</b>
-                    </Typography>
-                    <Row>
-                      <Col className={classes.col}>
-                        <TextField
-                          className={classes.textField}
-                          select
-                          onChange={(e) => {
-                            chiamanti[1] = e.target.value;
-                          }}
-                          label="Linea N°"
-                          value={chiamanti[1]}
-                          InputProps={{
-                            readOnly: modifica === false ? true : false,
-                          }}
-                        >
-                          {appearLine.map((typeLinea) => (
-                            <MenuItem key={typeLinea.id} value={typeLinea.id}>
-                              {typeLinea.descrizione}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Col>
-                      <Col className={classes.col}>
-                        <TextField
-                          className={classes.textField}
-                          select
-                          onChange={(e) => {
-                            chiamanti[0] = e.target.value;
-                          }}
-                          label="Outboundproxy N°"
-                          value={chiamanti[0]}
-                          InputProps={{
-                            readOnly: modifica === false ? true : false,
-                          }}
-                        >
-                          {appearOBP.map((obp) => (
-                            <MenuItem key={obp.id} value={obp.id}>
-                              {obp.descrizione}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className={classes.col}>
-                        <TextField
-                          className={classes.textField}
-                          // select
-                          // onChange={(e) => setNome(e.target.value)}
-                          label="File N°"
-                          defaultValue={chiamanti[2]}
-                          InputProps={{
-                            readOnly: modifica === false ? true : false,
-                          }}
-                        >
-                          {appearFile.map((obp) => (
-                            <MenuItem key={obp.id} value={obp.id}>
-                              {obp.descrizione}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Col>
-                    </Row>
-                  </>
-                ))}
+                <Typography className={classes.intestazione} variant="h6">
+                  Chiamante
+                </Typography>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      onChange={(e) => setLineaChiamante(e.target.value)}
+                      label="Linea"
+                      value={lineaChiamante}
+                      defaultValue={lineaChiamante}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    >
+                      {appearLine.map((linea) => (
+                        <MenuItem disabled={linea.id === lineaChiamato} key={linea.id} value={linea.id}>
+                          {linea.id}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      onChange={(e) => setOBPChiamante(e.target.value)}
+                      label="Outboundproxy"
+                      value={OBPChiamante}
+                      defaultValue={OBPChiamante}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    >
+                      {appearOBP.map((proxy) => (
+                        <MenuItem disabled={proxy.id === OBPChiamato} key={proxy.id} value={proxy.id}>
+                          {proxy.campiConcatenati}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                </Row>
               </Form>
               <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
@@ -1036,13 +892,13 @@ function TestGeneratoreTableNew() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      onClick={handleCloseChiamanti2}
+                      onClick={aggiornaChiamante}
                     />
                   )}
 
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
-                    onClick={handleCloseChiamanti}
+                    onClick={handleCloseChiamante}
                     size="medium"
                     nome={modifica === false ? "Indietro" : "Annulla"}
                   />
@@ -1051,7 +907,7 @@ function TestGeneratoreTableNew() {
             </Paper>
           </div>
         </Fade>
-      </Modal> */}
+      </Modal>
       {/* ------------------------MODALE DELETE--------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"

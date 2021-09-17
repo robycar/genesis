@@ -23,6 +23,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import SettingsIcon from "@material-ui/icons/Settings";
 import Tooltip from "@material-ui/core/Tooltip";
 
 function TestSuiteTable() {
@@ -211,22 +212,56 @@ function TestSuiteTable() {
     fetch(`/api/testsuite`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getAllTestSuite();
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "Internal Server Error") {
+            setWarning(
+              "Impossibile eliminare il Test Suite. L'utente non dispone delle autorizzazioni necessarie"
+            );
+          } else {
+            setWarning(
+              "Codice errore: " +
+                result.error.code +
+                "Descrizione: " +
+                result.error.description
+            );
+          }
+        } else {
+          setOpenWarning(false);
+          getAllTestSuite();
+        }
       })
       .catch((error) => console.log("error", error));
     handleCloseDelete();
   };
 
-  //------------ funzione apri modale
+  //------------ funzione apri modale delete
 
   const handleOpenDelete = (rowData) => {
     setNome(rowData.nome);
     setOpenDelete(true);
   };
 
-  //---------- funzione chiudi modale
+  //---------- funzione chiudi modale delete
   const handleCloseDelete = () => {
     setOpenDelete(false);
+  };
+
+  //-----------
+  const [warning, setWarning] = useState("");
+  const [openWarning, setOpenWarning] = useState(false);
+
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
+
+  //-------- MODALE ERROR AGGIORNA TEST SUITE -------------//
+
+  const [warningUpdate, setWarningUpdate] = useState("");
+  const [openWarningUpdate, setOpenWarningUpdate] = useState(false);
+
+  const handleCloseWarningUpdate = () => {
+    setOpenWarningUpdate(false);
   };
 
   //-------AGGIORNA TEST SUITE----------------------------
@@ -258,8 +293,25 @@ function TestSuiteTable() {
 
       fetch(`/api/testsuite`, requestOptions)
         .then((response) => response.json())
-        .then((response) => {
-          getAllTestSuite();
+        .then((result) => {
+          if (result.error !== null) {
+            setOpenWarningUpdate(true);
+            if (result.error.code === "") {
+              setWarningUpdate(
+                "Impossibile aggiornare il Test Suite poichè l'utente non dispone delle autorizzazioni necessarie"
+              );
+            } else {
+              setWarning(
+                "Codice errore: " +
+                  result.error.code +
+                  "Descrizione: " +
+                  result.error.description
+              );
+            }
+          } else {
+            setOpenWarningUpdate(false);
+            getAllTestSuite();
+          }
         })
         .catch((error) => console.log("error", error));
     };
@@ -326,8 +378,9 @@ function TestSuiteTable() {
     },
     intestazione: {
       color: "#47B881",
-
+      marginTop: "5%",
       flexDirection: "row",
+      marginBottom: "5%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -344,10 +397,10 @@ function TestSuiteTable() {
       alignItems: "center",
       justifyContent: "center",
     },
-    divider: {
-      marginTop: "3%",
-      marginBottom: "5",
-    },
+    // divider: {
+    //   marginTop: "3%",
+    //   marginBottom: "5",
+    // },
     paperModale: {
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
@@ -388,6 +441,24 @@ function TestSuiteTable() {
     },
     typography: {
       padding: "3%",
+    },
+    intestazioneModaleError: {
+      color: "#ef5350",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    iconModaleError: {
+      // width: "15%",
+      // height: "15%",
+      marginRight: "4%",
+      transform: "scale(1.9)",
+      color: "#ef5350",
+    },
+    divIntestazione: {
+      display: "flex",
+      alignItems: "center",
+      padding: "2%",
+      marginBottom: "1%",
     },
   }));
 
@@ -798,7 +869,7 @@ function TestSuiteTable() {
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography variant="h6" className={classes.typography}>
+                <Typography className={classes.typography}>
                   L'eliminazione del Test Suite selezionato, comporterà la
                   cancellazione dei Test Case ad esso associati.
                   <br />
@@ -824,6 +895,104 @@ function TestSuiteTable() {
           </div>
         </Fade>
       </Modal>
+
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+ {/*------------------MODALE UPDATE--------------- */}
+ <Modal
+        className={classes.modal}
+        open={openWarningUpdate}
+        onClose={handleCloseWarningUpdate}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarningUpdate}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarningUpdate}
+                    nome="OK"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
     </div>
   );
 }
