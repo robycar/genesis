@@ -27,6 +27,8 @@ public class TestSuiteDTO extends TrackedDTO {
   
   private List<TestCaseDTO> testCases;
   
+  private Long numTestCases;
+  
   public TestSuiteDTO() {
   }
 
@@ -99,6 +101,20 @@ public class TestSuiteDTO extends TrackedDTO {
 
   public void setTestCases(List<TestCaseDTO> testCases) {
     this.testCases = testCases;
+  }
+
+  public Long getNumTestCases() {
+    if (numTestCases != null) {
+      return numTestCases;
+    }
+    if (testCases != null) {
+      return Long.valueOf(testCases.size());
+    }
+    return null;
+  }
+
+  public void setNumTestCases(Long numTestCases) {
+    this.numTestCases = numTestCases;
   }
 
 }
