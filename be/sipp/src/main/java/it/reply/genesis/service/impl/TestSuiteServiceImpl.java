@@ -45,7 +45,7 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     logger.debug("enter list");
     List<TestSuiteVO> result = testSuiteRepository.findAll(Sort.by(Direction.DESC, "id"));
     return result.stream()
-        .map(vo -> new TestSuiteDTO(vo))
+        .map(vo -> new TestSuiteDTO(vo,true))
         .collect(Collectors.toList());
   }
 
