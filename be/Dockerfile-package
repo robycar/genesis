@@ -6,4 +6,4 @@ WORKDIR /app
 
 ENTRYPOINT ["mvn","-B","-s","/usr/share/maven/ref/settings-docker.xml"]
 
-CMD ["-DskipTests", "package"]
+CMD ["-DskipTests", "clean", "package"]
