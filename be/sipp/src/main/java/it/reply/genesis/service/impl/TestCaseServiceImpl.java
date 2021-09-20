@@ -80,7 +80,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     logger.debug("enter listTestCase");
     List<TestCaseVO> listVO = testCaseRepository.findAll(Sort.by(Direction.DESC, "id"));
     return listVO.stream()
-        .map(vo -> new TestCaseDTO(vo))
+        .map(vo -> new TestCaseDTO(vo, true))
         .collect(Collectors.toList());
   }
 
