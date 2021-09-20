@@ -3,6 +3,7 @@ package it.reply.genesis.api.linea.payload;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import it.reply.genesis.api.admin.payload.GruppoDTO;
 import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.payload.TrackedDTO;
 import it.reply.genesis.model.LineaGeneratoreVO;
@@ -20,6 +21,8 @@ public class LineaGeneratoreDTO extends TrackedDTO {
   private Integer porta;
   
   private TypeLineaDTO typeLinea;
+  
+  private GruppoDTO gruppo;
   
   private FileDTO pathCSV;
 
@@ -42,6 +45,8 @@ public class LineaGeneratoreDTO extends TrackedDTO {
     if (vo.getPathCSV() != null) {
       this.pathCSV = new FileDTO(vo.getPathCSV());
     }
+    
+    this.gruppo = new GruppoDTO(vo.getGruppo());
   }
 
   @Override
@@ -50,6 +55,7 @@ public class LineaGeneratoreDTO extends TrackedDTO {
     writeField(sb, "ip", ip);
     writeField(sb, "porta", porta);
     writeField(sb, "typeLinea", typeLinea);
+    writeField(sb, "gruppo", gruppo);
     writeField(sb, "pathCSV", pathCSV);
     super.writeFields(sb);
   }
@@ -92,6 +98,14 @@ public class LineaGeneratoreDTO extends TrackedDTO {
 
   public void setPathCSV(FileDTO pathCSV) {
     this.pathCSV = pathCSV;
+  }
+
+  public GruppoDTO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoDTO gruppo) {
+    this.gruppo = gruppo;
   }
 
 }

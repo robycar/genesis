@@ -38,6 +38,10 @@ public class LineaGeneratoreVO extends BaseEntity {
   @JoinColumn(name="PATH_CSV", nullable = true)
   private FileSystemVO pathCSV;
   
+  @ManyToOne
+  @JoinColumn(name="ID_GRUPPO")
+  private GruppoVO gruppo;
+  
   public LineaGeneratoreVO() {
   }
 
@@ -79,6 +83,14 @@ public class LineaGeneratoreVO extends BaseEntity {
 
   public void setPathCSV(FileSystemVO pathCSV) {
     this.pathCSV = pathCSV;
+  }
+
+  public GruppoVO getGruppo() {
+    return gruppo;
+  }
+
+  public void setGruppo(GruppoVO gruppo) {
+    this.gruppo = gruppo;
   }
 
 

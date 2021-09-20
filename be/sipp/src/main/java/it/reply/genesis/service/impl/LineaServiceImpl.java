@@ -113,6 +113,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     vo.setIp(dto.getIp());
     vo.setPorta(dto.getPorta());
     vo.setTypeLinea(readTypeLineaVO(dto.getTypeLinea().getId()));
+    vo.setGruppo(currentGroup());
     
     vo = lineaGeneratoreRepository.save(vo);
 
@@ -264,7 +265,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
   public void removeLineaGeneratore(long id) throws ApplicationException {
     logger.debug("enter removeLineaGeneratore");
     LineaGeneratoreVO lineaGeneratoreVO = readLineaGeneratoreVO(id);
-    
+    checkGroup(lineaGeneratoreVO.getGruppo(), AppError.LINEA_DELETE_WRONG_GROUP);
     long occurrence = testGeneratoreRepository.countByLineaChiamanteOrLineaChiamato(lineaGeneratoreVO,lineaGeneratoreVO);
     if (occurrence > 0) {
       throw makeError(HttpStatus.BAD_REQUEST, AppError.LINEA_GENERATORE_USED_IN_DELETE);
