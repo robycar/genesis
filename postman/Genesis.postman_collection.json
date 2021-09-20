@@ -7143,7 +7143,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"version\": 10,\r\n    \"nome\": \"Template 1\",\r\n    \"durata\": 57,\r\n    \"typeTemplate\": \"?Type Template?\",\r\n    \"fileLinks\": {\r\n        \"CHIAMATO\": [{\"id\":1}],\r\n        \"CHIAMANTE\": [2,3,4]\r\n    }\r\n}",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"version\": 22,\r\n    \"nome\": \"Template 1\",\r\n    \"durata\": 57,\r\n    \"typeTemplate\": \"?Type Template?\",\r\n    \"fileLinks\": {\r\n        \"CHIAMATO\": [{\"id\":1}],\r\n        \"CHIAMANTE\": [2,3,4]\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -7434,14 +7434,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{contextUrl}}/api/template/2",
+							"raw": "{{contextUrl}}/api/template/1",
 							"host": [
 								"{{contextUrl}}"
 							],
 							"path": [
 								"api",
 								"template",
-								"2"
+								"1"
 							]
 						},
 						"description": "Recupera i dati relativi ad un template.\r\nPermessi: template.view"
@@ -8418,6 +8418,27 @@
 							"body": "{\n    \"error\": null,\n    \"testCase\": {\n        \"modifiedDate\": \"2021-08-13T17:02:55.000+00:00\",\n        \"creationDate\": \"2021-08-13T17:02:55.000+00:00\",\n        \"modifiedBy\": \"test\",\n        \"createdBy\": \"test\",\n        \"version\": 3,\n        \"id\": 11,\n        \"expectedDuration\": 57,\n        \"nome\": \"Rustic Steel Cheese\",\n        \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n        \"chiamato\": {\n            \"linea\": {\n                \"id\": 1,\n                \"numero\": \"90-400-754-1037\",\n                \"ip\": \"240.195.169.235\",\n                \"porta\": 924,\n                \"password\": \"IdZtVacO4inAlAw\",\n                \"typeLinea\": {\n                    \"id\": 1,\n                    \"descrizione\": \"descrizione type linea 1\"\n                }\n            },\n            \"proxy\": {\n                \"id\": 1,\n                \"ipDestinazione\": \"87.216.188.151\",\n                \"descrizione\": \"Odit sequi blanditiis illo. Eligendi exercitationem laborum porro veniam ullam ipsam earum aut. Autem omnis modi qui explicabo et optio quibusdam illo occaecati. Ea architecto ut.\",\n                \"porta\": 187,\n                \"typeLinee\": [\n                    {\n                        \"id\": 1,\n                        \"descrizione\": \"descrizione type linea 1\"\n                    },\n                    {\n                        \"id\": 2,\n                        \"descrizione\": \"descrizione type linea 2\"\n                    }\n                ]\n            },\n            \"file\": {\n                \"modifiedDate\": \"2021-08-13T17:02:56.000+00:00\",\n                \"creationDate\": \"2021-08-13T17:02:56.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 79,\n                \"path\": \"file1.xml\",\n                \"url\": \"/api/fs/TEST/11/79\"\n            }\n        },\n        \"chiamanti\": [\n            {\n                \"linea\": {\n                    \"id\": 2,\n                    \"numero\": \"9042382\",\n                    \"ip\": \"241.88.251.202\",\n                    \"porta\": 224,\n                    \"password\": \"passwordSegreta\",\n                    \"typeLinea\": {\n                        \"id\": 1,\n                        \"descrizione\": \"descrizione type linea 1\"\n                    }\n                },\n                \"proxy\": {\n                    \"id\": 2,\n                    \"ipDestinazione\": \"2.244.140.46\",\n                    \"descrizione\": \"Harum voluptatem eum sunt commodi quibusdam veritatis eos iusto illo. Autem id hic facere est voluptatum ab et. Omnis et sit aut neque ut doloremque id libero dolor. Eum in facilis enim facilis repellat voluptatum doloremque a corrupti.\",\n                    \"porta\": 422,\n                    \"typeLinee\": [\n                        {\n                            \"id\": 1,\n                            \"descrizione\": \"descrizione type linea 1\"\n                        },\n                        {\n                            \"id\": 2,\n                            \"descrizione\": \"descrizione type linea 2\"\n                        }\n                    ]\n                },\n                \"file\": {\n                    \"modifiedDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"creationDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 82,\n                    \"path\": \"file4.xml\",\n                    \"url\": \"/api/fs/TEST/11/82\"\n                }\n            },\n            {\n                \"linea\": {\n                    \"id\": 2,\n                    \"numero\": \"9042382\",\n                    \"ip\": \"241.88.251.202\",\n                    \"porta\": 224,\n                    \"password\": \"passwordSegreta\",\n                    \"typeLinea\": {\n                        \"id\": 1,\n                        \"descrizione\": \"descrizione type linea 1\"\n                    }\n                },\n                \"proxy\": {\n                    \"id\": 3,\n                    \"ipDestinazione\": \"170.251.148.64\",\n                    \"descrizione\": \"Unde sunt iste similique eius. Rerum nihil recusandae. Perferendis temporibus voluptas dicta aspernatur.\",\n                    \"porta\": 678,\n                    \"typeLinee\": [\n                        {\n                            \"id\": 1,\n                            \"descrizione\": \"descrizione type linea 1\"\n                        },\n                        {\n                            \"id\": 2,\n                            \"descrizione\": \"descrizione type linea 2\"\n                        }\n                    ]\n                },\n                \"file\": {\n                    \"modifiedDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"creationDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 81,\n                    \"path\": \"file3.xml\",\n                    \"url\": \"/api/fs/TEST/11/81\"\n                }\n            },\n            {\n                \"linea\": {\n                    \"id\": 2,\n                    \"numero\": \"9042382\",\n                    \"ip\": \"241.88.251.202\",\n                    \"porta\": 224,\n                    \"password\": \"passwordSegreta\",\n                    \"typeLinea\": {\n                        \"id\": 1,\n                        \"descrizione\": \"descrizione type linea 1\"\n                    }\n                },\n                \"proxy\": {\n                    \"id\": 4,\n                    \"ipDestinazione\": \"228.183.17.147\",\n                    \"descrizione\": \"Harum natus ad. Eum quia voluptate vitae officiis sed quis. Delectus vel perferendis voluptatum et ut quia vero est.\",\n                    \"porta\": 339,\n                    \"typeLinee\": [\n                        {\n                            \"id\": 1,\n                            \"descrizione\": \"descrizione type linea 1\"\n                        },\n                        {\n                            \"id\": 2,\n                            \"descrizione\": \"descrizione type linea 2\"\n                        }\n                    ]\n                },\n                \"file\": {\n                    \"modifiedDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"creationDate\": \"2021-08-13T17:02:56.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 80,\n                    \"path\": \"file2.xml\",\n                    \"url\": \"/api/fs/TEST/11/80\"\n                }\n            }\n        ],\n        \"template\": null\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "testcase_load",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase/load/1",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase",
+								"load",
+								"1"
+							]
+						},
+						"description": "Carica un test case.\r\nPermessi: testcase.run"
+					},
+					"response": []
 				}
 			]
 		},
@@ -9106,7 +9127,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nome\": \"{{$randomNoun}}\",\r\n    \"descrizione\": \"{{$randomLoremParagraph}}\"\r\n}",
+							"raw": "{\r\n    \"nome\": \"{{$randomNoun}}\",\r\n    \"descrizione\": \"{{$randomLoremParagraph}}\",\r\n    \"testCases\": [1,3]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

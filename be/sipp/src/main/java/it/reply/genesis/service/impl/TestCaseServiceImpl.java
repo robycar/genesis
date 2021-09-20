@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import it.reply.genesis.AppError;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
+import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestCaseDTO;
 import it.reply.genesis.api.test.payload.TestCaseLineaDTO;
 import it.reply.genesis.model.FileSystemScope;
@@ -28,8 +29,13 @@ import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TemplateFileCategory;
 import it.reply.genesis.model.TemplateFileVO;
 import it.reply.genesis.model.TemplateVO;
+import it.reply.genesis.model.TestCaseCaricatoLineaChiamanteVO;
+import it.reply.genesis.model.TestCaseCaricatoStato;
+import it.reply.genesis.model.TestCaseCaricatoVO;
 import it.reply.genesis.model.TestCaseLineaChiamanteVO;
 import it.reply.genesis.model.TestCaseVO;
+import it.reply.genesis.model.repository.TestCaseCaricatoLineaChiamanteRepository;
+import it.reply.genesis.model.repository.TestCaseCaricatoRepository;
 import it.reply.genesis.model.repository.TestCaseLineaChiamanteRepository;
 import it.reply.genesis.model.repository.TestCaseRepository;
 import it.reply.genesis.service.FileSystemService;
@@ -46,6 +52,12 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   private TestCaseRepository testCaseRepository;
   
   @Autowired
+  private TestCaseCaricatoRepository testCaseCaricatoRepository;
+
+  @Autowired
+  private TestCaseCaricatoLineaChiamanteRepository testCaseCaricatoLineaChiamanteRepository;
+
+  @Autowired
   private TemplateService templateService;
   
   @Autowired
@@ -59,7 +71,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   
   @Autowired
   private TestCaseLineaChiamanteRepository testCaseLineaChiamanteRepository;
-  
+
   public TestCaseServiceImpl() {
   }
 
@@ -177,6 +189,19 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     }
     return targetFile;
   }
+  
+  private FileSystemVO findCopiedFile(Map<Long, FileSystemVO> fileCopiati, FileSystemVO srcFileId, String folderName) throws ApplicationException {
+    if (srcFileId == null) {
+      return null;
+    }
+    FileSystemVO targetFile = fileCopiati.get(srcFileId.getId());
+    if (targetFile == null) {
+      logger.error("Impossibile trovare un riferimento al file copiato con id {} per la copia in ", srcFileId.getId(), folderName);
+      throw makeError(HttpStatus.NOT_FOUND, AppError.FS_ENTITY_FILE_NOT_FOUND, folderName, srcFileId.getId());
+    }
+    return targetFile;
+    
+  }
 
   @Override
   public void removeTestCase(long id) throws ApplicationException {
@@ -278,6 +303,58 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     result.addAll(testCasePerChiamato);
     
     return new ArrayList<>(result);
+  }
+
+  @Override
+  public TestCaseCaricatoDTO loadTestCase(long id) throws ApplicationException {
+    logger.debug("enter loadTestCase");
+    TestCaseVO tcvo = readVO(id);
+    
+    TestCaseCaricatoVO vo = new TestCaseCaricatoVO();
+    vo.setDescrizione(tcvo.getDescrizione());
+    vo.setExpectedDuration(tcvo.getExpectedDuration());
+    vo.setGruppo(currentGroup());
+    vo.setLineaChiamato(tcvo.getLineaChiamato());
+    vo.setLoadedBy(currentUsername());
+    //vo.setLoadedWhen(null);
+    vo.setNome(tcvo.getNome());
+    vo.setObpChiamato(tcvo.getObpChiamato());
+    vo.setStato(TestCaseCaricatoStato.READY);
+    vo.setTemplate(tcvo.getTemplate());
+    vo.setTestCase(tcvo);
+    //vo.setVersion(0);
+    
+    vo = testCaseCaricatoRepository.save(vo);
+    
+    //Copia i file dal test case al test case caricato
+    logger.debug("Copia dei file dal test case al test case caricato");
+    Map<Long, FileSystemVO> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEST, tcvo.getId(), FileSystemScope.TEST_CARICATO, vo.getId())
+    .stream().collect(Collectors.toMap(p -> p.getFirst().getId(), Pair::getSecond));
+    
+    String folderName = FileSystemScope.TEST_CARICATO.name() + "/" + vo.getId();
+    if (tcvo.getLineeChiamanti() != null) {
+      ArrayList<TestCaseCaricatoLineaChiamanteVO> tccLineeChiamanti = new ArrayList<>(tcvo.getLineeChiamanti().size());
+      for (TestCaseLineaChiamanteVO lc: tcvo.getLineeChiamanti()) {
+        TestCaseCaricatoLineaChiamanteVO tcclc = new TestCaseCaricatoLineaChiamanteVO();
+        tcclc.setTestCaseCaricato(vo);
+        tcclc.setNumLinea(lc.getNumLinea());
+        tcclc.setLinea(lc.getLinea());
+        tcclc.setOutboundProxy(lc.getOutboundProxy());
+        tcclc.setFile(findCopiedFile(fileCopiati, tcvo.getFileChiamato(), folderName));
+        tccLineeChiamanti.add(tcclc);
+      }
+      if (!tccLineeChiamanti.isEmpty()) {
+        vo.setLineeChiamanti(testCaseCaricatoLineaChiamanteRepository.saveAll(tccLineeChiamanti));
+      }
+    }
+    
+    if (tcvo.getFileChiamato() != null) {
+      vo.setFileChiamato(findCopiedFile(fileCopiati, tcvo.getFileChiamato(), folderName));
+    }
+    
+    testCaseCaricatoRepository.saveAndFlush(vo);
+    
+    return new TestCaseCaricatoDTO(vo, true, true).assignFolder(fileCopiati.values());
   }
 
 }

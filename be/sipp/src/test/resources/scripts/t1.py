@@ -8,7 +8,11 @@ class MioTestRunner(TestRunner, object):
   	pass
   	
   def start(self, testResult): 
-  	print "Avvio il test", testResult.testCaseCaricato.id
+  	print "Avvio il test",
+  	open(self.calcolaNomeFile('pippo.csv'))
+
+  def calcolaNomefile(self, testResult, nomeFile):
+    return os.path.join(testResult.testCaseCaricato.workingDirectory, nomeFile)
 
 if __name__ == '__main__':
   print "Sono partito"
