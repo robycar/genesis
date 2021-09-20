@@ -8,7 +8,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import logo from "../../src/assets/genesisLogin.png";
 //import logo from "../../src/assets/logoReply.png";
-import loginImage from "../../src/assets/image.png";
 import { login } from "../service/api";
 import Alert from "@material-ui/lab/Alert";
 import { useHistory } from "react-router-dom";

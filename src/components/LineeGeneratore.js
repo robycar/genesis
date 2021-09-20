@@ -26,6 +26,8 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 
+import loading from "../../src/assets/load.gif";
+
 function LineeGeneratore() {
   const [data, setData] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
@@ -460,6 +462,18 @@ function LineeGeneratore() {
         localization={{
           header: {
             actions: "Azioni",
+          },
+          body: {
+            emptyDataSourceMessage: (
+              <div style={{display: 'flex',  
+                          justifyContent:'center', 
+                          alignItems:'center', 
+                          height: '10vh', 
+                          width: '10vh',
+                          margin:'0 auto'}} >
+                <img src={loading} alt="loading" />
+              </div>
+            ),
           },
         }}
       />

@@ -26,6 +26,8 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
+import loading from "../../src/assets/load.gif";
+
 function TestCaseTable() {
   const [file, setFile] = useState([]);
   const [data, setData] = useState([]);
@@ -640,6 +642,18 @@ function TestCaseTable() {
         localization={{
           header: {
             actions: "Azioni",
+          },
+          body: {
+            emptyDataSourceMessage: (
+              <div style={{display: 'flex',  
+                          justifyContent:'center', 
+                          alignItems:'center', 
+                          height: '10vh', 
+                          width: '10vh',
+                          margin:'0 auto'}} >
+                <img src={loading} alt="loading" />
+              </div>
+            ),
           },
         }}
       />

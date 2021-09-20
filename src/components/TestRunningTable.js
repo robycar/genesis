@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import Modal from "@material-ui/core/Modal";
@@ -14,6 +14,8 @@ import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import acccessControl from "../service/url.js";
+
+import loading from "../../src/assets/load.gif";
 
 const TestRunningTable = () => {
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -44,9 +46,9 @@ const TestRunningTable = () => {
       .catch((error) => console.log("error", error));
   };
 
-  /*useEffect(() => {
+  useEffect(() => {
     getAllTestCase();
-  }, []);*/
+  }, []);
 
   //---------TABLE COLUMNS------------------
   const columns = [
@@ -221,6 +223,18 @@ const TestRunningTable = () => {
         localization={{
           header: {
             actions: "Azioni",
+          },
+          body: {
+            emptyDataSourceMessage: (
+              <div style={{display: 'flex',  
+                          justifyContent:'center', 
+                          alignItems:'center', 
+                          height: '10vh', 
+                          width: '10vh',
+                          margin:'0 auto'}} >
+                <img src={loading} alt="loading" />
+              </div>
+            ),
           },
         }}
       />

@@ -26,6 +26,8 @@ import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Tooltip from "@material-ui/core/Tooltip";
 
+import loading from "../../src/assets/load.gif";
+
 function TestSuiteTable() {
   const [data, setData] = useState([]);
   const [testCases, setTestCases] = useState([]);
@@ -39,6 +41,8 @@ function TestSuiteTable() {
   const [modifiedDate, setModifiedDate] = useState("");
   const [durataComplessiva, setDurataComplessiva] = useState("");
   const [testSuite, setTestSuite] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [dataTestCases, setDataTestCases] = useState([]);
 
   // const [gruppo, setGruppo] = useState([]);
 
@@ -91,11 +95,35 @@ function TestSuiteTable() {
       .catch((error) => console.log("error", error));
   };
 
+  //-----------GET TEST CASE----------------------
+  const getAllTestCase = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setDataTestCases(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   useEffect(() => {
     getAllTestSuite();
+    getAllTestCase();
   }, []);
 
-  console.log(testSuite.testCases, "sono test suite");
+  // console.log(testSuite.testCases, "sono test suite");
+
+  const arrayTestCase = testSuite?.testCases;
 
   const columns = [
     {
@@ -132,7 +160,7 @@ function TestSuiteTable() {
     },
     {
       title: "Numero di Test Case",
-      field: "testSuite.testCases",
+      field: "numTestCases",
       // render: (rowData) => {
       //   let prova = "!";
       //   for (let index = 0; index < rowData.testCases.length; index++){
@@ -150,12 +178,58 @@ function TestSuiteTable() {
     //   field: "gruppo.nome",
     // },
   ];
+
+  const columnsTestcases = [
+    {
+      title: "ID Test",
+      field: "id",
+      defaultSort: "desc",
+      editable: "never",
+    },
+    {
+      title: "Nome",
+      field: "nome",
+    },
+    {
+      title: "Descrizione",
+      field: "descrizione",
+    },
+    // {
+    //   title: "Durata Attesa",
+    //   field: "expectedDuration",
+    // },
+    // {
+    //   title: "Versione",
+    //   field: "version",
+    // },
+    {
+      title: "Data Creazione",
+      field: "creationDate",
+    },
+    {
+      title: "Data Modifica",
+      field: "modifiedDate",
+    },
+    {
+      title: "Creato da",
+      field: "createdBy",
+    },
+    {
+      title: "Modificato da",
+      field: "modifiedBy",
+    },
+    {
+      title: "Template",
+      field: "file",
+    },
+  ];
   // console.log(columns.field);
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
   const [openTestSuite, SetOpenTestSuite] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
+  const [openTestCase, SetOpenTestCase] = React.useState(false);
 
   const openModifica = (rowData) => {
     setModifica(true);
@@ -178,6 +252,14 @@ function TestSuiteTable() {
     setModifiedDate(rowData.modifiedDate);
     // setOpen(true);
     getTestSuiteById(rowData.id);
+  };
+
+  const handleOpenTestCase = () => {
+    SetOpenTestCase(true);
+  };
+
+  const handleCloseTestCase = () => {
+    SetOpenTestCase(false);
   };
 
   const handleClose = () => {
@@ -320,8 +402,6 @@ function TestSuiteTable() {
 
   //-----------MODALE TEST SUITE------------------
 
-  const arrayTestCases = testSuite.testCases;
-
   // const handleOpenTestSuite= () => {
   //   var appoggioChiamato;
   //   appoggioChiamato = Object.values(testCase.chiamato);
@@ -409,6 +489,22 @@ function TestSuiteTable() {
       height: "fit-content",
       width: 800,
       position: "relative",
+    },
+    paperModaleTestCases: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      marginButton: "2%",
+      height: 800,
+      width: 800,
+      // position: "relative",
+    },
+
+    paperContainer2: {
+      flexDirection: "column",
+      padding: "20px",
+      // marginBottom: "10%",
     },
     paperModaleDelete: {
       backgroundColor: theme.palette.background.paper,
@@ -530,10 +626,25 @@ function TestSuiteTable() {
           header: {
             actions: "Azioni",
           },
+          body: {
+            emptyDataSourceMessage: (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "10vh",
+                  width: "10vh",
+                  margin: "0 auto",
+                }}
+              >
+                <img src={loading} alt="loading" />
+              </div>
+            ),
+          },
         }}
       />
       {/*------------------ MODALE VISUALIZZA/MODIFICA -------------*/}
-
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -638,10 +749,10 @@ function TestSuiteTable() {
                       error={testCases !== "" ? false : true}
                       // onChange={(e) => setTestCases(e.target.value)}
                       label="Numero Test Case"
-                      defaultValue={testCases}
+                      defaultValue={arrayTestCase?.length}
                       helperText={testCases !== "" ? "" : "Test Case"}
                       InputProps={{
-                        readOnly: modifica === false ? true : false,
+                        readOnly: true,
                       }}
                     />
                   </Col>
@@ -654,7 +765,7 @@ function TestSuiteTable() {
                           ? "Vedi test associati"
                           : "Modifica test associati"
                       }
-                      // onClick={handleOpenChiamato}
+                      onClick={handleOpenTestCase}
                     />
                   </Col>
                 </Row>
@@ -741,112 +852,210 @@ function TestSuiteTable() {
           </div>
         </Fade>
       </Modal>
-
-      {/* ------------------------MODALE TEST SUITE--------------------- */}
-      {/* <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={openChiamato}
-        onClose={handleCloseChiamato}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={openChiamato}>
-          <div>
-            <Paper className={classes.paperModale}>
-              <div>
-                <ListItem>
-                  <Typography className={classes.intestazione} variant="h4">
-                    {modifica === false ? "Visualizza " : "Modifica "} Chiamato{" "}
-                    <b>{nomeTitolo}</b>
-                  </Typography>
-                </ListItem>
-                <Divider className={classes.divider} />
-              </div>
-
-              <Form className={classes.contenutoModale}>
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      select
-                      onChange={(e) => {
-                        arrAppoggio[1] = e.target.value;
-                        console.log(arrAppoggio);
-                        setChiamato(arrAppoggio);
-                        console.log(chiamato);
-                      }}
-                      label="Linea"
-                      value={chiamato[1]}
-                      defaultValue={chiamato[1]}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    >
-                      {appearLine.map((linea) => (
-                        <MenuItem key={linea.id} value={linea.id}>
-                          {linea.campiConcatenati}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      select
-                      onChange={(e) => {
-                        chiamato[0] = e.target.value;
-                      }}
-                      label="Outboundproxy"
-                      value={chiamato[0]}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    >
-                      {appearOBP.map((obp) => (
-                        <MenuItem key={obp.id} value={obp.id}>
-                          {obp.campiConcatenati}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Col>
-                </Row>
-              </Form>
-              <div className={classes.buttonModale}>
-                <Divider className={classes.divider} />
-                <div
-                  className={classes.bottone}
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                  {modifica === false ? (
-                    ""
-                  ) : (
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome="Aggiorna"
-                      onClick={handleCloseChiamato2}
-                    />
-                  )}
-
-                  <ButtonNotClickedGreen
-                    className={classes.bottoneAnnulla}
-                    onClick={handleCloseChiamato}
-                    size="medium"
-                    nome={modifica === false ? "Indietro" : "Annulla"}
-                  />
+      {/* ------------------------MODALE TEST CASE ASSOCIATI-------------------- */}
+      {modifica === false ? (
+        //Modale Visualizza tabella testCases associati
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          className={classes.modal}
+          open={openTestCase}
+          onClose={handleCloseTestCase}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={openTestCase}>
+            <div>
+              <Paper className={classes.paperContainer2} elevation={1}>
+                <div>
+                  <ListItem>
+                    <Typography className={classes.intestazione} variant="h4">
+                      {modifica === false ? "Visualizza " : "Modifica "} i
+                      TestCase associati
+                    </Typography>
+                  </ListItem>
+                  <Divider className={classes.divider} />
                 </div>
-              </div>
-            </Paper>
-          </div>
-        </Fade>
-      </Modal> */}
 
+                <Form className={classes.contenutoModale}>
+                  <>
+                    <MaterialTable
+                      style={{ boxShadow: "none" }}
+                      title="Test Case"
+                      data={arrayTestCase}
+                      columns={columnsTestcases}
+                      options={{
+                        selection: false,
+                        sorting: true,
+                        actionsColumnIndex: -1,
+                        search: true,
+                        searchFieldVariant: "outlined",
+                        filtering: true,
+                        searchFieldAlignment: "left",
+                        pageSizeOptions: [
+                          5,
+                          10,
+                          20,
+                          { value: data.length, label: "All" },
+                        ],
+                      }}
+                      // actions={[
+                      //   {
+                      //     icon: (dat) => (
+                      //       <a>
+                      //         <VisibilityIcon />
+                      //       </a>
+                      //     ),
+                      //     tooltip: "Visualizza tutti i dati",
+                      //     position: "row",
+                      //     onClick: (event, rowData) => openVisualizza(rowData),
+                      //   },
+                      // ]}
+                      localization={{
+                        header: {
+                          actions: "Azioni",
+                        },
+                      }}
+                    />
+                  </>
+                </Form>
+                <div className={classes.buttonModale}>
+                  <Divider className={classes.divider} />
+                  <div
+                    className={classes.bottone}
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    {modifica === false ? (
+                      ""
+                    ) : (
+                      <ButtonClickedGreen
+                        size="medium"
+                        nome="Aggiorna"
+                        // onClick={handleCloseChiamato2}
+                      />
+                    )}
+
+                    <ButtonNotClickedGreen
+                      className={classes.bottoneAnnulla}
+                      onClick={handleCloseTestCase}
+                      size="medium"
+                      nome={modifica === false ? "Indietro" : "Annulla"}
+                    />
+                  </div>
+                </div>
+              </Paper>
+            </div>
+          </Fade>
+        </Modal>
+      ) : (
+        //Modale Modifica tabella testCases associati
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          className={classes.modal}
+          open={openTestCase}
+          onClose={handleCloseTestCase}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={openTestCase}>
+            <div>
+              <Paper className={classes.paperContainer2} elevation={1}>
+                <div>
+                  <ListItem>
+                    <Typography className={classes.intestazione} variant="h4">
+                      {modifica === false ? "Visualizza " : "Modifica "} i
+                      TestCase associati
+                    </Typography>
+                  </ListItem>
+                  <Divider className={classes.divider} />
+                </div>
+
+                <Form className={classes.contenutoModale}>
+                  <>
+                    <MaterialTable
+                      style={{ boxShadow: "none" }}
+                      title="Test Case"
+                      data={arrayTestCase}
+                      columns={columnsTestcases}
+                      options={{
+                        selection: true,
+                        sorting: true,
+                        actionsColumnIndex: -1,
+                        search: true,
+                        searchFieldVariant: "outlined",
+                        filtering: true,
+                        searchFieldAlignment: "left",
+                        pageSizeOptions: [
+                          5,
+                          10,
+                          20,
+                          { value: data.length, label: "All" },
+                        ],
+                      }}
+                      // onSelectionChange={
+                      //   (rows) => setSelectedRows(rows)
+                      //   // for (let i = 0; i < rows.length; i++) {
+                      //   //   // console.log(rows[i].id);
+                      //   //   return selectedRows.push(rows[i].id);
+                      //   // }
+                      // }
+                      // actions={[
+                      //   {
+                      //     icon: (dat) => (
+                      //       <a>
+                      //         <VisibilityIcon />
+                      //       </a>
+                      //     ),
+                      //     tooltip: "Visualizza tutti i dati",
+                      //     position: "row",
+                      //     onClick: (event, rowData) => openVisualizza(rowData),
+                      //   },
+                      // ]}
+                      localization={{
+                        header: {
+                          actions: "Azioni",
+                        },
+                      }}
+                    />
+                  </>
+                </Form>
+                <div className={classes.buttonModale}>
+                  <Divider className={classes.divider} />
+                  <div
+                    className={classes.bottone}
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    {modifica === false ? (
+                      ""
+                    ) : (
+                      <ButtonClickedGreen
+                        size="medium"
+                        nome="Aggiorna"
+                        // onClick={handleCloseChiamato2}
+                      />
+                    )}
+
+                    <ButtonNotClickedGreen
+                      className={classes.bottoneAnnulla}
+                      onClick={handleCloseTestCase}
+                      size="medium"
+                      nome={modifica === false ? "Indietro" : "Annulla"}
+                    />
+                  </div>
+                </div>
+              </Paper>
+            </div>
+          </Fade>
+        </Modal>
+      )}
       {/* ------------------------MODALE DELETE--------------------- */}
-
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -895,7 +1104,6 @@ function TestSuiteTable() {
           </div>
         </Fade>
       </Modal>
-
       {/*------------------MODALE ERRORE--------------- */}
       <Modal
         className={classes.modal}
@@ -944,8 +1152,8 @@ function TestSuiteTable() {
           </div>
         </Fade>
       </Modal>
- {/*------------------MODALE UPDATE--------------- */}
- <Modal
+      {/*------------------MODALE UPDATE--------------- */}
+      <Modal
         className={classes.modal}
         open={openWarningUpdate}
         onClose={handleCloseWarningUpdate}
@@ -992,7 +1200,6 @@ function TestSuiteTable() {
           </div>
         </Fade>
       </Modal>
-
     </div>
   );
 }

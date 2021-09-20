@@ -14,6 +14,8 @@ import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 
+import loading from "../../src/assets/load.gif";
+
 const TestCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
@@ -204,6 +206,15 @@ const TestCaricatiTable = () => {
           // columnsButton: true,
           filtering: filter,
         }}
+        /**
+        components={{
+          Body: (props) => (
+            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh', width: '10vh'}} >
+              <img src={loading} alt="loading" />
+            </div>
+          )
+        }}
+         */
         actions={[
           {
             icon: () => <PieChartOutlinedIcon />,
@@ -242,6 +253,18 @@ const TestCaricatiTable = () => {
         localization={{
           header: {
             actions: "Azioni",
+          },
+          body: {
+            emptyDataSourceMessage: (
+              <div style={{display: 'flex',  
+                          justifyContent:'center', 
+                          alignItems:'center', 
+                          height: '10vh', 
+                          width: '10vh',
+                          margin:'0 auto'}} >
+                <img src={loading} alt="loading" />
+              </div>
+            ),
           },
         }}
         // components={{

@@ -26,6 +26,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 
+import loading from "../../src/assets/load.gif";
+
 function Linee() {
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -491,6 +493,18 @@ function Linee() {
         localization={{
           header: {
             actions: "Azioni",
+          },
+          body: {
+            emptyDataSourceMessage: (
+              <div style={{display: 'flex',  
+                          justifyContent:'center', 
+                          alignItems:'center', 
+                          height: '10vh', 
+                          width: '10vh',
+                          margin:'0 auto'}} >
+                <img src={loading} alt="loading" />
+              </div>
+            ),
           },
         }}
       />
