@@ -24,7 +24,6 @@ public class TemplateFileVO implements Serializable {
   @Column(name="ID")
   private Long id;
   
-  
   @ManyToOne(optional = false)
   @JoinColumn(name="TEMPLATE_ID", nullable = false)
   private TemplateVO template;

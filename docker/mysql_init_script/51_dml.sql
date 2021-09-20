@@ -24,6 +24,7 @@ INSERT INTO `FUNZIONE` (`CODICE`, `RESERVED`, `NOME`, `DESCRIZIONE`) VALUES
 ('test.delete',	0,	'Elimina Test Case',	'Consente di eliminare un test case'),
 ('test.edit',	0,	'Modifica Test Case',	'Consente di modificare un test case'),
 ('test.view',	0,	'Mostra Test Case',	'Consente di accedere ai test case'),
+('test.run',	0,	'Carica/Lancia Test Case',	'Carica/Lancia Test Case'),
 ('testsuite.create',	0,	'Crea Test Suite',	'Consente di creare una nuova test suite'),
 ('testsuite.delete',	0,	'Elimina Test Suite',	'Consente di eliminare una test suite esistente'),
 ('testsuite.edit',	0,	'Modifica Test Suite',	'Consente di modificare una test suite esistente'),

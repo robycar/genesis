@@ -3,6 +3,7 @@ package it.reply.genesis.service;
 import java.util.List;
 
 import it.reply.genesis.api.generic.exception.ApplicationException;
+import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestCaseDTO;
 import it.reply.genesis.model.LineaVO;
 import it.reply.genesis.model.OutboundProxyVO;
@@ -25,6 +26,8 @@ public interface TestCaseService {
   List<Long> findTestCaseIdUsingProxy(OutboundProxyVO proxyVO);
   
   TestCaseVO readVO(long id) throws ApplicationException;
+
+  TestCaseCaricatoDTO loadTestCase(long id) throws ApplicationException;
 
 
 }
