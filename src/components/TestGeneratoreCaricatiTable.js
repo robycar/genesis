@@ -23,8 +23,9 @@ import { Divider } from "@material-ui/core";
 import loading from "../../src/assets/load.gif";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
-// import Stack from "@mui/material/Stack";
-// import TextField from "@mui/material/TextField";
+// import DateAdapter from "@mui/lab/AdapterDateFns";
+
+// n// import TextField from "@mui/material/TextField";
 // import AdapterDateFns from "@mui/lab/AdapterDateFns";
 // import LocalizationProvider from "@mui/lab/LocalizationProvider";
 // import TimePicker from "@mui/lab/TimePicker";
@@ -248,7 +249,7 @@ const TestCaricatiTable = () => {
     setValue(newValue);
   };
 
-  /*------------- GET TEST CASE -------------*/
+  /*------------- GET TEST GEN -------------*/
 
   let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
@@ -259,7 +260,7 @@ const TestCaricatiTable = () => {
   const [appearTest, setAppearTest] = useState([]);
   const [nome, setNome] = useState("");
 
-  const getAllTestCase = () => {
+  const getAllTestGeneratore = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -271,7 +272,7 @@ const TestCaricatiTable = () => {
       redirect: "follow",
     };
 
-    fetch(`/api/testcase`, requestOptions)
+    fetch(`/api/testgen`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -281,14 +282,14 @@ const TestCaricatiTable = () => {
   };
 
   useEffect(() => {
-    getAllTestCase();
+    getAllTestGeneratore();
   }, []);
 
   return (
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title=" Total Test Case Caricati"
+        title=" Total Test Generatore Caricati"
         data={data}
         columns={columns}
         options={{
@@ -329,9 +330,9 @@ const TestCaricatiTable = () => {
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Load Test Generatore"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Load Test Generatore",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },
@@ -359,7 +360,7 @@ const TestCaricatiTable = () => {
         }}
       />
 
-      {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
+      {/* ------------------ MODALE LOAD TEST GENERATORE --------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -381,19 +382,19 @@ const TestCaricatiTable = () => {
                     <BackupIcon className={classes.icon} />
                   </ListItemIcon>
                   <Typography className={classes.intestazione} variant="h5">
-                    Load Test Case
+                    Load Test Generatore
                   </Typography>
                 </ListItem>
               </div>
               <Divider className={classes.divider} />
 
               <Typography variant="h6" className={classes.typography}>
-                Seleziona Test Case
+                Seleziona Test Generatore
               </Typography>
 
               <div className={classes.divSelectBar}>
                 <Form.Group>
-                  <Form.Label>Nome del Test Case</Form.Label>
+                  <Form.Label>Nome del Test Generatore</Form.Label>
                   <FormControl variant="outlined">
                     <Select
                       className={classes.select}
@@ -438,7 +439,7 @@ const TestCaricatiTable = () => {
         </Fade>
       </Modal>
 
-      {/* ------------------ MODALE SCHEDULA TEST CASE --------------------- */}
+      {/* ------------------ MODALE SCHEDULA TEST GENERATORE --------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -459,7 +460,7 @@ const TestCaricatiTable = () => {
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
                 <Typography className={classes.intestazione} variant="h5">
-                  Schedula Test Case
+                  Schedula Test Generatore
                 </Typography>
               </ListItem>
               <Divider className={classes.divider} />
@@ -479,8 +480,8 @@ const TestCaricatiTable = () => {
                       <TextField {...params} helperText={null} />
                     )}
                   /> */}
-                  {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <Stack spacing={3}>
+                  {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
+                    {/* <Stack spacing={3}>
                       <DesktopDatePicker
                         label="Date desktop"
                         inputFormat="MM/dd/yyyy"
@@ -488,8 +489,8 @@ const TestCaricatiTable = () => {
                         onChange={handleChangeData}
                         renderInput={(params) => <TextField {...params} />}
                       />
-                    </Stack>
-                  </LocalizationProvider> */}
+                    </Stack> */}
+                  {/* </LocalizationProvider> */}
                 </Paper>
 
                 <Paper elevation={2} className={classes.delayPaper}>

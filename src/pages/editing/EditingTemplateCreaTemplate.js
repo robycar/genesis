@@ -466,13 +466,13 @@ function EditingTemplateCreaTemplate() {
       formdata.append("chiamanti", qntChiamanti[1].linea);
     }
     if (arrayValue[0]?.name) {
-      formdata.append("file", arrayValue[0], arrayValue[0].name);
+      formdata.append("file", arrayValue[0], arrayValue[0]?.name);
     }
     if (arrayValue[1]?.name) {
-      formdata.append("file", arrayValue[1], arrayValue[1].name);
+      formdata.append("file", arrayValue[1], arrayValue[1]?.name);
     }
     if (arrayValue[1]?.name) {
-      formdata.append("file", arrayValue[2], arrayValue[2].name);
+      formdata.append("file", arrayValue[2], arrayValue[2]?.name);
     }
 
     var requestOptions = {
@@ -506,9 +506,11 @@ function EditingTemplateCreaTemplate() {
           }
         } else {
           setOpenWarning(false);
+          history.push("/editing/template");
         }
       })
       .catch((error) => console.log("error", error));
+    // window.location = "/editing/template";
     handleCloseWarning();
   };
 

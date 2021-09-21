@@ -54,41 +54,41 @@ const TestSuiteComplete = () => {
 
   const columns = [
     {
-      title: "ID ",
-      field: "id",
-      defaultSort:"desc"
-    },
-    {
-      title: "Launcher",
+      title: "Id",
       field: "launcher",
+      defaultSort: "desc",
     },
     {
-      title: "Name TS",
-      field: "nameTS",
+      title: "Nome Test",
+      field: "nameTs",
     },
     {
-      title: "Start Date",
+      title: "Loader",
       field: "startDate",
     },
     {
-      title: "End Date",
+      title: "Data Inizio",
       field: "endDate",
     },
     {
-      title: "Test Case",
-      field: "testCase",
+      title: "Data Fine",
+      field: "result",
     },
     {
-      title: "OK Result",
-      field: "okResult",
+      title: "Status",
+      field: "trace",
     },
     {
-      title: "KO Result",
-      field: "koresult",
+      title: "Trace",
+      field: "trace",
     },
     {
-      title: "Partially Result",
-      field: "partiallyResoult",
+      title: "Call-Id",
+      field: "trace",
+    },
+    {
+      title: "Report",
+      field: "trace",
     },
   ];
 

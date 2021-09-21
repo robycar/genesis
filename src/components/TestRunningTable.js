@@ -53,28 +53,44 @@ const TestRunningTable = () => {
   //---------TABLE COLUMNS------------------
   const columns = [
     {
-      title: "ID",
-      field: "id",
-      defaultSort:"desc"
+      title: "Id",
+      field: "launcher",
+      defaultSort: "desc",
     },
     {
-      title: "Nome",
-      field: "nome",
+      title: "Nome Test",
+      field: "nameTs",
     },
     {
-      title: "Descrizione",
-      field: "descrizione",
+      title: "Loader",
+      field: "startDate",
     },
     {
-      title: "Versione",
-      field: "version",
+      title: "Data Inizio",
+      field: "endDate",
     },
     {
-      title: "Durata",
-      field: "expectedDuration",
-    }
+      title: "Data Fine",
+      field: "result",
+    },
+    {
+      title: "Status",
+      field: "trace",
+    },
+    {
+      title: "Trace",
+      field: "trace",
+    },
+    {
+      title: "Call-Id",
+      field: "trace",
+    },
+    {
+      title: "Report",
+      field: "trace",
+    },
   ];
-
+  
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,

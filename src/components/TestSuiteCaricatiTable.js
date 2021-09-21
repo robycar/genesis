@@ -18,7 +18,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
-import acccessControl from "../service/url";
+import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
 
 const TestSuiteCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
@@ -63,33 +64,41 @@ const TestSuiteCaricatiTable = () => {
 
   const columns = [
     {
-      title: "Launcher",
+      title: "Id",
       field: "launcher",
       defaultSort: "desc",
     },
     {
-      title: "Name TS",
+      title: "Nome Test",
       field: "nameTs",
     },
     {
-      title: "Start Date",
+      title: "Loader",
       field: "startDate",
     },
     {
-      title: "End Date",
+      title: "Data Inizio",
       field: "endDate",
     },
     {
-      title: "Result",
+      title: "Data Fine",
       field: "result",
+    },
+    {
+      title: "Status",
+      field: "trace",
     },
     {
       title: "Trace",
       field: "trace",
     },
     {
-      title: "MOS",
-      field: "mos",
+      title: "Call-Id",
+      field: "trace",
+    },
+    {
+      title: "Report",
+      field: "trace",
     },
   ];
 
@@ -133,7 +142,8 @@ const TestSuiteCaricatiTable = () => {
       marginTop: "1%",
     },
     divSelectBar: {
-      marginTop: "25px",
+      marginTop: "5%",
+      marginBottom: "5%",
     },
     typography: {
       marginTop: "3%",
@@ -144,11 +154,9 @@ const TestSuiteCaricatiTable = () => {
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: "2%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -167,6 +175,23 @@ const TestSuiteCaricatiTable = () => {
     select: {
       width: "400px",
     },
+    divContent: {
+      padding: "2%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    divIntestazione: {
+      marginBottom: "2%",
+    },
+    calendarPaper: {
+      width: "190px",
+      height: "210px",
+    },
+    delayPaper: {
+      width: "190px",
+      height: "210px",
+    },
   }));
 
   /*----------- GET TEST SUITE ------------------*/
@@ -179,6 +204,8 @@ const TestSuiteCaricatiTable = () => {
 
   const [appearTest, setAppearTest] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [openSchedula, setOpenSchedula] = React.useState(false);
+
   const [nome, setNome] = useState("");
 
   const handleOpen = () => {
@@ -187,6 +214,15 @@ const TestSuiteCaricatiTable = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleOpenSchedula = () => {
+    setOpenSchedula(true);
+    setOpen(false);
+  };
+
+  const handleCloseSchedula = () => {
+    setOpenSchedula(false);
   };
 
   // ------- GET TEST SUITE -----------
@@ -294,6 +330,9 @@ const TestSuiteCaricatiTable = () => {
         //   ),
         // }}
       />
+
+            {/* ------------------ MODALE TEST SUITE --------------------- */}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -309,14 +348,16 @@ const TestSuiteCaricatiTable = () => {
         <Fade in={open}>
           <Paper className={classes.paperModale} elevation={1}>
             <div>
-              <ListItem button>
-                <ListItemIcon>
-                  <BackupIcon className={classes.icon} />
-                </ListItemIcon>
-                <Typography className={classes.intestazione} variant="h4">
-                  Load Test Suite
-                </Typography>
-              </ListItem>
+              <div className={classes.divIntestazione}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <BackupIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <Typography className={classes.intestazione} variant="h5">
+                    Load Test Suite
+                  </Typography>
+                </ListItem>
+              </div>
               <Divider className={classes.divider} />
 
               <Typography variant="h6" className={classes.typography}>
@@ -334,7 +375,11 @@ const TestSuiteCaricatiTable = () => {
                     >
                       {appearTest.map((prova) => {
                         return (
-                          <MenuItem style={{width: "423px"}} key={prova.id} value={prova.id}>
+                          <MenuItem
+                            style={{ width: "423px" }}
+                            key={prova.id}
+                            value={prova.id}
+                          >
                             {prova.nome}
                           </MenuItem>
                         );
@@ -343,14 +388,100 @@ const TestSuiteCaricatiTable = () => {
                   </FormControl>
                 </Form.Group>
               </div>
+              <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-                <Button variant="contained" color="secondary">
-                  Schedula Test
+                <ButtonClickedGreen
+                  size="small"
+                  variant="contained"
+                  color="secondary"
+                  nome="Schedula Test"
+                  onClick={handleOpenSchedula}
+                />
+
+                <ButtonNotClickedGreen
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  nome="Carica Test"
+                />
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ------------------ MODALE SCHEDULA TEST SUITE --------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openSchedula}
+        onClose={handleCloseSchedula}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openSchedula}>
+          <Paper className={classes.paperModale} elevation={1}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h5">
+                  Schedula Test Suite
+                </Typography>
+              </ListItem>
+              <Divider className={classes.divider} />
+
+              <div className={classes.divContent}>
+                <Paper elevation={2} className={classes.calendarPaper}>
+                  <Typography>Calendario</Typography>
+                  {/* <DatePicker
+                    openTo="year"
+                    views={["year", "month", "day"]}
+                    label="Year, month and date"
+                    value={value}
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} helperText={null} />
+                    )}
+                  /> */}
+                  {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <Stack spacing={3}>
+                      <DesktopDatePicker
+                        label="Date desktop"
+                        inputFormat="MM/dd/yyyy"
+                        value={value}
+                        onChange={handleChangeData}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </Stack>
+                  </LocalizationProvider> */}
+                </Paper>
+
+                <Paper elevation={2} className={classes.delayPaper}>
+                  <Typography>Durata</Typography>
+                </Paper>
+              </div>
+              <Divider />
+
+              <div className={classes.bottone}>
+                <Button variant="contained" color="primary">
+                  Conferma
                 </Button>
 
-                <Button variant="contained" color="primary">
-                  Carica Test
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseSchedula}
+                >
+                  Annulla
                 </Button>
               </div>
             </div>

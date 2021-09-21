@@ -1,27 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import MaterialTable from "material-table";
 import Modal from "@material-ui/core/Modal";
+import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import SelectBar from "./SelectBar";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import "../styles/App.css";
 
-const TestSchedulatiTable = () => {
-  const [filter, setFilter] = useState(false);
+const TestGeneratoreConclusiTable = () => {
   const data = [
     {
       launcher: "Adam Denisov",
       nameTs: "PEM_001",
       startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
       result: "2/10",
       trace: "*****",
       mos: "",
@@ -30,7 +28,7 @@ const TestSchedulatiTable = () => {
       launcher: "Keith M. Boyce",
       nameTs: "PEM_002",
       startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
       result: "3/10",
       trace: "*****",
       mos: "",
@@ -39,7 +37,7 @@ const TestSchedulatiTable = () => {
       launcher: "Stella D. Knight",
       nameTs: "PEM_003",
       startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
       result: "4/10",
       trace: "*****",
       mos: "",
@@ -48,7 +46,7 @@ const TestSchedulatiTable = () => {
       launcher: "Walter E. Harmon",
       nameTs: "PEM_004",
       startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
+      endDate: "28/09/2020 13:10",
       result: "5/10",
       trace: "*****",
       mos: "",
@@ -94,6 +92,7 @@ const TestSchedulatiTable = () => {
       field: "trace",
     },
   ];
+
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -157,9 +156,6 @@ const TestSchedulatiTable = () => {
     },
   }));
 
-  const handleChange = () => {
-    setFilter(!filter);
-  };
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
@@ -171,12 +167,11 @@ const TestSchedulatiTable = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title=" Total Test Case Schedulati"
+        title="Total Test Suite Conclusi"
         data={data}
         columns={columns}
         options={{
@@ -185,9 +180,9 @@ const TestSchedulatiTable = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          selection: true,
+          // selection: true,
           // columnsButton: true,
-          filtering: filter,
+          // filtering: true,
         }}
         actions={[
           {
@@ -205,19 +200,8 @@ const TestSchedulatiTable = () => {
             position: "row",
           },
           {
-            icon: "delete",
-            tooltip: "Delete all selected row",
-            onClick: () => alert("Ho cancellato le righe"),
-          },
-          {
-            icon: () => <FilterListIcon />,
-            tooltip: "Hide/Show Filter option",
-            isFreeAction: true,
-            onClick: () => handleChange(),
-          },
-          {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Load Test Suite"></ButtonClickedBlue>
             ),
             tooltip: "Load Test Suite",
             onClick: () => handleOpen(),
@@ -229,6 +213,18 @@ const TestSchedulatiTable = () => {
             actions: "Azioni",
           },
         }}
+        // components={{
+        //   Toolbar: (props) => (
+        //     <div>
+        //       <MTableToolbar {...props} />
+        //       <div className="button-load-test">
+        //         <Button variant="contained" color="primary">
+        //           LOAD TEST CASE
+        //         </Button>
+        //       </div>
+        //     </div>
+        //   ),
+        // }}
       />
       <Modal
         className={classes.modal}
@@ -248,13 +244,13 @@ const TestSchedulatiTable = () => {
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
                 <Typography className={classes.intestazione} variant="h5">
-                  Load Test Case
+                  Load Test Suite
                 </Typography>
               </ListItem>
             </div>
 
             <div className={classes.paperBottom}>
-              <Typography variant="h6">Seleziona Test Case</Typography>
+              <Typography variant="h6">Seleziona Test Suite</Typography>
               <div className={classes.divSelectBar}>
                 <div className={classes.divTextarea}>
                   <Typography className={classes.contenuto} variant="h11">
@@ -281,4 +277,4 @@ const TestSchedulatiTable = () => {
   );
 };
 
-export default TestSchedulatiTable;
+export default TestGeneratoreConclusiTable;

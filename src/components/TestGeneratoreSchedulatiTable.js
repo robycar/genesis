@@ -14,7 +14,7 @@ import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 
-const TestSchedulatiTable = () => {
+const TestGeneratoreSchedulatiTable = () => {
   const [filter, setFilter] = useState(false);
   const data = [
     {
@@ -171,12 +171,11 @@ const TestSchedulatiTable = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title=" Total Test Case Schedulati"
+        title=" Total Test Suite Schedulati"
         data={data}
         columns={columns}
         options={{
@@ -217,7 +216,7 @@ const TestSchedulatiTable = () => {
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Load Test Suite"></ButtonClickedBlue>
             ),
             tooltip: "Load Test Suite",
             onClick: () => handleOpen(),
@@ -229,6 +228,18 @@ const TestSchedulatiTable = () => {
             actions: "Azioni",
           },
         }}
+        // components={{
+        //   Toolbar: (props) => (
+        //     <div>
+        //       <MTableToolbar {...props} />
+        //       <div className="button-load-test">
+        //         <Button variant="contained" color="primary">
+        //           LOAD TEST CASE
+        //         </Button>
+        //       </div>
+        //     </div>
+        //   ),
+        // }}
       />
       <Modal
         className={classes.modal}
@@ -248,13 +259,13 @@ const TestSchedulatiTable = () => {
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
                 <Typography className={classes.intestazione} variant="h5">
-                  Load Test Case
+                  Load Test Suite
                 </Typography>
               </ListItem>
             </div>
 
             <div className={classes.paperBottom}>
-              <Typography variant="h6">Seleziona Test Case</Typography>
+              <Typography variant="h6">Seleziona Test Suite</Typography>
               <div className={classes.divSelectBar}>
                 <div className={classes.divTextarea}>
                   <Typography className={classes.contenuto} variant="h11">
@@ -281,4 +292,4 @@ const TestSchedulatiTable = () => {
   );
 };
 
-export default TestSchedulatiTable;
+export default TestGeneratoreSchedulatiTable;

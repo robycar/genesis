@@ -580,6 +580,18 @@ function TestCaseTable() {
   return (
     <div>
       <MaterialTable
+       detailPanel={rowData => {
+        return (
+          <div
+          style={{
+            fontSize: 16,
+            marginLeft: 2,
+          }}
+        >
+       {"  "} {rowData.descrizione}
+        </div>
+        )
+      }}
         style={{ boxShadow: "none" }}
         title="Test Case"
         data={data}

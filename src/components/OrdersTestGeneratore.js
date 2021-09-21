@@ -17,10 +17,10 @@ import SearchBar from "./Search";
 import ButtonClickedBlue from "../components/ButtonClickedBlue";
 import ButtonNotClickedBlue from "../components/ButtonNotClickedBlue";
 import "../styles/App.css";
-import TestRunningTable from "./TestRunningTable";
-import TestCaricatiTable from "./TestCaricatiTable";
-import TestSchedulatiTable from "./TestSchedulatiTable";
-import TestConclusiTable from "./TestConclusiTable";
+import TestGeneratoreRunningTable from "./TestGeneratoreRunningTable";
+import TestGeneratoreCaricatiTable from "./TestGeneratoreCaricatiTable";
+import TestGeneratoreSchedulatiTable from "./TestGeneratoreSchedulatiTable";
+import TestGeneratoreConclusiTable from "./TestGeneratoreConclusiTable";
 
 
 const headCells = [
@@ -295,11 +295,11 @@ export default function EnhancedTable() {
         ))}
         
       </div>
-      {appState.activeObject === null && <TestCaricatiTable />}
-      {appState.objects[2] === appState.activeObject && <TestRunningTable />}
-      {appState.objects[3] === appState.activeObject && <TestConclusiTable />}
-      {appState.objects[0] === appState.activeObject && <TestCaricatiTable />}
-      {appState.objects[1] === appState.activeObject && <TestSchedulatiTable />}
+      {appState.activeObject === null && <TestGeneratoreCaricatiTable />}
+      {appState.objects[2] === appState.activeObject && <TestGeneratoreRunningTable />}
+      {appState.objects[3] === appState.activeObject && <TestGeneratoreConclusiTable />}
+      {appState.objects[0] === appState.activeObject && <TestGeneratoreCaricatiTable />}
+      {appState.objects[1] === appState.activeObject && <TestGeneratoreSchedulatiTable />}
       
     </>
   );

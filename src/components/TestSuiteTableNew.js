@@ -37,6 +37,8 @@ function TestSuiteTable() {
   const [descrizione, setDescrizione] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [modifiedBy, setModifiedBy] = useState("");
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [dataTestCases, setDataTestCases] = useState([]);
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
   const [durataComplessiva, setDurataComplessiva] = useState("");
@@ -44,21 +46,55 @@ function TestSuiteTable() {
   const arrayTestCase = testSuite?.testCases;
   const newArr1 = arrayTestCase?.map((v) => ({
     ...v,
+    // console.log(v),
     tableData: { checked: true },
   }));
   console.log(newArr1, " Array di test case modificato");
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [dataTestCases, setDataTestCases] = useState([]);
+
+  const arrayEmpty = [];
+  for (let index = 0; index < dataTestCases.length; index++) {
+    const elemento = dataTestCases[index];
+
+    for (let index = 0; index < newArr1?.length; index++) {
+      if (elemento.id === newArr1[index].id) {
+        arrayEmpty.push(newArr1[index]);
+      }
+    }
+
+    if (!arrayEmpty.includes(elemento)) {
+      arrayEmpty.push(elemento);
+
+      console.log(!arrayEmpty.includes(elemento.id));
+    }
+
+    console.log(dataTestCases[index], "data");
+    newArr1?.push(elemento);
+  }
+
+  console.log(arrayEmpty, "Empty");
+  const res = dataTestCases.map(
+    (obj) => newArr1?.find((o) => o.id === obj.id) || obj
+  );
+
+  /// Array di testCase associati con il flag
+
+  // for (let index = 0; index < dataTestCases.length; index++) {
+  //   const elemento = dataTestCases[index];
+
+  //   // console.log(dataTestCases[index], "data");
+  //   newArr1?.push(elemento);
+  // }
+
+  // console.log(dataTestCases, "dataTestCases");
 
   /*------- arrayIdTestCase -----------*/
-
   const arrayIdTestCase = [];
   for (let index = 0; index < selectedRows?.length; index++) {
     const element = selectedRows[index]?.id;
     arrayIdTestCase?.push(element);
   }
 
-  console.log(selectedRows, " Righe selezionati");
+  // console.log(selectedRows, " Righe selezionati");
   console.log(arrayTestCase, " Array di test case");
 
   var arrayId = [];
@@ -1038,7 +1074,7 @@ function TestSuiteTable() {
                     <MaterialTable
                       style={{ boxShadow: "none" }}
                       title="Test Case"
-                      data={dataTestCases}
+                      data={res}
                       columns={columnsTestcases}
                       options={{
                         selection: true,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import MaterialTable from "material-table";
@@ -14,76 +14,120 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import "../styles/App.css";
 
 const TestConclusiTable = () => {
-  const data = [
-    {
-      launcher: "Adam Denisov",
-      nameTs: "PEM_001",
-      startDate: "28/09/2020 13:10",
-      endDate: "28/09/2020 13:10",
-      result: "2/10",
-      trace: "*****",
-      callId: "",
-    },
-    {
-      launcher: "Keith M. Boyce",
-      nameTs: "PEM_002",
-      startDate: "28/09/2020 13:10",
-      endDate: "28/09/2020 13:10",
-      result: "3/10",
-      trace: "*****",
-      callId: "",
-    },
-    {
-      launcher: "Stella D. Knight",
-      nameTs: "PEM_003",
-      startDate: "28/09/2020 13:10",
-      endDate: "28/09/2020 13:10",
-      result: "4/10",
-      trace: "*****",
-      callId: "",
-    },
-    {
-      launcher: "Walter E. Harmon",
-      nameTs: "PEM_004",
-      startDate: "28/09/2020 13:10",
-      endDate: "28/09/2020 13:10",
-      result: "5/10",
-      trace: "*****",
-      callId: "",
-    },
-  ];
+
+  const [id, setId] = useState();
+  const [nome, setNome] =useState("");
+  const [creationDate, setCreationDate] = useState();
+  const [modifiedDate, setModifiedDate] = useState(); 
+  const [data, setData] = useState();
+  const [createdBy, setCreatedBy] = useState("");
+
+  // const data = [
+  //   {
+  //     launcher: "Adam Denisov",
+  //     nameTs: "PEM_001",
+  //     startDate: "28/09/2020 13:10",
+  //     endDate: "28/09/2020 13:10",
+  //     result: "2/10",
+  //     trace: "*****",
+  //     callId: "",
+  //   },
+  //   {
+  //     launcher: "Keith M. Boyce",
+  //     nameTs: "PEM_002",
+  //     startDate: "28/09/2020 13:10",
+  //     endDate: "28/09/2020 13:10",
+  //     result: "3/10",
+  //     trace: "*****",
+  //     callId: "",
+  //   },
+  //   {
+  //     launcher: "Stella D. Knight",
+  //     nameTs: "PEM_003",
+  //     startDate: "28/09/2020 13:10",
+  //     endDate: "28/09/2020 13:10",
+  //     result: "4/10",
+  //     trace: "*****",
+  //     callId: "",
+  //   },
+  //   {
+  //     launcher: "Walter E. Harmon",
+  //     nameTs: "PEM_004",
+  //     startDate: "28/09/2020 13:10",
+  //     endDate: "28/09/2020 13:10",
+  //     result: "5/10",
+  //     trace: "*****",
+  //     callId: "",
+  //   },
+  // ];
 
   const columns = [
     {
-      title: "Launcher",
-      field: "launcher",
-      defaultSort:"desc"
+      title: "Id",
+      field: "id",
+      defaultSort: "desc",
     },
     {
-      title: "Name TS",
-      field: "nameTs",
+      title: "Nome Test",
+      field: "nome",
     },
     {
-      title: "Start Date",
-      field: "startDate",
+      title: "Loader",
+      field: "createdBy",
     },
     {
-      title: "End Date",
-      field: "endDate",
+      title: "Data Inizio",
+      field: "creationDate",
     },
     {
-      title: "Result",
-      field: "result",
+      title: "Data Fine",
+      field: "modifiedDate",
+    },
+    {
+      title: "Status",
+      field: "trace",
     },
     {
       title: "Trace",
       field: "trace",
     },
     {
-      title: "Call ID",
-      field: "callId",
+      title: "Call-Id",
+      field: "trace",
+    },
+    {
+      title: "Report",
+      field: "trace",
     },
   ];
+
+  let bearer = `Bearer ${localStorage.getItem("token")}`;
+
+  //-----------GET TEST CASE----------------------
+  const getAllTestCase = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestCase();
+    
+  }, []);
 
   const useStyles = makeStyles((theme) => ({
     paper: {
