@@ -207,7 +207,7 @@ function Template() {
             );
           }
         } else {
-          setOpenwarning(false);
+          setOpenWarning(false);
           getTemplate();
         }
       })

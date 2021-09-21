@@ -8,6 +8,9 @@ import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Button from "@material-ui/core/Button";
+import acccessControl from "../service/url";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
 
 // function rand() {
 //   return Math.round(Math.random() * 20) - 10;
@@ -25,7 +28,7 @@ import Button from "@material-ui/core/Button";
 // }
 
 function SimpleModal() {
-
+  const classes = useStyles();
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -178,21 +181,19 @@ function SimpleModal() {
               </div> */}
 
               <div className={classes.divTextarea}>
-                
-              
-              <TextField
-                select
-                label="Seleziona Test Suite "
-                value={appearTest.nome}
-                defaultValue={nome}
-                onChange={(e) => setNome(e.target.value)}
-              >
-                {appearTest.map((nome) => (
-                  <MenuItem key={nome} value={nome}>
-                    {nome}
-                  </MenuItem>
-                ))}
-              </TextField>
+                <TextField
+                  select
+                  label="Seleziona Test Suite "
+                  value={appearTest.nome}
+                  defaultValue={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                >
+                  {appearTest.map((nome) => (
+                    <MenuItem key={nome} value={nome}>
+                      {nome}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </div>
 
               <div className={classes.bottoni}>
