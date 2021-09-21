@@ -8,6 +8,9 @@ import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Button from "@material-ui/core/Button";
+import acccessControl from "../service/url";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
 
 // function rand() {
 //   return Math.round(Math.random() * 20) - 10;
@@ -25,6 +28,7 @@ import Button from "@material-ui/core/Button";
 // }
 
 function SimpleModal() {
+  const classes = useStyles();
 
   const useStyles = makeStyles((theme) => ({
     paper: {
