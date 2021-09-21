@@ -1,6 +1,7 @@
 package it.reply.genesis.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +44,7 @@ import it.reply.genesis.service.LineaService;
 import it.reply.genesis.service.OBPService;
 import it.reply.genesis.service.TemplateService;
 import it.reply.genesis.service.TestCaseService;
+import it.reply.genesis.service.dto.TestListType;
 
 @Service
 @Transactional(rollbackFor = ApplicationException.class)
@@ -355,6 +357,34 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     testCaseCaricatoRepository.saveAndFlush(vo);
     
     return new TestCaseCaricatoDTO(vo, true, true).assignFolder(fileCopiati.values());
+  }
+
+  @Override
+  public List<TestCaseCaricatoDTO> readTestCaricatiOfType(TestListType inclusion) throws ApplicationException {
+    
+    TestCaseCaricatoStato stato;
+    switch (inclusion) {
+    case COMPLETED: 
+      stato = TestCaseCaricatoStato.COMPLETED;
+      break;
+    case READY:
+      stato = TestCaseCaricatoStato.READY;
+      break;
+    case RUNNING:
+      stato = TestCaseCaricatoStato.RUNNING;
+      break;
+    case WAITING:
+      stato = TestCaseCaricatoStato.WAITING;
+      break;
+    default:
+      return Collections.emptyList();
+    }
+    
+    List<TestCaseCaricatoVO> result = testCaseCaricatoRepository.findByStato(stato, Sort.by(Direction.DESC, "id"));
+
+    return result.stream()
+        .map(TestCaseCaricatoDTO::new)
+        .collect(Collectors.toList());
   }
 
 }

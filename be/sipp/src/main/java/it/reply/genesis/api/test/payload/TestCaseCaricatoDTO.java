@@ -12,7 +12,7 @@ import it.reply.genesis.api.generic.payload.DTO;
 import it.reply.genesis.api.linea.payload.LineaDTO;
 import it.reply.genesis.api.linea.payload.OutboundProxyDTO;
 import it.reply.genesis.model.FileSystemVO;
-import it.reply.genesis.model.TCCPropertyVO;
+import it.reply.genesis.model.TestCaseCaricatoPropertyVO;
 import it.reply.genesis.model.TestCaseCaricatoStato;
 import it.reply.genesis.model.TestCaseCaricatoVO;
 
@@ -140,11 +140,11 @@ public class TestCaseCaricatoDTO extends DTO {
     return this;
   }
   
-  public TestCaseCaricatoDTO assignProperties(Collection<? extends TCCPropertyVO> props) {
+  public TestCaseCaricatoDTO assignProperties(Collection<? extends TestCaseCaricatoPropertyVO> props) {
     if (props != null) {
       if (this.properties == null) {
         this.properties = props.stream()
-            .map(TCCPropertyVO::toPropertyDTO)
+            .map(TestCaseCaricatoPropertyVO::toPropertyDTO)
             .collect(Collectors.toList());
       } else {
         props.forEach(pvo -> this.properties.add(pvo.toPropertyDTO()));

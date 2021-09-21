@@ -8,6 +8,7 @@ import it.reply.genesis.api.test.payload.TestCaseDTO;
 import it.reply.genesis.model.LineaVO;
 import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TestCaseVO;
+import it.reply.genesis.service.dto.TestListType;
 
 public interface TestCaseService {
 
@@ -28,6 +29,8 @@ public interface TestCaseService {
   TestCaseVO readVO(long id) throws ApplicationException;
 
   TestCaseCaricatoDTO loadTestCase(long id) throws ApplicationException;
+
+  List<TestCaseCaricatoDTO> readTestCaricatiOfType(TestListType inclusion) throws ApplicationException;
 
 
 }
