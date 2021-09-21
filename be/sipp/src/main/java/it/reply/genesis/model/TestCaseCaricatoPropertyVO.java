@@ -15,7 +15,7 @@ import it.reply.genesis.api.test.payload.PropertyDTO;
 
 @Entity
 @Table(name="TEST_CASE_CARICATO_PROPERTY")
-public class TCCPropertyVO implements Serializable {
+public class TestCaseCaricatoPropertyVO implements Serializable {
 
   private static final long serialVersionUID = -367619550280925702L;
 
@@ -37,7 +37,7 @@ public class TCCPropertyVO implements Serializable {
   @Column(name="VALORE", length=VALORE_LENGTH)
   private String value;
   
-  public TCCPropertyVO() {
+  public TestCaseCaricatoPropertyVO() {
   }
 
   public PropertyDTO toPropertyDTO() {

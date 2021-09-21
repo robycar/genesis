@@ -86,6 +86,10 @@ public class TestCaseCaricatoVO implements Serializable {
   @Column(name="STATO", nullable = false)
   private TestCaseCaricatoStato stato;
   
+  @Enumerated(EnumType.STRING)
+  @Column(name="EXECUTION_RESULT")
+  private ExecutionResult result;
+  
   @ManyToOne
   @JoinColumn(name="ID_GRUPPO")
   private GruppoVO gruppo;
@@ -95,7 +99,7 @@ public class TestCaseCaricatoVO implements Serializable {
   private TemplateVO template;
   
   @OneToMany(mappedBy = "testCaseCaricato", orphanRemoval = true)
-  private List<TCCPropertyVO> properties;
+  private List<TestCaseCaricatoPropertyVO> properties;
   
   @OneToMany(mappedBy = "testCaseCaricato", cascade=CascadeType.REMOVE)
   @OrderBy("numLinea")
@@ -244,11 +248,11 @@ public class TestCaseCaricatoVO implements Serializable {
     this.template = template;
   }
 
-  public List<TCCPropertyVO> getProperties() {
+  public List<TestCaseCaricatoPropertyVO> getProperties() {
     return properties;
   }
 
-  public void setProperties(List<TCCPropertyVO> properties) {
+  public void setProperties(List<TestCaseCaricatoPropertyVO> properties) {
     this.properties = properties;
   }
 
@@ -266,6 +270,14 @@ public class TestCaseCaricatoVO implements Serializable {
 
   public void setTestCase(TestCaseVO testCase) {
     this.testCase = testCase;
+  }
+
+  public ExecutionResult getResult() {
+    return result;
+  }
+
+  public void setResult(ExecutionResult result) {
+    this.result = result;
   }
 
 }
