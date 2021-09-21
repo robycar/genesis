@@ -41,10 +41,35 @@ function TestSuiteTable() {
   const [modifiedDate, setModifiedDate] = useState("");
   const [durataComplessiva, setDurataComplessiva] = useState("");
   const [testSuite, setTestSuite] = useState([]);
+  const arrayTestCase = testSuite?.testCases;
+  const newArr1 = arrayTestCase?.map((v) => ({
+    ...v,
+    tableData: { checked: true },
+  }));
+  console.log(newArr1, " Array di test case modificato");
   const [selectedRows, setSelectedRows] = useState([]);
   const [dataTestCases, setDataTestCases] = useState([]);
 
-  // const [gruppo, setGruppo] = useState([]);
+  /*------- arrayIdTestCase -----------*/
+
+  const arrayIdTestCase = [];
+  for (let index = 0; index < selectedRows?.length; index++) {
+    const element = selectedRows[index]?.id;
+    arrayIdTestCase?.push(element);
+  }
+
+  console.log(selectedRows, " Righe selezionati");
+  console.log(arrayTestCase, " Array di test case");
+
+  var arrayId = [];
+  arrayTestCase?.forEach(function (obj) {
+    arrayId?.push(obj.id);
+  });
+  console.log(arrayId, "ID associati");
+
+  console.log(arrayIdTestCase, "Id test case selezionati");
+
+  //----Bearer-------------------------
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -116,20 +141,51 @@ function TestSuiteTable() {
       .catch((error) => console.log("error", error));
   };
 
+  //---------------- MODIFICA TEST SUITE---------------------
+
+  const Invia = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: id,
+      version: 0,
+      nome: nome,
+      descrizione: descrizione,
+      testCases: arrayIdTestCase,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testsuite`, requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
+  //----------------------------------------------------------
   useEffect(() => {
     getAllTestSuite();
     getAllTestCase();
+    Invia();
   }, []);
 
   // console.log(testSuite.testCases, "sono test suite");
-
-  const arrayTestCase = testSuite?.testCases;
 
   const columns = [
     {
       title: "ID Test",
       field: "id",
       defaultSort: "desc",
+      // tableData: { checked: true },
     },
     {
       title: "Nome",
@@ -982,10 +1038,13 @@ function TestSuiteTable() {
                     <MaterialTable
                       style={{ boxShadow: "none" }}
                       title="Test Case"
-                      data={arrayTestCase}
+                      data={dataTestCases}
                       columns={columnsTestcases}
                       options={{
                         selection: true,
+                        // selectionProps: (rowData) => ({
+                        //   checked: (rowData.tableData === rowData.id) === 1,
+                        // }),
                         sorting: true,
                         actionsColumnIndex: -1,
                         search: true,
@@ -999,13 +1058,16 @@ function TestSuiteTable() {
                           { value: data.length, label: "All" },
                         ],
                       }}
-                      // onSelectionChange={
-                      //   (rows) => setSelectedRows(rows)
-                      //   // for (let i = 0; i < rows.length; i++) {
-                      //   //   // console.log(rows[i].id);
-                      //   //   return selectedRows.push(rows[i].id);
-                      //   // }
-                      // }
+                      onSelectionChange={
+                        (rows) => {
+                          setSelectedRows(rows);
+                          console.log(rows, "Row");
+                        }
+                        // for (let i = 0; i < rows.length; i++) {
+                        //   // console.log(rows[i].id);
+                        //   return selectedRows.push(rows[i].id);
+                        // }
+                      }
                       // actions={[
                       //   {
                       //     icon: (dat) => (

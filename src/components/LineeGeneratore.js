@@ -43,6 +43,7 @@ function LineeGeneratore() {
   const [porta, setPorta] = useState();
   const [password, setPassword] = useState("");
   const [typeLinea, setTypeLinea] = useState();
+  const [pathCSV, setPathCSV] = useState("");
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -85,7 +86,7 @@ function LineeGeneratore() {
     fetch(`/api/lineageneratore`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        // console.log(result);
+        console.log(result);
         setData(result.list);
       })
       .catch((error) => console.log("error", error));
@@ -96,7 +97,7 @@ function LineeGeneratore() {
     getAppearLine();
   }, []);
 
-  //---------------------AGGIORNA UTENTE-------------------------
+  //---------------------AGGIORNA LINEA GENERATORE-------------------------
 
   const aggiornaLineaGeneratore = () => {
     ip = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
@@ -125,7 +126,7 @@ function LineeGeneratore() {
         redirect: "follow",
       };
 
-      fetch(`/api/lineageratore`, requestOptions)
+      fetch(`/api/lineageneratore`, requestOptions)
         .then((response) => response.json())
         .then((response) => {
           console.log(response);
@@ -138,10 +139,6 @@ function LineeGeneratore() {
 
   const columns = [
     { title: "ID Linea", field: "id", defaultSort: "desc" },
-    // {
-    //   title: "Path Csv",
-    //   field: "pathCsv",
-    // },
     {
       title: "IP Linea",
       field: "ip",
@@ -161,6 +158,10 @@ function LineeGeneratore() {
     {
       title: "Tipo Linea",
       field: "typeLinea.descrizione",
+    },
+    {
+      title: "Path Csv",
+      field: "pathCSV.path",
     },
     {
       title: "Creato da",
@@ -191,6 +192,7 @@ function LineeGeneratore() {
     setPorta(rowData.porta);
     setPassword(rowData.password);
     setTypeLinea(rowData.typeLinea.id);
+    setPathCSV(rowData.pathCSV.path);
     setOpen(true);
   };
 
@@ -240,6 +242,11 @@ function LineeGeneratore() {
             setWarning(
               "Impossibile eliminare la Linea Generatore poichè risulta collegata a uno o più Test Generatore"
             );
+            if (result.error === "Internal Server Error") {
+              setWarning(
+                "Impossibile eliminare la Linea Generatore poichè non si dispongono delle autorizzazioni adeguate"
+              );
+            }
           } else {
             setWarning(
               "Codice errore: " +
@@ -370,7 +377,7 @@ function LineeGeneratore() {
       flexDirection: "row",
     },
     textField: {
-      width: "200px",
+      width: "263px",
     },
     bottone: {
       marginLeft: "55px",
@@ -465,12 +472,16 @@ function LineeGeneratore() {
           },
           body: {
             emptyDataSourceMessage: (
-              <div style={{display: 'flex',  
-                          justifyContent:'center', 
-                          alignItems:'center', 
-                          height: '10vh', 
-                          width: '10vh',
-                          margin:'0 auto'}} >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "10vh",
+                  width: "10vh",
+                  margin: "0 auto",
+                }}
+              >
                 <img src={loading} alt="loading" />
               </div>
             ),
@@ -505,6 +516,7 @@ function LineeGeneratore() {
               <Row className={classes.rowIp}>
                 <Col className={classes.colIp}>
                   <TextField
+                    className={classes.textField}
                     error={
                       porta !== "" && porta > 1000 && porta < 100000
                         ? false
@@ -525,11 +537,13 @@ function LineeGeneratore() {
 
                 <Col className={classes.col}>
                   <TextField
+                    className={classes.textField}
                     select
                     label="Tipo Linea"
                     value={appearLine.id}
                     defaultValue={typeLinea}
                     onChange={(e) => setTypeLinea(e.target.value)}
+                    style={{ marginleft: "1px" }}
                   >
                     {appearLine.map((typeLinea) => (
                       <MenuItem key={typeLinea.id} value={typeLinea.id}>
@@ -621,6 +635,41 @@ function LineeGeneratore() {
                 </Col>
               </Row>
 
+              <Row>
+                <Col className={classes.colIp}>
+                  <TextField
+                    className={classes.textField}
+                    onChange={(e) => setCreatedBy(e.target.value)}
+                    label="Creato Da"
+                    defaultValue={createdBy}
+                    inputProps={{ readOnly: true }}
+                  />
+                </Col>
+
+                <Col className={classes.colIp}>
+                  <TextField
+                    className={classes.textField}
+                    onChange={(e) => setModifiedBy(e.target.value)}
+                    label="Modificato Da"
+                    defaultValue={modifiedBy}
+                    inputProps={{ readOnly: true }}
+                    style={{ marginLeft: "1px" }}
+                  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col className={classes.colIp}>
+                  <TextField
+                    className={classes.textField}
+                    onChange={(e) => setPathCSV(e.target.value)}
+                    label="Path CSV"
+                    defaultValue={pathCSV}
+                    inputProps={{ readOnly: true }}
+                  />
+                </Col>
+              </Row>
+
               <Divider className={classes.divider} />
               <div
                 className={classes.bottone}
@@ -693,8 +742,8 @@ function LineeGeneratore() {
                 <Divider className={classes.divider} />
 
                 <Typography className={classes.typography}>
-                  L'eliminazione della Linea selezionata, comporterà la
-                  cancellazione del Test Generatore ad essa collegato.
+                  L'eliminazione della Linea Generatore selezionata, potrebbe
+                  impattare su uno o più Test Generatore ad essa collegati.
                   <br />
                   Si vuole procedere?{" "}
                 </Typography>

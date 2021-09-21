@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -302,6 +303,7 @@ function getSteps() {
 //--------------------------FINE FUNZIONI STEPPER------------------------------
 
 function EditingTestCreaTestSuite() {
+  let history = useHistory();
   const classes = useStyles();
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
@@ -1233,7 +1235,10 @@ function EditingTestCreaTestSuite() {
                                     }}
                                   />
                                 </Col>
-                                <Col className={classes.col} style={{marginTop: "4%"}}>
+                                <Col
+                                  className={classes.col}
+                                  style={{ marginTop: "4%" }}
+                                >
                                   <Link href="#" variant="body2">
                                     Download XML
                                   </Link>
@@ -1597,12 +1602,22 @@ function EditingTestCreaTestSuite() {
                 <div>
                   <div>
                     <Button
+                      onClick={() => {
+                        activeStep === 0
+                          ? history.push("/editing/testsuite")
+                          : handleBack();
+                      }}
+                      className={classes.backButton}
+                    >
+                      {activeStep === 0 ? "annulla" : "indietro"}
+                    </Button>
+                    {/* <Button
                       disabled={activeStep === 0}
                       onClick={handleBack}
                       className={classes.backButton}
                     >
                       Indietro
-                    </Button>
+                    </Button> */}
                     <Button
                       disabled={
                         nextDisabled ||

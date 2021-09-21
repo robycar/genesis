@@ -102,7 +102,6 @@ function TestCaseTable() {
         setTestCase(result.testCase);
         var p1 = result.testCase;
         var p2 = p1.chiamanti;
-        console.log(p2);
         setChiamanti(p2);
         setOpen(true);
       })
@@ -181,7 +180,7 @@ function TestCaseTable() {
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
       .then((response) => {
-        getAllTestCase();
+        getTestCaseById(id);
         handleCloseChiamato();
       })
       .catch((error) => console.log("error", error));
@@ -377,11 +376,12 @@ function TestCaseTable() {
   //-----------MODALE CHIAMATO------------------
   const handleOpenChiamato = () => {
     var appoggioChiamato;
-    appoggioChiamato = Object.values(testCase.chiamato);
-    arrAppoggioChiamato.linea = appoggioChiamato[1].id;
-    arrAppoggioChiamato.proxy = appoggioChiamato[0].id;
+    appoggioChiamato = testCase.chiamato;
+    console.log(appoggioChiamato)
+    arrAppoggioChiamato.linea = appoggioChiamato.linea.id;
+    arrAppoggioChiamato.proxy = appoggioChiamato.proxy.id;
     setChiamato(arrAppoggioChiamato);
-    console.log(chiamato);
+    console.log(arrAppoggioChiamato);
     setOpenChiamato(true);
   };
 
@@ -721,18 +721,6 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={status !== "" ? false : true}
-                      onChange={(e) => setStatus(e.target.value)}
-                      label="Status"
-                      defaultValue={status}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
                       error={template !== "" ? false : true}
                       onChange={(e) => setTemplate(e.target.value)}
                       label="Template"
@@ -768,86 +756,7 @@ function TestCaseTable() {
                     />
                   </Col>
                 </Row>
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={opzioni !== "" ? false : true}
-                      onChange={(e) => setOpzioni(e.target.value)}
-                      label="Opzioni"
-                      defaultValue={opzioni}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={testSuite !== "" ? false : true}
-                      onChange={(e) => setTestSuite(e.target.value)}
-                      label="Test Suite"
-                      defaultValue={testSuite}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
 
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={startDate !== "" ? false : true}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      label="Start Date"
-                      defaultValue={startDate}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={endDate !== "" ? false : true}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      label="End Date"
-                      defaultValue={endDate}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={lastResult !== "" ? false : true}
-                      onChange={(e) => setLastResult(e.target.value)}
-                      label="Last Result"
-                      value={lastResult}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      //error={report !== "" ? false : true}
-                      //onChange={(e) => setStartDate(e.target.value)}
-                      label="Report"
-                      //defaultValue={startDate}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
                 <Row>
                   <Col className={classes.col}>
                     <TextField
@@ -895,25 +804,6 @@ function TestCaseTable() {
                         readOnly: true,
                       }}
                     />
-                  </Col>
-                </Row>
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      //error={endDate !== "" ? false : true}
-                      //onChange={(e) => setEndDate(e.target.value)}
-                      label="XML"
-                      //defaultValue={endDate}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col} style={{ marginTop: "4%" }}>
-                    <Link href="#" variant="body2">
-                      Download XML
-                    </Link>
                   </Col>
                 </Row>
               </Form>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -22,6 +22,8 @@ import {
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import SelectAutocompleteTestCase from "../components/SelectAutocompleteTestCase";
 import SelectAutocompleteTestSuite from "../components/SelectAutocompleteTestSuite";
+import accessControl from "../service/url.js";
+
 
 const drawerWidth = 240;
 
@@ -158,14 +160,68 @@ const useStyles = makeStyles((theme) => ({
     // marginLeft: "62px",
   },
 }));
-
+let bearer = `Bearer ${localStorage.getItem("token")}`;
 function Launching() {
+  
+  const [testSuites, setTestSuites] = useState([]);
+  const [testCases, setTestCases] = useState([]);
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    loadTestSuite();
+  })
+  
+  const loadTestSuite = () => {
+    if (testSuites.length>0){
+      return;
+    }
+     
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", accessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+  
+    fetch(`/api/testsuite`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTestSuites(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+  
+  const loadTestCases = (id) => {
+  
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", accessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+  
+    fetch(`/api/testsuite/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTestCases(result.testSuite.testCases);
+      })
+      .catch((error) => console.log("error", error));
+  };
+  
+
 
   return (
     <div className={classes.root}>
@@ -214,13 +270,17 @@ function Launching() {
                 </Typography>
               </Paper>
               <div className={classes.containerSelect}>
-                {/* <SelectBar nome="Selezione Test Case" /> */}
-                <SelectAutocompleteTestSuite />
+                {/* <SelectBar nome="Selezione Test Suite" /> */}
+                <SelectAutocompleteTestSuite
+                 items={testSuites?.map(i => ({id: i.id, nome: i.nome}))} 
+                 onChange ={(id) => {loadTestCases(id)}}/>
               </div>
 
               <div>
-                {/* <SelectBar nome="Selezione Test Suite" /> */}
-                <SelectAutocompleteTestCase />
+                {/* <SelectBar nome="Selezione Test Case" /> */}
+                <SelectAutocompleteTestCase 
+                items={testCases?.map(i => ({value: i.id, nome: i.nome, testCases: i.testCases}))} 
+                />
               </div>
             </Paper>
 
@@ -298,3 +358,4 @@ function Launching() {
 }
 
 export default Launching;
+// Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzIxNDY2NDAsImlhdCI6MTYzMjE0MzA0MCwidXNlcm5hbWUiOiJ0ZXN0In0.K2nhbP1jbR11bVV-2nF3fmVrDHPaZzC6zWsttYir3ZrlIQnzT175nQhn19sC50RHswA_7D52Oj48I0ax_KCoAw

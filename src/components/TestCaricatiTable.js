@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import Modal from "@material-ui/core/Modal";
@@ -8,13 +8,25 @@ import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
-import SelectBar from "./SelectBar";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
+import FormControl from "@material-ui/core/FormControl";
+import Form from "react-bootstrap/Form";
+import Select from "@material-ui/core/Select";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-
+import { MenuItem } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 import loading from "../../src/assets/load.gif";
+import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
+// import TextField from "@material-ui/core/TextField";
+// import AdapterDateFns from "@material-ui/AdapterDateFns";
+// import LocalizationProvider from "@material-ui/LocalizationProvider";
+// import DatePicker from "react-date-picker";
+
+
+
 
 const TestCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
@@ -27,6 +39,7 @@ const TestCaricatiTable = () => {
   const [trace, setTrace] = useState();
   const [callId, setCallId] = useState();
   const [report, setReport] = useState("");
+  // const somename = new EventEmitter();
 
   const data = [
     {
@@ -71,7 +84,7 @@ const TestCaricatiTable = () => {
     {
       title: "Id",
       field: "launcher",
-      defaultSort:"desc"
+      defaultSort: "desc",
     },
     {
       title: "Nome Test",
@@ -123,7 +136,6 @@ const TestCaricatiTable = () => {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      marginBottom: "5%",
     },
     paperTop: {
       height: "20%",
@@ -131,41 +143,58 @@ const TestCaricatiTable = () => {
       alignItems: "center",
       //opacity: "25%",
     },
+    paperModale: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
       //justifyContent: "center",
       flexDirection: "column",
-      marginTop: "5%",
+      marginTop: "1%",
     },
     divSelectBar: {
       marginTop: "25px",
     },
-    selectBar: {
-      width: "50%",
-      height: "100",
-      marginTop: "50px",
+    typography: {
+      marginTop: "3%",
     },
+
     divTextarea: {
       marginTop: "20px",
     },
     intestazione: {
       color: "#47B881",
       marginTop: "5%",
+      display: "flex",
       flexDirection: "row",
+      alignItems: "center",
+      marginBottom: "2%",
     },
     icon: {
       transform: "scale(1.8)",
       color: "#47B881",
-      marginTop: "9px",
     },
-    bottoni: {
+
+    bottone: {
       display: "flex",
+      flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-around",
-      marginLeft: "55px",
-      marginTop: "4%",
-      marginBottom: "2%",
+      marginTop: "6%",
+      justifyContent: "center",
+    },
+    select: {
+      width: "400px",
+    },
+    divContent: {
+      display: "flex",
+      flexDirection: "row",
     },
   }));
 
@@ -175,6 +204,9 @@ const TestCaricatiTable = () => {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
+  const [openSchedula, setOpenSchedula] = React.useState(false);
+  const [value, setValue] = React.useState(new Date());
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -183,14 +215,54 @@ const TestCaricatiTable = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleOpenSchedula = () => {
+    setOpenSchedula(true);
+    setOpen(false);
+  };
+
+  const handleCloseSchedula = () => {
+    setOpenSchedula(false);
+  };
+
+  /*------------- GET TEST CASE -------------*/
+
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+
+  const [appearTest, setAppearTest] = useState([]);
+  const [nome, setNome] = useState("");
+
+  const getAllTestCase = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setAppearTest(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestCase();
+  }, []);
+
   return (
     <div>
-      {/* <Checkbox
-        checked={filter}
-        onChange={handleChange}
-        inputProps={{ "aria-label": "primary checkbox" }}
-      /> */}
-
       <MaterialTable
         style={{ boxShadow: "none" }}
         title=" Total Test Case Caricati"
@@ -206,15 +278,6 @@ const TestCaricatiTable = () => {
           // columnsButton: true,
           filtering: filter,
         }}
-        /**
-        components={{
-          Body: (props) => (
-            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '10vh', width: '10vh'}} >
-              <img src={loading} alt="loading" />
-            </div>
-          )
-        }}
-         */
         actions={[
           {
             icon: () => <PieChartOutlinedIcon />,
@@ -256,31 +319,27 @@ const TestCaricatiTable = () => {
           },
           body: {
             emptyDataSourceMessage: (
-              <div style={{display: 'flex',  
-                          justifyContent:'center', 
-                          alignItems:'center', 
-                          height: '10vh', 
-                          width: '10vh',
-                          margin:'0 auto'}} >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "10vh",
+                  width: "10vh",
+                  margin: "0 auto",
+                }}
+              >
                 <img src={loading} alt="loading" />
               </div>
             ),
           },
         }}
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
+
+      {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
       <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
         className={classes.modal}
         open={open}
         onClose={handleClose}
@@ -291,38 +350,126 @@ const TestCaricatiTable = () => {
         }}
       >
         <Fade in={open}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paperModale} elevation={1}>
             <div>
               <ListItem button>
                 <ListItemIcon>
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
-                <Typography className={classes.intestazione} variant="h5">
+                <Typography className={classes.intestazione} variant="h4">
                   Load Test Case
                 </Typography>
               </ListItem>
-            </div>
+              <Divider className={classes.divider} />
 
-            <div className={classes.paperBottom}>
-              <Typography variant="h6">Seleziona Test Case</Typography>
+              <Typography variant="h6" className={classes.typography}>
+                Seleziona Test Case
+              </Typography>
+
               <div className={classes.divSelectBar}>
-                <div className={classes.divTextarea}>
-                  <Typography className={classes.contenuto} variant="h11">
-                    Nome del Test
-                  </Typography>
-                </div>
-                <SelectBar nome="Seleziona" classeName={classes.selectBar} />
+                <Form.Group>
+                  <Form.Label>Nome del Test Case</Form.Label>
+                  <FormControl variant="outlined">
+                    <Select
+                      className={classes.select}
+                      value={appearTest.nome}
+                      onChange={(e) => setNome(e.target.value)}
+                    >
+                      {appearTest.map((prova) => {
+                        return (
+                          <MenuItem
+                            style={{ width: "423px" }}
+                            key={prova.id}
+                            value={prova.id}
+                          >
+                            {prova.nome}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Form.Group>
               </div>
 
-              <div className={classes.bottoni}>
-                <Button variant="contained" color="secondary">
-                  Schedula Test
-                </Button>
+              <div className={classes.bottone}>
+                <ButtonClickedGreen
+                  variant="contained"
+                  color="secondary"
+                  nome="Schedula Test"
+                  onClick={handleOpenSchedula}
+                />
+
+                <ButtonNotClickedGreen
+                  variant="contained"
+                  color="primary"
+                  nome="Carica Test"
+                />
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ------------------ MODALE SCHEDULA TEST CASE --------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openSchedula}
+        onClose={handleCloseSchedula}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openSchedula}>
+          <Paper className={classes.paperModale} elevation={1}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h4">
+                  Schedula Test Case
+                </Typography>
+              </ListItem>
+              <Divider className={classes.divider} />
+
+              <div className={classes.divContent}>
+                <Paper elevation={1} style={{ backgroundColor: "yellow" }}>
+                  <Typography>Calendario</Typography>
+                  {/* <DatePicker
+                    openTo="year"
+                    views={["year", "month", "day"]}
+                    label="Year, month and date"
+                    value={value}
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} helperText={null} />
+                    )}
+                  /> */}
+                </Paper>
+
+                <Paper elevation={1} style={{ backgroundColor: "red" }}>
+                  <Typography>Durata</Typography>
+                </Paper>
+              </div>
+
+              {/* <div className={classes.bottone}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  nome="Schedula Test"
+                  onClick={handleOpenSchedula}
+                />
 
                 <Button variant="contained" color="primary">
                   Carica Test
                 </Button>
-              </div>
+              </div> */}
             </div>
           </Paper>
         </Fade>

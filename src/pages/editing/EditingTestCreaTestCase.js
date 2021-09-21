@@ -282,12 +282,12 @@ function EditingTestCreaTestCase() {
   const [qntChiamanti, setQntChiamanti] = useState([]);
   let arrAppoggio = qntChiamanti;
   const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
-  const [lineaChiamante1 , setLineaChiamante1] = useState(false);
-  const [lineaChiamante2 , setLineaChiamante2] = useState(false);
-  const [lineaChiamante3 , setLineaChiamante3] = useState(false);
-  const [proxyChiamante1 , setProxyChiamante1] = useState(false);
-  const [proxyChiamante2 , setProxyChiamante2] = useState(false);
-  const [proxyChiamante3 , setProxyChiamante3] = useState(false);
+  const [lineaChiamante1 , setLineaChiamante1] = useState(0);
+  const [lineaChiamante2 , setLineaChiamante2] = useState(0);
+  const [lineaChiamante3 , setLineaChiamante3] = useState(0);
+  const [proxyChiamante1 , setProxyChiamante1] = useState(0);
+  const [proxyChiamante2 , setProxyChiamante2] = useState(0);
+  const [proxyChiamante3 , setProxyChiamante3] = useState(0);
 
   const [templete , setTemplete] = useState(0)
   
@@ -440,16 +440,16 @@ function EditingTestCreaTestCase() {
 
     switch (qntChiamanti.length) {
       case 0:
-        setLineaChiamante1(false)
-        setProxyChiamante1(false)
+        setLineaChiamante1(0)
+        setProxyChiamante1(0)
         break;
       case 1:
-        setLineaChiamante2(false)
-        setProxyChiamante2(false)
+        setLineaChiamante2(0)
+        setProxyChiamante2(0)
         break;
       case 2:
-        setLineaChiamante3(false)
-        setProxyChiamante3(false)
+        setLineaChiamante3(0)
+        setProxyChiamante3(0)
         break;
     
       default:
@@ -666,7 +666,7 @@ return (
                       >
                         {appearLinea.map((linea) => {
                           return (
-                            <MenuItem key={linea.id} value={linea.id}>
+                            <MenuItem disabled={linea.id === lineaChiamante1 || linea.id === lineaChiamante2 || linea.id === lineaChiamante3} key={linea.id} value={linea.id}>
                               {linea.campiConcatenati}
                             </MenuItem>
                           );
@@ -695,10 +695,10 @@ return (
                         onChange={(e) => handleChangeOBPChiamato(e)}
                         disabled={lineaChiamato === 0}
                       >
-                        {appearOBP.map((OBP) => {
+                        {appearOBP.map((proxy) => {
                           return (
-                            <MenuItem key={OBP.id} value={OBP.id}>
-                              {OBP.campiConcatenati}
+                            <MenuItem disabled={proxy.id === proxyChiamante1 || proxy.id === proxyChiamante2 || proxy.id === proxyChiamante3} key={proxy.id} value={proxy.id}>
+                              {proxy.campiConcatenati}
                             </MenuItem>
                           );
                         })}
@@ -741,15 +741,15 @@ return (
                               value={qntChiamanti.index}
                               defaultValue={index.linea}
                               onChange={(e) => {
+                                console.log(lineaChiamato)
                                 arrAppoggio[index.index].linea = e.target.value
                                 setQntChiamanti(arrAppoggio);
-                                console.log(qntChiamanti)
-                                index.index === 0 ? setLineaChiamante1(true) : index.index === 1 ? setLineaChiamante2(true) : index.index === 2 ? setLineaChiamante3(true) : setLineaChiamante1(false)
+                                index.index === 0 ? setLineaChiamante1(e.target.value) : index.index === 1 ? setLineaChiamante2(e.target.value) : index.index === 2 ? setLineaChiamante3(e.target.value) : setLineaChiamante1(e.target.value)
                               }}
                             >
                               {appearLinea.map((linea) => {
                                 return (
-                                  <MenuItem key={linea.id} value={linea.id}>
+                                  <MenuItem disabled={linea.id === lineaChiamato || linea.id === lineaChiamante1 || linea.id === lineaChiamante2 || linea.id === lineaChiamante3} key={linea.id} value={linea.id}>
                                     {linea.campiConcatenati}
                                   </MenuItem>
                                 );
@@ -768,7 +768,7 @@ return (
                       <Col className={classes.col}>
                         <Form.Group >
                           <Form.Label style={{
-                                color : (index.index === 0 ? lineaChiamante1 === false ? "grey" : "black" : index.index === 1 ? lineaChiamante2 === false ? "grey" : "black" : index.index === 2 ? lineaChiamante3 === false ? "grey" : "black" : false)
+                                color : (index.index === 0 ? lineaChiamante1 === 0 ? "grey" : "black" : index.index === 1 ? lineaChiamante2 === 0 ? "grey" : "black" : index.index === 2 ? lineaChiamante3 === 0 ? "grey" : "black" : false)
                               }}>OBP</Form.Label>
                           <FormControl
                             variant="outlined"
@@ -778,17 +778,17 @@ return (
                               id="selectOBP"
                               value={qntChiamanti.index}
                               defaultValue={index.proxy}
-                              disabled={index.index === 0 ? lineaChiamante1 === false : index.index === 1 ? lineaChiamante2 === false : index.index === 2 ? lineaChiamante3 === false : false}
+                              disabled={index.index === 0 ? lineaChiamante1 === 0 : index.index === 1 ? lineaChiamante2 === 0 : index.index === 2 ? lineaChiamante3 === 0 : false}
                               onChange={(e) => {
                                 arrAppoggio[index.index].proxy = e.target.value
-                                index.index === 0 ? setProxyChiamante1(true) : index.index === 1 ? setProxyChiamante2(true) : index.index === 2 ? setProxyChiamante3(true) : setProxyChiamante1(false)
+                                index.index === 0 ? setProxyChiamante1(e.target.value) : index.index === 1 ? setProxyChiamante2(e.target.value) : index.index === 2 ? setProxyChiamante3(e.target.value) : setProxyChiamante1(e.target.value)
                                 setQntChiamanti(arrAppoggio);
                               }}
                             >
-                              {appearOBP.map((OBP) => {
+                              {appearOBP.map((proxy) => {
                                 return (
-                                  <MenuItem key={OBP.id} value={OBP.id}>
-                                    {OBP.campiConcatenati}
+                                  <MenuItem disabled={proxy.id === OBPChiamato || proxy.id === proxyChiamante1 || proxy.id === proxyChiamante2 || proxy.id === proxyChiamante3} key={proxy.id} value={proxy.id}>
+                                    {proxy.campiConcatenati}
                                   </MenuItem>
                                 );
                               })}
@@ -831,7 +831,7 @@ return (
               color="primary"
               startIcon={<AddIcon />}
               onClick={addArr}
-              disabled={nChiamanti < 3 && nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === false ? true : false : nChiamanti === 2 ? proxyChiamante2 === false ? true :false : false ? false : true}
+              disabled={nChiamanti < 3 && nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === 0 ? true : false : nChiamanti === 2 ? proxyChiamante2 === 0 ? true :false : false ? false : true}
             />
           </div>
 

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
+import TextField from "@material-ui/core/TextField";
 import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
@@ -8,11 +9,15 @@ import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
-import SelectBar from "./SelectBar";
+import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import Form from "react-bootstrap/Form";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { MenuItem } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
 
 const TestSuiteCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
@@ -59,7 +64,7 @@ const TestSuiteCaricatiTable = () => {
     {
       title: "Launcher",
       field: "launcher",
-      defaultSort:"desc"
+      defaultSort: "desc",
     },
     {
       title: "Name TS",
@@ -103,7 +108,6 @@ const TestSuiteCaricatiTable = () => {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      marginBottom: "5%",
     },
     paperTop: {
       height: "20%",
@@ -111,50 +115,70 @@ const TestSuiteCaricatiTable = () => {
       alignItems: "center",
       //opacity: "25%",
     },
+    paperModale: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
       //justifyContent: "center",
       flexDirection: "column",
-      marginTop: "5%",
+      marginTop: "1%",
     },
     divSelectBar: {
       marginTop: "25px",
     },
-    selectBar: {
-      width: "50%",
-      height: "100",
-      marginTop: "50px",
+    typography: {
+      marginTop: "3%",
     },
+
     divTextarea: {
       marginTop: "20px",
     },
     intestazione: {
       color: "#47B881",
       marginTop: "5%",
+      display: "flex",
       flexDirection: "row",
+      alignItems: "center",
+      marginBottom: "2%",
     },
     icon: {
       transform: "scale(1.8)",
       color: "#47B881",
-      marginTop: "9px",
     },
-    bottoni: {
+
+    bottone: {
       display: "flex",
+      flexDirection: "row",
       alignItems: "center",
-      justifyContent: "space-around",
-      marginLeft: "55px",
-      marginTop: "4%",
-      marginBottom: "2%",
+      marginTop: "6%",
+      justifyContent: "center",
+
+      // marginBottom: "2%",
+    },
+    select: {
+      width: "400px",
     },
   }));
 
-  const handleChange = () => {
-    setFilter(!filter);
-  };
-  const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
+  /*----------- GET TEST SUITE ------------------*/
+
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+
+  const [appearTest, setAppearTest] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [nome, setNome] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -163,6 +187,42 @@ const TestSuiteCaricatiTable = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  // ------- GET TEST SUITE -----------
+
+  const getAllTestSuite = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testsuite`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setAppearTest(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestSuite();
+  }, []);
+
+  console.log("dati", appearTest);
+
+  const handleChange = () => {
+    setFilter(!filter);
+  };
+  const classes = useStyles();
+  // getModalStyle is not a pure function, we roll the style only on the first render
+
   return (
     <div>
       <MaterialTable
@@ -234,6 +294,8 @@ const TestSuiteCaricatiTable = () => {
         // }}
       />
       <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
         className={classes.modal}
         open={open}
         onClose={handleClose}
@@ -244,32 +306,44 @@ const TestSuiteCaricatiTable = () => {
         }}
       >
         <Fade in={open}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paperModale} elevation={1}>
             <div>
               <ListItem button>
                 <ListItemIcon>
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
-                <Typography className={classes.intestazione} variant="h5">
+                <Typography className={classes.intestazione} variant="h4">
                   Load Test Suite
                 </Typography>
               </ListItem>
-            </div>
+              <Divider className={classes.divider} />
 
-            <div className={classes.paperBottom}>
-
-              <Typography variant="h6">Seleziona Test Suite</Typography>
+              <Typography variant="h6" className={classes.typography}>
+                Seleziona Test Suite
+              </Typography>
 
               <div className={classes.divSelectBar}>
-                <div className={classes.divTextarea}>
-                  <Typography className={classes.contenuto} variant="h11">
-                    Nome del Test
-                  </Typography>
-                </div>
-                <SelectBar nome="Seleziona" classeName={classes.selectBar} />
+                <Form.Group>
+                  <Form.Label>Nome del Test Suite</Form.Label>
+                  <FormControl variant="outlined">
+                    <Select
+                      className={classes.select}
+                      value={appearTest.nome}
+                      onChange={(e) => setNome(e.target.value)}
+                    >
+                      {appearTest.map((prova) => {
+                        return (
+                          <MenuItem style={{width: "423px"}} key={prova.id} value={prova.id}>
+                            {prova.nome}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Form.Group>
               </div>
 
-              <div className={classes.bottoni}>
+              <div className={classes.bottone}>
                 <Button variant="contained" color="secondary">
                   Schedula Test
                 </Button>

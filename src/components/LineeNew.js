@@ -242,9 +242,9 @@ function Linee() {
     getAppearLine();
   }, []);
 
-  //---------------------AGGIORNA UTENTE-------------------------
+  //---------------------AGGIORNA LINEA -------------------------
 
-  const aggiornaUtente = () => {
+  const aggiornaLinea = () => {
     ip = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
 
     const invia = () => {
@@ -347,7 +347,7 @@ function Linee() {
   };
 
   const handleClose2 = () => {
-    aggiornaUtente();
+    aggiornaLinea();
     setOpen(false);
   };
   const handleClose = () => {

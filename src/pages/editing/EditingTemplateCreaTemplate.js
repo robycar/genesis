@@ -491,6 +491,11 @@ function EditingTemplateCreaTemplate() {
             setWarning(
               "Impossibile completare l'operazione. Si sta tentando di utilizzare il file più di una volta tra chiamato e chiamanti"
             );
+          }
+          if (result.error === "Internal Server Error") {
+            setWarning(
+              "Impossibile completare l'operazione. Si sta tentando di utilizzare il file più di una volta tra chiamato e chiamanti"
+            );
           } else {
             setWarning(
               "Codice errore :" +

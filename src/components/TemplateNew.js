@@ -18,6 +18,7 @@ import TextField from "@material-ui/core/TextField";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import SettingsIcon from "@material-ui/icons/Settings";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
@@ -96,7 +97,7 @@ function Template() {
       title: "Versione",
       field: "version",
       editable: "never",
-      //hidden: true,
+      hidden: true,
     },
     {
       title: "Data modifica",
@@ -118,7 +119,6 @@ function Template() {
 
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
-  const [openDelete, setOpenDelete] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
 
   const handleOpen = (rowData) => {
@@ -154,6 +154,15 @@ function Template() {
     setOpen(false);
   };
 
+  /*--------------MODALE DELETE TEMPLATE -----------*/
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
+
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
+
   //------------ FUNZIONE DELETE ------------
 
   const functionDelete = () => {
@@ -177,7 +186,30 @@ function Template() {
     fetch(`/api/template`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getTemplate();
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "TEST-0011") {
+            setWarning(
+              "Impossibile eliminare un template che non appartiene al proprio gruppo"
+            );
+
+            if (result.error === "Internal Server Error") {
+              setWarning(
+                "Impossibile eliminare il template poichè associato ad uno o pi Test Case"
+              );
+            }
+          } else {
+            setWarning(
+              "Codice errore : " +
+                result.error.code +
+                "Descrizione: " +
+                result.code.description
+            );
+          }
+        } else {
+          setOpenwarning(false);
+          getTemplate();
+        }
       })
       .catch((error) => console.log("error", error));
     handleCloseDelete();
@@ -345,6 +377,24 @@ function Template() {
     typography: {
       padding: "3%",
     },
+    intestazioneModaleError: {
+      color: "#ef5350",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    iconModaleError: {
+      // width: "15%",
+      // height: "15%",
+      marginRight: "4%",
+      transform: "scale(1.9)",
+      color: "#ef5350",
+    },
+    divIntestazione: {
+      display: "flex",
+      alignItems: "center",
+      padding: "2%",
+      marginBottom: "1%",
+    },
   }));
 
   const classes = useStyles();
@@ -440,12 +490,16 @@ function Template() {
           },
           body: {
             emptyDataSourceMessage: (
-              <div style={{display: 'flex',  
-                          justifyContent:'center', 
-                          alignItems:'center', 
-                          height: '10vh', 
-                          width: '10vh',
-                          margin:'0 auto'}} >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "10vh",
+                  width: "10vh",
+                  margin: "0 auto",
+                }}
+              >
                 <img src={loading} alt="loading" />
               </div>
             ),
@@ -499,21 +553,6 @@ function Template() {
                       }}
                     />
                   </Col>
-                  {/* <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={version !== "" ? false : true}
-                      onChange={(e) => setVersion(e.target.value)}
-                      label="Versione"
-                      defaultValue={version}
-                      helperText={version !== "" ? "" : "Inserire versione"}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col> */}
-                </Row>
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -529,6 +568,8 @@ function Template() {
                       }}
                     />
                   </Col>
+                </Row>
+                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -542,32 +583,6 @@ function Template() {
                       }}
                     />
                   </Col>
-                </Row>
-                {/* <Row>
-                  <Col className={classes.col}>
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome={
-                        modifica === false
-                          ? "vedi chiamato"
-                          : "modifica chiamato"
-                      }
-                      // onClick={handleOpenChiamato}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome={
-                        modifica === false
-                          ? "vedi chiamanti"
-                          : "modifica chiamanti"
-                      }
-                      // onClick={handleOpenChiamanti}
-                    />
-                  </Col>
-                </Row> */}
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -578,6 +593,9 @@ function Template() {
                       }}
                     />
                   </Col>
+                </Row>
+
+                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -588,33 +606,30 @@ function Template() {
                       }}
                     />
                   </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      label="Data Creazione"
+                      defaultValue={creationDate}
+                      className={classes.textField}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
                 </Row>
 
                 <Row>
                   <Col className={classes.col}>
                     <TextField
-                      label="Data Creazione"
-                      type="datetime-local"
-                      defaultValue={creationDate.replace(".000+00:00", "")}
-                      className={classes.textField}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
                       className={classes.textField}
                       label="Data Modifica"
-                      type="datetime-local"
-                      defaultValue={modifiedDate.replace(".000+00:00", "")}
+                      defaultValue={modifiedDate}
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
-                </Row>
-                <Row>
+
                   <Col className={classes.col}>
                     <Link href="#" variant="body2">
                       Download files
@@ -675,7 +690,7 @@ function Template() {
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography variant="h6" className={classes.typography}>
+                <Typography className={classes.typography}>
                   L'eliminazione del Template selezionato, comporterà la
                   cancellazione dei Test Case ad esso associati.
                   <br />
@@ -694,6 +709,55 @@ function Template() {
                   <ButtonNotClickedGreen
                     onClick={handleCloseDelete}
                     nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
                   />
                 </div>
               </div>
