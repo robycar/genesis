@@ -26,8 +26,6 @@ import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import loading from "../../src/assets/load.gif";
-
 function TestSuiteTable() {
   const [data, setData] = useState([]);
   const [testCases, setTestCases] = useState([]);
@@ -43,35 +41,40 @@ function TestSuiteTable() {
   const [modifiedDate, setModifiedDate] = useState("");
   const [durataComplessiva, setDurataComplessiva] = useState("");
   const [testSuite, setTestSuite] = useState([]);
+  const [caricamento, setCaricamento] = useState(false);
+  const [caricamento2, setCaricamento2] = useState(false);
   const arrayTestCase = testSuite?.testCases;
+  //Array di case checked + quelli seza checked
   const newArr1 = arrayTestCase?.map((v) => ({
     ...v,
-    // console.log(v),
     tableData: { checked: true },
   }));
-  console.log(newArr1, " Array di test case modificato");
+  // console.log(newArr1, " Array di test case modificato");
 
-  const arrayEmpty = [];
-  for (let index = 0; index < dataTestCases.length; index++) {
-    const elemento = dataTestCases[index];
+  console.log(dataTestCases, "Lista di test cases");
 
-    for (let index = 0; index < newArr1?.length; index++) {
-      if (elemento.id === newArr1[index].id) {
-        arrayEmpty.push(newArr1[index]);
-      }
-    }
+  // Prova
+  // const arrayEmpty = [];
+  // for (let index = 0; index < dataTestCases.length; index++) {
+  //   const elemento = dataTestCases[index];
 
-    if (!arrayEmpty.includes(elemento)) {
-      arrayEmpty.push(elemento);
+  //   for (let index = 0; index < newArr1?.length; index++) {
+  //     if (elemento.id === newArr1[index].id) {
+  //       arrayEmpty.push(newArr1[index]);
+  //     }
+  //   }
 
-      console.log(!arrayEmpty.includes(elemento.id));
-    }
+  //   if (!arrayEmpty.includes(elemento)) {
+  //     arrayEmpty.push(elemento);
 
-    console.log(dataTestCases[index], "data");
-    newArr1?.push(elemento);
-  }
+  //     console.log(!arrayEmpty.includes(elemento.id));
+  //   }
 
-  console.log(arrayEmpty, "Empty");
+  //   console.log(dataTestCases[index], "data");
+  //   newArr1?.push(elemento);
+  // }
+
+  // Sostituzione array checked con quelli senza check che hanno lo seddo id
   const res = dataTestCases.map(
     (obj) => newArr1?.find((o) => o.id === obj.id) || obj
   );
@@ -105,6 +108,17 @@ function TestSuiteTable() {
 
   console.log(arrayIdTestCase, "Id test case selezionati");
 
+  //Pusho gli ID associati nell'array di test Case
+  // for (let index = 0; index < arrayId.length; index++) {
+  //   const element = arrayId[index];
+  //   arrayIdTestCase?.push(element);
+  // }
+  // console.log(arrayIdTestCase, "Id test case totali");
+  //Tolgo gli ID duplicati
+  // const uniqueArray = [...new Set(arrayIdTestCase)];
+
+  // console.log(uniqueArray);
+
   //----Bearer-------------------------
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -115,6 +129,7 @@ function TestSuiteTable() {
 
   //-----------GET TEST SUITE----------------------
   const getAllTestSuite = () => {
+    setCaricamento(true);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -130,6 +145,7 @@ function TestSuiteTable() {
       .then((response) => response.json())
       .then((result) => {
         setData(result.list);
+        setCaricamento(false);
       })
       .catch((error) => console.log("error", error));
   };
@@ -158,6 +174,7 @@ function TestSuiteTable() {
 
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
+    setCaricamento2(true);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -173,45 +190,49 @@ function TestSuiteTable() {
       .then((response) => response.json())
       .then((result) => {
         setDataTestCases(result.list);
+        setCaricamento2(false);
       })
       .catch((error) => console.log("error", error));
   };
 
   //---------------- MODIFICA TEST SUITE---------------------
+  const aggiornaTestCaseAssociati = () => {
+    const Invia = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  const Invia = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var raw = JSON.stringify({
+        id: id,
+        version: version,
+        nome: nome,
+        descrizione: descrizione,
+        testCases: arrayIdTestCase,
+      });
 
-    var raw = JSON.stringify({
-      id: id,
-      version: 0,
-      nome: nome,
-      descrizione: descrizione,
-      testCases: arrayIdTestCase,
-    });
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
+      fetch(`/api/testsuite`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.log("error", error));
+      getAllTestSuite();
+      // window.location = "/editing/testsuite";
     };
-
-    fetch(`/api/testsuite`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
   };
 
   //----------------------------------------------------------
   useEffect(() => {
     getAllTestSuite();
     getAllTestCase();
-    Invia();
+    // Invia();
   }, []);
 
   // console.log(testSuite.testCases, "sono test suite");
@@ -290,10 +311,11 @@ function TestSuiteTable() {
     //   title: "Durata Attesa",
     //   field: "expectedDuration",
     // },
-    // {
-    //   title: "Versione",
-    //   field: "version",
-    // },
+    {
+      title: "Versione",
+      field: "version",
+      hidden: true,
+    },
     {
       title: "Data Creazione",
       field: "creationDate",
@@ -352,6 +374,11 @@ function TestSuiteTable() {
 
   const handleCloseTestCase = () => {
     SetOpenTestCase(false);
+  };
+
+  const handleCloseTestCaseUpdated = () => {
+    SetOpenTestCase(false);
+    aggiornaTestCaseAssociati();
   };
 
   const handleClose = () => {
@@ -453,9 +480,7 @@ function TestSuiteTable() {
         version: version,
         nome: nome,
         descrizione: descrizione,
-        // testCases: [
-        //   id
-        // ],
+        testCases: arrayIdTestCase,
       });
 
       var requestOptions = {
@@ -548,6 +573,9 @@ function TestSuiteTable() {
     divTextarea: {
       marginTop: "20px",
     },
+    textArea: {
+      width: "660px",
+    },
     intestazione: {
       color: "#47B881",
       marginTop: "5%",
@@ -622,7 +650,7 @@ function TestSuiteTable() {
       width: "600px",
     },
     textField: {
-      width: "200px",
+      width: "300px",
     },
     bottoneAnnulla: {
       width: "128px",
@@ -659,6 +687,7 @@ function TestSuiteTable() {
         title="Test Suite"
         data={data}
         columns={columns}
+        isLoading={caricamento}
         options={{
           sorting: true,
           exportButton: true,
@@ -719,20 +748,7 @@ function TestSuiteTable() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "10vh",
-                  width: "10vh",
-                  margin: "0 auto",
-                }}
-              >
-                <img src={loading} alt="loading" />
-              </div>
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
       />
@@ -791,6 +807,8 @@ function TestSuiteTable() {
                       }}
                     />
                   </Col>
+                </Row>
+                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -807,6 +825,23 @@ function TestSuiteTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
+                      error={testCases !== "" ? false : true}
+                      // onChange={(e) => setTestCases(e.target.value)}
+                      label="Numero Test Case"
+                      defaultValue={arrayTestCase?.length}
+                      helperText={testCases !== "" ? "" : "Test Case"}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      multiline
+                      rows={2}
+                      className={classes.textArea}
                       error={descrizione !== "" ? false : true}
                       onChange={(e) => setDescrizione(e.target.value)}
                       label="Descrizione"
@@ -821,35 +856,8 @@ function TestSuiteTable() {
                   </Col>
                 </Row>
 
-                <Row>
-                  {/* <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      //error={gruppo !== "" ? false : true}
-                      //onChange={(e) => setGruppo(e.target.value)}
-                      label="Durata Complessiva"
-                      //defaultValue={gruppo}
-                      //helperText={gruppo !== "" ? "" : "Il Nome è richiesto"}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col> */}
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={testCases !== "" ? false : true}
-                      // onChange={(e) => setTestCases(e.target.value)}
-                      label="Numero Test Case"
-                      defaultValue={arrayTestCase?.length}
-                      helperText={testCases !== "" ? "" : "Test Case"}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-
-                  <Col className={classes.col}>
+                <div style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", padding: "2%"}}>
+                  
                     <ButtonClickedGreen
                       size="medium"
                       nome={
@@ -859,8 +867,8 @@ function TestSuiteTable() {
                       }
                       onClick={handleOpenTestCase}
                     />
-                  </Col>
-                </Row>
+                  
+                </div>
 
                 <Row>
                   <Col className={classes.col}>
@@ -979,6 +987,7 @@ function TestSuiteTable() {
                       title="Test Case"
                       data={arrayTestCase}
                       columns={columnsTestcases}
+                      isLoading={caricamento2}
                       options={{
                         selection: false,
                         sorting: true,
@@ -1009,6 +1018,10 @@ function TestSuiteTable() {
                       localization={{
                         header: {
                           actions: "Azioni",
+                        },
+                        body: {
+                          emptyDataSourceMessage:
+                            "Non è presente alcun dato da mostrare",
                         },
                       }}
                     />
@@ -1074,7 +1087,7 @@ function TestSuiteTable() {
                     <MaterialTable
                       style={{ boxShadow: "none" }}
                       title="Test Case"
-                      data={res}
+                      data={dataTestCases}
                       columns={columnsTestcases}
                       options={{
                         selection: true,
@@ -1130,15 +1143,13 @@ function TestSuiteTable() {
                     className={classes.bottone}
                     style={{ display: "flex", justifyContent: "flex-end" }}
                   >
-                    {modifica === false ? (
-                      ""
-                    ) : (
-                      <ButtonClickedGreen
-                        size="medium"
-                        nome="Aggiorna"
-                        // onClick={handleCloseChiamato2}
-                      />
-                    )}
+                    {/* {arrayIdTestCase.length < 0 ? () : ()} */}
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      disabled={arrayIdTestCase.length === 0 ? "true" : ""}
+                      onClick={handleCloseTestCaseUpdated}
+                    />
 
                     <ButtonNotClickedGreen
                       className={classes.bottoneAnnulla}

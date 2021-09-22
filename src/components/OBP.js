@@ -23,7 +23,6 @@ import { makeStyles } from "@material-ui/core/styles";
 // import { version } from "react-dom";
 import { identifier } from "@babel/types";
 
-import loading from "../../src/assets/load.gif";
 
 function Obp() {
   const [data, setData] = useState([]);
@@ -38,6 +37,7 @@ function Obp() {
   const [typeLinea, setTypeLinea] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [version, SetVersion] = React.useState(0);
+  const [caricamento, setCaricamento] = useState(false)
 
   /*----Get Type Linea ------*/
 
@@ -182,6 +182,7 @@ function Obp() {
   }, []);
 
   const getObp = () => {
+    setCaricamento(true)
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -196,8 +197,8 @@ function Obp() {
     fetch(`/api/obp`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setData(result.list);
+        setCaricamento(false)
       })
       .catch((error) => console.log("error", error));
   };
@@ -480,6 +481,7 @@ function Obp() {
         style={{ boxShadow: "none" }}
         title="Outbound Proxy"
         data={data}
+        isLoading={caricamento}
         columns={columns}
         options={{
           sorting: true,
@@ -532,14 +534,7 @@ function Obp() {
           },
           body: {
             emptyDataSourceMessage: (
-              <div style={{display: 'flex',  
-                          justifyContent:'center', 
-                          alignItems:'center', 
-                          height: '10vh', 
-                          width: '10vh',
-                          margin:'0 auto'}} >
-                <img src={loading} alt="loading" />
-              </div>
+                "Non è presente alcun dato da mostrare"
             ),
           },
         }}

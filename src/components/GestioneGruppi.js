@@ -26,6 +26,7 @@ const GestioneRuoli = () => {
   const [id, setId] = useState();
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
+  const [caricamento, setCaricamento] = useState(false)
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -139,6 +140,7 @@ const GestioneRuoli = () => {
   ];
 
   const getGruppi = () => {
+    setCaricamento(true)
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
@@ -153,7 +155,10 @@ const GestioneRuoli = () => {
 
     fetch(`/api/group`, requestOptions)
       .then((response) => response.json())
-      .then((result) => setData(result.gruppi))
+      .then((result) => {
+        setData(result.gruppi)
+        setCaricamento(false)
+      })
       .catch((error) => console.log("error", error));
   };
 
@@ -218,6 +223,7 @@ const GestioneRuoli = () => {
         title="Gestione Gruppi"
         data={data}
         columns={columns}
+        isLoading={caricamento}
         options={{
           // tableLayout: "",
           actionsColumnIndex: -1,
@@ -308,6 +314,11 @@ const GestioneRuoli = () => {
         localization={{
           header: {
             actions: "Azioni",
+          },
+          body: {
+            emptyDataSourceMessage: (
+                "Non è presente alcun dato da mostrare"
+            ),
           },
         }}
       />

@@ -24,8 +24,6 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import acccessControl from "../service/url.js";
 
-import loading from "../../src/assets/load.gif";
-
 function Template() {
   const [data, setData] = useState([]);
 
@@ -42,10 +40,12 @@ function Template() {
   const [typeTemplate, setTypeTemplate] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [nomeTitolo, setNomeTitolo] = useState("");
+  const [caricamento, setCaricamento] = useState(false);
 
   //----- GET TEMPLATE -------
 
   const getTemplate = () => {
+    setCaricamento(true);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -60,8 +60,8 @@ function Template() {
     fetch(`/api/template`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setData(result.list);
+        setCaricamento(false);
       })
       .catch((error) => console.log("error", error));
   };
@@ -149,10 +149,6 @@ function Template() {
     setOpen(false);
   };
 
-  const handleClose2 = () => {
-    aggiornaTemplate();
-    setOpen(false);
-  };
 
   /*--------------MODALE DELETE TEMPLATE -----------*/
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -193,9 +189,9 @@ function Template() {
               "Impossibile eliminare un template che non appartiene al proprio gruppo"
             );
 
-            if (result.error === "Internal Server Error") {
+            if (result.error.status === 500 ) {
               setWarning(
-                "Impossibile eliminare il template poichè associato ad uno o pi Test Case"
+                "Impossibile eliminare il template poichè associato ad uno o più Test Case"
               );
             }
           } else {
@@ -203,7 +199,7 @@ function Template() {
               "Codice errore : " +
                 result.error.code +
                 "Descrizione: " +
-                result.code.description
+                result.error.description
             );
           }
         } else {
@@ -243,16 +239,6 @@ function Template() {
         nome: nome,
         durata: durata,
         typeTemplate: typeTemplate,
-        // fileLinks: {
-        //   CHIAMATO: [
-        //     {
-        //       id: id.chiamato
-        //     }
-        //   ],
-        //   CHIAMANTE: [
-        //    id: id.chiamante
-        //   ]
-        // }
       });
 
       var requestOptions = {
@@ -266,6 +252,7 @@ function Template() {
         .then((response) => response.json())
         .then((response) => {
           getTemplate();
+          handleClose();
         })
         .catch((error) => console.log("error", error));
     };
@@ -402,61 +389,51 @@ function Template() {
   return (
     <div>
       <MaterialTable
-        style={{ boxShadow: "none" }}
-        title="Total Template"
+       detailPanel={rowData => {
+        return (
+          <div
+          style={{
+            fontSize: 16,
+            marginLeft: 2,
+          }}
+        >
+       {"  "} {rowData.descrizione}
+        </div>
+        )
+      }}
+        style={{ boxShadow: "none" , maxWidth: '100%'}}
+        title="Template"
         data={data}
+        isLoading={caricamento}
         columns={columns}
         options={{
           sorting: true,
+          exportButton: true,
           actionsColumnIndex: -1,
           search: true,
-          exportButton: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
           filtering: true,
-          // headerStyle: {
-          //   backgroundColor: "#f50057",
-          // },
+          searchFieldAlignment: "left",
+          pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
         actions={[
-          // {
-          //   icon: () => (
-          //     <Button
-          //       color="secondary"
-          //       size="medium"
-          //       variant="contained"
-          //       className="button-red"
-          //       component={NavLink}
-          //       activeClassName="button-red-active"
-          //       exact
-          //       to="/editing/template/carica"
-          //     >
-          //       CARICA{" "}
-          //     </Button>
-          //   ),
-          //   tooltip: "Carica Template",
-          //   // onClick: (event, rowData) => alert("Load Test Suite"),
-          //   isFreeAction: true,
-          // },
           {
             icon: () => (
-              <Button
-                color="secondary"
-                size="medium"
-                variant="contained"
-                className="button-red"
-                component={NavLink}
-                activeClassName="button-red-active"
-                exact
-                to="/editing/template/createmplate"
-              >
-                CREA{" "}
-              </Button>
+              <div className={classes.buttonRight}>
+                <Button
+                  className="button-green"
+                  component={NavLink}
+                  activeClassName="button-green-active"
+                  exact
+                  to="/editing/template/createmplate"
+                  startIcon={<AddIcon />}
+                >
+                  template
+                </Button>
+              </div>
             ),
-            tooltip: "Crea Template",
-            // onClick: (event, rowData) => alert("Load Test Suite"),
+            tooltip: "Carica Template",
+            //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
           {
@@ -467,7 +444,7 @@ function Template() {
             ),
             tooltip: "Visualizza tutti i dati",
             position: "row",
-            onClick: (event, rowData) => handleOpen(rowData),
+            onClick: (event, rowData) => openVisualizza(rowData),
           },
           {
             icon: () => <EditIcon />,
@@ -477,7 +454,7 @@ function Template() {
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Remove all selected test",
+            tooltip: "Rimuovi Template",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
@@ -489,27 +466,9 @@ function Template() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "10vh",
-                  width: "10vh",
-                  margin: "0 auto",
-                }}
-              >
-                <img src={loading} alt="loading" />
-              </div>
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
-        // options={{
-        //   headerStyle: {
-        //     backgroundColor: "#f50057",
-        //   },
-        // }}
       />
 
       {/*-------------- MODALE MODIFICA/VISUALIZZA---------- */}
@@ -556,13 +515,11 @@ function Template() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={descrizione !== "" ? false : true}
-                      onChange={(e) => setDescrizione(e.target.value)}
+                      onChange={(e) => {
+                        e.target.value === "" ? setDescrizione(" ") : setDescrizione(e.target.value) 
+                      }}
                       label="Descrizione"
                       defaultValue={descrizione}
-                      helperText={
-                        descrizione !== "" ? "" : "La descrizione è richiesta"
-                      }
                       InputProps={{
                         readOnly: modifica === false ? true : false,
                       }}
@@ -649,7 +606,7 @@ function Template() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      // onClick={handleClose2}
+                      onClick={aggiornaTemplate}
                     />
                   )}
 

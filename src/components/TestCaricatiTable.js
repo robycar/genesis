@@ -205,17 +205,36 @@ const TestCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
+      marginBottom: "2%",
     },
     divIntestazione: {
       marginBottom: "2%",
     },
     calendarPaper: {
+      padding: "3%",
       width: "190px",
-      height: "210px",
+      height: "fit-content",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginTop: "3%",
     },
     delayPaper: {
+      padding: "3%",
       width: "190px",
-      height: "210px",
+      height: "fit-content",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginTop: "3%",
+    },
+    divInput: {
+      display: "flex",
+      flexDirection: "column",
+      width: "80%",
+      alignItems: "center",
+      marginTop: "5%",
+      marginBottom: "5%",
     },
   }));
 
@@ -381,7 +400,7 @@ const TestCaricatiTable = () => {
                   <ListItemIcon>
                     <BackupIcon className={classes.icon} />
                   </ListItemIcon>
-                  <Typography className={classes.intestazione} variant="h5">
+                  <Typography className={classes.intestazione} variant="h4">
                     Load Test Case
                   </Typography>
                 </ListItem>
@@ -459,7 +478,7 @@ const TestCaricatiTable = () => {
                 <ListItemIcon>
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
-                <Typography className={classes.intestazione} variant="h5">
+                <Typography className={classes.intestazione} variant="h4">
                   Schedula Test Case
                 </Typography>
               </ListItem>
@@ -467,34 +486,35 @@ const TestCaricatiTable = () => {
 
               <div className={classes.divContent}>
                 <Paper elevation={2} className={classes.calendarPaper}>
-                  <Typography>Calendario</Typography>
-                  {/* <DatePicker
-                    openTo="year"
-                    views={["year", "month", "day"]}
-                    label="Year, month and date"
-                    value={value}
-                    onChange={(newValue) => {
-                      setValue(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField {...params} helperText={null} />
-                    )}
-                  /> */}
-                  {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <Stack spacing={3}>
-                      <DesktopDatePicker
-                        label="Date desktop"
-                        inputFormat="MM/dd/yyyy"
-                        value={value}
-                        onChange={handleChangeData}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </Stack>
-                  </LocalizationProvider> */}
+                  <Typography variant="h5">Calendario</Typography>
+                  <Divider />
+                  <div className={classes.divInput}>
+                    <label for="start">Start date:</label>
+                    <input
+                      type="date"
+                      id="start"
+                      name="trip-start"
+                      value="2018-07-22"
+                      min="2018-01-01"
+                      max="2018-12-31"
+                    />
+                  </div>
                 </Paper>
 
                 <Paper elevation={2} className={classes.delayPaper}>
-                  <Typography>Durata</Typography>
+                  <Typography variant="h5">Durata</Typography>
+                  <div className={classes.divInput}>
+                    <label for="appt">Start Time:</label>
+                    <input
+                      style={{ width: "135px" }}
+                      type="time"
+                      id="appt"
+                      name="appt"
+                      min="09:00"
+                      max="18:00"
+                      required
+                    />
+                  </div>
                 </Paper>
               </div>
               <Divider />

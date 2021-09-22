@@ -165,7 +165,7 @@ function EditingOutboundProxy() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
+        <Container maxWidth="xl" className={classes.container}>
 
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />

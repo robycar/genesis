@@ -24,8 +24,6 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
-import loading from "../../src/assets/load.gif";
-
 function TestGeneratoreTableNew() {
   const [file, setFile] = useState([]);
   const [data, setData] = useState([]);
@@ -46,13 +44,13 @@ function TestGeneratoreTableNew() {
   const [OBPChiamante, setOBPChiamante] = useState(0);
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
-
+  const [caricamento, setCaricamento] = useState(false);
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-
   //-----------GET TEST GENERATORE----------------------
   const getAllTestGeneratore = () => {
+    setCaricamento(true);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -68,6 +66,7 @@ function TestGeneratoreTableNew() {
       .then((response) => response.json())
       .then((result) => {
         setData(result.list);
+        setCaricamento(false);
       })
       .catch((error) => console.log("error", error));
   };
@@ -176,17 +175,17 @@ function TestGeneratoreTableNew() {
     setNomeTitolo(rowData.nome);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
-    setLineaChiamato(rowData.lineaChiamato.id)
-    setLineaChiamante(rowData.lineaChiamante.id)
-    setOBPChiamato(rowData.proxyChiamato.id)
-    setOBPChiamante(rowData.proxyChiamante.id)
+    setLineaChiamato(rowData.lineaChiamato.id);
+    setLineaChiamante(rowData.lineaChiamante.id);
+    setOBPChiamato(rowData.proxyChiamato.id);
+    setOBPChiamante(rowData.proxyChiamante.id);
     setVersion(rowData.version);
     setTemplate(rowData.template);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
-    setOpen(true)
+    setOpen(true);
   };
 
   const handleClose = () => {
@@ -253,7 +252,6 @@ function TestGeneratoreTableNew() {
     setOpenChiamanti(false);
   };
 
-
   //-------AGGIORNA TEST GENERATORE----------------------------
 
   const aggiornaTestGen = () => {
@@ -268,7 +266,7 @@ function TestGeneratoreTableNew() {
         id: id,
         version: version,
         nome: nome,
-        descrizione: descrizione === "" ? " " : descrizione
+        descrizione: descrizione === "" ? " " : descrizione,
       });
 
       var requestOptions = {
@@ -282,7 +280,7 @@ function TestGeneratoreTableNew() {
         .then((response) => response.json())
         .then((response) => {
           getAllTestGeneratore();
-          setOpen(false)
+          setOpen(false);
         })
         .catch((error) => console.log("error", error));
     };
@@ -299,11 +297,11 @@ function TestGeneratoreTableNew() {
       id: id,
       version: version,
       lineaChiamato: {
-        id: lineaChiamato
+        id: lineaChiamato,
       },
       proxyChiamato: {
-        id: OBPChiamato
-      }
+        id: OBPChiamato,
+      },
     });
 
     var requestOptions = {
@@ -317,7 +315,7 @@ function TestGeneratoreTableNew() {
       .then((response) => response.json())
       .then((response) => {
         getAllTestGeneratore();
-        handleCloseChiamato(false)
+        handleCloseChiamato(false);
       })
       .catch((error) => console.log("error", error));
   };
@@ -332,11 +330,11 @@ function TestGeneratoreTableNew() {
       id: id,
       version: version,
       lineaChiamante: {
-        id: lineaChiamante
+        id: lineaChiamante,
       },
       proxyChiamante: {
-        id: OBPChiamante
-      }
+        id: OBPChiamante,
+      },
     });
 
     var requestOptions = {
@@ -350,10 +348,10 @@ function TestGeneratoreTableNew() {
       .then((response) => response.json())
       .then((response) => {
         getAllTestGeneratore();
-        handleCloseChiamante(false)
+        handleCloseChiamante(false);
       })
       .catch((error) => console.log("error", error));
-  }
+  };
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
   const useStyles = makeStyles((theme) => ({
@@ -453,10 +451,13 @@ function TestGeneratoreTableNew() {
       width: "600px",
     },
     textField: {
-      width: "200px",
+      width: "300px",
     },
     bottoneAnnulla: {
       width: "128px",
+    },
+    textArea: {
+      width: "660px",
     },
   }));
 
@@ -469,6 +470,7 @@ function TestGeneratoreTableNew() {
         style={{ boxShadow: "none" }}
         title="Test Generatore"
         data={data}
+        isLoading={caricamento}
         columns={columns}
         options={{
           sorting: true,
@@ -530,16 +532,7 @@ function TestGeneratoreTableNew() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-              <div style={{display: 'flex',  
-                          justifyContent:'center', 
-                          alignItems:'center', 
-                          height: '10vh', 
-                          width: '10vh',
-                          margin:'0 auto'}} >
-                <img src={loading} alt="loading" />
-              </div>
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
       />
@@ -578,7 +571,7 @@ function TestGeneratoreTableNew() {
                       className={classes.textField}
                       error={nome !== "" ? false : true}
                       onChange={(e) => setNome(e.target.value)}
-                      label="Nome Test"
+                      label="Nome"
                       defaultValue={nome}
                       helperText={nome !== "" ? "" : "Il Nome è richiesto"}
                       InputProps={{
@@ -586,23 +579,6 @@ function TestGeneratoreTableNew() {
                       }}
                     />
                   </Col>
-
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={descrizione !== "" ? false : true}
-                      onChange={(e) => setDescrizione(e.target.value)}
-                      label="Descrizione"
-                      defaultValue={descrizione}
-                      helperText={descrizione !== "" ? "" : "La Descrizione è richiesta"}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -617,31 +593,53 @@ function TestGeneratoreTableNew() {
 
                 <Row>
                   <Col className={classes.col}>
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome={
-                        modifica === false
-                          ? "vedi chiamato"
-                          : "modifica chiamato"
+                    <TextField
+                      c
+                      multiline
+                      rows={2}
+                      className={classes.textArea}
+                      error={descrizione !== "" ? false : true}
+                      onChange={(e) => setDescrizione(e.target.value)}
+                      label="Descrizione"
+                      defaultValue={descrizione}
+                      helperText={
+                        descrizione !== "" ? "" : "La Descrizione è richiesta"
                       }
-                      onClick={handleOpenChiamato}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome={
-                        modifica === false
-                          ? "vedi chiamanti"
-                          : "modifica chiamanti"
-                      }
-                      onClick={handleOpenChiamanti}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
                     />
                   </Col>
                 </Row>
 
-                <Row>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    padding: "2%",
+                  }}
+                >
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome={
+                      modifica === false ? "vedi chiamato" : "modifica chiamato"
+                    }
+                    onClick={handleOpenChiamato}
+                  />
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome={
+                      modifica === false
+                        ? "vedi chiamanti"
+                        : "modifica chiamanti"
+                    }
+                    onClick={handleOpenChiamanti}
+                  />
+                </div>
 
+                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -661,7 +659,6 @@ function TestGeneratoreTableNew() {
                       onChange={(e) => setCreationDate(e.target.value)}
                       label="Data Creazione"
                       defaultValue={creationDate}
-
                       InputProps={{
                         readOnly: true,
                       }}
@@ -670,7 +667,6 @@ function TestGeneratoreTableNew() {
                 </Row>
 
                 <Row>
-
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -690,15 +686,12 @@ function TestGeneratoreTableNew() {
                       onChange={(e) => setModifiedDate(e.target.value)}
                       label="Data Modifica"
                       defaultValue={modifiedDate}
-
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
                 </Row>
-
-
               </Form>
               <Divider className={classes.divider} />
               <div
@@ -760,7 +753,6 @@ function TestGeneratoreTableNew() {
                       className={classes.textField}
                       select
                       onChange={(e) => setLineaChiamato(e.target.value)}
-
                       label="IP Linea"
                       value={lineaChiamato}
                       defaultValue={lineaChiamato}
@@ -769,7 +761,11 @@ function TestGeneratoreTableNew() {
                       }}
                     >
                       {appearLine.map((linea) => (
-                        <MenuItem disabled={linea.id === lineaChiamante} key={linea.id} value={linea.id}>
+                        <MenuItem
+                          disabled={linea.id === lineaChiamante}
+                          key={linea.id}
+                          value={linea.id}
+                        >
                           {linea.id}
                         </MenuItem>
                       ))}
@@ -788,7 +784,11 @@ function TestGeneratoreTableNew() {
                       }}
                     >
                       {appearOBP.map((proxy) => (
-                        <MenuItem disabled={proxy.id === OBPChiamante} key={proxy.id} value={proxy.id}>
+                        <MenuItem
+                          disabled={proxy.id === OBPChiamante}
+                          key={proxy.id}
+                          value={proxy.id}
+                        >
                           {proxy.campiConcatenati}
                         </MenuItem>
                       ))}
@@ -843,8 +843,8 @@ function TestGeneratoreTableNew() {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    {modifica === false ? "Visualizza " : "Modifica "} il Chiamante di{" "}
-                    <b>{nomeTitolo}</b>
+                    {modifica === false ? "Visualizza " : "Modifica "} il
+                    Chiamante di <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -868,7 +868,11 @@ function TestGeneratoreTableNew() {
                       }}
                     >
                       {appearLine.map((linea) => (
-                        <MenuItem disabled={linea.id === lineaChiamato} key={linea.id} value={linea.id}>
+                        <MenuItem
+                          disabled={linea.id === lineaChiamato}
+                          key={linea.id}
+                          value={linea.id}
+                        >
                           {linea.id}
                         </MenuItem>
                       ))}
@@ -887,7 +891,11 @@ function TestGeneratoreTableNew() {
                       }}
                     >
                       {appearOBP.map((proxy) => (
-                        <MenuItem disabled={proxy.id === OBPChiamato} key={proxy.id} value={proxy.id}>
+                        <MenuItem
+                          disabled={proxy.id === OBPChiamato}
+                          key={proxy.id}
+                          value={proxy.id}
+                        >
                           {proxy.campiConcatenati}
                         </MenuItem>
                       ))}

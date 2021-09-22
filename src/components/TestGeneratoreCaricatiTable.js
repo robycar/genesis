@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
-// import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-// import DateFnsUtils from "@date-io/date-fns";
-
 import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
@@ -24,19 +21,6 @@ import loading from "../../src/assets/load.gif";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
-// import DateAdapter from "@mui/lab/AdapterDateFns";
-
-// n// import TextField from "@mui/material/TextField";
-// import AdapterDateFns from "@mui/lab/AdapterDateFns";
-// import LocalizationProvider from "@mui/lab/LocalizationProvider";
-// import TimePicker from "@mui/lab/TimePicker";
-// import DateTimePicker from "@mui/lab/DateTimePicker";
-// import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-// import MobileDatePicker from "@mui/lab/MobileDatePicker";
-// import TextField from "@material-ui/core/TextField";
-// import AdapterDateFns from "@material-ui/AdapterDateFns";
-// import LocalizationProvider from "@material-ui/LocalizationProvider";
-// import DatePicker from "react-date-picker";
 
 const TestCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
@@ -161,6 +145,9 @@ const TestCaricatiTable = () => {
       height: "fit-content",
       width: 500,
       position: "relative",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center"
     },
     paperBottom: {
       padding: "2%",
@@ -206,17 +193,36 @@ const TestCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
+      marginBottom: "2%"
     },
     divIntestazione: {
       marginBottom: "2%",
     },
     calendarPaper: {
+      padding: "3%",
       width: "190px",
-      height: "210px",
+      height: "fit-content",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginTop: "3%",
     },
     delayPaper: {
+      padding: "3%",
       width: "190px",
-      height: "210px",
+      height: "fit-content",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginTop: "3%",
+    },
+    divInput: {
+      display: "flex",
+      flexDirection: "column",
+      width: "80%",
+      alignItems: "center",
+      marginTop: "5%",
+      marginBottom: "5%"
     },
   }));
 
@@ -377,12 +383,12 @@ const TestCaricatiTable = () => {
         <Fade in={open}>
           <Paper className={classes.paperModale} elevation={1}>
             <div>
-              <div className={classes.divIntestazione}>
+            <div className={classes.divIntestazione}>
                 <ListItem button>
                   <ListItemIcon>
                     <BackupIcon className={classes.icon} />
                   </ListItemIcon>
-                  <Typography className={classes.intestazione} variant="h5">
+                  <Typography className={classes.intestazione} variant="h4">
                     Load Test Generatore
                   </Typography>
                 </ListItem>
@@ -456,11 +462,11 @@ const TestCaricatiTable = () => {
         <Fade in={openSchedula}>
           <Paper className={classes.paperModale} elevation={1}>
             <div>
-              <ListItem button>
+              <ListItem button style={{marginLeft: "12%"}}>
                 <ListItemIcon>
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
-                <Typography className={classes.intestazione} variant="h5">
+                <Typography className={classes.intestazione} variant="h4">
                   Schedula Test Generatore
                 </Typography>
               </ListItem>
@@ -468,34 +474,37 @@ const TestCaricatiTable = () => {
 
               <div className={classes.divContent}>
                 <Paper elevation={2} className={classes.calendarPaper}>
-                  <Typography>Calendario</Typography>
-                  {/* <DatePicker
-                    openTo="year"
-                    views={["year", "month", "day"]}
-                    label="Year, month and date"
-                    value={value}
-                    onChange={(newValue) => {
-                      setValue(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField {...params} helperText={null} />
-                    )}
-                  /> */}
-                  {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
-                    {/* <Stack spacing={3}>
-                      <DesktopDatePicker
-                        label="Date desktop"
-                        inputFormat="MM/dd/yyyy"
-                        value={value}
-                        onChange={handleChangeData}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-                    </Stack> */}
-                  {/* </LocalizationProvider> */}
+                  <Typography variant="h5">Calendario</Typography>
+                  <Divider/>
+                  <div className={classes.divInput}>
+                    <label for="start">Start date:</label>
+                    <input
+                    
+                      type="date"
+                      id="start"
+                      name="trip-start"
+                      value="2018-07-22"
+                      min="2018-01-01"
+                      max="2018-12-31"
+                    />
+                  </div>
                 </Paper>
 
                 <Paper elevation={2} className={classes.delayPaper}>
-                  <Typography>Durata</Typography>
+                  <Typography variant="h5">Durata</Typography>
+                  <div className={classes.divInput}>
+
+                    <label for="appt">Start Time:</label>
+                    <input
+                    style={{width: "135px"}}
+                      type="time"
+                      id="appt"
+                      name="appt"
+                      min="09:00"
+                      max="18:00"
+                      required
+                    />
+                  </div>
                 </Paper>
               </div>
               <Divider />

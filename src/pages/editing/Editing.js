@@ -17,11 +17,12 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import { Paper } from "@material-ui/core";
-import Linee from "../../components/Linee";
+import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
+import LineeNew from "../../components/LineeNew";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
+import LanguageIcon from "@material-ui/icons/Language";
 
 const drawerWidth = 240;
 
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    boxShadow: "none",
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -105,9 +107,33 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     marginBottom: "20px",
   },
+  generalPaper: {
+    alignItems: "baseline",
+    marginTop: "10px",
+  },
+  icon: {
+    color: "rgba(71, 184, 129, 1)",
+  },
+  titolo: {
+    fontWeight: 500,
+    fontStyle: "normal",
+    fontSize: "24px",
+    color: "#66788A",
+    lineHeight: "20px",
+    padding: "2%",
+    // marginTop: "2%",
+  },
+  divider: {
+    width: "90%",
+    marginLeft: "5%",
+    lineHeight: "1px",
+  },
+  marginBottom: {
+    marginBottom: "20px",
+  },
 }));
 
-function Editing() {
+function EditingLinee() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerClose = () => {
@@ -131,11 +157,7 @@ function Editing() {
         }}
         open={open}
       >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
+        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -162,7 +184,7 @@ function Editing() {
             >
               LINEE
             </Button>
-            <Button
+            {/* <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
@@ -170,7 +192,7 @@ function Editing() {
               to="/editing/lineegeneratore"
             >
               LINEE GENERATORE
-            </Button>
+            </Button> */}
             {/* </NavLink> */}
 
             {/* <NavLink exact to="/dashboard/testsuite"> */}
@@ -202,8 +224,34 @@ function Editing() {
               TEST
             </Button>
           </div>
-          <Paper className={classes.paper}>
-            <Linee />
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/linee"
+          >
+            LINEE SIMULATORE
+          </Button>
+          <Button
+            className="button-green"
+            component={NavLink}
+            activeClassName="button-green-active"
+            exact
+            to="/editing/lineegeneratore"
+          >
+            LINEE GENERATORE
+          </Button>
+
+          <Paper className={classes.generalPaper} elevation={1}>
+            <ListItem>
+              <ListItemIcon>
+                <LanguageIcon fontSize="large" className={classes.icon} />
+              </ListItemIcon>
+              <Typography className={classes.titolo}> Linee </Typography>
+            </ListItem>
+            <Divider className={classes.divider} />
+            <LineeNew />
           </Paper>
         </Container>
       </main>
@@ -211,4 +259,4 @@ function Editing() {
   );
 }
 
-export default Editing;
+export default EditingLinee;

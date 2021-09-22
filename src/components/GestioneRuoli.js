@@ -24,10 +24,12 @@ const GestioneRuoli = () => {
   const [id, setId] = useState();
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
+  const [caricamento, setCaricamento] = useState(false)
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const getLevel = () => {
+    setCaricamento(true)
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -41,7 +43,9 @@ const GestioneRuoli = () => {
 
     fetch(`/api/level`, requestOptions)
       .then((response) => response.json())
-      .then((result) => setData(result.livelli))
+      .then((result) => {setData(result.livelli)
+      setCaricamento(false)
+      })
       .catch((error) => console.log("error", error));
   };
 
@@ -213,6 +217,7 @@ const GestioneRuoli = () => {
         title="Gestione Ruoli"
         data={data}
         columns={columns}
+        isLoading={caricamento}
         options={{
           actionsColumnIndex: -1,
           search: true,
@@ -282,6 +287,11 @@ const GestioneRuoli = () => {
         localization={{
           header: {
             actions: "Azioni",
+          },
+          body: {
+            emptyDataSourceMessage: (
+                "Non è presente alcun dato da mostrare"
+            ),
           },
         }}
       />

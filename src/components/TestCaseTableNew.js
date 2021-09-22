@@ -296,11 +296,6 @@ function TestCaseTable() {
     setOpen(false);
   };
 
-  const handleClose2 = () => {
-    aggiornaTestCase();
-    setOpen(false);
-  };
-
   /*------- OPEN WARNING DELETE ------------ */
 
   const [openWarning, setOpenWarning] = useState(false);
@@ -349,7 +344,7 @@ function TestCaseTable() {
               "Codice errore:" +
                 result.error.code +
                 "Descrizione" +
-                result.code.description
+                result.error.description
             );
           }
         } else {
@@ -377,7 +372,7 @@ function TestCaseTable() {
   const handleOpenChiamato = () => {
     var appoggioChiamato;
     appoggioChiamato = testCase.chiamato;
-    console.log(appoggioChiamato)
+    console.log(appoggioChiamato);
     arrAppoggioChiamato.linea = appoggioChiamato.linea.id;
     arrAppoggioChiamato.proxy = appoggioChiamato.proxy.id;
     setChiamato(arrAppoggioChiamato);
@@ -425,7 +420,6 @@ function TestCaseTable() {
       var raw = JSON.stringify({
         id: id,
         version: version,
-        expectedDuration: expectedDuration,
         nome: nome,
         descrizione: descrizione,
       });
@@ -441,6 +435,7 @@ function TestCaseTable() {
         .then((response) => response.json())
         .then((response) => {
           getAllTestCase();
+          handleClose();
         })
         .catch((error) => console.log("error", error));
     };
@@ -536,6 +531,9 @@ function TestCaseTable() {
       height: 370,
       overflowX: "hidden",
     },
+    textArea: {
+      width: "660px",
+    },
     buttonModale: {
       bottom: 0,
     },
@@ -547,14 +545,12 @@ function TestCaseTable() {
       width: "600px",
     },
     textField: {
-      width: "200px",
+      width: "300px",
     },
     bottoneAnnulla: {
       width: "128px",
     },
-    textField: {
-      width: "200px",
-    },
+
     divIntestazione: {
       display: "flex",
       alignItems: "center",
@@ -580,18 +576,18 @@ function TestCaseTable() {
   return (
     <div>
       <MaterialTable
-       detailPanel={rowData => {
-        return (
-          <div
-          style={{
-            fontSize: 16,
-            marginLeft: 2,
-          }}
-        >
-       {"  "} {rowData.descrizione}
-        </div>
-        )
-      }}
+        detailPanel={(rowData) => {
+          return (
+            <div
+              style={{
+                fontSize: 16,
+                marginLeft: 3,
+              }}
+            >
+              {"  "} {rowData.descrizione}
+            </div>
+          );
+        }}
         style={{ boxShadow: "none" }}
         title="Test Case"
         data={data}
@@ -657,12 +653,16 @@ function TestCaseTable() {
           },
           body: {
             emptyDataSourceMessage: (
-              <div style={{display: 'flex',  
-                          justifyContent:'center', 
-                          alignItems:'center', 
-                          height: '10vh', 
-                          width: '10vh',
-                          margin:'0 auto'}} >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "10vh",
+                  width: "10vh",
+                  margin: "0 auto",
+                }}
+              >
                 <img src={loading} alt="loading" />
               </div>
             ),
@@ -701,6 +701,7 @@ function TestCaseTable() {
                 <Row>
                   <Col className={classes.col}>
                     <TextField
+                      multiline={true}
                       className={classes.textField}
                       error={nome !== "" ? false : true}
                       onChange={(e) => setNome(e.target.value)}
@@ -712,24 +713,6 @@ function TestCaseTable() {
                       }}
                     />
                   </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={descrizione !== "" ? false : true}
-                      onChange={(e) => setDescrizione(e.target.value)}
-                      label="Descrizione"
-                      defaultValue={descrizione}
-                      helperText={
-                        descrizione !== "" ? "" : "La descrizione è richiesta"
-                      }
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -746,28 +729,55 @@ function TestCaseTable() {
 
                 <Row>
                   <Col className={classes.col}>
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome={
-                        modifica === false
-                          ? "vedi chiamato"
-                          : "modifica chiamato"
+                    <TextField
+                      multiline
+                      rows={2}
+                      className={classes.textArea}
+                      error={descrizione !== "" ? false : true}
+                      onChange={(e) => {
+                        e.target.value === ""
+                          ? setDescrizione(" ")
+                          : setDescrizione(e.target.value);
+                      }}
+                      label="Descrizione"
+                      defaultValue={descrizione}
+                      helperText={
+                        descrizione !== "" ? "" : "La descrizione è richiesta"
                       }
-                      onClick={handleOpenChiamato}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome={
-                        modifica === false
-                          ? "vedi chiamanti"
-                          : "modifica chiamanti"
-                      }
-                      onClick={handleOpenChiamanti}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
                     />
                   </Col>
                 </Row>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    padding: "2%",
+                  }}
+                >
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome={
+                      modifica === false ? "vedi chiamato" : "modifica chiamato"
+                    }
+                    onClick={handleOpenChiamato}
+                  />
+
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome={
+                      modifica === false
+                        ? "vedi chiamanti"
+                        : "modifica chiamanti"
+                    }
+                    onClick={handleOpenChiamanti}
+                  />
+                </div>
 
                 <Row>
                   <Col className={classes.col}>
@@ -831,7 +841,7 @@ function TestCaseTable() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      onClick={handleClose2}
+                      onClick={aggiornaTestCase}
                     />
                   )}
 
@@ -996,18 +1006,12 @@ function TestCaseTable() {
                           className={classes.textField}
                           select
                           label="Linea "
-                          value={() => {
-                            var p1 = chiamanti.linea;
-                            return p1.id;
-                          }}
-                          defaultValue={() => {
-                            var p1 = testCase.chiamanti;
-                            var p2 = p1[chiamante].linea;
-                            return p2.id;
-                          }}
+                          value={chiamanti[chiamante].linea.id}
                           onChange={(e) => {
-                            arrAppoggioChiamanti[0].linea.id = e.target.value;
-                            setChiamanti(arrAppoggioChiamanti);
+                            var p1 = chiamanti;
+                            p1[chiamante].linea.id = e.target.value;
+                            console.log(p1);
+                            // impostaChiamanti(p1);
                           }}
                           InputProps={{
                             readOnly: modifica === false ? true : false,

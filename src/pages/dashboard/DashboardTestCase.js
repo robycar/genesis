@@ -175,7 +175,7 @@ function DashboardTestCase() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
 
-        <Container maxWidth="lg" className={classes.container}>
+        <Container maxWidth="xl" className={classes.container}>
           {/* <Typography
             component="h1"
             variant="h6"

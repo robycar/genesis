@@ -40,9 +40,11 @@ const GestioneUtenti = () => {
   const [level, setLevel] = useState([]);
   const [levelId, setLevelId] = useState();
   const [email, setEmail] = useState("");
+  const [caricamento, setCaricamento] = useState(false)
 
   //-----------GET USER----------------------
   const getAllUsers = () => {
+    setCaricamento(true)
     var myHeaders = new Headers();
 
     myHeaders.append("Authorization", bearer);
@@ -59,6 +61,7 @@ const GestioneUtenti = () => {
       .then((response) => response.json())
       .then((result) => {
         setData(result.users);
+        setCaricamento(false)
       })
       .catch((error) => console.log("error", error));
   };
@@ -342,6 +345,7 @@ const GestioneUtenti = () => {
         title="Gestione Utenti"
         data={data}
         columns={columns}
+        isLoading={caricamento}
         options={{
           sorting: true,
           actionsColumnIndex: -1,
@@ -388,6 +392,11 @@ const GestioneUtenti = () => {
         localization={{
           header: {
             actions: "Azioni",
+          },
+          body: {
+            emptyDataSourceMessage: (
+                "Non è presente alcun dato da mostrare"
+            ),
           },
         }}
       />

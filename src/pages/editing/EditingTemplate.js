@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
@@ -177,7 +175,7 @@ function EditingTemplate() {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
+        <Container maxWidth="xl" className={classes.container}>
 
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
@@ -242,15 +240,6 @@ function EditingTemplate() {
             </ListItem>
             <Divider className={classes.divider} />
             <TemplateNew />
-            {/* <div className={classes.divTextArea}>
-              <Typography>Editor di Testo</Typography> */}
-            {/* <TextareaAutosize
-                className={classes.textArea}
-                aria-label="empty textarea"
-                rowsMin={8}
-                placeholder="Inserisci il testo"
-              />{" "} */}
-            {/* </div> */}
           </Paper>
         </Container>
       </main>

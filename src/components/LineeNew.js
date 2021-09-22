@@ -26,7 +26,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 
-import loading from "../../src/assets/load.gif";
 
 function Linee() {
   const useStyles = makeStyles((theme) => ({
@@ -189,6 +188,7 @@ function Linee() {
   const [porta, setPorta] = useState();
   const [password, setPassword] = useState("");
   const [typeLinea, setTypeLinea] = useState();
+  const [caricamento, setCaricamento] = useState(false)
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
@@ -217,6 +217,7 @@ function Linee() {
   // -------get linea-----------
 
   const getLinea = () => {
+    setCaricamento(true)
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -231,8 +232,8 @@ function Linee() {
     fetch(`/api/linea`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setData(result.list);
+        setCaricamento(false)
       })
       .catch((error) => console.log("error", error));
   };
@@ -446,6 +447,7 @@ function Linee() {
         style={{ boxShadow: "none" }}
         title="Total Lines"
         data={data}
+        isLoading={caricamento}
         columns={columns}
         options={{
           actionsColumnIndex: -1,
@@ -496,14 +498,7 @@ function Linee() {
           },
           body: {
             emptyDataSourceMessage: (
-              <div style={{display: 'flex',  
-                          justifyContent:'center', 
-                          alignItems:'center', 
-                          height: '10vh', 
-                          width: '10vh',
-                          margin:'0 auto'}} >
-                <img src={loading} alt="loading" />
-              </div>
+                "Non è presente alcun dato da mostrare"
             ),
           },
         }}

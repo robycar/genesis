@@ -471,7 +471,7 @@ function EditingTemplateCreaTemplate() {
     if (arrayValue[1]?.name) {
       formdata.append("file", arrayValue[1], arrayValue[1]?.name);
     }
-    if (arrayValue[1]?.name) {
+    if (arrayValue[2]?.name) {
       formdata.append("file", arrayValue[2], arrayValue[2]?.name);
     }
 
