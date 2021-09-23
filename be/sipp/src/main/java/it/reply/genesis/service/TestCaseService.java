@@ -39,5 +39,9 @@ public interface TestCaseService {
    */
   void runLoaded(long id) throws ApplicationException;
 
+  TestCaseCaricatoDTO readCaricato(long id) throws ApplicationException;
+
+  TestCaseCaricatoDTO updateTestCaseCaricato(TestCaseCaricatoDTO testCaseCaricato) throws ApplicationException;
+
 
 }

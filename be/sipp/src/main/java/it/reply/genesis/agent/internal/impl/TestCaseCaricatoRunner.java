@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.Instant;
 
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
@@ -18,8 +19,11 @@ import it.reply.genesis.api.files.payload.FileContentDTO;
 import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
+import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.FileSystemScope;
+import it.reply.genesis.model.TestCaseCaricatoStato;
 import it.reply.genesis.service.FileSystemService;
+import it.reply.genesis.service.TestCaseService;
 
 public class TestCaseCaricatoRunner implements Runnable {
 
@@ -70,7 +74,7 @@ public class TestCaseCaricatoRunner implements Runnable {
           testExecutionDir.toAbsolutePath());
       testCaseCaricato.setPathInstance(testExecutionDir.toAbsolutePath().toString());
 
-      logger.debug("Download del file {}", mainScriptFile);
+      logger.debug("Lettura del file {}", mainScriptFile);
       FileContentDTO fileContent = fileSystemService.readFile(FileSystemScope.TEST_CARICATO, testCaseCaricato.getId(), MAIN_SCRIPT_FILE_NAME);
       //download(testExecutionDir, fileContent);
       
@@ -90,10 +94,14 @@ public class TestCaseCaricatoRunner implements Runnable {
       logger.debug("Converting TEST_RUNNER_CLASS into TestRunner.class");
       TestRunner testRunner = (TestRunner) runner.__tojava__(TestRunner.class);
       TestCaseResultImpl testCaseResult = new TestCaseResultImpl(this.serviceManager, this.testCaseCaricato);
+      logger.debug("calling script.start");
       testRunner.start(testCaseResult);
+      logger.debug("test case completed. Saving OK result");
+      markTestCompletedOK();
       
     } catch (Exception e) {
       logger.error("Errore durante la preparazione e l'esecuzione del test case caricato {}:{}", testCaseCaricato.getId(), testCaseCaricato.getNome(), e);
+      markTestAsFailed(e);
     } finally {
       if (interpreter != null) {
         interpreter.close();
@@ -102,16 +110,54 @@ public class TestCaseCaricatoRunner implements Runnable {
     
   }
 
-  private void download(Path targetFolder, FileContentDTO fileContent) throws IOException {
-    Path targetFile = targetFolder.resolve(fileContent.getFileName());
-    logger.debug("Downloading {} into {}", fileContent, targetFile);
-    try (InputStream is = fileContent.getContent()) {
-      long written = Files.copy(fileContent.getContent(), targetFile, StandardCopyOption.REPLACE_EXISTING);
-      logger.debug("Written {} bytes to file {}", written, targetFile);
+
+
+  private void markTestCompletedOK() {
+    try {
+      TestCaseService testCaseService = serviceManager.getTestCaseService();
+      TestCaseCaricatoDTO testToUpdate = testCaseService.readCaricato(testCaseCaricato.getId());
+      if (!TestCaseCaricatoStato.COMPLETED.equals(testToUpdate.getStato())) {
+        TestCaseCaricatoDTO updatedTest = new TestCaseCaricatoDTO();
+        updatedTest.setId(testToUpdate.getId());
+        updatedTest.setVersion(testToUpdate.getVersion());
+        updatedTest.setEndDate(Instant.now());
+        updatedTest.setStato(TestCaseCaricatoStato.COMPLETED);
+        updatedTest.setResult(ExecutionResult.OK);
+        
+        this.testCaseCaricato = testCaseService.updateTestCaseCaricato(updatedTest);
+      }
+    } catch (ApplicationException ae) {
+      logger.error("Errore durante la registrazione OK del test caricato {}", testCaseCaricato.getId());
     }
     
-    
   }
+
+  private void markTestAsFailed(Exception r) {
+    try {
+      TestCaseService testCaseService = serviceManager.getTestCaseService();
+      TestCaseCaricatoDTO testToUpdate = testCaseService.readCaricato(testCaseCaricato.getId());
+      TestCaseCaricatoDTO updatedTest = new TestCaseCaricatoDTO();
+      updatedTest.setId(testToUpdate.getId());
+      updatedTest.setVersion(testToUpdate.getVersion());
+      updatedTest.setEndDate(Instant.now());
+      updatedTest.setStato(TestCaseCaricatoStato.COMPLETED);
+      updatedTest.setResult(ExecutionResult.KO);
+      this.testCaseCaricato =  testCaseService.updateTestCaseCaricato(updatedTest);
+    } catch (ApplicationException ae) {
+      logger.error("Errore durante la registrazione KO del test caricato {}", testCaseCaricato.getId(), ae);
+    }
+  }
+
+//  private void download(Path targetFolder, FileContentDTO fileContent) throws IOException {
+//    Path targetFile = targetFolder.resolve(fileContent.getFileName());
+//    logger.debug("Downloading {} into {}", fileContent, targetFile);
+//    try (InputStream is = fileContent.getContent()) {
+//      long written = Files.copy(fileContent.getContent(), targetFile, StandardCopyOption.REPLACE_EXISTING);
+//      logger.debug("Written {} bytes to file {}", written, targetFile);
+//    }
+//    
+//    
+//  }
 
   private FileDTO findMainFile() throws ApplicationException {
     if (testCaseCaricato.getFolder() == null) {
