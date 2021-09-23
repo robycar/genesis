@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jdbc.repository.config.EnableJdbcAuditing;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @SpringBootApplication
@@ -35,6 +36,15 @@ public class SippApplication {
 	    LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
 	    bean.setValidationMessageSource(messageSource());
 	    return bean;
+	}
+	
+	@Bean
+	public ThreadPoolTaskExecutor getTaskExecutor() {
+	  ThreadPoolTaskExecutor result = new ThreadPoolTaskExecutor();
+	  result.setMaxPoolSize(1);
+	  result.setCorePoolSize(1);
+	  
+    return result ;
 	}
 
 }

@@ -46,7 +46,7 @@ public class FileSystemController extends AbstractController {
   }
 
   public static String urlForVO(FileSystemVO vo) {
-    return FS_API_PATH + "/" + vo.getScope() + "/" + vo.getIdRef() + "/" + vo.getId();
+    return FS_API_PATH + "/" + "entityfolder/" + vo.getScope() + "/" + vo.getIdRef() + "/" + vo.getId();
   }
 
   @GetMapping("entityfolder/{scope}/{idRef}")
@@ -111,7 +111,7 @@ public class FileSystemController extends AbstractController {
   {
     logger.info("Enter download({},{},{})", scope, idRef, pathOrId);
 
-    String functionToCheck = "FUN_" + scope.name().toLowerCase() + ".view";
+    String functionToCheck = "FUN_" + scope.getMappedFunctionDomain() + ".view";
     if (!hasAuthority(functionToCheck)) {
       logger.error("Utente {} non autorizzato ad accedere alla risorsa {}/folder/{}/{}", currentUsername(), FS_API_PATH,
           scope, idRef);

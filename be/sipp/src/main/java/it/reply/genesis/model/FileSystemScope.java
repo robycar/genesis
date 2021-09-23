@@ -1,9 +1,20 @@
 package it.reply.genesis.model;
 
 public enum FileSystemScope {
-  TEMPLATE,
-  TEST,
-  TEST_CARICATO,
-  LINEA_GENERATORE, 
+  
+  TEMPLATE("template"),
+  TEST("test"),
+  TEST_CARICATO("test"),
+  LINEA_GENERATORE("lineagen"), 
   ;
+  
+  private final String mappedFunctionDomain;
+  
+  private FileSystemScope(String mappedFunctionDomain) {
+    this.mappedFunctionDomain = mappedFunctionDomain;
+  }
+
+  public String getMappedFunctionDomain() {
+    return mappedFunctionDomain;
+  }
 }

@@ -1,5 +1,6 @@
 package it.reply.genesis.service.impl;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.reply.genesis.AppError;
+import it.reply.genesis.agent.internal.impl.InternalAgent;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
@@ -73,6 +75,9 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   
   @Autowired
   private TestCaseLineaChiamanteRepository testCaseLineaChiamanteRepository;
+  
+  @Autowired
+  private InternalAgent internalAgent;
 
   public TestCaseServiceImpl() {
   }
@@ -385,6 +390,44 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     return result.stream()
         .map(TestCaseCaricatoDTO::new)
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public void runLoaded(long id) throws ApplicationException {
+    TestCaseCaricatoVO vo = readCaricatoVO(id, true);
+    //Verifica che lo stato sia ready
+    checkStatoOfTestCaseCaricato(vo, TestCaseCaricatoStato.READY);
+    
+    vo.setStato(TestCaseCaricatoStato.WAITING);
+    vo.setStartDate(Instant.now());
+    vo.setStartedBy(currentUsername());
+
+    testCaseCaricatoRepository.save(vo);
+    
+    internalAgent.runTestCaseIfQueueEmpty(vo);
+    testCaseCaricatoRepository.flush();
+  }
+
+  public void checkStatoOfTestCaseCaricato(TestCaseCaricatoVO vo, TestCaseCaricatoStato statoAtteso) throws ApplicationException {
+    if (!statoAtteso.equals(vo.getStato())) {
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_CARICATO_WRONG_STATE, vo.getId(), vo.getStato(), statoAtteso);
+    }
+  }
+
+  private TestCaseCaricatoVO readCaricatoVO(long id) throws ApplicationException {
+    return readCaricatoVO(id, false);
+  }
+  
+  private TestCaseCaricatoVO readCaricatoVO(long id, boolean locking) throws ApplicationException {
+    Optional<TestCaseCaricatoVO> result;
+    if (locking) {
+      result = testCaseCaricatoRepository.findByIdLocking(id);
+    } else {
+      result = testCaseCaricatoRepository.findById(id);
+    }
+    
+    return result.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_CARICATO_NOT_FOUND, id));
+
   }
 
 }

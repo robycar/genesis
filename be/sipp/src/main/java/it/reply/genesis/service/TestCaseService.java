@@ -32,5 +32,12 @@ public interface TestCaseService {
 
   List<TestCaseCaricatoDTO> readTestCaricatiOfType(TestListType inclusion) throws ApplicationException;
 
+  /**
+   * Avvia l'esecuzione di un test case caricato.
+   * @param id l'identificatore del test case caricato
+   * @throws ApplicationException in caso di errore
+   */
+  void runLoaded(long id) throws ApplicationException;
+
 
 }

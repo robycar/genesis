@@ -42,4 +42,6 @@ public interface FileSystemService {
    */
   FileSystemVO saveFile(FileSystemScope scope, long idRef, MultipartFile file) throws ApplicationException;
 
+  List<FileSystemVO> listFolderVO(FileSystemScope scope, long idRef) throws ApplicationException;
+
 }

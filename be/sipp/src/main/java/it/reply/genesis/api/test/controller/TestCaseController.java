@@ -101,21 +101,6 @@ public class TestCaseController extends AbstractController {
 
   }
 
-  @GetMapping("load/{id}")
-  @PreAuthorize("hasAuthority('FUN_test.run')")
-  public ResponseEntity<TestCaseLoadResponse> load(@PathVariable Long id) {
-    logger.info("ener load({})", id);
-    TestCaseLoadResponse response = new TestCaseLoadResponse();
-    try {
-      TestCaseCaricatoDTO result = testCaseService.loadTestCase(id);
-      response.setTestCaseCaricato(result);
-      logger.info("Caricato il test case {}", result);
-      return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    } catch (ApplicationException e) {
-      return handleException(e, response);
-    }
-  }
-  
   @GetMapping("{id}")
   @PreAuthorize("hasAuthority('FUN_test.view')")
   public ResponseEntity<TestCaseRetrieveResponse> retrieve(@PathVariable Long id) {
@@ -154,6 +139,38 @@ public class TestCaseController extends AbstractController {
     } catch (ApplicationException e) {
       return handleException(e, response);
     }
+  }
+  
+  @GetMapping("load/{id}")
+  @PreAuthorize("hasAuthority('FUN_test.run')")
+  public ResponseEntity<TestCaseLoadResponse> load(@PathVariable Long id) {
+    logger.info("ener load({})", id);
+    TestCaseLoadResponse response = new TestCaseLoadResponse();
+    try {
+      TestCaseCaricatoDTO result = testCaseService.loadTestCase(id);
+      response.setTestCaseCaricato(result);
+      logger.info("Caricato il test case {}", result);
+      return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+  }
+  
+
+  @GetMapping("runloaded/{id}")
+  @PreAuthorize("hasAuthority('FUN_test.run')")
+  public ResponseEntity<PayloadResponse> runLoaded(@PathVariable Long id) {
+    logger.info("enter runLoaded({})", id);
+    PayloadResponse response = new PayloadResponse();
+    try {
+      testCaseService.runLoaded(id);
+      
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+    
+    
   }
   
   

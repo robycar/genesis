@@ -1,14 +1,17 @@
-{
-	"properties": [
-		{
-			"name": "jwt.secret",
-			"type": "java.lang.String",
-			"description": "Il valore con cui cifrare i token JWT"
-		},
-		{
-			"name": "jwt.defaultExpirationMillis",
-			"type": "java.lang.Long",
-			"description": "La durata, in millisecondi, della validita' del token'"
-		}
-	]
-}
+{"properties": [
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "Il valore con cui cifrare i token JWT"
+  },
+  {
+    "name": "jwt.defaultExpirationMillis",
+    "type": "java.lang.Long",
+    "description": "La durata, in millisecondi, della validita' del token'"
+  },
+  {
+    "name": "genesis.agent.internal.workdir",
+    "type": "java.lang.String",
+    "description": "Directory di lavoro utilizzata dall'agent interno per gestire i file dei test"
+  }
+]}

@@ -51,8 +51,15 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     List<FileSystemVO> folderVO = fileSystemRepository.findByScopeAndIdRef(scope, idRef);
     
     return folderVO.stream()
-        .map(vo -> new FileDTO(vo))
+        .map(FileDTO::new)
         .collect(Collectors.toList());
+  }
+  
+  @Override
+  public List<FileSystemVO> listFolderVO(FileSystemScope scope, long idRef) throws ApplicationException {
+    logger.debug("enter listFolderVO");
+    return fileSystemRepository.findByScopeAndIdRef(scope, idRef);
+    
   }
 
   @Override
