@@ -377,7 +377,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
         tcclc.setNumLinea(lc.getNumLinea());
         tcclc.setLinea(lc.getLinea());
         tcclc.setOutboundProxy(lc.getOutboundProxy());
-        tcclc.setFile(findCopiedFile(fileCopiati, tcvo.getFileChiamato(), folderName));
+        tcclc.setFile(findCopiedFile(fileCopiati, lc.getFile(), folderName));
         tccLineeChiamanti.add(tcclc);
       }
       if (!tccLineeChiamanti.isEmpty()) {

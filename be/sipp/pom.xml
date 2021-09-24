@@ -106,6 +106,16 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+           <configuration>
+              <requiresUnpack>
+                  <dependency>
+                      <groupId>org.python</groupId>
+                      <artifactId>jython-slim</artifactId>
+                  </dependency>
+              </requiresUnpack>
+            </configuration>
+        
+        
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>

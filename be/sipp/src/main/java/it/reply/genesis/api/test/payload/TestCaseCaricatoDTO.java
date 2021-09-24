@@ -174,7 +174,7 @@ public class TestCaseCaricatoDTO extends DTO {
     writeField(sb, "template", template);
     writeField(sb, "testCase", testCase);
     writeField(sb, "properties", properties);
-    
+    writeField(sb, "folder", folder);
     
     super.writeFields(sb);
   }
