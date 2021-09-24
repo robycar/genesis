@@ -19,6 +19,7 @@ import it.reply.genesis.agent.ServiceManager;
 import it.reply.genesis.agent.TestCaseResult;
 import it.reply.genesis.agent.TestRunner;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
+import it.reply.genesis.api.test.payload.TestCaseLineaDTO;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -26,13 +27,15 @@ public class JythonSimpleTest {
 
   public static final String testFile1 = "scripts/t1.py";
   
+  public static final String testFile2 = "scripts/t2.py";
+  
   
   private static final Logger logger = LoggerFactory.getLogger(JythonSimpleTest.class);
   
   public JythonSimpleTest() {
   }
 
-  @Test
+  //@Test
   public void testPythonInterpreter() throws URISyntaxException, IOException {
     logger.debug("enter testPythonInterpreter" );
     try (PythonInterpreter interpreter = new PythonInterpreter()) {
@@ -67,6 +70,26 @@ public class JythonSimpleTest {
         logger.debug("Calling {}.start({})", testRunner, testCaseResult);
         testRunner.start(testCaseResult);
       }
+    }
+    
+  }
+  
+  @Test
+  public void testJythonGlobalInit() throws IOException {
+    logger.debug("enter testJythonGlobalInit");
+    
+    try (PythonInterpreter interpreter = new PythonInterpreter()) {
+      interpreter.set("variabile1", "valore della variabile 1");
+      TestCaseCaricatoDTO dto = new TestCaseCaricatoDTO(10L);
+      dto.setChiamato(new TestCaseLineaDTO());
+      interpreter.set("testCaseCaricato", dto);
+      //interpreter.set("logger", LoggerFactory.getLogger(testFile2));
+      URL fileUrl = getClass().getClassLoader().getResource(testFile2);
+      assertNotNull(fileUrl);
+      try (InputStream is = fileUrl.openStream()) {
+        interpreter.execfile(is, testFile2);
+      }
+
     }
     
   }

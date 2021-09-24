@@ -1,20 +1,16 @@
 package it.reply.genesis.agent.internal.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 
-import org.python.core.PyObject;
+import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
 import it.reply.genesis.agent.ServiceManager;
-import it.reply.genesis.agent.TestRunner;
 import it.reply.genesis.api.files.payload.FileContentDTO;
 import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
@@ -74,35 +70,44 @@ public class TestCaseCaricatoRunner implements Runnable {
           testExecutionDir.toAbsolutePath());
       testCaseCaricato.setPathInstance(testExecutionDir.toAbsolutePath().toString());
 
+      
+      updateTestCaseToRunningStatus();
+      
       logger.debug("Lettura del file {}", mainScriptFile);
       FileContentDTO fileContent = fileSystemService.readFile(FileSystemScope.TEST_CARICATO, testCaseCaricato.getId(), MAIN_SCRIPT_FILE_NAME);
       //download(testExecutionDir, fileContent);
-      
-      interpreter = new PythonInterpreter();
+      PySystemState pyState = new PySystemState();
+      pyState.setCurrentWorkingDir(testExecutionDir.normalize().toAbsolutePath().toString());
+      interpreter = new PythonInterpreter(null, pyState);
+      logger.debug("Initializing jython environment with global variables");
+      interpreter.set("testCaseCaricato", testCaseCaricato);
+      interpreter.set("serviceManager", this.serviceManager);
+      interpreter.set("logger", LoggerFactory.getLogger("script_main.py"));
+
       logger.debug("Executing {}", fileContent.getFileName());
       interpreter.execfile(fileContent.getContent(), fileContent.getFileName());
-      logger.debug("Obtaining TEST_RUNNER_CLASS");
-      PyObject runnerClass = interpreter.get("TEST_RUNNER_CLASS");
-      if (runnerClass == null) {
-        throw new Exception("Lo script " + fileContent.getFileName() + " non definisce la variabile globale TEST_RUNNER_CLASS");
-      }
-      logger.debug("Instantiating {}", runnerClass);
-      PyObject runner = runnerClass.__call__();
-      if (runner == null) {
-       throw new Exception("Impossibile instanziare la classe " + runnerClass); 
-      }
-      logger.debug("Converting TEST_RUNNER_CLASS into TestRunner.class");
-      TestRunner testRunner = (TestRunner) runner.__tojava__(TestRunner.class);
-      TestCaseResultImpl testCaseResult = new TestCaseResultImpl(this.serviceManager, this.testCaseCaricato);
-      logger.debug("calling script.start");
-      testRunner.start(testCaseResult);
+//      logger.debug("Obtaining TEST_RUNNER_CLASS");
+//      PyObject runnerClass = interpreter.get("TEST_RUNNER_CLASS");
+//      if (runnerClass == null) {
+//        throw new Exception("Lo script " + fileContent.getFileName() + " non definisce la variabile globale TEST_RUNNER_CLASS");
+//      }
+//      logger.debug("Instantiating {}", runnerClass);
+//      PyObject runner = runnerClass.__call__();
+//      if (runner == null) {
+//       throw new Exception("Impossibile instanziare la classe " + runnerClass); 
+//      }
+//      logger.debug("Converting TEST_RUNNER_CLASS into TestRunner.class");
+//      TestRunner testRunner = (TestRunner) runner.__tojava__(TestRunner.class);
+//      TestCaseResultImpl testCaseResult = new TestCaseResultImpl(this.serviceManager, this.testCaseCaricato);
+//      logger.debug("calling script.start");
+//      testRunner.start(testCaseResult);
       logger.debug("test case completed. Saving OK result");
       markTestCompletedOK();
-      
     } catch (Exception e) {
       logger.error("Errore durante la preparazione e l'esecuzione del test case caricato {}:{}", testCaseCaricato.getId(), testCaseCaricato.getNome(), e);
       markTestAsFailed(e);
     } finally {
+      logger.debug("closing interpeter and exit run");
       if (interpreter != null) {
         interpreter.close();
       }
@@ -111,6 +116,21 @@ public class TestCaseCaricatoRunner implements Runnable {
   }
 
 
+
+  private void updateTestCaseToRunningStatus() throws ApplicationException {
+    logger.debug("Imposto il testCaseCaricato {}:{} a RUNNING", 
+        testCaseCaricato.getId(), testCaseCaricato.getNome());
+    TestCaseService testCaseService = serviceManager.getTestCaseService();
+    TestCaseCaricatoDTO testToUpdate = testCaseService.readCaricato(testCaseCaricato.getId());
+    TestCaseCaricatoDTO updatedTest = new TestCaseCaricatoDTO();
+    updatedTest.setId(testToUpdate.getId());
+    updatedTest.setVersion(testToUpdate.getVersion());
+    updatedTest.setStato(TestCaseCaricatoStato.RUNNING);
+    // Sovrascrivo la data di avvio rispetto a quando l'utente ha premuto start?
+    updatedTest.setStartDate(Instant.now()); 
+    testCaseService.updateTestCaseCaricato(updatedTest);
+    
+  }
 
   private void markTestCompletedOK() {
     try {

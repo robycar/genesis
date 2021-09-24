@@ -84,6 +84,7 @@ public class TestCaseCaricatoDTO extends DTO {
     this.nome = vo.getNome();
     this.descrizione = vo.getDescrizione();
     this.stato = vo.getStato();
+    this.result = vo.getResult();
     this.pathInstance = vo.getPathInstance();
     this.gruppo = new GruppoDTO(vo.getGruppo());
     this.template = new TemplateDTO(vo.getTemplate());
@@ -173,7 +174,7 @@ public class TestCaseCaricatoDTO extends DTO {
     writeField(sb, "template", template);
     writeField(sb, "testCase", testCase);
     writeField(sb, "properties", properties);
-    
+    writeField(sb, "folder", folder);
     
     super.writeFields(sb);
   }

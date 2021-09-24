@@ -41,13 +41,11 @@ INSERT INTO `FUNZIONE` (`CODICE`, `RESERVED`, `NOME`, `DESCRIZIONE`) VALUES
 
 INSERT INTO `LEVEL` (`ID_LEVEL`, `DESCRIZIONE`, `LEVEL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
 (1, 'test', 'test', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
-(2,	'Descrizione livello admin',	'ADMIN', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
-(4,	'Regional',	'Lead Operations Manager', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
-(5,	'Descrizione Level 5',	'Level 5', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
+(2, 'ADMIN', 'ADMIN', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1)
+;
 
 INSERT INTO `GRUPPO` (`ID_GRUPPO`, `DESCRIZIONE`, `GRUPPO`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
-(1,	'g1',	'g1', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
-(2,	'Forward',	'Central Integration Designer', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
+(1,	'Gruppo di test',	'test', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
 
 INSERT INTO `UTENZE` (`ID_UTENZA`, `USERNAME`, `PASSWORD`, `ID_LEVEL`, `ID_GROUP`, `NOME`, `COGNOME`, `AZIENDA`, `EMAIL`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
 (1, 'test',	'{noop}test',	1,	1,	'nome',	'cognome',	'azienda',	'test@test.it', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
@@ -56,10 +54,10 @@ INSERT INTO AUTORIZZAZIONE_LEVEL(ID_LEVEL, FUNZIONE_CODICE)
 SELECT L.ID_LEVEL, F.CODICE
 FROM (LEVEL L, FUNZIONE F)
 LEFT JOIN AUTORIZZAZIONE_LEVEL AL ON (AL.ID_LEVEL = L.ID_LEVEL AND AL.FUNZIONE_CODICE=F.CODICE)
-WHERE LEVEL = 'test'
+WHERE LEVEL IN ('test', 'ADMIN')
 AND AL.ID_LEVEL IS NULL
 ;
-
+/*
 INSERT INTO `TYPE_LINEE` (`ID_TYPE_LINEA`, `DESCRIZIONE`, `MODIFIED_WHEN`, `CREATED_WHEN`, `MODIFIED_BY`, `CREATED_BY`, `VERSION`) VALUES
 (1,	'descrizione type linea 1', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1),
 (2,	'descrizione type linea 2', '2000-01-01 11:30:10', '2000-01-01 11:30:10', 'init', 'init', 1);
@@ -87,3 +85,4 @@ INSERT INTO `TEMPLATE_FILE` (`ID`, `TEMPLATE_ID`, `FILE_SYSTEM_ID`, `CATEGORY`, 
 (6,	1,	2,	'CHIAMANTE',	3),
 (5,	1,	3,	'CHIAMANTE',	2),
 (1,	1,	4,	'CHIAMANTE',	1);
+*/

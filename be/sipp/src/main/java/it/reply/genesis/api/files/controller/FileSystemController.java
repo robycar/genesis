@@ -84,7 +84,7 @@ public class FileSystemController extends AbstractController {
 
     FileSystemUploadResponse response = new FileSystemUploadResponse();
     
-    String functionToCheck = "FUN_" + scope.name().toLowerCase() + ".edit";
+    String functionToCheck = "FUN_" + scope.getMappedFunctionDomain().toLowerCase() + ".edit";
     if (!hasAuthority(functionToCheck)) {
       logger.error("Utente {} non autorizzato ad accedere alla risorsa {}/entityfolder/{}/{}", currentUsername(), FS_API_PATH,
           scope, idRef);

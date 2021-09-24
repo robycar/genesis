@@ -55,4 +55,12 @@ public class TestCaseLineaDTO extends DTO {
     this.file = file;
   }
 
+  @Override
+  protected void writeFields(StringBuilder sb) {
+    writeField(sb, "linea", linea);
+    writeField(sb, "proxy", proxy);
+    writeField(sb, "file", file);
+    super.writeFields(sb);
+  }
+
 }
