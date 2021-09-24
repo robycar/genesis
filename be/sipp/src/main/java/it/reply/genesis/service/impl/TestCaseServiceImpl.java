@@ -234,6 +234,36 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   }
 
   @Override
+  public TestCaseCaricatoDTO updateTestCaseCaricato(TestCaseCaricatoDTO dto) throws ApplicationException {
+    logger.debug("enter updateTestCaseCaricato");
+    
+    TestCaseCaricatoVO vo = readCaricatoVO(dto.getId(), true);
+    //checkVersion(vo, dto.getVersion(), "TestCaseCaricatoVO, vo.getId());
+    if (dto.getEndDate() != null) {
+      vo.setEndDate(dto.getEndDate());
+    }
+    if (dto.getPathInstance() != null) {
+      vo.setPathInstance(dto.getPathInstance());
+    }
+    if (dto.getResult() != null) {
+      vo.setResult(dto.getResult());
+    }
+    if (dto.getStartDate() != null) {
+      vo.setStartDate(dto.getStartDate());
+    }
+    if (dto.getStartedBy() != null) {
+      vo.setStartedBy(dto.getStartedBy());
+    }
+    if (dto.getStato() != null) {
+      vo.setStato(dto.getStato());
+    }
+    
+    vo = testCaseCaricatoRepository.saveAndFlush(vo);
+    
+    return new TestCaseCaricatoDTO(vo, false, false);
+  }
+
+  @Override
   public TestCaseDTO updateTestCase(TestCaseDTO dto) throws ApplicationException {
     logger.debug("enter updateTestCase");
     
@@ -403,6 +433,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     vo.setStartedBy(currentUsername());
 
     testCaseCaricatoRepository.save(vo);
+    logger.debug("Impostato lo stato del test case caricato {} a WAITING", id);
     
     internalAgent.runTestCaseIfQueueEmpty(vo);
     testCaseCaricatoRepository.flush();
@@ -414,6 +445,12 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     }
   }
 
+  @Override
+  public TestCaseCaricatoDTO readCaricato(long id) throws ApplicationException {
+    TestCaseCaricatoVO vo = readCaricatoVO(id);
+    return new TestCaseCaricatoDTO(vo, true, true);
+  }
+  
   private TestCaseCaricatoVO readCaricatoVO(long id) throws ApplicationException {
     return readCaricatoVO(id, false);
   }
@@ -429,5 +466,6 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     return result.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_CARICATO_NOT_FOUND, id));
 
   }
+
 
 }

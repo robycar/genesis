@@ -11,6 +11,7 @@ import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.payload.DTO;
 import it.reply.genesis.api.linea.payload.LineaDTO;
 import it.reply.genesis.api.linea.payload.OutboundProxyDTO;
+import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.FileSystemVO;
 import it.reply.genesis.model.TestCaseCaricatoPropertyVO;
 import it.reply.genesis.model.TestCaseCaricatoStato;
@@ -41,6 +42,8 @@ public class TestCaseCaricatoDTO extends DTO {
   private String descrizione;
   
   private TestCaseCaricatoStato stato;
+  
+  private ExecutionResult result;
   
   private String pathInstance;
   
@@ -325,6 +328,14 @@ public class TestCaseCaricatoDTO extends DTO {
 
   public void setTestCase(TestCaseDTO testCase) {
     this.testCase = testCase;
+  }
+
+  public ExecutionResult getResult() {
+    return result;
+  }
+
+  public void setResult(ExecutionResult result) {
+    this.result = result;
   }
 
 }
