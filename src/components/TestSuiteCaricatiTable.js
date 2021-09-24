@@ -23,67 +23,37 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 
 const TestSuiteCaricatiTable = () => {
+  
   const [filter, setFilter] = useState(false);
-  const data = [
-    {
-      launcher: "Adam Denisov",
-      nameTs: "PEM_001",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "2/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Keith M. Boyce",
-      nameTs: "PEM_002",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "3/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Stella D. Knight",
-      nameTs: "PEM_003",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "4/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Walter E. Harmon",
-      nameTs: "PEM_004",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "5/10",
-      trace: "*****",
-      mos: "",
-    },
-  ];
+  const [id, setId] = useState();
+  const [nome, setNome] =useState("");
+  const [creationDate, setCreationDate] = useState();
+  const [modifiedDate, setModifiedDate] = useState(); 
+  const [data, setData] = useState();
+  const [createdBy, setCreatedBy] = useState("");
+  
 
   const columns = [
     {
       title: "Id",
-      field: "launcher",
+      field: "id",
       defaultSort: "desc",
     },
     {
       title: "Nome Test",
-      field: "nameTs",
+      field: "nome",
     },
     {
       title: "Loader",
-      field: "startDate",
+      field: "createdBy",
     },
     {
       title: "Data Inizio",
-      field: "endDate",
+      field: "creationDate",
     },
     {
       title: "Data Fine",
-      field: "result",
+      field: "modifiedDate",
     },
     {
       title: "Status",
@@ -226,7 +196,6 @@ const TestSuiteCaricatiTable = () => {
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
 
-  const [nome, setNome] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -264,6 +233,7 @@ const TestSuiteCaricatiTable = () => {
       .then((result) => {
         console.log(result);
         setAppearTest(result.list);
+        setData(result.list);
       })
       .catch((error) => console.log("error", error));
   };
@@ -288,14 +258,14 @@ const TestSuiteCaricatiTable = () => {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
+          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           selection: true,
           // columnsButton: true,
-          filtering: filter,
+          filtering: true,
         }}
         actions={[
           {
@@ -476,7 +446,7 @@ const TestSuiteCaricatiTable = () => {
                 </Paper>
 
                 <Paper elevation={2} className={classes.delayPaper}>
-                  <Typography variant="h5">Durata</Typography>
+                  <Typography variant="h5">Delay</Typography>
                   <div className={classes.divInput}>
 
                     <label for="appt">Start Time:</label>

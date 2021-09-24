@@ -4,6 +4,7 @@ import "../styles/App.css";
 import { IconButton, Paper, Typography } from "@material-ui/core";
 import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { MenuItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -197,6 +198,14 @@ function TestGeneratoreTableNew() {
     setOpen(false);
   };
 
+  /*--------------MODALE DELETE TEST GENERATORE -----------*/
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
+
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
+
   const functionDelete = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -218,7 +227,24 @@ function TestGeneratoreTableNew() {
     fetch(`/api/testgen`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getAllTestGeneratore();
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error === "Internal Server Error") {
+            setWarning(
+              "Impossibile eliminare un Test Generatore che non appartiene al proprio gruppo"
+            );
+          } else {
+            setWarning(
+              "Codice errore: " +
+                result.error.code +
+                "Descrizione: " +
+                result.error.description
+            );
+          }
+        } else {
+          setOpenWarning(false);
+          getAllTestGeneratore();
+        }
       })
       .catch((error) => console.log("error", error));
     handleCloseDelete();
@@ -387,9 +413,14 @@ function TestGeneratoreTableNew() {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
-      height: 400,
+      height: "fit-content",
       width: 500,
       position: "relative",
+    
+    },
+    contenutoModale: {
+      height: 370,
+      overflowX: "hidden",
     },
     typography: {
       padding: "3%",
@@ -954,7 +985,7 @@ function TestGeneratoreTableNew() {
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography variant="h6" className={classes.typography}>
+                <Typography className={classes.typography}>
                   L'eliminazione del Test Generatore selezionato, comporterà la
                   cancellazione dei Test Suite ad esso collegati.
                   <br />
@@ -973,6 +1004,55 @@ function TestGeneratoreTableNew() {
                   <ButtonNotClickedGreen
                     onClick={handleCloseDelete}
                     nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
                   />
                 </div>
               </div>

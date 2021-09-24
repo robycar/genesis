@@ -25,6 +25,7 @@ function ButtonNotClickedGreen(props) {
       className={classes.button}
       variant="contained"
       onClick={props.onClick}
+      id={props.id}
     >
       {props.nome}
     </Button>

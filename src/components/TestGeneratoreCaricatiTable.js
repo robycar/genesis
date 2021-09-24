@@ -23,78 +23,37 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 
 const TestCaricatiTable = () => {
-  const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
-  const [nomeTest, setNomeTest] = useState("");
-  const [loader, setLoader] = useState("");
-  const [dataInizio, setDataInizio] = useState();
-  const [dataFine, setDataFine] = useState();
-  const [status, setStatus] = useState("");
-  const [trace, setTrace] = useState();
-  const [callId, setCallId] = useState();
-  const [report, setReport] = useState("");
-  // const somename = new EventEmitter();
+  const [nome, setNome] =useState("");
+  const [creationDate, setCreationDate] = useState();
+  const [modifiedDate, setModifiedDate] = useState(); 
+  const [data, setData] = useState();
+  const [createdBy, setCreatedBy] = useState("");
+  const [filter, setFilter] = useState(false);
 
-  const data = [
-    {
-      launcher: "Adam Denisov",
-      nameTs: "PEM_001",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "2/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Keith M. Boyce",
-      nameTs: "PEM_002",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "3/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Stella D. Knight",
-      nameTs: "PEM_003",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "4/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Walter E. Harmon",
-      nameTs: "PEM_004",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "5/10",
-      trace: "*****",
-      mos: "",
-    },
-  ];
+  
 
   const columns = [
     {
       title: "Id",
-      field: "launcher",
+      field: "id",
       defaultSort: "desc",
     },
     {
       title: "Nome Test",
-      field: "nameTs",
+      field: "nome",
     },
     {
       title: "Loader",
-      field: "startDate",
+      field: "createdBy",
     },
     {
       title: "Data Inizio",
-      field: "endDate",
+      field: "creationDate",
     },
     {
       title: "Data Fine",
-      field: "result",
+      field: "modifiedDate",
     },
     {
       title: "Status",
@@ -265,7 +224,6 @@ const TestCaricatiTable = () => {
   }
 
   const [appearTest, setAppearTest] = useState([]);
-  const [nome, setNome] = useState("");
 
   const getAllTestGeneratore = () => {
     var myHeaders = new Headers();
@@ -284,6 +242,7 @@ const TestCaricatiTable = () => {
       .then((result) => {
         console.log(result);
         setAppearTest(result.list);
+        setData(result.list)
       })
       .catch((error) => console.log("error", error));
   };
@@ -300,14 +259,13 @@ const TestCaricatiTable = () => {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          selection: true,
+          // selection: true,
           // columnsButton: true,
-          filtering: filter,
+          filtering: true,
         }}
         actions={[
           {
@@ -491,7 +449,7 @@ const TestCaricatiTable = () => {
                 </Paper>
 
                 <Paper elevation={2} className={classes.delayPaper}>
-                  <Typography variant="h5">Durata</Typography>
+                  <Typography variant="h5">Delay</Typography>
                   <div className={classes.divInput}>
 
                     <label for="appt">Start Time:</label>

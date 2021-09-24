@@ -28,7 +28,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 // }
 
 function SimpleModal() {
-  const classes = useStyles();
+    const classes = useStyles();
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -182,19 +182,21 @@ function SimpleModal() {
               </div> */}
 
               <div className={classes.divTextarea}>
-                <TextField
-                  select
-                  label="Seleziona Test Suite "
-                  value={appearTest.nome}
-                  defaultValue={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                >
-                  {appearTest.map((nome) => (
-                    <MenuItem key={nome} value={nome}>
-                      {nome}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                
+              
+              <TextField
+                select
+                label="Seleziona Test Suite "
+                value={appearTest.nome}
+                defaultValue={nome}
+                onChange={(e) => setNome(e.target.value)}
+              >
+                {appearTest.map((nome) => (
+                  <MenuItem key={nome} value={nome}>
+                    {nome}
+                  </MenuItem>
+                ))}
+              </TextField>
               </div>
 
               <div className={classes.bottoni}>

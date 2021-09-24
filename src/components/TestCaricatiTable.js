@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
-// import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-// import DateFnsUtils from "@date-io/date-fns";
-
 import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
@@ -24,22 +21,10 @@ import loading from "../../src/assets/load.gif";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
-// import Stack from "@mui/material/Stack";
-// import TextField from "@mui/material/TextField";
-// import AdapterDateFns from "@mui/lab/AdapterDateFns";
-// import LocalizationProvider from "@mui/lab/LocalizationProvider";
-// import TimePicker from "@mui/lab/TimePicker";
-// import DateTimePicker from "@mui/lab/DateTimePicker";
-// import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-// import MobileDatePicker from "@mui/lab/MobileDatePicker";
-// import TextField from "@material-ui/core/TextField";
-// import AdapterDateFns from "@material-ui/AdapterDateFns";
-// import LocalizationProvider from "@material-ui/LocalizationProvider";
-// import DatePicker from "react-date-picker";
+
 
 const TestCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
-  const [id, setId] = useState();
   const [nomeTest, setNomeTest] = useState("");
   const [loader, setLoader] = useState("");
   const [dataInizio, setDataInizio] = useState();
@@ -48,84 +33,57 @@ const TestCaricatiTable = () => {
   const [trace, setTrace] = useState();
   const [callId, setCallId] = useState();
   const [report, setReport] = useState("");
-  // const somename = new EventEmitter();
+  const [id, setId] = useState();
+  const [idToRun, setIdToRun] = useState();
+  const [creationDate, setCreationDate] = useState();
+  const [modifiedDate, setModifiedDate] = useState(); 
+  const [data, setData] = useState();
+  const [dataCase, setDataCase] = useState();
+  const [createdBy, setCreatedBy] = useState("");
+  const [appearTest, setAppearTest] = useState([]);
+  const [nome, setNome] = useState("");
 
-  const data = [
-    {
-      launcher: "Adam Denisov",
-      nameTs: "PEM_001",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "2/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Keith M. Boyce",
-      nameTs: "PEM_002",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "3/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Stella D. Knight",
-      nameTs: "PEM_003",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "4/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Walter E. Harmon",
-      nameTs: "PEM_004",
-      startDate: "28/09/2020 13:10",
-      endDate: "",
-      result: "5/10",
-      trace: "*****",
-      mos: "",
-    },
-  ];
+  const [dataLoad, setTestCaseLoad] = useState(null);
+  const [dataRun, setIdTestCaseRun] = useState(null);
+
+  const [includeTestCaseOfType, setincludeTestCaseOfType] = useState("");
+  const [includeTestSuiteOfType, setincludeTestSuiteOfType] = useState("");
+  const [includeTestGeneratoreOfType, setincludeTestGeneratoreOfType] = useState("");
+
 
   const columns = [
     {
       title: "Id",
-      field: "launcher",
+      field: "id",
       defaultSort: "desc",
     },
     {
       title: "Nome Test",
-      field: "nameTs",
+      field: "nome",
     },
     {
       title: "Loader",
-      field: "startDate",
+      field: "startedBy",
     },
     {
       title: "Data Inizio",
-      field: "endDate",
+      field: "startDate",
     },
     {
       title: "Data Fine",
-      field: "result",
+      field: "endDate",
     },
     {
       title: "Status",
-      field: "trace",
-    },
-    {
-      title: "Trace",
-      field: "trace",
+      field: "stato",
     },
     {
       title: "Call-Id",
-      field: "trace",
+      field: "loadedBy",
     },
     {
-      title: "Report",
-      field: "trace",
+      title: "Descrizione",
+      field: "descrizione",
     },
   ];
 
@@ -236,19 +194,27 @@ const TestCaricatiTable = () => {
       marginTop: "5%",
       marginBottom: "5%",
     },
+    info: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: "6%",
+      justifyContent: "center",
+    },
   }));
 
   const handleChange = () => {
     setFilter(!filter);
   };
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
+  const [openRun, setOpenRun] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
 
   const handleOpen = () => {
     setOpen(true);
+    getAllTestCaseModal();
   };
 
   const handleClose = () => {
@@ -264,9 +230,32 @@ const TestCaricatiTable = () => {
     setOpenSchedula(false);
   };
 
+  const handleOpenRun = (idRun_) => {
+    setIdToRun(idRun_)
+    setOpenRun(true)
+    setOpen(false);
+  };
+
+  const handleCloseRun = () => {
+    setOpenRun(false);
+  };
+
   const handleChangeData = (newValue) => {
     setValue(newValue);
   };
+
+  const testCaseLoader = () => {
+    loadTestCase(id);
+    handleClose();
+    getAllTestCase();
+  };
+
+
+  const runCaseLoder = () => {
+    runTestCase(idToRun);
+    handleCloseRun();
+    alert("Run test id :  "+ idToRun);
+  }
 
   /*------------- GET TEST CASE -------------*/
 
@@ -276,14 +265,52 @@ const TestCaricatiTable = () => {
     bearer = bearer.replace(/"/g, "");
   }
 
-  const [appearTest, setAppearTest] = useState([]);
-  const [nome, setNome] = useState("");
+   const getAllTestCase = () => {
+    var consta = "READY";
 
-  const getAllTestCase = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      includeTestCaseOfType: consta,
+      includeTestSuiteOfType: null,
+      includeTestGeneratoreOfType: null,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        //setAppearTest(result.testCaseList);
+        setData(result.testCaseList);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestCase();
+  }, []);
+
+  /*--------------- GET TEST CASE -------------------*/
+
+  const getAllTestCaseModal = () => {
+
+
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
+
 
     var requestOptions = {
       method: "GET",
@@ -296,13 +323,70 @@ const TestCaricatiTable = () => {
       .then((result) => {
         console.log(result);
         setAppearTest(result.list);
+        setDataCase(result.list);
       })
       .catch((error) => console.log("error", error));
   };
 
-  useEffect(() => {
-    getAllTestCase();
-  }, []);
+  /*--------------- LOAD TEST CASE -------------------*/
+
+  const loadTestCase = (id) => {
+   
+    var urlLoad = `/api/testcase/load/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setTestCaseLoad(result.list);
+      })
+      .catch((error) => console.log("error", error));
+        
+  };
+
+  /*--------------- RUN TEST CASE -------------------*/
+
+  const runTestCase = (idRun) => {
+   
+    var urlLoad = `/api/testcase/runloaded/${idRun}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setIdTestCaseRun(result.list);
+      })
+      .catch((error) => console.log("error", error));
+        
+  };
+
+  const hadleLoadData = (rowDataaa) => {
+    //console.log(rowDataaa.id);
+    //setIdToRun(rowDataaa.id);
+    runCaseLoder(rowDataaa.id);
+  };
 
   return (
     <div>
@@ -312,7 +396,7 @@ const TestCaricatiTable = () => {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
+          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
@@ -332,8 +416,8 @@ const TestCaricatiTable = () => {
           {
             icon: "play_circle_outlined",
             tooltip: "Launch",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            onClick: (event, rowData) => handleOpenRun(rowData.id),
+
             position: "row",
           },
           {
@@ -379,6 +463,8 @@ const TestCaricatiTable = () => {
         }}
       />
 
+
+
       {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
@@ -418,7 +504,7 @@ const TestCaricatiTable = () => {
                     <Select
                       className={classes.select}
                       value={appearTest.nome}
-                      onChange={(e) => setNome(e.target.value)}
+                      onChange={(e) => setId(e.target.value)}
                     >
                       {appearTest.map((prova) => {
                         return (
@@ -428,6 +514,7 @@ const TestCaricatiTable = () => {
                             value={prova.id}
                           >
                             {prova.nome}
+                            
                           </MenuItem>
                         );
                       })}
@@ -451,6 +538,8 @@ const TestCaricatiTable = () => {
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
+                  id={id}
+                  onClick={testCaseLoader}
                 />
               </div>
             </div>
@@ -502,7 +591,7 @@ const TestCaricatiTable = () => {
                 </Paper>
 
                 <Paper elevation={2} className={classes.delayPaper}>
-                  <Typography variant="h5">Durata</Typography>
+                  <Typography variant="h5">Delay</Typography>
                   <div className={classes.divInput}>
                     <label for="appt">Start Time:</label>
                     <input
@@ -520,7 +609,10 @@ const TestCaricatiTable = () => {
               <Divider />
 
               <div className={classes.bottone}>
-                <Button variant="contained" color="primary">
+                <Button 
+                  variant="contained" 
+                  color="primary"
+                >
                   Conferma
                 </Button>
 
@@ -528,6 +620,60 @@ const TestCaricatiTable = () => {
                   variant="contained"
                   color="secondary"
                   onClick={handleCloseSchedula}
+                >
+                  Annulla
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+
+
+      {/* ------------------ MODALE AVVIA TEST CASE --------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openRun}
+        onClose={handleCloseRun}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openRun}>
+          <Paper className={classes.paperModale} elevation={1}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h4">
+                  Lancio Test Case
+                </Typography>
+              </ListItem>
+
+              <Divider className={classes.divider} />
+                <Typography className={classes.info}>
+                  <p>Vuoi lanciare il test case da te selezionato ?</p>
+                </Typography>
+              <Divider />
+
+              <div className={classes.bottone}>
+                <Button 
+                  variant="contained" 
+                  color="primary"
+                  onClick={hadleLoadData}
+                >
+                  Lancio
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseRun}
                 >
                   Annulla
                 </Button>

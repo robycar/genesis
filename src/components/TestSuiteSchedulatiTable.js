@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import Modal from "@material-ui/core/Modal";
@@ -13,69 +13,38 @@ import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import acccessControl from "../service/url.js";
 
 const TestSuiteSchedulatiTable = () => {
-  const [filter, setFilter] = useState(false);
-  const data = [
-    {
-      launcher: "Adam Denisov",
-      nameTs: "PEM_001",
-      startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
-      result: "2/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Keith M. Boyce",
-      nameTs: "PEM_002",
-      startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
-      result: "3/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Stella D. Knight",
-      nameTs: "PEM_003",
-      startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
-      result: "4/10",
-      trace: "*****",
-      mos: "",
-    },
-    {
-      launcher: "Walter E. Harmon",
-      nameTs: "PEM_004",
-      startDate: "28/09/2020 13:10",
-      expectedEndDate: "28/09/2020 13:10",
-      result: "5/10",
-      trace: "*****",
-      mos: "",
-    },
-  ];
+  const [id, setId] = useState();
+  const [nome, setNome] = useState("");
+  const [creationDate, setCreationDate] = useState();
+  const [modifiedDate, setModifiedDate] = useState();
+  const [data, setData] = useState();
+  const [createdBy, setCreatedBy] = useState("");
+  const [filter, setFilter] = useState();
 
   const columns = [
     {
       title: "Id",
-      field: "launcher",
+      field: "id",
       defaultSort: "desc",
     },
     {
       title: "Nome Test",
-      field: "nameTs",
+      field: "nome",
     },
     {
       title: "Loader",
-      field: "startDate",
+      field: "createdBy",
     },
     {
       title: "Data Inizio",
-      field: "endDate",
+      field: "creationDate",
     },
     {
       title: "Data Fine",
-      field: "result",
+      field: "modifiedDate",
     },
     {
       title: "Status",
@@ -157,9 +126,41 @@ const TestSuiteSchedulatiTable = () => {
     },
   }));
 
-  const handleChange = () => {
-    setFilter(!filter);
+  // ------- GET TEST SUITE -----------
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+
+  const [appearTest, setAppearTest] = useState([]);
+
+  const getAllTestSuite = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testsuite`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setAppearTest(result.list);
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
   };
+
+  useEffect(() => {
+    getAllTestSuite();
+  }, []);
+
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
@@ -171,6 +172,11 @@ const TestSuiteSchedulatiTable = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleChange = () => {
+    setFilter(!filter);
+  };
+
   return (
     <div>
       <MaterialTable
@@ -179,14 +185,14 @@ const TestSuiteSchedulatiTable = () => {
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
+          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           selection: true,
           // columnsButton: true,
-          filtering: filter,
+          filtering: true,
         }}
         actions={[
           {

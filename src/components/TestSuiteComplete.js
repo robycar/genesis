@@ -1,78 +1,58 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
-import {Button} from "@material-ui/core";
+import Modal from "@material-ui/core/Modal";
+import { Button } from "@material-ui/core";
+import ButtonClickedBlue from "./ButtonClickedBlue";
+import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
+import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
+import { Fade, Paper, Typography } from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import BackupIcon from "@material-ui/icons/Backup";
+import FormControl from "@material-ui/core/FormControl";
+import Form from "react-bootstrap/Form";
+import Select from "@material-ui/core/Select";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { MenuItem } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
+import loading from "../../src/assets/load.gif";
+import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import acccessControl from "../service/url.js";
 
 const TestSuiteComplete = () => {
-  const data = [
-    {
-      id: "1489",
-      launcher: "Adam Denisov",
-      nameTS: "PEM_001",
-      startDate: "04/28/2018",
-      endDate: "04/28/2018t",
-      testCase: 10,
-      okResult: 8,
-      koresult: 1,
-      partiallyResoult: 1,
-    },
-    {
-      id: "1489",
-      launcher: "Adam Denisov",
-      nameTS: "PEM_001",
-      startDate: "04/28/2018",
-      endDate: "04/28/2018t",
-      testCase: 10,
-      okResult: 8,
-      koresult: 1,
-      partiallyResoult: 1,
-    },
-    {
-      id: "1489",
-      launcher: "Adam Denisov",
-      nameTS: "PEM_001",
-      startDate: "04/28/2018",
-      endDate: "04/28/2018t",
-      testCase: 10,
-      okResult: 8,
-      koresult: 1,
-      partiallyResoult: 1,
-    },
-    {
-      id: "1489",
-      launcher: "Adam Denisov",
-      nameTS: "PEM_001",
-      startDate: "04/28/2018",
-      endDate: "04/28/2018t",
-      testCase: 10,
-      okResult: 8,
-      koresult: 1,
-      partiallyResoult: 1,
-    },
-  ];
+  const [filter, setFilter] = useState(false);
+  const [id, setId] = useState();
+  const [nome, setNome] =useState("");
+  const [creationDate, setCreationDate] = useState();
+  const [modifiedDate, setModifiedDate] = useState(); 
+  const [data, setData] = useState();
+  const [createdBy, setCreatedBy] = useState("");
+  
 
   const columns = [
     {
       title: "Id",
-      field: "launcher",
+      field: "id",
       defaultSort: "desc",
     },
     {
       title: "Nome Test",
-      field: "nameTs",
+      field: "nome",
     },
     {
       title: "Loader",
-      field: "startDate",
+      field: "createdBy",
     },
     {
       title: "Data Inizio",
-      field: "endDate",
+      field: "creationDate",
     },
     {
       title: "Data Fine",
-      field: "result",
+      field: "modifiedDate",
     },
     {
       title: "Status",
@@ -156,13 +136,47 @@ const TestSuiteComplete = () => {
   }));
 
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
   };
 
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+
+  const [appearTest, setAppearTest] = useState([]);
+
+    // ------- GET TEST SUITE -----------
+
+    const getAllTestSuite = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+  
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+  
+      fetch(`/api/testsuite`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          setAppearTest(result.list);
+          setData(result.list);
+        })
+        .catch((error) => console.log("error", error));
+    };
+  
+    useEffect(() => {
+      getAllTestSuite();
+    }, []);
   
   return (
     <div>
