@@ -76,9 +76,9 @@ public class TestCaseCaricatoRunner implements Runnable {
       logger.debug("Lettura del file {}", mainScriptFile);
       FileContentDTO fileContent = fileSystemService.readFile(FileSystemScope.TEST_CARICATO, testCaseCaricato.getId(), MAIN_SCRIPT_FILE_NAME);
       //download(testExecutionDir, fileContent);
-      PySystemState pyState = new PySystemState();
-      pyState.setCurrentWorkingDir(testExecutionDir.normalize().toAbsolutePath().toString());
-      interpreter = new PythonInterpreter(null, pyState);
+//      PySystemState pyState = new PySystemState();
+//      pyState.setCurrentWorkingDir(testExecutionDir.normalize().toAbsolutePath().toString());
+      interpreter = new PythonInterpreter();
       logger.debug("Initializing jython environment with global variables");
       interpreter.set("testCaseCaricato", testCaseCaricato);
       interpreter.set("serviceManager", this.serviceManager);
