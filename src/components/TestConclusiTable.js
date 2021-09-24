@@ -62,15 +62,19 @@ const TestConclusiTable = () => {
     },
     {
       title: "Status",
-      field: "stato",
+      field: "result",
+    },
+    {
+      title: "Trace",
+      field: "properties",
     },
     {
       title: "Call-Id",
       field: "loadedBy",
     },
     {
-      title: "Descrizione",
-      field: "descrizione",
+      title: "Report",
+      field: "pathInstance",
     },
   ];
 
@@ -242,7 +246,7 @@ const TestConclusiTable = () => {
   const runCaseLoder = () => {
     runTestCase(idToRun);
     handleCloseRun();
-    alert("Run test id :  "+ idToRun);
+    //alert("Run test id :  "+ idToRun);
   }
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -426,6 +430,11 @@ const TestConclusiTable = () => {
         localization={{
           header: {
             actions: "Azioni",
+          },
+          body: {
+            emptyDataSourceMessage: (
+              "Non è presente alcun dato da mostrare"
+            ),
           },
         }}
       />

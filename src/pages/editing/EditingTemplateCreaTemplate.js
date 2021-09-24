@@ -432,6 +432,7 @@ function EditingTemplateCreaTemplate() {
     nChiamanti,
     chiamante1,
     chiamante2,
+    chiamante3,
   ]);
 
   /*----------- MODALE ERROR LOADING FILE ------------*/
@@ -465,6 +466,9 @@ function EditingTemplateCreaTemplate() {
     if (qntChiamanti[1]?.linea) {
       formdata.append("chiamanti", qntChiamanti[1].linea);
     }
+    if (qntChiamanti[2]?.linea) {
+      formdata.append("chiamanti", qntChiamanti[2].linea);
+    }
     if (arrayValue[0]?.name) {
       formdata.append("file", arrayValue[0], arrayValue[0]?.name);
     }
@@ -473,6 +477,9 @@ function EditingTemplateCreaTemplate() {
     }
     if (arrayValue[2]?.name) {
       formdata.append("file", arrayValue[2], arrayValue[2]?.name);
+    }
+    if (arrayValue[3]?.name) {
+      formdata.append("file", arrayValue[3], arrayValue[3]?.name);
     }
 
     var requestOptions = {

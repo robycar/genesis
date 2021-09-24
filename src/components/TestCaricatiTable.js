@@ -75,15 +75,19 @@ const TestCaricatiTable = () => {
     },
     {
       title: "Status",
-      field: "stato",
+      field: "result",
+    },
+    {
+      title: "Trace",
+      field: "properties",
     },
     {
       title: "Call-Id",
       field: "loadedBy",
     },
     {
-      title: "Descrizione",
-      field: "descrizione",
+      title: "Report",
+      field: "pathInstance",
     },
   ];
 
@@ -254,7 +258,7 @@ const TestCaricatiTable = () => {
   const runCaseLoder = () => {
     runTestCase(idToRun);
     handleCloseRun();
-    alert("Run test id :  "+ idToRun);
+    //alert("Run test id :  "+ idToRun);
   }
 
   /*------------- GET TEST CASE -------------*/
@@ -421,6 +425,12 @@ const TestCaricatiTable = () => {
             position: "row",
           },
           {
+            icon: "account_tree",
+            tooltip: "Trace",
+            onClick: (event, rowData) => console.log("Trace"),
+            position: "row",
+          },
+          {
             icon: "delete",
             tooltip: "Delete all selected row",
             onClick: () => alert("Ho cancellato le righe"),
@@ -446,18 +456,7 @@ const TestCaricatiTable = () => {
           },
           body: {
             emptyDataSourceMessage: (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "10vh",
-                  width: "10vh",
-                  margin: "0 auto",
-                }}
-              >
-                <img src={loading} alt="loading" />
-              </div>
+              "Non è presente alcun dato da mostrare"
             ),
           },
         }}

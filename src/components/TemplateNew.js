@@ -30,6 +30,7 @@ function Template() {
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const [id, setId] = useState();
+  const [template, setTemplate] = useState({});
   const [version, setVersion] = useState();
   const [nome, setNome] = useState();
   const [durata, setDurata] = useState();
@@ -41,6 +42,9 @@ function Template() {
   const [descrizione, setDescrizione] = useState("");
   const [nomeTitolo, setNomeTitolo] = useState("");
   const [caricamento, setCaricamento] = useState(false);
+  const [appearFile, setAppearFile] = useState([]);
+  const [chiamato, setChiamato] = useState();
+  const [chiamanti, setChiamanti] = useState([]);
 
   //----- GET TEMPLATE -------
 
@@ -65,6 +69,117 @@ function Template() {
       })
       .catch((error) => console.log("error", error));
   };
+  //----- GET TEMPLATE BY ID -------
+
+  const getTemplateById = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/template/` + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result)
+        setTemplate(result.template);
+        impostaChiama(result.template)
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  //----- GET FILE -------
+
+  const getAppearFile = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/fs/entityfolder/TEMPLATE/` + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setAppearFile(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  //----- UPDATE CHIAMA -------
+
+  const updateChiama = () => {
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      id: id,
+      version: version,
+      fileLinks: {
+        CHIAMATO: [{
+          id: chiamato
+        }]
+      }
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch(`/api/template`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getTemplateById(id)
+        handleCloseChiama()
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  //----- ADD FILE -------
+
+  const addFile = (files) => {
+
+    var arrayFile = Object.values(files)
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var formdata = new FormData();
+    formdata.append("file", arrayFile[0], arrayFile[0]?.name);
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+
+    fetch(`/api/fs/entityfolder/TEMPLATE/` + id, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        getAppearFile(id)
+      })
+      .catch((error) => console.log("error", error));
+  };
+
 
   useEffect(() => {
     getTemplate();
@@ -120,9 +235,12 @@ function Template() {
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
+  const [openChiama, setOpenChiama] = useState(false)
+  const [openFile, setOpenFile] = useState(false)
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
+    getTemplateById(rowData.id)
     setNomeTitolo(rowData.nome);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
@@ -133,8 +251,23 @@ function Template() {
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
     setTypeTemplate(rowData.typeTemplate);
+    getAppearFile(rowData.id)
     setOpen(true);
   };
+
+  const impostaChiama = (templ) => {
+
+    setChiamato(templ.fileLinks.CHIAMATO[0].id)
+
+    var appoggio = []
+
+    if (templ.fileLinks.CHIAMANTE) {
+      for (let i = 0; i < templ.fileLinks.CHIAMANTE.length; i++) {
+        appoggio.push(templ.fileLinks.CHIAMANTE[i].id)
+      }
+    }
+    setChiamanti(appoggio)
+  }
 
   const openModifica = (rowData) => {
     setModifica(true);
@@ -149,6 +282,25 @@ function Template() {
     setOpen(false);
   };
 
+  const handleOpenChiama = () => {
+    setOpenChiama(true)
+  }
+  const handleCloseChiama = () => {
+    setOpenChiama(false)
+  }
+
+  //-------------------MODIFICA FILE-------------------------
+
+  const handleOpenFile = () => {
+    setOpenFile(true)
+  }
+  const handleCloseFile = () => {
+    setOpenFile(false)
+  }
+  const changeHandler = (event) => {
+    addFile(event.target.files)
+  };
+  const handleSubmission = () => { };
 
   /*--------------MODALE DELETE TEMPLATE -----------*/
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -189,7 +341,7 @@ function Template() {
               "Impossibile eliminare un template che non appartiene al proprio gruppo"
             );
 
-            if (result.error.status === 500 ) {
+            if (result.error.status === 500) {
               setWarning(
                 "Impossibile eliminare il template poichè associato ad uno o più Test Case"
               );
@@ -197,9 +349,9 @@ function Template() {
           } else {
             setWarning(
               "Codice errore : " +
-                result.error.code +
-                "Descrizione: " +
-                result.error.description
+              result.error.code +
+              "Descrizione: " +
+              result.error.description
             );
           }
         } else {
@@ -239,6 +391,7 @@ function Template() {
         nome: nome,
         durata: durata,
         typeTemplate: typeTemplate,
+        descrizione: descrizione
       });
 
       var requestOptions = {
@@ -382,6 +535,10 @@ function Template() {
       padding: "2%",
       marginBottom: "1%",
     },
+    contenutoModaleChiama: {
+      height: 200,
+      overflowX: "hidden",
+    },
   }));
 
   const classes = useStyles();
@@ -389,19 +546,19 @@ function Template() {
   return (
     <div>
       <MaterialTable
-       detailPanel={rowData => {
-        return (
-          <div
-          style={{
-            fontSize: 16,
-            marginLeft: 2,
-          }}
-        >
-       {"  "} {rowData.descrizione}
-        </div>
-        )
-      }}
-        style={{ boxShadow: "none" , maxWidth: '100%'}}
+        detailPanel={rowData => {
+          return (
+            <div
+              style={{
+                fontSize: 16,
+                marginLeft: 2,
+              }}
+            >
+              {"  "} {rowData.descrizione}
+            </div>
+          )
+        }}
+        style={{ boxShadow: "none", maxWidth: '100%' }}
         title="Template"
         data={data}
         isLoading={caricamento}
@@ -516,7 +673,7 @@ function Template() {
                     <TextField
                       className={classes.textField}
                       onChange={(e) => {
-                        e.target.value === "" ? setDescrizione(" ") : setDescrizione(e.target.value) 
+                        e.target.value === "" ? setDescrizione(" ") : setDescrizione(e.target.value)
                       }}
                       label="Descrizione"
                       defaultValue={descrizione}
@@ -588,9 +745,15 @@ function Template() {
                   </Col>
 
                   <Col className={classes.col}>
-                    <Link href="#" variant="body2">
-                      Download files
-                    </Link>
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome={
+                        modifica === false
+                          ? "vedi file"
+                          : "modifica File"
+                      }
+                      onClick={(handleOpenChiama)}
+                    />
                   </Col>
                 </Row>
               </Form>
@@ -615,6 +778,194 @@ function Template() {
                     onClick={handleClose}
                     size="medium"
                     nome={modifica === false ? "Indietro" : "Annulla"}
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE CHIAMA--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiama}
+        onClose={handleCloseChiama}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiama}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    {modifica === false ? "Visualizza " : "Modifica "} Chiamanti{" "}
+                    <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <div >
+                <Col >
+                  <Typography className={classes.intestazione} variant="h6">
+                    Chiamato
+                  </Typography>
+                  <TextField
+                    className={classes.textField}
+                    select
+                    label="Linea "
+                    value={chiamato}
+                    onChange={(e) => setChiamato(e.target.value)}
+                    InputProps={{
+                      readOnly: modifica === false ? true : false,
+                    }}
+                  >
+                    {appearFile.map((file) => (
+                      <MenuItem disabled={chiamato === file.id || chiamanti[0] === file.id || chiamanti[1] === file.id || chiamanti[2] === file.id} key={file.id} value={file.id}>
+                        {file.path}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Col>
+              </div>
+
+              <Divider style={{ display: chiamanti.length === 0 ? "none" : "" }} className={classes.divider} />
+              <div>
+                <Form className={classes.contenutoModaleChiama}>
+                  {chiamanti.map((chiamante, index) => (
+                    <div style={{ float: "left" }}>
+                      <Col >
+                        <Typography className={classes.intestazione} variant="h6">
+                          Chiamante <b>{index + 1}</b>
+                        </Typography>
+                        <TextField
+                          className={classes.textField}
+                          select
+                          label="File "
+                          value={chiamanti[index]}
+                          onChange={(e) => {
+                            var x = [...chiamanti]
+                            x[index] = e.target.value
+                            setChiamanti(x)
+                          }}
+                          InputProps={{
+                            readOnly: modifica === false ? true : false,
+                          }}
+                        >
+                          {appearFile.map((file) => (
+                            <MenuItem disabled={chiamato === file.id || chiamanti[0] === file.id || chiamanti[1] === file.id || chiamanti[2] === file.id} key={file.id} value={file.id}>
+                              {file.path}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Col>
+
+                    </div>
+                  ))}
+                </Form>
+              </div>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  {modifica === false ? (
+                    ""
+                  ) : (
+                    <>
+                      <ButtonClickedGreen
+                        size="medium"
+                        nome="File"
+                        onClick={handleOpenFile}
+                      />
+                      <ButtonClickedGreen
+                        size="medium"
+                        nome="Aggiorna"
+                        onClick={updateChiama}
+                      />
+                    </>
+                  )}
+
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiama}
+                    size="medium"
+                    nome={modifica === false ? "Indietro" : "Annulla"}
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE FILE--------------------- */}
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openFile}
+        onClose={handleCloseFile}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openFile}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Modifica file
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+                <div>
+                  {appearFile.map((file) => (
+                    <MenuItem disabled={chiamato === file.id || chiamanti[0] === file.id || chiamanti[1] === file.id || chiamanti[2] === file.id} key={file.id} value={file.id}>
+                      {file.path}
+                    </MenuItem>
+                  ))}
+                </div>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <input
+                    // accept=".xml"
+                    style={{ display: "none" }}
+                    className={classes.input}
+                    id="contained-button-file"
+                    multiple
+                    type="file"
+                    name="file"
+                    onChange={changeHandler}
+                  />
+                  <label htmlFor="contained-button-file">
+                    <ButtonClickedGreen
+                      color="primary"
+                      size="medium"
+                      nome="Carica"
+                    />
+                  </label>
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseFile}
+                    className={classes.bottoneAnnulla}
+                    size="medium"
+                    nome="Indietro"
                   />
                 </div>
               </div>
