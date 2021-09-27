@@ -34,6 +34,8 @@ import it.reply.genesis.model.TemplateVO;
 import it.reply.genesis.model.repository.FileSystemRepository;
 import it.reply.genesis.model.repository.LineaGeneratoreRepository;
 import it.reply.genesis.model.repository.TemplateRepository;
+import it.reply.genesis.model.repository.TestCaseCaricatoRepository;
+import it.reply.genesis.model.repository.TestCaseRepository;
 import it.reply.genesis.service.FileSystemService;
 
 @Service
@@ -158,19 +160,29 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
   @Autowired
   private LineaGeneratoreRepository lineaGeneratoreRepository;
   
+  @Autowired
+  private TestCaseRepository testCaseRepository;
+  
+  @Autowired
+  private TestCaseCaricatoRepository testCaseCaricatoRepository;
+  
   private BaseEntity checkFolderExists(FileSystemScope scope, long idRef) throws ApplicationException {
     logger.debug("enter checkFolderExists");
-    if (scope.equals(FileSystemScope.TEMPLATE)) {
+    
+    switch (scope) {
+    case TEMPLATE:
       return templateRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEMPLATE_NOT_FOUND, idRef));
-    }
-    
-    if (scope.equals(FileSystemScope.LINEA_GENERATORE)) {
+    case LINEA_GENERATORE:
       return lineaGeneratoreRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.LINEA_GENERATORE_NOT_FOUND, idRef));
+    case TEST:
+      return testCaseRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_NOT_FOUND, idRef));
+    case TEST_CARICATO:
+      testCaseCaricatoRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_CARICATO_NOT_FOUND, idRef));
+      break;
+      //return null;
     }
-
-    //TODO: return test
-    return null;
     
+    return null;
   }
   
   private FileSystemVO findFile(FileSystemScope scope, long idRef, String pathOrId) throws ApplicationException {
@@ -224,7 +236,7 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
       break;
     case TEST:
       break;
-    case LINEA_GENERATORE:
+    default:
       throw makeError(HttpStatus.BAD_REQUEST, AppError.FS_PREVENT_DELETE_USED_FILE);
     }
     
