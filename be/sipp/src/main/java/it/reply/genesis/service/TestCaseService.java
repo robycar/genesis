@@ -2,9 +2,12 @@ package it.reply.genesis.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestCaseDTO;
+import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.LineaVO;
 import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TestCaseVO;
@@ -43,5 +46,11 @@ public interface TestCaseService {
 
   TestCaseCaricatoDTO updateTestCaseCaricato(TestCaseCaricatoDTO testCaseCaricato) throws ApplicationException;
 
-
+  @Transactional(rollbackFor = ApplicationException.class)
+  default TestCaseCaricatoDTO markTestCompleted(long id, ExecutionResult executionResult) throws ApplicationException {
+    return markTestCompleted(id, executionResult, null);
+  }
+  
+  TestCaseCaricatoDTO markTestCompleted(long id, ExecutionResult executionResult, TestCaseCaricatoDTO extraFieldsToSet) throws ApplicationException;
+  
 }

@@ -1,17 +1,21 @@
 package it.reply.genesis.jython;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -74,7 +78,7 @@ public class JythonSimpleTest {
     
   }
   
-  @Test
+  //@Test
   public void testJythonGlobalInit() throws IOException {
     logger.debug("enter testJythonGlobalInit");
     
@@ -90,6 +94,29 @@ public class JythonSimpleTest {
         interpreter.execfile(is, testFile2);
       }
 
+    }
+    
+  }
+  
+  @Autowired
+  private ServiceManager serviceManager;
+  
+  @Test
+  public void testDirectoryResult() {
+    logger.debug("enter testDirectoryResult");
+    Path testDir = Paths.get("test-resources", "d1");
+    logger.info("Test dir: {}", testDir);
+    assertTrue(testDir.toFile().isDirectory());
+    try (PythonInterpreter interpreter = new PythonInterpreter()) {
+      TestCaseCaricatoDTO testCaseCaricato = new TestCaseCaricatoDTO();
+      testCaseCaricato.setPathInstance(testDir.toAbsolutePath().toString());
+      testCaseCaricato.setId(9L);
+      
+      interpreter.set("testCaseCaricato", testCaseCaricato);
+      interpreter.set("logger", LoggerFactory.getLogger("main_py"));
+      interpreter.set("serviceManager", serviceManager);
+      
+      interpreter.execfile(testDir.resolve("main.py").toString());
     }
     
   }

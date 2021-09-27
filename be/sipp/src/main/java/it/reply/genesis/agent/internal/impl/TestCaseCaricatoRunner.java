@@ -127,7 +127,8 @@ public class TestCaseCaricatoRunner implements Runnable {
     updatedTest.setVersion(testToUpdate.getVersion());
     updatedTest.setStato(TestCaseCaricatoStato.RUNNING);
     // Sovrascrivo la data di avvio rispetto a quando l'utente ha premuto start?
-    updatedTest.setStartDate(Instant.now()); 
+    updatedTest.setStartDate(Instant.now());
+    updatedTest.setPathInstance(testCaseCaricato.getPathInstance());
     testCaseService.updateTestCaseCaricato(updatedTest);
     
   }

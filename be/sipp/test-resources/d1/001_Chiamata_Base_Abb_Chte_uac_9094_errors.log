@@ -1,0 +1,14 @@
+sipp: The following events occured:
+2021-09-27	12:54:01:102	1632740041.102765: Aborting call on unexpected message for Call-Id '1-9091@20.0.0.10': while pausing (index 9), received 'INFO sip:+390633040509@20.0.0.10:5060;transport=UDP;user=phone SIP/2.0
+Via: SIP/2.0/UDP 20.255.255.4:5060;branch=z9hG4bKv701a5103okhk7i80bu0.1
+To: "+390633040509" <sip:+390633040509@telecomitalia.it;user=phone>;tag=Chiamata_SIPP_SimulatorePVR_+390633040509_1
+From: <sip:+390633040510@telecomitalia.it;user=phone>;tag=SIPP_SimulatorePVR_+390633040510_1
+Max-Forwards: 69
+Call-ID: 1-9091@20.0.0.10
+CSeq: 1 INFO
+Content-Type: application/dtmf-relay
+Content-Length: 24
+
+Signal=2
+Duration=250
+'.

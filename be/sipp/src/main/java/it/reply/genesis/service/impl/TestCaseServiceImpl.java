@@ -17,6 +17,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import it.reply.genesis.AppError;
 import it.reply.genesis.agent.internal.impl.InternalAgent;
@@ -25,6 +26,7 @@ import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestCaseDTO;
 import it.reply.genesis.api.test.payload.TestCaseLineaDTO;
+import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.FileSystemScope;
 import it.reply.genesis.model.FileSystemVO;
 import it.reply.genesis.model.LineaVO;
@@ -465,6 +467,37 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     
     return result.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_CARICATO_NOT_FOUND, id));
 
+  }
+
+  @Override
+  public TestCaseCaricatoDTO markTestCompleted(long id, ExecutionResult executionResult,
+      TestCaseCaricatoDTO dto) throws ApplicationException {
+    logger.debug("enter markTestCompleted");
+    Assert.notNull(executionResult, "executionResult must not be null");
+    
+    TestCaseCaricatoVO vo = readCaricatoVO(id, true);
+    //checkVersion(vo, dto.getVersion(), "TestCaseCaricatoVO, vo.getId());
+    if (dto != null) {
+      if (dto.getPathInstance() != null) {
+        vo.setPathInstance(dto.getPathInstance());
+      }
+      
+      if (dto.getStartDate() != null) {
+        vo.setStartDate(dto.getStartDate());
+      }
+      
+      if (dto.getStartedBy() != null) {
+        vo.setStartedBy(dto.getStartedBy());
+      }
+    }
+   
+    vo.setResult(executionResult);
+    vo.setStato(TestCaseCaricatoStato.COMPLETED);
+    vo.setEndDate(Instant.now());
+    
+    vo = testCaseCaricatoRepository.saveAndFlush(vo);
+    
+    return new TestCaseCaricatoDTO(vo, false, false);
   }
 
 
