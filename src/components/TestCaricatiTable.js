@@ -261,7 +261,7 @@ const TestCaricatiTable = () => {
     //alert("Run test id :  "+ idToRun);
   }
 
-  /*------------- GET TEST CASE -------------*/
+  /*------------- GET TEST CASE DASH -------------*/
 
   let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
