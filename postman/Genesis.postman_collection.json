@@ -7612,7 +7612,7 @@
 							"formdata": [
 								{
 									"key": "nome",
-									"value": "Template 3",
+									"value": "MioTemplate",
 									"description": "(string)nome del template",
 									"type": "text"
 								},
@@ -7644,7 +7644,8 @@
 									"key": "chiamanti",
 									"value": "pom.xml",
 									"description": "Nome del file per li primo chiamante",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "chiamanti",
@@ -7661,6 +7662,11 @@
 									"key": "file",
 									"type": "file",
 									"src": "/C:/tim/sippone2/repo/sipp/package.json"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/tim/sippone2/repo/sipp/be/sipp/src/test/resources/scripts/main.py"
 								}
 							]
 						},
@@ -8450,7 +8456,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{contextUrl}}/api/testcase/runloaded/7",
+							"raw": "{{contextUrl}}/api/testcase/runloaded/2",
 							"host": [
 								"{{contextUrl}}"
 							],
@@ -8458,7 +8464,7 @@
 								"api",
 								"testcase",
 								"runloaded",
-								"7"
+								"2"
 							]
 						}
 					},
@@ -8558,7 +8564,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{contextUrl}}/api/fs/entityfolder/TEMPLATE/1",
+							"raw": "{{contextUrl}}/api/fs/entityfolder/TEST_CARICATO/7/91",
 							"host": [
 								"{{contextUrl}}"
 							],
@@ -8566,8 +8572,9 @@
 								"api",
 								"fs",
 								"entityfolder",
-								"TEMPLATE",
-								"1"
+								"TEST_CARICATO",
+								"7",
+								"91"
 							]
 						},
 						"description": "Elenca il contenuto di una directory associata ad una entità (ad esempio un template o un test case).\r\nLa URL è composta da\r\n/api/fs/entityfolder: (url del servizio)\r\n/scope: stringa che indica il tipo di entità: può essere TEST o TEMPLATE\r\n/id: identificatore dell'entità di cui estrarre i file"
@@ -9114,6 +9121,38 @@
 							]
 						},
 						"description": "Elimina un file associato ad un'entita'."
+					},
+					"response": []
+				},
+				{
+					"name": "fs_entity_file_edit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "content",
+									"value": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n  xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0</modelVersion>\n    <parent>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-parent</artifactId>\n        <version>2.5.0</version>\n        <relativePath />\n        <!-- lookup parent from repository -->\n  \n    </parent>\n    <groupId>it.reply.sipp</groupId>\n    <artifactId>sipp</artifactId>\n    <version>0.0.1-SNAPSHOT</version>\n    <packaging>war</packaging>\n    <name>sipp</name>\n    <description>Sipp project</description>\n    <properties>\n        <java.version>11</java.version>\n    </properties>\n    <dependencies>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-data-jdbc</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-data-jpa</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-security</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-web</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-devtools</artifactId>\n            <scope>runtime</scope>\n            <optional>true</optional>\n        </dependency>\n        <dependency>\n            <groupId>mysql</groupId>\n            <artifactId>mysql-connector-java</artifactId>\n            <scope>runtime</scope>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-tomcat</artifactId>\n            <scope>provided</scope>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-test</artifactId>\n            <scope>test</scope>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.security</groupId>\n            <artifactId>spring-security-test</artifactId>\n            <scope>test</scope>\n        </dependency>\n        <dependency>\n            <groupId>com.auth0</groupId>\n            <artifactId>java-jwt</artifactId>\n            <version>3.16.0</version>\n        </dependency>\n        <dependency>\n            <groupId>org.springframework.boot</groupId>\n            <artifactId>spring-boot-starter-validation</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.apache.commons</groupId>\n            <artifactId>commons-lang3</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.modeshape</groupId>\n            <artifactId>modeshape-jcr</artifactId>\n        </dependency>\n        <dependency>\n            <groupId>org.modeshape</groupId>\n            <artifactId>modeshape-jcr-api</artifactId>\n        </dependency>\n    </dependencies>\n    <build>\n        <plugins>\n            <plugin>\n                <groupId>org.springframework.boot</groupId>\n                <artifactId>spring-boot-maven-plugin</artifactId>\n            </plugin>\n            <plugin>\n                <artifactId>maven-assembly-plugin</artifactId>\n                <!-- <version>3.3.0</version>  -->\n                <configuration>\n                    <descriptors>\n                        <descriptor>src/assembly/distribution.xml</descriptor>\n                    </descriptors>\n                </configuration>\n                <executions>\n                    <execution>\n                        <id>dist-assembly</id>\n                        <phase>package</phase>\n                        <goals>\n                            <goal>single</goal>\n                        </goals>\n                    </execution>\n                </executions>\n            </plugin>\n            <!-- \n      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surfire-plugin</artifactId><version>3.0.0-M5</version><configuration><argLine>-Dspring.profiles.active=test</argLine></configuration>\n      </plugin>\n       -->\n    \n    </plugins>\n</build>\n<scm>\n    <url>https://10.21.125.71/git/sipp.git</url>\n</scm>\n<dependencyManagement>\n    <dependencies>\n        <dependency>\n            <groupId>org.modeshape.bom</groupId>\n            <artifactId>modeshape-bom-embedded</artifactId>\n            <version>5.4.1.Final</version>\n            <type>pom</type>\n            <scope>import</scope>\n        </dependency>\n    </dependencies>\n</dependencyManagement>\n</project>",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/fs/entityfolder/TEMPLATE/1/13",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"fs",
+								"entityfolder",
+								"TEMPLATE",
+								"1",
+								"13"
+							]
+						}
 					},
 					"response": []
 				}

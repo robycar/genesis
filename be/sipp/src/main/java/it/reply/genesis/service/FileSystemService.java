@@ -1,5 +1,6 @@
 package it.reply.genesis.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import org.springframework.data.util.Pair;
@@ -43,5 +44,7 @@ public interface FileSystemService {
   FileSystemVO saveFile(FileSystemScope scope, long idRef, MultipartFile file) throws ApplicationException;
 
   List<FileSystemVO> listFolderVO(FileSystemScope scope, long idRef) throws ApplicationException;
+
+  void editFile(FileSystemScope scope, long idRef, String pathOrId, ByteArrayInputStream byteArrayInputStream) throws ApplicationException;
 
 }

@@ -1,6 +1,9 @@
 package it.reply.genesis.api.files.controller;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -14,6 +17,7 @@ import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import it.reply.genesis.AppError;
 import it.reply.genesis.api.files.payload.FileContentDTO;
 import it.reply.genesis.api.files.payload.FileDTO;
+import it.reply.genesis.api.files.payload.FileSystemEditFileRequest;
 import it.reply.genesis.api.files.payload.FileSystemListFilesResponse;
 import it.reply.genesis.api.files.payload.FileSystemUploadResponse;
 import it.reply.genesis.api.generic.controller.AbstractController;
@@ -102,6 +107,32 @@ public class FileSystemController extends AbstractController {
     }
   }
   
+  @PostMapping(path="entityfolder/{scope}/{idRef}/{id}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  public ResponseEntity<PayloadResponse> editFile(
+      @PathVariable(required = true, name = "scope") FileSystemScope scope,
+      @PathVariable(required = true, name = "idRef") long idRef,
+      @PathVariable(required = true, name = "id") String pathOrId,
+      @Valid @ModelAttribute FileSystemEditFileRequest request) {
+    logger.info("enter editFile");
+    String functionToCheck = "FUN_" + scope.getMappedFunctionDomain() + ".edit";
+    
+    if (!hasAuthority(functionToCheck)) {
+      logger.error("Utente {} non autorizzato ad accedere alla risorsa {}/folder/{}/{}", currentUsername(), FS_API_PATH,
+          scope, idRef);
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    PayloadResponse response = new PayloadResponse();
+    
+    try {
+      fileSystemService.editFile(scope, idRef, pathOrId, new ByteArrayInputStream(request.getContent()));
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+    
+  }
+
   @GetMapping("entityfolder/{scope}/{idRef}/{id}")
   @Transactional(readOnly = true)
   public ResponseEntity<? extends Resource> download(
@@ -110,15 +141,13 @@ public class FileSystemController extends AbstractController {
       @PathVariable(required = true, name = "id") String pathOrId) 
   {
     logger.info("Enter download({},{},{})", scope, idRef, pathOrId);
-
+    
     String functionToCheck = "FUN_" + scope.getMappedFunctionDomain() + ".view";
     if (!hasAuthority(functionToCheck)) {
       logger.error("Utente {} non autorizzato ad accedere alla risorsa {}/folder/{}/{}", currentUsername(), FS_API_PATH,
           scope, idRef);
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
-
-    
     
     try (FileContentDTO fileContent = fileSystemService.readFile(scope, idRef, pathOrId)) {
       BodyBuilder response = ResponseEntity.ok();

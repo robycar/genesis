@@ -1,5 +1,6 @@
 package it.reply.genesis.service.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -82,6 +83,20 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
 
   private static final Path root = Path.of("");
   
+
+  @Override
+  public void editFile(FileSystemScope scope, long idRef, String pathOrId, ByteArrayInputStream bis)
+      throws ApplicationException {
+     logger.debug("enter editFile");
+     
+     FileSystemVO fileVO = findFile(scope, idRef, pathOrId);
+     writeFileData(fileVO, bis, bis.available());
+     
+     fileVO = fileSystemRepository.saveAndFlush(fileVO);
+     
+  }
+  
+  
   public FileSystemVO saveFile(FileSystemScope scope, long idRef, MultipartFile file) throws ApplicationException {
     logger.debug("enter saveFile");
     
@@ -99,21 +114,33 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
           return vo;
         });
     
+    try {
+
+      writeFileData(fileVO, file.getInputStream(), file.getSize());
+
+      // fileVO.setContent(BlobProxy.generateProxy(file.getInputStream(), file.getSize()));
+    } catch (IOException e) {
+      logger.error("Impossibile leggere il contenuto del file da caricare: {} ({})", file.getName(), file.getSize(), e);
+      throw makeError(HttpStatus.INTERNAL_SERVER_ERROR, AppError.FS_UPLOAD_READ_ERROR, file.getName());
+    }
+
+    if (file.getContentType() != null) {
+      fileVO.setContentType(file.getContentType());
+    }
+    fileVO = fileSystemRepository.saveAndFlush(fileVO);
     
+    return fileVO;
+    
+  }
+  
+  private void writeFileData(FileSystemVO fileVO, InputStream is, long length) throws ApplicationException {
     Blob content = fileVO.getContent();
     if (content == null) {
-      try {
-        fileVO.setContent(BlobProxy.generateProxy(file.getInputStream(), file.getSize()));
-      } catch (IOException e) {
-        logger.error("Impossibile leggere il contenuto del file da caricare: {} ({})",
-            file.getName(), file.getSize(), e);
-        throw makeError(HttpStatus.INTERNAL_SERVER_ERROR, AppError.FS_UPLOAD_READ_ERROR, file.getName());
-      }
+        fileVO.setContent(BlobProxy.generateProxy(is, length));
     } else {
       try {
         long originalLength = content.length();
-        try (OutputStream os = content.setBinaryStream(1);
-            InputStream is = file.getInputStream()) {
+        try (OutputStream os = content.setBinaryStream(1)) {
           long newLength = is.transferTo(os);
           if (newLength < originalLength) {
             content.truncate(newLength);
@@ -122,16 +149,10 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
         
       } catch (SQLException|IOException e) {
         logger.error("Errore nella scrittura del BLOB content", e);
-        throw makeError(HttpStatus.INTERNAL_SERVER_ERROR, AppError.FS_UPLOAD_WRITE_ERROR, file.getOriginalFilename());
+        throw makeError(HttpStatus.INTERNAL_SERVER_ERROR, AppError.FS_UPLOAD_WRITE_ERROR, fileVO.getPath());
       }
     }
-    if (file.getContentType() != null) {
-      fileVO.setContentType(file.getContentType());
-    }
-    fileVO = fileSystemRepository.saveAndFlush(fileVO);
-    
-    return fileVO;
-    
+     
   }
 
   @Autowired
@@ -239,7 +260,7 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     return result;
     
   }
-  
+
   
 
   
