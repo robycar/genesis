@@ -20,6 +20,7 @@
     "axios": "^0.21.4",
     "bootstrap": "^4.6.0",
     "chart.js": "^3.5.1",
+    "js-file-download": "^0.4.12",
     "material-table": "^1.69.3",
     "material-ui-search-bar": "^1.0.0",
     "react": "^17.0.2",

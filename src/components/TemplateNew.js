@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import DownloadIcon from "@mui/icons-material/Download";
 import { Paper, Typography, Link } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
@@ -23,9 +24,13 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import acccessControl from "../service/url.js";
+import fileDownload from "js-file-download";
+import axios from "axios";
 
 function Template() {
   const [data, setData] = useState([]);
+  const [dataFolder, setDataFolder] = useState([]);
+  const [dataFolderFile, setDataFolderFile] = useState("");
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -45,6 +50,9 @@ function Template() {
   const [appearFile, setAppearFile] = useState([]);
   const [chiamato, setChiamato] = useState();
   const [chiamanti, setChiamanti] = useState([]);
+  const [url, setUrl] = useState("");
+
+  console.log(appearFile, "appearFile");
 
   //----- GET TEMPLATE -------
 
@@ -86,15 +94,14 @@ function Template() {
     fetch(`/api/template/` + id, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result)
+        console.log(result);
         setTemplate(result.template);
-        impostaChiama(result.template)
+        impostaChiama(result.template);
       })
       .catch((error) => console.log("error", error));
   };
 
   //----- GET FILE -------
-
   const getAppearFile = (id) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -111,6 +118,7 @@ function Template() {
       .then((response) => response.json())
       .then((result) => {
         setAppearFile(result.list);
+        console.log("ciao", result);
       })
       .catch((error) => console.log("error", error));
   };
@@ -118,7 +126,6 @@ function Template() {
   //----- UPDATE CHIAMA -------
 
   const updateChiama = () => {
-
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
@@ -129,24 +136,26 @@ function Template() {
       id: id,
       version: version,
       fileLinks: {
-        CHIAMATO: [{
-          id: chiamato
-        }]
-      }
+        CHIAMATO: [
+          {
+            id: chiamato,
+          },
+        ],
+      },
     });
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: raw,
-      redirect: 'follow'
+      redirect: "follow",
     };
 
     fetch(`/api/template`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getTemplateById(id)
-        handleCloseChiama()
+        getTemplateById(id);
+        handleCloseChiama();
       })
       .catch((error) => console.log("error", error));
   };
@@ -154,32 +163,57 @@ function Template() {
   //----- ADD FILE -------
 
   const addFile = (files) => {
-
-    var arrayFile = Object.values(files)
-
+    var arrayFile = Object.values(files);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
     var formdata = new FormData();
-    formdata.append("file", arrayFile[0], arrayFile[0]?.name);
+    for (let i = 0; i < arrayFile.length; i++) {
+      formdata.append("file", arrayFile[i], arrayFile[i].name);
+    }
 
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: myHeaders,
       body: formdata,
-      redirect: 'follow'
+      redirect: "follow",
     };
 
     fetch(`/api/fs/entityfolder/TEMPLATE/` + id, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getAppearFile(id)
+        getTemplateById(id);
+        getAppearFile(id);
       })
       .catch((error) => console.log("error", error));
   };
 
+  //----------- FUNZIONE DELETE FILE-----------------
+
+  const functionDeleteFile = (path) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/fs/entityfolder/TEMPLATE/` + id + `/` + path, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        getTemplateById(id);
+        getAppearFile(id);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   useEffect(() => {
     getTemplate();
@@ -232,15 +266,26 @@ function Template() {
     },
   ];
 
+  const columnsFile = [
+    {
+      title: "File",
+      field: "path",
+    },
+    {
+      title: "URL",
+      field: "url",
+    },
+  ];
+
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
-  const [openChiama, setOpenChiama] = useState(false)
-  const [openFile, setOpenFile] = useState(false)
+  const [openChiama, setOpenChiama] = useState(false);
+  const [openFile, setOpenFile] = useState(false);
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
-    getTemplateById(rowData.id)
+    getTemplateById(rowData.id);
     setNomeTitolo(rowData.nome);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
@@ -251,23 +296,24 @@ function Template() {
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
     setTypeTemplate(rowData.typeTemplate);
-    getAppearFile(rowData.id)
+    getAppearFile(rowData.id);
+    loadTemplate(rowData.id);
+    setUrl(rowData.url);
     setOpen(true);
   };
 
   const impostaChiama = (templ) => {
+    setChiamato(templ.fileLinks.CHIAMATO[0].id);
 
-    setChiamato(templ.fileLinks.CHIAMATO[0].id)
-
-    var appoggio = []
+    var appoggio = [];
 
     if (templ.fileLinks.CHIAMANTE) {
       for (let i = 0; i < templ.fileLinks.CHIAMANTE.length; i++) {
-        appoggio.push(templ.fileLinks.CHIAMANTE[i].id)
+        appoggio.push(templ.fileLinks.CHIAMANTE[i].id);
       }
     }
-    setChiamanti(appoggio)
-  }
+    setChiamanti(appoggio);
+  };
 
   const openModifica = (rowData) => {
     setModifica(true);
@@ -283,24 +329,39 @@ function Template() {
   };
 
   const handleOpenChiama = () => {
-    setOpenChiama(true)
-  }
+    setOpenChiama(true);
+  };
   const handleCloseChiama = () => {
-    setOpenChiama(false)
-  }
+    setOpenChiama(false);
+  };
 
   //-------------------MODIFICA FILE-------------------------
 
   const handleOpenFile = () => {
-    setOpenFile(true)
-  }
-  const handleCloseFile = () => {
-    setOpenFile(false)
-  }
-  const changeHandler = (event) => {
-    addFile(event.target.files)
+    setOpenFile(true);
   };
-  const handleSubmission = () => { };
+  const handleCloseFile = () => {
+    setOpenFile(false);
+  };
+  const changeHandler = (event) => {
+    addFile(event.target.files);
+  };
+  const handleSubmission = () => {};
+
+  /*--------------MODALE MODIFICA CONTENUTO FILE -----------*/
+  const [ModificaContenutoFile, setModificaContenutoFile] = useState(false);
+
+  const openModificaContenutoFile = (rowData) => {
+    // getTemplateByID(rowData.id);
+    setModificaContenutoFile(true);
+    // handleOpen(rowData);
+    getDownloadFile(rowData.url);
+  };
+
+  const handleCloseModificaContenutoFile = () => {
+    setModificaContenutoFile(false);
+    // setOpen(false);
+  };
 
   /*--------------MODALE DELETE TEMPLATE -----------*/
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -311,7 +372,7 @@ function Template() {
     setOpenWarning(false);
   };
 
-  //------------ FUNZIONE DELETE ------------
+  //------------ FUNZIONE DELETE TEMPLATE------------
 
   const functionDelete = () => {
     var myHeaders = new Headers();
@@ -349,9 +410,9 @@ function Template() {
           } else {
             setWarning(
               "Codice errore : " +
-              result.error.code +
-              "Descrizione: " +
-              result.error.description
+                result.error.code +
+                "Descrizione: " +
+                result.error.description
             );
           }
         } else {
@@ -376,6 +437,48 @@ function Template() {
   };
 
   //-------AGGIORNA TEST SUITE----------------------------
+  const loadTemplate = async (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    const response = await fetch("/api/template/" + id, requestOptions);
+    const responseJson = await response.json();
+    setTemplate(responseJson.template);
+  };
+
+  const downloadAll = (folders) => {
+    folders.forEach((folder) => {
+      downloadSingleFile(folder);
+    });
+  };
+
+  const downloadSingleFile = (folder) => {
+    var config = {
+      responseType: "blob",
+      method: "get",
+      url: folder.url,
+      headers: {
+        Authorization: bearer,
+      },
+    };
+
+    axios(config)
+      .then(function (response) {
+        fileDownload(response.data, folder.path);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const aggiornaTemplate = () => {
     const invia = () => {
@@ -391,7 +494,7 @@ function Template() {
         nome: nome,
         durata: durata,
         typeTemplate: typeTemplate,
-        descrizione: descrizione
+        descrizione: descrizione,
       });
 
       var requestOptions = {
@@ -411,6 +514,70 @@ function Template() {
     };
     invia();
   };
+
+  //--------------------GET TEMPLATE BY ID ----------------------------
+
+  const getTemplateByID = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/template/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setDataFolder(result.template);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  console.log(dataFolder, "DataFolder");
+  const pathFolder = dataFolder?.folder;
+  console.log(pathFolder, "PathFolder");
+
+  let urlFile;
+  for (let index = 0; index < pathFolder?.length; index++) {
+    urlFile = pathFolder[index].url;
+  }
+
+  // console.log(urlFile, "URL File");
+
+  //----------------------------GET DOWNLOAD FILE --------------------------
+
+  // console.log(url, "Grande url");
+  // console.log(id, "sono un id");
+
+  const getDownloadFile = (url) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`${url}`, requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        setDataFolderFile(result);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  // console.log(dataFolderFile, "Contenuto File");
+
+  //--------------------------------------------------------------------------------
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -539,6 +706,18 @@ function Template() {
       height: 200,
       overflowX: "hidden",
     },
+    caricaFile: {
+      "&:hover": {
+        backgroundColor: "white",
+        color: "#47B881",
+      },
+      backgroundColor: "#47B881",
+      color: "white",
+      border: "1px solid #47B881",
+      marginRight: "10px",
+      marginLeft: "10px",
+      //width: "200px",
+    },
   }));
 
   const classes = useStyles();
@@ -546,7 +725,7 @@ function Template() {
   return (
     <div>
       <MaterialTable
-        detailPanel={rowData => {
+        detailPanel={(rowData) => {
           return (
             <div
               style={{
@@ -556,9 +735,9 @@ function Template() {
             >
               {"  "} {rowData.descrizione}
             </div>
-          )
+          );
         }}
-        style={{ boxShadow: "none", maxWidth: '100%' }}
+        style={{ boxShadow: "none", maxWidth: "100%" }}
         title="Template"
         data={data}
         isLoading={caricamento}
@@ -673,7 +852,9 @@ function Template() {
                     <TextField
                       className={classes.textField}
                       onChange={(e) => {
-                        e.target.value === "" ? setDescrizione(" ") : setDescrizione(e.target.value)
+                        e.target.value === ""
+                          ? setDescrizione(" ")
+                          : setDescrizione(e.target.value);
                       }}
                       label="Descrizione"
                       defaultValue={descrizione}
@@ -747,12 +928,8 @@ function Template() {
                   <Col className={classes.col}>
                     <ButtonClickedGreen
                       size="medium"
-                      nome={
-                        modifica === false
-                          ? "vedi file"
-                          : "modifica File"
-                      }
-                      onClick={(handleOpenChiama)}
+                      nome={modifica === false ? "vedi file" : "modifica File"}
+                      onClick={handleOpenChiama}
                     />
                   </Col>
                 </Row>
@@ -812,8 +989,8 @@ function Template() {
                 <Divider className={classes.divider} />
               </div>
 
-              <div >
-                <Col >
+              <div>
+                <Col>
                   <Typography className={classes.intestazione} variant="h6">
                     Chiamato
                   </Typography>
@@ -828,7 +1005,16 @@ function Template() {
                     }}
                   >
                     {appearFile.map((file) => (
-                      <MenuItem disabled={chiamato === file.id || chiamanti[0] === file.id || chiamanti[1] === file.id || chiamanti[2] === file.id} key={file.id} value={file.id}>
+                      <MenuItem
+                        disabled={
+                          chiamato === file.id ||
+                          chiamanti[0] === file.id ||
+                          chiamanti[1] === file.id ||
+                          chiamanti[2] === file.id
+                        }
+                        key={file.id}
+                        value={file.id}
+                      >
                         {file.path}
                       </MenuItem>
                     ))}
@@ -836,13 +1022,19 @@ function Template() {
                 </Col>
               </div>
 
-              <Divider style={{ display: chiamanti.length === 0 ? "none" : "" }} className={classes.divider} />
+              <Divider
+                style={{ display: chiamanti.length === 0 ? "none" : "" }}
+                className={classes.divider}
+              />
               <div>
                 <Form className={classes.contenutoModaleChiama}>
                   {chiamanti.map((chiamante, index) => (
                     <div style={{ float: "left" }}>
-                      <Col >
-                        <Typography className={classes.intestazione} variant="h6">
+                      <Col>
+                        <Typography
+                          className={classes.intestazione}
+                          variant="h6"
+                        >
                           Chiamante <b>{index + 1}</b>
                         </Typography>
                         <TextField
@@ -851,22 +1043,30 @@ function Template() {
                           label="File "
                           value={chiamanti[index]}
                           onChange={(e) => {
-                            var x = [...chiamanti]
-                            x[index] = e.target.value
-                            setChiamanti(x)
+                            var x = [...chiamanti];
+                            x[index] = e.target.value;
+                            setChiamanti(x);
                           }}
                           InputProps={{
                             readOnly: modifica === false ? true : false,
                           }}
                         >
                           {appearFile.map((file) => (
-                            <MenuItem disabled={chiamato === file.id || chiamanti[0] === file.id || chiamanti[1] === file.id || chiamanti[2] === file.id} key={file.id} value={file.id}>
+                            <MenuItem
+                              disabled={
+                                chiamato === file.id ||
+                                chiamanti[0] === file.id ||
+                                chiamanti[1] === file.id ||
+                                chiamanti[2] === file.id
+                              }
+                              key={file.id}
+                              value={file.id}
+                            >
                               {file.path}
                             </MenuItem>
                           ))}
                         </TextField>
                       </Col>
-
                     </div>
                   ))}
                 </Form>
@@ -925,19 +1125,69 @@ function Template() {
           <div>
             <Paper className={classes.paperModaleDelete} elevation={1}>
               <div>
-                <ListItem>
-                  <Typography className={classes.intestazione} variant="h4">
-                    Modifica file
-                  </Typography>
-                </ListItem>
                 <Divider className={classes.divider} />
-                <div>
-                  {appearFile.map((file) => (
-                    <MenuItem disabled={chiamato === file.id || chiamanti[0] === file.id || chiamanti[1] === file.id || chiamanti[2] === file.id} key={file.id} value={file.id}>
-                      {file.path}
-                    </MenuItem>
-                  ))}
-                </div>
+                <MaterialTable
+                  title="Modifica File"
+                  data={appearFile}
+                  isLoading={caricamento}
+                  columns={columnsFile}
+                  options={{
+                    sorting: true,
+                    actionsColumnIndex: -1,
+                    search: false,
+                    pageSizeOptions: [
+                      5,
+                      10,
+                      20,
+                      { value: appearFile.length, label: "All" },
+                    ],
+                  }}
+                  actions={[
+                    {
+                      icon: () => (
+                        <a>
+                          <DownloadIcon />
+                        </a>
+                      ),
+                      tooltip: "Scarica il File",
+                      position: "row",
+
+                      onClick: (event, folder) => {
+                        downloadSingleFile(folder);
+                      },
+                    },
+                    {
+                      icon: (dat) => (
+                        <a>
+                          <VisibilityIcon />
+                        </a>
+                      ),
+                      tooltip: "Visualizza tutti i dati",
+                      position: "row",
+                      onClick: (event, rowData) => {
+                        openModificaContenutoFile(rowData);
+                      },
+                      // position: "row",
+                    },
+                    {
+                      icon: () => <EditIcon />,
+                      tooltip: "Modifica il File",
+                      onClick: (event, rowData) => openModifica(rowData),
+                      position: "row",
+                    },
+                    (rowData) => ({
+                      icon: () => <DeleteIcon />,
+                      tooltip: "Elimina File",
+                      onClick: (event, rowData) =>
+                        functionDeleteFile(rowData.path),
+                      disabled:
+                        chiamato === rowData.id ||
+                        chiamanti[0] === rowData.id ||
+                        chiamanti[1] === rowData.id ||
+                        chiamanti[2] === rowData.id,
+                    }),
+                  ]}
+                />
 
                 <Divider className={classes.divider} />
                 <div
@@ -955,11 +1205,15 @@ function Template() {
                     onChange={changeHandler}
                   />
                   <label htmlFor="contained-button-file">
-                    <ButtonClickedGreen
+                    <Button
+                      className={classes.caricaFile}
+                      variant="contained"
                       color="primary"
-                      size="medium"
-                      nome="Carica"
-                    />
+                      component="span"
+                      onClick={handleSubmission}
+                    >
+                      Carica
+                    </Button>
                   </label>
                   <ButtonNotClickedGreen
                     onClick={handleCloseFile}
@@ -1018,6 +1272,100 @@ function Template() {
                     onClick={handleCloseDelete}
                     nome="Indietro"
                   />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+      {/*------------------ MODALE MODIFICA CONTENUTO FILE --------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={ModificaContenutoFile}
+        onClose={handleCloseModificaContenutoFile}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={ModificaContenutoFile}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    {modifica === false ? "Visualizza " : "Modifica "} Template{" "}
+                    <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+              {/* <Row>
+                <Col className={classes.colIp}>
+                  <TextField
+                    select
+                    label="File XML"
+                    value={pathFolder?.url}
+                    defaultValue={pathFolder?.url}
+                    onChange={(e) => {
+                      setUrl(e.target.value);
+                      getDownloadFile(url);
+
+                      console.log(e.target.value, "URL");
+                    }}
+                  >
+                    {pathFolder?.map(
+                      (folder) => (
+                        console.log(folder, "folkder"),
+                        (
+                          <MenuItem key={folder.id} value={folder.url}>
+                            {folder.path}
+                          </MenuItem>
+                        )
+                      )
+                    )}
+                  </TextField>
+                </Col>
+              </Row> */}
+
+              <Form className={classes.contenutoModale}>
+                <div class="form-group">
+                  {/* <label for="exampleFormControlTextarea1"></label>
+                  <textarea
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                  >
+                    
+                  </textarea> */}
+                  <p>{dataFolderFile}</p>
+
+                  {/* {url == "" ? <p></p> : <p>{getAppearFile.id}</p>} */}
+                </div>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  {modifica === false ? (
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      // onClick={aggiornaTemplate}
+                    />
+                  ) : (
+                    <ButtonNotClickedGreen
+                      className={classes.bottoneAnnulla}
+                      onClick={handleCloseModificaContenutoFile}
+                      size="medium"
+                      nome="Indietro"
+                    />
+                  )}
                 </div>
               </div>
             </Paper>

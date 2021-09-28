@@ -26,6 +26,7 @@ function ButtonNotClickedGreen(props) {
       variant="contained"
       onClick={props.onClick}
       id={props.id}
+      size={props.size}
     >
       {props.nome}
     </Button>

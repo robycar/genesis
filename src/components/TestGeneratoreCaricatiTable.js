@@ -24,14 +24,22 @@ import acccessControl from "../service/url.js";
 
 const TestCaricatiTable = () => {
   const [id, setId] = useState();
-  const [nome, setNome] =useState("");
+  const [nome, setNome] = useState("");
   const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState(); 
+  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
   const [filter, setFilter] = useState(false);
-
-  
+  const [idToRun, setIdToRun] = useState();
+  const [dataLoad, setTestGenLoad] = useState(null);
+  const [dataRun, setIdTestGenRun] = useState(null);
+  const [includeTestCaseOfType, setincludeTestCaseOfType] = useState("");
+  const [includeTestSuiteOfType, setincludeTestSuiteOfType] = useState("");
+  const [includeTestGeneratoreOfType, setincludeTestGeneratoreOfType] =
+    useState("");
+  const [dataInizio, setDataInizio] = useState("");
+  const [orarioInizio, setOrarioInizio] = useState("");
+  const [delay, setDelay] = useState("");
 
   const columns = [
     {
@@ -106,7 +114,7 @@ const TestCaricatiTable = () => {
       position: "relative",
       display: "flex",
       flexDirection: "column",
-      alignItems: "center"
+      alignItems: "center",
     },
     paperBottom: {
       padding: "2%",
@@ -152,7 +160,21 @@ const TestCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
-      marginBottom: "2%"
+      marginBottom: "2%",
+    },
+    divSubContent1: {
+      padding: "2%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    divSubContent2: {
+      padding: "2%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      marginBottom: "2%",
+      marginTop: "1%",
     },
     divIntestazione: {
       marginBottom: "2%",
@@ -160,7 +182,16 @@ const TestCaricatiTable = () => {
     calendarPaper: {
       padding: "3%",
       width: "190px",
-      height: "fit-content",
+      height: "130px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginTop: "3%",
+    },
+    orarioPaper: {
+      padding: "3%",
+      width: "190px",
+      height: "130px",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -173,7 +204,7 @@ const TestCaricatiTable = () => {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      marginTop: "3%",
+      justifyContent: "center",
     },
     divInput: {
       display: "flex",
@@ -181,7 +212,7 @@ const TestCaricatiTable = () => {
       width: "80%",
       alignItems: "center",
       marginTop: "5%",
-      marginBottom: "5%"
+      marginBottom: "5%",
     },
   }));
 
@@ -191,11 +222,13 @@ const TestCaricatiTable = () => {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
+  const [openRun, setOpenRun] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
 
   const handleOpen = () => {
     setOpen(true);
+    getAllTestGeneratoreModal();
   };
 
   const handleClose = () => {
@@ -207,6 +240,10 @@ const TestCaricatiTable = () => {
     setOpen(false);
   };
 
+  const handleCloseRun = () => {
+    setOpenRun(false);
+  };
+
   const handleCloseSchedula = () => {
     setOpenSchedula(false);
   };
@@ -215,7 +252,24 @@ const TestCaricatiTable = () => {
     setValue(newValue);
   };
 
-  /*------------- GET TEST GEN -------------*/
+  const handleOpenRun = (idRun_) => {
+    setIdToRun(idRun_);
+    setOpen(true);
+    setOpen(false);
+  };
+
+  const testGenLoader = () => {
+    loadTestGen(id);
+    handleClose();
+    getAllTestGeneratore();
+  };
+
+  const runGenLoader = () => {
+    runTestGen(idToRun);
+    handleCloseRun();
+  };
+
+  /*------------- GET TEST GEN DASH-------------*/
 
   let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
@@ -223,9 +277,47 @@ const TestCaricatiTable = () => {
     bearer = bearer.replace(/"/g, "");
   }
 
+  const getAllTestGeneratore = () => {
+    var consta = "READY";
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: null,
+      includeTestGeneratoreOfType: consta,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        //setAppearTest(result.testGenList);
+        setData(result.testCaseist);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestGeneratore();
+  }, []);
+
+  /*--------------- GET TEST GENERATORE -------------------*/
+
   const [appearTest, setAppearTest] = useState([]);
 
-  const getAllTestGeneratore = () => {
+  const getAllTestGeneratoreModal = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -242,14 +334,66 @@ const TestCaricatiTable = () => {
       .then((result) => {
         console.log(result);
         setAppearTest(result.list);
-        setData(result.list)
+        setData(result.list);
       })
       .catch((error) => console.log("error", error));
   };
 
-  useEffect(() => {
-    getAllTestGeneratore();
-  }, []);
+  /*--------------- LOAD TEST CASE -------------------*/
+
+  const loadTestGen = (id) => {
+    var urlLoad = `/api/testcase/load/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setTestGenLoad(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  /*--------------- RUN TEST CASE -------------------*/
+
+  const runTestGen = (idRun) => {
+    var urlLoad = `/api/testgen/runloaded/${idRun}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setIdTestGenRun(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const handleLoadData = (rowDataaa) => {
+    //console.log(rowDataaa.id);
+    //setIdToRun(rowDataaa.id);
+    runGenLoader(rowDataaa.id);
+  };
 
   return (
     <div>
@@ -278,8 +422,13 @@ const TestCaricatiTable = () => {
           {
             icon: "play_circle_outlined",
             tooltip: "Launch",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            onClick: (event, rowData) => handleOpenRun(rowData.launcher),
+            position: "row",
+          },
+          {
+            icon: "account_tree",
+            tooltip: "Trace",
+            onClick: (event, rowData) => console.log("Trace"),
             position: "row",
           },
           {
@@ -307,21 +456,24 @@ const TestCaricatiTable = () => {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "10vh",
-                  width: "10vh",
-                  margin: "0 auto",
-                }}
-              >
-                <img src={loading} alt="loading" />
-              </div>
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
+          // body: {
+          //   emptyDataSourceMessage: (
+          //     <div
+          //       style={{
+          //         display: "flex",
+          //         justifyContent: "center",
+          //         alignItems: "center",
+          //         height: "10vh",
+          //         width: "10vh",
+          //         margin: "0 auto",
+          //       }}
+          //     >
+          //       <img src={loading} alt="loading" />
+          //     </div>
+          //   ),
+          // },
         }}
       />
 
@@ -341,7 +493,7 @@ const TestCaricatiTable = () => {
         <Fade in={open}>
           <Paper className={classes.paperModale} elevation={1}>
             <div>
-            <div className={classes.divIntestazione}>
+              <div className={classes.divIntestazione}>
                 <ListItem button>
                   <ListItemIcon>
                     <BackupIcon className={classes.icon} />
@@ -397,6 +549,8 @@ const TestCaricatiTable = () => {
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
+                  id={id}
+                  onClick={testGenLoader}
                 />
               </div>
             </div>
@@ -420,7 +574,7 @@ const TestCaricatiTable = () => {
         <Fade in={openSchedula}>
           <Paper className={classes.paperModale} elevation={1}>
             <div>
-              <ListItem button style={{marginLeft: "12%"}}>
+              <ListItem button style={{ marginLeft: "12%" }}>
                 <ListItemIcon>
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
@@ -430,36 +584,55 @@ const TestCaricatiTable = () => {
               </ListItem>
               <Divider className={classes.divider} />
 
-              <div className={classes.divContent}>
+              <div className={classes.divSubContent1}>
                 <Paper elevation={2} className={classes.calendarPaper}>
                   <Typography variant="h5">Calendario</Typography>
-                  <Divider/>
+                  <Divider />
                   <div className={classes.divInput}>
-                    <label for="start">Start date:</label>
+                    <label for="start">Data Inizio:</label>
                     <input
-                    
                       type="date"
                       id="start"
                       name="trip-start"
-                      value="2018-07-22"
-                      min="2018-01-01"
-                      max="2018-12-31"
+                      onChange={(e) => setDataInizio(e.target.value)}
+                      min=""
+                      max=""
                     />
                   </div>
                 </Paper>
 
-                <Paper elevation={2} className={classes.delayPaper}>
-                  <Typography variant="h5">Delay</Typography>
+                <Paper elevation={2} className={classes.orarioPaper}>
+                  <Typography variant="h5">Orario</Typography>
                   <div className={classes.divInput}>
-
-                    <label for="appt">Start Time:</label>
+                    <label for="appt">Orario Inizio:</label>
                     <input
-                    style={{width: "135px"}}
+                      style={{ width: "135px" }}
                       type="time"
                       id="appt"
                       name="appt"
-                      min="09:00"
-                      max="18:00"
+                      min=""
+                      max=""
+                      onChange={(e) => setOrarioInizio(e.target.value)}
+                      required
+                    />
+                  </div>
+                </Paper>
+              </div>
+
+              <div className={classes.divSubContent2}>
+                <Paper elevation={2} className={classes.delayPaper}>
+                  <Typography variant="h5">Delay</Typography>
+                  <div className={classes.divInput}>
+                    <label for="appt">Delay:</label>
+                    <input
+                      style={{ width: "100px" }}
+                      type="number"
+                      id=""
+                      name=""
+                      min=""
+                      defaultValue="60"
+                      max=""
+                      onChange={(e) => setDelay(e.target.value)}
                       required
                     />
                   </div>
@@ -476,6 +649,59 @@ const TestCaricatiTable = () => {
                   variant="contained"
                   color="secondary"
                   onClick={handleCloseSchedula}
+                >
+                  Annulla
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ------------------ MODALE AVVIA TEST GEN --------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openRun}
+        onClose={handleCloseRun}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openRun}>
+          <Paper className={classes.paperModale} elevation={1}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h4">
+                  Lancio Test Case
+                </Typography>
+              </ListItem>
+
+              <Divider className={classes.divider} />
+              <Typography className={classes.info}>
+                <p>Vuoi lanciare il test case da te selezionato ?</p>
+              </Typography>
+              <Divider />
+
+              <div className={classes.bottone}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleLoadData}
+                >
+                  Lancio
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseRun}
                 >
                   Annulla
                 </Button>

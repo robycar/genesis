@@ -493,6 +493,7 @@ function Obp() {
           // selection: true,
           // columnsButton: true,
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
         actions={[
           {

@@ -31,6 +31,10 @@ const TestSuiteCaricatiTable = () => {
   const [modifiedDate, setModifiedDate] = useState(); 
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
+  const [dataInizio, setDataInizio] = useState("");
+  const [orarioInizio, setOrarioInizio] = useState("");
+  const [delay, setDelay] = useState("");
+
   
 
   const columns = [
@@ -159,7 +163,7 @@ const TestSuiteCaricatiTable = () => {
     calendarPaper: {
       padding: "3%",
       width: "190px",
-      height: "fit-content",
+      height: "130px",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -172,7 +176,7 @@ const TestSuiteCaricatiTable = () => {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      marginTop: "3%",
+      justifyContent: "center",
     },
     divInput: {
       display: "flex",
@@ -181,6 +185,29 @@ const TestSuiteCaricatiTable = () => {
       alignItems: "center",
       marginTop: "5%",
       marginBottom: "5%"
+    },
+    orarioPaper: {
+      padding: "3%",
+      width: "190px",
+      height: "130px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginTop: "3%",
+    },
+    divSubContent1: {
+      padding: "2%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    divSubContent2: {
+      padding: "2%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      marginBottom: "2%",
+      marginTop: "1%",
     },
   }));
 
@@ -427,36 +454,55 @@ const TestSuiteCaricatiTable = () => {
               </ListItem>
               <Divider className={classes.divider} />
 
-              <div className={classes.divContent}>
+              <div className={classes.divSubContent1}>
                 <Paper elevation={2} className={classes.calendarPaper}>
                   <Typography variant="h5">Calendario</Typography>
-                  <Divider/>
+                  <Divider />
                   <div className={classes.divInput}>
-                    <label for="start">Start date:</label>
+                    <label for="start">Data Inizio:</label>
                     <input
-                    
                       type="date"
                       id="start"
                       name="trip-start"
-                      value="2018-07-22"
-                      min="2018-01-01"
-                      max="2018-12-31"
+                      onChange={(e) => setDataInizio(e.target.value)}
+                      min=""
+                      max=""
                     />
                   </div>
                 </Paper>
 
-                <Paper elevation={2} className={classes.delayPaper}>
-                  <Typography variant="h5">Delay</Typography>
+                <Paper elevation={2} className={classes.orarioPaper}>
+                  <Typography variant="h5">Orario</Typography>
                   <div className={classes.divInput}>
-
-                    <label for="appt">Start Time:</label>
+                    <label for="appt">Orario Inizio:</label>
                     <input
-                    style={{width: "135px"}}
+                      style={{ width: "135px" }}
                       type="time"
                       id="appt"
                       name="appt"
-                      min="09:00"
-                      max="18:00"
+                      min=""
+                      max=""
+                      onChange={(e) => setOrarioInizio(e.target.value)}
+                      required
+                    />
+                  </div>
+                </Paper>
+              </div>
+
+              <div className={classes.divSubContent2}>
+                <Paper elevation={2} className={classes.delayPaper}>
+                  <Typography variant="h5">Delay</Typography>
+                  <div className={classes.divInput}>
+                    <label for="appt" >Delay:</label>
+                    <input
+                      style={{ width: "100px"}}
+                      type="number"
+                      id=""
+                      name=""
+                      min=""
+                      defaultValue="60"
+                      max=""
+                      onChange={(e) => setDelay(e.target.value)}
                       required
                     />
                   </div>

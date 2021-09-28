@@ -173,7 +173,6 @@ function TestCaseTable() {
       .then((response) => response.json())
       .then((response) => {
         handleCloseChiamato();
-        getTestCaseById(id);
       })
       .catch((error) => console.log("error", error));
   };
@@ -203,7 +202,6 @@ function TestCaseTable() {
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
       .then((response) => {
-        getAllTestCase();
         handleCloseChiamanti();
       })
       .catch((error) => console.log("error", error));
@@ -282,6 +280,7 @@ function TestCaseTable() {
     setTemplate(rowData.template.nome);
     setChiamato(rowData.chiamato);
     setChiamanti(rowData.chiamanti);
+    setChiama(rowData)
   };
 
   const handleClose = () => {
@@ -324,12 +323,12 @@ function TestCaseTable() {
           setOpenWarning(true);
           if (result.error === "TEST-0009") {
             setWarning(
-              "Non Ã¨ possibile eliminare un test case che non appartiene al proprio gruppo"
+              "Non è possibile eliminare un test case che non appartiene al proprio gruppo"
             );
           }
           if (result.error === "Internal Server Error") {
             setWarning(
-              "Non Ã¨ possibile eliminare un test case che Ã¨ legato a una o piÃ¹ Test Suite"
+              "Non è possibile eliminare un test case che è legato a una o piÃ¹ Test Suite"
             );
           } else {
             setWarning(
@@ -361,9 +360,23 @@ function TestCaseTable() {
   };
 
   //-----------MODALE CHIAMATO------------------
+  const setChiama=(rowData)=>{
+    //-----chiamato------
+    setLineaChiamato(rowData.chiamato.linea.id);
+    setProxyChiamato(rowData.chiamato.proxy.id);
+
+    //-----chiamanti-----
+    var appoggioChiamanti = rowData.chiamanti;
+
+    for (let i = 0; i < Object.keys(rowData.chiamanti).length; i++) {
+      delete appoggioChiamanti[i].file
+      appoggioChiamanti[i].linea = { id: rowData.chiamanti[i].linea.id };
+      appoggioChiamanti[i].proxy = { id: rowData.chiamanti[i].proxy.id };
+    }
+    setMapChiamanti(Object.keys(rowData.chiamanti));
+  }
+
   const handleOpenChiamato = () => {
-    setLineaChiamato(chiamato.linea.id);
-    setProxyChiamato(chiamato.proxy.id);
     setOpenChiamato(true);
   };
 
@@ -373,15 +386,6 @@ function TestCaseTable() {
 
   //---------MODALE CHIAMANTi--------------------
   const handleOpenChiamanti = () => {
-    var appoggioChiamanti = chiamanti;
-
-    for (let i = 0; i < Object.keys(chiamanti).length; i++) {
-      appoggioChiamanti[i].linea = { id: chiamanti[i].linea.id };
-      appoggioChiamanti[i].proxy = { id: chiamanti[i].proxy.id };
-    }
-    console.log(Object.values(chiamanti));
-    setMapChiamanti(Object.keys(chiamanti));
-
     setOpenChiamanti(true);
   };
   const impostaChiamanti = (e) => {
@@ -430,7 +434,7 @@ function TestCaseTable() {
     getAllTestCase();
     getAppearLine();
     getAppearOBP();
-  }, [chiamanti]);
+  }, []);
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
   const useStyles = makeStyles((theme) => ({
@@ -868,7 +872,7 @@ function TestCaseTable() {
                       }}
                     >
                       {appearLine.map((linea) => (
-                        <MenuItem key={linea.id} value={linea.id}>
+                        <MenuItem disabled={linea.id === lineaChiamato || linea.id === chiamanti[0]?.linea.id || linea.id === chiamanti[1]?.linea.id || linea.id === chiamanti[2]?.linea.id} key={linea.id} value={linea.id}>
                           {linea.campiConcatenati}
                         </MenuItem>
                       ))}
@@ -887,9 +891,9 @@ function TestCaseTable() {
                         readOnly: modifica === false ? true : false,
                       }}
                     >
-                      {appearOBP.map((obp) => (
-                        <MenuItem key={obp.id} value={obp.id}>
-                          {obp.campiConcatenati}
+                      {appearOBP.map((proxy) => (
+                        <MenuItem disabled={proxy.id === proxyChiamato || proxy.id === chiamanti[0]?.proxy.id || proxy.id === chiamanti[1]?.proxy.id || proxy.id === chiamanti[2]?.proxy.id} key={proxy.id} value={proxy.id}>
+                          {proxy.campiConcatenati}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -951,10 +955,10 @@ function TestCaseTable() {
               </div>
 
               <Form className={classes.contenutoModale}>
-                {mapChiamanti.map((chiamante) => (
+                {mapChiamanti.map((chiamante, index) => (
                   <>
                     <Typography className={classes.intestazione} variant="h6">
-                      Chiamante <b>{chiamante}</b>
+                      Chiamante <b>{index+1}</b>
                     </Typography>
                     <Row>
                       <Col className={classes.col}>
@@ -962,11 +966,10 @@ function TestCaseTable() {
                           className={classes.textField}
                           select
                           label="Linea "
-                          value={chiamanti[chiamante].linea.id}
+                          value={chiamanti[index].linea.id}
                           onChange={(e) => {
-                            var p1 = chiamanti;
-                            p1[chiamante].linea.id = e.target.value;
-                            console.log(p1);
+                            var p1 = [...chiamanti];
+                            p1[index].linea.id = e.target.value;
                             impostaChiamanti(p1);
                           }}
                           InputProps={{
@@ -974,7 +977,7 @@ function TestCaseTable() {
                           }}
                         >
                           {appearLine.map((linea) => (
-                            <MenuItem key={linea.id} value={linea.id}>
+                            <MenuItem disabled={linea.id === lineaChiamato || linea.id === chiamanti[0]?.linea.id || linea.id === chiamanti[1]?.linea.id || linea.id === chiamanti[2]?.linea.id} key={linea.id} value={linea.id}>
                               {linea.campiConcatenati}
                             </MenuItem>
                           ))}
@@ -985,20 +988,19 @@ function TestCaseTable() {
                           className={classes.textField}
                           select
                           label="Outboundproxy"
-                          value={chiamanti[chiamante].proxy.id}
+                          value={chiamanti[index].proxy.id}
                           onChange={(e) => {
-                            var p1 = chiamanti;
-                            p1[chiamante].proxy.id = e.target.value;
-                            console.log(p1);
+                            var p1 = [...chiamanti];
+                            p1[index].proxy.id = e.target.value;
                             impostaChiamanti(p1);
                           }}
                           InputProps={{
                             readOnly: modifica === false ? true : false,
                           }}
                         >
-                          {appearOBP.map((obp) => (
-                            <MenuItem key={obp.id} value={obp.id}>
-                              {obp.campiConcatenati}
+                          {appearOBP.map((proxy) => (
+                            <MenuItem disabled={proxy.id === proxyChiamato || proxy.id === chiamanti[0]?.proxy.id || proxy.id === chiamanti[1]?.proxy.id || proxy.id === chiamanti[2]?.proxy.id} key={proxy.id} value={proxy.id}>
+                              {proxy.campiConcatenati}
                             </MenuItem>
                           ))}
                         </TextField>

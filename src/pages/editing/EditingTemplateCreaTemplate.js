@@ -334,7 +334,7 @@ function EditingTemplateCreaTemplate() {
   const arrayValue = Object.values(selectedFile);
   // console.log(arrayValue[0]);
 
-  const handleSubmission = () => {};
+  const handleSubmission = () => { };
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -403,20 +403,20 @@ function EditingTemplateCreaTemplate() {
         nChiamanti <= 3 && nChiamanti === 0
           ? false
           : nChiamanti === 1
-          ? chiamante1 === false
-            ? true
-            : false
-          : nChiamanti === 2
-          ? chiamante2 === false
-            ? true
-            : false
-          : nChiamanti === 3
-          ? chiamante3 === false
-            ? true
-            : false
-          : false
-          ? false
-          : true
+            ? chiamante1 === false
+              ? true
+              : false
+            : nChiamanti === 2
+              ? chiamante2 === false
+                ? true
+                : false
+              : nChiamanti === 3
+                ? chiamante3 === false
+                  ? true
+                  : false
+                : false
+                  ? false
+                  : true
       ) {
         setNextDisabled(true);
       } else {
@@ -506,9 +506,9 @@ function EditingTemplateCreaTemplate() {
           } else {
             setWarning(
               "Codice errore :" +
-                result.error.code +
-                "Descrizione " +
-                result.error.description
+              result.error.code +
+              "Descrizione " +
+              result.error.description
             );
           }
         } else {
@@ -906,7 +906,11 @@ function EditingTemplateCreaTemplate() {
                         >
                           {arrayValue.map((file) => {
                             return (
-                              <MenuItem key={file.name} value={file.name}>
+                              <MenuItem
+                                disabled={chiamato === file.name || qntChiamanti[0]?.linea === file.name || qntChiamanti[1]?.linea === file.name || qntChiamanti[2]?.linea === file.name}
+                                key={file.name}
+                                value={file.name}
+                              >
                                 {file.name}
                               </MenuItem>
                             );
@@ -936,7 +940,7 @@ function EditingTemplateCreaTemplate() {
           >
             <div className={classes.bodyContainer}>
               <div className={classes.bodyContainer}>
-                {qntChiamanti.map((index) => {
+                {qntChiamanti.map((chiamante, index) => {
                   return (
                     <div>
                       <>
@@ -944,14 +948,14 @@ function EditingTemplateCreaTemplate() {
                           className={classes.intestazione}
                           variant="h6"
                         >
-                          Chiamante <b>{index.index + 1}</b>
+                          Chiamante <b>{index + 1}</b>
                         </Typography>
                         <Row>
                           <Col className={classes.col}>
                             <Form.Group controlId="form.Numero">
                               <Form.Label>
                                 Seleziona il file del Chiamate{" "}
-                                <b>{index.index + 1}</b>{" "}
+                                <b>{index + 1}</b>{" "}
                               </Form.Label>
                               <FormControl
                                 variant="outlined"
@@ -960,28 +964,24 @@ function EditingTemplateCreaTemplate() {
                                 <Select
                                   id="selectLinea"
                                   value={qntChiamanti.index}
-                                  defaultValue={index.linea}
                                   onChange={(e) => {
-                                    arrAppoggio[index.index].linea =
-                                      e.target.value;
-
-                                    setChiamanti(e.target.value);
+                                    arrAppoggio = [...qntChiamanti]
+                                    arrAppoggio[index].linea = e.target.value;
                                     setQntChiamanti(arrAppoggio);
-                                    // arrayChiamanti.push(chiamanti);
-                                    // console.log(arrayChiamanti);
 
-                                    index.index === 0
+                                    index === 0
                                       ? setChiamante1(true)
-                                      : index.index === 1
-                                      ? setChiamante2(true)
-                                      : index.index === 2
-                                      ? setChiamante3(true)
-                                      : setChiamante1(false);
+                                      : index === 1
+                                        ? setChiamante2(true)
+                                        : index === 2
+                                          ? setChiamante3(true)
+                                          : setChiamante1(false);
                                   }}
                                 >
                                   {arrayValue.map((file) => {
                                     return (
                                       <MenuItem
+                                        disabled={chiamato === file.name || qntChiamanti[0]?.linea === file.name || qntChiamanti[1]?.linea === file.name || qntChiamanti[2]?.linea === file.name}
                                         key={file.name}
                                         value={file.name}
                                       >
@@ -1030,16 +1030,16 @@ function EditingTemplateCreaTemplate() {
                   nChiamanti < 3 && nChiamanti === 0
                     ? false
                     : nChiamanti === 1
-                    ? chiamante1 === false
-                      ? true
-                      : false
-                    : nChiamanti === 2
-                    ? chiamante2 === false
-                      ? true
-                      : false
-                    : false
-                    ? false
-                    : true
+                      ? chiamante1 === false
+                        ? true
+                        : false
+                      : nChiamanti === 2
+                        ? chiamante2 === false
+                          ? true
+                          : false
+                        : false
+                          ? false
+                          : true
                 }
               />
             </div>

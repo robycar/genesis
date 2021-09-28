@@ -7,6 +7,7 @@ import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
@@ -15,6 +16,7 @@ import Form from "react-bootstrap/Form";
 import Select from "@material-ui/core/Select";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import TextField from "@material-ui/core/TextField";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
 import loading from "../../src/assets/load.gif";
@@ -22,12 +24,10 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 
-
 const TestCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
   const [nomeTest, setNomeTest] = useState("");
   const [loader, setLoader] = useState("");
-  const [dataInizio, setDataInizio] = useState();
   const [dataFine, setDataFine] = useState();
   const [status, setStatus] = useState("");
   const [trace, setTrace] = useState();
@@ -35,21 +35,24 @@ const TestCaricatiTable = () => {
   const [report, setReport] = useState("");
   const [id, setId] = useState();
   const [idToRun, setIdToRun] = useState();
+  const [dataInizio, setDataInizio] = useState();
   const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState(); 
+  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [dataCase, setDataCase] = useState();
   const [createdBy, setCreatedBy] = useState("");
   const [appearTest, setAppearTest] = useState([]);
+  const [orarioInizio, setOrarioInizio] = useState();
   const [nome, setNome] = useState("");
+  const [delay, setDelay] = useState();
 
   const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
 
   const [includeTestCaseOfType, setincludeTestCaseOfType] = useState("");
   const [includeTestSuiteOfType, setincludeTestSuiteOfType] = useState("");
-  const [includeTestGeneratoreOfType, setincludeTestGeneratoreOfType] = useState("");
-
+  const [includeTestGeneratoreOfType, setincludeTestGeneratoreOfType] =
+    useState("");
 
   const columns = [
     {
@@ -135,7 +138,7 @@ const TestCaricatiTable = () => {
       marginBottom: "5%",
     },
     typography: {
-      marginTop: "3%",
+      padding: "3%",
     },
 
     divTextarea: {
@@ -162,20 +165,37 @@ const TestCaricatiTable = () => {
     select: {
       width: "400px",
     },
-    divContent: {
+    divSubContent1: {
       padding: "2%",
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
-      marginBottom: "2%",
     },
+    divSubContent2: {
+      padding: "2%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      marginBottom: "2%",
+      marginTop: "1%",
+    },
+
     divIntestazione: {
       marginBottom: "2%",
     },
     calendarPaper: {
       padding: "3%",
       width: "190px",
-      height: "fit-content",
+      height: "130px",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginTop: "3%",
+    },
+    orarioPaper: {
+      padding: "3%",
+      width: "190px",
+      height: "130px",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -188,7 +208,7 @@ const TestCaricatiTable = () => {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      marginTop: "3%",
+      justifyContent: "center",
     },
     divInput: {
       display: "flex",
@@ -204,6 +224,33 @@ const TestCaricatiTable = () => {
       alignItems: "center",
       marginTop: "6%",
       justifyContent: "center",
+    },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
+    divIntestazione: {
+      display: "flex",
+      alignItems: "center",
+      padding: "2%",
+      marginBottom: "1%",
+    },
+    intestazioneModaleError: {
+      color: "#ef5350",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    iconModaleError: {
+      // width: "15%",
+      // height: "15%",
+      marginRight: "4%",
+      transform: "scale(1.9)",
+      color: "#ef5350",
     },
   }));
 
@@ -235,8 +282,8 @@ const TestCaricatiTable = () => {
   };
 
   const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_)
-    setOpenRun(true)
+    setIdToRun(idRun_);
+    setOpenRun(true);
     setOpen(false);
   };
 
@@ -254,12 +301,20 @@ const TestCaricatiTable = () => {
     getAllTestCase();
   };
 
-
-  const runCaseLoder = () => {
+  const runCaseLoader = () => {
     runTestCase(idToRun);
     handleCloseRun();
     //alert("Run test id :  "+ idToRun);
-  }
+  };
+
+  /*------- OPEN WARNING DELETE ------------ */
+
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
+
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
 
   /*------------- GET TEST CASE DASH -------------*/
 
@@ -269,7 +324,7 @@ const TestCaricatiTable = () => {
     bearer = bearer.replace(/"/g, "");
   }
 
-   const getAllTestCase = () => {
+  const getAllTestCase = () => {
     var consta = "READY";
 
     var myHeaders = new Headers();
@@ -308,13 +363,10 @@ const TestCaricatiTable = () => {
   /*--------------- GET TEST CASE -------------------*/
 
   const getAllTestCaseModal = () => {
-
-
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
 
     var requestOptions = {
       method: "GET",
@@ -335,7 +387,6 @@ const TestCaricatiTable = () => {
   /*--------------- LOAD TEST CASE -------------------*/
 
   const loadTestCase = (id) => {
-   
     var urlLoad = `/api/testcase/load/${id}`;
 
     var myHeaders = new Headers();
@@ -356,13 +407,11 @@ const TestCaricatiTable = () => {
         setTestCaseLoad(result.list);
       })
       .catch((error) => console.log("error", error));
-        
   };
 
   /*--------------- RUN TEST CASE -------------------*/
 
   const runTestCase = (idRun) => {
-   
     var urlLoad = `/api/testcase/runloaded/${idRun}`;
 
     var myHeaders = new Headers();
@@ -379,17 +428,31 @@ const TestCaricatiTable = () => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        setIdTestCaseRun(result.list);
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "TEST-0020") {
+            setWarning("Il test selezionato è già stato lanciato!");
+          } else {
+            setWarning(
+              "Codice errore:" +
+                result.error.code +
+                "Descrizione" +
+                result.code.description
+            );
+          }
+        } else {
+          setOpenWarning(false);
+          console.log(result);
+          setIdTestCaseRun(result.list);
+        }
       })
       .catch((error) => console.log("error", error));
-        
   };
 
-  const hadleLoadData = (rowDataaa) => {
+  const handleLoadData = (rowDataaa) => {
     //console.log(rowDataaa.id);
     //setIdToRun(rowDataaa.id);
-    runCaseLoder(rowDataaa.id);
+    runCaseLoader(rowDataaa.id);
   };
 
   return (
@@ -455,14 +518,10 @@ const TestCaricatiTable = () => {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-              "Non è presente alcun dato da mostrare"
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
       />
-
-
 
       {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
       <Modal
@@ -513,7 +572,6 @@ const TestCaricatiTable = () => {
                             value={prova.id}
                           >
                             {prova.nome}
-                            
                           </MenuItem>
                         );
                       })}
@@ -572,34 +630,55 @@ const TestCaricatiTable = () => {
               </ListItem>
               <Divider className={classes.divider} />
 
-              <div className={classes.divContent}>
+              <div className={classes.divSubContent1}>
                 <Paper elevation={2} className={classes.calendarPaper}>
                   <Typography variant="h5">Calendario</Typography>
                   <Divider />
                   <div className={classes.divInput}>
-                    <label for="start">Start date:</label>
+                    <label for="start">Data Inizio:</label>
                     <input
                       type="date"
                       id="start"
                       name="trip-start"
-                      value="2018-07-22"
-                      min="2018-01-01"
-                      max="2018-12-31"
+                      onChange={(e) => setDataInizio(e.target.value)}
+                      min=""
+                      max=""
                     />
                   </div>
                 </Paper>
 
-                <Paper elevation={2} className={classes.delayPaper}>
-                  <Typography variant="h5">Delay</Typography>
+                <Paper elevation={2} className={classes.orarioPaper}>
+                  <Typography variant="h5">Orario</Typography>
                   <div className={classes.divInput}>
-                    <label for="appt">Start Time:</label>
+                    <label for="appt">Orario Inizio:</label>
                     <input
                       style={{ width: "135px" }}
                       type="time"
                       id="appt"
                       name="appt"
-                      min="09:00"
-                      max="18:00"
+                      min=""
+                      max=""
+                      onChange={(e) => setOrarioInizio(e.target.value)}
+                      required
+                    />
+                  </div>
+                </Paper>
+              </div>
+
+              <div className={classes.divSubContent2}>
+                <Paper elevation={2} className={classes.delayPaper}>
+                  <Typography variant="h5">Delay</Typography>
+                  <div className={classes.divInput}>
+                    <label for="appt">Delay:</label>
+                    <input
+                      style={{ width: "100px" }}
+                      type="number"
+                      id=""
+                      name=""
+                      min=""
+                      defaultValue="60"
+                      max=""
+                      onChange={(e) => setDelay(e.target.value)}
                       required
                     />
                   </div>
@@ -608,10 +687,7 @@ const TestCaricatiTable = () => {
               <Divider />
 
               <div className={classes.bottone}>
-                <Button 
-                  variant="contained" 
-                  color="primary"
-                >
+                <Button variant="contained" color="primary">
                   Conferma
                 </Button>
 
@@ -627,7 +703,6 @@ const TestCaricatiTable = () => {
           </Paper>
         </Fade>
       </Modal>
-
 
       {/* ------------------ MODALE AVVIA TEST CASE --------------------- */}
       <Modal
@@ -655,16 +730,16 @@ const TestCaricatiTable = () => {
               </ListItem>
 
               <Divider className={classes.divider} />
-                <Typography className={classes.info}>
-                  <p>Vuoi lanciare il test case da te selezionato ?</p>
-                </Typography>
+              <Typography className={classes.info}>
+                <p>Vuoi lanciare il test case da te selezionato ?</p>
+              </Typography>
               <Divider />
 
               <div className={classes.bottone}>
-                <Button 
-                  variant="contained" 
+                <Button
+                  variant="contained"
                   color="primary"
-                  onClick={hadleLoadData}
+                  onClick={handleLoadData}
                 >
                   Lancio
                 </Button>
@@ -679,6 +754,55 @@ const TestCaricatiTable = () => {
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
     </div>
