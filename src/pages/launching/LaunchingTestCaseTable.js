@@ -418,6 +418,7 @@ function LaunTestCaseTable() {
     const hadleLoadData = (rowDataaa) => {
         //console.log(rowDataaa.id);
         //setIdToRun(rowDataaa.id);
+        loadTestCase(idToRun);
         runCaseLoder(rowDataaa.id);
     };
 
@@ -715,13 +716,13 @@ function LaunTestCaseTable() {
                         position: "row",
                         onClick: (event, rowData) => openVisualizza(rowData),
                     },
-                    {
+                    /*{
                         icon: () => <FileUploadIcon />,
                         tooltip: "Load",
                         onClick: (event, rowData) => loadTestCase(rowData.id),
                         position: "row",
                     },
-                    /*{
+                    {
                        icon: () => <DeleteIcon />,
                        tooltip: "Remove all selected test",
                        onClick: (event, rowData) => {

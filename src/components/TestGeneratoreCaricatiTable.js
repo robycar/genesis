@@ -37,9 +37,10 @@ const TestCaricatiTable = () => {
   const [includeTestSuiteOfType, setincludeTestSuiteOfType] = useState("");
   const [includeTestGeneratoreOfType, setincludeTestGeneratoreOfType] =
     useState("");
-  const [dataInizio, setDataInizio] = useState("");
-  const [orarioInizio, setOrarioInizio] = useState("");
-  const [delay, setDelay] = useState("");
+    const [dataInizio, setDataInizio] = useState("");
+    const [orarioInizio, setOrarioInizio] = useState("");
+    const [delay, setDelay] = useState("");
+
 
   const columns = [
     {
@@ -623,9 +624,9 @@ const TestCaricatiTable = () => {
                 <Paper elevation={2} className={classes.delayPaper}>
                   <Typography variant="h5">Delay</Typography>
                   <div className={classes.divInput}>
-                    <label for="appt">Delay:</label>
+                    <label for="appt" >Delay:</label>
                     <input
-                      style={{ width: "100px" }}
+                      style={{ width: "100px"}}
                       type="number"
                       id=""
                       name=""

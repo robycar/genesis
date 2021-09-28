@@ -473,6 +473,7 @@ function LaunchingTestSuiteTable() {
     };
 
     const hadleLoadData = (rowDataaa) => {
+        loadTestCase(idToRun);
         runCaseLoder(rowDataaa.id);
     };
 
@@ -1079,12 +1080,12 @@ function LaunchingTestSuiteTable() {
                                                 ],
                                             }}
                                             actions={[
-                                                {
+                                                /*{
                                                     icon: () => <FileUploadIcon />,
                                                     tooltip: "Load",
                                                     onClick: (event, rowData) => loadTestCase(rowData.id),
                                                     position: "row",
-                                                },
+                                                },*/
                                                 {
                                                     icon: () => <PlayCircleFilledIcon />,
                                                     tooltip: "Run Test Case",

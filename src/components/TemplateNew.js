@@ -274,6 +274,7 @@ function Template() {
     {
       title: "URL",
       field: "url",
+      hidden: true,
     },
   ];
 
@@ -577,7 +578,9 @@ function Template() {
 
   // console.log(dataFolderFile, "Contenuto File");
 
-  //--------------------------------------------------------------------------------
+  //--------------------MODIFY FILE---------------------------------------
+
+  const modifyFiles = () => {};
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -1278,7 +1281,7 @@ function Template() {
           </div>
         </Fade>
       </Modal>
-      {/*------------------ MODALE MODIFICA CONTENUTO FILE --------------- */}
+      {/*------------------ MODALE VISUALIZZA / MODIFICA CONTENUTO FILE --------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -1332,19 +1335,19 @@ function Template() {
               </Row> */}
 
               <Form className={classes.contenutoModale}>
-                <div class="form-group">
-                  {/* <label for="exampleFormControlTextarea1"></label>
+                {/* <div class="form-group">
+                  <label for="exampleFormControlTextarea1"></label>
                   <textarea
                     class="form-control"
                     id="exampleFormControlTextarea1"
                     rows="3"
                   >
                     
-                  </textarea> */}
-                  <p>{dataFolderFile}</p>
+                  </textarea>
 
-                  {/* {url == "" ? <p></p> : <p>{getAppearFile.id}</p>} */}
-                </div>
+                  
+                </div> */}
+                <p>{dataFolderFile}</p>
               </Form>
               <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
