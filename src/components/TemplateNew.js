@@ -51,8 +51,10 @@ function Template() {
   const [chiamato, setChiamato] = useState();
   const [chiamanti, setChiamanti] = useState([]);
   const [url, setUrl] = useState("");
+  const [contenutoFile, setContenutoFile] = useState("");
+  console.log(contenutoFile, "Sono un contenuto");
 
-  console.log(appearFile, "appearFile");
+  // console.log(appearFile, "appearFile");
 
   //----- GET TEMPLATE -------
 
@@ -217,6 +219,7 @@ function Template() {
 
   useEffect(() => {
     getTemplate();
+    // aggiornaFile(url);
   }, []);
 
   const columns = [
@@ -349,20 +352,38 @@ function Template() {
   };
   const handleSubmission = () => {};
 
-  /*--------------MODALE MODIFICA CONTENUTO FILE -----------*/
-  const [ModificaContenutoFile, setModificaContenutoFile] = useState(false);
+  /*--------------MODALE VISUALIZZA CONTENUTO FILE -----------*/
+  const [visualizzaContenutoFile, setVisualizzaContenutoFile] = useState(false);
 
-  const openModificaContenutoFile = (rowData) => {
-    // getTemplateByID(rowData.id);
-    setModificaContenutoFile(true);
-    // handleOpen(rowData);
+  const handleOpenVisualizzaContenutoFile = (rowData) => {
     getDownloadFile(rowData.url);
+    setVisualizzaContenutoFile(true);
+    // setModifica(false);
   };
+
+  const handleCloseVisualizzaContenutoFile = () => {
+    setVisualizzaContenutoFile(false);
+  };
+
+  /*--------------MODALE MODIFICA CONTENUTO FILE -----------*/
+  const [modificaContenutoFile, setModificaContenutoFile] = useState(false);
+
+  const handleOpenModificaContenutoFile = (rowData) => {
+    getDownloadFile(rowData.url);
+    setModificaContenutoFile(true);
+    // setModifica(true);
+    setUrl(rowData.url);
+  };
+  // console.log(url, "Url");
 
   const handleCloseModificaContenutoFile = () => {
     setModificaContenutoFile(false);
-    // setOpen(false);
   };
+
+  // const aggiornaFile = () => {
+  //   modifyFiles(url);
+  //   // setModificaContenutoFile(false);
+  // };
 
   /*--------------MODALE DELETE TEMPLATE -----------*/
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -518,35 +539,35 @@ function Template() {
 
   //--------------------GET TEMPLATE BY ID ----------------------------
 
-  const getTemplateByID = (id) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  // const getTemplateByID = (id) => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Content-Type", "application/json");
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
 
-    fetch(`/api/template/${id}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setDataFolder(result.template);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  //   fetch(`/api/template/${id}`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setDataFolder(result.template);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
 
-  console.log(dataFolder, "DataFolder");
-  const pathFolder = dataFolder?.folder;
-  console.log(pathFolder, "PathFolder");
+  // console.log(dataFolder, "DataFolder");
+  // const pathFolder = dataFolder?.folder;
+  // console.log(pathFolder, "PathFolder");
 
-  let urlFile;
-  for (let index = 0; index < pathFolder?.length; index++) {
-    urlFile = pathFolder[index].url;
-  }
+  // let urlFile;
+  // for (let index = 0; index < pathFolder?.length; index++) {
+  //   urlFile = pathFolder[index].url;
+  // }
 
   // console.log(urlFile, "URL File");
 
@@ -579,8 +600,37 @@ function Template() {
   // console.log(dataFolderFile, "Contenuto File");
 
   //--------------------MODIFY FILE---------------------------------------
+  const modifyFiles = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+    // myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    // myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  const modifyFiles = () => {};
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("content", contenutoFile);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: "follow",
+    };
+
+    fetch(`${url}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        handleCloseModificaContenutoFile();
+        getDownloadFile(url);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  // console.log(url, "Sono un URL");
+
+  // console.log(contenutoFile, "sono un contenuto");
+
+  ///////////////////////////////////////////////
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -630,10 +680,23 @@ function Template() {
       marginTop: "9px",
     },
     bottone: {
-      // display: "flex",
+      display: "flex",
       // alignItems: "center",
-      // justifyContent: "space-around",
-      marginLeft: "55px",
+      justifyContent: "flex-end",
+      marginTop: "4%",
+      marginBottom: "2%",
+    },
+    bottoniModaleFile: {
+      display: "flex",
+      // alignItems: "center",
+      justifyContent: "flex-end",
+      marginTop: "4%",
+      marginBottom: "2%",
+    },
+    bottoniModaleChiamanti: {
+      display: "flex",
+      // alignItems: "center",
+      justifyContent: "flex-end",
       marginTop: "4%",
       marginBottom: "2%",
     },
@@ -655,6 +718,15 @@ function Template() {
       width: 800,
       position: "relative",
     },
+    paperModaleChiama: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 800,
+      position: "relative",
+    },
     paperModaleDelete: {
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
@@ -662,6 +734,15 @@ function Template() {
       padding: "5%",
       height: "fit-content",
       width: 500,
+      position: "relative",
+    },
+    paperModaleFile: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: "fit-content",
       position: "relative",
     },
     contenutoModale: {
@@ -681,9 +762,9 @@ function Template() {
     textField: {
       width: "200px",
     },
-    bottoneAnnulla: {
-      width: "128px",
-    },
+    // bottoneAnnulla: {
+    //   width: "128px",
+    // },
     typography: {
       padding: "3%",
     },
@@ -709,18 +790,21 @@ function Template() {
       height: 200,
       overflowX: "hidden",
     },
-    caricaFile: {
-      "&:hover": {
-        backgroundColor: "white",
-        color: "#47B881",
-      },
-      backgroundColor: "#47B881",
-      color: "white",
-      border: "1px solid #47B881",
-      marginRight: "10px",
-      marginLeft: "10px",
-      //width: "200px",
+    textArea: {
+      width: 600,
     },
+    // caricaFile: {
+    //   "&:hover": {
+    //     backgroundColor: "white",
+    //     color: "#47B881",
+    //   },
+    //   backgroundColor: "#47B881",
+    //   color: "white",
+    //   border: "1px solid #47B881",
+    //   marginRight: "10px",
+    //   marginLeft: "10px",
+    //   //width: "200px",
+    // },
   }));
 
   const classes = useStyles();
@@ -981,7 +1065,7 @@ function Template() {
       >
         <Fade in={openChiama}>
           <div>
-            <Paper className={classes.paperModale} elevation={1}>
+            <Paper className={classes.paperModaleChiama} elevation={1}>
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
@@ -993,36 +1077,35 @@ function Template() {
               </div>
 
               <div>
-                <Col>
-                  <Typography className={classes.intestazione} variant="h6">
-                    Chiamato
-                  </Typography>
-                  <TextField
-                    className={classes.textField}
-                    select
-                    label="Linea "
-                    value={chiamato}
-                    onChange={(e) => setChiamato(e.target.value)}
-                    InputProps={{
-                      readOnly: modifica === false ? true : false,
-                    }}
-                  >
-                    {appearFile.map((file) => (
-                      <MenuItem
-                        disabled={
-                          chiamato === file.id ||
-                          chiamanti[0] === file.id ||
-                          chiamanti[1] === file.id ||
-                          chiamanti[2] === file.id
-                        }
-                        key={file.id}
-                        value={file.id}
-                      >
-                        {file.path}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Col>
+                <Typography className={classes.intestazione} variant="h6">
+                  Chiamato
+                </Typography>
+                <TextField
+                  className={classes.textField}
+                  style={{ width: "300px" }}
+                  select
+                  label="Linea "
+                  value={chiamato}
+                  onChange={(e) => setChiamato(e.target.value)}
+                  InputProps={{
+                    readOnly: modifica === false ? true : false,
+                  }}
+                >
+                  {appearFile.map((file) => (
+                    <MenuItem
+                      disabled={
+                        chiamato === file.id ||
+                        chiamanti[0] === file.id ||
+                        chiamanti[1] === file.id ||
+                        chiamanti[2] === file.id
+                      }
+                      key={file.id}
+                      value={file.id}
+                    >
+                      {file.path}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </div>
 
               <Divider
@@ -1032,78 +1115,70 @@ function Template() {
               <div>
                 <Form className={classes.contenutoModaleChiama}>
                   {chiamanti.map((chiamante, index) => (
-                    <div style={{ float: "left" }}>
-                      <Col>
-                        <Typography
-                          className={classes.intestazione}
-                          variant="h6"
-                        >
-                          Chiamante <b>{index + 1}</b>
-                        </Typography>
-                        <TextField
-                          className={classes.textField}
-                          select
-                          label="File "
-                          value={chiamanti[index]}
-                          onChange={(e) => {
-                            var x = [...chiamanti];
-                            x[index] = e.target.value;
-                            setChiamanti(x);
-                          }}
-                          InputProps={{
-                            readOnly: modifica === false ? true : false,
-                          }}
-                        >
-                          {appearFile.map((file) => (
-                            <MenuItem
-                              disabled={
-                                chiamato === file.id ||
-                                chiamanti[0] === file.id ||
-                                chiamanti[1] === file.id ||
-                                chiamanti[2] === file.id
-                              }
-                              key={file.id}
-                              value={file.id}
-                            >
-                              {file.path}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Col>
+                    <div>
+                      <Typography className={classes.intestazione} variant="h6">
+                        Chiamante <b>{index + 1}</b>
+                      </Typography>
+                      <TextField
+                        className={classes.textField}
+                        style={{ width: "300px" }}
+                        select
+                        label="File "
+                        value={chiamanti[index]}
+                        onChange={(e) => {
+                          var x = [...chiamanti];
+                          x[index] = e.target.value;
+                          setChiamanti(x);
+                        }}
+                        InputProps={{
+                          readOnly: modifica === false ? true : false,
+                        }}
+                      >
+                        {appearFile.map((file) => (
+                          <MenuItem
+                            disabled={
+                              chiamato === file.id ||
+                              chiamanti[0] === file.id ||
+                              chiamanti[1] === file.id ||
+                              chiamanti[2] === file.id
+                            }
+                            key={file.id}
+                            value={file.id}
+                          >
+                            {file.path}
+                          </MenuItem>
+                        ))}
+                      </TextField>
                     </div>
                   ))}
                 </Form>
               </div>
-              <div className={classes.buttonModale}>
-                <Divider className={classes.divider} />
-                <div
-                  className={classes.bottone}
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                  {modifica === false ? (
-                    ""
-                  ) : (
-                    <>
-                      <ButtonClickedGreen
-                        size="medium"
-                        nome="File"
-                        onClick={handleOpenFile}
-                      />
-                      <ButtonClickedGreen
-                        size="medium"
-                        nome="Aggiorna"
-                        onClick={updateChiama}
-                      />
-                    </>
-                  )}
 
-                  <ButtonNotClickedGreen
-                    className={classes.bottoneAnnulla}
-                    onClick={handleCloseChiama}
-                    size="medium"
-                    nome={modifica === false ? "Indietro" : "Annulla"}
-                  />
-                </div>
+              <Divider className={classes.divider} />
+              <div className={classes.bottoniModaleChiamanti}>
+                {modifica === false ? (
+                  ""
+                ) : (
+                  <>
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="File"
+                      onClick={handleOpenFile}
+                    />
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      onClick={updateChiama}
+                    />
+                  </>
+                )}
+
+                <ButtonNotClickedGreen
+                  className={classes.bottoneAnnulla}
+                  onClick={handleCloseChiama}
+                  size="medium"
+                  nome={modifica === false ? "Indietro" : "Annulla"}
+                />
               </div>
             </Paper>
           </div>
@@ -1126,7 +1201,7 @@ function Template() {
       >
         <Fade in={openFile}>
           <div>
-            <Paper className={classes.paperModaleDelete} elevation={1}>
+            <Paper className={classes.paperModaleFile} elevation={1}>
               <div>
                 <Divider className={classes.divider} />
                 <MaterialTable
@@ -1168,14 +1243,15 @@ function Template() {
                       tooltip: "Visualizza tutti i dati",
                       position: "row",
                       onClick: (event, rowData) => {
-                        openModificaContenutoFile(rowData);
+                        handleOpenVisualizzaContenutoFile(rowData);
                       },
                       // position: "row",
                     },
                     {
                       icon: () => <EditIcon />,
                       tooltip: "Modifica il File",
-                      onClick: (event, rowData) => openModifica(rowData),
+                      onClick: (event, rowData) =>
+                        handleOpenModificaContenutoFile(rowData),
                       position: "row",
                     },
                     (rowData) => ({
@@ -1193,10 +1269,7 @@ function Template() {
                 />
 
                 <Divider className={classes.divider} />
-                <div
-                  className={classes.bottone}
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                >
+                <div className={classes.bottoniModaleFile}>
                   <input
                     // accept=".xml"
                     style={{ display: "none" }}
@@ -1209,21 +1282,25 @@ function Template() {
                   />
                   <label htmlFor="contained-button-file">
                     <Button
-                      className={classes.caricaFile}
+                      style={{ height: "36px", width: "87px" }}
                       variant="contained"
-                      color="primary"
+                      color="secondary"
                       component="span"
                       onClick={handleSubmission}
                     >
                       Carica
                     </Button>
                   </label>
-                  <ButtonNotClickedGreen
+
+                  <Button
+                    style={{ marginLeft: "2%", height: "36px", width: "87px" }}
+                    variant="contained"
+                    color="primary"
+                    component="span"
                     onClick={handleCloseFile}
-                    className={classes.bottoneAnnulla}
-                    size="medium"
-                    nome="Indietro"
-                  />
+                  >
+                    Indietro
+                  </Button>
                 </div>
               </div>
             </Paper>
@@ -1281,27 +1358,26 @@ function Template() {
           </div>
         </Fade>
       </Modal>
-      {/*------------------ MODALE VISUALIZZA / MODIFICA CONTENUTO FILE --------------- */}
+      {/*------------------ MODALE VISUALIZZA CONTENUTO FILE --------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={ModificaContenutoFile}
-        onClose={handleCloseModificaContenutoFile}
+        open={visualizzaContenutoFile}
+        onClose={handleCloseVisualizzaContenutoFile}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Fade in={ModificaContenutoFile}>
+        <Fade in={visualizzaContenutoFile}>
           <div>
             <Paper className={classes.paperModale} elevation={1}>
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    {modifica === false ? "Visualizza " : "Modifica "} Template{" "}
-                    <b>{nomeTitolo}</b>
+                    Visualizza Template <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -1335,19 +1411,21 @@ function Template() {
               </Row> */}
 
               <Form className={classes.contenutoModale}>
-                {/* <div class="form-group">
-                  <label for="exampleFormControlTextarea1"></label>
-                  <textarea
-                    class="form-control"
-                    id="exampleFormControlTextarea1"
-                    rows="3"
-                  >
-                    
-                  </textarea>
-
-                  
-                </div> */}
-                <p>{dataFolderFile}</p>
+                <Row className={classes.rowContent}>
+                  <Col className={classes.col}>
+                    <TextField
+                      multiline
+                      rows={15}
+                      className={classes.textArea}
+                      onChange={(e) => setContenutoFile(e.target.value)}
+                      label=""
+                      defaultValue={dataFolderFile}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
+                    />
+                  </Col>
+                </Row>
               </Form>
               <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
@@ -1355,20 +1433,108 @@ function Template() {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  {modifica === false ? (
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome="Aggiorna"
-                      // onClick={aggiornaTemplate}
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseVisualizzaContenutoFile}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/*------------------ MODALE MODIFICA CONTENUTO FILE --------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={modificaContenutoFile}
+        onClose={handleCloseModificaContenutoFile}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={modificaContenutoFile}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Modifica Template <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+              {/* <Row>
+                <Col className={classes.colIp}>
+                  <TextField
+                    select
+                    label="File XML"
+                    value={pathFolder?.url}
+                    defaultValue={pathFolder?.url}
+                    onChange={(e) => {
+                      setUrl(e.target.value);
+                      getDownloadFile(url);
+
+                      console.log(e.target.value, "URL");
+                    }}
+                  >
+                    {pathFolder?.map(
+                      (folder) => (
+                        console.log(folder, "folkder"),
+                        (
+                          <MenuItem key={folder.id} value={folder.url}>
+                            {folder.path}
+                          </MenuItem>
+                        )
+                      )
+                    )}
+                  </TextField>
+                </Col>
+              </Row> */}
+
+              <Form className={classes.contenutoModale}>
+                <Row className={classes.rowContent}>
+                  <Col className={classes.col}>
+                    <TextField
+                      multiline
+                      rows={15}
+                      className={classes.textArea}
+                      onChange={(e) => setContenutoFile(e.target.value)}
+                      label=""
+                      defaultValue={dataFolderFile}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
                     />
-                  ) : (
-                    <ButtonNotClickedGreen
-                      className={classes.bottoneAnnulla}
-                      onClick={handleCloseModificaContenutoFile}
-                      size="medium"
-                      nome="Indietro"
-                    />
-                  )}
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottoneModaleChiamanti}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Aggiorna"
+                    onClick={() => {
+                      modifyFiles();
+                    }}
+                  />
+
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseModificaContenutoFile}
+                    size="medium"
+                    nome="Indietro"
+                  />
                 </div>
               </div>
             </Paper>

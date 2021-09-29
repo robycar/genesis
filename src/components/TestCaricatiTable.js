@@ -46,7 +46,7 @@ const TestCaricatiTable = () => {
   const [nome, setNome] = useState("");
   const [delay, setDelay] = useState();
 
-  const [dataLoad, setTestCaseLoad] = useState(null);
+  const [dataLoad, setTestCaseLoad] = useState({});
   const [dataRun, setIdTestCaseRun] = useState(null);
 
   const [includeTestCaseOfType, setincludeTestCaseOfType] = useState("");
@@ -298,6 +298,7 @@ const TestCaricatiTable = () => {
   const testCaseLoader = () => {
     loadTestCase(id);
     handleClose();
+    console.log("testCaseLoader");
     getAllTestCase();
   };
 
@@ -582,22 +583,38 @@ const TestCaricatiTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-                <ButtonClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="secondary"
                   nome="Schedula Test"
                   onClick={handleOpenSchedula}
-                />
+                >
+                  Schedula Test
+                </Button>
 
-                <ButtonNotClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
                   id={id}
                   onClick={testCaseLoader}
-                />
+                >
+                  {" "}
+                  Carica Test{" "}
+                </Button>
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  style={{backgroundColor:"#ffeb3b", color: "white"}}
+                  nome="Annulla"
+                  onClick={handleClose}
+                >
+                  {" "}
+                  Annulla{" "}
+                </Button>
               </div>
             </div>
           </Paper>

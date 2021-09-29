@@ -18,7 +18,7 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import TestCaseComplete from "../../components/TestCaseComplete";
+import TestGeneratoreComplete from "../../components/TestGeneratoreComplete";
 import NavbarItemReport from "../../components/NavbarItemReport";
 import Table from "../../components/Table";
 import { Typography } from "@material-ui/core";
@@ -169,20 +169,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ReportTestCase() {
+function ReportTestGeneratore() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
-  // const table = [
-  //     {col1:"", col2:"Run", col3:"Passed", col4:"N/A", col5:"Failed"},
-  //     {col1:"Registrazione",col2: 159, col3:6.0, col4:24, col5:4.0},
-  //     {col1:"Plug-In", col2: 237, col3:9.0, col4:37, col5:4.3},
-  //     {col1:"Focus P-CSCF", col2:262, col3:16.0, col4:24, col5:6.0},
-  //     {col1:"Total", col2:305, col3:3.7, col4:67, col5:4.3},
-  //   ]
+
 
   return (
     <div className={classes.root}>
@@ -260,7 +254,7 @@ function ReportTestCase() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <TestCaseComplete />
+                <TestGeneratoreComplete />
               </Paper>
             </Grid>
           </Grid>
@@ -284,4 +278,4 @@ function ReportTestCase() {
   );
 }
 
-export default ReportTestCase;
+export default ReportTestGeneratore;

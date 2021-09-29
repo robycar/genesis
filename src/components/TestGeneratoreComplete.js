@@ -22,7 +22,7 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 
-const TestSuiteComplete = () => {
+const TestGeneratoreComplete = () => {
   const columns = [
     {
       title: "Id",
@@ -310,7 +310,7 @@ const TestSuiteComplete = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="Last 30 Test Suite Completed"
+        title="Last 30 Test Generatore Completed"
         data={data}
         columns={columns}
         options={{
@@ -336,7 +336,7 @@ const TestSuiteComplete = () => {
                 >EXPORT</Button>
               </div>
             ),
-            tooltip: "Export Test Suite Table",
+            tooltip: "Export Test Generatore Table",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },
@@ -353,4 +353,4 @@ const TestSuiteComplete = () => {
 
   };
 
-export default TestSuiteComplete;
+export default TestGeneratoreComplete;

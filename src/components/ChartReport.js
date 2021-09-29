@@ -2,7 +2,7 @@ import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
 const data = {
-  labels: [ 'Blue', 'Yellow', 'Green', 'Purple'],
+  labels: [ 'OK', 'Running', 'Schedule', 'KO'],
   datasets: [
     {
       label: '# of Votes',

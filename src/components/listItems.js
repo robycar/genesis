@@ -41,7 +41,7 @@ export const mainListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
-      to="/launching"
+      to="/launching/testcase"
     >
       <ListItemIcon>
         <PlayCircleOutlineIcon />
@@ -100,7 +100,7 @@ export const tertiaryListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
-      to="/report/testsuite"
+      to="/report/testcase"
     >
       <ListItemIcon>
         <BarChartIcon />

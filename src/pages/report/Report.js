@@ -221,26 +221,40 @@ function Report() {
           <Grid container spacing={3}>
             {/* Recent Orders */}
             <Grid item xs={12}>
-              <div className={classes.buttonContainer}>
-                <Button
-                  component={NavLink}
-                  className="button-blue"
-                  activeClassName="button-blue-active"
-                  exact
-                  to="/report/testsuite"
-                >
-                  TEST SUITE
-                </Button>
-                <Button
-                  component={NavLink}
-                  className="button-blue"
-                  activeClassName="button-blue-active"
-                  exact
-                  to="/report/testcase"
-                >
-                  TEST CASE
-                </Button>
-              </div>
+            <div className={classes.bottonTest}>
+            {/* <NavLink exact to="/dashboard/testcase"> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/report/testcase"
+            >
+              Test Case
+            </Button>
+            {/* </NavLink> */}
+
+            {/* <NavLink exact to="/dashboard/testsuite"> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/report/testsuite"
+            >
+              Test Suite
+            </Button>
+            {/* </NavLink> */}
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/report/testgeneratore"
+            >
+              Test Generatore
+            </Button>
+          </div>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>

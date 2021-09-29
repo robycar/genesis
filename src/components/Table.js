@@ -54,7 +54,7 @@ function CustomizedTables() {
         <TableHead>
           <TableRow>
             <StyledTableCell>
-              Test Status Summary - Last 30 Test Suite
+              Test Status Summary - Last 30 Test Case
             </StyledTableCell>
             <StyledTableCell align="right">{""}</StyledTableCell>
             <StyledTableCell align="right">{""}</StyledTableCell>

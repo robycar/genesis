@@ -1,94 +1,65 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
-import {Button} from "@material-ui/core";
+import Modal from "@material-ui/core/Modal";
+import { Button } from "@material-ui/core";
+import ButtonClickedBlue from "./ButtonClickedBlue";
+import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
+import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
+import { Fade, Paper, Typography } from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import BackupIcon from "@material-ui/icons/Backup";
+import FormControl from "@material-ui/core/FormControl";
+import Form from "react-bootstrap/Form";
+import Select from "@material-ui/core/Select";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { MenuItem } from "@material-ui/core";
+import { Divider } from "@material-ui/core";
+import loading from "../../src/assets/load.gif";
+import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
+import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import acccessControl from "../service/url.js";
 
 const TestCaseComplete = () => {
-  const data = [
-    {
-      id: "2541",
-      launcher: "Adam Denisov",
-      nameTS: "PEM_001",
-      startDate: "04/28/2018",
-      endDate: "04/28/2018t",
-      testCase: 10,
-      okResult: 8,
-      koresult: 1,
-      partiallyResoult: 1,
-    },
-    {
-      id: "2541",
-      launcher: "Adam Denisov",
-      nameTS: "PEM_001",
-      startDate: "04/28/2018",
-      endDate: "04/28/2018t",
-      testCase: 10,
-      okResult: 8,
-      koresult: 1,
-      partiallyResoult: 1,
-    },
-    {
-      id: "2541",
-      launcher: "Adam Denisov",
-      nameTS: "PEM_001",
-      startDate: "04/28/2018",
-      endDate: "04/28/2018t",
-      testCase: 10,
-      okResult: 8,
-      koresult: 1,
-      partiallyResoult: 1,
-    },
-    {
-      id: "2541",
-      launcher: "Adam Denisov",
-      nameTS: "PEM_001",
-      startDate: "04/28/2018",
-      endDate: "04/28/2018t",
-      testCase: 10,
-      okResult: 8,
-      koresult: 1,
-      partiallyResoult: 1,
-    },
-  ];
-
   const columns = [
     {
-      title: "ID",
+      title: "Id",
       field: "id",
-      defaultSort:"desc"
+      defaultSort: "desc",
     },
     {
-      title: "Launcher",
-      field: "launcher",
+      title: "Nome Test",
+      field: "nome",
     },
     {
-      title: "Name TS",
-      field: "nameTS",
+      title: "Loader",
+      field: "startedBy",
     },
     {
-      title: "Start Date",
+      title: "Data Inizio",
       field: "startDate",
     },
     {
-      title: "End Date",
+      title: "Data Fine",
       field: "endDate",
     },
     {
-      title: "Test Case",
-      field: "testCase",
+      title: "Status",
+      field: "result",
     },
     {
-      title: "OK Result",
-      field: "okResult",
+      title: "Trace",
+      field: "properties",
     },
     {
-      title: "KO Result",
-      field: "koresult",
+      title: "Call-Id",
+      field: "loadedBy",
     },
     {
-      title: "Partially Result",
-      field: "partiallyResoult",
+      title: "Report",
+      field: "pathInstance",
     },
   ];
 
@@ -146,20 +117,193 @@ const TestCaseComplete = () => {
       marginTop: "4%",
       marginBottom: "2%",
     },
-    export:{
-      backgroundColor:"#cce5ff",
-      color:"#4352db",
-      border:"1px solid #4352db",
-      width:"125px"
-    }
+  
   }));
 
+  const handleChange = () => {
+    setFilter(!filter);
+  };
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
+  const [openSchedula, setOpenSchedula] = React.useState(false);
+  const [openRun, setOpenRun] = React.useState(false);
+  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
+  const [filter, setFilter] = useState(false);
+  const [id, setId] = useState();
+  const [idToRun, setIdToRun] = useState();
+  const [nome, setNome] = useState("");
+  const [creationDate, setCreationDate] = useState();
+  const [modifiedDate, setModifiedDate] = useState();
+  const [data, setData] = useState();
+  const [createdBy, setCreatedBy] = useState("");
+
+  const [appearTest, setAppearTest] = useState([]);
+
+  const [dataLoad, setTestCaseLoad] = useState(null);
+  const [dataRun, setIdTestCaseRun] = useState(null);
+  const [dataCase, setDataCase] = useState();
 
   const handleOpen = () => {
     setOpen(true);
+    getAllTestCaseModal();
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpenSchedula = () => {
+    setOpenSchedula(true);
+    setOpen(false);
+  };
+
+  const handleCloseSchedula = () => {
+    setOpenSchedula(false);
+  };
+
+  const handleOpenRun = (idRun_) => {
+    setIdToRun(idRun_);
+    setOpenRun(true);
+    setOpen(false);
+  };
+
+  const handleCloseRun = () => {
+    setOpenRun(false);
+  };
+
+  const handleChangeData = (newValue) => {
+    setValue(newValue);
+  };
+
+  const testCaseLoader = () => {
+    loadTestCase(id);
+    handleClose();
+    getAllTestCase();
+  };
+
+  const runCaseLoder = () => {
+    runTestCase(idToRun);
+    handleCloseRun();
+    //alert("Run test id :  "+ idToRun);
+  };
+
+  let bearer = `Bearer ${localStorage.getItem("token")}`;
+
+  //-----------GET TEST CASE----------------------
+  const getAllTestCase = () => {
+    var consta = "COMPLETED";
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      includeTestCaseOfType: consta,
+      includeTestSuiteOfType: null,
+      includeTestGeneratoreOfType: null,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        //setAppearTest(result.testCaseList);
+        setData(result.testCaseList);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestCase();
+  }, []);
+
+  /*--------------- LOAD TEST CASE -------------------*/
+
+  const loadTestCase = (id) => {
+    var urlLoad = `/api/testcase/load/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setTestCaseLoad(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  /*--------------- RUN TEST CASE -------------------*/
+
+  const runTestCase = (idRun) => {
+    var urlLoad = `/api/testcase/runloaded/${idRun}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setIdTestCaseRun(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const hadleLoadData = (rowDataaa) => {
+    //console.log(rowDataaa.id);
+    //setIdToRun(rowDataaa.id);
+    runCaseLoder(rowDataaa.id);
+  };
+
+  /*--------------- GET TEST CASE -------------------*/
+
+  const getAllTestCaseModal = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setAppearTest(result.list);
+        setDataCase(result.list);
+      })
+      .catch((error) => console.log("error", error));
   };
 
   return (
@@ -175,6 +319,8 @@ const TestCaseComplete = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
+          exportButton: true,
+
           // selection: true,
           // columnsButton: true,
           // filtering: true,
@@ -182,15 +328,15 @@ const TestCaseComplete = () => {
         actions={[
           {
             icon: () => (
-              <div className={classes.buttonRight}>
+              <div>
                 <Button
-                  className={classes.export}
-                >
-                  EXPORT
-                </Button>
+                size="small"
+                variant="contained"
+                color="secondary"
+                >EXPORT</Button>
               </div>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Export Test Case Table",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },

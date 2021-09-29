@@ -26,9 +26,9 @@ const TestConclusiTable = () => {
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
   const [idToRun, setIdToRun] = useState();
-  const [nome, setNome] =useState("");
+  const [nome, setNome] = useState("");
   const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState(); 
+  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
 
@@ -194,7 +194,6 @@ const TestConclusiTable = () => {
     },
   }));
 
-
   const handleChange = () => {
     setFilter(!filter);
   };
@@ -223,8 +222,8 @@ const TestConclusiTable = () => {
   };
 
   const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_)
-    setOpenRun(true)
+    setIdToRun(idRun_);
+    setOpenRun(true);
     setOpen(false);
   };
 
@@ -242,12 +241,11 @@ const TestConclusiTable = () => {
     getAllTestCase();
   };
 
-
   const runCaseLoder = () => {
     runTestCase(idToRun);
     handleCloseRun();
     //alert("Run test id :  "+ idToRun);
-  }
+  };
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -286,13 +284,11 @@ const TestConclusiTable = () => {
 
   useEffect(() => {
     getAllTestCase();
-    
   }, []);
 
-   /*--------------- LOAD TEST CASE -------------------*/
+  /*--------------- LOAD TEST CASE -------------------*/
 
-   const loadTestCase = (id) => {
-   
+  const loadTestCase = (id) => {
     var urlLoad = `/api/testcase/load/${id}`;
 
     var myHeaders = new Headers();
@@ -313,13 +309,11 @@ const TestConclusiTable = () => {
         setTestCaseLoad(result.list);
       })
       .catch((error) => console.log("error", error));
-        
   };
 
   /*--------------- RUN TEST CASE -------------------*/
 
   const runTestCase = (idRun) => {
-   
     var urlLoad = `/api/testcase/runloaded/${idRun}`;
 
     var myHeaders = new Headers();
@@ -340,7 +334,6 @@ const TestConclusiTable = () => {
         setIdTestCaseRun(result.list);
       })
       .catch((error) => console.log("error", error));
-        
   };
 
   const hadleLoadData = (rowDataaa) => {
@@ -349,15 +342,13 @@ const TestConclusiTable = () => {
     runCaseLoder(rowDataaa.id);
   };
 
-   /*--------------- GET TEST CASE -------------------*/
+  /*--------------- GET TEST CASE -------------------*/
 
-   const getAllTestCaseModal = () => {
-
+  const getAllTestCaseModal = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
 
     var requestOptions = {
       method: "GET",
@@ -374,7 +365,7 @@ const TestConclusiTable = () => {
       })
       .catch((error) => console.log("error", error));
   };
-  
+
   return (
     <div>
       <MaterialTable
@@ -432,12 +423,13 @@ const TestConclusiTable = () => {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-              "Non è presente alcun dato da mostrare"
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
       />
+
+      {/*------------- modale load test -----------*/}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -486,7 +478,6 @@ const TestConclusiTable = () => {
                             value={prova.id}
                           >
                             {prova.nome}
-                            
                           </MenuItem>
                         );
                       })}
@@ -497,22 +488,38 @@ const TestConclusiTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-                <ButtonClickedGreen
+              <Button
                   size="small"
                   variant="contained"
                   color="secondary"
                   nome="Schedula Test"
                   onClick={handleOpenSchedula}
-                />
+                >
+                  Schedula Test
+                </Button>
 
-                <ButtonNotClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
                   id={id}
                   onClick={testCaseLoader}
-                />
+                >
+                  {" "}
+                  Carica Test{" "}
+                </Button>
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  style={{backgroundColor:"#ffeb3b", color: "white"}}
+                  nome="Annulla"
+                  onClick={handleClose}
+                >
+                  {" "}
+                  Annulla{" "}
+                </Button>
               </div>
             </div>
           </Paper>
@@ -581,10 +588,7 @@ const TestConclusiTable = () => {
               <Divider />
 
               <div className={classes.bottone}>
-                <Button 
-                  variant="contained" 
-                  color="primary"
-                >
+                <Button variant="contained" color="primary">
                   Conferma
                 </Button>
 
@@ -627,14 +631,14 @@ const TestConclusiTable = () => {
               </ListItem>
 
               <Divider className={classes.divider} />
-                <Typography className={classes.info}>
-                  <p>Vuoi lanciare il test case da te selezionato ?</p>
-                </Typography>
+              <Typography className={classes.info}>
+                <p>Vuoi lanciare il test case da te selezionato ?</p>
+              </Typography>
               <Divider />
 
               <div className={classes.bottone}>
-                <Button 
-                  variant="contained" 
+                <Button
+                  variant="contained"
                   color="primary"
                   onClick={hadleLoadData}
                 >

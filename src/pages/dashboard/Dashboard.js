@@ -201,7 +201,7 @@ function Dashboard() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/dashboard/testcase"
+              to="/report/testcase"
             >
               Test Case
             </Button>
@@ -213,20 +213,20 @@ function Dashboard() {
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/dashboard/testsuite"
+              to="/report/testsuite"
             >
               Test Suite
             </Button>
             {/* </NavLink> */}
-            <Button
+            {/* <Button
               className="button-green"
               component={NavLink}
               activeClassName="button-green-active"
               exact
-              to="/dashboard/testgeneratore"
+              to="/report/testgeneratore"
             >
               Test Generatore
-            </Button>
+            </Button> */}
           </div>
           <Grid container spacing={3}>
             <Card />
