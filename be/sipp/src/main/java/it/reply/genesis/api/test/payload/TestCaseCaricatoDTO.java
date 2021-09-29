@@ -2,6 +2,7 @@ package it.reply.genesis.api.test.payload;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +24,11 @@ public class TestCaseCaricatoDTO extends DTO {
 
   private Long id;
   
-  private Timestamp loadedWhen;  
+  private Timestamp loadedWhen;
+  
+  private LocalDateTime scheduleDateTime;
+  
+  private Long delay;
 
   private Instant startDate;
   
@@ -77,6 +82,8 @@ public class TestCaseCaricatoDTO extends DTO {
     this.id = vo.getId();
     this.loadedBy = vo.getLoadedBy();
     this.loadedWhen = vo.getLoadedWhen();
+    this.scheduleDateTime = vo.getScheduleDateTime();
+    this.delay = vo.getDelay();
     this.startDate = vo.getStartDate();
     this.endDate = vo.getEndDate();
     this.expectedDuration = vo.getExpectedDuration();
@@ -164,6 +171,8 @@ public class TestCaseCaricatoDTO extends DTO {
     writeField(sb, "version", version);
     writeField(sb, "loadedBy", loadedBy);
     writeField(sb, "loadedWhen", loadedWhen);
+    writeField(sb, "scheduleDateTime", scheduleDateTime);
+    writeField(sb, "delay", delay);
     writeField(sb, "expectedDuration", expectedDuration);
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "stato", stato);
@@ -337,6 +346,22 @@ public class TestCaseCaricatoDTO extends DTO {
 
   public void setResult(ExecutionResult result) {
     this.result = result;
+  }
+
+  public LocalDateTime getScheduleDateTime() {
+    return scheduleDateTime;
+  }
+
+  public void setScheduleDateTime(LocalDateTime scheduleDateTime) {
+    this.scheduleDateTime = scheduleDateTime;
+  }
+
+  public Long getDelay() {
+    return delay;
+  }
+
+  public void setDelay(Long delay) {
+    this.delay = delay;
   }
 
 }

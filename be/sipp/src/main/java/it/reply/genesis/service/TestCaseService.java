@@ -11,6 +11,7 @@ import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.LineaVO;
 import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TestCaseVO;
+import it.reply.genesis.service.dto.ScheduleInfo;
 import it.reply.genesis.service.dto.TestListType;
 
 public interface TestCaseService {
@@ -31,7 +32,7 @@ public interface TestCaseService {
   
   TestCaseVO readVO(long id) throws ApplicationException;
 
-  TestCaseCaricatoDTO loadTestCase(long id) throws ApplicationException;
+  TestCaseCaricatoDTO loadTestCase(long id, ScheduleInfo scheduleInfo) throws ApplicationException;
 
   List<TestCaseCaricatoDTO> readTestCaricatiOfType(TestListType inclusion) throws ApplicationException;
 

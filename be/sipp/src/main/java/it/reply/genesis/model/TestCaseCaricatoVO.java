@@ -3,6 +3,7 @@ package it.reply.genesis.model;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -70,6 +71,12 @@ public class TestCaseCaricatoVO implements Serializable {
   @Column(name="PATH_INSTANCE", length=PATH_INSTANCE_LENGTH)
   private String pathInstance;
 
+  @Column(name="SCHEDULE_DATETIME")
+  private LocalDateTime scheduleDateTime;
+  
+  @Column(name="SCHEDULE_DELAY")
+  private Long delay;
+  
   @ManyToOne
   @JoinColumn(name="ID_LINEA_CHIAMATO")
   private LineaVO lineaChiamato;
@@ -278,6 +285,22 @@ public class TestCaseCaricatoVO implements Serializable {
 
   public void setResult(ExecutionResult result) {
     this.result = result;
+  }
+ 
+  public LocalDateTime getScheduleDateTime() {
+    return scheduleDateTime;
+  }
+
+  public void setScheduleDateTime(LocalDateTime scheduleDateTime) {
+    this.scheduleDateTime = scheduleDateTime;
+  }
+
+  public Long getDelay() {
+    return delay;
+  }
+
+  public void setDelay(Long delay) {
+    this.delay = delay;
   }
 
 }

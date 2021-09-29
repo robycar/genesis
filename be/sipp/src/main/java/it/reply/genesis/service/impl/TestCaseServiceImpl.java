@@ -48,6 +48,7 @@ import it.reply.genesis.service.LineaService;
 import it.reply.genesis.service.OBPService;
 import it.reply.genesis.service.TemplateService;
 import it.reply.genesis.service.TestCaseService;
+import it.reply.genesis.service.dto.ScheduleInfo;
 import it.reply.genesis.service.dto.TestListType;
 
 @Service
@@ -345,7 +346,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   }
 
   @Override
-  public TestCaseCaricatoDTO loadTestCase(long id) throws ApplicationException {
+  public TestCaseCaricatoDTO loadTestCase(long id, ScheduleInfo scheduleInfo) throws ApplicationException {
     logger.debug("enter loadTestCase");
     TestCaseVO tcvo = readVO(id);
     
@@ -358,7 +359,13 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     //vo.setLoadedWhen(null);
     vo.setNome(tcvo.getNome());
     vo.setObpChiamato(tcvo.getObpChiamato());
-    vo.setStato(TestCaseCaricatoStato.READY);
+    if (scheduleInfo == null) {
+      vo.setStato(TestCaseCaricatoStato.READY);
+    } else {
+      vo.setStato(TestCaseCaricatoStato.SCHEDULED);
+      vo.setDelay(scheduleInfo.getDelay());
+      vo.setScheduleDateTime(scheduleInfo.getScheduleDateTime());
+    }
     vo.setTemplate(tcvo.getTemplate());
     vo.setTestCase(tcvo);
     //vo.setVersion(0);
@@ -403,6 +410,9 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     switch (inclusion) {
     case COMPLETED: 
       stato = TestCaseCaricatoStato.COMPLETED;
+      break;
+    case SCHEDULED:
+      stato = TestCaseCaricatoStato.SCHEDULED;
       break;
     case READY:
       stato = TestCaseCaricatoStato.READY;
