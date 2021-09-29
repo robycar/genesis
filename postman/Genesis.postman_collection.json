@@ -8552,6 +8552,34 @@
 							"body": "{\n    \"error\": null\n}"
 						}
 					]
+				},
+				{
+					"name": "testcase_schedule",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"scheduleDateTime\": \"2021-10-03T09:00\",\r\n    \"delay\": 120\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase/schedule",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase",
+								"schedule"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -8759,12 +8787,12 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/tim/sippone2/repo/sipp/be/sipp/src/test/resources/scripts/t1.py"
+									"src": "/C:/tim/sippone2/script/v2/main.py"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{contextUrl}}/api/fs/entityfolder/TEMPLATE/1",
+							"raw": "{{contextUrl}}/api/fs/entityfolder/TEST_CARICATO/4",
 							"host": [
 								"{{contextUrl}}"
 							],
@@ -8772,8 +8800,8 @@
 								"api",
 								"fs",
 								"entityfolder",
-								"TEMPLATE",
-								"1"
+								"TEST_CARICATO",
+								"4"
 							]
 						},
 						"description": "Carica uno o più file nella directory di una entità.\r\nPer i dettagli della url, vedi fs_list_folder"
@@ -10486,7 +10514,7 @@
 								"info"
 							]
 						},
-						"description": "Ottiene i dati da mostrare nella dashboard. Ogni campo \"include*\" nel json di richiesta sono opzionali e possono essere omessi. I valori ammissibili sono (case sensitive):\n- null\n- \"READY\"\n- \"SCHEDULED\"\n- \"WAITING\"\n- \"RUNNING\"\n- \"COMPLETED\"\n\nI dati nel json di risposta saranno popolati solo se li corrispondente campo \"include*\" è presente e diverso da `null`."
+						"description": "Ottiene i dati da mostrare nella dashboard. Ogni campo \"include*\" nel json di richiesta sono opzionali e possono essere omessi. I valori ammissibili sono (case sensitive):\n- null\n- \"READY\"\n- \"SCHEDULED\"\n- \"<u>~~WAITING~~</u>\"\n- \"RUNNING\"\n- \"COMPLETED\"\n\nI dati nel json di risposta saranno popolati solo se li corrispondente campo \"include*\" è presente e diverso da `null`."
 					},
 					"response": []
 				}
