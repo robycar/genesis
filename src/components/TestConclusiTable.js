@@ -50,7 +50,7 @@ const TestConclusiTable = () => {
     },
     {
       title: "Loader",
-      field: "startedBy",
+      field: "loadedBy",
     },
     {
       title: "Data Inizio",
@@ -62,7 +62,7 @@ const TestConclusiTable = () => {
     },
     {
       title: "Status",
-      field: "result",
+      field: "stato",
     },
     {
       title: "Trace",

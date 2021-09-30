@@ -26,33 +26,18 @@ import acccessControl from "../service/url.js";
 
 const TestCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
-  const [nomeTest, setNomeTest] = useState("");
-  const [loader, setLoader] = useState("");
-  const [dataFine, setDataFine] = useState();
-  const [status, setStatus] = useState("");
-  const [trace, setTrace] = useState();
-  const [callId, setCallId] = useState();
-  const [report, setReport] = useState("");
   const [id, setId] = useState();
   const [idToRun, setIdToRun] = useState();
-  const [dataInizio, setDataInizio] = useState();
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
+  const [dataInizio, setDataInizio] = useState("");
   const [data, setData] = useState();
   const [dataCase, setDataCase] = useState();
-  const [createdBy, setCreatedBy] = useState("");
   const [appearTest, setAppearTest] = useState([]);
-  const [orarioInizio, setOrarioInizio] = useState();
-  const [nome, setNome] = useState("");
-  const [delay, setDelay] = useState();
-
+  const [orarioInizio, setOrarioInizio] = useState("");
+  const [delay, setDelay] = useState(0);
+  let scheduleDateTime = "";
   const [dataLoad, setTestCaseLoad] = useState({});
   const [dataRun, setIdTestCaseRun] = useState(null);
-
-  const [includeTestCaseOfType, setincludeTestCaseOfType] = useState("");
-  const [includeTestSuiteOfType, setincludeTestSuiteOfType] = useState("");
-  const [includeTestGeneratoreOfType, setincludeTestGeneratoreOfType] =
-    useState("");
+  const [dataSchedula, setDataSchedula] = useState();
 
   const columns = [
     {
@@ -66,7 +51,7 @@ const TestCaricatiTable = () => {
     },
     {
       title: "Loader",
-      field: "startedBy",
+      field: "loadedBy",
     },
     {
       title: "Data Inizio",
@@ -78,7 +63,7 @@ const TestCaricatiTable = () => {
     },
     {
       title: "Status",
-      field: "result",
+      field: "stato",
     },
     {
       title: "Trace",
@@ -273,6 +258,7 @@ const TestCaricatiTable = () => {
   };
 
   const handleOpenSchedula = () => {
+    
     setOpenSchedula(true);
     setOpen(false);
   };
@@ -456,6 +442,48 @@ const TestCaricatiTable = () => {
     runCaseLoader(rowDataaa.id);
   };
 
+  /*------------------ SCHEDULA TEST ------------------*/
+
+  const schedulaTestCase = () => {
+    const invia = () => {
+      scheduleDateTime = dataInizio + "T" + orarioInizio;
+      console.log(scheduleDateTime, "schedule date time" )
+      console.log(dataInizio, "data inizio");
+      console.log(orarioInizio, "orario");
+
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+      var raw = JSON.stringify({
+        id: id,
+        scheduleDateTime: scheduleDateTime,
+        delay: delay,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/testcase/schedule`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          setDataSchedula(result.testCaseCaricato);
+          handleCloseSchedula();
+        })
+        .catch((error) => console.log("error", error));
+    };
+    invia();
+  };
+
+ 
+
   return (
     <div>
       <MaterialTable
@@ -608,7 +636,7 @@ const TestCaricatiTable = () => {
                 <Button
                   size="small"
                   variant="contained"
-                  style={{backgroundColor:"#ffeb3b", color: "white"}}
+                  style={{ backgroundColor: "#ffeb3b", color: "white" }}
                   nome="Annulla"
                   onClick={handleClose}
                 >
@@ -704,7 +732,11 @@ const TestCaricatiTable = () => {
               <Divider />
 
               <div className={classes.bottone}>
-                <Button variant="contained" color="primary">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={schedulaTestCase}
+                >
                   Conferma
                 </Button>
 

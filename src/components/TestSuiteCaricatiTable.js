@@ -34,7 +34,6 @@ const TestSuiteCaricatiTable = () => {
   const [dataInizio, setDataInizio] = useState("");
   const [orarioInizio, setOrarioInizio] = useState("");
   const [delay, setDelay] = useState("");
-
   
 
   const columns = [

@@ -24,13 +24,17 @@ import "../styles/App.css";
 
 const TestGeneratoreConclusiTable = () => {
   const [id, setId] = useState();
-  const [nome, setNome] =useState("");
+  const [nome, setNome] = useState("");
   const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState(); 
+  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
+  const [name, setName] = useState("");
+  const [rate, setRate] = useState();
+  const [testDuration, setTestDuration] = useState();
+  const [callDuration, setCallDuration] = useState();
 
-  
+
 
   const columns = [
     {
@@ -225,41 +229,41 @@ const TestGeneratoreConclusiTable = () => {
     setValue(newValue);
   };
 
-/*------------- GET TEST GEN -------------*/
+  /*------------- GET TEST GEN -------------*/
 
-let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
-if (bearer != null) {
-  bearer = bearer.replace(/"/g, "");
-}
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
 
-const [appearTest, setAppearTest] = useState([]);
+  const [appearTest, setAppearTest] = useState([]);
 
-const getAllTestGeneratore = () => {
-  var myHeaders = new Headers();
-  myHeaders.append("Authorization", bearer);
-  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const getAllTestGeneratore = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  var requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow",
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testgen`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setAppearTest(result.list);
+        setData(result.list)
+      })
+      .catch((error) => console.log("error", error));
   };
 
-  fetch(`/api/testgen`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      setAppearTest(result.list);
-      setData(result.list)
-    })
-    .catch((error) => console.log("error", error));
-};
-
-useEffect(() => {
-  getAllTestGeneratore();
-}, []);
+  useEffect(() => {
+    getAllTestGeneratore();
+  }, []);
 
   return (
     <div>
@@ -306,18 +310,18 @@ useEffect(() => {
             actions: "Azioni",
           },
         }}
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
+      // components={{
+      //   Toolbar: (props) => (
+      //     <div>
+      //       <MTableToolbar {...props} />
+      //       <div className="button-load-test">
+      //         <Button variant="contained" color="primary">
+      //           LOAD TEST CASE
+      //         </Button>
+      //       </div>
+      //     </div>
+      //   ),
+      // }}
       />
       {/* ------------------ MODALE LOAD TEST GENERATORE --------------------- */}
       <Modal
@@ -335,7 +339,7 @@ useEffect(() => {
         <Fade in={open}>
           <Paper className={classes.paperModale} elevation={1}>
             <div>
-            <div className={classes.divIntestazione}>
+              <div className={classes.divIntestazione}>
                 <ListItem button>
                   <ListItemIcon>
                     <BackupIcon className={classes.icon} />
@@ -358,7 +362,7 @@ useEffect(() => {
                     <Select
                       className={classes.select}
                       value={appearTest.nome}
-                      onChange={(e) => setNome(e.target.value)}
+                      onChange={(e) => setName(e.target.value)}
                     >
                       {appearTest.map((prova) => {
                         return (
@@ -372,6 +376,73 @@ useEffect(() => {
                         );
                       })}
                     </Select>
+                    <br />
+                    {name && <>
+                      <Form.Label>Rate </Form.Label>
+                      <FormControl variant="outlined">
+                        <Select
+                          className={classes.select}
+                          value={rate}
+                          onChange={(e) => setRate(e.target.value)}
+                        >
+                          {[5, 10, 15, 20, 25].map((rate) => {
+                            return (
+                              <MenuItem
+                                style={{ width: "423px" }}
+                                key={rate}
+                                value={rate}
+                              >
+                                {rate} secondi
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                      <br />
+                      <Form.Label>Durata Test (s)</Form.Label>
+                      <FormControl variant="outlined">
+                        <Select
+                          className={classes.select}
+                          value={testDuration}
+                          onChange={(e) => setTestDuration(e.target.value)}
+                        >
+                          {[{ label: "5 minuti", value: 5 },
+                          { label: "10 minuti", value: 10 },
+                          { label: "20 minuti", value: 20 },
+                          { label: "30 minuti", value: 30 },
+                          { label: "60 minuti", value: 60 },
+                          { label: "120 minuti", value: 120 },
+                          { label: "360 minuti", value: 360 },
+                          { label: "720 minuti", value: 720 },
+                          { label: "24 ore", value: 1440 },
+                          { label: "48 ore", value: 2880 }
+                          ].map((testDuration) => {
+                            return (
+                              <MenuItem
+                                style={{ width: "423px" }}
+                                key={testDuration.label}
+                                value={testDuration.value}
+                              >
+                                {testDuration.label}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                      <br />
+                      <Form.Label>Durata Chiamata </Form.Label>
+                      <Form.Control
+                        max={rate * 60 * testDuration}
+                        type="number"
+                        value={callDuration}
+                        placeholder="60"
+                        onChange={(e) => {
+                          const newValue = parseInt(e.target.value);
+                          const maxValue = rate * 60 * testDuration;
+                          setCallDuration(Math.min(newValue, maxValue));
+                        }}
+                      />
+                    </>}
                   </FormControl>
                 </Form.Group>
               </div>
@@ -396,7 +467,7 @@ useEffect(() => {
             </div>
           </Paper>
         </Fade>
-      </Modal>
+      </Modal >
 
       {/* ------------------ MODALE SCHEDULA TEST GENERATORE --------------------- */}
       <Modal
@@ -414,7 +485,7 @@ useEffect(() => {
         <Fade in={openSchedula}>
           <Paper className={classes.paperModale} elevation={1}>
             <div>
-              <ListItem button style={{marginLeft: "12%"}}>
+              <ListItem button style={{ marginLeft: "12%" }}>
                 <ListItemIcon>
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
@@ -427,11 +498,11 @@ useEffect(() => {
               <div className={classes.divContent}>
                 <Paper elevation={2} className={classes.calendarPaper}>
                   <Typography variant="h5">Calendario</Typography>
-                  <Divider/>
+                  <Divider />
                   <div className={classes.divInput}>
                     <label for="start">Start date:</label>
                     <input
-                    
+
                       type="date"
                       id="start"
                       name="trip-start"
@@ -448,7 +519,7 @@ useEffect(() => {
 
                     <label for="appt">Start Time:</label>
                     <input
-                    style={{width: "135px"}}
+                      style={{ width: "135px" }}
                       type="time"
                       id="appt"
                       name="appt"

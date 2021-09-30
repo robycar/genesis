@@ -50,11 +50,12 @@ const TestSchedulatiTable = () => {
     },
     {
       title: "Loader",
-      field: "startedBy",
+      field: "loadedBy",
     },
     {
       title: "Data Inizio",
-      field: "startDate",
+      field: "dataInizio",
+    
     },
     {
       title: "Data Fine",
@@ -62,7 +63,7 @@ const TestSchedulatiTable = () => {
     },
     {
       title: "Status",
-      field: "result",
+      field: "stato",
     },
     {
       title: "Trace",
@@ -207,7 +208,7 @@ const TestSchedulatiTable = () => {
 
   const handleOpen = () => {
     setOpen(true);
-    getAllTestCaseModal();
+    // getAllTestCaseModal();
   };
 
   const handleClose = () => {
@@ -238,14 +239,14 @@ const TestSchedulatiTable = () => {
   };
 
   const testCaseLoader = () => {
-    loadTestCase(id);
+    // loadTestCase(id);
     handleClose();
     getAllTestCase();
   };
 
 
   const runCaseLoder = () => {
-    runTestCase(idToRun);
+    // runTestCase(idToRun);
     handleCloseRun();
     //alert("Run test id :  "+ idToRun);
   }
@@ -254,7 +255,7 @@ const TestSchedulatiTable = () => {
 
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
-    var consta = "WAITING";
+    var consta = "SCHEDULED";
 
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -291,59 +292,59 @@ const TestSchedulatiTable = () => {
 
   /*--------------- LOAD TEST CASE -------------------*/
 
-  const loadTestCase = (id) => {
+  // const loadTestCase = (id) => {
    
-    var urlLoad = `/api/testcase/load/${id}`;
+  //   var urlLoad = `/api/testcase/load/${id}`;
 
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
 
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setTestCaseLoad(result.list);
-      })
-      .catch((error) => console.log("error", error));
+  //   fetch(urlLoad, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       console.log(result);
+  //       setTestCaseLoad(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
         
-  };
+  // };
 
   /*--------------- RUN TEST CASE -------------------*/
 
-  const runTestCase = (idRun) => {
+  // const runTestCase = (idRun) => {
    
-    var urlLoad = `/api/testcase/runloaded/${idRun}`;
+  //   var urlLoad = `/api/testcase/runloaded/${idRun}`;
 
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
 
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setIdTestCaseRun(result.list);
-      })
-      .catch((error) => console.log("error", error));
+  //   fetch(urlLoad, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       console.log(result);
+  //       setIdTestCaseRun(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
         
-  };
+  // };
 
-  const hadleLoadData = (rowDataaa) => {
+  const handleLoadData = (rowDataaa) => {
     //console.log(rowDataaa.id);
     //setIdToRun(rowDataaa.id);
     runCaseLoder(rowDataaa.id);
@@ -351,29 +352,29 @@ const TestSchedulatiTable = () => {
 
    /*--------------- GET TEST CASE -------------------*/
 
-   const getAllTestCaseModal = () => {
+  //  const getAllTestCaseModal = () => {
 
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
 
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
 
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setAppearTest(result.list);
-        setDataCase(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  //   fetch(`/api/testcase`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       console.log(result);
+  //       setAppearTest(result.list);
+  //       setDataCase(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
 
   return (
     <div>
@@ -497,38 +498,22 @@ const TestSchedulatiTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-              <Button
+                <ButtonClickedGreen
                   size="small"
                   variant="contained"
                   color="secondary"
                   nome="Schedula Test"
                   onClick={handleOpenSchedula}
-                >
-                  Schedula Test
-                </Button>
+                />
 
-                <Button
+                <ButtonNotClickedGreen
                   size="small"
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
                   id={id}
                   onClick={testCaseLoader}
-                >
-                  {" "}
-                  Carica Test{" "}
-                </Button>
-
-                <Button
-                  size="small"
-                  variant="contained"
-                  style={{backgroundColor:"#ffeb3b", color: "white"}}
-                  nome="Annulla"
-                  onClick={handleClose}
-                >
-                  {" "}
-                  Annulla{" "}
-                </Button>
+                />
               </div>
             </div>
           </Paper>
@@ -652,7 +637,7 @@ const TestSchedulatiTable = () => {
                 <Button 
                   variant="contained" 
                   color="primary"
-                  onClick={hadleLoadData}
+                  onClick={handleLoadData}
                 >
                   Lancio
                 </Button>

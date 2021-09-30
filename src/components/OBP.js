@@ -366,9 +366,9 @@ function Obp() {
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
+      marginTop: "2%",
       flexDirection: "row",
-      marginBottom: "5%",
+      marginBottom: "3%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -414,7 +414,7 @@ function Obp() {
       flexDirection: "row",
     },
     textField: {
-      width: "200px",
+      width: "270px",
     },
     bottone: {
       marginLeft: "55px",
@@ -671,6 +671,7 @@ function Obp() {
 
                 <Col className={classes.colIp}>
                   <TextField
+                  className={classes.textField}
                     select
                     label="Tipo Linea"
                     value={appearLine.id}

@@ -37,10 +37,13 @@ const TestCaricatiTable = () => {
   const [includeTestSuiteOfType, setincludeTestSuiteOfType] = useState("");
   const [includeTestGeneratoreOfType, setincludeTestGeneratoreOfType] =
     useState("");
-    const [dataInizio, setDataInizio] = useState("");
-    const [orarioInizio, setOrarioInizio] = useState("");
-    const [delay, setDelay] = useState("");
-
+  const [name, setName] = useState("");
+  const [rate, setRate] = useState();
+  const [testDuration, setTestDuration] = useState();
+  const [callDuration, setCallDuration] = useState();
+  const [dataInizio, setDataInizio] = useState("");
+  const [orarioInizio, setOrarioInizio] = useState("");
+  const [delay, setDelay] = useState("");
 
   const columns = [
     {
@@ -517,7 +520,7 @@ const TestCaricatiTable = () => {
                     <Select
                       className={classes.select}
                       value={appearTest.nome}
-                      onChange={(e) => setNome(e.target.value)}
+                      onChange={(e) => setName(e.target.value)}
                     >
                       {appearTest.map((prova) => {
                         return (
@@ -531,6 +534,73 @@ const TestCaricatiTable = () => {
                         );
                       })}
                     </Select>
+                    <br />
+                    {name && <>
+                      <Form.Label>Rate </Form.Label>
+                      <FormControl variant="outlined">
+                        <Select
+                          className={classes.select}
+                          value={rate}
+                          onChange={(e) => setRate(e.target.value)}
+                        >
+                          {[5, 10, 15, 20, 25].map((rate) => {
+                            return (
+                              <MenuItem
+                                style={{ width: "423px" }}
+                                key={rate}
+                                value={rate}
+                              >
+                                {rate} secondi
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                      <br />
+                      <Form.Label>Durata Test (s)</Form.Label>
+                      <FormControl variant="outlined">
+                        <Select
+                          className={classes.select}
+                          value={testDuration}
+                          onChange={(e) => setTestDuration(e.target.value)}
+                        >
+                          {[{ label: "5 minuti", value: 5 },
+                          { label: "10 minuti", value: 10 },
+                          { label: "20 minuti", value: 20 },
+                          { label: "30 minuti", value: 30 },
+                          { label: "60 minuti", value: 60 },
+                          { label: "120 minuti", value: 120 },
+                          { label: "360 minuti", value: 360 },
+                          { label: "720 minuti", value: 720 },
+                          { label: "24 ore", value: 1440 },
+                          { label: "48 ore", value: 2880 }
+                          ].map((testDuration) => {
+                            return (
+                              <MenuItem
+                                style={{ width: "423px" }}
+                                key={testDuration.label}
+                                value={testDuration.value}
+                              >
+                                {testDuration.label}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </FormControl>
+                      <br />
+                      <Form.Label>Durata Chiamata </Form.Label>
+                      <Form.Control
+                        max={rate * 60 * testDuration}
+                        type="number"
+                        value={callDuration}
+                        placeholder="60"
+                        onChange={(e) => {
+                          const newValue = parseInt(e.target.value);
+                          const maxValue = rate * 60 * testDuration;
+                          setCallDuration(Math.min(newValue, maxValue));
+                        }}
+                      />
+                    </>}
                   </FormControl>
                 </Form.Group>
               </div>
@@ -550,14 +620,12 @@ const TestCaricatiTable = () => {
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
-                  id={id}
-                  onClick={testGenLoader}
                 />
               </div>
             </div>
           </Paper>
         </Fade>
-      </Modal>
+      </Modal >
 
       {/* ------------------ MODALE SCHEDULA TEST GENERATORE --------------------- */}
       <Modal
@@ -626,7 +694,7 @@ const TestCaricatiTable = () => {
                   <div className={classes.divInput}>
                     <label for="appt" >Delay:</label>
                     <input
-                      style={{ width: "100px"}}
+                      style={{ width: "100px" }}
                       type="number"
                       id=""
                       name=""

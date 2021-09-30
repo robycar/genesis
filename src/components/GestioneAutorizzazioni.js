@@ -130,7 +130,7 @@ const useStyles = makeStyles((theme) => ({
 
 function FormCreaRuolo() {
   const classes = useStyles();
-  
+
   const [appState, changeState] = useState({
     activeObject: null,
     objects: [
@@ -138,11 +138,6 @@ function FormCreaRuolo() {
       // { id: 2, name: "Gestione Utenti" },
     ],
   });
-
-  window.onload = function () {
-    document.getElementById("1Gestione Ruoli").click();
-  };
-  //  ||appState.activeObject === null
 
   return (
     <>

@@ -326,18 +326,18 @@ function TestCaseTable() {
               "Non è possibile eliminare un test case che non appartiene al proprio gruppo"
             );
           }
-          if (result.error === "Internal Server Error") {
-            setWarning(
-              "Non è possibile eliminare un test case che è legato a una o piÃ¹ Test Suite"
-            );
-          } else {
-            setWarning(
-              "Codice errore:" +
-                result.error.code +
-                "Descrizione" +
-                result.code.description
-            );
-          }
+          // if (result.error === "Internal Server Error") {
+          //   setWarning(
+          //     "Non è possibile eliminare un test case che è legato a una o piÃ¹ Test Suite"
+          //   );
+          // } else {
+          //   setWarning(
+          //     "Codice errore:" +
+          //       result.error.code +
+          //       "Descrizione" +
+          //       result.code.description
+          //   );
+          // }
         } else {
           setOpenWarning(false);
           getAllTestCase();

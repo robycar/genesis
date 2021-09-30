@@ -30,7 +30,6 @@ import axios from "axios";
 function Template() {
   const [data, setData] = useState([]);
   const [dataFolder, setDataFolder] = useState([]);
-  const [dataFolderFile, setDataFolderFile] = useState("");
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -52,9 +51,6 @@ function Template() {
   const [chiamanti, setChiamanti] = useState([]);
   const [url, setUrl] = useState("");
   const [contenutoFile, setContenutoFile] = useState("");
-  console.log(contenutoFile, "Sono un contenuto");
-
-  // console.log(appearFile, "appearFile");
 
   //----- GET TEMPLATE -------
 
@@ -120,7 +116,6 @@ function Template() {
       .then((response) => response.json())
       .then((result) => {
         setAppearFile(result.list);
-        console.log("ciao", result);
       })
       .catch((error) => console.log("error", error));
   };
@@ -286,6 +281,7 @@ function Template() {
   const [idElemento, setIdElemento] = React.useState(0);
   const [openChiama, setOpenChiama] = useState(false);
   const [openFile, setOpenFile] = useState(false);
+  const [path, setPath] = useState("");
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
@@ -354,11 +350,12 @@ function Template() {
 
   /*--------------MODALE VISUALIZZA CONTENUTO FILE -----------*/
   const [visualizzaContenutoFile, setVisualizzaContenutoFile] = useState(false);
+  const [modificaContenutoFile, setModificaContenutoFile] = useState(false);
 
   const handleOpenVisualizzaContenutoFile = (rowData) => {
     getDownloadFile(rowData.url);
-    setVisualizzaContenutoFile(true);
-    // setModifica(false);
+    setModificaContenutoFile(false);
+    setPath(rowData.path);
   };
 
   const handleCloseVisualizzaContenutoFile = () => {
@@ -366,23 +363,20 @@ function Template() {
   };
 
   /*--------------MODALE MODIFICA CONTENUTO FILE -----------*/
-  const [modificaContenutoFile, setModificaContenutoFile] = useState(false);
 
   const handleOpenModificaContenutoFile = (rowData) => {
     getDownloadFile(rowData.url);
     setModificaContenutoFile(true);
-    // setModifica(true);
     setUrl(rowData.url);
+    setPath(rowData.path);
   };
-  // console.log(url, "Url");
 
   const handleCloseModificaContenutoFile = () => {
     setModificaContenutoFile(false);
   };
 
-  // const aggiornaFile = () => {
-  //   modifyFiles(url);
-  //   // setModificaContenutoFile(false);
+  // const aggiornaFile = (rowData) => {
+  //   modifyFiles(rowData.url);
   // };
 
   /*--------------MODALE DELETE TEMPLATE -----------*/
@@ -592,7 +586,8 @@ function Template() {
     fetch(`${url}`, requestOptions)
       .then((response) => response.text())
       .then((result) => {
-        setDataFolderFile(result);
+        setContenutoFile(result);
+        setVisualizzaContenutoFile(true);
       })
       .catch((error) => console.log("error", error));
   };
@@ -670,9 +665,9 @@ function Template() {
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
+      marginTop: "2%",
       flexDirection: "row",
-      marginBottom: "5%",
+      marginBottom: "3%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -714,8 +709,8 @@ function Template() {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
-      height: 700,
-      width: 800,
+      width: 750,
+      height: "fit-content",
       position: "relative",
     },
     paperModaleChiama: {
@@ -748,11 +743,11 @@ function Template() {
     contenutoModale: {
       height: 370,
       overflowX: "hidden",
+      padding: "2%",
     },
-    buttonModale: {
-      bottom: 0,
-    },
+    
     col: {
+      width: "110px",
       padding: "3%",
       height: "106px",
     },
@@ -760,7 +755,8 @@ function Template() {
       width: "600px",
     },
     textField: {
-      width: "200px",
+      width: "270px",
+    
     },
     // bottoneAnnulla: {
     //   width: "128px",
@@ -921,7 +917,7 @@ function Template() {
               </div>
 
               <Form className={classes.contenutoModale}>
-                <Row>
+              <Row className={classes.row}>              
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -951,8 +947,8 @@ function Template() {
                     />
                   </Col>
                 </Row>
-                <Row>
-                  <Col className={classes.col}>
+                <Row className={classes.row}>
+                                    <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       error={durata !== "" ? false : true}
@@ -977,7 +973,7 @@ function Template() {
                   </Col>
                 </Row>
 
-                <Row>
+                <Row className={classes.row}>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -1000,7 +996,7 @@ function Template() {
                   </Col>
                 </Row>
 
-                <Row>
+                <Row className={classes.row}>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -1157,7 +1153,11 @@ function Template() {
               <Divider className={classes.divider} />
               <div className={classes.bottoniModaleChiamanti}>
                 {modifica === false ? (
-                  ""
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="File"
+                    onClick={handleOpenFile}
+                  />
                 ) : (
                   <>
                     <ButtonClickedGreen
@@ -1205,7 +1205,9 @@ function Template() {
               <div>
                 <Divider className={classes.divider} />
                 <MaterialTable
-                  title="Modifica File"
+                  title={
+                    modifica === true ? "Modifica File" : "Visualizza File"
+                  }
                   data={appearFile}
                   isLoading={caricamento}
                   columns={columnsFile}
@@ -1213,6 +1215,7 @@ function Template() {
                     sorting: true,
                     actionsColumnIndex: -1,
                     search: false,
+
                     pageSizeOptions: [
                       5,
                       10,
@@ -1253,6 +1256,7 @@ function Template() {
                       onClick: (event, rowData) =>
                         handleOpenModificaContenutoFile(rowData),
                       position: "row",
+                      hidden: modifica === false ? "true" : null,
                     },
                     (rowData) => ({
                       icon: () => <DeleteIcon />,
@@ -1264,33 +1268,38 @@ function Template() {
                         chiamanti[0] === rowData.id ||
                         chiamanti[1] === rowData.id ||
                         chiamanti[2] === rowData.id,
+                      hidden: modifica === false ? "true" : null,
                     }),
                   ]}
                 />
 
                 <Divider className={classes.divider} />
                 <div className={classes.bottoniModaleFile}>
-                  <input
-                    // accept=".xml"
-                    style={{ display: "none" }}
-                    className={classes.input}
-                    id="contained-button-file"
-                    multiple
-                    type="file"
-                    name="file"
-                    onChange={changeHandler}
-                  />
-                  <label htmlFor="contained-button-file">
-                    <Button
-                      style={{ height: "36px", width: "87px" }}
-                      variant="contained"
-                      color="secondary"
-                      component="span"
-                      onClick={handleSubmission}
-                    >
-                      Carica
-                    </Button>
-                  </label>
+                  {modifica === true && (
+                    <>
+                      <input
+                        // accept=".xml"
+                        style={{ display: "none" }}
+                        className={classes.input}
+                        id="contained-button-file"
+                        multiple
+                        type="file"
+                        name="file"
+                        onChange={changeHandler}
+                      />
+                      <label htmlFor="contained-button-file">
+                        <Button
+                          style={{ height: "36px", width: "87px" }}
+                          variant="contained"
+                          color="secondary"
+                          component="span"
+                          onClick={handleSubmission}
+                        >
+                          Carica
+                        </Button>
+                      </label>
+                    </>
+                  )}
 
                   <Button
                     style={{ marginLeft: "2%", height: "36px", width: "87px" }}
@@ -1358,7 +1367,7 @@ function Template() {
           </div>
         </Fade>
       </Modal>
-      {/*------------------ MODALE VISUALIZZA CONTENUTO FILE --------------- */}
+      {/*------------------ MODALE VISUALIZZA / MODIFICA CONTENUTO FILE --------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -1377,38 +1386,14 @@ function Template() {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Visualizza Template <b>{nomeTitolo}</b>
+                    {modificaContenutoFile === false
+                      ? "Visualizza "
+                      : "Modifica "}{" "}
+                    Template <b>{path}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
-              {/* <Row>
-                <Col className={classes.colIp}>
-                  <TextField
-                    select
-                    label="File XML"
-                    value={pathFolder?.url}
-                    defaultValue={pathFolder?.url}
-                    onChange={(e) => {
-                      setUrl(e.target.value);
-                      getDownloadFile(url);
-
-                      console.log(e.target.value, "URL");
-                    }}
-                  >
-                    {pathFolder?.map(
-                      (folder) => (
-                        console.log(folder, "folkder"),
-                        (
-                          <MenuItem key={folder.id} value={folder.url}>
-                            {folder.path}
-                          </MenuItem>
-                        )
-                      )
-                    )}
-                  </TextField>
-                </Col>
-              </Row> */}
 
               <Form className={classes.contenutoModale}>
                 <Row className={classes.rowContent}>
@@ -1417,11 +1402,12 @@ function Template() {
                       multiline
                       rows={15}
                       className={classes.textArea}
+                      value={contenutoFile}
                       onChange={(e) => setContenutoFile(e.target.value)}
                       label=""
-                      defaultValue={dataFolderFile}
                       InputProps={{
-                        readOnly: modifica === false ? true : false,
+                        readOnly:
+                          modificaContenutoFile === false ? true : false,
                       }}
                     />
                   </Col>
@@ -1433,107 +1419,30 @@ function Template() {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  <ButtonNotClickedGreen
+                  {/* <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseVisualizzaContenutoFile}
                     size="medium"
                     nome="Indietro"
-                  />
-                </div>
-              </div>
-            </Paper>
-          </div>
-        </Fade>
-      </Modal>
+                  /> */}
 
-      {/*------------------ MODALE MODIFICA CONTENUTO FILE --------------- */}
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={modificaContenutoFile}
-        onClose={handleCloseModificaContenutoFile}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={modificaContenutoFile}>
-          <div>
-            <Paper className={classes.paperModale} elevation={1}>
-              <div>
-                <ListItem>
-                  <Typography className={classes.intestazione} variant="h4">
-                    Modifica Template <b>{nomeTitolo}</b>
-                  </Typography>
-                </ListItem>
-                <Divider className={classes.divider} />
-              </div>
-              {/* <Row>
-                <Col className={classes.colIp}>
-                  <TextField
-                    select
-                    label="File XML"
-                    value={pathFolder?.url}
-                    defaultValue={pathFolder?.url}
-                    onChange={(e) => {
-                      setUrl(e.target.value);
-                      getDownloadFile(url);
-
-                      console.log(e.target.value, "URL");
-                    }}
-                  >
-                    {pathFolder?.map(
-                      (folder) => (
-                        console.log(folder, "folkder"),
-                        (
-                          <MenuItem key={folder.id} value={folder.url}>
-                            {folder.path}
-                          </MenuItem>
-                        )
-                      )
-                    )}
-                  </TextField>
-                </Col>
-              </Row> */}
-
-              <Form className={classes.contenutoModale}>
-                <Row className={classes.rowContent}>
-                  <Col className={classes.col}>
-                    <TextField
-                      multiline
-                      rows={15}
-                      className={classes.textArea}
-                      onChange={(e) => setContenutoFile(e.target.value)}
-                      label=""
-                      defaultValue={dataFolderFile}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
+                  {modificaContenutoFile === false ? (
+                    ""
+                  ) : (
+                    <ButtonClickedGreen
+                      size="medium"
+                      nome="Aggiorna"
+                      onClick={modifyFiles}
                     />
-                  </Col>
-                </Row>
-              </Form>
-              <div className={classes.buttonModale}>
-                <Divider className={classes.divider} />
-                <div
-                  className={classes.bottoneModaleChiamanti}
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                  <ButtonClickedGreen
-                    size="medium"
-                    nome="Aggiorna"
-                    onClick={() => {
-                      modifyFiles();
-                    }}
-                  />
+                  )}
 
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
-                    onClick={handleCloseModificaContenutoFile}
+                    onClick={handleCloseVisualizzaContenutoFile}
                     size="medium"
-                    nome="Indietro"
+                    nome={
+                      modificaContenutoFile === false ? "Indietro" : "Annulla"
+                    }
                   />
                 </div>
               </div>

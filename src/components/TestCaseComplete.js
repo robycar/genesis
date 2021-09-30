@@ -35,7 +35,7 @@ const TestCaseComplete = () => {
     },
     {
       title: "Loader",
-      field: "startedBy",
+      field: "loadedBy",
     },
     {
       title: "Data Inizio",
@@ -47,7 +47,7 @@ const TestCaseComplete = () => {
     },
     {
       title: "Status",
-      field: "result",
+      field: "stato",
     },
     {
       title: "Trace",
@@ -117,75 +117,14 @@ const TestCaseComplete = () => {
       marginTop: "4%",
       marginBottom: "2%",
     },
-  
   }));
 
-  const handleChange = () => {
-    setFilter(!filter);
-  };
+ 
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [openSchedula, setOpenSchedula] = React.useState(false);
-  const [openRun, setOpenRun] = React.useState(false);
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
-  const [filter, setFilter] = useState(false);
-  const [id, setId] = useState();
-  const [idToRun, setIdToRun] = useState();
-  const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
+  const [open, setOpen] = React.useState(false); 
   const [data, setData] = useState();
-  const [createdBy, setCreatedBy] = useState("");
 
-  const [appearTest, setAppearTest] = useState([]);
-
-  const [dataLoad, setTestCaseLoad] = useState(null);
-  const [dataRun, setIdTestCaseRun] = useState(null);
-  const [dataCase, setDataCase] = useState();
-
-  const handleOpen = () => {
-    setOpen(true);
-    getAllTestCaseModal();
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleOpenSchedula = () => {
-    setOpenSchedula(true);
-    setOpen(false);
-  };
-
-  const handleCloseSchedula = () => {
-    setOpenSchedula(false);
-  };
-
-  const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_);
-    setOpenRun(true);
-    setOpen(false);
-  };
-
-  const handleCloseRun = () => {
-    setOpenRun(false);
-  };
-
-  const handleChangeData = (newValue) => {
-    setValue(newValue);
-  };
-
-  const testCaseLoader = () => {
-    loadTestCase(id);
-    handleClose();
-    getAllTestCase();
-  };
-
-  const runCaseLoder = () => {
-    runTestCase(idToRun);
-    handleCloseRun();
-    //alert("Run test id :  "+ idToRun);
-  };
+  
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -226,85 +165,7 @@ const TestCaseComplete = () => {
     getAllTestCase();
   }, []);
 
-  /*--------------- LOAD TEST CASE -------------------*/
 
-  const loadTestCase = (id) => {
-    var urlLoad = `/api/testcase/load/${id}`;
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setTestCaseLoad(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  /*--------------- RUN TEST CASE -------------------*/
-
-  const runTestCase = (idRun) => {
-    var urlLoad = `/api/testcase/runloaded/${idRun}`;
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setIdTestCaseRun(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  const hadleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
-    runCaseLoder(rowDataaa.id);
-  };
-
-  /*--------------- GET TEST CASE -------------------*/
-
-  const getAllTestCaseModal = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setAppearTest(result.list);
-        setDataCase(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
 
   return (
     <div>
@@ -329,15 +190,13 @@ const TestCaseComplete = () => {
           {
             icon: () => (
               <div>
-                <Button
-                size="small"
-                variant="contained"
-                color="secondary"
-                >EXPORT</Button>
+                <Button size="small" variant="contained" color="secondary">
+                  EXPORT
+                </Button>
               </div>
             ),
             tooltip: "Export Test Case Table",
-            onClick: () => handleOpen(),
+            // onClick: () => handleOpen(),
             isFreeAction: true,
           },
         ]}

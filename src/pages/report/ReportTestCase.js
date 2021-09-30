@@ -145,6 +145,7 @@ const useStyles = makeStyles((theme) => ({
     width: "36%",
     flexDirection: "column",
     marginLeft: "2%",
+    marginBottom: "2%"
   },
   img: {
     width: "100%",

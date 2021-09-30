@@ -26,7 +26,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 
-
 function Linee() {
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -66,7 +65,9 @@ function Linee() {
     },
     intestazione: {
       color: "#47B881",
+      marginTop: "2%",
       flexDirection: "row",
+      marginBottom: "3%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -92,10 +93,11 @@ function Linee() {
       boxShadow: theme.shadows[5],
       padding: "4%",
       width: "fit-content",
-      height: "80%",
+      height: "fit-contet",
     },
     col: {
       padding: "3%",
+      height: "106px",
     },
     colIp: {
       width: "110px",
@@ -111,7 +113,7 @@ function Linee() {
       flexDirection: "row",
     },
     textField: {
-      width: "200px",
+      width: "270px",
     },
     bottone: {
       marginLeft: "55px",
@@ -188,7 +190,7 @@ function Linee() {
   const [porta, setPorta] = useState();
   const [password, setPassword] = useState("");
   const [typeLinea, setTypeLinea] = useState();
-  const [caricamento, setCaricamento] = useState(false)
+  const [caricamento, setCaricamento] = useState(false);
 
   const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
@@ -217,7 +219,7 @@ function Linee() {
   // -------get linea-----------
 
   const getLinea = () => {
-    setCaricamento(true)
+    setCaricamento(true);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -233,7 +235,7 @@ function Linee() {
       .then((response) => response.json())
       .then((result) => {
         setData(result.list);
-        setCaricamento(false)
+        setCaricamento(false);
       })
       .catch((error) => console.log("error", error));
   };
@@ -497,9 +499,7 @@ function Linee() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-                "Non è presente alcun dato da mostrare"
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
       />
@@ -530,41 +530,6 @@ function Linee() {
             </div>
 
             <Paper className={classes.paperContent} elevation={0}>
-              <Row className={classes.row}>
-                <Col className={classes.col}>
-                  <TextField
-                    type="number"
-                    className={classes.textField}
-                    error={numero !== "" ? false : true}
-                    onChange={(e) => setNumero(e.target.value)}
-                    required
-                    label="Numero"
-                    defaultValue={numero}
-                    helperText={numero !== "" ? "" : "Il Numero è richiesto"}
-                  />
-                </Col>
-
-                <Col className={classes.col}>
-                  <TextField
-                    error={
-                      porta !== "" && porta > 1000 && porta < 100000
-                        ? false
-                        : true
-                    }
-                    onChange={(e) => setPorta(e.target.value)}
-                    label="Porta"
-                    type="number"
-                    required
-                    defaultValue={porta}
-                    helperText={
-                      porta !== "" && porta > 1000 && porta < 100000
-                        ? ""
-                        : "La Porta deve essere compresa tra 4 e 5 digit"
-                    }
-                  />
-                </Col>
-              </Row>
-
               <Row className={classes.rowIp}>
                 <Col className={classes.colIp}>
                   <TextField
@@ -649,6 +614,42 @@ function Linee() {
               <Row className={classes.row}>
                 <Col className={classes.colIp}>
                   <TextField
+                    type="number"
+                    className={classes.textField}
+                    error={numero !== "" ? false : true}
+                    onChange={(e) => setNumero(e.target.value)}
+                    required
+                    label="Numero"
+                    defaultValue={numero}
+                    helperText={numero !== "" ? "" : "Il Numero è richiesto"}
+                  />
+                </Col>
+
+                <Col className={classes.colIp}>
+                  <TextField
+                    className={classes.textField}
+                    error={
+                      porta !== "" && porta > 1000 && porta < 100000
+                        ? false
+                        : true
+                    }
+                    onChange={(e) => setPorta(e.target.value)}
+                    label="Porta"
+                    type="number"
+                    required
+                    defaultValue={porta}
+                    helperText={
+                      porta !== "" && porta > 1000 && porta < 100000
+                        ? " "
+                        : "La Porta deve essere compresa tra 4 e 5 digit"
+                    }
+                  />
+                </Col>
+              </Row>
+
+              <Row className={classes.row}>
+                <Col className={classes.colIp}>
+                  <TextField
                     type="text"
                     className={classes.textField}
                     error={password !== "" ? false : true}
@@ -664,6 +665,7 @@ function Linee() {
 
                 <Col className={classes.colIp}>
                   <TextField
+                    className={classes.textField}
                     select
                     label="Tipo Linea"
                     value={appearLine.id}
