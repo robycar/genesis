@@ -41,9 +41,10 @@ const TestCaricatiTable = () => {
   const [rate, setRate] = useState();
   const [testDuration, setTestDuration] = useState();
   const [callDuration, setCallDuration] = useState();
-  const [dataInizio, setDataInizio] = useState("");
-  const [orarioInizio, setOrarioInizio] = useState("");
-  const [delay, setDelay] = useState("");
+  const [DataInizio, setDataInizio] = useState("");
+  const [OrarioInizio, setOrarioInizio] = useState("");
+  const [Delay, setDelay] = useState("");
+
 
   const columns = [
     {

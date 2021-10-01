@@ -26,6 +26,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import acccessControl from "../service/url.js";
 import fileDownload from "js-file-download";
 import axios from "axios";
+import { height } from "@mui/system";
 
 function Template() {
   const [data, setData] = useState([]);
@@ -718,8 +719,10 @@ function Template() {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
+      minHeight: "600px",
       height: "fit-content",
-      width: 800,
+      width: "fit-content",
+      minWidth: 750,
       position: "relative",
     },
     paperModaleDelete: {
@@ -736,8 +739,10 @@ function Template() {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "5%",
+      minHeight: "300px",
       height: "fit-content",
-      width: "fit-content",
+      //minWidht: 650,
+      width: 650,
       position: "relative",
     },
     contenutoModale: {
@@ -745,7 +750,7 @@ function Template() {
       overflowX: "hidden",
       padding: "2%",
     },
-    
+
     col: {
       width: "110px",
       padding: "3%",
@@ -756,7 +761,6 @@ function Template() {
     },
     textField: {
       width: "270px",
-    
     },
     // bottoneAnnulla: {
     //   width: "128px",
@@ -783,7 +787,7 @@ function Template() {
       marginBottom: "1%",
     },
     contenutoModaleChiama: {
-      height: 200,
+      height: 350,
       overflowX: "hidden",
     },
     textArea: {
@@ -917,7 +921,7 @@ function Template() {
               </div>
 
               <Form className={classes.contenutoModale}>
-              <Row className={classes.row}>              
+                <Row className={classes.row}>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -948,7 +952,7 @@ function Template() {
                   </Col>
                 </Row>
                 <Row className={classes.row}>
-                                    <Col className={classes.col}>
+                  <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       error={durata !== "" ? false : true}
@@ -1046,7 +1050,7 @@ function Template() {
         </Fade>
       </Modal>
 
-      {/* ------------------------MODALE CHIAMA--------------------- */}
+      {/* ------------------------MODALE CHIAMATO/CHIAMANTI--------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -1073,78 +1077,85 @@ function Template() {
               </div>
 
               <div>
-                <Typography className={classes.intestazione} variant="h6">
-                  Chiamato
-                </Typography>
-                <TextField
-                  className={classes.textField}
-                  style={{ width: "300px" }}
-                  select
-                  label="Linea "
-                  value={chiamato}
-                  onChange={(e) => setChiamato(e.target.value)}
-                  InputProps={{
-                    readOnly: modifica === false ? true : false,
-                  }}
-                >
-                  {appearFile.map((file) => (
-                    <MenuItem
-                      disabled={
-                        chiamato === file.id ||
-                        chiamanti[0] === file.id ||
-                        chiamanti[1] === file.id ||
-                        chiamanti[2] === file.id
-                      }
-                      key={file.id}
-                      value={file.id}
+                <Form className={classes.contenutoModaleChiama}>
+                  <Typography
+                    style={{ color: "#47B881", marginTop: "2%", marginLeft: "16px" }}
+                    variant="h6"
+                  >
+                    Chiamato
+                  </Typography>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      style={{ width: "300px" }}
+                      select
+                      label="Linea "
+                      value={chiamato}
+                      onChange={(e) => setChiamato(e.target.value)}
+                      InputProps={{
+                        readOnly: modifica === false ? true : false,
+                      }}
                     >
-                      {file.path}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
+                      {appearFile.map((file) => (
+                        <MenuItem
+                          disabled={
+                            chiamato === file.id ||
+                            chiamanti[0] === file.id ||
+                            chiamanti[1] === file.id ||
+                            chiamanti[2] === file.id
+                          }
+                          key={file.id}
+                          value={file.id}
+                        >
+                          {file.path}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
 
-              <Divider
+                  {/* <Divider
                 style={{ display: chiamanti.length === 0 ? "none" : "" }}
                 className={classes.divider}
-              />
-              <div>
-                <Form className={classes.contenutoModaleChiama}>
+              /> */}
+
                   {chiamanti.map((chiamante, index) => (
                     <div>
-                      <Typography className={classes.intestazione} variant="h6">
+                      <Typography style={{ color: "#47B881", marginTop: "2%", marginLeft: "16px" }}
+                    variant="h6" variant="h6">
                         Chiamante <b>{index + 1}</b>
                       </Typography>
-                      <TextField
-                        className={classes.textField}
-                        style={{ width: "300px" }}
-                        select
-                        label="File "
-                        value={chiamanti[index]}
-                        onChange={(e) => {
-                          var x = [...chiamanti];
-                          x[index] = e.target.value;
-                          setChiamanti(x);
-                        }}
-                        InputProps={{
-                          readOnly: modifica === false ? true : false,
-                        }}
-                      >
-                        {appearFile.map((file) => (
-                          <MenuItem
-                            disabled={
-                              chiamato === file.id ||
-                              chiamanti[0] === file.id ||
-                              chiamanti[1] === file.id ||
-                              chiamanti[2] === file.id
-                            }
-                            key={file.id}
-                            value={file.id}
-                          >
-                            {file.path}
-                          </MenuItem>
-                        ))}
-                      </TextField>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          style={{ width: "300px" }}
+                          select
+                          label="File "
+                          value={chiamanti[index]}
+                          onChange={(e) => {
+                            var x = [...chiamanti];
+                            x[index] = e.target.value;
+                            setChiamanti(x);
+                          }}
+                          InputProps={{
+                            readOnly: modifica === false ? true : false,
+                          }}
+                        >
+                          {appearFile.map((file) => (
+                            <MenuItem
+                              disabled={
+                                chiamato === file.id ||
+                                chiamanti[0] === file.id ||
+                                chiamanti[1] === file.id ||
+                                chiamanti[2] === file.id
+                              }
+                              key={file.id}
+                              value={file.id}
+                            >
+                              {file.path}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Col>
                     </div>
                   ))}
                 </Form>
@@ -1216,12 +1227,12 @@ function Template() {
                     actionsColumnIndex: -1,
                     search: false,
 
-                    pageSizeOptions: [
-                      5,
-                      10,
-                      20,
-                      { value: appearFile.length, label: "All" },
-                    ],
+                    // pageSizeOptions: [
+                    //   5,
+                    //   10,
+                    //   20,
+                    //   { value: appearFile.length, label: "All" },
+                    // ],
                   }}
                   actions={[
                     {

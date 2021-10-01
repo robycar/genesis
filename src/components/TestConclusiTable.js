@@ -21,6 +21,7 @@ import loading from "../../src/assets/load.gif";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
+import { NavLink } from "react-router-dom";
 
 const TestConclusiTable = () => {
   const [filter, setFilter] = useState(false);
@@ -31,11 +32,10 @@ const TestConclusiTable = () => {
   const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
-
   const [appearTest, setAppearTest] = useState([]);
-
   const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
+  const [idTestReport, setIdTestReport] = useState();
   const [dataCase, setDataCase] = useState();
 
   const columns = [
@@ -74,9 +74,19 @@ const TestConclusiTable = () => {
     },
     {
       title: "Report",
-      field: "pathInstance",
+      field: "report",
+      render: (rowData) => (
+        <Button
+          color="secondary"
+          onClick={() => handleOpenReport(rowData.testCase.id)}
+        >
+          report
+        </Button>
+      ),
     },
   ];
+
+  
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -108,6 +118,15 @@ const TestConclusiTable = () => {
       padding: "3%",
       height: "fit-content",
       width: 500,
+      position: "relative",
+    },
+    paperModaleReport: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 800,
       position: "relative",
     },
     paperBottom: {
@@ -202,6 +221,7 @@ const TestConclusiTable = () => {
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
+  const [openReport, setOpenReport] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -225,6 +245,16 @@ const TestConclusiTable = () => {
     setIdToRun(idRun_);
     setOpenRun(true);
     setOpen(false);
+  };
+
+  const handleOpenReport = () => {
+    setIdTestCaseRun();
+    getTestCaseReport();
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
   };
 
   const handleCloseRun = () => {
@@ -366,11 +396,39 @@ const TestConclusiTable = () => {
       .catch((error) => console.log("error", error));
   };
 
+  /*--------------------  TEST CASE COMPLETE REPORT ---------------*/
+
+  const getTestCaseReport = (idTestReport) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase/${idTestReport}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        //setAppearTest(result.testCaseList);
+        setIdTestReport(result.testCase);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getTestCaseReport();
+  }, []);
+
   return (
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title=" Total Test Case Schedulati"
+        title=" Total Test Case Conclusi"
         data={data}
         columns={columns}
         options={{
@@ -378,10 +436,10 @@ const TestConclusiTable = () => {
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "left",
+          searchFieldAlignment: "center",
           selection: true,
           // columnsButton: true,
-          filtering: filter,
+          filtering: true,
         }}
         actions={[
           {
@@ -413,7 +471,7 @@ const TestConclusiTable = () => {
             icon: () => (
               <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Load Test Case",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },
@@ -488,7 +546,7 @@ const TestConclusiTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-              <Button
+                <Button
                   size="small"
                   variant="contained"
                   color="secondary"
@@ -513,7 +571,7 @@ const TestConclusiTable = () => {
                 <Button
                   size="small"
                   variant="contained"
-                  style={{backgroundColor:"#ffeb3b", color: "white"}}
+                  style={{ backgroundColor: "#ffeb3b", color: "white" }}
                   nome="Annulla"
                   onClick={handleClose}
                 >
@@ -655,6 +713,72 @@ const TestConclusiTable = () => {
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ----------------MODALE REPORT ------------------*/}
+
+      
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openReport}
+        onClose={handleCloseReport}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openReport}>
+          <div>
+            <Paper className={classes.paperModaleReport} elevation={1}>
+              <div>
+                <MaterialTable
+                  style={{ boxShadow: "none" }}
+                  title="Report"
+                  // data={data}
+                  columns={columns}
+                  actions={[
+                    {
+                      icon: () => (
+                        <div>
+                          <Button
+                            size="small"
+                            color="secondary"
+                            component={NavLink}
+                            activeClassName="button-green-active"
+                            exact
+                            to="/report/testcase"
+                          >
+                            Vai alla sezione report
+                          </Button>
+                        </div>
+                      ),
+                      tooltip: "Vai ai Report",
+                      // onClick: () => handleOpen(),
+                      isFreeAction: true,
+                    },
+                   
+                  ]}
+                  components={{
+                    Action: props => (
+                      <Button
+                        onClick={handleCloseReport}
+                        color="primary"
+                        variant="contained"
+                        style={{textTransform: 'none'}}
+                        size="small"
+                      >
+                        Chiudi
+                      </Button>
+                    ),
+                  }}
+                />
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
     </div>

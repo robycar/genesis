@@ -44,51 +44,33 @@ function TestSuiteTable() {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const arrayTestCase = testSuite?.testCases;
-  //Array di case checked + quelli seza checked
-  const newArr1 = arrayTestCase?.map((v) => ({
-    ...v,
-    tableData: { checked: true },
-  }));
-  // console.log(newArr1, " Array di test case modificato");
 
-  console.log(dataTestCases, "Lista di test cases");
+  //--------------------------------MODIFICA TESTCASE ASSOCIATI A TESTSUITE-----------------------------------------------------
+  const [prova, setProva] = useState([]);
 
-  // Prova
-  // const arrayEmpty = [];
-  // for (let index = 0; index < dataTestCases.length; index++) {
-  //   const elemento = dataTestCases[index];
+  const setTestCaseAssociati = (testsuite) => {
+    let x = [];
 
-  //   for (let index = 0; index < newArr1?.length; index++) {
-  //     if (elemento.id === newArr1[index].id) {
-  //       arrayEmpty.push(newArr1[index]);
-  //     }
-  //   }
+    //console.log("--------"+testsuite)
+    for (let i = 0; i < testsuite.testCases.length; i++) {
+      x.push(testsuite.testCases[i].id);
+    }
+    setProva(x);
+  };
 
-  //   if (!arrayEmpty.includes(elemento)) {
-  //     arrayEmpty.push(elemento);
+  let y = [...prova];
 
-  //     console.log(!arrayEmpty.includes(elemento.id));
-  //   }
+  const modificaTestSelezionati = (testcase) => {
+    if (prova.includes(testcase.id)) {
+      y.splice(y.indexOf(testcase.id), 1);
+    } else {
+      y.push(testcase.id);
+    }
+    setProva(y);
+    // aggiornaTestCaseAssociati(x);
+  };
 
-  //   console.log(dataTestCases[index], "data");
-  //   newArr1?.push(elemento);
-  // }
-
-  // Sostituzione array checked con quelli senza check che hanno lo seddo id
-  const res = dataTestCases.map(
-    (obj) => newArr1?.find((o) => o.id === obj.id) || obj
-  );
-
-  /// Array di testCase associati con il flag
-
-  // for (let index = 0; index < dataTestCases.length; index++) {
-  //   const elemento = dataTestCases[index];
-
-  //   // console.log(dataTestCases[index], "data");
-  //   newArr1?.push(elemento);
-  // }
-
-  // console.log(dataTestCases, "dataTestCases");
+  //---------------------------------------------------------------------------------------------------------------------------------
 
   /*------- arrayIdTestCase -----------*/
   const arrayIdTestCase = [];
@@ -98,15 +80,15 @@ function TestSuiteTable() {
   }
 
   // console.log(selectedRows, " Righe selezionati");
-  console.log(arrayTestCase, " Array di test case");
+  //console.log(arrayTestCase, " Array di test case");
 
   var arrayId = [];
   arrayTestCase?.forEach(function (obj) {
     arrayId?.push(obj.id);
   });
-  console.log(arrayId, "ID associati");
+  // console.log(arrayId, "ID associati");
 
-  console.log(arrayIdTestCase, "Id test case selezionati");
+  // console.log(arrayIdTestCase, "Id test case selezionati");
 
   //Pusho gli ID associati nell'array di test Case
   // for (let index = 0; index < arrayId.length; index++) {
@@ -167,7 +149,9 @@ function TestSuiteTable() {
       .then((response) => response.json())
       .then((result) => {
         setTestSuite(result.testSuite);
+        setTestCaseAssociati(result.testSuite);
         setOpen(true);
+        SetOpenTestCase(false);
       })
       .catch((error) => console.log("error", error));
   };
@@ -195,38 +179,40 @@ function TestSuiteTable() {
       .catch((error) => console.log("error", error));
   };
 
-  //---------------- MODIFICA TEST SUITE---------------------
-  const aggiornaTestCaseAssociati = () => {
-    const Invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //---------------- MODIFICA TESTCASEA ASSOCIATI---------------------
+  // const aggiornaTestCaseAssociati = (testcases) => {
+  //   const Invia = () => {
+  //     var myHeaders = new Headers();
+  //     myHeaders.append("Authorization", bearer);
+  //     myHeaders.append("Content-Type", "application/json");
+  //     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      var raw = JSON.stringify({
-        id: id,
-        version: version,
-        nome: nome,
-        descrizione: descrizione,
-        testCases: arrayIdTestCase,
-      });
+  //     var raw = JSON.stringify({
+  //       id: id,
+  //       version: version,
+  //       nome: nome,
+  //       descrizione: descrizione,
+  //       testCases: testcases,
+  //     });
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
+  //     var requestOptions = {
+  //       method: "POST",
+  //       headers: myHeaders,
+  //       body: raw,
+  //       redirect: "follow",
+  //     };
 
-      fetch(`/api/testsuite`, requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
-      getAllTestSuite();
-      // window.location = "/editing/testsuite";
-    };
-  };
+  //     fetch(`/api/testsuite`, requestOptions)
+  //       .then((response) => response.json())
+  //       .then((result) => console.log(result))
+  //       .catch((error) => console.log("error", error));
+  //     getAllTestSuite();
+
+  //     // window.location = "/editing/testsuite";
+  //   };
+  //   Invia();
+  // };
 
   //----------------------------------------------------------
   useEffect(() => {
@@ -334,7 +320,7 @@ function TestSuiteTable() {
     },
     {
       title: "Template",
-      field: "file",
+      field: "template.nome",
     },
   ];
   // console.log(columns.field);
@@ -373,12 +359,12 @@ function TestSuiteTable() {
   };
 
   const handleCloseTestCase = () => {
-    SetOpenTestCase(false);
+    getTestSuiteById(id);
   };
 
   const handleCloseTestCaseUpdated = () => {
     SetOpenTestCase(false);
-    aggiornaTestCaseAssociati();
+    // aggiornaTestCaseAssociati();
   };
 
   const handleClose = () => {
@@ -388,6 +374,7 @@ function TestSuiteTable() {
   const handleClose2 = () => {
     aggiornaTestSuite();
     setOpen(false);
+    // aggiornaTestCaseAssociati();
   };
 
   //------------ FUNZIONE DELETE ------------
@@ -480,7 +467,7 @@ function TestSuiteTable() {
         version: version,
         nome: nome,
         descrizione: descrizione,
-        testCases: arrayIdTestCase,
+        testCases: y,
       });
 
       var requestOptions = {
@@ -809,7 +796,7 @@ function TestSuiteTable() {
                   </Col>
                 </Row>
                 <Row>
-                  <Col className={classes.col}>
+                  {/* <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       error={version !== "" ? false : true}
@@ -821,7 +808,7 @@ function TestSuiteTable() {
                         readOnly: modifica === false ? true : false,
                       }}
                     />
-                  </Col>
+                  </Col> */}
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
@@ -856,18 +843,24 @@ function TestSuiteTable() {
                   </Col>
                 </Row>
 
-                <div style={{display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", padding: "2%"}}>
-                  
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome={
-                        modifica === false
-                          ? "Vedi test associati"
-                          : "Modifica test associati"
-                      }
-                      onClick={handleOpenTestCase}
-                    />
-                  
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "2%",
+                  }}
+                >
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome={
+                      modifica === false
+                        ? "Vedi test associati"
+                        : "Modifica test associati"
+                    }
+                    onClick={handleOpenTestCase}
+                  />
                 </div>
 
                 <Row>
@@ -1091,9 +1084,10 @@ function TestSuiteTable() {
                       columns={columnsTestcases}
                       options={{
                         selection: true,
-                        // selectionProps: (rowData) => ({
-                        //   checked: (rowData.tableData === rowData.id) === 1,
-                        // }),
+                        showTextRowsSelected: false,
+                        selectionProps: (rowData) => ({
+                          checked: prova.includes(rowData.id),
+                        }),
                         sorting: true,
                         actionsColumnIndex: -1,
                         search: true,
@@ -1104,13 +1098,13 @@ function TestSuiteTable() {
                           5,
                           10,
                           20,
-                          { value: data.length, label: "All" },
+                          { value: dataTestCases.length, label: "All" },
                         ],
                       }}
                       onSelectionChange={
-                        (rows) => {
+                        (rows, testcase) => {
                           setSelectedRows(rows);
-                          console.log(rows, "Row");
+                          modificaTestSelezionati(testcase);
                         }
                         // for (let i = 0; i < rows.length; i++) {
                         //   // console.log(rows[i].id);
@@ -1155,7 +1149,7 @@ function TestSuiteTable() {
                       className={classes.bottoneAnnulla}
                       onClick={handleCloseTestCase}
                       size="medium"
-                      nome={modifica === false ? "Indietro" : "Annulla"}
+                      nome="Indietro"
                     />
                   </div>
                 </div>

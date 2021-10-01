@@ -390,7 +390,7 @@ const TestRunningTable = () => {
           searchFieldAlignment: "left",
           selection: true,
           // columnsButton: true,
-          filtering: filter,
+          filtering: true,
         }}
         actions={[
           {

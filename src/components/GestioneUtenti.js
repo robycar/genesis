@@ -19,6 +19,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import { getGenerale, aggiornaUtente } from "../service/api";
 
 const GestioneUtenti = () => {
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -28,137 +29,59 @@ const GestioneUtenti = () => {
   const [appearGroup, setAppearGroup] = useState([]);
   const [appearLevel, setAppearLevel] = useState([]);
 
-  const [id, setId] = useState();
+  const [id, setId] = useState(0);
+  const [version , setVersion] = useState(0)
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
   const [gruppo, setGruppo] = useState([]);
-  const [gruppoId, setGruppoId] = useState();
+  const [gruppoId, setGruppoId] = useState(0);
   const [azienda, setAzienda] = useState("");
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("test");
   //const [password, setPassword] = useState("");
   const [level, setLevel] = useState([]);
-  const [levelId, setLevelId] = useState();
+  const [levelId, setLevelId] = useState(0);
   const [email, setEmail] = useState("");
   const [caricamento, setCaricamento] = useState(false)
 
-  //-----------GET USER----------------------
-  const getAllUsers = () => {
-    setCaricamento(true)
-    var myHeaders = new Headers();
+  //-------------------------PROVA----------------
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //-----------GET ----------------------
+  const funzioneGetAll = () => {
+    //----GET ALL USERS----
+    (async () => {
+      setCaricamento(true)
+      setData((await getGenerale('user')).users);
+      setCaricamento(false)
+    })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+    //-----GET APPEAR GROUP-----
+    (async () => {
+      setAppearGroup((await getGenerale('group')).gruppi);
+    })();
 
-    fetch(`/api/user`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.users);
-        setCaricamento(false)
-      })
-      .catch((error) => console.log("error", error));
-  };
+    //-----GET APPEAR LEVEL-----
+    (async () => {
+      setAppearLevel((await getGenerale('level')).livelli);
+    })();
 
-  const aggiornaUtente = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  }
 
-    var raw = JSON.stringify({
-      user: {
-        id: id,
-        username: username,
-        cognome: cognome,
-        nome: nome,
-        email: email,
-        level: {
-          id: levelId, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
-        },
-        gruppo: {
-          id: gruppoId, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
-        },
-      },
-      password: "test",
-    });
+  const funzioneAggiornaUtente = () => {
+    //----AGGIORNA UTENTE----
+    (async () => {
+      setData((await aggiornaUtente(id, version, username, cognome, nome, email, levelId, gruppoId, password)).users);
+      funzioneGetAll();
+    })();
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+  }
 
-    fetch(`/api/user`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        getAllUsers();
-      });
 
-    // .catch((error) => console.log("error", error));
-  };
 
-  /*------- Get group-------*/
 
-  const getAppearGroup = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/group`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearGroup(result.gruppi);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  /*------- Get level-------*/
-
-  const getAppearLevel = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/level`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLevel(result.livelli);
-      })
-      .catch((error) => console.log("error", error));
-  };
 
   useEffect(() => {
-    getAppearGroup();
-    getAppearLevel();
-    getAllUsers();
+    funzioneGetAll();
   }, []);
 
   const columns = [
@@ -204,6 +127,7 @@ const GestioneUtenti = () => {
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
+    setVersion(rowData.version);
     setNome(rowData.nome);
     setCognome(rowData.cognome);
     setUsername(rowData.username);
@@ -221,7 +145,7 @@ const GestioneUtenti = () => {
   };
 
   const handleClose2 = () => {
-    aggiornaUtente();
+    funzioneAggiornaUtente();
     setOpen(false);
   };
   const Delete = (oldData) => {
@@ -245,11 +169,11 @@ const GestioneUtenti = () => {
     fetch(`/api/user?id=` + oldData.id, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        getAllUsers();
+        // getAllUsers();
       })
       .catch((error) => console.log("error", error));
   }
-  
+
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -353,7 +277,7 @@ const GestioneUtenti = () => {
           searchFieldVariant: "outlined",
           filtering: true,
           searchFieldAlignment: "left",
-          pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
         }}
         actions={[
           {
@@ -377,11 +301,11 @@ const GestioneUtenti = () => {
           },
           rowData => (
             {
-            icon: () => <EditIcon />,
-            tooltip: "Edit",
-            onClick: (event, rowData) => handleOpen(rowData),
-            position: "row",
-          }),
+              icon: () => <EditIcon />,
+              tooltip: "Edit",
+              onClick: (event, rowData) => handleOpen(rowData),
+              position: "row",
+            }),
           rowData => ({
             icon: 'delete',
             tooltip: 'Delete User',
@@ -395,7 +319,7 @@ const GestioneUtenti = () => {
           },
           body: {
             emptyDataSourceMessage: (
-                "Non è presente alcun dato da mostrare"
+              "Non è presente alcun dato da mostrare"
             ),
           },
         }}

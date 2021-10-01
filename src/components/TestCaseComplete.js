@@ -171,7 +171,7 @@ const TestCaseComplete = () => {
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title="Last 30 Test Case Completed"
+        title="Ultimi 30 Test Case Conclusi"
         data={data}
         columns={columns}
         options={{

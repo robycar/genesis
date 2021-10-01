@@ -529,7 +529,7 @@ function EditingTestCreaTestSuite() {
     },
     {
       title: "Template",
-      field: "file",
+      field: "template.nome",
     },
   ];
 

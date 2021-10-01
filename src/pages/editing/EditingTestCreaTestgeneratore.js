@@ -739,7 +739,7 @@ function EditingTestCreaTestgeneratore() {
                       {appearLinea.map((linea) => {
                         return (
                           <MenuItem key={linea.id} value={linea.id}>
-                            {linea.numero}
+                            {linea.ip+":"+linea.porta+"-"+linea.typeLinea.descrizione}
                           </MenuItem>
                         );
                       })}
@@ -837,7 +837,7 @@ function EditingTestCreaTestgeneratore() {
                 {appearLinea.map((linea) => {
                   return (
                     <MenuItem key={linea.id} value={linea.id}>
-                      {linea.numero}
+                      {linea.ip+":"+linea.porta+"-"+linea.typeLinea.descrizione}
                     </MenuItem>
                   );
                 })}

@@ -31,9 +31,10 @@ const TestSuiteCaricatiTable = () => {
   const [modifiedDate, setModifiedDate] = useState(); 
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
-  const [dataInizio, setDataInizio] = useState("");
-  const [orarioInizio, setOrarioInizio] = useState("");
-  const [delay, setDelay] = useState("");
+  const [DataInizio, setDataInizio] = useState("");
+  const [OrarioInizio, setOrarioInizio] = useState("");
+  const [Delay, setDelay] = useState("");
+
   
 
   const columns = [

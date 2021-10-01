@@ -32,7 +32,7 @@ function createData(name, run, passed, nA, failed) {
 }
 
 const rows = [
-  createData("", "Run", "Passed", "N/A", "Failed"),
+  createData("", "OK", "Scheduled", "Running", "KO"),
   createData("Registrazione", 159, 6.0, 24, 4.0),
   createData("Plug-In", 237, 9.0, 37, 4.3),
   createData("Focus P-CSCF", 262, 16.0, 24, 6.0),
@@ -49,13 +49,11 @@ function CustomizedTables() {
   const classes = useStyles();
 
   return (
-    <TableContainer component={Paper}>
+    //<TableContainer component={Paper}>
       <Table className={classes.table} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>
-              Test Status Summary - Last 30 Test Case
-            </StyledTableCell>
+            <StyledTableCell>Test Case Totali - Ultimo Mese </StyledTableCell>
             <StyledTableCell align="right">{""}</StyledTableCell>
             <StyledTableCell align="right">{""}</StyledTableCell>
             <StyledTableCell align="right">{""}</StyledTableCell>
@@ -77,7 +75,7 @@ function CustomizedTables() {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+   // </TableContainer>
   );
 }
 export default CustomizedTables;

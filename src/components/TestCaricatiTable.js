@@ -499,7 +499,7 @@ const TestCaricatiTable = () => {
           searchFieldAlignment: "left",
           selection: true,
           // columnsButton: true,
-          filtering: filter,
+          filtering: true,
         }}
         actions={[
           {
@@ -525,7 +525,8 @@ const TestCaricatiTable = () => {
           {
             icon: "delete",
             tooltip: "Delete all selected row",
-            onClick: () => alert("Ho cancellato le righe"),
+            onClick: (event, rowData) => console.log(rowData),
+            position: "row"
           },
           {
             icon: () => <FilterListIcon />,
@@ -537,7 +538,7 @@ const TestCaricatiTable = () => {
             icon: () => (
               <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Load Test Case",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },

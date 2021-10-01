@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, version } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
@@ -18,70 +18,40 @@ import Row from "react-bootstrap/Row";
 import Divider from "@material-ui/core/Divider";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import { getGenerale, aggiornaRuolo } from "../service/api";
 
 const GestioneRuoli = () => {
   const [data, setData] = useState([]);
-  const [id, setId] = useState();
+  const [id, setId] = useState(0);
+  const [version, setVersion] = useState(0);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [caricamento, setCaricamento] = useState(false)
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  const getLevel = () => {
-    setCaricamento(true)
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/level`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {setData(result.livelli)
+  //-----------GET ----------------------
+  const funzioneGetAll = () => {
+    //----GET ALL USERS----
+    (async () => {
+      setCaricamento(true)
+      setData((await getGenerale('level')).livelli);
       setCaricamento(false)
-      })
-      .catch((error) => console.log("error", error));
-  };
+    })();
+  }
+  const funzioneAggiornamento = () => {
+    //----GET ALL USERS----
+    (async () => {
+      setData((await aggiornaRuolo(id, version, nome, descrizione)).livelli);
+      setOpen(false);
+      funzioneGetAll();
+    })();
+  }
 
   useEffect(() => {
-    getLevel();
+    funzioneGetAll();
   }, []);
 
-  const aggiornaRuolo = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: id,
-      nome: nome,
-      descrizione: descrizione,
-      funzioni: [],
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/level`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        getLevel();
-      });
-    //.catch((error) => console.log("error", error));
-  };
 
   const columns = [
     {
@@ -196,6 +166,7 @@ const GestioneRuoli = () => {
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
+    setVersion(rowData.version);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
     setOpen(true);
@@ -206,8 +177,7 @@ const GestioneRuoli = () => {
   };
 
   const handleClose2 = () => {
-    aggiornaRuolo();
-    setOpen(false);
+    funzioneAggiornamento();
   };
 
   return (
@@ -224,11 +194,11 @@ const GestioneRuoli = () => {
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           filtering: true,
-          pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
           sorting: true,
         }}
         editable={{
-          isDeletable:(row)=>row.nome!=="ADMIN",
+          isDeletable: (row) => row.nome !== "ADMIN",
           onRowDelete: (oldData) =>
             new Promise((resolve, reject) => {
               //Backend call
@@ -252,7 +222,7 @@ const GestioneRuoli = () => {
               fetch(`/api/level?id=` + oldData.id, requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
-                  getLevel();
+                  // getLevel();
                   resolve();
                 })
                 .catch((error) => console.log("error", error));
@@ -290,7 +260,7 @@ const GestioneRuoli = () => {
           },
           body: {
             emptyDataSourceMessage: (
-                "Non è presente alcun dato da mostrare"
+              "Non è presente alcun dato da mostrare"
             ),
           },
         }}
@@ -329,8 +299,8 @@ const GestioneRuoli = () => {
                         onChange={(e) => setNome(e.target.value)}
                         required
                         label="Nome"
-                        defaultValue= {nome }
-                        disabled={nome === "ADMIN" || nome === "admin" || nome === "Admin" ? true :  false}
+                        defaultValue={nome}
+                        disabled={nome === "ADMIN" || nome === "admin" || nome === "Admin" ? true : false}
                         helperText={nome !== "" ? "" : "Il Nome è richiesto"}
                       />
                     </Col>

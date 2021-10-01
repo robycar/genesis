@@ -13,17 +13,17 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import "../styles/App.css";
 import acccessControl from "../service/url.js";
+import { NavLink } from "react-router-dom";
 
 const TestSuiteConclusiTable = () => {
- 
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
-  const [nome, setNome] =useState("");
+  const [nome, setNome] = useState("");
   const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState(); 
+  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
-  
+  const [openReport, setOpenReport] = React.useState(false);
 
   const columns = [
     {
@@ -61,10 +61,14 @@ const TestSuiteConclusiTable = () => {
     },
     {
       title: "Report",
-      field: "trace",
+      field: "report",
+      render: (rowData) => (
+        <Button color="secondary" onClick={() => handleOpenReport()}>
+          report
+        </Button>
+      ),
     },
   ];
-
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -83,6 +87,15 @@ const TestSuiteConclusiTable = () => {
       alignItems: "center",
       justifyContent: "center",
       marginBottom: "5%",
+    },
+    peperModaleReport: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 700,
+      position: "relative",
     },
     paperTop: {
       height: "20%",
@@ -140,9 +153,16 @@ const TestSuiteConclusiTable = () => {
     setOpen(false);
   };
 
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
 
- // ------- GET TEST SUITE -----------
- let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
+
+  // ------- GET TEST SUITE -----------
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   if (bearer != null) {
     bearer = bearer.replace(/"/g, "");
@@ -150,34 +170,31 @@ const TestSuiteConclusiTable = () => {
 
   const [appearTest, setAppearTest] = useState([]);
 
+  const getAllTestSuite = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
- const getAllTestSuite = () => {
-  var myHeaders = new Headers();
-  myHeaders.append("Authorization", bearer);
-  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  var requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow",
+    fetch(`/api/testsuite`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setAppearTest(result.list);
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
   };
 
-  fetch(`/api/testsuite`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      setAppearTest(result.list);
-      setData(result.list);
-    })
-    .catch((error) => console.log("error", error));
-};
-
-useEffect(() => {
-  getAllTestSuite();
-}, []);
-
+  useEffect(() => {
+    getAllTestSuite();
+  }, []);
 
   return (
     <div>
@@ -194,7 +211,7 @@ useEffect(() => {
           searchFieldAlignment: "left",
           // selection: true,
           // columnsButton: true,
-           filtering: true,
+          filtering: true,
         }}
         actions={[
           {
@@ -225,18 +242,6 @@ useEffect(() => {
             actions: "Azioni",
           },
         }}
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
       <Modal
         className={classes.modal}
@@ -283,6 +288,69 @@ useEffect(() => {
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ----------------MODALE REPORT ------------------*/}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openReport}
+        onClose={handleCloseReport}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openReport}>
+          <div>
+            <Paper className={classes.paperModaleReport} elevation={1}>
+              <div>
+                <MaterialTable
+                  style={{ boxShadow: "none" }}
+                  title="Report"
+                  // data={data}
+                  columns={columns}
+                  actions={[
+                    {
+                      icon: () => (
+                        <div>
+                          <Button
+                            size="small"
+                            color="secondary"
+                            component={NavLink}
+                            activeClassName="button-green-active"
+                            exact
+                            to="/report/testsuite"
+                          >
+                            Vai alla sezione report
+                          </Button>
+                        </div>
+                      ),
+                      tooltip: "Vai ai Report",
+                      // onClick: () => handleOpen(),
+                      isFreeAction: true,
+                    },
+                  ]}
+                  components={{
+                    Action: (props) => (
+                      <Button
+                        onClick={handleCloseReport}
+                        color="primary"
+                        variant="contained"
+                        style={{ textTransform: "none" }}
+                        size="small"
+                      >
+                        Chiudi
+                      </Button>
+                    ),
+                  }}
+                />
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
     </div>

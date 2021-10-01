@@ -21,6 +21,8 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import "../styles/App.css";
+import { NavLink } from "react-router-dom";
+
 
 const TestGeneratoreConclusiTable = () => {
   const [id, setId] = useState();
@@ -72,7 +74,12 @@ const TestGeneratoreConclusiTable = () => {
     },
     {
       title: "Report",
-      field: "trace",
+      field: "report",
+      render: (rowData) => (
+        <Button color="secondary" onClick={() => handleOpenReport()}>
+          report
+        </Button>
+      ),
     },
   ];
 
@@ -207,6 +214,8 @@ const TestGeneratoreConclusiTable = () => {
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
+  const [openReport, setOpenReport] = React.useState(false);
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -228,6 +237,15 @@ const TestGeneratoreConclusiTable = () => {
   const handleChangeData = (newValue) => {
     setValue(newValue);
   };
+
+  const handleOpenReport = () => {
+    setOpenReport(true);
+  };
+
+  const handleCloseReport = () => {
+    setOpenReport(false);
+  };
+
 
   /*------------- GET TEST GEN -------------*/
 
@@ -547,6 +565,69 @@ const TestGeneratoreConclusiTable = () => {
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+
+       {/* ----------------MODALE REPORT ------------------*/}
+       <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openReport}
+        onClose={handleCloseReport}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openReport}>
+          <div>
+            <Paper className={classes.paperModaleReport} elevation={1}>
+              <div>
+                <MaterialTable
+                  style={{ boxShadow: "none" }}
+                  title="Report"
+                  // data={data}
+                  columns={columns}
+                  actions={[
+                    {
+                      icon: () => (
+                        <div>
+                          <Button
+                            size="small"
+                            color="secondary"
+                            component={NavLink}
+                            activeClassName="button-green-active"
+                            exact
+                            to="/report/testgeneratore"
+                          >
+                            Vai alla sezione report
+                          </Button>
+                        </div>
+                      ),
+                      tooltip: "Vai ai Report",
+                      // onClick: () => handleOpen(),
+                      isFreeAction: true,
+                    },
+                  ]}
+                  components={{
+                    Action: props => (
+                      <Button
+                        onClick={handleCloseReport}
+                        color="primary"
+                        variant="contained"
+                        style={{textTransform: 'none'}}
+                        size="small"
+                      >
+                        Chiudi
+                      </Button>
+                    ),
+                  }}
+                />
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
     </div>

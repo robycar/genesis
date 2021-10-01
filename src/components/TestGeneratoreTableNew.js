@@ -784,7 +784,7 @@ function TestGeneratoreTableNew() {
                       className={classes.textField}
                       select
                       onChange={(e) => setLineaChiamato(e.target.value)}
-                      label="IP Linea"
+                      label="Linea"
                       value={lineaChiamato}
                       defaultValue={lineaChiamato}
                       InputProps={{
@@ -797,7 +797,7 @@ function TestGeneratoreTableNew() {
                           key={linea.id}
                           value={linea.id}
                         >
-                          {linea.id}
+                          {linea.ip+":"+linea.porta+"-"+linea.typeLinea.descrizione}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -904,7 +904,7 @@ function TestGeneratoreTableNew() {
                           key={linea.id}
                           value={linea.id}
                         >
-                          {linea.id}
+                          {linea.ip+":"+linea.porta+"-"+linea.typeLinea.descrizione}
                         </MenuItem>
                       ))}
                     </TextField>
