@@ -91,7 +91,7 @@ public class TestCaseCaricatoVO implements Serializable {
   
   @Enumerated(EnumType.STRING)
   @Column(name="STATO", nullable = false)
-  private TestCaseCaricatoStato stato;
+  private LoadedEntityStatus stato;
   
   @Enumerated(EnumType.STRING)
   @Column(name="EXECUTION_RESULT")
@@ -115,6 +115,10 @@ public class TestCaseCaricatoVO implements Serializable {
   @ManyToOne
   @JoinColumn(name="ID_TEST_CASE")
   private TestCaseVO testCase;
+  
+  @ManyToOne
+  @JoinColumn(name="ID_TEST_SUITE_CARICATA")
+  private TestSuiteCaricataVO testSuite;
   
   public TestCaseCaricatoVO() {
   }
@@ -223,11 +227,11 @@ public class TestCaseCaricatoVO implements Serializable {
     this.fileChiamato = fileChiamato;
   }
 
-  public TestCaseCaricatoStato getStato() {
+  public LoadedEntityStatus getStato() {
     return stato;
   }
 
-  public void setStato(TestCaseCaricatoStato stato) {
+  public void setStato(LoadedEntityStatus stato) {
     this.stato = stato;
   }
 

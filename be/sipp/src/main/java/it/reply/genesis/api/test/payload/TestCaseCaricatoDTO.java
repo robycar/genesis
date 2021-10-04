@@ -15,7 +15,7 @@ import it.reply.genesis.api.linea.payload.OutboundProxyDTO;
 import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.FileSystemVO;
 import it.reply.genesis.model.TestCaseCaricatoPropertyVO;
-import it.reply.genesis.model.TestCaseCaricatoStato;
+import it.reply.genesis.model.LoadedEntityStatus;
 import it.reply.genesis.model.TestCaseCaricatoVO;
 
 public class TestCaseCaricatoDTO extends DTO {
@@ -46,7 +46,7 @@ public class TestCaseCaricatoDTO extends DTO {
   
   private String descrizione;
   
-  private TestCaseCaricatoStato stato;
+  private LoadedEntityStatus stato;
   
   private ExecutionResult result;
   
@@ -284,11 +284,11 @@ public class TestCaseCaricatoDTO extends DTO {
     this.chiamanti = chiamanti;
   }
 
-  public TestCaseCaricatoStato getStato() {
+  public LoadedEntityStatus getStato() {
     return stato;
   }
 
-  public void setStato(TestCaseCaricatoStato stato) {
+  public void setStato(LoadedEntityStatus stato) {
     this.stato = stato;
   }
 

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.reply.genesis.api.generic.controller.AbstractController;
@@ -23,8 +22,10 @@ import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.payload.PayloadResponse;
 import it.reply.genesis.api.test.payload.TestSuiteAddRequest;
 import it.reply.genesis.api.test.payload.TestSuiteAddResponse;
+import it.reply.genesis.api.test.payload.TestSuiteCaricataDTO;
 import it.reply.genesis.api.test.payload.TestSuiteDTO;
 import it.reply.genesis.api.test.payload.TestSuiteListResponse;
+import it.reply.genesis.api.test.payload.TestSuiteLoadResponse;
 import it.reply.genesis.api.test.payload.TestSuiteRemoveRequest;
 import it.reply.genesis.api.test.payload.TestSuiteRetrieveResponse;
 import it.reply.genesis.api.test.payload.TestSuiteUpdateRequest;
@@ -114,6 +115,22 @@ public class TestSuiteController extends AbstractController {
     } catch (ApplicationException e) {
       return handleException(e, response);
     }
+  }
+  
+  @GetMapping("load/{id}")
+  @PreAuthorize("hasAuthority('FUN_testsuite.run')")
+  public ResponseEntity<TestSuiteLoadResponse>load(@PathVariable(required=true) Long id) {
+    logger.info("enter load({})", id);
+    TestSuiteLoadResponse response = new TestSuiteLoadResponse();
+    try {
+      TestSuiteCaricataDTO result = testSuiteService.loadTestSuite(id);
+      logger.info("test suite caricata con id {}", result.getId());
+      response.setTestSuiteCaricata(result);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+    
   }
   
   @DeleteMapping()

@@ -10,12 +10,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
-import it.reply.genesis.model.TestCaseCaricatoStato;
+import it.reply.genesis.model.LoadedEntityStatus;
 import it.reply.genesis.model.TestCaseCaricatoVO;
+import it.reply.genesis.model.TestSuiteCaricataVO;
 
 public interface TestCaseCaricatoRepository extends JpaRepository<TestCaseCaricatoVO, Long>/*, JpaSpecificationExecutor<TestCaseCaricatoVO>*/ {
 
-  List<TestCaseCaricatoVO> findByStato(TestCaseCaricatoStato stato, Sort sort);
+  List<TestCaseCaricatoVO> findByStatoAndTestSuite(LoadedEntityStatus stato, TestSuiteCaricataVO testSuite, Sort sort);
 
   @Lock(LockModeType.PESSIMISTIC_READ)
   @Query("FROM TestCaseCaricatoVO t WHERE t.id = :id")

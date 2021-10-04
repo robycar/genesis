@@ -2,6 +2,7 @@ package it.reply.genesis.service.impl;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,15 +31,16 @@ import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.FileSystemScope;
 import it.reply.genesis.model.FileSystemVO;
 import it.reply.genesis.model.LineaVO;
+import it.reply.genesis.model.LoadedEntityStatus;
 import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TemplateFileCategory;
 import it.reply.genesis.model.TemplateFileVO;
 import it.reply.genesis.model.TemplateVO;
 import it.reply.genesis.model.TestCaseCaricatoLineaChiamanteVO;
-import it.reply.genesis.model.TestCaseCaricatoStato;
 import it.reply.genesis.model.TestCaseCaricatoVO;
 import it.reply.genesis.model.TestCaseLineaChiamanteVO;
 import it.reply.genesis.model.TestCaseVO;
+import it.reply.genesis.model.TestSuiteCaricataVO;
 import it.reply.genesis.model.repository.TestCaseCaricatoLineaChiamanteRepository;
 import it.reply.genesis.model.repository.TestCaseCaricatoRepository;
 import it.reply.genesis.model.repository.TestCaseLineaChiamanteRepository;
@@ -350,84 +352,40 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     logger.debug("enter loadTestCase");
     TestCaseVO tcvo = readVO(id);
     
-    TestCaseCaricatoVO vo = new TestCaseCaricatoVO();
-    vo.setDescrizione(tcvo.getDescrizione());
-    vo.setExpectedDuration(tcvo.getExpectedDuration());
-    vo.setGruppo(currentGroup());
-    vo.setLineaChiamato(tcvo.getLineaChiamato());
-    vo.setLoadedBy(currentUsername());
-    //vo.setLoadedWhen(null);
-    vo.setNome(tcvo.getNome());
-    vo.setObpChiamato(tcvo.getObpChiamato());
-    if (scheduleInfo == null) {
-      vo.setStato(TestCaseCaricatoStato.READY);
-    } else {
-      vo.setStato(TestCaseCaricatoStato.SCHEDULED);
-      vo.setDelay(scheduleInfo.getDelay());
-      vo.setScheduleDateTime(scheduleInfo.getScheduleDateTime());
-    }
-    vo.setTemplate(tcvo.getTemplate());
-    vo.setTestCase(tcvo);
-    //vo.setVersion(0);
+    ArrayList<FileSystemVO> fileCopiati = new ArrayList<>();
     
-    vo = testCaseCaricatoRepository.save(vo);
-    
-    //Copia i file dal test case al test case caricato
-    logger.debug("Copia dei file dal test case al test case caricato");
-    Map<Long, FileSystemVO> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEST, tcvo.getId(), FileSystemScope.TEST_CARICATO, vo.getId())
-    .stream().collect(Collectors.toMap(p -> p.getFirst().getId(), Pair::getSecond));
-    
-    String folderName = FileSystemScope.TEST_CARICATO.name() + "/" + vo.getId();
-    if (tcvo.getLineeChiamanti() != null) {
-      ArrayList<TestCaseCaricatoLineaChiamanteVO> tccLineeChiamanti = new ArrayList<>(tcvo.getLineeChiamanti().size());
-      for (TestCaseLineaChiamanteVO lc: tcvo.getLineeChiamanti()) {
-        TestCaseCaricatoLineaChiamanteVO tcclc = new TestCaseCaricatoLineaChiamanteVO();
-        tcclc.setTestCaseCaricato(vo);
-        tcclc.setNumLinea(lc.getNumLinea());
-        tcclc.setLinea(lc.getLinea());
-        tcclc.setOutboundProxy(lc.getOutboundProxy());
-        tcclc.setFile(findCopiedFile(fileCopiati, lc.getFile(), folderName));
-        tccLineeChiamanti.add(tcclc);
-      }
-      if (!tccLineeChiamanti.isEmpty()) {
-        vo.setLineeChiamanti(testCaseCaricatoLineaChiamanteRepository.saveAll(tccLineeChiamanti));
-      }
-    }
-    
-    if (tcvo.getFileChiamato() != null) {
-      vo.setFileChiamato(findCopiedFile(fileCopiati, tcvo.getFileChiamato(), folderName));
-    }
+    TestCaseCaricatoVO vo = loadTestCaseInternal(tcvo, null, scheduleInfo, true, fileCopiati);
     
     testCaseCaricatoRepository.saveAndFlush(vo);
     
-    return new TestCaseCaricatoDTO(vo, true, true).assignFolder(fileCopiati.values());
+    return new TestCaseCaricatoDTO(vo, true, true).assignFolder(fileCopiati);
   }
 
   @Override
   public List<TestCaseCaricatoDTO> readTestCaricatiOfType(TestListType inclusion) throws ApplicationException {
     
-    TestCaseCaricatoStato stato;
+    LoadedEntityStatus stato;
     switch (inclusion) {
     case COMPLETED: 
-      stato = TestCaseCaricatoStato.COMPLETED;
+      stato = LoadedEntityStatus.COMPLETED;
       break;
     case SCHEDULED:
-      stato = TestCaseCaricatoStato.SCHEDULED;
+      stato = LoadedEntityStatus.SCHEDULED;
       break;
     case READY:
-      stato = TestCaseCaricatoStato.READY;
+      stato = LoadedEntityStatus.READY;
       break;
     case RUNNING:
-      stato = TestCaseCaricatoStato.RUNNING;
+      stato = LoadedEntityStatus.RUNNING;
       break;
     case WAITING:
-      stato = TestCaseCaricatoStato.WAITING;
+      stato = LoadedEntityStatus.WAITING;
       break;
     default:
       return Collections.emptyList();
     }
     
-    List<TestCaseCaricatoVO> result = testCaseCaricatoRepository.findByStato(stato, Sort.by(Direction.DESC, "id"));
+    List<TestCaseCaricatoVO> result = testCaseCaricatoRepository.findByStatoAndTestSuite(stato, null, Sort.by(Direction.DESC, "id"));
 
     return result.stream()
         .map(TestCaseCaricatoDTO::new)
@@ -438,9 +396,9 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   public void runLoaded(long id) throws ApplicationException {
     TestCaseCaricatoVO vo = readCaricatoVO(id, true);
     //Verifica che lo stato sia ready
-    checkStatoOfTestCaseCaricato(vo, TestCaseCaricatoStato.READY);
+    checkStatoOfTestCaseCaricato(vo, LoadedEntityStatus.READY);
     
-    vo.setStato(TestCaseCaricatoStato.WAITING);
+    vo.setStato(LoadedEntityStatus.WAITING);
     vo.setStartDate(Instant.now());
     vo.setStartedBy(currentUsername());
 
@@ -451,7 +409,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     testCaseCaricatoRepository.flush();
   }
 
-  public void checkStatoOfTestCaseCaricato(TestCaseCaricatoVO vo, TestCaseCaricatoStato statoAtteso) throws ApplicationException {
+  public void checkStatoOfTestCaseCaricato(TestCaseCaricatoVO vo, LoadedEntityStatus statoAtteso) throws ApplicationException {
     if (!statoAtteso.equals(vo.getStato())) {
       throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_CARICATO_WRONG_STATE, vo.getId(), vo.getStato(), statoAtteso);
     }
@@ -502,12 +460,86 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     }
    
     vo.setResult(executionResult);
-    vo.setStato(TestCaseCaricatoStato.COMPLETED);
+    vo.setStato(LoadedEntityStatus.COMPLETED);
     vo.setEndDate(Instant.now());
     
     vo = testCaseCaricatoRepository.saveAndFlush(vo);
     
     return new TestCaseCaricatoDTO(vo, false, false);
+  }
+
+  @Override
+  public List<TestCaseCaricatoVO> loadTestCasesInTestSuiteVO(TestSuiteCaricataVO testSuite,
+      Collection<TestCaseVO> testCases) throws ApplicationException {
+    logger.debug("enter loadTestCasesInTestSuiteVO");
+    ArrayList<TestCaseCaricatoVO> result = new ArrayList<>(testCases.size());
+    for (TestCaseVO tcvo: testCases) {
+      result.add(loadTestCaseInternal(tcvo, testSuite, null, false, null));
+      
+    }
+    return result;
+  }
+
+  private TestCaseCaricatoVO loadTestCaseInternal(TestCaseVO tcvo, TestSuiteCaricataVO testSuiteCaricata, ScheduleInfo scheduleInfo,
+      boolean flush, Collection<FileSystemVO> outfileCopiati) throws ApplicationException {
+    
+    TestCaseCaricatoVO vo = new TestCaseCaricatoVO();
+    vo.setDescrizione(tcvo.getDescrizione());
+    vo.setExpectedDuration(tcvo.getExpectedDuration());
+    vo.setGruppo(currentGroup());
+    vo.setLineaChiamato(tcvo.getLineaChiamato());
+    vo.setLoadedBy(currentUsername());
+    //vo.setLoadedWhen(null);
+    vo.setNome(tcvo.getNome());
+    vo.setObpChiamato(tcvo.getObpChiamato());
+    if (scheduleInfo == null) {
+      vo.setStato(LoadedEntityStatus.READY);
+    } else {
+      vo.setStato(LoadedEntityStatus.SCHEDULED);
+      vo.setDelay(scheduleInfo.getDelay());
+      vo.setScheduleDateTime(scheduleInfo.getScheduleDateTime());
+    }
+    vo.setTemplate(tcvo.getTemplate());
+    vo.setTestCase(tcvo);
+    //vo.setVersion(0);
+    
+    vo = testCaseCaricatoRepository.save(vo);
+    
+    //Copia i file dal test case al test case caricato
+    logger.debug("Copia dei file dal test case {} al test case caricato {}", tcvo.getId(), vo.getId());
+    Map<Long, FileSystemVO> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEST, tcvo.getId(), FileSystemScope.TEST_CARICATO, vo.getId())
+    .stream().collect(Collectors.toMap(p -> p.getFirst().getId(), Pair::getSecond));
+    
+    String folderName = FileSystemScope.TEST_CARICATO.name() + "/" + vo.getId();
+    if (tcvo.getLineeChiamanti() != null) {
+      ArrayList<TestCaseCaricatoLineaChiamanteVO> tccLineeChiamanti = new ArrayList<>(tcvo.getLineeChiamanti().size());
+      for (TestCaseLineaChiamanteVO lc: tcvo.getLineeChiamanti()) {
+        TestCaseCaricatoLineaChiamanteVO tcclc = new TestCaseCaricatoLineaChiamanteVO();
+        tcclc.setTestCaseCaricato(vo);
+        tcclc.setNumLinea(lc.getNumLinea());
+        tcclc.setLinea(lc.getLinea());
+        tcclc.setOutboundProxy(lc.getOutboundProxy());
+        tcclc.setFile(findCopiedFile(fileCopiati, lc.getFile(), folderName));
+        tccLineeChiamanti.add(tcclc);
+      }
+      if (!tccLineeChiamanti.isEmpty()) {
+        vo.setLineeChiamanti(testCaseCaricatoLineaChiamanteRepository.saveAll(tccLineeChiamanti));
+      }
+    }
+    
+    if (tcvo.getFileChiamato() != null) {
+      vo.setFileChiamato(findCopiedFile(fileCopiati, tcvo.getFileChiamato(), folderName));
+    }
+    
+    if (outfileCopiati != null) {
+      outfileCopiati.addAll(fileCopiati.values());
+    }
+    
+    if (flush) {
+      return testCaseCaricatoRepository.saveAndFlush(vo);
+    } else {
+      return testCaseCaricatoRepository.save(vo);
+    }
   }
 
 

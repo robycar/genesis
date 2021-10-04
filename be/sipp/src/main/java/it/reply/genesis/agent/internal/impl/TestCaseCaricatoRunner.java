@@ -17,7 +17,7 @@ import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
 import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.FileSystemScope;
-import it.reply.genesis.model.TestCaseCaricatoStato;
+import it.reply.genesis.model.LoadedEntityStatus;
 import it.reply.genesis.service.FileSystemService;
 import it.reply.genesis.service.TestCaseService;
 
@@ -125,7 +125,7 @@ public class TestCaseCaricatoRunner implements Runnable {
     TestCaseCaricatoDTO updatedTest = new TestCaseCaricatoDTO();
     updatedTest.setId(testToUpdate.getId());
     updatedTest.setVersion(testToUpdate.getVersion());
-    updatedTest.setStato(TestCaseCaricatoStato.RUNNING);
+    updatedTest.setStato(LoadedEntityStatus.RUNNING);
     // Sovrascrivo la data di avvio rispetto a quando l'utente ha premuto start?
     updatedTest.setStartDate(Instant.now());
     updatedTest.setPathInstance(testCaseCaricato.getPathInstance());
@@ -137,12 +137,12 @@ public class TestCaseCaricatoRunner implements Runnable {
     try {
       TestCaseService testCaseService = serviceManager.getTestCaseService();
       TestCaseCaricatoDTO testToUpdate = testCaseService.readCaricato(testCaseCaricato.getId());
-      if (!TestCaseCaricatoStato.COMPLETED.equals(testToUpdate.getStato())) {
+      if (!LoadedEntityStatus.COMPLETED.equals(testToUpdate.getStato())) {
         TestCaseCaricatoDTO updatedTest = new TestCaseCaricatoDTO();
         updatedTest.setId(testToUpdate.getId());
         updatedTest.setVersion(testToUpdate.getVersion());
         updatedTest.setEndDate(Instant.now());
-        updatedTest.setStato(TestCaseCaricatoStato.COMPLETED);
+        updatedTest.setStato(LoadedEntityStatus.COMPLETED);
         updatedTest.setResult(ExecutionResult.OK);
         
         this.testCaseCaricato = testCaseService.updateTestCaseCaricato(updatedTest);
@@ -161,7 +161,7 @@ public class TestCaseCaricatoRunner implements Runnable {
       updatedTest.setId(testToUpdate.getId());
       updatedTest.setVersion(testToUpdate.getVersion());
       updatedTest.setEndDate(Instant.now());
-      updatedTest.setStato(TestCaseCaricatoStato.COMPLETED);
+      updatedTest.setStato(LoadedEntityStatus.COMPLETED);
       updatedTest.setResult(ExecutionResult.KO);
       this.testCaseCaricato =  testCaseService.updateTestCaseCaricato(updatedTest);
     } catch (ApplicationException ae) {

@@ -3,6 +3,7 @@ package it.reply.genesis.service;
 import java.util.List;
 
 import it.reply.genesis.api.generic.exception.ApplicationException;
+import it.reply.genesis.api.test.payload.TestSuiteCaricataDTO;
 import it.reply.genesis.api.test.payload.TestSuiteDTO;
 
 public interface TestSuiteService {
@@ -16,5 +17,7 @@ public interface TestSuiteService {
   void remove(long id) throws ApplicationException;
 
   TestSuiteDTO retrieve(long id) throws ApplicationException;
+
+  TestSuiteCaricataDTO loadTestSuite(long id) throws ApplicationException;
 
 }

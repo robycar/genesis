@@ -1,6 +1,6 @@
 package it.reply.genesis.model;
 
-public enum TestCaseCaricatoStato {
+public enum LoadedEntityStatus {
   READY,
   SCHEDULED,
   WAITING,

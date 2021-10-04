@@ -35,7 +35,8 @@ INSERT INTO `FUNZIONE` (`CODICE`, `RESERVED`, `NOME`, `DESCRIZIONE`) VALUES
 ('testgen.delete',	0,	'Elimina Test Generatore',	'Consente di eliminare un test generatore'),
 ('testgen.edit',    0,	'Modifica Test Generatore',	'Consente di modificare un test generatore'),
 ('testgen.view',    0,	'Mostra Test Generatore',	'Consente di accedere ai test generatore'),
-('testgen.create',  0,	'Creazione Test Generatore',	'Consente di accedere ai test generatore')
+('testgen.create',  0,	'Creazione Test Generatore',	'Consente di accedere ai test generatore'),
+('testsuite.run',  0,	'Carica/Lancia Test Suite',	'Carica/Lancia Test ')
 
 ;
 

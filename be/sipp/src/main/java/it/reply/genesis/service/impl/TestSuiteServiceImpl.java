@@ -20,11 +20,17 @@ import it.reply.genesis.AppError;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.api.test.payload.TestCaseDTO;
+import it.reply.genesis.api.test.payload.TestSuiteCaricataDTO;
 import it.reply.genesis.api.test.payload.TestSuiteDTO;
+import it.reply.genesis.model.LoadedEntityStatus;
+import it.reply.genesis.model.TestCaseCaricatoVO;
 import it.reply.genesis.model.TestCaseVO;
+import it.reply.genesis.model.TestSuiteCaricataVO;
 import it.reply.genesis.model.TestSuiteVO;
 import it.reply.genesis.model.repository.TestCaseRepository;
+import it.reply.genesis.model.repository.TestSuiteCaricataRepository;
 import it.reply.genesis.model.repository.TestSuiteRepository;
+import it.reply.genesis.service.TestCaseService;
 import it.reply.genesis.service.TestSuiteService;
 
 @Service
@@ -32,10 +38,16 @@ import it.reply.genesis.service.TestSuiteService;
 public class TestSuiteServiceImpl extends AbstractService implements TestSuiteService {
 
   @Autowired
+  private TestCaseService testCaseService;
+
+  @Autowired
   private TestSuiteRepository testSuiteRepository;
   
   @Autowired
   private TestCaseRepository testCaseRepository;
+  
+  @Autowired
+  private TestSuiteCaricataRepository testSuiteCaricataRepository;
   
   public TestSuiteServiceImpl() {
   }
@@ -158,6 +170,34 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     TestSuiteVO testSuiteVO = readVO(id);
     
     return new TestSuiteDTO(testSuiteVO, true);
+  }
+
+  @Override
+  public TestSuiteCaricataDTO loadTestSuite(long id) throws ApplicationException {
+    logger.debug("enter loadTestSuite");
+    TestSuiteVO src = readVO(id);
+    
+    TestSuiteCaricataVO vo = new TestSuiteCaricataVO();
+    
+    vo.setDescrizione(src.getDescrizione());
+    vo.setGruppo(src.getGruppo());
+    vo.setLoadedBy(currentUsername());
+    //vo.setLoadedWhen(new Timestamp());
+    vo.setNome(src.getNome());
+    vo.setStato(LoadedEntityStatus.READY);
+    vo.setTestSuite(src);
+    
+    vo = testSuiteCaricataRepository.save(vo);
+    
+    if (!src.getTestCases().isEmpty()) {
+      List<TestCaseCaricatoVO> loadedTestCases = testCaseService.loadTestCasesInTestSuiteVO(vo, src.getTestCases());
+      vo.setTestCases(loadedTestCases);
+      vo = testSuiteCaricataRepository.saveAndFlush(vo);
+    } else {
+      testSuiteCaricataRepository.flush();
+    }
+
+    return new TestSuiteCaricataDTO(vo, true);
   }
 
 }
