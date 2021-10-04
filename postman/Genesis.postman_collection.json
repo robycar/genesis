@@ -10002,6 +10002,109 @@
 							"body": "{\n    \"error\": {\n        \"code\": \"TEST-0013\",\n        \"description\": \"Test suite non trovata: 4\"\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "testsuite_load",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testsuite/load/2",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testsuite",
+								"load",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "testsuite_load success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/testsuite/load/2",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testsuite",
+										"load",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 01 Oct 2021 16:59:41 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"testSuiteCaricata\": {\n        \"id\": 3,\n        \"version\": 0,\n        \"nome\": \"pixel\",\n        \"descrizione\": \"Alias rerum occaecati sit eveniet reiciendis ab laboriosam nesciunt. Natus perferendis aperiam. Ut est vitae occaecati accusamus aspernatur ut. Enim repudiandae voluptate aut consequatur dolor minima quo nihil. Omnis aut similique non fuga odio quaerat veniam ex iusto.\",\n        \"stato\": \"READY\",\n        \"gruppo\": {\n            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"modifiedBy\": \"init\",\n            \"createdBy\": \"init\",\n            \"version\": 1,\n            \"id\": 1,\n            \"nome\": \"g1\",\n            \"descrizione\": \"g1\"\n        },\n        \"loadedWhen\": \"2021-10-01T16:59:40.592+00:00\",\n        \"testSuite\": {\n            \"modifiedDate\": \"2021-09-17T10:48:00.000+00:00\",\n            \"creationDate\": \"2021-09-17T10:48:00.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 2,\n            \"nome\": \"pixel\",\n            \"descrizione\": \"Alias rerum occaecati sit eveniet reiciendis ab laboriosam nesciunt. Natus perferendis aperiam. Ut est vitae occaecati accusamus aspernatur ut. Enim repudiandae voluptate aut consequatur dolor minima quo nihil. Omnis aut similique non fuga odio quaerat veniam ex iusto.\",\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"g1\",\n                \"descrizione\": \"g1\"\n            },\n            \"testCases\": null,\n            \"numTestCases\": null\n        },\n        \"startDate\": null,\n        \"endDate\": null,\n        \"loadedBy\": \"test\",\n        \"startedBy\": null,\n        \"testCases\": [\n            {\n                \"id\": 15,\n                \"loadedWhen\": \"2021-10-01T16:59:40.638+00:00\",\n                \"scheduleDateTime\": null,\n                \"delay\": null,\n                \"startDate\": null,\n                \"endDate\": null,\n                \"loadedBy\": \"test\",\n                \"startedBy\": null,\n                \"expectedDuration\": 57,\n                \"version\": 1,\n                \"nome\": \"Handcrafted Metal Chicken\",\n                \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n                \"stato\": \"READY\",\n                \"result\": null,\n                \"pathInstance\": null,\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"g1\",\n                    \"descrizione\": \"g1\"\n                },\n                \"template\": {\n                    \"modifiedDate\": \"2021-09-16T09:58:45.000+00:00\",\n                    \"creationDate\": \"2021-08-06T16:41:30.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 22,\n                    \"id\": 1,\n                    \"nome\": \"Template 1\",\n                    \"durata\": 57,\n                    \"typeTemplate\": \"?Type Template?\",\n                    \"descrizione\": \"Descrizione molto lunga per il template 1\",\n                    \"gruppo\": {\n                        \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                        \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                        \"modifiedBy\": \"init\",\n                        \"createdBy\": \"init\",\n                        \"version\": 1,\n                        \"id\": 1,\n                        \"nome\": \"g1\",\n                        \"descrizione\": \"g1\"\n                    },\n                    \"folder\": null,\n                    \"fileLinks\": null\n                },\n                \"testCase\": {\n                    \"modifiedDate\": \"2021-09-14T15:24:20.000+00:00\",\n                    \"creationDate\": \"2021-09-14T15:24:20.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"expectedDuration\": 57,\n                    \"nome\": \"Handcrafted Metal Chicken\",\n                    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n                    \"chiamato\": null,\n                    \"chiamanti\": null,\n                    \"template\": {\n                        \"modifiedDate\": \"2021-09-16T09:58:45.000+00:00\",\n                        \"creationDate\": \"2021-08-06T16:41:30.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 22,\n                        \"id\": 1,\n                        \"nome\": \"Template 1\",\n                        \"durata\": 57,\n                        \"typeTemplate\": \"?Type Template?\",\n                        \"descrizione\": \"Descrizione molto lunga per il template 1\",\n                        \"gruppo\": {\n                            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                            \"modifiedBy\": \"init\",\n                            \"createdBy\": \"init\",\n                            \"version\": 1,\n                            \"id\": 1,\n                            \"nome\": \"g1\",\n                            \"descrizione\": \"g1\"\n                        },\n                        \"folder\": null,\n                        \"fileLinks\": null\n                    },\n                    \"gruppo\": {\n                        \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                        \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                        \"modifiedBy\": \"init\",\n                        \"createdBy\": \"init\",\n                        \"version\": 1,\n                        \"id\": 1,\n                        \"nome\": \"g1\",\n                        \"descrizione\": \"g1\"\n                    }\n                },\n                \"properties\": null,\n                \"chiamato\": null,\n                \"chiamanti\": null,\n                \"folder\": null\n            },\n            {\n                \"id\": 16,\n                \"loadedWhen\": \"2021-10-01T16:59:40.847+00:00\",\n                \"scheduleDateTime\": null,\n                \"delay\": null,\n                \"startDate\": null,\n                \"endDate\": null,\n                \"loadedBy\": \"test\",\n                \"startedBy\": null,\n                \"expectedDuration\": 57,\n                \"version\": 1,\n                \"nome\": \"Unbranded Cotton Salad\",\n                \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n                \"stato\": \"READY\",\n                \"result\": null,\n                \"pathInstance\": null,\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"g1\",\n                    \"descrizione\": \"g1\"\n                },\n                \"template\": {\n                    \"modifiedDate\": \"2021-09-16T09:58:45.000+00:00\",\n                    \"creationDate\": \"2021-08-06T16:41:30.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 22,\n                    \"id\": 1,\n                    \"nome\": \"Template 1\",\n                    \"durata\": 57,\n                    \"typeTemplate\": \"?Type Template?\",\n                    \"descrizione\": \"Descrizione molto lunga per il template 1\",\n                    \"gruppo\": {\n                        \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                        \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                        \"modifiedBy\": \"init\",\n                        \"createdBy\": \"init\",\n                        \"version\": 1,\n                        \"id\": 1,\n                        \"nome\": \"g1\",\n                        \"descrizione\": \"g1\"\n                    },\n                    \"folder\": null,\n                    \"fileLinks\": null\n                },\n                \"testCase\": {\n                    \"modifiedDate\": \"2021-09-17T10:47:49.000+00:00\",\n                    \"creationDate\": \"2021-09-17T10:47:49.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 1,\n                    \"id\": 3,\n                    \"expectedDuration\": 57,\n                    \"nome\": \"Unbranded Cotton Salad\",\n                    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n                    \"chiamato\": null,\n                    \"chiamanti\": null,\n                    \"template\": {\n                        \"modifiedDate\": \"2021-09-16T09:58:45.000+00:00\",\n                        \"creationDate\": \"2021-08-06T16:41:30.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 22,\n                        \"id\": 1,\n                        \"nome\": \"Template 1\",\n                        \"durata\": 57,\n                        \"typeTemplate\": \"?Type Template?\",\n                        \"descrizione\": \"Descrizione molto lunga per il template 1\",\n                        \"gruppo\": {\n                            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                            \"modifiedBy\": \"init\",\n                            \"createdBy\": \"init\",\n                            \"version\": 1,\n                            \"id\": 1,\n                            \"nome\": \"g1\",\n                            \"descrizione\": \"g1\"\n                        },\n                        \"folder\": null,\n                        \"fileLinks\": null\n                    },\n                    \"gruppo\": {\n                        \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                        \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                        \"modifiedBy\": \"init\",\n                        \"createdBy\": \"init\",\n                        \"version\": 1,\n                        \"id\": 1,\n                        \"nome\": \"g1\",\n                        \"descrizione\": \"g1\"\n                    }\n                },\n                \"properties\": null,\n                \"chiamato\": null,\n                \"chiamanti\": null,\n                \"folder\": null\n            }\n        ]\n    }\n}"
+						}
+					]
 				}
 			]
 		},
