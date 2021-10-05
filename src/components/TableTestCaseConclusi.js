@@ -5,13 +5,13 @@ import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import ChartReport from "../components/ChartReport";
-
+import { IconButton } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
+import ChartReport from "../components/ChartReport";
 import ButtonClickedBlue from "./ButtonClickedBlue";
+import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined';
 import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -24,13 +24,12 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
 import loading from "../../src/assets/load.gif";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import ButtonNotClickedGreen from "./ButtonNotClickedGreen";
+import ButtonClickedGreen from "./ButtonClickedGreen";
 import acccessControl from "../service/url.js";
-import { IconButton } from "@material-ui/core";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 
-const TestSuiteComplete = () => {
+const TotalTestCaseConclusi = () => {
   const columns = [
     {
       title: "Id",
@@ -74,60 +73,18 @@ const TestSuiteComplete = () => {
       field: "pathInstance",
       render: () => (
         <IconButton>
-          <PostAddOutlinedIcon onClick={(event)=> alert("Show Report")}/>
+          <PostAddOutlinedIcon onClick={(event) => alert("Show Report")} />
         </IconButton>
       ),
     },
   ];
 
-  const columnsTestcases = [
-    {
-      title: "ID Test",
-      field: "id",
-      defaultSort: "desc",
-      editable: "never",
-    },
-    {
-      title: "Nome",
-      field: "nome",
-    },
-    {
-      title: "Descrizione",
-      field: "descrizione",
-      
-    },
-    // {
-    //   title: "Durata Attesa",
-    //   field: "expectedDuration",
-    // },
-    {
-      title: "Versione",
-      field: "version",
-      hidden: true,
-    },
-    {
-      title: "Data Creazione",
-      field: "creationDate",
-    },
-    {
-      title: "Data Modifica",
-      field: "modifiedDate",
-    },
-    {
-      title: "Creato da",
-      field: "createdBy",
-    },
-    {
-      title: "Modificato da",
-      field: "modifiedBy",
-    },
-    {
-      title: "Template",
-      field: "template.nome",
-    },
-  ];
-
   const useStyles = makeStyles((theme) => ({
+    modal: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    },
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
@@ -162,9 +119,12 @@ const TestSuiteComplete = () => {
       position: "relative",
     },
     paperContainer2: {
-      flexDirection: "column",
+      //flexDirection: "column",
       padding: "20px",
       // marginBottom: "10%",
+      position: "relative",
+      alignItems: "center",
+      justifyContent: "center",
     },
     contenutoModale: {
       height: 370,
@@ -261,7 +221,6 @@ const TestSuiteComplete = () => {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const [openGrafico, setOpenGrafico] = useState(false);
-  const [dataTaTestCases, setDataTestCases] = useState();
 
   const [prova, setProva] = useState([]);
 
@@ -306,7 +265,7 @@ const TestSuiteComplete = () => {
 
   const handleOpenExport = () => {
     setOpenExport(true);
-    getAllTestCaseModal();
+    // getAllTestCaseModal();
   };
 
   const handleOpen = (rowData) => {
@@ -321,11 +280,19 @@ const TestSuiteComplete = () => {
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
     // setOpen(true);
-    getTestSuiteById(rowData.id);
+    // getTestSuiteById(rowData.id);
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleOpenGrafico = () => {
+    setOpenGrafico(true);
+  };
+
+  const handleCloseGrafico = () => {
+    setOpenGrafico(false);
   };
 
   const handleOpenSchedula = () => {
@@ -367,51 +334,41 @@ const TestSuiteComplete = () => {
     handleOpen(rowData);
   };
 
-  const handleOpenGrafico = () => {
-    setOpenGrafico(true);
-  }
-
-  const handleCloseGrafico = () => {
-    setOpenGrafico(false);
-  }
-
   const handleOpenTestCase = () => {
     SetOpenTestCase(true);
   };
 
   const handleCloseTestCase = () => {
-    getTestSuiteById(id);
+    // getTestSuiteById(id);
     SetOpenTestCase(false);
   };
-
- 
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
   //------------------------- GET TEST SUITE BY ID ------------------------------
 
-  const getTestSuiteById = (id) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  // const getTestSuiteById = (id) => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
 
-    fetch(`/api/testsuite/` + id, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setTestSuite(result.testSuite);
-        setTestCaseAssociati(result.testSuite);
-        setOpen(true);
-        SetOpenTestCase(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  //   fetch(`/api/testsuite/` + id, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setTestSuite(result.testSuite);
+  //       setTestCaseAssociati(result.testSuite);
+  //       setOpen(true);
+  //       SetOpenTestCase(false);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
 
   //-----------GET TEST SUITE COMPLETE----------------------
   // const getAllTestSuiteComplete = () => {
@@ -445,12 +402,6 @@ const TestSuiteComplete = () => {
   //     })
   //     .catch((error) => console.log("error", error));
   // };
-
-  useEffect(() => {
-    //getAllTestSuiteComplete();
-    getAllTestSuite();
-    getAllTestCase();
-  }, []);
 
   /*--------------- LOAD TEST CASE -------------------*/
 
@@ -508,75 +459,42 @@ const TestSuiteComplete = () => {
     runCaseLoder(rowDataaa.id);
   };
 
-  /*--------------- GET TEST CASE -------------------*/
+  //-----------GET TEST CASE----------------------
+  const getAllTestCase = () => {
+    var consta = "COMPLETED";
 
-  const getAllTestCaseModal = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
+    var raw = JSON.stringify({
+      includeTestCaseOfType: consta,
+      includeTestSuiteOfType: null,
+      includeTestGeneratoreOfType: null,
+    });
+
     var requestOptions = {
-      method: "GET",
+      method: "POST",
       headers: myHeaders,
+      body: raw,
       redirect: "follow",
     };
 
-    fetch(`/api/testcase`, requestOptions)
+    fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        setAppearTest(result.list);
-        setDataCase(result.list);
+        //setAppearTest(result.testCaseList);
+        setData(result.testCaseList);
       })
       .catch((error) => console.log("error", error));
   };
 
-   //-----------GET TEST CASE ASSOCIATI----------------------
-   const getAllTestCase = () => {
-    //setCaricamento2(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setDataTestCases(result.list);
-        setCaricamento2(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-   //-----------GET TEST SUITE----------------------
-   const getAllTestSuite = () => {
-    setCaricamento(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testsuite`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-        setCaricamento(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  useEffect(() => {
+    getAllTestCase();
+  }, []);
 
   const tableIcons = {
     Export: React.forwardRef((props, ref) => (
@@ -589,10 +507,9 @@ const TestSuiteComplete = () => {
   return (
     <div>
       <MaterialTable
-              icons={tableIcons}
-
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
-        title="Ultimi 30 Test Suite Completi"
+        title="Tutti i Test Case Conclusi"
         data={data}
         columns={columns}
         options={{
@@ -620,30 +537,30 @@ const TestSuiteComplete = () => {
           //       </Button>
           //     </div>
           //   ),
-          //   tooltip: "Export Test Suite Table",
+          //   tooltip: "Export Test Case Table",
           //   onClick: () => handleOpenExport(),
           //   isFreeAction: true,
           // },
-          {
-            icon: (dat) => (
-              <a>
-                <VisibilityIcon />
-              </a>
-            ),
-            tooltip: "Visualizza tutti i dati",
-            position: "row",
-            onClick: (event, rowData) => openVisualizza(rowData),
-          },
-          {
-            icon: (dat) => (
-              <a>
-                <PieChartOutlinedIcon />
-              </a>
-            ),
-            tooltip: "Visualizza grafico",
-            position: "row",
-            onClick: (event, rowData) => handleOpenGrafico(rowData),
-          },
+          // {
+          //   icon: (dat) => (
+          //     <a>
+          //       <VisibilityIcon />
+          //     </a>
+          //   ),
+          //   tooltip: "Visualizza tutti i dati",
+          //   position: "row",
+          //   onClick: (event, rowData) => openVisualizza(rowData),
+          // },
+          // {
+          //   icon: (dat) => (
+          //     <a>
+          //       <PieChartOutlinedIcon />
+          //     </a>
+          //   ),
+          //   tooltip: "Visualizza Grafico",
+          //   position: "row",
+          //   onClick: (event, rowData) => handleOpenGrafico(rowData),
+          // },
         ]}
         localization={{
           header: {
@@ -842,100 +759,8 @@ const TestSuiteComplete = () => {
           </div>
         </Fade>
       </Modal>
-      {/* ------------------------MODALE TEST CASE ASSOCIATI-------------------- */}
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={openTestCase}
-        onClose={handleCloseTestCase}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={openTestCase}>
-          <div>
-            <Paper className={classes.paperContainer2} elevation={1}>
-              <div>
-                <ListItem>
-                  <Typography className={classes.intestazione} variant="h4">
-                    Visualizza i Test Case associati
-                  </Typography>
-                </ListItem>
-                <Divider className={classes.divider} />
-              </div>
 
-              <Form className={classes.contenutoModale}>
-                <>
-                  <MaterialTable
-                    style={{ boxShadow: "none" }}
-                    title="Test Case"
-                    data={arrayTestCase}
-                    columns={columnsTestcases}
-                    isLoading={caricamento2}
-                    options={{
-                      selection: false,
-                      sorting: true,
-                      actionsColumnIndex: -1,
-                      search: true,
-                      searchFieldVariant: "outlined",
-                      filtering: true,
-                      searchFieldAlignment: "left",
-                      // pageSizeOptions: [
-                      //   5,
-                      //   10,
-                      //   20,
-                      //   { value: data.length, label: "All" },
-                      // ],
-                    }}
-                    // actions={[
-                    //   {
-                    //     icon: (dat) => (
-                    //       <a>
-                    //         <VisibilityIcon />
-                    //       </a>
-                    //     ),
-                    //     tooltip: "Visualizza tutti i dati",
-                    //     position: "row",
-                    //     onClick: (event, rowData) => openVisualizza(rowData),
-                    //   },
-                    // ]}
-                    localization={{
-                      header: {
-                        actions: "Azioni",
-                      },
-                      body: {
-                        emptyDataSourceMessage:
-                          "Non è presente alcun dato da mostrare",
-                      },
-                    }}
-                  />
-                </>
-              </Form>
-              <div className={classes.buttonModale}>
-                <Divider className={classes.divider} />
-                <div
-                  className={classes.bottone}
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                 
-
-                  <ButtonNotClickedGreen
-                    className={classes.bottoneAnnulla}
-                    onClick={handleCloseTestCase}
-                    size="medium"
-                    nome="Indietro"
-                  />
-                </div>
-              </div>
-            </Paper>
-          </div>
-        </Fade>
-      </Modal>
-
-      {/*---------------- MODALE VISUALIZZA GRAFICO ------------------*/}
+      {/* ---------------- MODALE VISUALIZZA GRAFICO ------------------
 
       <Modal
         aria-labelledby="transition-modal-title"
@@ -955,41 +780,42 @@ const TestSuiteComplete = () => {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                  Test Case KO-OK
+                    Test Case KO-OK
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
 
               <Form className={classes.contenutoModale}>
-              <div className={classes.chart}>
-                <ChartReport />
-              </div>
+                <div className={classes.chart}>
+                  <ChartReport />
+                </div>
               </Form>
               <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
-                
+
                 <div
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                 <Button
+                  <Button
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseGrafico}
                     size="medium"
-                    color="primary"
+                    color="secondary"
                     variant="outlined"
-                  > Chiudi
+                  >
+                    {" "}
+                    Chiudi
                   </Button>
                 </div>
               </div>
             </Paper>
           </div>
         </Fade>
-      </Modal>
-
+      </Modal> */}
     </div>
   );
 };
 
-export default TestSuiteComplete;
+export default TotalTestCaseConclusi;

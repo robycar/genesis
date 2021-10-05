@@ -24,7 +24,8 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Tooltip from "@material-ui/core/Tooltip";
+import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale} from "../service/api";
+
 
 function TestSuiteTable() {
   const [data, setData] = useState([]);
@@ -39,7 +40,6 @@ function TestSuiteTable() {
   const [dataTestCases, setDataTestCases] = useState([]);
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
-  const [durataComplessiva, setDurataComplessiva] = useState("");
   const [testSuite, setTestSuite] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
@@ -52,8 +52,8 @@ function TestSuiteTable() {
     let x = [];
 
     //console.log("--------"+testsuite)
-    for (let i = 0; i < testsuite.testCases.length; i++) {
-      x.push(testsuite.testCases[i].id);
+    for (let i = 0; i < testsuite?.testCases?.length; i++) {
+      x.push(testsuite?.testCases[i]?.id);
     }
     setProva(x);
   };
@@ -79,27 +79,11 @@ function TestSuiteTable() {
     arrayIdTestCase?.push(element);
   }
 
-  // console.log(selectedRows, " Righe selezionati");
-  //console.log(arrayTestCase, " Array di test case");
-
   var arrayId = [];
   arrayTestCase?.forEach(function (obj) {
     arrayId?.push(obj.id);
   });
-  // console.log(arrayId, "ID associati");
 
-  // console.log(arrayIdTestCase, "Id test case selezionati");
-
-  //Pusho gli ID associati nell'array di test Case
-  // for (let index = 0; index < arrayId.length; index++) {
-  //   const element = arrayId[index];
-  //   arrayIdTestCase?.push(element);
-  // }
-  // console.log(arrayIdTestCase, "Id test case totali");
-  //Tolgo gli ID duplicati
-  // const uniqueArray = [...new Set(arrayIdTestCase)];
-
-  // console.log(uniqueArray);
 
   //----Bearer-------------------------
 
@@ -108,127 +92,42 @@ function TestSuiteTable() {
   if (bearer != null) {
     bearer = bearer.replace(/"/g, "");
   }
+  const funzioneGetAll = () => {
+    //----GET ALL USERS----
+    (async () => {
+      setCaricamento(true)
+      setData((await getGenerale('testsuite')).list);
+      setCaricamento(false)
+    })();
 
-  //-----------GET TEST SUITE----------------------
-  const getAllTestSuite = () => {
-    setCaricamento(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    (async () => {
+      setCaricamento2(true)
+      setDataTestCases((await getGenerale('testcase')).list);
+      setCaricamento2(false)
+    })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  }
 
-    fetch(`/api/testsuite`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-        setCaricamento(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
-  //------------------------- GET TEST SUITE BY ID ------------------------------
-
-  const getTestSuiteById = (id) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testsuite/` + id, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setTestSuite(result.testSuite);
+  const funzioneGetTestsuiteById = (id) => {
+    (async () => {
+      let result = await getByIdGenerale('testcase', id);
+      setTestSuite(result.testSuite);
         setTestCaseAssociati(result.testSuite);
         setOpen(true);
         SetOpenTestCase(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //-----------GET TEST CASE----------------------
-  const getAllTestCase = () => {
-    setCaricamento2(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setDataTestCases(result.list);
-        setCaricamento2(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //---------------- MODIFICA TESTCASEA ASSOCIATI---------------------
-  // const aggiornaTestCaseAssociati = (testcases) => {
-  //   const Invia = () => {
-  //     var myHeaders = new Headers();
-  //     myHeaders.append("Authorization", bearer);
-  //     myHeaders.append("Content-Type", "application/json");
-  //     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //     var raw = JSON.stringify({
-  //       id: id,
-  //       version: version,
-  //       nome: nome,
-  //       descrizione: descrizione,
-  //       testCases: testcases,
-  //     });
-
-  //     var requestOptions = {
-  //       method: "POST",
-  //       headers: myHeaders,
-  //       body: raw,
-  //       redirect: "follow",
-  //     };
-
-  //     fetch(`/api/testsuite`, requestOptions)
-  //       .then((response) => response.json())
-  //       .then((result) => console.log(result))
-  //       .catch((error) => console.log("error", error));
-  //     getAllTestSuite();
-
-  //     // window.location = "/editing/testsuite";
-  //   };
-  //   Invia();
-  // };
-
+    })();
+  }
+ 
   //----------------------------------------------------------
   useEffect(() => {
-    getAllTestSuite();
-    getAllTestCase();
-    // Invia();
+    funzioneGetAll();
   }, []);
-
-  // console.log(testSuite.testCases, "sono test suite");
 
   const columns = [
     {
       title: "ID Test",
       field: "id",
       defaultSort: "desc",
-      // tableData: { checked: true },
     },
     {
       title: "Nome",
@@ -260,22 +159,11 @@ function TestSuiteTable() {
     {
       title: "Numero di Test Case",
       field: "numTestCases",
-      // render: (rowData) => {
-      //   let prova = "!";
-      //   for (let index = 0; index < rowData.testCases.length; index++){
-      //     prova += ", " +rowData.testCases[index].nome;
-      //   }
-      //   return prova.replace("!, ", "")
-      // },
     },
     {
       title: "Durata Complessiva",
       field: "durata",
-    },
-    // {
-    //   title: "Gruppo",
-    //   field: "gruppo.nome",
-    // },
+    }
   ];
 
   const columnsTestcases = [
@@ -293,10 +181,6 @@ function TestSuiteTable() {
       title: "Descrizione",
       field: "descrizione",
     },
-    // {
-    //   title: "Durata Attesa",
-    //   field: "expectedDuration",
-    // },
     {
       title: "Versione",
       field: "version",
@@ -351,7 +235,7 @@ function TestSuiteTable() {
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
     // setOpen(true);
-    getTestSuiteById(rowData.id);
+    funzioneGetTestsuiteById(rowData.id);
   };
 
   const handleOpenTestCase = () => {
@@ -359,7 +243,7 @@ function TestSuiteTable() {
   };
 
   const handleCloseTestCase = () => {
-    getTestSuiteById(id);
+    funzioneGetTestsuiteById(id);
   };
 
   const handleCloseTestCaseUpdated = () => {
@@ -416,7 +300,7 @@ function TestSuiteTable() {
           }
         } else {
           setOpenWarning(false);
-          getAllTestSuite();
+          funzioneGetAll();
         }
       })
       .catch((error) => console.log("error", error));
@@ -496,7 +380,7 @@ function TestSuiteTable() {
             }
           } else {
             setOpenWarningUpdate(false);
-            getAllTestSuite();
+            funzioneGetAll();
           }
         })
         .catch((error) => console.log("error", error));

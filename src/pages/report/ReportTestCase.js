@@ -26,6 +26,7 @@ import ChartReport from "../../components/ChartReport.js";
 import "../../styles/App.css";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
+import TableTestCaseConclusi from "../../components/TableTestCaseConclusi";
 
 const drawerWidth = 240;
 
@@ -134,10 +135,10 @@ const useStyles = makeStyles((theme) => ({
   containerNavbarItem: {},
   bottomContainer: {
     marginTop: "2%",
-    display: "flex",
+    //display: "flex",
   },
   paperTable: {
-    width: "62%",
+    width: "100%",
     flexDirection: "column",
   },
   paperImg: {
@@ -260,19 +261,22 @@ function ReportTestCase() {
             </Grid>
           </Grid>
 
-          <Paper className={classes.bottomContainer}>
-            <Paper className={classes.paperTable}>
-              <Table />
-            </Paper>
-            <Paper className={classes.paperImg}>
+          <Grid item xs={12}>
+              <Paper className={classes.paper}>
+              <TableTestCaseConclusi />
+              </Paper>
+            </Grid>
+
+          
+            {/* <Paper className={classes.paperImg}>
               <Typography className={classes.titleImg}>
                 Test Case-CB Fibra
               </Typography>
               <div className={classes.chart}>
                 <ChartReport />
               </div>
-            </Paper>
-          </Paper>
+            </Paper> */}
+         
         </Container>
       </main>
     </div>

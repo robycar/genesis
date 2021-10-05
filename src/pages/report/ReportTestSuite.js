@@ -26,6 +26,7 @@ import ChartReport from "../../components/ChartReport.js";
 import "../../styles/App.css";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
+import TotalTestSuiteConclusi from "../../components/Table";
 
 const drawerWidth = 240;
 
@@ -265,19 +266,23 @@ function ReportTestSuite() {
             </Grid>
           </Grid>
 
-          <Paper className={classes.bottomContainer}>
-            <Paper className={classes.paperTable}>
+          <Grid item xs={12}>
+              <Paper className={classes.paper}>
               <Table />
-            </Paper>
-            <Paper className={classes.paperImg}>
+              </Paper>
+            </Grid>
+
+        
+      
+            {/* <Paper className={classes.paperImg}>
               <Typography className={classes.titleImg}>
                 Test Suite-CB Fibra
               </Typography>
               <div className={classes.chart}>
                 <ChartReport />
               </div>
-            </Paper>
-          </Paper>
+            </Paper> */}
+     
         </Container>
       </main>
     </div>

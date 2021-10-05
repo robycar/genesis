@@ -10,8 +10,8 @@ import { MenuItem, Paper, Typography } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
-import acccessControl from "../service/url.js";
 import InputLabel from "@material-ui/core/InputLabel";
+import { getGenerale, getByIdGenerale, postGenerale } from "../service/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,123 +72,48 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TransferListRuolo() {
-  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  //---------------------GET LEVEL-------------------------------------------
   const [dataLevel, setDataLevel] = useState([]);
-
-  const getLevel = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/level`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setDataLevel(result.livelli);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //----------------GET ALL FUNCTION-----------------
   const [allFunzioni, setAllFunzioni] = useState([]);
-
-  const getAllFunzioni = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/funzione`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAllFunzioni(result.funzioni);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //----------------GET USER FUNCTION BY ID-----------------
-
   const [funzioniLevel, setfunzioniLevel] = useState([]);
-
-  const [idSelezionato, setIdSelezionato] = useState([]);
+  const [idSelezionato, setIdSelezionato] = useState(0);
   const [nomeLevel, setNomeLevel] = useState([]);
 
-  const getLevelById = (event) => {
-    var myHeaders = new Headers();
+  //-----------GET ----------------------
+  const funzioneGetAll = () => {
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    //----GET ALL FUNCTIONS----
+    (async () => {
+      setAllFunzioni((await getGenerale('funzione')).funzioni);
+    })();
 
-    // console.log(bearer.toString());
+    //-----GET APPEAR LEVEL-----
+    (async () => {
+      setDataLevel((await getGenerale('level')).livelli);
+    })();
+  }
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  const funzioneGetLevelById = (event) => {
+    let id = event.target.value;
+    (async () => {
+      setIdSelezionato(id);
+      let result = await getByIdGenerale('level', id);
+      setfunzioniLevel(result?.level?.funzioni)
+      setNomeLevel(result?.level?.nome);
+    })();
+  }
 
-    fetch(`/api/level/${event.target.value}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setfunzioniLevel(result.level.funzioni);
-        setIdSelezionato(event.target.value);
-        setNomeLevel(result.level.nome);
-      })
-      .catch((error) => console.log("error", error));
-    
-  };
+  const funzioneAggiornaFunzioniLevel = (codici) => {
+    //----AGGIORNA UTENTE----
+    (async () => {
+      (await postGenerale('level', { id: idSelezionato, funzioni: codici, nome: nomeLevel }));
+      //funzioneGetAll();
+    })();
 
-  //---------------MODIFICA FUNZIONI UTENTE-------------------
-  const modificaFunzioniLevel = (codici) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: idSelezionato,
-      nome: nomeLevel,
-      funzioni: codici,
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/level`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-  };
-
-  var funzioni = [];
+  }
 
   const provaFunzione = (codice) => {
+    let funzioni = [];
     funzioni = funzioniLevel;
     const index = funzioni.indexOf(codice);
     if (index > -1) {
@@ -196,20 +121,13 @@ export default function TransferListRuolo() {
     } else {
       funzioni.push(codice);
     }
-    modificaFunzioniLevel(funzioni);
+    funzioneAggiornaFunzioniLevel(funzioni);
   };
 
   useEffect(() => {
-    getAllFunzioni();
-    getLevel();
+    funzioneGetAll();
   }, []);
 
-  // for (let i = 0; i < roleGeneral.length; i++) {
-  //   if (roleGeneral[i].side == "left")
-  //     sinistra.push(roleGeneral[i].nome)
-  //   else
-  //     destra.push(roleGeneral[i].nome)
-  // }
 
   const classes = useStyles();
   const [checked, setChecked] = React.useState([]);
@@ -235,7 +153,7 @@ export default function TransferListRuolo() {
           const labelId = `transfer-list-item-${value.nome}-label`;
 
           const funzione = () => {
-            for (let i = 0; i < funzioniLevel.length; i++) {
+            for (let i = 0; i < funzioniLevel?.length; i++) {
               if (value.codice === funzioniLevel[i]) {
                 return true;
               }
@@ -247,6 +165,7 @@ export default function TransferListRuolo() {
               key={value.nome}
               role="listitem"
               disabled={nomeLevel === "ADMIN"}
+              style={{display: idSelezionato === 0? 'none':''}}
               button
               onClick={handleToggle(value.codice)}
             >
@@ -271,8 +190,8 @@ export default function TransferListRuolo() {
     <Paper className={classes.paperSelect}>
       <Form.Group controlId="form.Numero">
         <FormControl variant="outlined" className={classes.formControl}>
-          <InputLabel id="select-ruolo-label">Ruoli</InputLabel>
-          <Select label="Ruoli" value={dataLevel.nome} onChange={getLevelById}>
+          <InputLabel id="select-ruolo-label">Selezionare un Ruolo</InputLabel>
+          <Select label="Selezionare un Ruolo" value={dataLevel.nome} placeholder="Selezionare un Ruolo" onChange={funzioneGetLevelById}>
             {dataLevel.map((prova) => {
               return (
                 <MenuItem key={prova.id} value={prova.id}>

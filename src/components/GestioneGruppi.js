@@ -1,4 +1,4 @@
-import React from "react";
+import React, { version } from "react";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
@@ -8,7 +8,6 @@ import "../styles/App.css";
 import EditIcon from "@material-ui/icons/Edit";
 import { NavLink } from "react-router-dom";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import acccessControl from "../service/url.js";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -20,15 +19,30 @@ import Row from "react-bootstrap/Row";
 import Divider from "@material-ui/core/Divider";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
+import { useHistory } from "react-router-dom";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const GestioneRuoli = () => {
+  let history = useHistory();
+
   const [data, setData] = useState([]);
-  const [id, setId] = useState();
+  const [id, setId] = useState(0);
+  const [versione, setVersione] = useState(0);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [caricamento, setCaricamento] = useState(false)
 
-  const bearer = `Bearer ${localStorage.getItem("token")}`;
+
+  /*---------- OPEN WARNING DELETE-----------*/
+
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
+
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
+
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -123,6 +137,38 @@ const GestioneRuoli = () => {
       marginTop: "2%",
       marginBottom: "2%",
     },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
+    intestazioneModaleError: {
+      color: "#ef5350",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    iconModaleError: {
+      // width: "15%",
+      // height: "15%",
+      marginRight: "4%",
+      transform: "scale(1.9)",
+      color: "#ef5350",
+    },
+    intestazione: {
+      color: "#47B881",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    divIntestazione: {
+      display: "flex",
+      alignItems: "center",
+      padding: "2%",
+      marginBottom: "1%",
+    },
   }));
 
   const classes = useStyles();
@@ -139,69 +185,48 @@ const GestioneRuoli = () => {
     },
   ];
 
-  const getGruppi = () => {
-    setCaricamento(true)
-    var myHeaders = new Headers();
+  //-----------GET ----------------------
+  const funzioneGetAll = () => {
+    //----GET ALL USERS----
+    (async () => {
+      setCaricamento(true)
+      setData((await getGenerale('group')).gruppi);
+      setCaricamento(false)
+    })();
+  }
+  const funzioneAggiornamento = () => {
+    //----GET ALL USERS----
+    (async () => {
+      setData((await postGenerale('group', {id: id, version: versione, nome: nome, descrizione: descrizione})).gruppi);
+      setOpen(false);
+      funzioneGetAll();
+    })();
+  }
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/group`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.gruppi)
-        setCaricamento(false)
-      })
-      .catch((error) => console.log("error", error));
-  };
+  const funzioneDelete = (id) => {
+    (async () => {
+      setCaricamento(true)
+      let result = await deleteGenerale("group", id)
+      if (result.error !== null) {
+        if (result.error.code === "ADMIN-0012") {
+          setCaricamento(false)
+          setWarning("Questo Gruppo non può essere eliminato perche uno o più utenti ne fanno parte.")
+          setOpenWarning(true)
+        }
+      }
+      funzioneGetAll();
+    })();
+  }
 
   useEffect(() => {
-    getGruppi();
+    funzioneGetAll();
   }, []);
-
-  const aggiornaGruppo = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      gruppo: {
-        id: id,
-        nome: nome,
-        descrizione: descrizione,
-      },
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/group`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        getGruppi();
-      });
-
-    // .catch((error) => console.log("error", error));
-  };
 
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
+    setVersione(rowData.version);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
     setOpen(true);
@@ -211,10 +236,6 @@ const GestioneRuoli = () => {
     setOpen(false);
   };
 
-  const handleClose2 = () => {
-    aggiornaGruppo();
-    setOpen(false);
-  };
 
   return (
     <div>
@@ -230,52 +251,12 @@ const GestioneRuoli = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
           filtering: true,
           sorting: true,
-        }}
-        editable={{
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-              var raw = JSON.stringify({
-                id: oldData.id,
-              });
-
-              var requestOptions = {
-                method: "DELETE",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
-
-              fetch(`/api/group?id=` + oldData.id, requestOptions)
-                .then((response) => {
-                  if (response.status === 200) {
-                    return response.json();
-                  } else if (response.status === 400) {
-                    return alert(
-                      "Non può essere eliminato un gruppo associato a un utente esistente"
-                    );
-                  }
-                })
-                .then((result) => {
-                  getGruppi();
-                  resolve();
-                })
-                .catch((error) => console.log("error", error));
-            }),
         }}
         actions={[
           {
             icon: (dat) => (
-              //href="../amministrazione/viewgruppo"
               <a>
                 <VisibilityIcon />
               </a>
@@ -283,8 +264,7 @@ const GestioneRuoli = () => {
             tooltip: "Visualizza",
             position: "row",
             onClick: (event, rowData) =>
-              (window.location =
-                "../amministrazione/viewgruppo?id=" + rowData.id),
+              (history.push("../amministrazione/viewgruppo?id=" + rowData.id)),
           },
           {
             icon: () => (
@@ -303,6 +283,11 @@ const GestioneRuoli = () => {
             tooltip: "Load Test Suite",
             isFreeAction: true,
           },
+          rowData => ({
+            icon: 'delete',
+            tooltip: 'Elimina Gruppo',
+            onClick: (event, rowData) => funzioneDelete(rowData.id)
+          }),
           {
             icon: () => <EditIcon />,
             tooltip: "Edit",
@@ -317,7 +302,7 @@ const GestioneRuoli = () => {
           },
           body: {
             emptyDataSourceMessage: (
-                "Non è presente alcun dato da mostrare"
+              "Non è presente alcun dato da mostrare"
             ),
           },
         }}
@@ -364,14 +349,11 @@ const GestioneRuoli = () => {
                     <Col className={classes.col}>
                       <TextField
                         className={classes.textField}
-                        error={descrizione !== "" ? false : true}
-                        onChange={(e) => setDescrizione(e.target.value)}
-                        required
+                        value={descrizione}
+                        onChange={(e) => {
+                          e.target.value === "" ? setDescrizione(" ") : setDescrizione(e.target.value)
+                        }}
                         label="Descrizione"
-                        defaultValue="Inserisci descrizione"
-                        helperText={
-                          descrizione !== "" ? "" : "La descrizione è richiesta"
-                        }
                       />
                     </Col>
                   </Row>
@@ -385,7 +367,7 @@ const GestioneRuoli = () => {
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
-                    onClick={handleClose2}
+                    onClick={funzioneAggiornamento}
                   />
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
@@ -398,6 +380,55 @@ const GestioneRuoli = () => {
           </div>
         </Fade>
       </Modal>
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import TextField from "@material-ui/core/TextField";
 import Modal from "@material-ui/core/Modal";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { Button } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
@@ -10,6 +11,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
+import DeleteIcon from "@material-ui/icons/Delete";
 import FormControl from "@material-ui/core/FormControl";
 import Form from "react-bootstrap/Form";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -23,19 +25,19 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 
 const TestSuiteCaricatiTable = () => {
-  
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
-  const [nome, setNome] =useState("");
+  const [nome, setNome] = useState("");
   const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState(); 
+  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
+  const [dataSuite, setDataSuite] = useState();
   const [createdBy, setCreatedBy] = useState("");
-  const [DataInizio, setDataInizio] = useState("");
-  const [OrarioInizio, setOrarioInizio] = useState("");
-  const [Delay, setDelay] = useState("");
-
-  
+  const [dataInizio, setDataInizio] = useState();
+  const [orarioInizio, setOrarioInizio] = useState();
+  const [idToRun, setIdToRun] = useState();
+  const [runSuiteLoader, setRunSuiteLoader] = useState();
+  const [delay, setDelay] = useState();
 
   const columns = [
     {
@@ -49,32 +51,32 @@ const TestSuiteCaricatiTable = () => {
     },
     {
       title: "Loader",
-      field: "createdBy",
+      field: "loadedBy",
     },
-    {
-      title: "Data Inizio",
-      field: "creationDate",
-    },
-    {
-      title: "Data Fine",
-      field: "modifiedDate",
-    },
+    // {
+    //   title: "Data Inizio",
+    //   field: "creationDate",
+    // },
+    // {
+    //   title: "Data Fine",
+    //   field: "modifiedDate",
+    // },
     {
       title: "Status",
-      field: "trace",
+      field: "stato",
     },
-    {
-      title: "Trace",
-      field: "trace",
-    },
-    {
-      title: "Call-Id",
-      field: "trace",
-    },
-    {
-      title: "Report",
-      field: "trace",
-    },
+    // {
+    //   title: "Trace",
+    //   field: "trace",
+    // },
+    // {
+    //   title: "Call-Id",
+    //   field: "trace",
+    // },
+    // {
+    //   title: "Report",
+    //   field: "trace",
+    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -155,7 +157,7 @@ const TestSuiteCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
-      marginBottom: "2%"
+      marginBottom: "2%",
     },
     divIntestazione: {
       marginBottom: "2%",
@@ -184,7 +186,7 @@ const TestSuiteCaricatiTable = () => {
       width: "80%",
       alignItems: "center",
       marginTop: "5%",
-      marginBottom: "5%"
+      marginBottom: "5%",
     },
     orarioPaper: {
       padding: "3%",
@@ -213,18 +215,17 @@ const TestSuiteCaricatiTable = () => {
 
   /*----------- GET TEST SUITE ------------------*/
 
-  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
-
   const [appearTest, setAppearTest] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
-
+  const [openRun, setOpenRun] = React.useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  let scheduleDateTime = "";
+  const [testSuiteLoad, setTestSuiteLoad] = useState({});
+  const [idTest, setIdTest] = React.useState(0);
 
   const handleOpen = () => {
+    getAllTestSuiteModal();
     setOpen(true);
   };
 
@@ -241,9 +242,107 @@ const TestSuiteCaricatiTable = () => {
     setOpenSchedula(false);
   };
 
-  // ------- GET TEST SUITE -----------
+  const handleChange = () => {
+    setFilter(!filter);
+  };
+
+  const testSuiteLoader = () => {
+    loadTestSuite(id);
+    handleClose();
+    console.log("testSuite Loader");
+    getAllTestSuite();
+  };
+
+  const handleOpenRun = (idRun_) => {
+    setIdToRun(idRun_);
+    setOpenRun(true);
+    setOpen(false);
+  };
+
+  const handleCloseRun = () => {
+    setOpenRun(false);
+  };
+
+  const handleLoadData = (rowDataaa) => {
+    //console.log(rowDataaa.id);
+    //setIdToRun(rowDataaa.id);
+    runSuiteLoader(rowDataaa.id);
+  };
+
+  const testCaseLoader = () => {
+    loadTestSuite(id);
+    handleClose();
+    console.log("testCaseLoader");
+    getAllTestSuite();
+  };
+  /*------- OPEN WARNING DELETE ------------ */
+
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
+
+  const handleCloseWarning = () => {
+    setOpenWarning(false);
+  };
+
+  //------------ funzione apri modale
+
+  const handleOpenDelete = (rowData) => {
+    setId(rowData.id);
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  /*------------- GET TEST SUITE DASHBOARD -------------*/
+
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
 
   const getAllTestSuite = () => {
+    var consta = "READY";
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: consta,
+      includeTestGeneratoreOfType: null,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        //setAppearTest(result.testCaseList);
+        setData(result.testSuiteList);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestSuite();
+  }, []);
+
+  // ------- GET TEST SUITE -----------
+
+  const getAllTestSuiteModal = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -260,20 +359,116 @@ const TestSuiteCaricatiTable = () => {
       .then((result) => {
         console.log(result);
         setAppearTest(result.list);
-        setData(result.list);
+        setDataSuite(result.list);
       })
       .catch((error) => console.log("error", error));
   };
 
-  useEffect(() => {
-    getAllTestSuite();
-  }, []);
+  /*------------------ SCHEDULA TEST ------------------*/
 
-  console.log("dati", appearTest);
+  // const schedulaTestSuite = () => {
+  //   const invia = () => {
+  //     scheduleDateTime = dataInizio + "T" + orarioInizio;
+  //     console.log(scheduleDateTime, "schedule date time");
+  //     console.log(dataInizio, "data inizio");
+  //     console.log(orarioInizio, "orario");
 
-  const handleChange = () => {
-    setFilter(!filter);
+  //     var myHeaders = new Headers();
+  //     myHeaders.append("Authorization", bearer);
+  //     myHeaders.append("Content-Type", "application/json");
+  //     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //     myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  //     var raw = JSON.stringify({
+  //       id: id,
+  //       scheduleDateTime: scheduleDateTime,
+  //       delay: delay,
+  //     });
+
+  //     var requestOptions = {
+  //       method: "POST",
+  //       headers: myHeaders,
+  //       body: raw,
+  //       redirect: "follow",
+  //     };
+
+  //     fetch(`/api/testsuite/schedule`, requestOptions)
+  //       .then((response) => response.json())
+  //       .then((result) => {
+  //         console.log(result);
+  //         setDataSchedula(result.testSuiteCaricato);
+  //         handleCloseSchedula();
+  //       })
+  //       .catch((error) => console.log("error", error));
+  //   };
+  //   invia();
+  // };
+
+  /*--------------- FUNZIONE CARICA TEST SUITE -------------------*/
+
+  const loadTestSuite = (id) => {
+    var urlLoad = `/api/testcase/load/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setTestSuiteLoad(result.testSuiteCaricata);
+      })
+      .catch((error) => console.log("error", error));
   };
+
+  // /*--------------- FUNZIONE RUN TEST SUITE -------------------*/
+
+  // const runTestSuite = (idRun) => {
+  //   var urlLoad = `/api/testcase/runloaded/${idRun}`;
+
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
+
+  //   fetch(urlLoad, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       if (result.error !== null) {
+  //         setOpenWarning(true);
+  //         if (result.error.code === "TEST-0020") {
+  //           setWarning("Il test selezionato è già stato lanciato!");
+  //         } else {
+  //           setWarning(
+  //             "Codice errore:" +
+  //               result.error.code +
+  //               "Descrizione" +
+  //               result.code.description
+  //           );
+  //         }
+  //       } else {
+  //         setOpenWarning(false);
+  //         console.log(result);
+  //         setIdTestSuiteRun(result.list);
+  //       }
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
+
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
 
@@ -305,14 +500,18 @@ const TestSuiteCaricatiTable = () => {
           {
             icon: "play_circle_outlined",
             tooltip: "Launch",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            onClick: (event, rowData) => handleOpenRun(rowData.id),
+
             position: "row",
           },
           {
-            icon: "delete",
-            tooltip: "Delete all selected row",
-            onClick: () => alert("Ho cancellato le righe"),
+            icon: () => <DeleteIcon />,
+            tooltip: "Delete Loaded Test",
+            onClick: (event, rowData) => {
+              handleOpenDelete(rowData);
+              setIdTest(rowData.id);
+            },
+            position: "row",
           },
           {
             icon: () => <FilterListIcon />,
@@ -333,6 +532,9 @@ const TestSuiteCaricatiTable = () => {
           header: {
             actions: "Azioni",
           },
+          body: {
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
+          },
         }}
         // components={{
         //   Toolbar: (props) => (
@@ -348,8 +550,7 @@ const TestSuiteCaricatiTable = () => {
         // }}
       />
 
-            {/* ------------------ MODALE TEST SUITE --------------------- */}
-
+      {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -371,24 +572,24 @@ const TestSuiteCaricatiTable = () => {
                     <BackupIcon className={classes.icon} />
                   </ListItemIcon>
                   <Typography className={classes.intestazione} variant="h4">
-                    Load Test Suite
+                    Load Test Case
                   </Typography>
                 </ListItem>
               </div>
               <Divider className={classes.divider} />
 
               <Typography variant="h6" className={classes.typography}>
-                Seleziona Test Suite
+                Seleziona Test Case
               </Typography>
 
               <div className={classes.divSelectBar}>
                 <Form.Group>
-                  <Form.Label>Nome del Test Suite</Form.Label>
+                  <Form.Label>Nome del Test Case</Form.Label>
                   <FormControl variant="outlined">
                     <Select
                       className={classes.select}
                       value={appearTest.nome}
-                      onChange={(e) => setNome(e.target.value)}
+                      onChange={(e) => setId(e.target.value)}
                     >
                       {appearTest.map((prova) => {
                         return (
@@ -408,27 +609,45 @@ const TestSuiteCaricatiTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-                <ButtonClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="secondary"
                   nome="Schedula Test"
                   onClick={handleOpenSchedula}
-                />
+                >
+                  Schedula Test
+                </Button>
 
-                <ButtonNotClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
-                />
+                  id={id}
+                  onClick={testCaseLoader}
+                >
+                  {" "}
+                  Carica Test{" "}
+                </Button>
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  style={{ backgroundColor: "#ffeb3b", color: "white" }}
+                  nome="Annulla"
+                  onClick={handleClose}
+                >
+                  {" "}
+                  Annulla{" "}
+                </Button>
               </div>
             </div>
           </Paper>
         </Fade>
       </Modal>
 
-      {/* ------------------ MODALE SCHEDULA TEST SUITE --------------------- */}
+      {/* ------------------ MODALE SCHEDULA TEST CASE --------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -493,9 +712,9 @@ const TestSuiteCaricatiTable = () => {
                 <Paper elevation={2} className={classes.delayPaper}>
                   <Typography variant="h5">Delay</Typography>
                   <div className={classes.divInput}>
-                    <label for="appt" >Delay:</label>
+                    <label for="appt">Delay:</label>
                     <input
-                      style={{ width: "100px"}}
+                      style={{ width: "100px" }}
                       type="number"
                       id=""
                       name=""
@@ -511,7 +730,12 @@ const TestSuiteCaricatiTable = () => {
               <Divider />
 
               <div className={classes.bottone}>
-                <Button variant="contained" color="primary">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  //onClick={handleOpenSchedula}
+                  onClick={() => alert("Funzione schedula moccata")}
+                >
                   Conferma
                 </Button>
 
@@ -525,6 +749,158 @@ const TestSuiteCaricatiTable = () => {
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ------------------ MODALE AVVIA TEST CASE --------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openRun}
+        onClose={handleCloseRun}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openRun}>
+          <Paper className={classes.paperModale} elevation={1}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h4">
+                  Lancio Test Suite
+                </Typography>
+              </ListItem>
+
+              <Divider className={classes.divider} />
+              <Typography className={classes.info}>
+                <p>Vuoi lanciare il test case da te selezionato ?</p>
+              </Typography>
+              <Divider />
+
+              <div className={classes.bottone}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleLoadData}
+                >
+                  Lancio
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseRun}
+                >
+                  Annulla
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <div className={classes.divIntestazione}>
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE DELETE--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Elimina Test Id <b>{" " + id}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  Vuoi eliminare il Test Caricato?
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    //onClick={functionDelete}
+                    onClick={() =>
+                      alert("Inserire funzione Delete Loaded Test ")
+                    }
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
     </div>

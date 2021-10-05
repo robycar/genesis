@@ -44,6 +44,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { file } from "@babel/types";
 import { useHistory } from "react-router-dom";
+import { getGenerale, putGenerale } from "../../service/api";
 
 const drawerWidth = 240;
 
@@ -283,109 +284,31 @@ function EditingTestCreaTestGeneratore() {
   const [template, setTemplate] = useState(0);
 
   /*------- get linea -----------*/
+  const funzioneGetAll = () => {
+    //----GET APPEAR TEMPLATE----
+    (async () => {
+      setAppearTemplate((await getGenerale('template')).list);
+    })();
 
-  const getLineaGeneratore = () => {
-    var myHeaders = new Headers();
+    //-----GET APPEAR OBP-----
+    (async () => {
+      setAppearOBP((await getGenerale('obp')).list);
+    })();
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    //-----GET APPEAR LIST-----
+    (async () => {
+      setAppearLinea((await getGenerale('lineageneratore')).list);
+    })();
+  }
 
-    // console.log(bearer.toString());
+  const funzioneAggiungiTestgeneratore = () => {
+    //----AGGIUNGI GRUPPO------
+    (async () => {
+      await putGenerale('testgen', { nome: nome, template: template, descrizione: descrizione === "" ? " " : descrizione, lineaChiamante: lineaChiamante, lineaChiamato: lineaChiamato, proxyChiamante: OBPChiamante, proxyChiamato: OBPChiamato, });
+      history.push("/editing/testgeneratore")
+    })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/lineageneratore`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLinea(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  /*--------- get obp ---------*/
-
-  const getOBP = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/obp`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearOBP(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  /*-------- get template ---------*/
-
-  const getTemplate = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/template`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearTemplate(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  const Invia = () => {
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-    var raw = JSON.stringify({
-      nome: nome,
-      template: template,
-      descrizione: descrizione === "" ? " " : descrizione,
-      lineaChiamante: lineaChiamante,
-      lineaChiamato: lineaChiamato,
-      proxyChiamante: OBPChiamante,
-      proxyChiamato: OBPChiamato,
-    });
-
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testgen`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => history.push("/editing/testgeneratore"))
-      .catch((error) => console.log("error", error));
-  };
+  }
 
   //-----------------------SCRIPT STEPPER------------------------------
 
@@ -394,7 +317,7 @@ function EditingTestCreaTestGeneratore() {
 
   const handleNext = () => {
     if (activeStep + 1 === steps.length) {
-      Invia();
+      funzioneAggiungiTestgeneratore();
     } else setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -422,9 +345,7 @@ function EditingTestCreaTestGeneratore() {
     };
 
     useEffect(() => {
-      getLineaGeneratore();
-      getTemplate();
-      getOBP();
+      funzioneGetAll();
     }, []);
 
     return (
@@ -618,7 +539,7 @@ function EditingTestCreaTestGeneratore() {
                             {appearLinea.map((linea) => {
                               return (
                                 <MenuItem disabled={linea.id === lineaChiamante} key={linea.id} value={linea.id}>
-                                  {linea.id}
+                                  {linea.ip+":"+linea.porta+"-"+linea.typeLinea.descrizione}
                                 </MenuItem>
                               );
                             })}
@@ -700,7 +621,7 @@ function EditingTestCreaTestGeneratore() {
                             {appearLinea.map((linea) => {
                               return (
                                 <MenuItem disabled={linea.id === lineaChiamato} key={linea.id} value={linea.id}>
-                                  {linea.id}
+                                  {linea.ip+":"+linea.porta+"-"+linea.typeLinea.descrizione}
                                 </MenuItem>
                               );
                             })}

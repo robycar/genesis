@@ -259,7 +259,7 @@ function ReportTestGeneratore() {
             </Grid>
           </Grid>
 
-          <Paper className={classes.bottomContainer}>
+          {/* <Paper className={classes.bottomContainer}>
             <Paper className={classes.paperTable}>
               <Table />
             </Paper>
@@ -271,7 +271,7 @@ function ReportTestGeneratore() {
                 <ChartReport />
               </div>
             </Paper>
-          </Paper>
+          </Paper> */}
         </Container>
       </main>
     </div>

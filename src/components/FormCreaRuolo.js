@@ -7,11 +7,11 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonClickedGreen from "./ButtonClickedGreen";
-import acccessControl from "../service/url.js";
 import Alert from "@material-ui/lab/Alert";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
+import { putGenerale } from "../service/api";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -40,49 +40,34 @@ function FormCreaRuolo() {
   let history = useHistory();
   const classes = useStyles();
 
-  const bearer = `Bearer ${localStorage.getItem("token")}`;
-
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
-  // console.warn(descrizione);
 
   const checkRichiesta = (result) => {
     if (result.error == null) {
       history.push("/amministrazione/ruoli");
     } else if (result.error.code === "ADMIN-0020") {
-      document.getElementById("alertRuolo").style.display = "";
+      document.getElementById("alertRuolo1").style.display = "";
+      document.getElementById("alertRuolo2").style.display = "none";
     } else {
-      document.getElementById("alertRuolo").style.display = "none";
+      document.getElementById("alertRuolo1").style.display = "none";
     }
   };
 
-  function login() {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const funzioneAggiungiRuolo = () => {
+    //----AGGIUNGI GRUPPO------
+    (async () => {
+      let result = await putGenerale('level', { nome: nome, desccrizione: descrizione });
+      checkRichiesta(result);
+    })();
+  }
 
-    var raw = JSON.stringify({
-      nome: nome,
-      descrizione: descrizione,
-    });
-
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/level`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => checkRichiesta(result))
-      .catch((error) => console.log("error", error));
-
-    // localStorage.setItem("user-info", JSON.stringify(result));
-    // history.push("/dashboard/testcase");
-    // window.location = "/amministrazione/ruoli";
+  const putRuolo = () => {
+    if (nome === "") {
+      document.getElementById("alertRuolo2").style.display = "";
+      document.getElementById("alertRuolo1").style.display = "none";
+    } else
+      funzioneAggiungiRuolo()
   }
 
   return (
@@ -99,10 +84,17 @@ function FormCreaRuolo() {
               />
               <Alert
                 severity="error"
-                id="alertRuolo"
+                id="alertRuolo1"
                 style={{ display: "none" }}
               >
-                Ruolo already exists!
+                Esiste già un Ruolo con questo Nome!
+              </Alert>
+              <Alert
+                severity="error"
+                id="alertRuolo2"
+                style={{ display: "none" }}
+              >
+                Inserire il Nome del Ruolo!
               </Alert>
             </Form.Group>
           </Col>
@@ -128,7 +120,7 @@ function FormCreaRuolo() {
           className={classes.bottone}
           style={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <ButtonClickedGreen size="medium" nome="Crea" onClick={login} />
+          <ButtonClickedGreen size="medium" nome="Crea" onClick={putRuolo} />
           <Button
               component={NavLink}
               className="button-green-disactive"

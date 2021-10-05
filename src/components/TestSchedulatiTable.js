@@ -26,17 +26,18 @@ const TestSchedulatiTable = () => {
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
   const [idToRun, setIdToRun] = useState();
-  const [nome, setNome] =useState("");
+  const [nome, setNome] = useState("");
   const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState(); 
+  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
   const [dataCase, setDataCase] = useState();
-
   const [appearTest, setAppearTest] = useState([]);
-
   const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
+  const [dataInizio, setDataInizio] = useState();
+  const [orarioInizio, setOrarioInizio] = useState();
+  const [dataSchedula, setDataSchedula] = useState();
 
   const columns = [
     {
@@ -54,28 +55,12 @@ const TestSchedulatiTable = () => {
     },
     {
       title: "Data Inizio",
-      field: "dataInizio",
-    
+      field: "scheduleDateTime",
     },
-    {
-      title: "Data Fine",
-      field: "endDate",
-    },
+
     {
       title: "Status",
       field: "stato",
-    },
-    {
-      title: "Trace",
-      field: "properties",
-    },
-    {
-      title: "Call-Id",
-      field: "loadedBy",
-    },
-    {
-      title: "Report",
-      field: "pathInstance",
     },
   ];
 
@@ -195,8 +180,6 @@ const TestSchedulatiTable = () => {
     },
   }));
 
-
-
   const handleChange = () => {
     setFilter(!filter);
   };
@@ -205,6 +188,8 @@ const TestSchedulatiTable = () => {
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
+  const [scheduleDateTime, setSchedulaDateTime] = React.useState("");
+  const [delay, setDelay] = useState(0);
 
   const handleOpen = () => {
     setOpen(true);
@@ -224,16 +209,6 @@ const TestSchedulatiTable = () => {
     setOpenSchedula(false);
   };
 
-  const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_)
-    setOpenRun(true)
-    setOpen(false);
-  };
-
-  const handleCloseRun = () => {
-    setOpenRun(false);
-  };
-
   const handleChangeData = (newValue) => {
     setValue(newValue);
   };
@@ -244,12 +219,21 @@ const TestSchedulatiTable = () => {
     getAllTestCase();
   };
 
-
   const runCaseLoder = () => {
-    // runTestCase(idToRun);
+    runTestCase(idToRun);
     handleCloseRun();
     //alert("Run test id :  "+ idToRun);
-  }
+  };
+
+  const handleOpenRun = (idRun_) => {
+    setIdToRun(idRun_);
+    setOpenRun(true);
+    setOpen(false);
+  };
+
+  const handleCloseRun = () => {
+    setOpenRun(false);
+  };
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -290,10 +274,50 @@ const TestSchedulatiTable = () => {
     getAllTestCase();
   }, []);
 
+  /*------------------ SCHEDULA TEST ------------------*/
+
+  const schedulaTestCase = () => {
+    const invia = () => {
+      scheduleDateTime = dataInizio + "T" + orarioInizio;
+      console.log(scheduleDateTime, "schedule date time");
+      console.log(dataInizio, "data inizio");
+      console.log(orarioInizio, "orario");
+
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+      var raw = JSON.stringify({
+        id: id,
+        scheduleDateTime: scheduleDateTime,
+        delay: delay,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/testcase/schedule`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          setDataSchedula(result.testCaseCaricato);
+          handleCloseSchedula();
+        })
+        .catch((error) => console.log("error", error));
+    };
+    invia();
+  };
+
   /*--------------- LOAD TEST CASE -------------------*/
 
   // const loadTestCase = (id) => {
-   
+
   //   var urlLoad = `/api/testcase/load/${id}`;
 
   //   var myHeaders = new Headers();
@@ -314,43 +338,41 @@ const TestSchedulatiTable = () => {
   //       setTestCaseLoad(result.list);
   //     })
   //     .catch((error) => console.log("error", error));
-        
+
   // };
 
   /*--------------- RUN TEST CASE -------------------*/
 
-  // const runTestCase = (idRun) => {
-   
-  //   var urlLoad = `/api/testcase/runloaded/${idRun}`;
+  const runTestCase = (idRun) => {
+    var urlLoad = `/api/testcase/runloaded/${idRun}`;
 
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  //   fetch(urlLoad, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       setIdTestCaseRun(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-        
-  // };
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setIdTestCaseRun(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   const handleLoadData = (rowDataaa) => {
     //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
+    setIdToRun(rowDataaa.id);
     runCaseLoder(rowDataaa.id);
   };
 
-   /*--------------- GET TEST CASE -------------------*/
+  /*--------------- GET TEST CASE -------------------*/
 
   //  const getAllTestCaseModal = () => {
 
@@ -358,7 +380,6 @@ const TestSchedulatiTable = () => {
   //   myHeaders.append("Authorization", bearer);
   //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
   //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
 
   //   var requestOptions = {
   //     method: "GET",
@@ -404,8 +425,7 @@ const TestSchedulatiTable = () => {
           {
             icon: "play_circle_outlined",
             tooltip: "Launch",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            onClick: (event, rowData) => handleOpenRun(rowData.id),
             position: "row",
           },
           {
@@ -433,12 +453,13 @@ const TestSchedulatiTable = () => {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-              "Non è presente alcun dato da mostrare"
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
       />
+
+      {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -487,7 +508,6 @@ const TestSchedulatiTable = () => {
                             value={prova.id}
                           >
                             {prova.nome}
-                            
                           </MenuItem>
                         );
                       })}
@@ -498,22 +518,38 @@ const TestSchedulatiTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-                <ButtonClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="secondary"
                   nome="Schedula Test"
                   onClick={handleOpenSchedula}
-                />
+                >
+                  Schedula Test
+                </Button>
 
-                <ButtonNotClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
                   id={id}
                   onClick={testCaseLoader}
-                />
+                >
+                  {" "}
+                  Carica Test{" "}
+                </Button>
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  style={{ backgroundColor: "#ffeb3b", color: "white" }}
+                  nome="Annulla"
+                  onClick={handleClose}
+                >
+                  {" "}
+                  Annulla{" "}
+                </Button>
               </div>
             </div>
           </Paper>
@@ -546,34 +582,55 @@ const TestSchedulatiTable = () => {
               </ListItem>
               <Divider className={classes.divider} />
 
-              <div className={classes.divContent}>
+              <div className={classes.divSubContent1}>
                 <Paper elevation={2} className={classes.calendarPaper}>
                   <Typography variant="h5">Calendario</Typography>
                   <Divider />
                   <div className={classes.divInput}>
-                    <label for="start">Start date:</label>
+                    <label for="start">Data Inizio:</label>
                     <input
                       type="date"
                       id="start"
                       name="trip-start"
-                      value="2018-07-22"
-                      min="2018-01-01"
-                      max="2018-12-31"
+                      onChange={(e) => setDataInizio(e.target.value)}
+                      min=""
+                      max=""
                     />
                   </div>
                 </Paper>
 
-                <Paper elevation={2} className={classes.delayPaper}>
-                  <Typography variant="h5">Delay</Typography>
+                <Paper elevation={2} className={classes.orarioPaper}>
+                  <Typography variant="h5">Orario</Typography>
                   <div className={classes.divInput}>
-                    <label for="appt">Start Time:</label>
+                    <label for="appt">Orario Inizio:</label>
                     <input
                       style={{ width: "135px" }}
                       type="time"
                       id="appt"
                       name="appt"
-                      min="09:00"
-                      max="18:00"
+                      min=""
+                      max=""
+                      onChange={(e) => setOrarioInizio(e.target.value)}
+                      required
+                    />
+                  </div>
+                </Paper>
+              </div>
+
+              <div className={classes.divSubContent2}>
+                <Paper elevation={2} className={classes.delayPaper}>
+                  <Typography variant="h5">Delay</Typography>
+                  <div className={classes.divInput}>
+                    <label for="appt">Delay:</label>
+                    <input
+                      style={{ width: "100px" }}
+                      type="number"
+                      id=""
+                      name=""
+                      min=""
+                      defaultValue="60"
+                      max=""
+                      onChange={(e) => setDelay(e.target.value)}
                       required
                     />
                   </div>
@@ -582,9 +639,10 @@ const TestSchedulatiTable = () => {
               <Divider />
 
               <div className={classes.bottone}>
-                <Button 
-                  variant="contained" 
+                <Button
+                  variant="contained"
                   color="primary"
+                  onClick={schedulaTestCase}
                 >
                   Conferma
                 </Button>
@@ -628,14 +686,14 @@ const TestSchedulatiTable = () => {
               </ListItem>
 
               <Divider className={classes.divider} />
-                <Typography className={classes.info}>
-                  <p>Vuoi lanciare il test case da te selezionato ?</p>
-                </Typography>
+              <Typography className={classes.info}>
+                <p>Vuoi lanciare il test case da te selezionato ?</p>
+              </Typography>
               <Divider />
 
               <div className={classes.bottone}>
-                <Button 
-                  variant="contained" 
+                <Button
+                  variant="contained"
                   color="primary"
                   onClick={handleLoadData}
                 >

@@ -14,6 +14,7 @@ import Alert from "@material-ui/lab/Alert";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
+import { getGenerale, putGenerale } from "../service/api";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,64 +47,45 @@ function FormAddUtente() {
   const [azienda, setAzienda] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [level, setLevel] = useState("");
-  const [email, setEmail] = useState("");
-  // console.warn(level);
+  const [level, setLevel] = useState(0);
+  const [email, setEmail] = useState(0);
   let bearer = `Bearer ${localStorage.getItem("token")}`;
-
 
   const [appearGroup, setAppearGroup] = useState([]);
   const [appearLevel, setAppearLevel] = useState([]);
 
-  const getGroup = () => {
-    var myHeaders = new Headers();
+  //-----------GET ----------------------
+  const funzioneGetAll = () => {
+    //-----GET APPEAR GROUP-----
+    (async () => {
+      setAppearGroup((await getGenerale("group")).gruppi);
+    })();
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/group`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearGroup(result.gruppi);
-      })
-      .catch((error) => console.log("error", error));
+    //-----GET APPEAR LEVEL-----
+    (async () => {
+      setAppearLevel((await getGenerale("level")).livelli);
+    })();
   };
 
-  const getAppearLevel = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/level`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLevel(result.livelli);
-      })
-      .catch((error) => console.log("error", error));
+  const funzioneAggiungiUtente = () => {
+    //----AGGIUNGI UTENTE----
+    (async () => {
+      let result = await putGenerale("user", {
+        password: password,
+        username: username,
+        nome: nome,
+        cognome: cognome,
+        azienda: azienda,
+        email: email,
+        level: { id: level },
+        gruppo: { id: gruppo },
+      });
+      checkRichiesta(result);
+    })();
   };
 
   useEffect(() => {
-    getGroup();
-    getAppearLevel();
+    funzioneGetAll();
   }, []);
 
   const checkRichiesta = (result) => {
@@ -117,41 +99,6 @@ function FormAddUtente() {
   };
 
   function addUtente() {
-    const Invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-      var raw = JSON.stringify({
-        password: password,
-        username: username,
-        cognome: cognome,
-        nome: nome,
-        azienda: azienda,
-        email: email,
-        level: {
-          id: level,
-        },
-        gruppo: {
-          id: gruppo,
-        },
-      });
-
-      var requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/user`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => checkRichiesta(result))
-        .catch((error) => console.log("error", error));
-    };
-
     if (
       password !== "" &&
       username !== "" &&
@@ -162,8 +109,7 @@ function FormAddUtente() {
       gruppo !== "" &&
       email !== ""
     ) {
-      Invia();
-      // console.log(ip);
+      funzioneAggiungiUtente();
     } else {
       if (password === "") {
         document.getElementById("alertPassword").style.display = "";

@@ -7,9 +7,10 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import Button from "@material-ui/core/Button";
-import acccessControl from "../service/url.js";
 import Alert from "@material-ui/lab/Alert";
 import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { putGenerale } from "../service/api";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,53 +37,37 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function FormCreaGruppo() {
+  let history = useHistory();
   const classes = useStyles();
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
 
-  let bearer = `Bearer ${localStorage.getItem("token")}`;
-
-
   const checkRichiesta = (result) => {
     if (result.error == null) {
-      window.location = "/amministrazione/gruppo";
+      history.push("/amministrazione/gruppo");
     } else if (result.error.code === "ADMIN-0010") {
-      document.getElementById("alertGruppo").style.display = "";
+      document.getElementById("alertGruppo1").style.display = "";
+      document.getElementById("alertGruppo2").style.display = "none";
     } else {
-      document.getElementById("alertGruppo").style.display = "none";
+      document.getElementById("alertGruppo1").style.display = "none";
     }
   };
 
-  // console.log(bearer);
+  const funzioneAggiungiGruppo = () => {
+    //----AGGIUNGI GRUPPO------
+    (async () => {
+      let result = await putGenerale('group', { nome: nome, descrizione: descrizione });
+      checkRichiesta(result);
+    })();
 
-  function putGroup() {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  }
 
-    var raw = JSON.stringify({
-      nome: nome,
-      descrizione: descrizione,
-    });
-
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/group`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => checkRichiesta(result))
-      .catch((error) => console.log("error", error));
-
-    //window.location = "/amministrazione/gruppo";
-
-    // localStorage.setItem("user-info", JSON.stringify(result));
-    // history.push("/dashboard/testcase");
+  const putGroup = () => {
+    if (nome === "") {
+      document.getElementById("alertGruppo2").style.display = "";
+      document.getElementById("alertGruppo1").style.display = "none";
+    } else
+      funzioneAggiungiGruppo()
   }
 
   return (
@@ -99,10 +84,17 @@ function FormCreaGruppo() {
               />
               <Alert
                 severity="error"
-                id="alertGruppo"
+                id="alertGruppo1"
                 style={{ display: "none" }}
               >
-                Gruppo already exists!
+                Esiste già un Gruppo con questo Nome!
+              </Alert>
+              <Alert
+                severity="error"
+                id="alertGruppo2"
+                style={{ display: "none" }}
+              >
+                Inserire un Nome per il Gruppo!
               </Alert>
             </Form.Group>
           </Col>
@@ -131,15 +123,15 @@ function FormCreaGruppo() {
         >
           <ButtonClickedGreen size="medium" nome="Crea" onClick={putGroup} />
           <Button
-              component={NavLink}
-              className="button-green-disactive"
-              exact
-              to="/amministrazione/gruppo"
-              variant="contained"
-              size="medium"
-            >
-              annulla
-            </Button>
+            component={NavLink}
+            className="button-green-disactive"
+            exact
+            to="/amministrazione/gruppo"
+            variant="contained"
+            size="medium"
+          >
+            annulla
+          </Button>
         </div>
       </Form>
     </Container>

@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
+import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+import { IconButton } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -35,7 +37,7 @@ const TestGeneratoreComplete = () => {
     },
     {
       title: "Loader",
-      field: "startedBy",
+      field: "loadedBy",
     },
     {
       title: "Data Inizio",
@@ -47,11 +49,11 @@ const TestGeneratoreComplete = () => {
     },
     {
       title: "Status",
-      field: "result",
+      field: "stato",
     },
     {
-      title: "Trace",
-      field: "properties",
+      title: "Risultato",
+      field: "result",
     },
     {
       title: "Call-Id",
@@ -60,6 +62,11 @@ const TestGeneratoreComplete = () => {
     {
       title: "Report",
       field: "pathInstance",
+      render: () => (
+        <IconButton>
+          <PostAddOutlinedIcon onClick={(event) => alert("Show Report")} />
+        </IconButton>
+      ),
     },
   ];
 
@@ -117,7 +124,6 @@ const TestGeneratoreComplete = () => {
       marginTop: "4%",
       marginBottom: "2%",
     },
-  
   }));
 
   const handleChange = () => {
@@ -306,41 +312,56 @@ const TestGeneratoreComplete = () => {
       .catch((error) => console.log("error", error));
   };
 
+  const tableIcons = {
+    Export: React.forwardRef((props, ref) => (
+      <Button size="small" variant="contained" color="secondary">
+        EXPORT
+      </Button>
+    )),
+  };
+
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
-        title="Last 30 Test Generatore Completed"
+        title="Test Generatore Conclusi"
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
+          //tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "left",
+          searchFieldAlignment: "center",
           exportButton: true,
 
           // selection: true,
           // columnsButton: true,
           // filtering: true,
-        }}
-        actions={[
-          {
-            icon: () => (
-              <div>
-                <Button
-                size="small"
-                variant="contained"
-                color="secondary"
-                >EXPORT</Button>
-              </div>
-            ),
-            tooltip: "Export Test Generatore Table",
-            onClick: () => handleOpen(),
-            isFreeAction: true,
+          headerStyle: {
+            backgroundColor: "beige",
+            //color: '#FFF'
           },
-        ]}
+        }}
+        actions={
+          [
+            // {
+            //   icon: () => (
+            //     <div>
+            //       <Button
+            //       size="small"
+            //       variant="contained"
+            //       color="secondary"
+            //       >EXPORT</Button>
+            //     </div>
+            //   ),
+            //   tooltip: "Export Test Generatore Table",
+            //   onClick: () => handleOpen(),
+            //   isFreeAction: true,
+            // },
+          ]
+        }
         localization={{
           header: {
             actions: "Azioni",
@@ -349,8 +370,6 @@ const TestGeneratoreComplete = () => {
       />
     </div>
   );
-
-
-  };
+};
 
 export default TestGeneratoreComplete;

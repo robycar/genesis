@@ -24,6 +24,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 function TestGeneratoreTableNew() {
   const [file, setFile] = useState([]);
@@ -49,74 +50,86 @@ function TestGeneratoreTableNew() {
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  //-----------GET TEST GENERATORE----------------------
-  const getAllTestGeneratore = () => {
-    setCaricamento(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const funzioneGetAll = () => {
+    //----GET ALL USERS----
+    (async () => {
+      setCaricamento(true)
+      setData((await getGenerale('testgen')).list);
+      setCaricamento(false)
+    })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+    //-----GET APPEAR OBP-----
+    (async () => {
+      setAppearOBP((await getGenerale('obp')).list);
+    })();
 
-    fetch(`/api/testgen`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-        setCaricamento(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
+    //-----GET APPEAR LINEA-----
+    (async () => {
+      setAppearLine((await getGenerale('lineageneratore')).list);
+    })();
+  }
 
-  //--------------GET LINE------------------------------
-  const getAppearLine = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const funzioneGetTestgenById = (id) => {
+    (async () => {
+      setAllVariables((await getByIdGenerale('testgen', id)).testGeneratore);
+      funzioneGetAll();
+    })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  }
 
-    fetch(`/api/lineageneratore`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLine(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-  //--------------GET OBP------------------------------
-  const getAppearOBP = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const funzioneAggiornaChiamato = () => {
+    //----AGGIORNA CHIAMATO----
+    (async () => {
+      await postGenerale('testgen', { id: id, version: version, lineaChiamato: { id: lineaChiamato }, proxyChiamato: { id: OBPChiamato } });
+      funzioneGetTestgenById(id)
+    })();
+  }
+  const funzioneAggiornaChiamante = () => {
+    //----AGGIORNA CHIAMANTE----
+    (async () => {
+      await postGenerale('testgen', { id: id, version: version, lineaChiamante: { id: lineaChiamante }, proxyChiamante: { id: OBPChiamante } });
+      funzioneGetTestgenById(id)
+    })();
+  }
+  
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  const funzioneAggiornaTestgen = () => {
+    //----AGGIORNA TESTCASE----
+    (async () => {
+      await postGenerale('testgen', { id: id, version: version, nome: nome, descrizione: descrizione === "" ? " " : descrizione});
+      funzioneGetTestgenById(id);
+    })();
+  }
 
-    fetch(`/api/obp`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearOBP(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  const funzioneDelete = () => {
+    (async () => {
+      setCaricamento(true)
+      let result = await deleteGenerale("testcase", idElemento);
+      if (result?.error !== null) {
 
+        if (result?.error === "Internal Server Error") {
+          setWarning(
+            "Non è possibile eliminare il TestCase perchè associato ad una o più TestSuite"
+          );
+        } else {
+          setWarning(
+            "Codice errore:" +
+            result.error.code +
+            "Descrizione" +
+            result.code.description
+          )
+        }
+
+        setOpenWarning(true);
+
+      } else {
+        funzioneGetAll();
+        setOpenDelete(false)
+      }
+    })();
+  }
   useEffect(() => {
-    getAllTestGeneratore();
-    getAppearLine();
-    getAppearOBP();
+    funzioneGetAll();
   }, []);
 
   const columns = [
@@ -171,8 +184,9 @@ function TestGeneratoreTableNew() {
     handleOpen(rowData);
   };
 
-  const handleOpen = (rowData) => {
+  const setAllVariables = (rowData) => {
     setId(rowData.id);
+    setVersion(rowData.version);
     setNomeTitolo(rowData.nome);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
@@ -180,23 +194,22 @@ function TestGeneratoreTableNew() {
     setLineaChiamante(rowData.lineaChiamante.id);
     setOBPChiamato(rowData.proxyChiamato.id);
     setOBPChiamante(rowData.proxyChiamante.id);
-    setVersion(rowData.version);
     setTemplate(rowData.template);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
-    setOpen(true);
   };
+
+  const handleOpen = (rowData) => {
+    setAllVariables(rowData)
+    setOpen(true);
+  }
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleClose2 = () => {
-    aggiornaTestGen();
-    setOpen(false);
-  };
 
   /*--------------MODALE DELETE TEST GENERATORE -----------*/
   const [openWarning, setOpenWarning] = useState(false);
@@ -204,50 +217,6 @@ function TestGeneratoreTableNew() {
 
   const handleCloseWarning = () => {
     setOpenWarning(false);
-  };
-
-  const functionDelete = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: idElemento,
-    });
-
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testgen`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.error !== null) {
-          setOpenWarning(true);
-          if (result.error === "Internal Server Error") {
-            setWarning(
-              "Impossibile eliminare un Test Generatore che non appartiene al proprio gruppo"
-            );
-          } else {
-            setWarning(
-              "Codice errore: " +
-                result.error.code +
-                "Descrizione: " +
-                result.error.description
-            );
-          }
-        } else {
-          setOpenWarning(false);
-          getAllTestGeneratore();
-        }
-      })
-      .catch((error) => console.log("error", error));
-    handleCloseDelete();
   };
 
   //------------ MODALE DELETE--------------
@@ -266,6 +235,7 @@ function TestGeneratoreTableNew() {
   };
 
   const handleCloseChiamato = () => {
+    funzioneGetTestgenById(id)
     setOpenChiamato(false);
   };
 
@@ -275,110 +245,9 @@ function TestGeneratoreTableNew() {
   };
 
   const handleCloseChiamante = () => {
+    funzioneGetTestgenById(id)
     setOpenChiamanti(false);
-  };
-
-  //-------AGGIORNA TEST GENERATORE----------------------------
-
-  const aggiornaTestGen = () => {
-    const invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-      var raw = JSON.stringify({
-        id: id,
-        version: version,
-        nome: nome,
-        descrizione: descrizione === "" ? " " : descrizione,
-      });
-
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/testgen`, requestOptions)
-        .then((response) => response.json())
-        .then((response) => {
-          getAllTestGeneratore();
-          setOpen(false);
-        })
-        .catch((error) => console.log("error", error));
-    };
-    invia();
-  };
-  const aggiornaChiamato = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: id,
-      version: version,
-      lineaChiamato: {
-        id: lineaChiamato,
-      },
-      proxyChiamato: {
-        id: OBPChiamato,
-      },
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testgen`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        getAllTestGeneratore();
-        handleCloseChiamato(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
-  const aggiornaChiamante = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: id,
-      version: version,
-      lineaChiamante: {
-        id: lineaChiamante,
-      },
-      proxyChiamante: {
-        id: OBPChiamante,
-      },
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testgen`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        getAllTestGeneratore();
-        handleCloseChiamante(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
-  //-------VISUALIZZA TUTTI I DATI-----------------------
+  }; 
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -416,7 +285,7 @@ function TestGeneratoreTableNew() {
       height: "fit-content",
       width: 500,
       position: "relative",
-    
+
     },
     contenutoModale: {
       height: 370,
@@ -663,8 +532,8 @@ function TestGeneratoreTableNew() {
                     size="medium"
                     nome={
                       modifica === false
-                        ? "vedi chiamanti"
-                        : "modifica chiamanti"
+                        ? "vedi chiamante"
+                        : "modifica chiamante"
                     }
                     onClick={handleOpenChiamanti}
                   />
@@ -735,7 +604,7 @@ function TestGeneratoreTableNew() {
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
-                    onClick={aggiornaTestGen}
+                    onClick={funzioneAggiornaTestgen}
                   />
                 )}
 
@@ -797,7 +666,7 @@ function TestGeneratoreTableNew() {
                           key={linea.id}
                           value={linea.id}
                         >
-                          {linea.ip+":"+linea.porta+"-"+linea.typeLinea.descrizione}
+                          {linea.ip + ":" + linea.porta + "-" + linea.typeLinea.descrizione}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -839,7 +708,7 @@ function TestGeneratoreTableNew() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      onClick={aggiornaChiamato}
+                      onClick={funzioneAggiornaChiamato}
                     />
                   )}
 
@@ -904,7 +773,7 @@ function TestGeneratoreTableNew() {
                           key={linea.id}
                           value={linea.id}
                         >
-                          {linea.ip+":"+linea.porta+"-"+linea.typeLinea.descrizione}
+                          {linea.ip + ":" + linea.porta + "-" + linea.typeLinea.descrizione}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -946,7 +815,7 @@ function TestGeneratoreTableNew() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      onClick={aggiornaChiamante}
+                      onClick={funzioneAggiornaChiamante}
                     />
                   )}
 
@@ -998,7 +867,7 @@ function TestGeneratoreTableNew() {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <ButtonNotClickedGreen
-                    onClick={functionDelete}
+                    onClick={funzioneDelete}
                     nome="Elimina"
                   />
                   <ButtonNotClickedGreen

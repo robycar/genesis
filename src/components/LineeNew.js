@@ -25,8 +25,28 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
+import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 function Linee() {
+  const [data, setData] = useState([]);
+  const [nomeLinea, setNomeLinea] = useState("");
+  const [appearLine, setAppearLine] = useState([]);
+  const [createdBy, setCreatedBy] = useState("");
+  const [modifiedBy, setModifiedBy] = useState("");
+  const [id, setId] = useState();
+  const [numero, setNumero] = useState("");
+  let ip;
+  const [ip1, setIp1] = useState("");
+  const [ip2, setIp2] = useState("");
+  const [ip3, setIp3] = useState("");
+  const [ip4, setIp4] = useState("");
+  const [porta, setPorta] = useState();
+  const [password, setPassword] = useState("");
+  const [typeLinea, setTypeLinea] = useState();
+  const [caricamento, setCaricamento] = useState(false);
+  const [version, setVersion] = useState(0);
+  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -175,92 +195,32 @@ function Linee() {
 
   const classes = useStyles();
 
-  const [data, setData] = useState([]);
-  const [nomeLinea, setNomeLinea] = useState("");
-  const [appearLine, setAppearLine] = useState([]);
-  const [createdBy, setCreatedBy] = useState("");
-  const [modifiedBy, setModifiedBy] = useState("");
-  const [id, setId] = useState();
-  const [numero, setNumero] = useState("");
-  let ip;
-  const [ip1, setIp1] = useState("");
-  const [ip2, setIp2] = useState("");
-  const [ip3, setIp3] = useState("");
-  const [ip4, setIp4] = useState("");
-  const [porta, setPorta] = useState();
-  const [password, setPassword] = useState("");
-  const [typeLinea, setTypeLinea] = useState();
-  const [caricamento, setCaricamento] = useState(false);
+  //-------------------------LINEE API----------------
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  //-----------GET ----------------------
+  const funzioneGetAll = () => {
+    //----GET ALL LINEE----
+    (async () => {
+      setCaricamento(true);
+      setData((await getGenerale("linea")).list);
+      setCaricamento(false);
+    })();
 
-  /*----Get Type Linea ------*/
-
-  const getAppearLine = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLine(result.list);
-      })
-      .catch((error) => console.log("error", error));
+    //-----GET APPEAR TYPE LINEA-----
+    (async () => {
+      setAppearLine((await getGenerale("typeLinea")).list);
+    })();
   };
 
-  // -------get linea-----------
+  //---------------------AGGIORNA LINEA API -------------------------
 
-  const getLinea = () => {
-    setCaricamento(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/linea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-        setCaricamento(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  useEffect(() => {
-    getLinea();
-    getAppearLine();
-  }, []);
-
-  //---------------------AGGIORNA LINEA -------------------------
-
-  const aggiornaLinea = () => {
-    ip = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
-
-    const invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-      var raw = JSON.stringify({
+  const funzioneAggiornaLinea = () => {
+    (async () => {
+      await postGenerale("linea", {
         id: id,
         numero: numero,
         ip: ip,
+        version: version,
         password: password,
         porta: porta,
         typeLinea: {
@@ -268,23 +228,53 @@ function Linee() {
         },
       });
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/linea`, requestOptions)
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response);
-          getLinea();
-        })
-        .catch((error) => console.log("error", error));
-    };
-    if (ip !== "") invia();
+      funzioneGetAll();
+    })();
   };
+
+  const aggiornaLinea = () => {
+    ip = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
+    if (ip !== "") funzioneAggiornaLinea();
+  };
+
+  /*--------- DELETE LINEA API ---------*/
+
+  const funzioneDelete = () => {
+    (async () => {
+      setCaricamento(true);
+      await deleteGenerale("linea", `${idElemento}`).result;
+      funzioneGetAll();
+    })();
+  };
+
+  const functionDelete = () => {
+    deleteGenerale("linea", `${idElemento}`)
+      .then((result) => {
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "LINEA-0014") {
+            setWarning(
+              "Impossibile eliminare la linea selezionata poichè collegata ad uno o più Test Case"
+            );
+          } else {
+            setWarning(
+              "Codice errore: " +
+                result.error.code +
+                " Descrizione: " +
+                result.code.description
+            );
+          }
+        } else {
+          funzioneDelete();
+          setOpenWarning(false);
+          funzioneGetAll();
+        }
+      })
+      .catch((error) => console.log("error", error));
+    handleCloseDelete();
+  };
+
+  /*--------- COLUMNS ---------*/
 
   const columns = [
     { title: "ID Linea", field: "id", defaultSort: "desc" },
@@ -336,7 +326,7 @@ function Linee() {
   const handleOpen = (rowData) => {
     setId(rowData.id);
     setNumero(rowData.numero);
-
+    setVersion(rowData.version);
     var ipAppoggio = rowData.ip;
     ipAppoggio = ipAppoggio.split(".");
     setIp1(ipAppoggio[0].replace(".", ""));
@@ -357,51 +347,10 @@ function Linee() {
     setOpen(false);
   };
 
-  /*--------- MODALE DELETE ---------*/
-
-  const functionDelete = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: idElemento,
-    });
-
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/linea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.error !== null) {
-          setOpenWarning(true);
-          if (result.error.code === "LINEA-0014") {
-            setWarning(
-              "Impossibile eliminare la linea selezionata poichè collegata ad uno o più Test Case"
-            );
-          } else {
-            setWarning(
-              "Codice errore: " +
-                result.error.code +
-                " Descrizione: " +
-                result.code.description
-            );
-          }
-        } else {
-          setOpenWarning(false);
-          getLinea();
-        }
-      })
-      .catch((error) => console.log("error", error));
-    handleCloseDelete();
-  };
+  //---------------USE EFFECT ----------------------
+  useEffect(() => {
+    funzioneGetAll();
+  }, []);
 
   //------------ funzione apri modale -----------
 
@@ -442,6 +391,7 @@ function Linee() {
   //     setBtnDisabled(true);
   //   }
   // };
+  // console.log(data)
 
   return (
     <div>
@@ -668,7 +618,7 @@ function Linee() {
                     className={classes.textField}
                     select
                     label="Tipo Linea"
-                    value={appearLine.id}
+                    value={appearLine?.id}
                     defaultValue={typeLinea}
                     onChange={(e) => setTypeLinea(e.target.value)}
                   >

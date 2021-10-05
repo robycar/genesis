@@ -1,5 +1,4 @@
 // const URL = `http://localhost:9081/`;
-import { version } from "os";
 import acccessControl from "url";
 
 
@@ -29,8 +28,9 @@ export async function login(username, password) {
   return result;
 }
 
-//----------CHIAMATE GENERALI-------------
+//--------------------CHIAMATE GENERALI---------------------
 
+//------GET-----
 export async function getGenerale(indirizzo) {
   var myHeaders = new Headers();
 
@@ -44,39 +44,66 @@ export async function getGenerale(indirizzo) {
     redirect: "follow",
   };
 
-  let result = await fetch(`/api/` + indirizzo, requestOptions)
+  let result = await fetch(`/api/${indirizzo}`, requestOptions)
 
   result = await result.json();
   return result;
 
 };
 
-//----------------------AMMINISTRAZIONE-----------------------------------
-//-------------Gestione Utenti---------------
-export async function aggiornaUtente(id, version, username, cognome, nome, email, levelId, gruppoId, password) {
+//------GET BY ID-----
+export async function getByIdGenerale(indirizzo, id) {
+  var myHeaders = new Headers();
+
+  myHeaders.append("Authorization", bearer);
+  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  var requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  let result = await fetch(`/api/${indirizzo}/${id}`, requestOptions)
+
+  result = await result.json();
+  return result;
+
+};
+
+//------PUT------
+export async function putGenerale(indirizzo, object){
   var myHeaders = new Headers();
   myHeaders.append("Authorization", bearer);
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
   myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  var raw = JSON.stringify({
-    user: {
-      id: id,
-      version: version,
-      username: username,
-      cognome: cognome,
-      nome: nome,
-      email: email,
-      level: {
-        id: levelId, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
-      },
-      gruppo: {
-        id: gruppoId, //aggiornare qui per passare ID corretto    arr1[newData.level.id].id
-      },
-    },
-    password: password,
-  });
+  var raw = JSON.stringify(object);
+
+  var requestOptions = {
+    method: "PUT",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  let result = await fetch(`/api/${indirizzo}`, requestOptions)
+
+  result = await result.json();
+  return result;
+};
+
+//------POST-----
+export async function postGenerale(indirizzo, object) {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", bearer);
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  var raw = JSON.stringify(object);
 
   var requestOptions = {
     method: "POST",
@@ -85,16 +112,18 @@ export async function aggiornaUtente(id, version, username, cognome, nome, email
     redirect: "follow",
   };
 
-  let result = await fetch(`/api/user`, requestOptions)
+
+  let result = await fetch(`/api/${indirizzo}`, requestOptions)
 
   result = await result.json();
   return result;
 
-}
+};
 
-//-------------Gestione Ruoli----------------
-export async function aggiornaRuolo(id, version, nome, descrizione) {
+//----------DELETE---------
+export async function deleteGenerale(indirizzo, id) {
   var myHeaders = new Headers();
+
   myHeaders.append("Authorization", bearer);
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -102,21 +131,18 @@ export async function aggiornaRuolo(id, version, nome, descrizione) {
 
   var raw = JSON.stringify({
     id: id,
-    version: version,
-    nome: nome,
-    descrizione: descrizione,
   });
 
   var requestOptions = {
-    method: "POST",
+    method: "DELETE",
     headers: myHeaders,
     body: raw,
     redirect: "follow",
   };
 
-  let result = await fetch(`/api/level`, requestOptions)
+  let result = await fetch(`/api/${indirizzo}`, requestOptions)
 
   result = await result.json();
   return result;
 
-}
+};

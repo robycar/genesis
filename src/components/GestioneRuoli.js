@@ -6,7 +6,6 @@ import "../styles/App.css";
 import { Paper, Typography } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
-import acccessControl from "../service/url.js";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -18,7 +17,7 @@ import Row from "react-bootstrap/Row";
 import Divider from "@material-ui/core/Divider";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import { getGenerale, aggiornaRuolo } from "../service/api";
+import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 const GestioneRuoli = () => {
   const [data, setData] = useState([]);
@@ -28,7 +27,6 @@ const GestioneRuoli = () => {
   const [descrizione, setDescrizione] = useState("");
   const [caricamento, setCaricamento] = useState(false)
 
-  const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
@@ -42,8 +40,16 @@ const GestioneRuoli = () => {
   const funzioneAggiornamento = () => {
     //----GET ALL USERS----
     (async () => {
-      setData((await aggiornaRuolo(id, version, nome, descrizione)).livelli);
+      setData((await postGenerale('level', {id: id, version: version, nome: nome, descrizione: descrizione})).livelli);
       setOpen(false);
+      funzioneGetAll();
+    })();
+  }
+
+  const funzioneDelete = (id) => {
+    (async () => {
+      setCaricamento(true)
+      await deleteGenerale("level", id)
       funzioneGetAll();
     })();
   }
@@ -197,37 +203,6 @@ const GestioneRuoli = () => {
           pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
           sorting: true,
         }}
-        editable={{
-          isDeletable: (row) => row.nome !== "ADMIN",
-          onRowDelete: (oldData) =>
-            new Promise((resolve, reject) => {
-              //Backend call
-              var myHeaders = new Headers();
-              myHeaders.append("Authorization", bearer);
-              myHeaders.append("Content-Type", "application/json");
-              myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-              myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-              var raw = JSON.stringify({
-                id: oldData.id,
-              });
-
-              var requestOptions = {
-                method: "DELETE",
-                headers: myHeaders,
-                body: raw,
-                redirect: "follow",
-              };
-
-              fetch(`/api/level?id=` + oldData.id, requestOptions)
-                .then((response) => response.json())
-                .then((result) => {
-                  // getLevel();
-                  resolve();
-                })
-                .catch((error) => console.log("error", error));
-            }),
-        }}
         actions={[
           {
             icon: () => (
@@ -253,6 +228,12 @@ const GestioneRuoli = () => {
 
             position: "row",
           },
+          rowData => ({
+            icon: 'delete',
+            tooltip: 'Elimina Utente',
+            onClick: (event, rowData) => funzioneDelete(rowData.id),
+            disabled: rowData.nome === "ADMIN",
+          }),
         ]}
         localization={{
           header: {

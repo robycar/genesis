@@ -82,8 +82,8 @@ function ChartReport() {
         label: "# of Test Case",
         data: [ko , ok],
         backgroundColor: [
-          "rgba(54, 162, 235)",
-          "rgba(255, 206, 86)",
+          "red",
+          "blue",
           // "rgba(75, 192, 192)",
           // "rgba(153, 102, 255)",
         ],

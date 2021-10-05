@@ -20,6 +20,7 @@ import TextField from "@material-ui/core/TextField";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
 import loading from "../../src/assets/load.gif";
+import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
@@ -55,12 +56,9 @@ const TestCaricatiTable = () => {
     },
     {
       title: "Data Inizio",
-      field: "startDate",
+      field: "loadedWhen",
     },
-    {
-      title: "Data Fine",
-      field: "endDate",
-    },
+
     {
       title: "Status",
       field: "stato",
@@ -72,10 +70,6 @@ const TestCaricatiTable = () => {
     {
       title: "Call-Id",
       field: "loadedBy",
-    },
-    {
-      title: "Report",
-      field: "pathInstance",
     },
   ];
 
@@ -111,6 +105,15 @@ const TestCaricatiTable = () => {
       width: 500,
       position: "relative",
     },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
@@ -123,7 +126,7 @@ const TestCaricatiTable = () => {
       marginBottom: "5%",
     },
     typography: {
-      padding: "3%",
+      marginTop: "3%",
     },
 
     divTextarea: {
@@ -134,6 +137,7 @@ const TestCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
+      marginBottom: "2%"
     },
     icon: {
       transform: "scale(1.8)",
@@ -247,6 +251,9 @@ const TestCaricatiTable = () => {
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
+  const [openDelete, setOpenDelete] = useState(false);
+  const [idTest, setIdTest] = React.useState(0);
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -258,7 +265,6 @@ const TestCaricatiTable = () => {
   };
 
   const handleOpenSchedula = () => {
-    
     setOpenSchedula(true);
     setOpen(false);
   };
@@ -267,8 +273,8 @@ const TestCaricatiTable = () => {
     setOpenSchedula(false);
   };
 
-  const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_);
+  const handleOpenRun = (idRun) => {
+    setIdToRun(idRun);
     setOpenRun(true);
     setOpen(false);
   };
@@ -293,6 +299,18 @@ const TestCaricatiTable = () => {
     handleCloseRun();
     //alert("Run test id :  "+ idToRun);
   };
+
+    //------------ funzione apri modale
+
+    const handleOpenDelete = (rowData) => {
+      setId(rowData.id);
+      setOpenDelete(true);
+    };
+  
+    //---------- funzione chiudi modale
+    const handleCloseDelete = () => {
+      setOpenDelete(false);
+    };
 
   /*------- OPEN WARNING DELETE ------------ */
 
@@ -371,7 +389,7 @@ const TestCaricatiTable = () => {
       .catch((error) => console.log("error", error));
   };
 
-  /*--------------- LOAD TEST CASE -------------------*/
+  /*--------------- FUNZIONE CARICA TEST CASE -------------------*/
 
   const loadTestCase = (id) => {
     var urlLoad = `/api/testcase/load/${id}`;
@@ -438,7 +456,7 @@ const TestCaricatiTable = () => {
 
   const handleLoadData = (rowDataaa) => {
     //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
+    setIdToRun(rowDataaa.id);
     runCaseLoader(rowDataaa.id);
   };
 
@@ -447,7 +465,7 @@ const TestCaricatiTable = () => {
   const schedulaTestCase = () => {
     const invia = () => {
       scheduleDateTime = dataInizio + "T" + orarioInizio;
-      console.log(scheduleDateTime, "schedule date time" )
+      console.log(scheduleDateTime, "schedule date time");
       console.log(dataInizio, "data inizio");
       console.log(orarioInizio, "orario");
 
@@ -481,8 +499,6 @@ const TestCaricatiTable = () => {
     };
     invia();
   };
-
- 
 
   return (
     <div>
@@ -523,10 +539,13 @@ const TestCaricatiTable = () => {
             position: "row",
           },
           {
-            icon: "delete",
-            tooltip: "Delete all selected row",
-            onClick: (event, rowData) => console.log(rowData),
-            position: "row"
+            icon: () => <DeleteIcon />,
+            tooltip: "Delete Loaded Test",
+            onClick: (event, rowData) => {
+              handleOpenDelete(rowData);
+              setIdTest(rowData.id);
+            },
+            position: "row",
           },
           {
             icon: () => <FilterListIcon />,
@@ -534,6 +553,12 @@ const TestCaricatiTable = () => {
             isFreeAction: true,
             onClick: () => handleChange(),
           },
+          // {
+          //   icon: () => <DeleteIcon />,
+          //   tooltip: "Delete Test Case",
+          //   isFreeAction: true,
+          //   onClick: () => handleChange(),
+          // },
           {
             icon: () => (
               <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
@@ -855,6 +880,55 @@ const TestCaricatiTable = () => {
           </div>
         </Fade>
       </Modal>
+
+ {/* ------------------------MODALE DELETE--------------------- */}
+ <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Elimina Test Id <b>{" "+ id}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                Vuoi eliminare il Test Caricato?
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    //onClick={functionDelete}
+                    onClick={() => alert("Inserire funzione Delete Loaded Test ")}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
     </div>
   );
 };

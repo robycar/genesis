@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import { IconButton, Paper, Typography, Link } from "@material-ui/core";
-import acccessControl from "../service/url.js";
+import {Paper, Typography } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
@@ -16,22 +15,18 @@ import TextField from "@material-ui/core/TextField";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
-import GetAppIcon from "@material-ui/icons/GetApp";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../service/api";
 
-import loading from "../../src/assets/load.gif";
 
 function TestCaseTable() {
-  const [file, setFile] = useState([]);
   const [data, setData] = useState([]);
-  const [testCase, setTestCase] = useState([]);
   const [id, setId] = useState();
   const [nomeTitolo, setNomeTitolo] = useState("");
   const [nome, setNome] = useState("");
@@ -49,163 +44,91 @@ function TestCaseTable() {
   const [proxyChiamato, setProxyChiamato] = useState(0);
   const [chiamanti, setChiamanti] = useState({});
   const [mapChiamanti, setMapChiamanti] = useState([]);
-  let arrAppoggioChiamanti = {};
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
 
-  let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  //-----------GET TEST CASE----------------------
-  const getAllTestCase = () => {
-    setCaricamento(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const funzioneGetAll = () => {
+    //----GET ALL USERS----
+    (async () => {
+      setCaricamento(true)
+      setData((await getGenerale('testcase')).list);
+      setCaricamento(false)
+    })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+    //-----GET APPEAR OBP-----
+    (async () => {
+      setAppearOBP((await getGenerale('obp')).list);
+    })();
 
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-        setCaricamento(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
+    //-----GET APPEAR LINEA-----
+    (async () => {
+      setAppearLine((await getGenerale('linea')).list);
+    })();
+  }
 
-  //-----------GET TEST CASE BY ID----------------------
-  const getTestCaseById = (id) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const funzioneGetTestcaseById = (id) => {
+    (async () => {
+      setAllVariables((await getByIdGenerale('testcase', id)).testCase);
+      funzioneGetAll();
+    })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  }
 
-    fetch(`/api/testcase/` + id, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAllVariables(result.testCase);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  const funzioneAggiornaChiamato = () => {
+    //----AGGIORNA CHIAMATO----
+    (async () => {
+      await postGenerale('testcase', { id: id, version: version, chiamato: { linea: { id: lineaChiamato }, proxy: { id: proxyChiamato } } });
+      funzioneGetTestcaseById(id)
+    })();
+  }
 
-  //--------------GET LINE------------------------------
-  const getAppearLine = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const funzioneAggiornaChiamanti = () => {
+    //----AGGIORNA CHIAMANTI----
+    (async () => {
+      await postGenerale('testcase', { id: id, version: version, chiamanti });
+      funzioneGetTestcaseById(id)
+    })();
+  }
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  const funzioneAggiornaTestcase = () => {
+    //----AGGIORNA TESTCASE----
+    (async () => {
+      await postGenerale('testcase', {id: id, version: version, nome: nome, descrizione: descrizione});
+      funzioneGetTestcaseById(id);
+    })();
+  }
 
-    fetch(`/api/linea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLine(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-  //--------------GET OBP------------------------------
-  const getAppearOBP = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/obp`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearOBP(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //------------UPDATE CHIAMATO-----------------
-  const updateChiamato = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: id,
-      version: version,
-      chiamato: {
-        linea: {
-          id: lineaChiamato,
-        },
-        proxy: {
-          id: proxyChiamato,
-        },
-      },
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        handleCloseChiamato();
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //------------UPDATE CHIAMANTI-----------------
-  const updateChiamante = () => {
-    console.log("prova", chiamanti);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: id,
-      version: version,
-      chiamante: chiamanti,
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
-        handleCloseChiamanti();
-      })
-      .catch((error) => console.log("error", error));
-  };
+  const funzioneDelete = () => {
+    (async () => {
+      setCaricamento(true)
+      let result = await deleteGenerale("testcase", idElemento);
+      if (result?.error !== null) {
+        setOpenWarning(true);
+        if (result?.error?.code === "TEST-0009") {
+          setWarning(
+            "Non è possibile eliminare un test case che non appartiene al proprio gruppo"
+          );
+        }
+        else if (result?.error === "Internal Server Error") {
+          setWarning(
+            "Non è possibile eliminare il TestCase perchè associato ad una o più TestSuite"
+          );
+        } else {
+          setWarning(
+            "Codice errore:" +
+            result.error.code +
+            "Descrizione" +
+            result.code.description
+          );
+        }
+      } else {
+        funzioneGetAll();
+        setOpenDelete(false)
+      }
+    })();
+  }
 
   const columns = [
     {
@@ -293,59 +216,10 @@ function TestCaseTable() {
   const [warning, setWarning] = useState("");
 
   const handleCloseWarning = () => {
+    setCaricamento(false)
     setOpenWarning(false);
   };
 
-  /*---------MODALE DELETE-------*/
-
-  const functionDelete = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: idElemento,
-    });
-
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.error !== null) {
-          setOpenWarning(true);
-          if (result.error === "TEST-0009") {
-            setWarning(
-              "Non è possibile eliminare un test case che non appartiene al proprio gruppo"
-            );
-          }
-          // if (result.error === "Internal Server Error") {
-          //   setWarning(
-          //     "Non è possibile eliminare un test case che è legato a una o piÃ¹ Test Suite"
-          //   );
-          // } else {
-          //   setWarning(
-          //     "Codice errore:" +
-          //       result.error.code +
-          //       "Descrizione" +
-          //       result.code.description
-          //   );
-          // }
-        } else {
-          setOpenWarning(false);
-          getAllTestCase();
-        }
-      })
-      .catch((error) => console.log("error", error));
-    handleCloseDelete();
-  };
 
   //------------ funzione apri modale delete
 
@@ -360,7 +234,7 @@ function TestCaseTable() {
   };
 
   //-----------MODALE CHIAMATO------------------
-  const setChiama=(rowData)=>{
+  const setChiama = (rowData) => {
     //-----chiamato------
     setLineaChiamato(rowData.chiamato.linea.id);
     setProxyChiamato(rowData.chiamato.proxy.id);
@@ -381,6 +255,7 @@ function TestCaseTable() {
   };
 
   const handleCloseChiamato = () => {
+    funzioneGetTestcaseById(id)
     setOpenChiamato(false);
   };
 
@@ -392,48 +267,13 @@ function TestCaseTable() {
     setChiamanti(e);
   };
   const handleCloseChiamanti = () => {
+    funzioneGetTestcaseById(id)
     setOpenChiamanti(false);
   };
 
-  //-------AGGIORNA TEST CASE----------------------------
-
-  const aggiornaTestCase = () => {
-    const invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-      var raw = JSON.stringify({
-        id: id,
-        version: version,
-        nome: nome,
-        descrizione: descrizione,
-      });
-
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/testcase`, requestOptions)
-        .then((response) => response.json())
-        .then((response) => {
-          getAllTestCase();
-          handleClose();
-        })
-        .catch((error) => console.log("error", error));
-    };
-    invia();
-  };
 
   useEffect(() => {
-    getAllTestCase();
-    getAppearLine();
-    getAppearOBP();
+    funzioneGetAll();
   }, []);
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
@@ -542,7 +382,7 @@ function TestCaseTable() {
     bottoneAnnulla: {
       width: "128px",
     },
-    
+
     divIntestazione: {
       display: "flex",
       alignItems: "center",
@@ -815,7 +655,7 @@ function TestCaseTable() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      onClick={aggiornaTestCase}
+                      onClick={funzioneAggiornaTestcase}
                     />
                   )}
 
@@ -912,7 +752,7 @@ function TestCaseTable() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      onClick={updateChiamato}
+                      onClick={funzioneAggiornaChiamato}
                     />
                   )}
 
@@ -958,7 +798,7 @@ function TestCaseTable() {
                 {mapChiamanti.map((chiamante, index) => (
                   <>
                     <Typography className={classes.intestazione} variant="h6">
-                      Chiamante <b>{index+1}</b>
+                      Chiamante <b>{index + 1}</b>
                     </Typography>
                     <Row>
                       <Col className={classes.col}>
@@ -1021,7 +861,7 @@ function TestCaseTable() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      onClick={updateChiamante}
+                      onClick={funzioneAggiornaChiamanti}
                     />
                   )}
 
@@ -1073,7 +913,7 @@ function TestCaseTable() {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <ButtonNotClickedGreen
-                    onClick={functionDelete}
+                    onClick={funzioneDelete}
                     nome="Elimina"
                   />
                   <ButtonNotClickedGreen

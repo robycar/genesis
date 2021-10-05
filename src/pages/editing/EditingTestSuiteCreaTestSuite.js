@@ -19,37 +19,25 @@ import {
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import TestSuiteSelectNew from "../../components/TestSuiteSelectNew";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import { MenuItem, Paper, Link } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
 import acccessControl from "../../service/url";
-import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Prova from "../../components/Prova";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { file } from "@babel/types";
 import MaterialTable from "material-table";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { getGenerale, getByIdGenerale, putGenerale } from "../../service/api";
+
 
 const drawerWidth = 240;
 
@@ -124,12 +112,14 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-    //backgroundColor: "yellow",
-    alignItems: "center",
     marginLeft: "1%",
+    // display: "flex",
+    // overflow: "auto",
+    // flexDirection: "column",
+    // backgroundColor: "yellow",
+    // alignItems: "center",
+    // marginLeft: "1%",
+    // widh: "100%",
   },
   fixedHeight: {
     height: 240,
@@ -138,7 +128,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "20px",
     marginLeft: "1%",
   },
-  generalContainer: {
+  // generalContainer: {
+  //   display: "flex",
+  //   marginTop: "5%",
+  // },
+
+  firstStep: {
     display: "flex",
     marginTop: "5%",
   },
@@ -234,10 +229,6 @@ const useStyles = makeStyles((theme) => ({
     padding: "5%",
   },
 
-  intestazione: {
-    color: "#47B881",
-    marginTop: "5%",
-  },
   icon: {
     transform: "scale(1.8)",
     color: "#47B881",
@@ -290,6 +281,38 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     width: "200px",
   },
+  paperModaleDelete: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: "5%",
+    height: "fit-content",
+    width: 500,
+    position: "relative",
+  },
+  intestazioneModaleError: {
+    color: "#ef5350",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  iconModaleError: {
+    // width: "15%",
+    // height: "15%",
+    marginRight: "4%",
+    transform: "scale(1.9)",
+    color: "#ef5350",
+  },
+  intestazione: {
+    color: "#47B881",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  divIntestazione: {
+    display: "flex",
+    alignItems: "center",
+    padding: "2%",
+    marginBottom: "1%",
+  },
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
@@ -312,7 +335,6 @@ function EditingTestCreaTestSuite() {
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [nextDisabled, setNextDisabled] = useState(true);
-  const [file, setFile] = useState([]);
   const [data, setData] = useState([]);
   const [testCase, setTestCase] = useState([]);
   const [id, setId] = useState();
@@ -320,11 +342,6 @@ function EditingTestCreaTestSuite() {
   const [version, setVersion] = useState();
   const [expectedDuration, setExpectedDuration] = useState();
   const [durata, setDurata] = useState();
-  const [endDate, setEndDate] = useState();
-  const [startDate, setStartDate] = useState();
-  const [status, setStatus] = useState();
-  const [lastResult, setLastResult] = useState();
-  const [template, setTemplate] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [modifiedBy, setModifiedBy] = useState("");
   const [creationDate, setCreationDate] = useState("");
@@ -333,8 +350,9 @@ function EditingTestCreaTestSuite() {
   const [chiamanti, setChiamanti] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
-  const [appearFile, setAppearFile] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [isErrore, setErrore] = useState(false);
+  const [messaggioErr, setMessaggioErr] = useState("");
 
   /*------- arrayIdTestCase -----------*/
   const arrayIdTestCase = [];
@@ -343,149 +361,57 @@ function EditingTestCreaTestSuite() {
     arrayIdTestCase.push(element);
   }
 
-  console.log(arrayIdTestCase);
+  const funzioneGetAll = () => {
+    //----GET APPEAR TEMPLATE----
+    (async () => {
+      setData((await getGenerale('testcase')).list);
+    })();
 
-  //-----------GET TEST CASE----------------------
-  const getAllTestCase = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    //-----GET APPEAR OBP-----
+    (async () => {
+      setAppearOBP((await getGenerale('obp')).list);
+    })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+    //-----GET APPEAR LIST-----
+    (async () => {
+      setAppearLine((await getGenerale('linea')).list);
+    })();
+  }
 
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-      })
-      .catch((error) => console.log("error", error));
+  const funzioneGetTestcaseById = (id) => {
+    //----GET APPEAR TEMPLATE----
+    (async () => {
+      setTestCase((await getByIdGenerale('testcase', id)).testCase);
+      setOpen(true);
+    })();
+  }
+
+  const checkRichiesta = (result) => {
+    if (result.error == null) {
+      history.push("/editing/testsuite");
+    } else if (result.error.code === "TEST-0012") {
+      setMessaggioErr("Il nome inserito per il TestSuite è già stato assegnato ad un altro TestSuite")
+      setErrore(true)
+    } else {
+      setMessaggioErr(result.error.description)
+      setErrore(true)
+    }
   };
 
-  //--------------GET TEMPLATE------------------------------
-  const getTemplateById = (id) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/template/` + id, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //--------------TEST CASE BY ID-----------------------
-  const getTestCaseById = (id) => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase/` + id, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setTestCase(result.testCase);
-        setOpen(true);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //--------------GET LINE------------------------------
-  const getAppearLine = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/linea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLine(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //--------------GET OBP------------------------------
-  const getAppearOBP = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/obp`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearOBP(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  const Invia = () => {
+    (async () => {
+      checkRichiesta(await putGenerale('testsuite', { nome: nome, descrizione: descrizione, testCases: arrayIdTestCase }));
+    })();
+  }
 
   useEffect(() => {
-    getAllTestCase();
-    getAppearLine();
-    getAppearOBP();
+    funzioneGetAll();
   }, []);
-  //-----------CREA TEST SUITE----------------------
-  const Invia = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var raw = JSON.stringify({
-      nome: nome,
-      descrizione: descrizione,
-      testCases: arrayIdTestCase,
-    });
-
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testsuite`, requestOptions)
-      .then((response) => response.json())
-      .catch((error) => console.log("error", error));
-
-    // localStorage.setItem("user-info", JSON.stringify(result));
-    // history.push("/dashboard/testcase");
-    window.location = "/editing/testsuite";
-  };
+  const handleCloseErrore = () => {
+    setErrore(false)
+    setActiveStep(0)
+  }
   //-----------------------Data Columns------------------------------
 
   const columns = [
@@ -503,14 +429,6 @@ function EditingTestCreaTestSuite() {
       title: "Descrizione",
       field: "descrizione",
     },
-    // {
-    //   title: "Durata Attesa",
-    //   field: "expectedDuration",
-    // },
-    // {
-    //   title: "Versione",
-    //   field: "version",
-    // },
     {
       title: "Data Creazione",
       field: "creationDate",
@@ -534,21 +452,11 @@ function EditingTestCreaTestSuite() {
   ];
 
   const [open, setOpen] = React.useState(false);
-  const [modifica, setModifica] = React.useState(false);
   const [openChiamato, setOpenChiamato] = React.useState(false);
   const [openChiamanti, setOpenChiamanti] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
   const [openDelete, setOpenDelete] = React.useState(false);
-  const [visualizza, setVisualizza] = useState(false);
 
-  const openModifica = (rowData) => {
-    setModifica(true);
-    handleOpen(rowData);
-  };
-  const openVisualizza = (rowData) => {
-    setVisualizza(true);
-    handleOpen(rowData);
-  };
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
@@ -562,7 +470,7 @@ function EditingTestCreaTestSuite() {
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
-    getTestCaseById(rowData.id);
+    funzioneGetTestcaseById(rowData.id);
   };
 
   const handleClose = () => {
@@ -570,38 +478,10 @@ function EditingTestCreaTestSuite() {
   };
 
   const handleClose2 = () => {
-    aggiornaTestCase();
+    // aggiornaTestCase();
     setOpen(false);
   };
 
-  /*---------MODALE DELETE-------*/
-
-  const functionDelete = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: idElemento,
-    });
-
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        getAllTestCase();
-      })
-      .catch((error) => console.log("error", error));
-    handleCloseDelete();
-  };
 
   //------------ funzione apri modale
 
@@ -648,7 +528,6 @@ function EditingTestCreaTestSuite() {
       chiamanti[i][2] = appoggioChiamanti[i]["file"].id;
       chiamanti[i][3] = i;
     }
-    console.log(chiamanti);
     setOpenChiamanti(true);
   };
 
@@ -661,40 +540,6 @@ function EditingTestCreaTestSuite() {
     setOpenChiamanti(false);
   };
 
-  //-------AGGIORNA TEST CASE----------------------------
-
-  const aggiornaTestCase = () => {
-    const invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-      var raw = JSON.stringify({
-        id: id,
-        version: version,
-        expectedDuration: expectedDuration,
-        nome: nome,
-        descrizione: descrizione,
-      });
-
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/testcase`, requestOptions)
-        .then((response) => response.json())
-        .then((response) => {
-          getAllTestCase();
-        })
-        .catch((error) => console.log("error", error));
-    };
-    invia();
-  };
 
   //-----------------------SCRIPT STEPPER------------------------------
 
@@ -720,14 +565,6 @@ function EditingTestCreaTestSuite() {
         setNextDisabled(false);
       }
     }
-
-    // if (activeStep === 1) {
-    //   if (arrayIdTestCase.length === 0) {
-    //     setNextDisabled(true);
-    //   } else {
-    //     setNextDisabled(false);
-    //   }
-    // }
   };
 
   const handleChangeName = (e) => {
@@ -738,9 +575,6 @@ function EditingTestCreaTestSuite() {
   };
 
   useEffect(() => {
-    // getTestCase();
-    //   getFile();
-    //   getOBP();
 
     if (activeStep === 0) {
       if (nome === "") {
@@ -749,13 +583,6 @@ function EditingTestCreaTestSuite() {
         setNextDisabled(false);
       }
     }
-    // else if (activeStep === 1) {
-    //   if (testCase === 0) {
-    //     setNextDisabled(true);
-    //   } else {
-    //     setNextDisabled(false)
-    //   }
-    // }
   }, [nome, nextDisabled]);
 
   return (
@@ -881,7 +708,7 @@ function EditingTestCreaTestSuite() {
 
           {/* ------------------------STEP 1--------------------------------- */}
           <div
-            className={classes.generalContainer}
+            className={classes.firstStep}
             style={{ display: activeStep === 0 ? "" : "none" }}
           >
             <Paper className={classes.paperContainer1} elevation={0}>
@@ -933,654 +760,66 @@ function EditingTestCreaTestSuite() {
             className={classes.generalContainer}
             style={{ display: activeStep === 1 ? "" : "none" }}
           >
-            <div className={classes.bodyContainer}>
-              <>
-                <Paper className={classes.paperContainer2} elevation={2}>
-                  <Typography>Seleziona i Test Case da associare:</Typography>
-                  <div>
-                    <MaterialTable
-                      style={{ boxShadow: "none" }}
-                      title="Test Case"
-                      data={data}
-                      columns={columns}
-                      onSelectionChange={
-                        (rows) => setSelectedRows(rows)
-                        // for (let i = 0; i < rows.length; i++) {
-                        //   // console.log(rows[i].id);
-                        //   return selectedRows.push(rows[i].id);
-                        // }
-                      }
-                      options={{
-                        selection: true,
-                        sorting: true,
-                        actionsColumnIndex: -1,
-                        search: true,
-                        searchFieldVariant: "outlined",
-                        filtering: true,
-                        searchFieldAlignment: "left",
-                        pageSizeOptions: [
-                          5,
-                          10,
-                          20,
-                          { value: data.length, label: "All" },
-                        ],
-                      }}
-                      actions={[
-                        {
-                          icon: (dat) => (
-                            <a>
-                              <VisibilityIcon />
-                            </a>
-                          ),
-                          tooltip: "Visualizza tutti i dati",
-                          position: "row",
-                          onClick: (event, rowData) => openVisualizza(rowData),
-                        },
-                      ]}
-                      localization={{
-                        header: {
-                          actions: "Azioni",
-                        },
-                      }}
-                    />
-
-                    {/*------------------ MODALE VISUALIZZA/MODIFICA -------------*/}
-
-                    <Modal
-                      aria-labelledby="transition-modal-title"
-                      aria-describedby="transition-modal-description"
-                      className={classes.modal}
-                      open={open}
-                      onClose={handleClose}
-                      closeAfterTransition
-                      BackdropComponent={Backdrop}
-                      BackdropProps={{
-                        timeout: 500,
-                      }}
-                    >
-                      <Fade in={open}>
-                        <div>
-                          <Paper className={classes.paperModale} elevation={1}>
-                            <div>
-                              <ListItem>
-                                <Typography
-                                  className={classes.intestazione}
-                                  variant="h4"
-                                >
-                                  {modifica === false
-                                    ? "Visualizza "
-                                    : "Modifica "}{" "}
-                                  Test Case <b>{nomeTitolo}</b>
-                                </Typography>
-                              </ListItem>
-                              <Divider className={classes.divider} />
-                            </div>
-
-                            <Form className={classes.contenutoModale}>
-                              <Row>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    error={nome !== "" ? false : true}
-                                    onChange={(e) => setNome(e.target.value)}
-                                    label="Nome"
-                                    defaultValue={nome}
-                                    helperText={
-                                      nome !== "" ? "" : "Il nome è richiesto"
-                                    }
-                                    InputProps={{
-                                      readOnly:
-                                        modifica === false ? true : false,
-                                    }}
-                                  />
-                                </Col>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    error={descrizione !== "" ? false : true}
-                                    onChange={(e) =>
-                                      setDescrizione(e.target.value)
-                                    }
-                                    label="Descrizione"
-                                    defaultValue={descrizione}
-                                    helperText={
-                                      descrizione !== ""
-                                        ? ""
-                                        : "La descrizione è richiesta"
-                                    }
-                                    InputProps={{
-                                      readOnly:
-                                        modifica === false ? true : false,
-                                    }}
-                                  />
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    error={status !== "" ? false : true}
-                                    onChange={(e) => setStatus(e.target.value)}
-                                    label="Status"
-                                    defaultValue={status}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    error={template !== "" ? false : true}
-                                    onChange={(e) =>
-                                      setTemplate(e.target.value)
-                                    }
-                                    label="Template"
-                                    defaultValue={template}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col className={classes.col}>
-                                  <ButtonClickedGreen
-                                    size="medium"
-                                    nome={
-                                      modifica === false
-                                        ? "vedi chiamato"
-                                        : "modifica chiamato"
-                                    }
-                                    onClick={handleOpenChiamato}
-                                  />
-                                </Col>
-                                <Col className={classes.col}>
-                                  <ButtonClickedGreen
-                                    size="medium"
-                                    nome={
-                                      modifica === false
-                                        ? "vedi chiamanti"
-                                        : "modifica chiamanti"
-                                    }
-                                    onClick={handleOpenChiamanti}
-                                  />
-                                </Col>
-                              </Row>
-
-                              <Row>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    error={startDate !== "" ? false : true}
-                                    onChange={(e) =>
-                                      setStartDate(e.target.value)
-                                    }
-                                    label="Start Date"
-                                    defaultValue={startDate}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    error={endDate !== "" ? false : true}
-                                    onChange={(e) => setEndDate(e.target.value)}
-                                    label="End Date"
-                                    defaultValue={endDate}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                              </Row>
-
-                              <Row>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    error={lastResult !== "" ? false : true}
-                                    onChange={(e) =>
-                                      setLastResult(e.target.value)
-                                    }
-                                    label="Last Result"
-                                    value={lastResult}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    //error={report !== "" ? false : true}
-                                    //onChange={(e) => setStartDate(e.target.value)}
-                                    label="Report"
-                                    //defaultValue={startDate}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    onChange={(e) =>
-                                      setCreatedBy(e.target.value)
-                                    }
-                                    label="Creato Da"
-                                    value={createdBy}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    label="Data di creazione"
-                                    onChange={(e) =>
-                                      setCreationDate(e.target.value)
-                                    }
-                                    value={creationDate}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                              </Row>
-
-                              <Row>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    onChange={(e) =>
-                                      setModifiedBy(e.target.value)
-                                    }
-                                    label="Modificato da"
-                                    value={modifiedBy}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    label="Data di Modifica"
-                                    onChange={(e) =>
-                                      setModifiedDate(e.target.value)
-                                    }
-                                    value={modifiedDate}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    //error={endDate !== "" ? false : true}
-                                    //onChange={(e) => setEndDate(e.target.value)}
-                                    label="XML"
-                                    //defaultValue={endDate}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Col>
-                                <Col
-                                  className={classes.col}
-                                  style={{ marginTop: "4%" }}
-                                >
-                                  <Link href="#" variant="body2">
-                                    Download XML
-                                  </Link>
-                                </Col>
-                              </Row>
-                            </Form>
-                            <div className={classes.buttonModale}>
-                              <Divider className={classes.divider} />
-                              <div
-                                className={classes.bottone}
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                {modifica === false ? (
-                                  ""
-                                ) : (
-                                  <ButtonClickedGreen
-                                    size="medium"
-                                    nome="Aggiorna"
-                                    onClick={handleClose2}
-                                  />
-                                )}
-
-                                <ButtonNotClickedGreen
-                                  className={classes.bottoneAnnulla}
-                                  onClick={handleClose}
-                                  size="medium"
-                                  nome={
-                                    modifica === false ? "Indietro" : "Annulla"
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </Paper>
-                        </div>
-                      </Fade>
-                    </Modal>
-
-                    {/* ------------------------MODALE CHIAMATO--------------------- */}
-                    <Modal
-                      aria-labelledby="transition-modal-title"
-                      aria-describedby="transition-modal-description"
-                      className={classes.modal}
-                      open={openChiamato}
-                      onClose={handleCloseChiamato}
-                      closeAfterTransition
-                      BackdropComponent={Backdrop}
-                      BackdropProps={{
-                        timeout: 500,
-                      }}
-                    >
-                      <Fade in={openChiamato}>
-                        <div>
-                          <Paper className={classes.paperModale}>
-                            <div>
-                              <ListItem>
-                                <Typography
-                                  className={classes.intestazione}
-                                  variant="h4"
-                                >
-                                  {modifica === false
-                                    ? "Visualizza "
-                                    : "Modifica "}{" "}
-                                  Chiamato <b>{nomeTitolo}</b>
-                                </Typography>
-                              </ListItem>
-                              <Divider className={classes.divider} />
-                            </div>
-
-                            <Form className={classes.contenutoModale}>
-                              <Row>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    select
-                                    onChange={(e) => {
-                                      chiamato[1] = e.target.value;
-                                    }}
-                                    label="Linea"
-                                    value={chiamato[1]}
-                                    InputProps={{
-                                      readOnly:
-                                        modifica === false ? true : false,
-                                    }}
-                                  >
-                                    {appearLine.map((linea) => (
-                                      <MenuItem key={linea.id} value={linea.id}>
-                                        {linea.campiConcatenati}
-                                      </MenuItem>
-                                    ))}
-                                  </TextField>
-                                </Col>
-                                <Col className={classes.col}>
-                                  <TextField
-                                    className={classes.textField}
-                                    select
-                                    onChange={(e) => {
-                                      chiamato[0] = e.target.value;
-                                    }}
-                                    label="Outboundproxy"
-                                    value={chiamato[0]}
-                                    InputProps={{
-                                      readOnly:
-                                        modifica === false ? true : false,
-                                    }}
-                                  >
-                                    {appearOBP.map((obp) => (
-                                      <MenuItem key={obp.id} value={obp.id}>
-                                        {obp.campiConcatenati}
-                                      </MenuItem>
-                                    ))}
-                                  </TextField>
-                                </Col>
-                              </Row>
-                            </Form>
-                            <div className={classes.buttonModale}>
-                              <Divider className={classes.divider} />
-                              <div
-                                className={classes.bottone}
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                {modifica === false ? (
-                                  ""
-                                ) : (
-                                  <ButtonClickedGreen
-                                    size="medium"
-                                    nome="Aggiorna"
-                                    onClick={handleCloseChiamato2}
-                                  />
-                                )}
-
-                                <ButtonNotClickedGreen
-                                  className={classes.bottoneAnnulla}
-                                  onClick={handleCloseChiamato}
-                                  size="medium"
-                                  nome={
-                                    modifica === false ? "Indietro" : "Annulla"
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </Paper>
-                        </div>
-                      </Fade>
-                    </Modal>
-                    {/* ------------------------MODALE CHIAMANTi--------------------- */}
-                    <Modal
-                      aria-labelledby="transition-modal-title"
-                      aria-describedby="transition-modal-description"
-                      className={classes.modal}
-                      open={openChiamanti}
-                      onClose={handleCloseChiamanti}
-                      closeAfterTransition
-                      BackdropComponent={Backdrop}
-                      BackdropProps={{
-                        timeout: 500,
-                      }}
-                    >
-                      <Fade in={openChiamanti}>
-                        <div>
-                          <Paper className={classes.paperModale} elevation={1}>
-                            <div>
-                              <ListItem>
-                                <Typography
-                                  className={classes.intestazione}
-                                  variant="h4"
-                                >
-                                  {modifica === false
-                                    ? "Visualizza "
-                                    : "Modifica "}{" "}
-                                  Chiamanti <b>{nomeTitolo}</b>
-                                </Typography>
-                              </ListItem>
-                              <Divider className={classes.divider} />
-                            </div>
-
-                            <Form className={classes.contenutoModale}>
-                              {chiamanti.map((chiamanti) => (
-                                <>
-                                  <Typography
-                                    className={classes.intestazione}
-                                    variant="h6"
-                                  >
-                                    Chiamanti <b>{chiamanti[3] + 1}</b>
-                                  </Typography>
-                                  <Row>
-                                    <Col className={classes.col}>
-                                      <TextField
-                                        className={classes.textField}
-                                        select
-                                        onChange={(e) => {
-                                          chiamanti[1] = e.target.value;
-                                        }}
-                                        label="Linea N°"
-                                        value={chiamanti[1]}
-                                        InputProps={{
-                                          readOnly:
-                                            modifica === false ? true : false,
-                                        }}
-                                      >
-                                        {appearLine.map((linea) => (
-                                          <MenuItem
-                                            key={linea.id}
-                                            value={linea.id}
-                                          >
-                                            {linea.campiConcatenati}
-                                          </MenuItem>
-                                        ))}
-                                      </TextField>
-                                    </Col>
-                                    <Col className={classes.col}>
-                                      <TextField
-                                        className={classes.textField}
-                                        select
-                                        onChange={(e) => {
-                                          chiamanti[0] = e.target.value;
-                                        }}
-                                        label="Outboundproxy N°"
-                                        value={chiamanti[0]}
-                                        InputProps={{
-                                          readOnly:
-                                            modifica === false ? true : false,
-                                        }}
-                                      >
-                                        {appearOBP.map((obp) => (
-                                          <MenuItem key={obp.id} value={obp.id}>
-                                            {obp.campiConcatenati}
-                                          </MenuItem>
-                                        ))}
-                                      </TextField>
-                                    </Col>
-                                  </Row>
-                                </>
-                              ))}
-                            </Form>
-                            <div className={classes.buttonModale}>
-                              <Divider className={classes.divider} />
-                              <div
-                                className={classes.bottone}
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                {modifica === false ? (
-                                  ""
-                                ) : (
-                                  <ButtonClickedGreen
-                                    size="medium"
-                                    nome="Aggiorna"
-                                    onClick={handleCloseChiamanti2}
-                                  />
-                                )}
-
-                                <ButtonNotClickedGreen
-                                  className={classes.bottoneAnnulla}
-                                  onClick={handleCloseChiamanti}
-                                  size="medium"
-                                  nome={
-                                    modifica === false ? "Indietro" : "Annulla"
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </Paper>
-                        </div>
-                      </Fade>
-                    </Modal>
-                    {/* ------------------------MODALE DELETE--------------------- */}
-                    <Modal
-                      aria-labelledby="transition-modal-title"
-                      aria-describedby="transition-modal-description"
-                      className={classes.modal}
-                      open={openDelete}
-                      closeAfterTransition
-                      BackdropComponent={Backdrop}
-                      BackdropProps={{
-                        timeout: 500,
-                      }}
-                    >
-                      <Fade in={openDelete}>
-                        <div>
-                          <Paper
-                            className={classes.paperModaleDelete}
-                            elevation={1}
-                          >
-                            <div>
-                              <ListItem>
-                                <Typography
-                                  className={classes.intestazione}
-                                  variant="h4"
-                                >
-                                  Elimina Test Case <b>{nome}</b>
-                                </Typography>
-                              </ListItem>
-                              <Divider className={classes.divider} />
-
-                              <Typography className={classes.typography}>
-                                L'eliminazione del Test Case selezionato,
-                                comporterà la cancellazione dei Test Suite ad
-                                esso collegati.
-                                <br />
-                                Si vuole procedere?{" "}
-                              </Typography>
-
-                              <Divider className={classes.divider} />
-                              <div
-                                className={classes.bottone}
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-end",
-                                }}
-                              >
-                                <ButtonNotClickedGreen
-                                  onClick={functionDelete}
-                                  nome="Elimina"
-                                />
-                                <ButtonNotClickedGreen
-                                  onClick={handleCloseDelete}
-                                  nome="Indietro"
-                                />
-                              </div>
-                            </div>
-                          </Paper>
-                        </div>
-                      </Fade>
-                    </Modal>
-                  </div>
-                  <Alert
-                    severity="error"
-                    id="alertTestCase"
-                    style={{ display: "none" }}
-                  >
-                    Selezionare almeno un Test Case da associare!
-                  </Alert>
-                </Paper>
-              </>
+            <div>
+              {/* <Paper className={classes.generalContainer} elevation={1}> */}
+              <Typography variant="h6">
+                Seleziona i Test Case da associare:
+              </Typography>
+              <div>
+                <MaterialTable
+                  style={{ boxShadow: "none" }}
+                  title="Test Case"
+                  data={data}
+                  columns={columns}
+                  onSelectionChange={
+                    (rows) => setSelectedRows(rows)
+                    // for (let i = 0; i < rows.length; i++) {
+                    //   // console.log(rows[i].id);
+                    //   return selectedRows.push(rows[i].id);
+                    // }
+                  }
+                  options={{
+                    selection: true,
+                    sorting: true,
+                    actionsColumnIndex: -1,
+                    search: true,
+                    searchFieldVariant: "outlined",
+                    filtering: true,
+                    searchFieldAlignment: "left",
+                    pageSizeOptions: [
+                      5,
+                      10,
+                      20,
+                      { value: data.length, label: "All" },
+                    ],
+                  }}
+                  actions={[
+                    {
+                      icon: (dat) => (
+                        <a>
+                          <VisibilityIcon />
+                        </a>
+                      ),
+                      tooltip: "Visualizza tutti i dati",
+                      position: "row",
+                      onClick: (event, rowData) => handleOpen(rowData),
+                    },
+                  ]}
+                  localization={{
+                    header: {
+                      actions: "Azioni",
+                    },
+                  }}
+                />
+              </div>
+              <Alert
+                severity="error"
+                id="alertTestCase"
+                style={{ display: "none" }}
+              >
+                Selezionare almeno un Test Case da associare!
+              </Alert>
+              {/* </Paper> */}
             </div>
           </div>
 
@@ -1611,13 +850,6 @@ function EditingTestCreaTestSuite() {
                     >
                       {activeStep === 0 ? "annulla" : "indietro"}
                     </Button>
-                    {/* <Button
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
-                      className={classes.backButton}
-                    >
-                      Indietro
-                    </Button> */}
                     <Button
                       disabled={
                         nextDisabled ||
@@ -1635,6 +867,55 @@ function EditingTestCreaTestSuite() {
             </div>
           </div>
         </Paper>
+        {/* ------------------------MODALE ERROR-------------------- */}
+        <Modal
+          className={classes.modal}
+          open={isErrore}
+          onClose={handleCloseErrore}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={isErrore}>
+            <div>
+              <Paper className={classes.paperModaleDelete} elevation={1}>
+                <div>
+                  <div className={classes.divIntestazione}>
+                    <SettingsIcon className={classes.iconModaleError} />
+                    <Typography
+                      className={classes.intestazioneModaleError}
+                      variant="h5"
+                    >
+                      ERRORE
+                    </Typography>
+                  </div>
+                  <Divider className={classes.divider} />
+
+                  <Typography className={classes.typography}>
+                    {messaggioErr}
+                  </Typography>
+
+                  <Divider className={classes.divider} />
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "3%",
+                    }}
+                  >
+                    <ButtonNotClickedGreen
+                      onClick={handleCloseErrore}
+                      nome="OK"
+                    />
+                  </div>
+                </div>
+              </Paper>
+            </div>
+          </Fade>
+        </Modal>
+
       </main>
     </div>
   );

@@ -36,31 +36,15 @@ const TestSuiteSchedulatiTable = () => {
     },
     {
       title: "Loader",
-      field: "createdBy",
+      field: "loadedBy",
     },
     {
       title: "Data Inizio",
-      field: "creationDate",
-    },
-    {
-      title: "Data Fine",
-      field: "modifiedDate",
+      field: "scheduleDateTime",
     },
     {
       title: "Status",
-      field: "trace",
-    },
-    {
-      title: "Trace",
-      field: "trace",
-    },
-    {
-      title: "Call-Id",
-      field: "trace",
-    },
-    {
-      title: "Report",
-      field: "trace",
+      field: "stato",
     },
   ];
 

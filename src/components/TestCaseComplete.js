@@ -1,33 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import MaterialTable from "material-table";
+import MaterialTable, { MTableHeader } from "material-table";
 import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
-import ButtonClickedBlue from "./ButtonClickedBlue";
-import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import "../styles/App.css";
-import { Fade, Paper, Typography } from "@material-ui/core";
-import Backdrop from "@material-ui/core/Backdrop";
-import BackupIcon from "@material-ui/icons/Backup";
-import FormControl from "@material-ui/core/FormControl";
-import Form from "react-bootstrap/Form";
-import Select from "@material-ui/core/Select";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { MenuItem } from "@material-ui/core";
-import { Divider } from "@material-ui/core";
-import loading from "../../src/assets/load.gif";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
+import { IconButton } from "@material-ui/core";
+import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+
 
 const TestCaseComplete = () => {
   const columns = [
+    
     {
       title: "Id",
       field: "id",
       defaultSort: "desc",
+      headerStyle: {
+        backgroundColor: 'beige',
+        //color: "#FFF"
+      }
     },
     {
       title: "Nome Test",
@@ -50,8 +41,8 @@ const TestCaseComplete = () => {
       field: "stato",
     },
     {
-      title: "Trace",
-      field: "properties",
+      title: "Risultato",
+      field: "result",
     },
     {
       title: "Call-Id",
@@ -60,6 +51,11 @@ const TestCaseComplete = () => {
     {
       title: "Report",
       field: "pathInstance",
+      render: () => (
+        <IconButton>
+          <PostAddOutlinedIcon onClick={(event)=> alert("Show Report")}/>
+        </IconButton>
+      ),
     },
   ];
 
@@ -119,12 +115,9 @@ const TestCaseComplete = () => {
     },
   }));
 
- 
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false); 
+  const [open, setOpen] = React.useState(false);
   const [data, setData] = useState();
-
-  
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -165,46 +158,60 @@ const TestCaseComplete = () => {
     getAllTestCase();
   }, []);
 
-
+  
+  const tableIcons = {
+    Export: React.forwardRef((props, ref) => (
+      <Button size="small" variant="contained" color="secondary">
+        EXPORT
+      </Button>
+    )),
+  };
 
   return (
     <div>
       <MaterialTable
+      icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Ultimi 30 Test Case Conclusi"
         data={data}
         columns={columns}
         options={{
-          tableLayout: "fixed",
+          //tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "left",
+          searchFieldAlignment: "center",
           exportButton: true,
+          headerStyle: {
+            backgroundColor: 'beige',
+            //color: '#FFF'
+          }
 
           // selection: true,
           // columnsButton: true,
           // filtering: true,
         }}
         actions={[
-          {
-            icon: () => (
-              <div>
-                <Button size="small" variant="contained" color="secondary">
-                  EXPORT
-                </Button>
-              </div>
-            ),
-            tooltip: "Export Test Case Table",
-            // onClick: () => handleOpen(),
-            isFreeAction: true,
-          },
+          // {
+          //   icon: () => (
+          //     <div>
+          //       <Button size="small" variant="contained" color="secondary">
+          //         EXPORT
+          //       </Button>
+          //     </div>
+          //   ),
+          //   tooltip: "Export Test Case Table",
+          //   // onClick: () => handleOpen(),
+          //   isFreeAction: true,
+          // },
         ]}
         localization={{
           header: {
             actions: "Azioni",
+            backgrounColor: "beige"
           },
         }}
+      
       />
     </div>
   );

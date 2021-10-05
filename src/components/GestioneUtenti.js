@@ -4,7 +4,6 @@ import MaterialTable from "material-table";
 import { Button, Paper, Typography } from "@material-ui/core";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
-import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
@@ -19,11 +18,9 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import { getGenerale, aggiornaUtente } from "../service/api";
+import { getGenerale, postGenerale, deleteGenerale} from "../service/api";
 
 const GestioneUtenti = () => {
-  let bearer = `Bearer ${localStorage.getItem("token")}`;
-
 
   const [data, setData] = useState([]);
   const [appearGroup, setAppearGroup] = useState([]);
@@ -37,14 +34,10 @@ const GestioneUtenti = () => {
   const [gruppoId, setGruppoId] = useState(0);
   const [azienda, setAzienda] = useState("");
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("test");
-  //const [password, setPassword] = useState("");
   const [level, setLevel] = useState([]);
   const [levelId, setLevelId] = useState(0);
   const [email, setEmail] = useState("");
   const [caricamento, setCaricamento] = useState(false)
-
-  //-------------------------PROVA----------------
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
@@ -64,20 +57,23 @@ const GestioneUtenti = () => {
     (async () => {
       setAppearLevel((await getGenerale('level')).livelli);
     })();
-
   }
 
   const funzioneAggiornaUtente = () => {
     //----AGGIORNA UTENTE----
     (async () => {
-      setData((await aggiornaUtente(id, version, username, cognome, nome, email, levelId, gruppoId, password)).users);
+      setData((await postGenerale('user', {user:{id: id, version: version, azienda: azienda, username: username, cognome: cognome, nome: nome, email: email, levelId: levelId, gruppoId: gruppoId}})).users);
       funzioneGetAll();
     })();
-
   }
 
-
-
+  const funzioneDelete = (id) => {
+    (async () => {
+      setCaricamento(true)
+      await deleteGenerale("user", id)
+      funzioneGetAll();
+    })();
+  }
 
 
   useEffect(() => {
@@ -112,16 +108,12 @@ const GestioneUtenti = () => {
     {
       title: "Ruolo",
       field: "level.nome",
-      // lookup: appearLevel.map((livelli) => {
-      //   return livelli.nome;
-      // }),
     },
     {
       title: "Gruppo",
       field: "gruppo.nome",
     },
   ];
-  // const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const [open, setOpen] = React.useState(false);
 
@@ -148,31 +140,6 @@ const GestioneUtenti = () => {
     funzioneAggiornaUtente();
     setOpen(false);
   };
-  const Delete = (oldData) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: oldData.id,
-    });
-
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/user?id=` + oldData.id, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        // getAllUsers();
-      })
-      .catch((error) => console.log("error", error));
-  }
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -222,9 +189,6 @@ const GestioneUtenti = () => {
       marginTop: "9px",
     },
     bottone: {
-      // display: "flex",
-      // alignItems: "center",
-      // justifyContent: "space-around",
       marginLeft: "55px",
       marginTop: "4%",
       marginBottom: "2%",
@@ -308,8 +272,8 @@ const GestioneUtenti = () => {
             }),
           rowData => ({
             icon: 'delete',
-            tooltip: 'Delete User',
-            onClick: (event, rowData) => Delete(rowData),
+            tooltip: 'Elimina Utente',
+            onClick: (event, rowData) => funzioneDelete(rowData.id),
             disabled: (rowData.level.nome === "ADMIN") || (rowData.username === localStorage.getItem("username"))
           }),
         ]}
@@ -441,7 +405,7 @@ const GestioneUtenti = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       label="Email"
                       defaultValue={email}
-                      helperText={email !== "" ? "" : "L'Email è richiesto"}
+                      helperText={email !== "" ? "" : "L'Email è richiesta"}
                     />
                   </Col>
                 </Row>

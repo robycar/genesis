@@ -38,6 +38,12 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
+import {
+  getGenerale,
+  postGenerale,
+  deleteGenerale,
+  putGenerale,
+} from "../../service/api";
 
 const drawerWidth = 240;
 
@@ -252,104 +258,74 @@ function EditingLineaCreaLinea() {
     setOpen(false);
   };
 
-  const handleOpenWarning = () =>{
-    setOpenWarning(false)
-  }
-  const getTypeId = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-      })
-      .catch((error) => console.log("error", error));
+  const handleOpenWarning = () => {
+    setOpenWarning(false);
   };
 
-  const removeTypeLinea = (id) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: id,
-    });
-
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
+  //-------------------------TYPE LINEA API ----------------
+  //---- GET ALL TYPE LINEA ----
+  const funzioneGetAll = () => {
+    (async () => {
+      setData((await getGenerale("typeLinea")).list);
+    })();
+  };
+  //---- DELETE TYPE LINEA ----
+  const funzioneDelete = (id) => {
+    (async () => {
+      await deleteGenerale("typeLinea", id).result;
+      funzioneGetAll();
+    })();
+  };
+  const functionDelete = () => {
+    deleteGenerale("typeLinea", typeLineaId.id)
       .then((result) => {
-
         if (result.error !== null) {
-          setOpenWarning(true)
+          setOpenWarning(true);
           if (result.error.code === "LINEA-0006") {
-            setWarning("Impossibile eliminare il Tipo Linea perche appartiene a una Linea o a un OBP")
+            setWarning(
+              "Impossibile eliminare il Tipo Linea perche appartiene a una Linea o a un OBP"
+            );
           } else {
-            setWarning("Codice errore: " + result.error.code + " Descrizione: " + result.code.description)
+            setWarning(
+              "Codice errore: " +
+                result.error.code +
+                " Descrizione: " +
+                result.code.description
+            );
           }
         } else {
-          setOpenWarning(false)
-          getTypeId()
+          funzioneDelete();
+          setOpenWarning(false);
+          funzioneGetAll();
         }
-
       })
-
+      .catch((error) => console.log("error", error));
     handleCloseRemove();
   };
 
-  const editTypeLinea = (typeLinea) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //----------AGGIORNA TYPELINEA API ----
 
-    var raw = JSON.stringify({
-      id: typeLinea.id,
-      version: typeLinea.version,
-      descrizione:
-        typeLineaDescrizione !== ""
-          ? typeLineaDescrizione
-          : typeLinea.descrizione,
-    });
-
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        getTypeId();
+  const funzioneAggiornaTypeLinea = (typeLinea) => {
+    (async () => {
+      await postGenerale("typeLinea", {
+        id: typeLinea.id,
+        version: typeLinea.version,
+        descrizione:
+          typeLineaDescrizione !== ""
+            ? typeLineaDescrizione
+            : typeLinea.descrizione,
       });
-    handleCloseEdit();
+
+      funzioneGetAll();
+    })();
   };
 
+  const editTypeLinea = () => {
+    funzioneAggiornaTypeLinea(typeLineaId);
+    handleCloseEdit();
+  };
   useEffect(() => {
-    getTypeId();
+    funzioneGetAll();
   }, []);
 
   const [ip1, setIP1] = useState("");
@@ -363,40 +339,29 @@ function EditingLineaCreaLinea() {
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
   function salva() {
-    const Invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-      var raw = JSON.stringify({
-        ip: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
-        numero: numero,
-        password: password,
-        porta: porta,
-        typeLinea: {
-          id: typeLineaId.id,
-        },
-      });
-
-      var requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/linea`, requestOptions)
-        .then((response) => response.json())
-        .then((result) =>
-          result.error !== null
-            ? result.error.code === "LINEA-0003"
-              ? (document.getElementById("alertNumero2").style.display = "")
-              : ""
-            : history.push("/editing/linee")
-        )
-        .catch((error) => console.log("error", error));
+    const funzioneAggiungiUtente = () => {
+      //--------------CREA LINEA------------------------
+      (async () => {
+        let result = await putGenerale("linea", {
+          ip: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
+          numero: numero,
+          password: password,
+          porta: porta,
+          typeLinea: {
+            id: typeLineaId.id,
+          },
+        });
+        checkRichiesta(result);
+      })();
+    };
+    const checkRichiesta = (result) => {
+      if (result.error == null) {
+        history.push("/editing/linee");
+      } else if (result.error.code === "LINEA-0003") {
+        document.getElementById("alertNumero2").style.display = "";
+      } else {
+        document.getElementById("alertNumero2").style.display = "none";
+      }
     };
 
     const aggiornaIP = () => {
@@ -418,7 +383,7 @@ function EditingLineaCreaLinea() {
         document.getElementById("alertPassword").style.display = "none";
         document.getElementById("alertIP2").style.display = "none";
 
-        Invia();
+        funzioneAggiungiUtente();
       } else {
         document.getElementById("alertIP2").style.display = "";
       }
@@ -561,7 +526,7 @@ function EditingLineaCreaLinea() {
         })
         .then((result) => {
           checkRichiesta(result.typeLinea);
-          getTypeId();
+          funzioneGetAll();
         })
         .catch((error) => console.log("error", error));
 
@@ -598,7 +563,6 @@ function EditingLineaCreaLinea() {
         }}
         open={openDrawer}
       >
-        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -626,7 +590,7 @@ function EditingLineaCreaLinea() {
           >
             LINEE
           </Button>
-                    <Button
+          <Button
             className="button-green"
             component={NavLink}
             activeClassName="button-green-active"
@@ -653,27 +617,27 @@ function EditingLineaCreaLinea() {
           >
             TEST
           </Button>
-        
-        <div className={classes.buttonTestContainer}>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/linee/crealinea"
-          >
-            LINEE SIMULATORE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/lineegeneratore"
-          >
-            LINEE GENERATORE
-          </Button>
-        </div>
+
+          <div className={classes.buttonTestContainer}>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/linee/crealinea"
+            >
+              LINEE SIMULATORE
+            </Button>
+            <Button
+              className="button-green"
+              component={NavLink}
+              activeClassName="button-green-active"
+              exact
+              to="/editing/lineegeneratore"
+            >
+              LINEE GENERATORE
+            </Button>
+          </div>
         </div>
 
         <Paper className={classes.paper} elevation={2}>
@@ -1061,7 +1025,7 @@ function EditingLineaCreaLinea() {
                                   <div>
                                     <Button
                                       onClick={() =>
-                                        removeTypeLinea(typeLineaId.id)
+                                        functionDelete(typeLineaId.id)
                                       }
                                       variant="contained"
                                       color="secondary"
@@ -1120,7 +1084,9 @@ function EditingLineaCreaLinea() {
                                         ? typeLineaDescrizione
                                         : ""
                                     }
-                                    onChange={(e) => setTypeLineaDescrizione(e.target.value)}
+                                    onChange={(e) =>
+                                      setTypeLineaDescrizione(e.target.value)
+                                    }
                                   />
                                 </Form.Group>
 
@@ -1131,7 +1097,7 @@ function EditingLineaCreaLinea() {
                                 <div className={classes.bottoni}>
                                   <div>
                                     <Button
-                                      onClick={() => editTypeLinea(typeLineaId)}
+                                      onClick={() => editTypeLinea()}
                                       variant="contained"
                                       color="secondary"
                                     >
@@ -1180,9 +1146,7 @@ function EditingLineaCreaLinea() {
                               </div>
 
                               <div className={classes.paperBottom}>
-                                <Typography variant="h11">
-                                  {warning}
-                                </Typography>
+                                <Typography variant="h11">{warning}</Typography>
 
                                 <div className={classes.divider2}>
                                   <Divider />

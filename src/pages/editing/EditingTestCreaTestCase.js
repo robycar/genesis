@@ -19,7 +19,6 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import { MenuItem, Paper } from "@material-ui/core";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
@@ -27,8 +26,6 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
@@ -39,11 +36,10 @@ import Modal from "@material-ui/core/Modal";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Prova from "../../components/Prova";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { file } from "@babel/types";
 import { useHistory } from "react-router-dom";
+import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 
 const drawerWidth = 240;
 
@@ -227,11 +223,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "2px",
     padding: "5%",
   },
-
-  intestazione: {
-    color: "#47B881",
-    marginTop: "5%",
-  },
   icon: {
     transform: "scale(1.8)",
     color: "#47B881",
@@ -251,6 +242,38 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonTestContainer: {
     marginTop: "2%",
+  },
+  paperModaleDelete: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: "5%",
+    height: "fit-content",
+    width: 500,
+    position: "relative",
+  },
+  intestazioneModaleError: {
+    color: "#ef5350",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  iconModaleError: {
+    // width: "15%",
+    // height: "15%",
+    marginRight: "4%",
+    transform: "scale(1.9)",
+    color: "#ef5350",
+  },
+  intestazione: {
+    color: "#47B881",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  divIntestazione: {
+    display: "flex",
+    alignItems: "center",
+    padding: "2%",
+    marginBottom: "1%",
   },
   
 }));
@@ -292,6 +315,9 @@ function EditingTestCreaTestCase() {
   const [templete , setTemplete] = useState(0)
   
   const [nextDisabled, setNextDisabled] = useState(true);
+  
+  const [isErrore, setErrore] = useState(false);
+  const [messaggioErr, setMessaggioErr] = useState("");
 
 
   /*------- get linea -----------*/
@@ -370,7 +396,17 @@ function EditingTestCreaTestCase() {
   };
 
 
-
+  const checkRichiesta = (result) => {
+    if (result.error == null) {
+      history.push("/editing/testcase");
+    } else if (result.error.code === "TEST-0004") {
+      setMessaggioErr("Il nome inserito per il TestCase è già stato assegnato ad un altro TestCase")
+      setErrore(true)
+    } else {
+      setMessaggioErr(result.error.description)
+      setErrore(true)
+    }
+  };
 
 
   const Invia = () => {
@@ -402,11 +438,14 @@ function EditingTestCreaTestCase() {
 
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
-      .then((result) => history.push("/editing/testcase"))
+      .then((result) => checkRichiesta(result))
       .catch((error) => console.log("error", error));
-
-
   };
+
+  const handleCloseErrore = () => {
+    setErrore(false)
+    setActiveStep(0)
+  }
 
   //-----------------------SCRIPT STEPPER------------------------------
 
@@ -436,7 +475,6 @@ function EditingTestCreaTestCase() {
     arrAppoggio.pop()
     setQntChiamanti(arrAppoggio);
     setNChiamanti(qntChiamanti.length)
-    console.log(qntChiamanti)
 
     switch (qntChiamanti.length) {
       case 0:
@@ -933,6 +971,55 @@ return (
             </Button>
           </div> */}
       </Paper>
+      {/* ------------------------MODALE ERROR-------------------- */}
+      <Modal
+          className={classes.modal}
+          open={isErrore}
+          onClose={handleCloseErrore}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={isErrore}>
+            <div>
+              <Paper className={classes.paperModaleDelete} elevation={1}>
+                <div>
+                  <div className={classes.divIntestazione}>
+                    <SettingsIcon className={classes.iconModaleError} />
+                    <Typography
+                      className={classes.intestazioneModaleError}
+                      variant="h5"
+                    >
+                      ERRORE
+                    </Typography>
+                  </div>
+                  <Divider className={classes.divider} />
+
+                  <Typography className={classes.typography}>
+                    {messaggioErr}
+                  </Typography>
+
+                  <Divider className={classes.divider} />
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "3%",
+                    }}
+                  >
+                    <ButtonNotClickedGreen
+                      onClick={handleCloseErrore}
+                      nome="OK"
+                    />
+                  </div>
+                </div>
+              </Paper>
+            </div>
+          </Fade>
+        </Modal>
+
     </main>
   </div>
 );
