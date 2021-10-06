@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 
 import it.reply.genesis.agent.ServiceManager;
+import it.reply.genesis.agent.TestRunner;
 import it.reply.genesis.api.files.payload.FileContentDTO;
 import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
@@ -21,7 +22,7 @@ import it.reply.genesis.model.LoadedEntityStatus;
 import it.reply.genesis.service.FileSystemService;
 import it.reply.genesis.service.TestCaseService;
 
-public class TestCaseCaricatoRunner implements Runnable {
+public class TestCaseCaricatoRunner implements TestRunner {
 
   
   private static final Logger logger = LoggerFactory.getLogger(TestCaseCaricatoRunner.class);
@@ -118,18 +119,22 @@ public class TestCaseCaricatoRunner implements Runnable {
 
 
   private void updateTestCaseToRunningStatus() throws ApplicationException {
-    logger.debug("Imposto il testCaseCaricato {}:{} a RUNNING", 
-        testCaseCaricato.getId(), testCaseCaricato.getNome());
+    logger.debug("Aggiorno startDate e pathInstance del testCaseCaricato {}:{} => {}", 
+        testCaseCaricato.getId(), testCaseCaricato.getNome(), testCaseCaricato.getPathInstance());
     TestCaseService testCaseService = serviceManager.getTestCaseService();
     TestCaseCaricatoDTO testToUpdate = testCaseService.readCaricato(testCaseCaricato.getId());
-    TestCaseCaricatoDTO updatedTest = new TestCaseCaricatoDTO();
-    updatedTest.setId(testToUpdate.getId());
-    updatedTest.setVersion(testToUpdate.getVersion());
-    updatedTest.setStato(LoadedEntityStatus.RUNNING);
+    
     // Sovrascrivo la data di avvio rispetto a quando l'utente ha premuto start?
-    updatedTest.setStartDate(Instant.now());
-    updatedTest.setPathInstance(testCaseCaricato.getPathInstance());
-    testCaseService.updateTestCaseCaricato(updatedTest);
+    testToUpdate.setStartDate(Instant.now());
+    testToUpdate.setPathInstance(testCaseCaricato.getPathInstance());
+    testToUpdate.setStato(LoadedEntityStatus.RUNNING);
+    testToUpdate = testCaseService.updateTestCaseCaricato(testToUpdate);
+    testToUpdate.setFolder(testCaseCaricato.getFolder());
+    // Se lanciato dalla test suite test case non e' aggiornato
+    if (testToUpdate.getStartedBy() == null) {
+      testToUpdate.setStartedBy(testCaseCaricato.getStartedBy());
+    }
+    testCaseCaricato = testToUpdate;
     
   }
 

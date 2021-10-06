@@ -1,5 +1,6 @@
 package it.reply.genesis.service.impl;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.reply.genesis.AppError;
+import it.reply.genesis.agent.internal.impl.SingleThreadSingleTestExecutor;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.api.test.payload.TestCaseDTO;
@@ -48,6 +50,9 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
   
   @Autowired
   private TestSuiteCaricataRepository testSuiteCaricataRepository;
+  
+  @Autowired
+  private SingleThreadSingleTestExecutor testExecutor;
   
   public TestSuiteServiceImpl() {
   }
@@ -198,6 +203,87 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     }
 
     return new TestSuiteCaricataDTO(vo, true);
+  }
+
+  @Override
+  public void runLoaded(long id) throws ApplicationException {
+    logger.debug("enter runLoaded");
+    TestSuiteCaricataVO testSuiteVO = readTestSuiteCaricataVO(id, true);
+    
+    checkStatoOfTestSuiteCariata(testSuiteVO, LoadedEntityStatus.READY);
+    //Cerco eventuali test suite running?
+    testSuiteVO.setStartDate(Instant.now());
+    testSuiteVO.setStartedBy(currentUsername());
+    testSuiteVO.setStato(LoadedEntityStatus.RUNNING);
+    testSuiteVO = testSuiteCaricataRepository.saveAndFlush(testSuiteVO);
+    logger.info("Lo stato della test suite caricata {} e' stato impostato a RUNNING", id);
+    testExecutor.startTestSuite(new TestSuiteCaricataDTO(testSuiteVO));
+  }
+
+  private void checkStatoOfTestSuiteCariata(TestSuiteCaricataVO vo, LoadedEntityStatus expectedStatus) throws ApplicationException {
+    if (!expectedStatus.equals(vo.getStato())) {
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_SUITE_CARICATA_WRONG_STATE, vo.getId(), vo.getStato(), expectedStatus);
+    }
+  }
+
+  private TestSuiteCaricataVO readTestSuiteCaricataVO(long id) throws ApplicationException {
+    return readTestSuiteCaricataVO(id, false);
+  }
+  
+  private TestSuiteCaricataVO readTestSuiteCaricataVO(long id, boolean locking) throws ApplicationException {
+    Optional<TestSuiteCaricataVO> result;
+    
+    if (locking) {
+      result = testSuiteCaricataRepository.findByIdLocking(id);
+    } else {
+      result = testSuiteCaricataRepository.findById(id);
+    }
+    return result.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_SUITE_CARICATA_NOT_FOUND, id));
+  }
+
+  @Override
+  public TestSuiteCaricataDTO retrieveCaricata(long id, boolean includeDetails, boolean locking) throws ApplicationException {
+    logger.debug("enter retrieveCaricata");
+    
+    TestSuiteCaricataVO vo = readTestSuiteCaricataVO(id, locking);
+    
+    TestSuiteCaricataDTO result = new TestSuiteCaricataDTO(vo, includeDetails);
+    
+    return result;
+  }
+
+  @Override
+  public TestSuiteCaricataDTO updateCaricata(TestSuiteCaricataDTO dto) throws ApplicationException {
+    logger.debug("enter updateCaricata");
+    TestSuiteCaricataVO vo = readTestSuiteCaricataVO(dto.getId());
+
+    if (dto.getEndDate() != null) {
+      vo.setEndDate(dto.getEndDate());
+    }
+    
+    if (dto.getLoadedBy() != null) {
+      vo.setLoadedBy(dto.getLoadedBy());
+    }
+    
+    if (dto.getLoadedWhen() != null) {
+      vo.setLoadedWhen(dto.getLoadedWhen());
+    }
+    
+    if (dto.getStartDate() != null) {
+      vo.setStartDate(dto.getStartDate());
+    }
+    
+    if (dto.getStartedBy() != null) {
+      vo.setStartedBy(dto.getStartedBy());
+    }
+    
+    if (dto.getStato() != null) {
+      vo.setStato(dto.getStato());
+    }
+    
+    vo = testSuiteCaricataRepository.saveAndFlush(vo);
+    
+    return new TestSuiteCaricataDTO(vo);
   }
 
 }

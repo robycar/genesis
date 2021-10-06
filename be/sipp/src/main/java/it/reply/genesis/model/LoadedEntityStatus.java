@@ -3,8 +3,9 @@ package it.reply.genesis.model;
 public enum LoadedEntityStatus {
   READY,
   SCHEDULED,
-  WAITING,
+  //WAITING,
   RUNNING,
+  PAUSED,
   COMPLETED,
   ;
 }

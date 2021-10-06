@@ -133,6 +133,19 @@ public class TestSuiteController extends AbstractController {
     
   }
   
+  @GetMapping("loaded/run/{id}")
+  @PreAuthorize("hasAuthority('FUN_testsuite.run')")
+  public ResponseEntity<PayloadResponse> run(@PathVariable(required=true) Long id) {
+    logger.info("enter run({})");
+    PayloadResponse response = new PayloadResponse();
+    try {
+      testSuiteService.runLoaded(id);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+  }
+  
   @DeleteMapping()
   @PreAuthorize("hasAuthority('FUN_testsuite.delete')")
   public ResponseEntity<PayloadResponse> remove(@Valid @RequestBody(required=true) TestSuiteRemoveRequest request) {

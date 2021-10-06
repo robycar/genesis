@@ -2,6 +2,8 @@ package it.reply.genesis.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestSuiteCaricataDTO;
 import it.reply.genesis.api.test.payload.TestSuiteDTO;
@@ -19,5 +21,16 @@ public interface TestSuiteService {
   TestSuiteDTO retrieve(long id) throws ApplicationException;
 
   TestSuiteCaricataDTO loadTestSuite(long id) throws ApplicationException;
+
+  void runLoaded(long id) throws ApplicationException;
+
+  @Transactional(rollbackFor = ApplicationException.class)
+  default TestSuiteCaricataDTO retrieveCaricata(long id, boolean includeDetails) throws ApplicationException {
+    return retrieveCaricata(id, includeDetails, false);
+  }
+  
+  TestSuiteCaricataDTO retrieveCaricata(long id, boolean includeDetails, boolean locking) throws ApplicationException;
+
+  TestSuiteCaricataDTO updateCaricata(TestSuiteCaricataDTO testSuite) throws ApplicationException;
 
 }

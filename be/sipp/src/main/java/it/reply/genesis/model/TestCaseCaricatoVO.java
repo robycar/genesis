@@ -307,4 +307,12 @@ public class TestCaseCaricatoVO implements Serializable {
     this.delay = delay;
   }
 
+  public TestSuiteCaricataVO getTestSuite() {
+    return testSuite;
+  }
+
+  public void setTestSuite(TestSuiteCaricataVO testSuite) {
+    this.testSuite = testSuite;
+  }
+
 }

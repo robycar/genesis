@@ -93,10 +93,12 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     
     vo = templateRepository.save(vo);
     
+    
+    List<FileDTO> folderDTO = null;
     //Aggiungo i file
     if (dto.getFile() != null) {
       logger.debug("storing {} files", dto.getFile().size());
-      fileSystemService.upload(FileSystemScope.TEMPLATE, vo.getId(), dto.getFile());
+      folderDTO = fileSystemService.upload(FileSystemScope.TEMPLATE, vo.getId(), dto.getFile());
     }
 
     //Collego chiamante chiamato ai file
@@ -159,7 +161,7 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     
     TemplateDTO result = new TemplateDTO(vo);
     mapFileLinks(result, vo);
-    
+    result.setFolder(folderDTO);
     return result;
     
   }
@@ -322,6 +324,7 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     TemplateDTO dto = new TemplateDTO(templateVO);
     dto.setFolder(folderDTO);
     mapFileLinks(dto, templateVO);
+
     return dto;
   }
 

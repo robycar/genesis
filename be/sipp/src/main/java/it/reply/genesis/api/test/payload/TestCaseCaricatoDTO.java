@@ -94,8 +94,12 @@ public class TestCaseCaricatoDTO extends DTO {
     this.result = vo.getResult();
     this.pathInstance = vo.getPathInstance();
     this.gruppo = new GruppoDTO(vo.getGruppo());
-    this.template = new TemplateDTO(vo.getTemplate());
-    this.testCase = new TestCaseDTO(vo.getTestCase());
+    if (vo.getTemplate() != null) {
+      this.template = new TemplateDTO(vo.getTemplate());
+    }
+    if (vo.getTestCase() != null) {
+      this.testCase = new TestCaseDTO(vo.getTestCase());
+    }
     
     if (includeProperties) {
       assignProperties(vo.getProperties());

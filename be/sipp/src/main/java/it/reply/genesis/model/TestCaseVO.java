@@ -22,7 +22,8 @@ public class TestCaseVO extends BaseEntity {
 
   private static final long serialVersionUID = -6192614604772927009L;
 
-  public static final int NOME_LENGTH = 80;
+  //Il campo del nome del test case e' lungo 80 ma 10 caratteri sono riservati per memorizzare l'ip
+  public static final int NOME_LENGTH = 70;
 
   public static final int DESCRIZIONE_LENGTH = 255;
 

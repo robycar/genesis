@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import it.reply.genesis.AppError;
-import it.reply.genesis.agent.internal.impl.InternalAgent;
+import it.reply.genesis.agent.internal.impl.SingleThreadSingleTestExecutor;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
@@ -80,9 +81,9 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   
   @Autowired
   private TestCaseLineaChiamanteRepository testCaseLineaChiamanteRepository;
-  
+
   @Autowired
-  private InternalAgent internalAgent;
+  private SingleThreadSingleTestExecutor internalTestExecutor;
 
   public TestCaseServiceImpl() {
   }
@@ -101,10 +102,10 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     
     TemplateVO templateVO = templateService.readVO(dto.getTemplate().getId());
     
-    Optional<TestCaseVO> ovo = testCaseRepository.findByNome(dto.getNome());
-    if (ovo.isPresent()) {
-      throw makeError(HttpStatus.CONFLICT, AppError.TEST_CASE_ALRADY_EXISTS, dto.getNome());
-    }
+//    Optional<TestCaseVO> ovo = testCaseRepository.findByNome(dto.getNome());
+//    if (ovo.isPresent()) {
+//      throw makeError(HttpStatus.CONFLICT, AppError.TEST_CASE_ALRADY_EXISTS, dto.getNome());
+//    }
     
     long numLinee = templateVO.getFiles().stream().filter(tvo -> tvo.getCategory().equals(TemplateFileCategory.CHIAMANTE)).count();
     int numLineeDTO = dto.getChiamanti() == null ? 0 : dto.getChiamanti().size();
@@ -117,7 +118,14 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     vo.setTemplate(templateVO);
     vo.init(currentUsername());
     vo.setGruppo(currentGroup());
-    vo.setNome(dto.getNome());
+    {
+      StringBuilder sb = new StringBuilder(TestCaseVO.NOME_LENGTH + 40);
+      sb.append(UUID.randomUUID().toString())
+        .append(dto.getNome());
+      if (sb.length() > TestCaseVO.NOME_LENGTH + 10)
+        sb.delete(TestCaseVO.NOME_LENGTH + 9, sb.length());
+      vo.setNome(sb.toString());
+    }
     vo.setDescrizione(dto.getDescrizione());
     
     vo.setExpectedDuration(dto.getExpectedDuration() == null ? templateVO.getDurata() : dto.getExpectedDuration());
@@ -130,6 +138,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     }
     
     vo = testCaseRepository.saveAndFlush(vo);
+    vo.setNome(dto.getNome() + "_" + vo.getId());
     //Copiare i file dal template
     
     Map<Long, FileSystemVO> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEMPLATE, templateVO.getId(), FileSystemScope.TEST, vo.getId())
@@ -378,9 +387,9 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     case RUNNING:
       stato = LoadedEntityStatus.RUNNING;
       break;
-    case WAITING:
-      stato = LoadedEntityStatus.WAITING;
-      break;
+//    case WAITING:
+//      stato = LoadedEntityStatus.WAITING;
+//      break;
     default:
       return Collections.emptyList();
     }
@@ -398,15 +407,16 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     //Verifica che lo stato sia ready
     checkStatoOfTestCaseCaricato(vo, LoadedEntityStatus.READY);
     
-    vo.setStato(LoadedEntityStatus.WAITING);
+    vo.setStato(LoadedEntityStatus.RUNNING);
     vo.setStartDate(Instant.now());
     vo.setStartedBy(currentUsername());
 
-    testCaseCaricatoRepository.save(vo);
-    logger.debug("Impostato lo stato del test case caricato {} a WAITING", id);
-    
-    internalAgent.runTestCaseIfQueueEmpty(vo);
+    vo = testCaseCaricatoRepository.saveAndFlush(vo);
+    logger.debug("Lo stato del test case caricato {} e' stato spostato a RUNNING", id);
     testCaseCaricatoRepository.flush();
+    
+    //internalAgent.runTestCaseIfQueueEmpty(vo);
+    internalTestExecutor.startTestCase(vo);
   }
 
   public void checkStatoOfTestCaseCaricato(TestCaseCaricatoVO vo, LoadedEntityStatus statoAtteso) throws ApplicationException {
@@ -501,6 +511,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     }
     vo.setTemplate(tcvo.getTemplate());
     vo.setTestCase(tcvo);
+    vo.setTestSuite(testSuiteCaricata);
     //vo.setVersion(0);
     
     vo = testCaseCaricatoRepository.save(vo);
