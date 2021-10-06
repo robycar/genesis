@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.reply.genesis.api.generic.payload.PayloadResponse;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
+import it.reply.genesis.api.test.payload.TestSuiteCaricataDTO;
 
 public class DashboardInfoResponse extends PayloadResponse {
 
@@ -11,7 +12,7 @@ public class DashboardInfoResponse extends PayloadResponse {
 
   private List<TestCaseCaricatoDTO> testCaseList;
   
-  private List<TestCaseCaricatoDTO> testSuiteList;
+  private List<TestSuiteCaricataDTO> testSuiteList;
   
   private List<TestCaseCaricatoDTO> testGeneratoList;
   
@@ -26,11 +27,11 @@ public class DashboardInfoResponse extends PayloadResponse {
     this.testCaseList = testCaseList;
   }
 
-  public List<TestCaseCaricatoDTO> getTestSuiteList() {
+  public List<TestSuiteCaricataDTO> getTestSuiteList() {
     return testSuiteList;
   }
 
-  public void setTestSuiteList(List<TestCaseCaricatoDTO> testSuiteList) {
+  public void setTestSuiteList(List<TestSuiteCaricataDTO> testSuiteList) {
     this.testSuiteList = testSuiteList;
   }
 

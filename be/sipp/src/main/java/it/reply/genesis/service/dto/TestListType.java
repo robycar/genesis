@@ -4,7 +4,6 @@ public enum TestListType {
 
   READY,
   SCHEDULED,
-  WAITING,
   RUNNING,
   COMPLETED,
   ;

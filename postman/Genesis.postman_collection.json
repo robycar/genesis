@@ -7944,7 +7944,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nome\": \"{{$randomProductName}}\",\r\n    \"template\": 1,\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"expectedDuration\": null,\r\n    \"chiamato\": {\r\n        \"linea\": 1,\r\n        \"proxy\": 1\r\n    },\r\n    \"chiamanti\": [\r\n        {\r\n            \"linea\": 2,\r\n            \"proxy\": 2\r\n        },\r\n        {\r\n            \"linea\": 2,\r\n            \"proxy\": 3\r\n        },\r\n        {\r\n            \"linea\": 2,\r\n            \"proxy\": 4\r\n        }\r\n    ]\r\n\r\n}",
+							"raw": "{\r\n    \"nome\": \"{{$randomProductName}}\",\r\n    \"template\": 1,\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"expectedDuration\": null,\r\n    \"chiamato\": {\r\n        \"linea\": 1,\r\n        \"proxy\": 1\r\n    },\r\n    \"chiamanti\": [\r\n        {\r\n            \"linea\": 2,\r\n            \"proxy\": 2\r\n        }\r\n    ]\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -8546,6 +8546,26 @@
 								"api",
 								"testcase",
 								"schedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "testcase_caricato_retrieve",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase/loaded/1",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase",
+								"loaded",
+								"1"
 							]
 						}
 					},
@@ -9266,7 +9286,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nome\": \"{{$randomNoun}}\",\r\n    \"descrizione\": \"{{$randomLoremParagraph}}\",\r\n    \"testCases\": [1,3]\r\n}",
+							"raw": "{\r\n    \"nome\": \"{{$randomNoun}}\",\r\n    \"descrizione\": \"{{$randomLoremParagraph}}\",\r\n    \"testCases\": [1,2,3]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -9979,7 +9999,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{contextUrl}}/api/testsuite/load/2",
+							"raw": "{{contextUrl}}/api/testsuite/load/1",
 							"host": [
 								"{{contextUrl}}"
 							],
@@ -9987,7 +10007,7 @@
 								"api",
 								"testsuite",
 								"load",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -10180,6 +10200,26 @@
 							"body": "{\n    \"error\": null\n}"
 						}
 					]
+				},
+				{
+					"name": "testsuite_caricata_retrieve",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testsuite/loaded/1",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testsuite",
+								"loaded",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -10674,7 +10714,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"includeTestCaseOfType\": \"READY\",\r\n    \"includeTestSuiteOfType\": null,\r\n    \"includeTestGeneratoreOfType\": null\r\n}",
+							"raw": "{\r\n    \"includeTestCaseOfType\": \"COMPLETED\",\r\n    \"includeTestSuiteOfType\": \"COMPLETED\",\r\n    \"includeTestGeneratoreOfType\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

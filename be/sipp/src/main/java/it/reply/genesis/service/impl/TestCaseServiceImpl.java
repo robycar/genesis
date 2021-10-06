@@ -426,9 +426,13 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   }
 
   @Override
-  public TestCaseCaricatoDTO readCaricato(long id) throws ApplicationException {
+  public TestCaseCaricatoDTO readCaricato(long id, boolean includeDetails, boolean includeFolder) throws ApplicationException {
     TestCaseCaricatoVO vo = readCaricatoVO(id);
-    return new TestCaseCaricatoDTO(vo, true, true);
+    TestCaseCaricatoDTO result = new TestCaseCaricatoDTO(vo, includeDetails, includeDetails);
+    if (includeFolder) {
+      result.assignFolder(fileSystemService.listFolderVO(FileSystemScope.TEST_CARICATO, id));
+    }
+    return result;
   }
   
   private TestCaseCaricatoVO readCaricatoVO(long id) throws ApplicationException {

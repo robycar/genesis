@@ -15,6 +15,7 @@ import it.reply.genesis.api.dashboard.payload.DashboardInfoResponse;
 import it.reply.genesis.api.generic.controller.AbstractController;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.service.TestCaseService;
+import it.reply.genesis.service.TestSuiteService;
 import it.reply.genesis.service.dto.TestListType;
 
 @RestController
@@ -25,6 +26,9 @@ public class DashboardController extends AbstractController {
 
   @Autowired
   private TestCaseService testCaseService;
+  
+  @Autowired
+  private TestSuiteService testSuiteService;
   
   public DashboardController() {
   }
@@ -46,8 +50,9 @@ public class DashboardController extends AbstractController {
         response.setTestGeneratoList(Collections.emptyList());
       }
       
-      if (request.getIncludeTestSuiteOfType() != null) {
-        response.setTestSuiteList(Collections.emptyList());
+      inclusion = request.getIncludeTestSuiteOfType();
+      if (inclusion != null) {
+        response.setTestSuiteList(testSuiteService.readTestSuiteCaricateOfType(inclusion));
       }
       
       return ResponseEntity.ok(response);

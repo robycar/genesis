@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestSuiteCaricataDTO;
 import it.reply.genesis.api.test.payload.TestSuiteDTO;
+import it.reply.genesis.service.dto.TestListType;
 
 public interface TestSuiteService {
 
@@ -32,5 +33,7 @@ public interface TestSuiteService {
   TestSuiteCaricataDTO retrieveCaricata(long id, boolean includeDetails, boolean locking) throws ApplicationException;
 
   TestSuiteCaricataDTO updateCaricata(TestSuiteCaricataDTO testSuite) throws ApplicationException;
+
+  List<TestSuiteCaricataDTO> readTestSuiteCaricateOfType(TestListType inclusion) throws ApplicationException;
 
 }

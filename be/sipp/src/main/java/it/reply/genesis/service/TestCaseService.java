@@ -48,7 +48,12 @@ public interface TestCaseService {
    */
   void runLoaded(long id) throws ApplicationException;
 
-  TestCaseCaricatoDTO readCaricato(long id) throws ApplicationException;
+  @Transactional(rollbackFor = ApplicationException.class)
+  default TestCaseCaricatoDTO readCaricato(long id) throws ApplicationException {
+    return readCaricato(id, false, false);
+  }
+  
+  TestCaseCaricatoDTO readCaricato(long id, boolean includeDetails, boolean includeFolder) throws ApplicationException;
 
   TestCaseCaricatoDTO updateTestCaseCaricato(TestCaseCaricatoDTO testCaseCaricato) throws ApplicationException;
 

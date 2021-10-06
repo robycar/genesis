@@ -27,6 +27,7 @@ import it.reply.genesis.api.test.payload.TestCaseDTO;
 import it.reply.genesis.api.test.payload.TestCaseListResponse;
 import it.reply.genesis.api.test.payload.TestCaseLoadResponse;
 import it.reply.genesis.api.test.payload.TestCaseRemoveRequest;
+import it.reply.genesis.api.test.payload.TestCaseRetrieveLoadedResponse;
 import it.reply.genesis.api.test.payload.TestCaseRetrieveResponse;
 import it.reply.genesis.api.test.payload.TestCaseScheduleRequest;
 import it.reply.genesis.api.test.payload.TestCaseScheduleResponse;
@@ -118,6 +119,20 @@ public class TestCaseController extends AbstractController {
       return handleException(e, response);
     }
     
+  }
+  
+  @GetMapping("loaded/{id}")
+  @PreAuthorize("hasAuthority('FUN_test.view')")
+  public ResponseEntity<TestCaseRetrieveLoadedResponse> retrieveLoaded(@PathVariable Long id) {
+    logger.info("retrieveLoaded({})", id);
+    TestCaseRetrieveLoadedResponse response = new TestCaseRetrieveLoadedResponse();
+    try {
+      TestCaseCaricatoDTO result = testCaseService.readCaricato(id, true, true);
+      response.setTestCase(result);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
   }
   
   @PostMapping()

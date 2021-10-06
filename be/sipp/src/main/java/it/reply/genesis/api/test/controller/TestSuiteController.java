@@ -27,6 +27,7 @@ import it.reply.genesis.api.test.payload.TestSuiteDTO;
 import it.reply.genesis.api.test.payload.TestSuiteListResponse;
 import it.reply.genesis.api.test.payload.TestSuiteLoadResponse;
 import it.reply.genesis.api.test.payload.TestSuiteRemoveRequest;
+import it.reply.genesis.api.test.payload.TestSuiteRetrieveLoadedResponse;
 import it.reply.genesis.api.test.payload.TestSuiteRetrieveResponse;
 import it.reply.genesis.api.test.payload.TestSuiteUpdateRequest;
 import it.reply.genesis.api.test.payload.TestSuiteUpdateResponse;
@@ -115,6 +116,21 @@ public class TestSuiteController extends AbstractController {
     } catch (ApplicationException e) {
       return handleException(e, response);
     }
+  }
+  
+  @GetMapping("loaded/{id}")
+  @PreAuthorize("hasAuthority('FUN_testsuite.view')")
+  public ResponseEntity<TestSuiteRetrieveLoadedResponse> retrieveLoaded(@PathVariable Long id) {
+    logger.info("enter retrieveLoaded({})", id);
+    TestSuiteRetrieveLoadedResponse response = new TestSuiteRetrieveLoadedResponse();
+    try {
+      TestSuiteCaricataDTO testSuite = testSuiteService.retrieveCaricata(id, true);
+      response.setTestSuite(testSuite);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+    
   }
   
   @GetMapping("load/{id}")

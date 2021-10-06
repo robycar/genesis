@@ -1,6 +1,8 @@
 package it.reply.genesis.service.impl;
 
 import java.time.Instant;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,6 +36,7 @@ import it.reply.genesis.model.repository.TestSuiteCaricataRepository;
 import it.reply.genesis.model.repository.TestSuiteRepository;
 import it.reply.genesis.service.TestCaseService;
 import it.reply.genesis.service.TestSuiteService;
+import it.reply.genesis.service.dto.TestListType;
 
 @Service
 @Transactional(rollbackFor = ApplicationException.class)
@@ -284,6 +287,39 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     vo = testSuiteCaricataRepository.saveAndFlush(vo);
     
     return new TestSuiteCaricataDTO(vo);
+  }
+
+  @Override
+  public List<TestSuiteCaricataDTO> readTestSuiteCaricateOfType(TestListType inclusion) throws ApplicationException {
+    logger.debug("enter readTestSuiteCaricateOfType");
+    
+    Collection<LoadedEntityStatus> stato;
+    String orderBy = "id";
+    switch (inclusion) {
+    case READY:
+      stato = Collections.singleton(LoadedEntityStatus.READY);
+      break;
+    case COMPLETED:
+      stato = Collections.singleton(LoadedEntityStatus.COMPLETED);
+      orderBy = "endDate";
+      break;
+    case RUNNING:
+      stato = List.of(LoadedEntityStatus.RUNNING, LoadedEntityStatus.READY);
+      orderBy = "startDate";
+      break;
+    case SCHEDULED:
+      stato = Collections.singleton(LoadedEntityStatus.SCHEDULED);
+      break;
+    default:
+      return Collections.emptyList();
+    }
+
+    List<TestSuiteCaricataVO> result = testSuiteCaricataRepository.findByStatoIn(stato, Sort.by(Direction.DESC, orderBy));
+    
+    return result.stream()
+        .map(TestSuiteCaricataDTO::new)
+        .collect(Collectors.toList());
+    
   }
 
 }

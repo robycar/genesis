@@ -122,7 +122,7 @@ public class TestCaseCaricatoRunner implements TestRunner {
     logger.debug("Aggiorno startDate e pathInstance del testCaseCaricato {}:{} => {}", 
         testCaseCaricato.getId(), testCaseCaricato.getNome(), testCaseCaricato.getPathInstance());
     TestCaseService testCaseService = serviceManager.getTestCaseService();
-    TestCaseCaricatoDTO testToUpdate = testCaseService.readCaricato(testCaseCaricato.getId());
+    TestCaseCaricatoDTO testToUpdate = testCaseService.readCaricato(testCaseCaricato.getId(), true, false);
     
     // Sovrascrivo la data di avvio rispetto a quando l'utente ha premuto start?
     testToUpdate.setStartDate(Instant.now());
