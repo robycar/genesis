@@ -274,7 +274,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     
     vo = testCaseCaricatoRepository.saveAndFlush(vo);
     
-    return new TestCaseCaricatoDTO(vo, false, false);
+    return new TestCaseCaricatoDTO(vo, true, true);
   }
 
   @Override
