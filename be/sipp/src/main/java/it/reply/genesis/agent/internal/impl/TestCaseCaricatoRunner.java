@@ -3,6 +3,7 @@ package it.reply.genesis.agent.internal.impl;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.HashMap;
 
 import org.python.core.PySystemState;
 import org.python.util.PythonInterpreter;
@@ -143,14 +144,20 @@ public class TestCaseCaricatoRunner implements TestRunner {
       TestCaseService testCaseService = serviceManager.getTestCaseService();
       TestCaseCaricatoDTO testToUpdate = testCaseService.readCaricato(testCaseCaricato.getId());
       if (!LoadedEntityStatus.COMPLETED.equals(testToUpdate.getStato())) {
-        TestCaseCaricatoDTO updatedTest = new TestCaseCaricatoDTO();
-        updatedTest.setId(testToUpdate.getId());
-        updatedTest.setVersion(testToUpdate.getVersion());
-        updatedTest.setEndDate(Instant.now());
-        updatedTest.setStato(LoadedEntityStatus.COMPLETED);
-        updatedTest.setResult(ExecutionResult.OK);
-        
-        this.testCaseCaricato = testCaseService.updateTestCaseCaricato(updatedTest);
+        testToUpdate.setId(testToUpdate.getId());
+        testToUpdate.setVersion(testToUpdate.getVersion());
+        testToUpdate.setEndDate(Instant.now());
+        testToUpdate.setStato(LoadedEntityStatus.COMPLETED);
+        testToUpdate.setResult(ExecutionResult.OK);
+        //mock
+        if (testToUpdate.getProperties() == null) {
+          testToUpdate.setProperties(new HashMap<>(2));
+        }
+        testToUpdate.getProperties().put("call-id", "01234556790");
+        testToUpdate.getProperties().put("pcap", "/url/per/scaricare/il/pcap");
+        this.testCaseCaricato = testCaseService.updateTestCaseCaricato(testToUpdate);
+      } else {
+        logger.debug("Test case gia' nello stato COMPLETED");
       }
     } catch (ApplicationException ae) {
       logger.error("Errore durante la registrazione OK del test caricato {}", testCaseCaricato.getId());

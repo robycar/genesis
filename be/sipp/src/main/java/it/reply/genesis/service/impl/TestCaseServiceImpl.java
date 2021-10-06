@@ -4,8 +4,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -38,11 +41,13 @@ import it.reply.genesis.model.TemplateFileCategory;
 import it.reply.genesis.model.TemplateFileVO;
 import it.reply.genesis.model.TemplateVO;
 import it.reply.genesis.model.TestCaseCaricatoLineaChiamanteVO;
+import it.reply.genesis.model.TestCaseCaricatoPropertyVO;
 import it.reply.genesis.model.TestCaseCaricatoVO;
 import it.reply.genesis.model.TestCaseLineaChiamanteVO;
 import it.reply.genesis.model.TestCaseVO;
 import it.reply.genesis.model.TestSuiteCaricataVO;
 import it.reply.genesis.model.repository.TestCaseCaricatoLineaChiamanteRepository;
+import it.reply.genesis.model.repository.TestCaseCaricatoPropertyRepository;
 import it.reply.genesis.model.repository.TestCaseCaricatoRepository;
 import it.reply.genesis.model.repository.TestCaseLineaChiamanteRepository;
 import it.reply.genesis.model.repository.TestCaseRepository;
@@ -81,6 +86,9 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
   
   @Autowired
   private TestCaseLineaChiamanteRepository testCaseLineaChiamanteRepository;
+  
+  @Autowired
+  private TestCaseCaricatoPropertyRepository testCaseCaricatoPropertyRepository;
 
   @Autowired
   private SingleThreadSingleTestExecutor internalTestExecutor;
@@ -272,9 +280,38 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
       vo.setStato(dto.getStato());
     }
     
+    if (dto.getProperties() != null) {
+      
+      HashMap<String, String> dtoProperties = new HashMap<>(dto.getProperties());
+      
+      List<TestCaseCaricatoPropertyVO> propertiesVO = vo.getProperties();
+      for (Iterator<TestCaseCaricatoPropertyVO> it = propertiesVO.iterator(); it.hasNext();) {
+        TestCaseCaricatoPropertyVO pvo = it.next();
+        String propKey = pvo.getKey();
+        String newPropValue = dtoProperties.get(propKey);
+        if (newPropValue == null) {
+          it.remove();
+        } else {
+          if (!newPropValue.equals(pvo.getValue())) {
+            pvo.setValue(newPropValue);
+          }
+          dtoProperties.remove(propKey);
+        }
+      }
+      
+      for (Entry<String, String> entry: dtoProperties.entrySet()) {
+        TestCaseCaricatoPropertyVO pvo = new TestCaseCaricatoPropertyVO();
+        pvo.setKey(entry.getKey());
+        pvo.setValue(entry.getValue());
+        pvo.setTestCaseCaricato(vo);
+        propertiesVO.add(testCaseCaricatoPropertyRepository.save(pvo));
+      }
+    }
+    
     vo = testCaseCaricatoRepository.saveAndFlush(vo);
     
-    return new TestCaseCaricatoDTO(vo, true, true);
+    return new TestCaseCaricatoDTO(vo, true, true)
+        .assignFolder(fileSystemService.listFolderVO(FileSystemScope.TEST_CARICATO, vo.getId()));
   }
 
   @Override

@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import it.reply.genesis.api.admin.payload.GruppoDTO;
@@ -14,8 +15,8 @@ import it.reply.genesis.api.linea.payload.LineaDTO;
 import it.reply.genesis.api.linea.payload.OutboundProxyDTO;
 import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.FileSystemVO;
-import it.reply.genesis.model.TestCaseCaricatoPropertyVO;
 import it.reply.genesis.model.LoadedEntityStatus;
+import it.reply.genesis.model.TestCaseCaricatoPropertyVO;
 import it.reply.genesis.model.TestCaseCaricatoVO;
 
 public class TestCaseCaricatoDTO extends DTO {
@@ -58,7 +59,7 @@ public class TestCaseCaricatoDTO extends DTO {
   
   private TestCaseDTO testCase;
   
-  private List<PropertyDTO> properties;
+  private Map<String,String> properties;
   
   private TestCaseLineaDTO chiamato;
   
@@ -159,10 +160,9 @@ public class TestCaseCaricatoDTO extends DTO {
     if (props != null) {
       if (this.properties == null) {
         this.properties = props.stream()
-            .map(TestCaseCaricatoPropertyVO::toPropertyDTO)
-            .collect(Collectors.toList());
+            .collect(Collectors.toMap(TestCaseCaricatoPropertyVO::getKey, TestCaseCaricatoPropertyVO::getValue));
       } else {
-        props.forEach(pvo -> this.properties.add(pvo.toPropertyDTO()));
+        props.forEach(pvo -> this.properties.putIfAbsent(pvo.getKey(), pvo.getValue()));
       }
     }
     return this;
@@ -320,11 +320,11 @@ public class TestCaseCaricatoDTO extends DTO {
     this.template = template;
   }
 
-  public List<PropertyDTO> getProperties() {
+  public Map<String, String> getProperties() {
     return properties;
   }
 
-  public void setProperties(List<PropertyDTO> properties) {
+  public void setProperties(Map<String, String> properties) {
     this.properties = properties;
   }
 

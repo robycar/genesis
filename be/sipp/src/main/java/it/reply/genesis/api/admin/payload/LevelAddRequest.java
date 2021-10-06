@@ -1,6 +1,5 @@
 package it.reply.genesis.api.admin.payload;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;

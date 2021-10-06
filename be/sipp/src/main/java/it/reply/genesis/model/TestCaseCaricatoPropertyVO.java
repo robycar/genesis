@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import it.reply.genesis.api.test.payload.PropertyDTO;
-
 @Entity
 @Table(name="TEST_CASE_CARICATO_PROPERTY")
 public class TestCaseCaricatoPropertyVO implements Serializable {
@@ -40,14 +38,6 @@ public class TestCaseCaricatoPropertyVO implements Serializable {
   public TestCaseCaricatoPropertyVO() {
   }
 
-  public PropertyDTO toPropertyDTO() {
-    PropertyDTO result = new PropertyDTO(this.id);
-    result.setKey(this.key);
-    result.setValue(value);
-    
-    return result;
-  }
-  
   public Long getId() {
     return id;
   }

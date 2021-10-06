@@ -194,7 +194,7 @@ public class TestCaseController extends AbstractController {
   }
   
 
-  @GetMapping("runloaded/{id}")
+  @GetMapping({"runloaded/{id}", "loaded/run/{id}"})
   @PreAuthorize("hasAuthority('FUN_test.run')")
   public ResponseEntity<PayloadResponse> runLoaded(@PathVariable Long id) {
     logger.info("enter runLoaded({})", id);
