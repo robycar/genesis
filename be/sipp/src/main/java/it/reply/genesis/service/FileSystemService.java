@@ -47,4 +47,6 @@ public interface FileSystemService {
 
   void editFile(FileSystemScope scope, long idRef, String pathOrId, ByteArrayInputStream byteArrayInputStream) throws ApplicationException;
 
+  long deleteFolder(FileSystemScope testCaricato, long idref);
+
 }

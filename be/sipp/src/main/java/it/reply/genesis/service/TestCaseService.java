@@ -63,5 +63,9 @@ public interface TestCaseService {
   }
   
   TestCaseCaricatoDTO markTestCompleted(long id, ExecutionResult executionResult, TestCaseCaricatoDTO extraFieldsToSet) throws ApplicationException;
+
+  void removeCaricati(List<Long> ids) throws ApplicationException;
+  
+  void removeCaricatoVO(TestCaseCaricatoVO testCase) throws ApplicationException;
   
 }

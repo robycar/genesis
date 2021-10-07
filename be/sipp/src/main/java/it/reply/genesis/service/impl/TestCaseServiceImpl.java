@@ -458,7 +458,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
 
   public void checkStatoOfTestCaseCaricato(TestCaseCaricatoVO vo, LoadedEntityStatus statoAtteso) throws ApplicationException {
     if (!statoAtteso.equals(vo.getStato())) {
-      throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_CARICATO_WRONG_STATE, vo.getId(), vo.getStato(), statoAtteso);
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_CARICATO_WRONG_EXPECTED_STATE, vo.getId(), vo.getStato(), statoAtteso);
     }
   }
 
@@ -592,6 +592,30 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     } else {
       return testCaseCaricatoRepository.save(vo);
     }
+  }
+
+  @Override
+  public void removeCaricati(List<Long> ids) throws ApplicationException {
+    logger.debug("enter removeCaricati");
+    for (Long id: ids) {
+      TestCaseCaricatoVO vo = readCaricatoVO(id, true);
+      if (vo.getTestSuite() != null) {
+        throw makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_CARICATO_IN_TEST_SUITE, id, vo.getTestSuite().getId());
+      }
+      removeCaricatoVO(vo);
+    }
+  }
+
+  @Override
+  public void removeCaricatoVO(TestCaseCaricatoVO testCaseVO) throws ApplicationException {
+    logger.debug("enter removeCaricatoVO");
+    if (LoadedEntityStatus.RUNNING.equals(testCaseVO.getStato())) {
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_CARICATO_WRONG_STATE, testCaseVO.getId(), testCaseVO.getStato());
+    }
+    checkGroup(testCaseVO.getGruppo(), AppError.TEST_CASE_DELETE_WRONG_GROUP);
+    testCaseCaricatoRepository.delete(testCaseVO);
+    long deleted = fileSystemService.deleteFolder(FileSystemScope.TEST_CARICATO, testCaseVO.getId());
+    logger.debug("Deleted {} files associated to testCase {}", deleted, testCaseVO.getId());
   }
 
 

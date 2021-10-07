@@ -8421,20 +8421,49 @@
 					"response": []
 				},
 				{
-					"name": "testcasecaricato_run",
+					"name": "testcase_schedule",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"scheduleDateTime\": \"2021-10-03T09:00\",\r\n    \"delay\": 120\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{contextUrl}}/api/testcase/runloaded/8",
+							"raw": "{{contextUrl}}/api/testcase/schedule",
 							"host": [
 								"{{contextUrl}}"
 							],
 							"path": [
 								"api",
 								"testcase",
-								"runloaded",
-								"8"
+								"schedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "testcasecaricato_run",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase/loaded/run/4",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase",
+								"loaded",
+								"run",
+								"4"
 							]
 						}
 					},
@@ -8524,40 +8553,12 @@
 					]
 				},
 				{
-					"name": "testcase_schedule",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"scheduleDateTime\": \"2021-10-03T09:00\",\r\n    \"delay\": 120\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{contextUrl}}/api/testcase/schedule",
-							"host": [
-								"{{contextUrl}}"
-							],
-							"path": [
-								"api",
-								"testcase",
-								"schedule"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "testcase_caricato_retrieve",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{contextUrl}}/api/testcase/loaded/1",
+							"raw": "{{contextUrl}}/api/testcase/loaded/4",
 							"host": [
 								"{{contextUrl}}"
 							],
@@ -8565,11 +8566,111 @@
 								"api",
 								"testcase",
 								"loaded",
-								"1"
+								"4"
 							]
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "testcase_caricato_delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testcase/loaded/1,2,3",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testcase",
+								"loaded",
+								"1,2,3"
+							]
+						},
+						"description": "Elimina uno o più test case caricati dal sistema. &Egrave; possibile indicare più di un test case, attraverso il suo identificatore numerico, separandoli con il carattere virgola (`,`).\nSe un test case non viene trovato o se un test case si trova nello stato `RUNNING` viene restituito un errore.\n\nPermessi: testcase.run"
+					},
+					"response": [
+						{
+							"name": "testcase_caricato_delete failed running status",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/testcase/loaded/4,3,2,1",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testcase",
+										"loaded",
+										"4,3,2,1"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 07 Oct 2021 10:18:08 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"TEST-0024\",\n        \"description\": \"Impossibile completare l'operazione in quanto il test case caricato 4 si trova nello stato RUNNING\"\n    }\n}"
+						}
+					]
 				}
 			]
 		},
@@ -10218,6 +10319,27 @@
 								"1"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "testsuite_caricata_delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testsuite/loaded/1,2,3",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testsuite",
+								"loaded",
+								"1,2,3"
+							]
+						},
+						"description": "Elimina una o più test suite. Le test suite vanno indicata utilizzando il loro identificatore numerico (campo id) separate da una virgola.\nEs.: DELETE {{contextUrl}}/api/testsuite/loaded/1,2,3\n\nNon è possibile eliminare una test suite se questa è in stato RUNNING o PAUSED.\n\nPermessi:\ntestsuite.run"
 					},
 					"response": []
 				}

@@ -192,7 +192,6 @@ public class TestCaseController extends AbstractController {
       return handleException(e, response);
     }
   }
-  
 
   @GetMapping({"runloaded/{id}", "loaded/run/{id}"})
   @PreAuthorize("hasAuthority('FUN_test.run')")
@@ -206,10 +205,20 @@ public class TestCaseController extends AbstractController {
     } catch (ApplicationException e) {
       return handleException(e, response);
     }
-    
-    
   }
   
+  @DeleteMapping("loaded/{ids}")
+  @PreAuthorize("hasAuthority('FUN_test.run')")
+  public ResponseEntity<PayloadResponse> removeLoaded(@PathVariable List<Long> ids) {
+    logger.info("enter removeLoaded({})", ids);
+    PayloadResponse response = new PayloadResponse();
+    try {
+      testCaseService.removeCaricati(ids);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+  }
   
 
 }

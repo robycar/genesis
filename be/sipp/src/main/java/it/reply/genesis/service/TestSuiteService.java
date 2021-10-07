@@ -36,4 +36,6 @@ public interface TestSuiteService {
 
   List<TestSuiteCaricataDTO> readTestSuiteCaricateOfType(TestListType inclusion) throws ApplicationException;
 
+  void removeCaricate(List<Long> ids) throws ApplicationException;
+
 }

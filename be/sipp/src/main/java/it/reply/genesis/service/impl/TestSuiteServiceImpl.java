@@ -225,7 +225,7 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
 
   private void checkStatoOfTestSuiteCariata(TestSuiteCaricataVO vo, LoadedEntityStatus expectedStatus) throws ApplicationException {
     if (!expectedStatus.equals(vo.getStato())) {
-      throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_SUITE_CARICATA_WRONG_STATE, vo.getId(), vo.getStato(), expectedStatus);
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_SUITE_CARICATA_WRONG_EXPECTED_STATE, vo.getId(), vo.getStato(), expectedStatus);
     }
   }
 
@@ -320,6 +320,26 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
         .map(TestSuiteCaricataDTO::new)
         .collect(Collectors.toList());
     
+  }
+
+  @Override
+  public void removeCaricate(List<Long> ids) throws ApplicationException {
+    logger.debug("enter removeCaricate");
+    for (Long id: ids) {
+      TestSuiteCaricataVO testSuite = readTestSuiteCaricataVO(id, true);
+      if (LoadedEntityStatus.PAUSED.equals(testSuite.getStato()) || LoadedEntityStatus.RUNNING.equals(testSuite.getStato())) {
+        throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_SUITE_CARICATA_WRONG_STATE, testSuite.getId(), testSuite.getStato());
+      }
+      logger.debug("Elimino la test suite caricata {}:{}:{}", id, testSuite.getNome(), testSuite.getStato());
+     
+      for (TestCaseCaricatoVO testCase: testSuite.getTestCases()) {
+        testCaseService.removeCaricatoVO(testCase);
+        logger.debug("Eliminato test case caricato {}", testCase.getId());
+      }
+      testSuite.getTestCases().clear();
+      testSuiteCaricataRepository.delete(testSuite);
+      logger.debug("Eliminata la test suite {}", testSuite.getId());
+    }
   }
 
 }

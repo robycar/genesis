@@ -176,4 +176,21 @@ public class TestSuiteController extends AbstractController {
     }
   }
   
+  @DeleteMapping("loaded/{ids}")
+  @PreAuthorize("hasAuthority('FUN_testsuite.run')")
+  public ResponseEntity<PayloadResponse>removeLoaded(@Valid @PathVariable(required=true)List<Long> ids) {
+    logger.info("enter removeLoaded({})", ids);
+    PayloadResponse response = new PayloadResponse();
+    try {
+      if (ids.isEmpty()) {
+        logger.info("Chiamata la funzione removeLoaded senza indicare gli id delle test suite da eliminare");
+      } else {
+        testSuiteService.removeCaricate(ids);
+      }
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+  }
+  
 }

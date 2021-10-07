@@ -222,6 +222,12 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
   }
 
   @Override
+  public long deleteFolder(FileSystemScope testCaricato, long idRef) {
+    return fileSystemRepository.deleteAllByScopeAndIdRef(testCaricato, idRef);
+  }
+
+
+  @Override
   public void deleteFile(FileSystemScope scope, long idRef, String pathOrId) throws ApplicationException {
     FileSystemVO fileVO = findFile(scope, idRef, pathOrId);
     BaseEntity entity = checkFolderExists(scope, idRef);

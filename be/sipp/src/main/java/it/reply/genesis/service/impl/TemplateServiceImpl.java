@@ -346,7 +346,8 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     TemplateVO templateVO = readVO(id);
     checkGroup(templateVO.getGruppo(), AppError.TEMPLATE_DELETE_WRONG_GROUP);
     templateRepository.delete(templateVO);
-    fileSystemRepository.deleteAllByScopeAndIdRef(FileSystemScope.TEMPLATE, templateVO.getId());
+    fileSystemService.deleteFolder(FileSystemScope.TEMPLATE, id);
+    //fileSystemRepository.deleteAllByScopeAndIdRef(FileSystemScope.TEMPLATE, templateVO.getId());
   }
 
 
