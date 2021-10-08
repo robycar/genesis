@@ -10836,7 +10836,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"includeTestCaseOfType\": \"COMPLETED\",\r\n    \"includeTestSuiteOfType\": \"COMPLETED\",\r\n    \"includeTestGeneratoreOfType\": null\r\n}",
+							"raw": "{\r\n    \"includeRiepilogoTestCase\": false,\r\n    \"includeRiepilogoTestSuite\": true,\r\n    \"includeTestCaseOfType\": \"COMPLETED\",\r\n    \"includeTestSuiteOfType\": \"COMPLETED\",\r\n    \"includeTestGeneratoreOfType\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -10854,7 +10854,7 @@
 								"info"
 							]
 						},
-						"description": "Ottiene i dati da mostrare nella dashboard. Ogni campo \"include*\" nel json di richiesta sono opzionali e possono essere omessi. I valori ammissibili sono (case sensitive):\n- null\n- \"READY\"\n- \"SCHEDULED\"\n- \"<u>~~WAITING~~</u>\"\n- \"RUNNING\"\n- \"COMPLETED\"\n\nI dati nel json di risposta saranno popolati solo se li corrispondente campo \"include*\" è presente e diverso da `null`."
+						"description": "Ottiene i dati da mostrare nella dashboard. Ogni campo \"includeTest*\" nel json di richiesta sono opzionali e possono essere omessi. I valori ammissibili sono (case sensitive):\n- null\n- \"READY\"\n- \"SCHEDULED\"\n- \"<u>~~WAITING~~</u>\"\n- \"RUNNING\"\n- \"COMPLETED\"\n\n\nAnche i campi includeRiepilogo* sono opzionali e possono avere i seguenti valori:\n- null\n- true\n- false\n\nI dati nel json di risposta saranno popolati solo se li corrispondente campo \"include*\" è presente e diverso da `null`."
 					},
 					"response": []
 				}

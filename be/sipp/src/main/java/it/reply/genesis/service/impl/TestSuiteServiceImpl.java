@@ -1,6 +1,7 @@
 package it.reply.genesis.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,16 +22,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.reply.genesis.AppError;
 import it.reply.genesis.agent.internal.impl.SingleThreadSingleTestExecutor;
+import it.reply.genesis.api.dashboard.payload.RiepilogoNumericoTestSuiteDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.api.test.payload.TestCaseDTO;
 import it.reply.genesis.api.test.payload.TestSuiteCaricataDTO;
 import it.reply.genesis.api.test.payload.TestSuiteDTO;
+import it.reply.genesis.model.ExecutionResult;
 import it.reply.genesis.model.LoadedEntityStatus;
 import it.reply.genesis.model.TestCaseCaricatoVO;
 import it.reply.genesis.model.TestCaseVO;
 import it.reply.genesis.model.TestSuiteCaricataVO;
 import it.reply.genesis.model.TestSuiteVO;
+import it.reply.genesis.model.dao.ExecutionResultTestSuite;
+import it.reply.genesis.model.dao.StatoTestSuite;
+import it.reply.genesis.model.dao.TestSuiteSelector;
 import it.reply.genesis.model.repository.TestCaseRepository;
 import it.reply.genesis.model.repository.TestSuiteCaricataRepository;
 import it.reply.genesis.model.repository.TestSuiteRepository;
@@ -56,6 +62,9 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
   
   @Autowired
   private SingleThreadSingleTestExecutor testExecutor;
+  
+  @Autowired
+  private TestSuiteSelector testSuiteSelector;
   
   public TestSuiteServiceImpl() {
   }
@@ -340,6 +349,56 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
       testSuiteCaricataRepository.delete(testSuite);
       logger.debug("Eliminata la test suite {}", testSuite.getId());
     }
+  }
+
+  @Override
+  public RiepilogoNumericoTestSuiteDTO riepilogoNumerico(LocalDate fromDay, LocalDate toDay) {
+    logger.debug("enter riepilogoNumerico");
+    
+    long caricate = 0L;
+    long schedulate = 0L;
+    long completate = 0L;
+    long testTotali = 0L;
+    long testOK = 0L;
+    long testKO = 0L;
+    
+    List<StatoTestSuite> records = testSuiteSelector.testSuiteCaricataExecutionStatus(fromDay, toDay);
+    for (StatoTestSuite record: records) {
+      switch (record.getStato()) {
+      case COMPLETED:
+        ++completate;
+        break;
+      case READY:
+      case PAUSED:
+      case RUNNING:
+        ++caricate;
+      default:
+        logger.warn("Nel metodo riepilogoNumerico trovate {} test suite che si trovano in uno stato non atteso: {}", record.getCount(), record.getStato());
+      }
+    }
+    
+    List<ExecutionResultTestSuite> records2 = testSuiteSelector.retrieveTestStatusByTestSuiteCaricate(fromDay, toDay);
+    for (ExecutionResultTestSuite record: records2) {
+      if (record.getResult() == null) {
+        testTotali += record.getCount();
+      } else {
+        if (ExecutionResult.OK.equals(record.getResult())) {
+          testOK += record.getCount();
+        } else {
+          testKO += record.getCount();
+        }
+      }
+    }
+    
+    RiepilogoNumericoTestSuiteDTO result = new RiepilogoNumericoTestSuiteDTO();
+    result.setCompletate(completate);
+    result.setCaricate(caricate);
+    result.setSchedulate(schedulate);
+    result.setTestTotali(testTotali);
+    result.setTestKO(testKO);
+    result.setTestOK(testOK);
+    
+    return result;
   }
 
 }

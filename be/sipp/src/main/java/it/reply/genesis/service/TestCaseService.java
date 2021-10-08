@@ -1,10 +1,12 @@
 package it.reply.genesis.service;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import it.reply.genesis.api.dashboard.payload.RiepilogoNumericoTestDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestCaseDTO;
@@ -67,5 +69,7 @@ public interface TestCaseService {
   void removeCaricati(List<Long> ids) throws ApplicationException;
   
   void removeCaricatoVO(TestCaseCaricatoVO testCase) throws ApplicationException;
+
+  RiepilogoNumericoTestDTO riepilogoNumerico(LocalDate fromDay, LocalDate toDay);
   
 }

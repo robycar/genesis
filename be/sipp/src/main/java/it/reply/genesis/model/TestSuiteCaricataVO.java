@@ -80,6 +80,11 @@ public class TestSuiteCaricataVO implements Serializable {
   
   public TestSuiteCaricataVO() {
   }
+  
+  public TestSuiteCaricataVO(Long id) {
+    super();
+    this.id = id;
+  }
 
   public Long getId() {
     return id;

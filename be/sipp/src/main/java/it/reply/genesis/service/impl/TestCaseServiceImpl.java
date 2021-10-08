@@ -1,6 +1,7 @@
 package it.reply.genesis.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +27,7 @@ import org.springframework.util.Assert;
 
 import it.reply.genesis.AppError;
 import it.reply.genesis.agent.internal.impl.SingleThreadSingleTestExecutor;
+import it.reply.genesis.api.dashboard.payload.RiepilogoNumericoTestDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
@@ -49,6 +51,7 @@ import it.reply.genesis.model.TestSuiteCaricataVO;
 import it.reply.genesis.model.repository.TestCaseCaricatoLineaChiamanteRepository;
 import it.reply.genesis.model.repository.TestCaseCaricatoPropertyRepository;
 import it.reply.genesis.model.repository.TestCaseCaricatoRepository;
+import it.reply.genesis.model.repository.TestCaseCaricatoRepository.StatoTest;
 import it.reply.genesis.model.repository.TestCaseLineaChiamanteRepository;
 import it.reply.genesis.model.repository.TestCaseRepository;
 import it.reply.genesis.service.FileSystemService;
@@ -616,6 +619,65 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     testCaseCaricatoRepository.delete(testCaseVO);
     long deleted = fileSystemService.deleteFolder(FileSystemScope.TEST_CARICATO, testCaseVO.getId());
     logger.debug("Deleted {} files associated to testCase {}", deleted, testCaseVO.getId());
+  }
+
+  @Override
+  public RiepilogoNumericoTestDTO riepilogoNumerico(LocalDate fromDay, LocalDate toDay) {
+    
+    RiepilogoNumericoTestDTO result = new RiepilogoNumericoTestDTO();
+    long caricati = 0L;
+    long schedulati = 0L;
+    long completatiOK = 0L;
+    long completatiKO = 0L;
+
+    List<StatoTest> records = testCaseCaricatoRepository
+        .findByLoadedWhenBetweenAndTestSuiteIsNullAndScheduleDateIsNull(fromDay, toDay);
+    for (StatoTest record: records) {
+      switch (record.getStato()) {
+      case COMPLETED:
+        ++caricati;
+        if(ExecutionResult.OK.equals(record.getResult())) {
+          ++completatiOK;
+        } else {
+          ++completatiKO;
+        }
+        break;
+      case READY:
+      case RUNNING:
+        ++caricati;
+        break;
+      default:
+        logger.warn("Durante il riepilogoNumerico per i test non schedulati il test {} e' stato trovato in uno stato non atteso: {}", record.getId(), record.getStato());
+      }
+    }
+    
+    records = testCaseCaricatoRepository.findScheduledInInterval(fromDay, toDay);
+    for (StatoTest record: records) {
+      switch (record.getStato()) {
+      case COMPLETED:
+        ++schedulati;
+        if (ExecutionResult.OK.equals(record.getResult())) {
+          ++completatiOK;
+        } else {
+          ++completatiKO;
+        }
+        break;
+      case SCHEDULED:
+      case RUNNING:
+        ++schedulati;
+        break;
+      default:
+        logger.warn("Durante il riepilogoNumerico per i test schedulati il test {} e' stato trovato in uno stato non atteso: {}", record.getId(), record.getStato());
+      }
+
+    }
+    
+    result.setCaricati(caricati);
+    result.setCompletatiKO(completatiKO);
+    result.setCompletatiOK(completatiOK);
+    result.setSchedulati(schedulati);
+    
+    return result;
   }
 
 
