@@ -28,6 +28,8 @@ import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
 import TableTestCaseConclusi from "../../components/TableTestCaseConclusi";
 
+import ReportCardTestCaseGeneral from "./ReportCardTestCaseGeneral";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -178,7 +180,7 @@ function ReportTestCase() {
     setOpen(false);
   };
 
- 
+
 
   return (
     <div className={classes.root}>
@@ -196,7 +198,7 @@ function ReportTestCase() {
         }}
         open={open}
       >
-        
+
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -219,41 +221,47 @@ function ReportTestCase() {
           <Grid container spacing={3}>
             {/* Recent Orders */}
             <Grid item xs={12}>
-            <div className={classes.bottonTest}>
-            {/* <NavLink exact to="/dashboard/testcase"> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/report/testcase"
-            >
-              Test Case
-            </Button>
-            {/* </NavLink> */}
+              <div className={classes.bottonTest}>
+                {/* <NavLink exact to="/dashboard/testcase"> */}
+                <Button
+                  className="button-green"
+                  component={NavLink}
+                  activeClassName="button-green-active"
+                  exact
+                  to="/report/testcase"
+                >
+                  Test Case
+                </Button>
+                {/* </NavLink> */}
 
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/report/testsuite"
-            >
-              Test Suite
-            </Button>
-            {/* </NavLink> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/report/testgeneratore"
-            >
-              Test Generatore
-            </Button>
-          </div>
+                {/* <NavLink exact to="/dashboard/testsuite"> */}
+                <Button
+                  className="button-green"
+                  component={NavLink}
+                  activeClassName="button-green-active"
+                  exact
+                  to="/report/testsuite"
+                >
+                  Test Suite
+                </Button>
+                {/* </NavLink> */}
+                <Button
+                  className="button-green"
+                  component={NavLink}
+                  activeClassName="button-green-active"
+                  exact
+                  to="/report/testgeneratore"
+                >
+                  Test Generatore
+                </Button>
+              </div>
             </Grid>
+
+            {/* INFO DASH FOR TEST CASE*/}
+          <Grid>
+            <ReportCardTestCaseGeneral />
+          </Grid>
+          
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <TestCaseComplete />
@@ -262,21 +270,11 @@ function ReportTestCase() {
           </Grid>
 
           <Grid item xs={12}>
-              <Paper className={classes.paper}>
+            <Paper className={classes.paper}>
               <TableTestCaseConclusi />
-              </Paper>
-            </Grid>
+            </Paper>
+          </Grid>
 
-          
-            {/* <Paper className={classes.paperImg}>
-              <Typography className={classes.titleImg}>
-                Test Case-CB Fibra
-              </Typography>
-              <div className={classes.chart}>
-                <ChartReport />
-              </div>
-            </Paper> */}
-         
         </Container>
       </main>
     </div>

@@ -24,6 +24,9 @@ import { useHistory } from "react-router-dom";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 const GestioneRuoli = () => {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   let history = useHistory();
 
   const [data, setData] = useState([]);
@@ -32,7 +35,7 @@ const GestioneRuoli = () => {
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [caricamento, setCaricamento] = useState(false)
-
+  const [scrittaTabella, setScrittaTabella] = useState("")
 
   /*---------- OPEN WARNING DELETE-----------*/
 
@@ -187,35 +190,48 @@ const GestioneRuoli = () => {
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
-    //----GET ALL USERS----
-    (async () => {
-      setCaricamento(true)
-      setData((await getGenerale('group')).gruppi);
-      setCaricamento(false)
-    })();
+
+    if (functions.indexOf("group.view") !== -1) {
+      //----GET ALL USERS----
+      (async () => {
+        setCaricamento(true)
+        setData((await getGenerale('group')).gruppi);
+        setCaricamento(false)
+      })();
+
+      setScrittaTabella("Non è presente alcun dato da mostrare")
+
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzarequesti dati")
+    }
   }
+
   const funzioneAggiornamento = () => {
     //----GET ALL USERS----
-    (async () => {
-      setData((await postGenerale('group', {id: id, version: versione, nome: nome, descrizione: descrizione})).gruppi);
-      setOpen(false);
-      funzioneGetAll();
-    })();
+    if (functions.indexOf("group.edit") !== -1) {
+      (async () => {
+        setData((await postGenerale('group', { id: id, version: versione, nome: nome, descrizione: descrizione })).gruppi);
+        setOpen(false);
+        funzioneGetAll();
+      })();
+    }
   }
 
   const funzioneDelete = (id) => {
-    (async () => {
-      setCaricamento(true)
-      let result = await deleteGenerale("group", id)
-      if (result.error !== null) {
-        if (result.error.code === "ADMIN-0012") {
-          setCaricamento(false)
-          setWarning("Questo Gruppo non può essere eliminato perche uno o più utenti ne fanno parte.")
-          setOpenWarning(true)
+    if (functions.indexOf("group.delete") !== -1) {
+      (async () => {
+        setCaricamento(true)
+        let result = await deleteGenerale("group", id)
+        if (result.error !== null) {
+          if (result.error.code === "ADMIN-0012") {
+            setCaricamento(false)
+            setWarning("Questo Gruppo non può essere eliminato perche uno o più utenti ne fanno parte.")
+            setOpenWarning(true)
+          }
         }
-      }
-      funzioneGetAll();
-    })();
+        funzioneGetAll();
+      })();
+    }
   }
 
   useEffect(() => {
@@ -280,19 +296,20 @@ const GestioneRuoli = () => {
                 </Button>
               </div>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Crea Gruppo",
             isFreeAction: true,
           },
           rowData => ({
             icon: 'delete',
             tooltip: 'Elimina Gruppo',
-            onClick: (event, rowData) => funzioneDelete(rowData.id)
+            onClick: (event, rowData) => funzioneDelete(rowData.id),
+            disabled: functions.indexOf("group.delete") === -1
           }),
           {
             icon: () => <EditIcon />,
-            tooltip: "Edit",
+            tooltip: "Modifica Gruppo",
             onClick: (event, rowData) => handleOpen(rowData),
-
+            disabled: functions.indexOf("group.edit") === -1,
             position: "row",
           },
         ]}
@@ -302,7 +319,7 @@ const GestioneRuoli = () => {
           },
           body: {
             emptyDataSourceMessage: (
-              "Non è presente alcun dato da mostrare"
+              scrittaTabella
             ),
           },
         }}

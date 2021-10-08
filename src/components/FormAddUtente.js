@@ -6,7 +6,6 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import acccessControl from "../service/url.js";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { MenuItem } from "@material-ui/core";
@@ -38,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function FormAddUtente() {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   let history = useHistory();
   const classes = useStyles();
 
@@ -49,39 +51,43 @@ function FormAddUtente() {
   const [password, setPassword] = useState("");
   const [level, setLevel] = useState(0);
   const [email, setEmail] = useState(0);
-  let bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const [appearGroup, setAppearGroup] = useState([]);
   const [appearLevel, setAppearLevel] = useState([]);
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
-    //-----GET APPEAR GROUP-----
-    (async () => {
-      setAppearGroup((await getGenerale("group")).gruppi);
-    })();
-
-    //-----GET APPEAR LEVEL-----
-    (async () => {
-      setAppearLevel((await getGenerale("level")).livelli);
-    })();
+    
+    if (functions.indexOf("user.edit") !== -1 && functions.indexOf("group.view") !== -1 && functions.indexOf("level.view") !== -1) {
+      //-----GET APPEAR GROUP-----
+      (async () => {
+        setAppearGroup((await getGenerale("group")).gruppi);
+      })();
+      alert()
+      //-----GET APPEAR LEVEL-----
+      (async () => {
+        setAppearLevel((await getGenerale("level")).livelli);
+      })();
+    }
   };
 
   const funzioneAggiungiUtente = () => {
     //----AGGIUNGI UTENTE----
-    (async () => {
-      let result = await putGenerale("user", {
-        password: password,
-        username: username,
-        nome: nome,
-        cognome: cognome,
-        azienda: azienda,
-        email: email,
-        level: { id: level },
-        gruppo: { id: gruppo },
-      });
-      checkRichiesta(result);
-    })();
+    if (functions.indexOf("user.edit") !== -1) {
+      (async () => {
+        let result = await putGenerale("user", {
+          password: password,
+          username: username,
+          nome: nome,
+          cognome: cognome,
+          azienda: azienda,
+          email: email,
+          level: { id: level },
+          gruppo: { id: gruppo },
+        });
+        checkRichiesta(result);
+      })();
+    }
   };
 
   useEffect(() => {
@@ -338,10 +344,7 @@ function FormAddUtente() {
             className={classes.bottone}
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            {/* <button className="btn btn-primary" onClick={addUtente}>
-              Aggiungi
-            </button> */}
-            <ButtonClickedGreen size="medium" nome="Crea" onClick={addUtente} />
+            <ButtonClickedGreen disabled={functions.indexOf("user.edit") === -1} size="medium" nome="Crea" onClick={addUtente} />
             <Button
               component={NavLink}
               className="button-green-disactive"

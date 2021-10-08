@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
@@ -21,8 +19,7 @@ import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import { Paper, Typography } from "@material-ui/core";
 import SelectBar from "../../components/SelectBar";
 import CreaItem from "../../components/CreaItem";
-import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
+import { ButtonEditing, ButtonEditingTest } from "../../components/ButtonBarraNavigazione"
 
 const drawerWidth = 240;
 
@@ -183,56 +180,10 @@ function EditingTestCreaTestCase() {
             <NavbarItemEdit fontSize="large" />
           </div>
         </Container>
-        <div className={classes.buttonContainer}>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/linee"
-          >
-            LINEE
-          </Button>
-          <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/lineegeneratore"
-            >
-              LINEE GENERATORE
-            </Button>
-          {/* </NavLink> */}
 
-          {/* <NavLink exact to="/dashboard/testsuite"> */}
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/outboundproxy"
-          >
-            OUTBOUND PROXY
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/template"
-          >
-            TEMPLATE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/testcase"
-          >
-            TEST
-          </Button>
-        </div>
+        <ButtonEditing />
+        <ButtonEditingTest />
+
 
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Test Case" />

@@ -25,9 +25,12 @@ import Row from "react-bootstrap/Row";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 function LineeGeneratore() {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const [data, setData] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
   const [modifiedBy, setModifiedBy] = useState("");
@@ -43,76 +46,46 @@ function LineeGeneratore() {
   const [password, setPassword] = useState("");
   const [typeLinea, setTypeLinea] = useState();
   const [pathCSV, setPathCSV] = useState("");
-  const [caricamento, setCaricamento] = useState(false)
+  const [caricamento, setCaricamento] = useState(false);
+  const [version, setVersion] = useState(0);
+  const [scrittaTabella, setScrittaTabella] = useState("")
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  /*----Get Type Linea ------*/
+  //-------------------------LINEE GENERATORE API----------------
 
-  const getAppearLine = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const funzioneGetAll = () => {
+    if (functions.indexOf("lineagen.view") !== -1 && functions.indexOf("linea.view") !== -1) {
+      //----GET ALL LINEE----
+      (async () => {
+        setCaricamento(true);
+        setData((await getGenerale("lineageneratore")).list);
+        setCaricamento(false);
+      })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+      //-----GET APPEAR TYPE LINEA-----
+      (async () => {
+        setAppearLine((await getGenerale("typeLinea")).list);
+      })();
 
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLine(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
+      setScrittaTabella("Non è presente alcun dato da mostrare")
 
-  // -------get linea-----------
-
-  const getLineaGeneratore = () => {
-    setCaricamento(true)
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/lineageneratore`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-        setCaricamento(false)
-      })
-      .catch((error) => console.log("error", error));
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzarequesti dati")
+    }
   };
 
   useEffect(() => {
-    getLineaGeneratore();
-    getAppearLine();
+    funzioneGetAll();
   }, []);
 
-  //---------------------AGGIORNA LINEA GENERATORE-------------------------
+  //---------------------AGGIORNA LINEA API -------------------------
 
-  const aggiornaLineaGeneratore = () => {
-    ip = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
-
-    const invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-      var raw = JSON.stringify({
+  const funzioneAggiornaLinea = () => {
+    (async () => {
+      await postGenerale("lineageneratore", {
         id: id,
-        version: 1,
+        version: version,
         ip: ip,
         porta: porta,
         typeLinea: {
@@ -120,22 +93,13 @@ function LineeGeneratore() {
         },
       });
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
+      funzioneGetAll();
+    })();
+  };
 
-      fetch(`/api/lineageneratore`, requestOptions)
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response);
-          getLineaGeneratore();
-        })
-        .catch((error) => console.log("error", error));
-    };
-    if (ip !== "") invia();
+  const aggiornaLineaGeneratore = () => {
+    ip = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
+    if (ip !== "") funzioneAggiornaLinea();
   };
 
   const columns = [
@@ -144,14 +108,6 @@ function LineeGeneratore() {
       title: "IP Linea",
       field: "ip",
     },
-    // {
-    //   title: "Numero",
-    //   field: "numero",
-    // },{
-    //   title: "Password",
-    //   field: "password",
-    // },
-
     {
       title: "Porta",
       field: "porta",
@@ -183,7 +139,7 @@ function LineeGeneratore() {
     setNumero(rowData.numero);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
-
+    setVersion(rowData.version);
     var ipAppoggio = rowData.ip;
     ipAppoggio = ipAppoggio.split(".");
     setIp1(ipAppoggio[0].replace(".", ""));
@@ -214,28 +170,17 @@ function LineeGeneratore() {
     setOpenWarning(false);
   };
 
-  /*---------MODALE DELETE-------*/
+  /*--------- DELETE LINEA API ---------*/
+  const funzioneDelete = () => {
+    (async () => {
+      setCaricamento(true);
+      await deleteGenerale("lineageneratore", `${idElemento}`).result;
+      funzioneGetAll();
+    })();
+  };
 
   const functionDelete = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: idElemento,
-    });
-
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/lineageneratore`, requestOptions)
-      .then((response) => response.json())
+    deleteGenerale("lineageneratore", `${idElemento}`)
       .then((result) => {
         if (result.error !== null) {
           setOpenWarning(true);
@@ -243,27 +188,24 @@ function LineeGeneratore() {
             setWarning(
               "Impossibile eliminare la Linea Generatore poichè risulta collegata a uno o più Test Generatore"
             );
-            if (result.error.code === "LINEA-0008") {
-              setWarning(
-                "Impossibile eliminare una linea che non appartiene al proprio gruppo"
-              );
-            }
           } else {
             setWarning(
               "Codice errore: " +
-                result.error.code +
-                "Descrizione: " +
-                result.code.description
+              result.error.code +
+              " Descrizione: " +
+              result.code.description
             );
           }
         } else {
+          funzioneDelete();
           setOpenWarning(false);
-          getLineaGeneratore();
+          funzioneGetAll();
         }
       })
       .catch((error) => console.log("error", error));
     handleCloseDelete();
   };
+
 
   //------------ funzione apri modale
 
@@ -430,8 +372,6 @@ function LineeGeneratore() {
           exportButton: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -444,28 +384,29 @@ function LineeGeneratore() {
                 exact
                 to="/editing/linee/crealineageneratore"
                 startIcon={<AddIcon />}
+                disabled={ functions.indexOf("lineagen.create") === -1 || functions.indexOf("linea.view") === -1}
               >
                 LINEA GENERATORE{" "}
               </Button>
             ),
             tooltip: "Crea Linea",
-            // onClick: (event, rowData) => alert("Load Test Suite"),
             isFreeAction: true,
           },
           {
             icon: () => <EditIcon />,
-            tooltip: "Edit",
+            tooltip: "Modifica Linea",
             onClick: (event, rowData) => handleOpen(rowData),
-
+            disabled: functions.indexOf("lineagen.edit") === -1,
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Remove all selected test",
+            tooltip: "Elimina Linea",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
+            disabled: functions.indexOf("lineagen.delete") === -1
           },
         ]}
         localization={{
@@ -473,9 +414,7 @@ function LineeGeneratore() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-                "Non è presente alcun dato da mostrare"
-            ),
+            emptyDataSourceMessage: scrittaTabella,
           },
         }}
       />
@@ -667,27 +606,27 @@ function LineeGeneratore() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 {ip1 <= 255 &&
-                ip1 !== "" &&
-                ip1.length < 4 &&
-                ip2 <= 255 &&
-                ip2 !== "" &&
-                ip2.length < 4 &&
-                ip3 <= 255 &&
-                ip3 !== "" &&
-                ip3.length < 4 &&
-                ip4 <= 255 &&
-                ip4 !== "" &&
-                ip4.length < 4 &&
-                password !== "" &&
-                numero !== "" &&
-                porta !== "" &&
-                porta > 1000 &&
-                porta < 100000 ? (
+                  ip1 !== "" &&
+                  ip1.length < 4 &&
+                  ip2 <= 255 &&
+                  ip2 !== "" &&
+                  ip2.length < 4 &&
+                  ip3 <= 255 &&
+                  ip3 !== "" &&
+                  ip3.length < 4 &&
+                  ip4 <= 255 &&
+                  ip4 !== "" &&
+                  ip4.length < 4 &&
+                  password !== "" &&
+                  numero !== "" &&
+                  porta !== "" &&
+                  porta > 1000 &&
+                  porta < 100000 ? (
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
                     onClick={handleClose2}
-                    // disabled={handleBtn}
+                  // disabled={handleBtn}
                   />
                 ) : (
                   <ButtonClickedGreen

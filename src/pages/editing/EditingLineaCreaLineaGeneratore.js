@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
 import { Typography, Fade } from "@material-ui/core";
 import {
@@ -32,12 +30,19 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-import acccessControl from "../../service/url";
 import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
 import { useHistory } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
+import {
+  getGenerale,
+  postGenerale,
+  deleteGenerale,
+  putGenerale,
+  putFileCsv,
+} from "../../service/api";
+import { ButtonEditing, ButtonEditingLinee } from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -254,6 +259,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditingLineaCreaLineaGeneratore() {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const classes = useStyles();
   let history = useHistory();
 
@@ -264,87 +272,53 @@ function EditingLineaCreaLineaGeneratore() {
     setOpen(false);
   };
 
-  const getTypeId = () => {
-    var myHeaders = new Headers();
-
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    // console.log(bearer.toString());
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-      })
-      .catch((error) => console.log("error", error));
+  //-------------------------TYPE LINEA API ----------------
+  //---- GET ALL TYPE LINEA ----
+  const funzioneGetAll = () => {
+    if (functions.indexOf("linea.view") !== -1) {
+      (async () => {
+        setData((await getGenerale("typeLinea")).list);
+      })();
+    }
   };
-
+  //---- DELETE TYPE LINEA ----
+  // Aggiungere Warning appena sarà disponibile il codice d'errore (Vedi EditingLineeCreaLinea.js)
   const removeTypeLinea = (id) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: id,
-    });
-
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => getTypeId());
-
-    handleCloseRemove();
+    if (functions.indexOf("linea.delete") !== -1) {
+      (async () => {
+        await deleteGenerale("typeLinea", id).result;
+        funzioneGetAll();
+        handleCloseRemove();
+      })();
+    }
   };
 
-  const editTypeLinea = (typeLinea) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //----------AGGIORNA TYPELINEA API ----
+  const funzioneAggiornaTypeLinea = (typeLinea) => {
 
-    var raw = JSON.stringify({
-      id: typeLinea.id,
-      version: typeLinea.version,
-      descrizione:
-        typeLineaDescrizione !== ""
-          ? typeLineaDescrizione
-          : typeLinea.descrizione,
-    });
+    if (functions.indexOf("linea.edit") !== -1) {
+      (async () => {
+        await postGenerale("typeLinea", {
+          id: typeLinea.id,
+          version: typeLinea.version,
+          descrizione:
+            typeLineaDescrizione !== ""
+              ? typeLineaDescrizione
+              : typeLinea.descrizione,
+        });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+        funzioneGetAll();
+      })();
+    }
+  };
 
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        getTypeId();
-      });
+  const editTypeLinea = () => {
+    funzioneAggiornaTypeLinea(typeLineaId);
     handleCloseEdit();
   };
 
   useEffect(() => {
-    getTypeId();
+    funzioneGetAll();
   }, []);
 
   const [ip, setIp] = useState("");
@@ -359,35 +333,35 @@ function EditingLineaCreaLineaGeneratore() {
   const ipTotal = ip1 + "." + ip2 + "." + ip3 + "." + ip4;
 
   function salva() {
-    const Invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
+    const funzioneAggiungiLineaGeneratore = () => {
 
-      var formdata = new FormData();
-      formdata.append("ip", ipTotal);
-      formdata.append("porta", porta);
-      formdata.append("typeLinea.id", typeLineaId.id);
-      formdata.append("pathCSV", arrayValue[0], arrayValue[0].name);
+      if (functions.indexOf("lineagen.create") !== -1) {
+        let result = (async () => {
+          await putFileCsv(
+            "lineageneratore",
+            "ip",
+            ipTotal,
+            "porta",
+            porta,
+            "typeLinea.id",
+            typeLineaId.id,
+            "pathCSV",
+            arrayValue[0],
+            arrayValue[0].name
+          );
+          checkRichiesta(result);
+        })();
+      }
 
-      var requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: formdata,
-        redirect: "follow",
+      const checkRichiesta = (result) => {
+        if (result.error == null) {
+          history.push("/editing/lineegeneratore");
+        } else if (result.error.code === "LINEA-0003") {
+          document.getElementById("alertNumero2").style.display = "";
+        } else {
+          document.getElementById("alertNumero2").style.display = "none";
+        }
       };
-
-      fetch(`/api/lineageneratore`, requestOptions)
-        .then((response) => response.json())
-        .then((result) =>
-          result.error !== null
-            ? result.error.code === "LINEA-0003"
-              ? (document.getElementById("alertNumero2").style.display = "")
-              : ""
-            : history.push("/editing/lineegeneratore")
-        )
-        .catch((error) => console.log("error", error));
     };
 
     const aggiornaIP = () => {
@@ -405,7 +379,7 @@ function EditingLineaCreaLineaGeneratore() {
         document.getElementById("alertPorta").style.display = "none";
         document.getElementById("alertTypeLinea").style.display = "none";
         document.getElementById("alertIP2").style.display = "none";
-        Invia();
+        funzioneAggiungiLineaGeneratore();
       } else {
         document.getElementById("alertIP2").style.display = "";
       }
@@ -471,24 +445,21 @@ function EditingLineaCreaLineaGeneratore() {
     console.log(event.target.files);
   };
 
-  const handleSubmission = () => {};
+  const handleSubmission = () => { };
 
   const arrayValue = Object.values(selectedFile);
-  console.log(arrayValue);
 
   //----------------- DISABILITA BOTTONE ---------------------
 
   const [nextDisabled, setNextDisabled] = useState(true);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (arrayValue.length === 0) {
       setNextDisabled(true);
     } else {
       setNextDisabled(false);
     }
-
-  })
- 
+  });
 
   //--------------------MODALI TYPE LINEE---------------------------------
 
@@ -536,48 +507,44 @@ function EditingLineaCreaLineaGeneratore() {
     setTypeLineaId(result.id);
   };
 
-  const salva2 = () => {
-    const Invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-      var raw = JSON.stringify({
-        descrizione: type,
-      });
+  //----------CREA TYPELINEA API ----
 
-      var requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
+  const salva2 = () => {
+    const funzioneAggiungiTypeLinea = () => {
+      (async () => {
+        await putGenerale("typeLinea", {
+          descrizione: type,
+        }).result;
+        funzioneGetAll();
+      })();
+    };
+    const Invia = () => {
+
+      if (functions.indexOf("linea.edit") !== -1) {
+        putGenerale("typeLinea", {
+          descrizione: type,
+        })
+          .then((result) => {
+            if (result.error.code === null) {
+              return result;
+            } else if (result.error.code === "LINEA-0005") {
+              return alert("Non può essere creato un tipo linea già esistente");
+            }
+          })
+          .then((result) => {
+            funzioneAggiungiTypeLinea();
+            checkRichiesta(result.typeLinea);
+            funzioneGetAll();
+          })
+          .catch((error) => console.log("error", error));
       };
 
-      fetch(`/api/typeLinea`, requestOptions)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          } else if (response.status === 409) {
-            return alert("Non può essere creato un tipo linea già esistente");
-          }
-        })
-        .then((result) => {
-          checkRichiesta(result.typeLinea);
-          getTypeId();
-        })
-        .catch((error) => console.log("error", error));
-
-      // localStorage.setItem("user-info", JSON.stringify(result));
-      // history.push("/dashboard/testcase");
-      //window.location = "/editing/linee";
-    };
-
-    if (type !== "") {
-      Invia();
-      handleClose();
-      handleClose2();
-    } else {
+      if (type !== "") {
+        Invia();
+        handleClose();
+        handleClose2();
+      } else {
+      }
     }
   };
 
@@ -601,7 +568,6 @@ function EditingLineaCreaLineaGeneratore() {
         }}
         open={openDrawer}
       >
-        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -619,65 +585,9 @@ function EditingLineaCreaLineaGeneratore() {
             <NavbarItemEdit fontSize="large" />
           </div>
         </Container>
-        <div className={classes.buttonContainer}>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/linee"
-          >
-            LINEE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/outboundproxy"
-          >
-            OUTBOUND PROXY
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/template"
-          >
-            TEMPLATE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/testcase"
-          >
-            TEST
-          </Button>
 
-          <div className={classes.buttonTestContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/linee/crealinea"
-            >
-              LINEE SIMULATORE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/linee/crealineageneratore"
-            >
-              LINEE GENERATORE
-            </Button>
-          </div>
-        </div>
+        <ButtonEditing />
+        <ButtonEditingLinee />
 
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Linea Generatore" />
@@ -841,6 +751,7 @@ function EditingLineaCreaLineaGeneratore() {
                         color="primary"
                         startIcon={<AddIcon />}
                         size="small"
+                        disabled={functions.indexOf("linea.edit") === -1}
                       >
                         TYPE
                       </Button>
@@ -852,7 +763,7 @@ function EditingLineaCreaLineaGeneratore() {
                         color="secondary"
                         startIcon={<RemoveIcon />}
                         size="small"
-                        disabled={typeLineaId === 0 ? true : false}
+                        disabled={functions.indexOf("linea.delete") === -1 || typeLineaId === 0}
                       >
                         TYPE
                       </Button>
@@ -864,7 +775,7 @@ function EditingLineaCreaLineaGeneratore() {
                         style={{ backgroundColor: "#ffc107" }}
                         startIcon={<EditIcon />}
                         size="small"
-                        disabled={typeLineaId === 0 ? true : false}
+                        disabled={functions.indexOf("linea.edit") === -1 || typeLineaId === 0 ? true : false}
                       >
                         TYPE
                       </Button>
@@ -1159,7 +1070,7 @@ function EditingLineaCreaLineaGeneratore() {
               size="medium"
               nome="Crea"
               onClick={salva}
-              disabled={nextDisabled}
+              disabled={functions.indexOf("lineagen.create") === -1 || functions.indexOf("linea.view") === -1 || nextDisabled}
             />
             <Button
               component={NavLink}
@@ -1168,6 +1079,7 @@ function EditingLineaCreaLineaGeneratore() {
               to="/editing/linee"
               variant="contained"
               size="medium"
+              disabled={functions.indexOf("lineagen.create") === -1}
             >
               annulla
             </Button>

@@ -18,16 +18,18 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
-import { getGenerale, postGenerale, deleteGenerale} from "../service/api";
+import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 const GestioneUtenti = () => {
+
+  var functions = localStorage.getItem("funzioni").split(",");
 
   const [data, setData] = useState([]);
   const [appearGroup, setAppearGroup] = useState([]);
   const [appearLevel, setAppearLevel] = useState([]);
 
   const [id, setId] = useState(0);
-  const [version , setVersion] = useState(0)
+  const [version, setVersion] = useState(0)
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
   const [gruppo, setGruppo] = useState([]);
@@ -38,41 +40,52 @@ const GestioneUtenti = () => {
   const [levelId, setLevelId] = useState(0);
   const [email, setEmail] = useState("");
   const [caricamento, setCaricamento] = useState(false)
+  const [scrittaTabella, setScrittaTabella] = useState("")
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
-    //----GET ALL USERS----
-    (async () => {
-      setCaricamento(true)
-      setData((await getGenerale('user')).users);
-      setCaricamento(false)
-    })();
+    if (functions.indexOf("user.view") !== -1 && functions.indexOf("group.view") !== -1 && functions.indexOf("level.view") !== -1) {
+      //----GET ALL USERS----
+      (async () => {
+        setCaricamento(true)
+        setData((await getGenerale('user')).users);
+        setCaricamento(false)
+      })();
 
-    //-----GET APPEAR GROUP-----
-    (async () => {
-      setAppearGroup((await getGenerale('group')).gruppi);
-    })();
+      //-----GET APPEAR GROUP-----
+      (async () => {
+        setAppearGroup((await getGenerale('group')).gruppi);
+      })();
 
-    //-----GET APPEAR LEVEL-----
-    (async () => {
-      setAppearLevel((await getGenerale('level')).livelli);
-    })();
+      //-----GET APPEAR LEVEL-----
+      (async () => {
+        setAppearLevel((await getGenerale('level')).livelli);
+      })();
+      setScrittaTabella("Non è presente alcun dato da mostrare")
+
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzarequesti dati")
+    }
   }
 
   const funzioneAggiornaUtente = () => {
     //----AGGIORNA UTENTE----
-    (async () => {
-      setData((await postGenerale('user', {user:{id: id, version: version, azienda: azienda, username: username, cognome: cognome, nome: nome, email: email, levelId: levelId, gruppoId: gruppoId}})).users);
-      funzioneGetAll();
-    })();
+    if (functions.indexOf("user.edit") !== -1) {
+      (async () => {
+        setData((await postGenerale('user', { user: { id: id, version: version, azienda: azienda, username: username, cognome: cognome, nome: nome, email: email, level: { id: levelId }, gruppo: { id: gruppoId } } })).users);
+        funzioneGetAll();
+      })();
+    }
   }
 
   const funzioneDelete = (id) => {
-    (async () => {
-      setCaricamento(true)
-      await deleteGenerale("user", id)
-      funzioneGetAll();
-    })();
+    if (functions.indexOf("user.delete") !== -1) {
+      (async () => {
+        setCaricamento(true)
+        await deleteGenerale("user", id)
+        funzioneGetAll();
+      })();
+    }
   }
 
 
@@ -254,27 +267,28 @@ const GestioneUtenti = () => {
                   exact
                   to="/amministrazione/addutente"
                   startIcon={<AddIcon />}
+                  disabled={functions.indexOf("user.edit") === -1 || functions.indexOf("group.view") === -1 || functions.indexOf("level.view") === -1}
                 >
                   UTENTE
                 </Button>
               </div>
             ),
-            tooltip: "Load Test Suite",
-            //onClick: () => funzioneFor(),
+            tooltip: "Crea utente",
             isFreeAction: true,
           },
           rowData => (
             {
               icon: () => <EditIcon />,
-              tooltip: "Edit",
+              tooltip: "Modifica Utente",
               onClick: (event, rowData) => handleOpen(rowData),
               position: "row",
+              disabled: (functions.indexOf("user.edit") === -1)
             }),
           rowData => ({
             icon: 'delete',
             tooltip: 'Elimina Utente',
             onClick: (event, rowData) => funzioneDelete(rowData.id),
-            disabled: (rowData.level.nome === "ADMIN") || (rowData.username === localStorage.getItem("username"))
+            disabled: (functions.indexOf("user.delete") === -1 || rowData.level.nome === "ADMIN") || (rowData.username === localStorage.getItem("username"))
           }),
         ]}
         localization={{
@@ -283,7 +297,7 @@ const GestioneUtenti = () => {
           },
           body: {
             emptyDataSourceMessage: (
-              "Non è presente alcun dato da mostrare"
+              scrittaTabella
             ),
           },
         }}

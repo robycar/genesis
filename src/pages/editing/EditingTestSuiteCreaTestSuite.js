@@ -8,9 +8,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
 import { Typography, Fade } from "@material-ui/core";
 import {
@@ -25,9 +23,7 @@ import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Form from "react-bootstrap/Form";
-import ListItem from "@material-ui/core/ListItem";
 import SettingsIcon from "@material-ui/icons/Settings";
-import acccessControl from "../../service/url";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
 import Stepper from "@material-ui/core/Stepper";
@@ -37,6 +33,7 @@ import MaterialTable from "material-table";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { getGenerale, getByIdGenerale, putGenerale } from "../../service/api";
+import { ButtonEditing, ButtonEditingTest } from "../../components/ButtonBarraNavigazione"
 
 
 const drawerWidth = 240;
@@ -627,77 +624,9 @@ function EditingTestCreaTestSuite() {
             <NavbarItemEdit fontSize="large" />
           </div>
         </Container>
-        <div className={classes.buttonContainer}>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/linee"
-          >
-            LINEE
-          </Button>
 
-          {/* </NavLink> */}
-
-          {/* <NavLink exact to="/dashboard/testsuite"> */}
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/outboundproxy"
-          >
-            OUTBOUND PROXY
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/template"
-          >
-            TEMPLATE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/testcase"
-          >
-            TEST
-          </Button>
-          <div className={classes.buttonTestContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/testcreatestcase"
-            >
-              TEST CASE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/testsuite/creaTestSuite"
-            >
-              TEST SUITE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/testgeneratore"
-            >
-              TEST GENERATORE
-            </Button>
-          </div>
-        </div>
+        <ButtonEditing />
+        <ButtonEditingTest />
 
         {/* ----------------------------CREA TEST SUITE---------------------------------------- */}
 
@@ -800,7 +729,7 @@ function EditingTestCreaTestSuite() {
                           <VisibilityIcon />
                         </a>
                       ),
-                      tooltip: "Visualizza tutti i dati",
+                      tooltip: "Visualizza Test Suite",
                       position: "row",
                       onClick: (event, rowData) => handleOpen(rowData),
                     },

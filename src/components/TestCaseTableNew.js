@@ -451,7 +451,7 @@ function TestCaseTable() {
                 </Button>
               </div>
             ),
-            tooltip: "Load Test Case",
+            tooltip: "Crea Test Case",
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
@@ -461,19 +461,19 @@ function TestCaseTable() {
                 <VisibilityIcon />
               </a>
             ),
-            tooltip: "Visualizza tutti i dati",
+            tooltip: "Visualizza Test Case",
             position: "row",
             onClick: (event, rowData) => openVisualizza(rowData),
           },
           {
             icon: () => <EditIcon />,
-            tooltip: "Modifica",
+            tooltip: "Modifica Test Case",
             onClick: (event, rowData) => openModifica(rowData),
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Remove all selected test",
+            tooltip: "Elimina Test Case",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
@@ -485,7 +485,7 @@ function TestCaseTable() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: "Non Ã¨ presente alcun dato da mostrare",
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
       />

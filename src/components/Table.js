@@ -257,7 +257,7 @@ const TotalTestSuiteConclusi = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [version, setVersion] = useState();
   const [openTestCase, SetOpenTestCase] = React.useState(false);
-  const [DataTestCases, setDataTestCases] = useState();
+  const [dataTestCases, setDataTestCases] = useState();
   const arrayTestCase = testSuite?.testCases;
   const [appearTest, setAppearTest] = useState([]);
   const [openExport, setOpenExport] = useState(false);
@@ -267,9 +267,7 @@ const TotalTestSuiteConclusi = () => {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const [openGrafico, setOpenGrafico] = useState(false);
-
   const [prova, setProva] = useState([]);
-
   const setTestCaseAssociati = (testsuite) => {
     let x = [];
 
@@ -326,7 +324,7 @@ const TotalTestSuiteConclusi = () => {
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
     // setOpen(true);
-    getTestSuiteById(rowData.id);
+    getTestSuiteCompleteById(rowData.id);
   };
 
   const handleClose = () => {
@@ -385,7 +383,7 @@ const TotalTestSuiteConclusi = () => {
   };
 
   const handleCloseTestCase = () => {
-    getTestSuiteById(id);
+    getTestSuiteCompleteById(id);
     SetOpenTestCase(false);
   };
 
@@ -393,7 +391,7 @@ const TotalTestSuiteConclusi = () => {
 
   //------------------------- GET TEST SUITE BY ID ------------------------------
 
-  const getTestSuiteById = (id) => {
+  const getTestSuiteCompleteById = (id) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -405,7 +403,7 @@ const TotalTestSuiteConclusi = () => {
       redirect: "follow",
     };
 
-    fetch(`/api/testsuite/` + id, requestOptions)
+    fetch(`/api/testsuite/loaded/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setTestSuite(result.testSuite);
@@ -417,40 +415,40 @@ const TotalTestSuiteConclusi = () => {
   };
 
   //-----------GET TEST SUITE COMPLETE----------------------
-  // const getAllTestSuiteComplete = () => {
-  //   var consta = "COMPLETED";
+  const getAllTestSuiteComplete = () => {
+    var consta = "COMPLETED";
 
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Content-Type", "application/json");
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   var raw = JSON.stringify({
-  //     includeTestCaseOfType: null,
-  //     includeTestSuiteOfType: consta,
-  //     includeTestGeneratoreOfType: null,
-  //   });
+    var raw = JSON.stringify({
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: consta,
+      includeTestGeneratoreOfType: null,
+    });
 
-  //   var requestOptions = {
-  //     method: "POST",
-  //     headers: myHeaders,
-  //     body: raw,
-  //     redirect: "follow",
-  //   };
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
-  //   fetch(`/api/dashboard/info`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       //setAppearTest(result.testCaseList);
-  //       setData(result.testSuiteList);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        //setAppearTest(result.testCaseList);
+        setData(result.testSuiteList);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   useEffect(() => {
-    //getAllTestSuiteComplete();
+    getAllTestSuiteComplete();
     getAllTestSuite();
     //getAllTestCase();
     getAllTestCaseAssociati();

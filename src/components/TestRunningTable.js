@@ -22,6 +22,9 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 
 import loading from "../../src/assets/load.gif";
+import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const TestRunningTable = () => {
   const [filter, setFilter] = useState(false);
@@ -395,34 +398,36 @@ const TestRunningTable = () => {
         actions={[
           {
             icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Report",
+            tooltip: "Mostra Report",
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
           },
           {
-            icon: "play_circle_outlined",
-            tooltip: "Launch",
+            icon: () => <PlayCircleOutlineIcon />,
+            tooltip: "Lancio",
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
           },
           {
-            icon: "delete",
-            tooltip: "Delete all selected row",
-            onClick: () => alert("Ho cancellato le righe"),
+            icon: () => <DeleteIcon />,
+            tooltip: "Elimina Test",
+            onClick: (event, rowData) =>
+            alert("Api delete da inserire"),
+            position: "row",
           },
           {
             icon: () => <FilterListIcon />,
-            tooltip: "Hide/Show Filter option",
+            tooltip: "Filtro",
             isFreeAction: true,
             onClick: () => handleChange(),
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Carica Test Case",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },

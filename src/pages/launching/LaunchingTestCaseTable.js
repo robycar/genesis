@@ -55,10 +55,9 @@ function LaunTestCaseTable() {
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
-
   const [idToRun, setIdToRun] = useState();
-  const [dataLoad, setTestCaseLoad] = useState(null);
-  const [dataRun, setIdTestCaseRun] = useState(null);
+  const [testCaseLoad, setTestCaseLoad] = useState(null);
+  const [idTestCaseRun, setIdTestCaseRun] = useState(null);
   const [openRun, setOpenRun] = React.useState(false);
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -85,6 +84,7 @@ function LaunTestCaseTable() {
       })
       .catch((error) => console.log("error", error));
   };
+
 
   //-----------GET TEST CASE BY ID----------------------
   const getTestCaseById = (id) => {
@@ -127,6 +127,7 @@ function LaunTestCaseTable() {
       })
       .catch((error) => console.log("error", error));
   };
+
   //--------------GET OBP------------------------------
   const getAppearOBP = () => {
     var myHeaders = new Headers();
@@ -331,12 +332,12 @@ function LaunTestCaseTable() {
           setOpenWarning(true);
           if (result.error === "TEST-0009") {
             setWarning(
-              "Non Ã¨ possibile eliminare un test case che non appartiene al proprio gruppo"
+              "Non è possibile eliminare un test case che non appartiene al proprio gruppo"
             );
           }
           if (result.error === "Internal Server Error") {
             setWarning(
-              "Non Ã¨ possibile eliminare un test case che Ã¨ legato a una o piÃ¹ Test Suite"
+              "Non è possibile eliminare un test case che Ã¨ legato a una o piÃ¹ Test Suite"
             );
           } else {
             setWarning(
@@ -404,21 +405,22 @@ function LaunTestCaseTable() {
   };
 
   const runCaseLoder = () => {
-    runTestCase(idToRun);
+    runTestCase(testCaseLoad);
     handleCloseRun();
     //alert("Run test id :  "+ idToRun);
   };
 
-  const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_);
+  const handleOpenRun = (idRun) => {
+    loadTestCase(idRun);
+    setIdToRun(idRun);
     setOpenRun(true);
     setOpen(false);
   };
 
   const hadleLoadData = (rowDataaa) => {
     //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
-    loadTestCase(idToRun);
+    setIdToRun(rowDataaa.id);
+    //loadTestCase(idToRun);
     runCaseLoder(rowDataaa.id);
   };
 
@@ -457,7 +459,7 @@ function LaunTestCaseTable() {
     invia();
   };
 
-  //LOAD AND RUN TEST CASE
+  //-------------------- LOAD TEST CASE ---------------
   const loadTestCase = (id) => {
     var urlLoad = `/api/testcase/load/${id}`;
 
@@ -476,10 +478,14 @@ function LaunTestCaseTable() {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        setTestCaseLoad(result.list);
+        setTestCaseLoad(result.testCaseCaricato.id);
       })
       .catch((error) => console.log("error", error));
   };
+
+  console.log(testCaseLoad, "id test case caricato");
+
+  //------------------- RUN TEST CASE ------------------
 
   const runTestCase = (idRun) => {
     var urlLoad = `/api/testcase/runloaded/${idRun}`;
@@ -509,6 +515,7 @@ function LaunTestCaseTable() {
     getAppearLine();
     getAppearOBP();
   }, [chiamanti]);
+
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
   const useStyles = makeStyles((theme) => ({
@@ -599,6 +606,15 @@ function LaunTestCaseTable() {
       padding: "5%",
       height: "fit-content",
       width: 800,
+      position: "relative",
+    },
+    paperModaleLaunch: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 500,
       position: "relative",
     },
     contenutoModale: {
@@ -698,7 +714,7 @@ function LaunTestCaseTable() {
                             </div>*/
               <div></div>
             ),
-            tooltip: "Load Test Case",
+            tooltip: "Crea Test Case",
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
@@ -708,7 +724,7 @@ function LaunTestCaseTable() {
                 <VisibilityIcon />
               </a>
             ),
-            tooltip: "Visualizza tutti i dati",
+            tooltip: "Visualizza Test Case",
             position: "row",
             onClick: (event, rowData) => openVisualizza(rowData),
           },
@@ -728,7 +744,7 @@ function LaunTestCaseTable() {
                      },*/
           {
             icon: () => <PlayCircleFilledIcon />,
-            tooltip: "Run Test Case",
+            tooltip: "Lancia Test Case",
             onClick: (event, rowData) => handleOpenRun(rowData.id),
           },
         ]}
@@ -1243,7 +1259,7 @@ function LaunTestCaseTable() {
         }}
       >
         <Fade in={openRun}>
-          <Paper className={classes.paperModale} elevation={1}>
+          <Paper className={classes.paperModaleLaunch} elevation={1}>
             <div>
               <ListItem button>
                 <ListItemIcon>

@@ -121,12 +121,12 @@ function Navbar() {
 
   let history=useHistory()
   
-
   const logOut = () => {
     localStorage.setItem("token", "");
     localStorage.setItem("username", "");
     localStorage.setItem("livello", "");
     localStorage.setItem("gruppo", "");
+    localStorage.setItem("funzioni", "");
     history.push("/");
   };
   return (

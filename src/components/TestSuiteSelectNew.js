@@ -534,7 +534,7 @@ function TestSuiteSelect() {
                 </Button>
               </div>
             ),
-            tooltip: "Load Test Case",
+            tooltip: "Crea Test Case",
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
@@ -544,19 +544,19 @@ function TestSuiteSelect() {
                 <VisibilityIcon />
               </a>
             ),
-            tooltip: "Visualizza tutti i dati",
+            tooltip: "Visualizza Test Case",
             position: "row",
             onClick: (event, rowData) => openVisualizza(rowData),
           },
           {
             icon: () => <EditIcon />,
-            tooltip: "Modifica",
+            tooltip: "Modifica Terst Case",
             onClick: (event, rowData) => openModifica(rowData),
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Remove all selected test",
+            tooltip: "Elimina Test Case",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);

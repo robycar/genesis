@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
@@ -19,9 +17,8 @@ import {
 import { Paper } from "@material-ui/core";
 import ViewGruppo from "../../components/ViewGruppo";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
-import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
+import { ButtonAmministrazione } from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -132,7 +129,7 @@ function AmministrazioneViewGruppo() {
         }}
         open={open}
       >
-        
+
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -150,44 +147,8 @@ function AmministrazioneViewGruppo() {
             <NavbarItemAdmin fontSize="large" />
           </div>
 
-          <div className={classes.buttonContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/utenze"
-            >
-              UTENZE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/ruoli"
-            >
-              RUOLI
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/autorizzazioni"
-            >
-              AUTORIZZAZIONI
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/gruppo"
-            >
-              GRUPPO
-            </Button>
-          </div>
+          <ButtonAmministrazione />
+
           <Paper className={classes.paper}>
             <ViewGruppo />
           </Paper>

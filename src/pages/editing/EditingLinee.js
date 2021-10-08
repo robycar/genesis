@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
@@ -19,10 +17,9 @@ import {
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
 import LineeNew from "../../components/LineeNew";
-import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import LanguageIcon from "@material-ui/icons/Language";
+import { ButtonEditing, ButtonEditingLinee } from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -134,6 +131,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditingLinee() {
+  
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerClose = () => {
@@ -174,74 +172,8 @@ function EditingLinee() {
             <NavbarItemEdit fontSize="large" />
           </div>
 
-          <div className={classes.buttonContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/linee"
-            >
-              LINEE
-            </Button>
-            {/* <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/lineegeneratore"
-            >
-              LINEE GENERATORE
-            </Button> */}
-            {/* </NavLink> */}
-
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/outboundproxy"
-            >
-              OUTBOUND PROXY
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/template"
-            >
-              TEMPLATE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/testcase"
-            >
-              TEST
-            </Button>
-          </div>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/linee"
-          >
-            LINEE SIMULATORE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/lineegeneratore"
-          >
-            LINEE GENERATORE
-          </Button>
+          <ButtonEditing />
+          <ButtonEditingLinee />
 
           <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>

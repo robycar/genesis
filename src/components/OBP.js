@@ -22,7 +22,7 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 // import { version } from "react-dom";
 import { identifier } from "@babel/types";
-
+import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 function Obp() {
   const [data, setData] = useState([]);
@@ -37,30 +37,26 @@ function Obp() {
   const [typeLinea, setTypeLinea] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [version, SetVersion] = React.useState(0);
-  const [caricamento, setCaricamento] = useState(false)
+  const [caricamento, setCaricamento] = useState(false);
 
-  /*----Get Type Linea ------*/
+  //-------------------------OBP API----------------
 
-  const getAppearLine = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //-----------GET ----------------------
+  const funzioneGetAll = () => {
+    //----GET ALL LINEE----
+    (async () => {
+      setCaricamento(true);
+      setData((await getGenerale("obp")).list);
+      setCaricamento(false);
+    })();
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLine(result.list);
-      })
-      .catch((error) => console.log("error", error));
+    //-----GET APPEAR TYPE LINEA-----
+    (async () => {
+      setAppearLine((await getGenerale("typeLinea")).list);
+    })();
   };
 
+  
   const aggiornaUtente = () => {
     const invia = () => {
       var myHeaders = new Headers();
@@ -93,7 +89,7 @@ function Obp() {
       fetch(`/api/obp`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-          getObp();
+          funzioneGetAll();
         })
         .catch((error) => console.log("error", error));
     };
@@ -171,37 +167,15 @@ function Obp() {
     {
       title: "Versione",
       field: "version",
+      hidden: true,
     },
   ];
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   useEffect(() => {
-    getObp();
-    getAppearLine();
+    funzioneGetAll();
   }, []);
-
-  const getObp = () => {
-    setCaricamento(true)
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/obp`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-        setCaricamento(false)
-      })
-      .catch((error) => console.log("error", error));
-  };
 
   const handleOpen = (rowData) => {
     setId(rowData.id);
@@ -311,7 +285,7 @@ function Obp() {
           }
         } else {
           setOpenWarning(false);
-          getObp();
+          funzioneGetAll();
           //resolve();
         }
       })
@@ -509,20 +483,20 @@ function Obp() {
                 Outbound Proxy{" "}
               </Button>
             ),
-            tooltip: "Crea Obp",
+            tooltip: "Crea Outbound Proxy",
             // onClick: (event, rowData) => alert("Load Test Suite"),
             isFreeAction: true,
           },
           {
             icon: () => <EditIcon />,
-            tooltip: "Edit",
+            tooltip: "Modifica Outbound Proxy",
             onClick: (event, rowData) => handleOpen(rowData),
 
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Remove all selected OBP",
+            tooltip: "Elimina Outbound Proxy",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
@@ -534,9 +508,7 @@ function Obp() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-                "Non è presente alcun dato da mostrare"
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
       />
@@ -671,7 +643,7 @@ function Obp() {
 
                 <Col className={classes.colIp}>
                   <TextField
-                  className={classes.textField}
+                    className={classes.textField}
                     select
                     label="Tipo Linea"
                     value={appearLine.id}

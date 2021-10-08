@@ -11,7 +11,7 @@ import TextField from "@material-ui/core/TextField";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined';
+import PieChartOutlinedIcon from "@mui/icons-material/PieChartOutlined";
 import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -74,7 +74,7 @@ const TestSuiteComplete = () => {
       field: "pathInstance",
       render: () => (
         <IconButton>
-          <PostAddOutlinedIcon onClick={(event)=> alert("Show Report")}/>
+          <PostAddOutlinedIcon onClick={(event) => alert("Show Report")} />
         </IconButton>
       ),
     },
@@ -94,7 +94,6 @@ const TestSuiteComplete = () => {
     {
       title: "Descrizione",
       field: "descrizione",
-      
     },
     // {
     //   title: "Durata Attesa",
@@ -261,7 +260,7 @@ const TestSuiteComplete = () => {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const [openGrafico, setOpenGrafico] = useState(false);
-  const [dataTaTestCases, setDataTestCases] = useState();
+  const [dataTestCases, setDataTestCases] = useState();
 
   const [prova, setProva] = useState([]);
 
@@ -321,7 +320,7 @@ const TestSuiteComplete = () => {
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
     // setOpen(true);
-    getTestSuiteById(rowData.id);
+    getTestSuiteCompletedById(rowData.id);
   };
 
   const handleClose = () => {
@@ -351,46 +350,45 @@ const TestSuiteComplete = () => {
     setValue(newValue);
   };
 
-  const testCaseLoader = () => {
-    loadTestCase(id);
-    handleClose();
-    getAllTestCase();
-  };
+  // const testCaseLoader = () => {
+  //   loadTestCase(id);
+  //   handleClose();
+  //   getAllTestCase();
+  // };
 
-  const runCaseLoder = () => {
-    runTestCase(idToRun);
-    handleCloseRun();
-    //alert("Run test id :  "+ idToRun);
-  };
+  // const runCaseLoder = () => {
+  //   runTestCase(idToRun);
+  //   handleCloseRun();
+  //   //alert("Run test id :  "+ idToRun);
+  // };
 
   const openVisualizza = (rowData) => {
+    //getTestSuiteById();
     handleOpen(rowData);
   };
 
   const handleOpenGrafico = () => {
     setOpenGrafico(true);
-  }
+  };
 
   const handleCloseGrafico = () => {
     setOpenGrafico(false);
-  }
+  };
 
   const handleOpenTestCase = () => {
     SetOpenTestCase(true);
   };
 
   const handleCloseTestCase = () => {
-    getTestSuiteById(id);
+    getTestSuiteCompletedById(id);
     SetOpenTestCase(false);
   };
 
- 
-
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  //------------------------- GET TEST SUITE BY ID ------------------------------
+  //------------------------- GET TEST SUITE COMPLETED BY ID ------------------------------
 
-  const getTestSuiteById = (id) => {
+  const getTestSuiteCompletedById = (id) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -402,7 +400,7 @@ const TestSuiteComplete = () => {
       redirect: "follow",
     };
 
-    fetch(`/api/testsuite/` + id, requestOptions)
+    fetch(`/api/testsuite/loaded/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setTestSuite(result.testSuite);
@@ -414,99 +412,55 @@ const TestSuiteComplete = () => {
   };
 
   //-----------GET TEST SUITE COMPLETE----------------------
-  // const getAllTestSuiteComplete = () => {
-  //   var consta = "COMPLETED";
+  const getAllTestSuiteComplete = () => {
+    var consta = "COMPLETED";
 
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: consta,
+      includeTestGeneratoreOfType: null,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        //setAppearTest(result.testCaseList);
+        setData(result.testSuiteList);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  //-------------   GET TEST SUITE BY ID -------------
+
+  // const getTestSuiteById = () => {
   //   var myHeaders = new Headers();
   //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Content-Type", "application/json");
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   var raw = JSON.stringify({
-  //     includeTestCaseOfType: null,
-  //     includeTestSuiteOfType: consta,
-  //     includeTestGeneratoreOfType: null,
-  //   });
 
   //   var requestOptions = {
-  //     method: "POST",
+  //     method: "GET",
   //     headers: myHeaders,
-  //     body: raw,
   //     redirect: "follow",
   //   };
 
-  //   fetch(`/api/dashboard/info`, requestOptions)
+  //   fetch(`/api/testsuite/${id}`, requestOptions)
   //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       //setAppearTest(result.testCaseList);
-  //       setData(result.testSuiteList);
-  //     })
+  //     .then((result) => console.log(result))
   //     .catch((error) => console.log("error", error));
   // };
-
-  useEffect(() => {
-    //getAllTestSuiteComplete();
-    getAllTestSuite();
-    getAllTestCase();
-  }, []);
-
-  /*--------------- LOAD TEST CASE -------------------*/
-
-  const loadTestCase = (id) => {
-    var urlLoad = `/api/testcase/load/${id}`;
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setTestCaseLoad(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  /*--------------- RUN TEST CASE -------------------*/
-
-  const runTestCase = (idRun) => {
-    var urlLoad = `/api/testcase/runloaded/${idRun}`;
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setIdTestCaseRun(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  const hadleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
-    runCaseLoder(rowDataaa.id);
-  };
 
   /*--------------- GET TEST CASE -------------------*/
 
@@ -532,8 +486,8 @@ const TestSuiteComplete = () => {
       .catch((error) => console.log("error", error));
   };
 
-   //-----------GET TEST CASE ASSOCIATI----------------------
-   const getAllTestCase = () => {
+  //-----------GET TEST CASE ASSOCIATI----------------------
+  const getAllTestCase = () => {
     //setCaricamento2(true);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -555,28 +509,35 @@ const TestSuiteComplete = () => {
       .catch((error) => console.log("error", error));
   };
 
-   //-----------GET TEST SUITE----------------------
-   const getAllTestSuite = () => {
-    setCaricamento(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //-----------GET TEST SUITE----------------------
+  // const getAllTestSuite = () => {
+  //   setCaricamento(true);
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
 
-    fetch(`/api/testsuite`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-        setCaricamento(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  //   fetch(`/api/testsuite`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setData(result.list);
+  //       setCaricamento(false);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
+
+  useEffect(() => {
+    getAllTestSuiteComplete();
+    //getAllTestSuite();
+    getAllTestCase();
+    //getTestSuiteCompletedById();
+  }, []);
 
   const tableIcons = {
     Export: React.forwardRef((props, ref) => (
@@ -589,8 +550,7 @@ const TestSuiteComplete = () => {
   return (
     <div>
       <MaterialTable
-              icons={tableIcons}
-
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Ultimi 30 Test Suite Completi"
         data={data}
@@ -630,7 +590,7 @@ const TestSuiteComplete = () => {
                 <VisibilityIcon />
               </a>
             ),
-            tooltip: "Visualizza tutti i dati",
+            tooltip: "Visualizza Test Suite",
             position: "row",
             onClick: (event, rowData) => openVisualizza(rowData),
           },
@@ -640,7 +600,7 @@ const TestSuiteComplete = () => {
                 <PieChartOutlinedIcon />
               </a>
             ),
-            tooltip: "Visualizza grafico",
+            tooltip: "Visualizza Grafico",
             position: "row",
             onClick: (event, rowData) => handleOpenGrafico(rowData),
           },
@@ -920,8 +880,6 @@ const TestSuiteComplete = () => {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                 
-
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseTestCase}
@@ -955,31 +913,33 @@ const TestSuiteComplete = () => {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                  Test Case KO-OK
+                    Test Case KO-OK
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
 
               <Form className={classes.contenutoModale}>
-              <div className={classes.chart}>
-                <ChartReport />
-              </div>
+                <div className={classes.chart}>
+                  <ChartReport />
+                </div>
               </Form>
               <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
-                
+
                 <div
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                 <Button
+                  <Button
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseGrafico}
                     size="medium"
                     color="primary"
                     variant="outlined"
-                  > Chiudi
+                  >
+                    {" "}
+                    Chiudi
                   </Button>
                 </div>
               </div>
@@ -987,7 +947,6 @@ const TestSuiteComplete = () => {
           </div>
         </Fade>
       </Modal>
-
     </div>
   );
 };

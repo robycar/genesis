@@ -7,7 +7,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import logo from "../../src/assets/genesisLogin.png";
-//import logo from "../../src/assets/logoReply.png";
 import { login } from "../service/api";
 import Alert from "@material-ui/lab/Alert";
 import { useHistory } from "react-router-dom";
@@ -17,7 +16,6 @@ import Fade from "@material-ui/core/Fade";
 import SignUp from "./SignUp";
 import { Link } from "@material-ui/core";
 import ForgotPassword from "./ForgotPassword";
-import { ruolo } from "../service/api";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -124,13 +122,9 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // function userLogin() {
-  //   login(username, password);
-  // }
 
   useEffect(() => {
     if (localStorage.getItem("user-info")) {
-      // history.push("/dashboard/testcase");
     }
   }, []);
 
@@ -156,6 +150,7 @@ export default function Login() {
       localStorage.setItem("username", result.username);
       localStorage.setItem("livello", result.currentRole);
       localStorage.setItem("gruppo", result.currentGroup);
+      localStorage.setItem("funzioni", result.functions);
 
       timer();
 

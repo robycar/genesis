@@ -2,29 +2,57 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 //import Title from "./Title";
+import { useEffect, useState } from "react";
+import { postGenerale } from "../service/api";
 
 const useStyles = makeStyles({
   title: {
-    color: "#1665D8",
-    fontWeight: 700,
-    fontSize: "18px",
+    color: "#E2783C",
+    fontWeight: 800,
+    fontSize: "15px",
     lineHeight: "20px",
     fontStyle: "normal",
     marginBottom: "20px",
     textAlign: "center",
   },
+
   secondTitle: {
-    marginBottom: "20px",
+    marginBottom: "10px",
     textAlign: "center",
+    fontSize: "15px",
   },
   thirdTitle: {
-    marginBottom: "20px",
+    marginBottom: "10px",
     textAlign: "center",
   },
 });
 
 export default function TotalPlannedDaylyTestSuite() {
   const classes = useStyles();
+
+  const [dataGiorni, setDataGiorni] = useState([]);
+  const [dataSettimana, setDataSettimana] = useState([]);
+
+  const objDashInfoTestCase = {
+    "includeRiepilogoTestCase": null,
+    "includeRiepilogoTestSuite": true,
+    "includeTestCaseOfType": null,
+    "includeTestSuiteOfType": "COMPLETED",
+    "includeTestGeneratoreOfType": null
+  };
+
+  const getDataForTestCase = () => {
+    (async () => {
+      setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestSuiteGiorno);
+      //setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestCaseSettimana);
+    })();
+  }
+
+  useEffect(() => {
+    getDataForTestCase();
+  }, []);
+
+
   return (
     <React.Fragment>
       <Typography className={classes.title}>
@@ -37,6 +65,9 @@ export default function TotalPlannedDaylyTestSuite() {
         className={classes.secondTitle}
       >
         % COMPLETATI
+        <Typography>
+          <h5>{dataGiorni?.completate}</h5>
+        </Typography>
       </Typography>
       <Typography
         color="textSecondary"
@@ -45,6 +76,9 @@ export default function TotalPlannedDaylyTestSuite() {
         className={classes.secondTitle}
       >
         % SUCCESSO
+        <Typography>
+          <h5>{dataGiorni?.testOK}</h5>
+        </Typography>
       </Typography>
       {/* <div>
         <Link color="primary" href="#" onClick={preventDefault}>

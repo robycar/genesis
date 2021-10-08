@@ -4,9 +4,11 @@ import Modal from "@material-ui/core/Modal";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
+import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import SelectBar from "./SelectBar";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
@@ -14,6 +16,12 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import "../styles/App.css";
 import acccessControl from "../service/url.js";
 import { NavLink } from "react-router-dom";
+import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
+import { Divider } from "@material-ui/core";
+import Select from "@material-ui/core/Select";
+import { MenuItem } from "@material-ui/core";
+import FormControl from "@material-ui/core/FormControl";
+import Form from "react-bootstrap/Form";
 
 const TestSuiteConclusiTable = () => {
   const [filter, setFilter] = useState(false);
@@ -23,7 +31,12 @@ const TestSuiteConclusiTable = () => {
   const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
+  const [idTest, setIdTest] = useState();
   const [openReport, setOpenReport] = React.useState(false);
+  const [testSuiteLoad, setTestSuiteLoad] = useState(null);
+  const [dataInizio, setDataInizio] = useState();
+  const [orarioInizio, setOrarioInizio] = useState();
+  const [delay, setDelay] = useState();
 
   const columns = [
     {
@@ -37,33 +50,36 @@ const TestSuiteConclusiTable = () => {
     },
     {
       title: "Loader",
-      field: "createdBy",
+      field: "loadedBy",
     },
     {
       title: "Data Inizio",
-      field: "creationDate",
+      field: "startDate",
     },
     {
       title: "Data Fine",
-      field: "modifiedDate",
+      field: "endDate",
     },
     {
       title: "Status",
-      field: "trace",
+      field: "stato",
     },
-    {
-      title: "Trace",
-      field: "trace",
-    },
+    // {
+    //   title: "Trace",
+    //   field: "trace",
+    // },
     {
       title: "Call-Id",
-      field: "trace",
+      field: "loadedBy",
     },
     {
       title: "Report",
       field: "report",
       render: (rowData) => (
-        <Button color="secondary" onClick={() => handleOpenReport()}>
+        <Button
+          color="secondary"
+          onClick={() => handleOpenReport(rowData.testSuite.id)}
+        >
           report
         </Button>
       ),
@@ -97,6 +113,15 @@ const TestSuiteConclusiTable = () => {
       width: 700,
       position: "relative",
     },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
     paperTop: {
       height: "20%",
       display: "flex",
@@ -110,8 +135,18 @@ const TestSuiteConclusiTable = () => {
       flexDirection: "column",
       marginTop: "5%",
     },
+    paperModale: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
     divSelectBar: {
-      marginTop: "25px",
+      marginTop: "5%",
+      marginBottom: "5%",
     },
     selectBar: {
       width: "50%",
@@ -123,8 +158,9 @@ const TestSuiteConclusiTable = () => {
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
+      display: "flex",
       flexDirection: "row",
+      alignItems: "center",
     },
     icon: {
       transform: "scale(1.8)",
@@ -139,11 +175,59 @@ const TestSuiteConclusiTable = () => {
       marginTop: "4%",
       marginBottom: "2%",
     },
+    typography: {
+      marginTop: "3%",
+      marginBottom: "3%",
+      // paddingLeft: "16px"
+    },
+    bottone: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: "6%",
+      justifyContent: "center",
+
+      // marginBottom: "2%",
+    },
+    select: {
+      width: "400px",
+    },
   }));
 
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
+  const [openSchedula, setOpenSchedula] = React.useState(false);
+  const [appearTest, setAppearTest] = useState([]);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  //------------ funzione apri modale
+
+  const handleOpenDelete = (rowData) => {
+    setId(rowData.id);
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  const handleOpenSchedula = () => {
+    setOpenSchedula(true);
+    setOpen(false);
+  };
+
+  const handleCloseSchedula = () => {
+    setOpenSchedula(false);
+  };
+
+  const testSuiteLoader = () => {
+    loadTestSuite(id);
+    handleClose();
+    console.log("testSuite Loader");
+    getAllTestSuite();
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -168,9 +252,48 @@ const TestSuiteConclusiTable = () => {
     bearer = bearer.replace(/"/g, "");
   }
 
-  const [appearTest, setAppearTest] = useState([]);
-
+  //-----------GET TEST CASE----------------------
   const getAllTestSuite = () => {
+    var consta = "COMPLETED";
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: consta,
+      includeTestGeneratoreOfType: null,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        //setAppearTest(result.testCaseList);
+        setData(result.testSuiteList);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestSuite();
+  }, []);
+
+  /*--------------- FUNZIONE CARICA TEST SUITE -------------------*/
+
+  const loadTestSuite = (id) => {
+    var urlLoad = `/api/testsuite/load/${id}`;
+
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -182,12 +305,11 @@ const TestSuiteConclusiTable = () => {
       redirect: "follow",
     };
 
-    fetch(`/api/testsuite`, requestOptions)
+    fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        setAppearTest(result.list);
-        setData(result.list);
+        setTestSuiteLoad(result.list);
       })
       .catch((error) => console.log("error", error));
   };
@@ -222,17 +344,26 @@ const TestSuiteConclusiTable = () => {
             position: "row",
           },
           {
-            icon: "play_circle_outlined",
-            tooltip: "Launch",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            icon: () => <DeleteIcon />,
+            tooltip: "Elimina il Test",
+            onClick: (event, rowData) => {
+              handleOpenDelete(rowData);
+              setIdTest(rowData.id);
+            },
             position: "row",
           },
+          // {
+          //   icon: () => <PlayCircleOutlineIcon />,
+          //   tooltip: "Lancia",
+          //   onClick: (event, rowData) =>
+          //     alert("Ho cliccato " + rowData.launcher),
+          //   position: "row",
+          // },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Suite"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Carica Test Suite"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Carica Test Suite",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },
@@ -243,7 +374,10 @@ const TestSuiteConclusiTable = () => {
           },
         }}
       />
+      {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
       <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
         className={classes.modal}
         open={open}
         onClose={handleClose}
@@ -254,40 +388,241 @@ const TestSuiteConclusiTable = () => {
         }}
       >
         <Fade in={open}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paperModale} elevation={1}>
+            <div>
+              <div className={classes.divIntestazione}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <BackupIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Load Test Suite
+                  </Typography>
+                </ListItem>
+              </div>
+              <Divider className={classes.divider} />
+
+              <Typography variant="h6" className={classes.typography}>
+                Seleziona Test Suite
+              </Typography>
+
+              <div className={classes.divSelectBar}>
+                <Form.Group>
+                  <Form.Label>Nome del Test Suite</Form.Label>
+                  <FormControl variant="outlined">
+                    <Select
+                      className={classes.select}
+                      value={appearTest.nome}
+                      onChange={(e) => setId(e.target.value)}
+                    >
+                      {appearTest.map((prova) => {
+                        return (
+                          <MenuItem
+                            style={{ width: "423px" }}
+                            key={prova.id}
+                            value={prova.id}
+                          >
+                            {prova.nome}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Form.Group>
+              </div>
+              <Divider className={classes.divider} />
+
+              <div className={classes.bottone}>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="secondary"
+                  nome="Schedula Test"
+                  onClick={handleOpenSchedula}
+                >
+                  Schedula Test
+                </Button>
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  nome="Carica Test"
+                  id={id}
+                  onClick={testSuiteLoader}
+                >
+                  {" "}
+                  Carica Test{" "}
+                </Button>
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  style={{ backgroundColor: "#ffeb3b", color: "white" }}
+                  nome="Annulla"
+                  onClick={handleClose}
+                >
+                  {" "}
+                  Annulla{" "}
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ------------------ MODALE SCHEDULA TEST SUITE --------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openSchedula}
+        onClose={handleCloseSchedula}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openSchedula}>
+          <Paper className={classes.paperModale} elevation={1}>
             <div>
               <ListItem button>
                 <ListItemIcon>
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
-                <Typography className={classes.intestazione} variant="h5">
-                  Load Test Suite
+                <Typography className={classes.intestazione} variant="h4">
+                  Schedula Test Suite
                 </Typography>
               </ListItem>
-            </div>
+              <Divider className={classes.divider} />
 
-            <div className={classes.paperBottom}>
-              <Typography variant="h6">Seleziona Test Suite</Typography>
-              <div className={classes.divSelectBar}>
-                <div className={classes.divTextarea}>
-                  <Typography className={classes.contenuto} variant="h11">
-                    Nome del Test
-                  </Typography>
-                </div>
-                <SelectBar nome="Seleziona" classeName={classes.selectBar} />
+              <div className={classes.divSubContent1}>
+                <Paper elevation={2} className={classes.calendarPaper}>
+                  <Typography variant="h5">Calendario</Typography>
+                  <Divider />
+                  <div className={classes.divInput}>
+                    <label for="start">Data Inizio:</label>
+                    <input
+                      type="date"
+                      id="start"
+                      name="trip-start"
+                      onChange={(e) => setDataInizio(e.target.value)}
+                      min=""
+                      max=""
+                    />
+                  </div>
+                </Paper>
+
+                <Paper elevation={2} className={classes.orarioPaper}>
+                  <Typography variant="h5">Orario</Typography>
+                  <div className={classes.divInput}>
+                    <label for="appt">Orario Inizio:</label>
+                    <input
+                      style={{ width: "135px" }}
+                      type="time"
+                      id="appt"
+                      name="appt"
+                      min=""
+                      max=""
+                      onChange={(e) => setOrarioInizio(e.target.value)}
+                      required
+                    />
+                  </div>
+                </Paper>
               </div>
 
-              <div className={classes.bottoni}>
-                <Button variant="contained" color="secondary">
-                  Schedula Test
+              <div className={classes.divSubContent2}>
+                <Paper elevation={2} className={classes.delayPaper}>
+                  <Typography variant="h5">Delay</Typography>
+                  <div className={classes.divInput}>
+                    <label for="appt">Delay:</label>
+                    <input
+                      style={{ width: "100px" }}
+                      type="number"
+                      id=""
+                      name=""
+                      min=""
+                      defaultValue="60"
+                      max=""
+                      onChange={(e) => setDelay(e.target.value)}
+                      required
+                    />
+                  </div>
+                </Paper>
+              </div>
+              <Divider />
+
+              <div className={classes.bottone}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  //onClick={handleOpenSchedula}
+                  onClick={() => alert("Funzione schedula moccata")}
+                >
+                  Conferma
                 </Button>
 
-                <Button variant="contained" color="primary">
-                  Carica Test
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseSchedula}
+                >
+                  Annulla
                 </Button>
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE DELETE--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4" style={{ color: "#ef5350"}}>
+                    Elimina Test Id <b>{" " + id}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography} style={{paddingLeft: "16px"}}>
+                  Vuoi eliminare il Test Caricato?
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    //onClick={functionDelete}
+                    onClick={() =>
+                      alert("Inserire funzione Delete Loaded Test")
+                    }
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
 

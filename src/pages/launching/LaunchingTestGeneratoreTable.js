@@ -529,7 +529,7 @@ function LaunchingTestGeneratoreTable() {
                 </Button>*/}
                 </div>
             ),
-            tooltip: "Load Test Generatore",
+            tooltip: "Crea Test Generatore",
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
@@ -539,19 +539,19 @@ function LaunchingTestGeneratoreTable() {
                 <VisibilityIcon />
               </a>
             ),
-            tooltip: "Visualizza tutti i dati",
+            tooltip: "Visualizza Test Generatore",
             position: "row",
             onClick: (event, rowData) => openVisualizza(rowData),
           },
           {
             icon: () => <EditIcon />,
-            tooltip: "Modifica",
+            tooltip: "Modifica Test Generatore",
             onClick: (event, rowData) => openModifica(rowData),
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Remove all selected users",
+            tooltip: "Elimina Test Generatore",
             onClick: (event, rowData) => {
               handleOpenDelete();
               setIdElemento(rowData.id);

@@ -63,10 +63,10 @@ const TestCaricatiTable = () => {
       title: "Status",
       field: "stato",
     },
-    {
-      title: "Trace",
-      field: "properties",
-    },
+    // {
+    //   title: "Trace",
+    //   field: "result",
+    // },
     {
       title: "Call-Id",
       field: "loadedBy",
@@ -127,6 +127,8 @@ const TestCaricatiTable = () => {
     },
     typography: {
       marginTop: "3%",
+      marginBottom: "3%",
+      // paddingLeft: "16px"
     },
 
     divTextarea: {
@@ -137,7 +139,7 @@ const TestCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: "2%"
+      marginBottom: "2%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -214,15 +216,7 @@ const TestCaricatiTable = () => {
       marginTop: "6%",
       justifyContent: "center",
     },
-    paperModaleDelete: {
-      backgroundColor: theme.palette.background.paper,
-      border: "2px solid #000",
-      boxShadow: theme.shadows[5],
-      padding: "5%",
-      height: "fit-content",
-      width: 500,
-      position: "relative",
-    },
+
     divIntestazione: {
       display: "flex",
       alignItems: "center",
@@ -253,7 +247,7 @@ const TestCaricatiTable = () => {
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
   const [openDelete, setOpenDelete] = useState(false);
   const [idTest, setIdTest] = React.useState(0);
-
+  const [idLoadDelete, setIdLoadDelete] = useState();
 
   const handleOpen = () => {
     setOpen(true);
@@ -290,8 +284,6 @@ const TestCaricatiTable = () => {
   const testCaseLoader = () => {
     loadTestCase(id);
     handleClose();
-    console.log("testCaseLoader");
-    getAllTestCase();
   };
 
   const runCaseLoader = () => {
@@ -300,17 +292,22 @@ const TestCaricatiTable = () => {
     //alert("Run test id :  "+ idToRun);
   };
 
-    //------------ funzione apri modale
+  //------------ funzione apri modale delete
 
-    const handleOpenDelete = (rowData) => {
-      setId(rowData.id);
-      setOpenDelete(true);
-    };
-  
-    //---------- funzione chiudi modale
-    const handleCloseDelete = () => {
-      setOpenDelete(false);
-    };
+  const handleOpenDelete = (rowData) => {
+    setId(rowData.id);
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  //---------- funzione elimina TestCase
+  const handleDelete = () => {
+    deleteTestCaricato(id);
+  };
 
   /*------- OPEN WARNING DELETE ------------ */
 
@@ -410,6 +407,7 @@ const TestCaricatiTable = () => {
       .then((result) => {
         console.log(result);
         setTestCaseLoad(result.list);
+        getAllTestCase();
       })
       .catch((error) => console.log("error", error));
   };
@@ -500,11 +498,38 @@ const TestCaricatiTable = () => {
     invia();
   };
 
+  /*----------- DELETE TEST CARICATO ----------------*/
+
+  const deleteTestCaricato = (id) => {
+    var urlLoadDelete = `/api/testcase/loaded/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    // myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoadDelete, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setOpenDelete(false);
+        getAllTestCase();
+        console.log(result);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   return (
     <div>
       <MaterialTable
         style={{ boxShadow: "none" }}
-        title=" Total Test Case Caricati"
+        title="Total Test Case Caricati"
         data={data}
         columns={columns}
         options={{
@@ -520,36 +545,36 @@ const TestCaricatiTable = () => {
         actions={[
           {
             icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Report",
+            tooltip: "Mostra Report",
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
           },
           {
             icon: "play_circle_outlined",
-            tooltip: "Launch",
+            tooltip: "Lancia il Test",
             onClick: (event, rowData) => handleOpenRun(rowData.id),
 
             position: "row",
           },
           {
             icon: "account_tree",
-            tooltip: "Trace",
+            tooltip: "Traccia",
             onClick: (event, rowData) => console.log("Trace"),
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Delete Loaded Test",
+            tooltip: "Elimina il Test",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
-              setIdTest(rowData.id);
+              //setIdTest(rowData.id);
             },
             position: "row",
           },
           {
             icon: () => <FilterListIcon />,
-            tooltip: "Hide/Show Filter option",
+            tooltip: "Filtro",
             isFreeAction: true,
             onClick: () => handleChange(),
           },
@@ -561,9 +586,9 @@ const TestCaricatiTable = () => {
           // },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Case",
+            tooltip: "Carica Test Case",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },
@@ -730,7 +755,6 @@ const TestCaricatiTable = () => {
                       min=""
                       max=""
                       onChange={(e) => setOrarioInizio(e.target.value)}
-                      required
                     />
                   </div>
                 </Paper>
@@ -881,8 +905,8 @@ const TestCaricatiTable = () => {
         </Fade>
       </Modal>
 
- {/* ------------------------MODALE DELETE--------------------- */}
- <Modal
+      {/* ------------------------MODALE DELETE--------------------- */}
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -898,14 +922,21 @@ const TestCaricatiTable = () => {
             <Paper className={classes.paperModaleDelete} elevation={1}>
               <div>
                 <ListItem>
-                  <Typography className={classes.intestazione} variant="h4">
-                    Elimina Test Id <b>{" "+ id}</b>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#ef5350" }}
+                  >
+                    Elimina Test Id <b>{" " + id}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography className={classes.typography}>
-                Vuoi eliminare il Test Caricato?
+                <Typography
+                  className={classes.typography}
+                  style={{ paddingLeft: "16px" }}
+                >
+                  Vuoi eliminare il Test Caricato?
                 </Typography>
 
                 <Divider className={classes.divider} />
@@ -915,8 +946,8 @@ const TestCaricatiTable = () => {
                 >
                   <ButtonNotClickedGreen
                     //onClick={functionDelete}
-                    onClick={() => alert("Inserire funzione Delete Loaded Test ")}
                     nome="Elimina"
+                    onClick={handleDelete}
                   />
                   <ButtonNotClickedGreen
                     onClick={handleCloseDelete}
@@ -928,7 +959,6 @@ const TestCaricatiTable = () => {
           </div>
         </Fade>
       </Modal>
-
     </div>
   );
 };

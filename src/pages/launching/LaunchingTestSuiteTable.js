@@ -49,7 +49,8 @@ function LaunchingTestSuiteTable() {
   const [testSuite, setTestSuite] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
-
+  const [idTestSuiteRun, setIdTestSuiteRun] = useState(0);
+ const [testSuiteLoad, setTestSuiteLoad] = useState(); 
   const [idToRun, setIdToRun] = useState();
   const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
@@ -240,16 +241,18 @@ function LaunchingTestSuiteTable() {
     };
   };
 
-  //----------------------------------------------------------
   useEffect(() => {
     getAllTestSuite();
     getAllTestCase();
     // Invia();
   }, []);
 
-  //LOAD AND RUN TEST CASE
-  const loadTestCase = (id) => {
-    var urlLoad = `/api/testcase/load/${id}`;
+
+
+  //----------------FUNZIONE LOAD AND RUN TEST SUITE---------------
+
+  const loadTestSuite = (id) => {
+    var urlLoad = `/api/testsuite/load/${id}`;
 
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -266,13 +269,18 @@ function LaunchingTestSuiteTable() {
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        setTestCaseLoad(result.list);
+        //setTestSuiteLoad(result.testSuiteCaricata);
+        setTestSuiteLoad(result.testSuiteCaricata.id);
+        
       })
       .catch((error) => console.log("error", error));
   };
 
-  const runTestCase = (idRun) => {
-    var urlLoad = `/api/testcase/runloaded/${idRun}`;
+console.log(testSuiteLoad, "id test caricato")
+  // /*--------------- FUNZIONE RUN TEST SUITE -------------------*/
+
+  const runTestSuite = (idRun) => {
+    var urlLoad = `/api/testsuite/loaded/run/${idRun}`;
 
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -288,8 +296,23 @@ function LaunchingTestSuiteTable() {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        setIdTestCaseRun(result.list);
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "TEST-0020") {
+            setWarning("Il test selezionato è già stato lanciato!");
+          } else {
+            setWarning(
+              "Codice errore:" +
+                result.error.code +
+                "Descrizione" +
+                result.code.description
+            );
+          }
+        } else {
+          setOpenWarning(false);
+          console.log(result);
+          setIdTestSuiteRun(result.list);
+        }
       })
       .catch((error) => console.log("error", error));
   };
@@ -341,10 +364,10 @@ function LaunchingTestSuiteTable() {
       //   return prova.replace("!, ", "")
       // },
     },
-    {
-      title: "Durata Complessiva",
-      field: "durata",
-    },
+    // {
+    //   title: "Durata Complessiva",
+    //   field: "durata",
+    // },
     // {
     //   title: "Gruppo",
     //   field: "gruppo.nome",
@@ -396,7 +419,6 @@ function LaunchingTestSuiteTable() {
       field: "file",
     },
   ];
-  // console.log(columns.field);
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
   const [openTestSuite, SetOpenTestSuite] = React.useState(false);
@@ -449,26 +471,37 @@ function LaunchingTestSuiteTable() {
     setOpen(false);
   };
 
-  //---------MODALE LANCIO TEST CASE
+  //------------MODALE LANCIO TEST SUITE-----------------//
+
   const handleCloseRun = () => {
     setOpenRun(false);
   };
 
-  const runCaseLoder = () => {
-    runTestCase(idToRun);
+  const testSuiteLoader = () => {
+    loadTestSuite(id);
+    handleClose();
+    console.log("testSuite Loader");
+    getAllTestSuite();
+  };
+
+  const runSuiteLoader = () => {
+    runTestSuite(testSuiteLoad);
     handleCloseRun();
     //alert("Run test id :  "+ idToRun);
   };
 
-  const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_);
+
+  const handleOpenRun = (idRun) => {
+    loadTestSuite(idRun);
+    setIdToRun(idRun);
     setOpenRun(true);
     setOpen(false);
   };
 
-  const hadleLoadData = (rowDataaa) => {
-    loadTestCase(idToRun);
-    runCaseLoder(rowDataaa.id);
+  const handleLoadData = (rowDataaa) => {
+    setIdToRun(rowDataaa.id);
+    //loadTestSuite(idToRun);
+    runSuiteLoader(rowDataaa.id);
   };
 
   //------------ FUNZIONE DELETE ------------
@@ -703,7 +736,15 @@ function LaunchingTestSuiteTable() {
       width: 800,
       // position: "relative",
     },
-
+    paperModaleLaunch:{
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
     paperContainer2: {
       flexDirection: "column",
       padding: "20px",
@@ -759,6 +800,13 @@ function LaunchingTestSuiteTable() {
       padding: "2%",
       marginBottom: "1%",
     },
+    info: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: "6%",
+      justifyContent: "center",
+    },
   }));
 
   const classes = useStyles();
@@ -797,7 +845,7 @@ function LaunchingTestSuiteTable() {
                                 </Button>*/}
               </div>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Crea Test Suite",
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
@@ -807,9 +855,19 @@ function LaunchingTestSuiteTable() {
                 <VisibilityIcon />
               </a>
             ),
-            tooltip: "Visualizza tutti i dati",
+            tooltip: "Visualizza Test Suite",
             position: "row",
             onClick: (event, rowData) => openVisualizza(rowData),
+          },
+          {
+            icon: (dat) => (
+              <a>
+                <PlayCircleFilledIcon />
+              </a>
+            ),
+            tooltip: "Lancia Test Suite",
+            position: "row",
+            onClick: (event, rowData) => handleOpenRun(rowData.id),
           },
         ]}
         localization={{
@@ -1087,7 +1145,7 @@ function LaunchingTestSuiteTable() {
                                                 },*/
                         {
                           icon: () => <PlayCircleFilledIcon />,
-                          tooltip: "Run Test Case",
+                          tooltip: "Lancia Test Suite",
                           onClick: (event, rowData) =>
                             handleOpenRun(rowData.id),
                         },
@@ -1401,7 +1459,7 @@ function LaunchingTestSuiteTable() {
         }}
       >
         <Fade in={openRun}>
-          <Paper className={classes.paperModale} elevation={1}>
+          <Paper className={classes.paperModaleLaunch} elevation={1}>
             <div>
               <ListItem button>
                 <ListItemIcon>
@@ -1422,7 +1480,7 @@ function LaunchingTestSuiteTable() {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={hadleLoadData}
+                  onClick={handleLoadData}
                 >
                   Lancio
                 </Button>

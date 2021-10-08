@@ -19,9 +19,8 @@ import {
 import { Paper } from "@material-ui/core";
 import GestioneUtenti from "../../components/GestioneUtenti";
 import NavbarItemAdmin from "../../components/NavbarItemAdmin";
-import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
+import { ButtonAmministrazione } from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -157,44 +156,8 @@ function Amministrazione() {
             <NavbarItemAdmin fontSize="large" />
           </div>
 
-          <div className={classes.buttonContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/utenze"
-            >
-              UTENZE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/ruoli"
-            >
-              RUOLI
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/autorizzazioni"
-            >
-              AUTORIZZAZIONI
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/amministrazione/gruppo"
-            >
-              GRUPPO
-            </Button>
-          </div>
+          <ButtonAmministrazione />
+          
           <Paper className={classes.paper}>
             <GestioneUtenti />
           </Paper>

@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import InputRadio from "./InputRadio";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { Paper, Typography } from "@material-ui/core";
-import acccessControl from "../service/url.js";
 import Divider from "@material-ui/core/Divider";
-import { MenuItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import Modal from "@material-ui/core/Modal";
@@ -24,13 +21,14 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale} from "../service/api";
+import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 
 function TestSuiteTable() {
   const [data, setData] = useState([]);
   const [testCases, setTestCases] = useState([]);
   const [id, setId] = useState();
+  const [numTestCases, setNumTestCases] = useState();
   const [nome, setNome] = useState("");
   const [version, setVersion] = useState();
   const [descrizione, setDescrizione] = useState("");
@@ -46,28 +44,26 @@ function TestSuiteTable() {
   const arrayTestCase = testSuite?.testCases;
 
   //--------------------------------MODIFICA TESTCASE ASSOCIATI A TESTSUITE-----------------------------------------------------
-  const [prova, setProva] = useState([]);
+  const [testAssociati, setTestAssociati] = useState([]);
 
-  const setTestCaseAssociati = (testsuite) => {
+  const impostaTestCaseAssociati = (testsuite) => {
     let x = [];
 
-    //console.log("--------"+testsuite)
     for (let i = 0; i < testsuite?.testCases?.length; i++) {
       x.push(testsuite?.testCases[i]?.id);
     }
-    setProva(x);
+    setTestAssociati(x);
   };
 
-  let y = [...prova];
 
   const modificaTestSelezionati = (testcase) => {
-    if (prova.includes(testcase.id)) {
-      y.splice(y.indexOf(testcase.id), 1);
+    let x = [...testAssociati];
+    if (testAssociati.includes(testcase.id)) {
+      x.splice(x.indexOf(testcase.id), 1);
     } else {
-      y.push(testcase.id);
+      x.push(testcase.id);
     }
-    setProva(y);
-    // aggiornaTestCaseAssociati(x);
+    setTestAssociati(x);
   };
 
   //---------------------------------------------------------------------------------------------------------------------------------
@@ -87,13 +83,8 @@ function TestSuiteTable() {
 
   //----Bearer-------------------------
 
-  let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  if (bearer != null) {
-    bearer = bearer.replace(/"/g, "");
-  }
   const funzioneGetAll = () => {
-    //----GET ALL USERS----
     (async () => {
       setCaricamento(true)
       setData((await getGenerale('testsuite')).list);
@@ -108,16 +99,57 @@ function TestSuiteTable() {
 
   }
 
+  //----PRENDI TESTCASE ASSOCIATI----
   const funzioneGetTestsuiteById = (id) => {
     (async () => {
-      let result = await getByIdGenerale('testcase', id);
+      let result = await getByIdGenerale('testsuite', id);
       setTestSuite(result.testSuite);
-        setTestCaseAssociati(result.testSuite);
-        setOpen(true);
-        SetOpenTestCase(false);
+      aggiornaVariabili(result.testSuite)
+      impostaTestCaseAssociati(result.testSuite);
+      setOpen(true);
     })();
   }
- 
+
+  //----AGGIORNA TESTCASE ASSOCIATI----
+  const funzioneAggiornaTestCaseAssociati = () => {
+    (async () => {
+      let result = (await postGenerale('testsuite', { id: id, version: version, testCases: testAssociati }));
+      funzioneGetTestsuiteById(id)
+    })();
+  }
+
+  //----AGGIORNA TESTSUITE----
+  const funzioneAggiornaTestSuite = () => {
+    (async () => {
+      await postGenerale('testsuite', {id: id, version: version, nome: nome, descrizione: descrizione,});
+      handleClose()
+    })();
+  }
+  //------------ FUNZIONE DELETE ------------
+  const funzioneDelete = () => {
+    (async () => {
+      let result = await deleteGenerale("testsuite", idElemento)
+      if (result.error !== null) {
+        setOpenWarning(true);
+        if (result?.error?.code === "Internal Server Error") {
+          setWarning(
+            "Impossibile eliminare il Test Suite. L'utente non dispone delle autorizzazioni necessarie"
+          );
+        } else {
+          setWarning(
+            "Codice errore: " +
+            result.error.code +
+            "Descrizione: " +
+            result.error.description
+          );
+        }
+      } else {
+        setOpenWarning(false);
+        funzioneGetAll();
+      }
+    })();
+  }
+
   //----------------------------------------------------------
   useEffect(() => {
     funzioneGetAll();
@@ -207,7 +239,6 @@ function TestSuiteTable() {
       field: "template.nome",
     },
   ];
-  // console.log(columns.field);
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
   const [openTestSuite, SetOpenTestSuite] = React.useState(false);
@@ -217,25 +248,24 @@ function TestSuiteTable() {
 
   const openModifica = (rowData) => {
     setModifica(true);
-    handleOpen(rowData);
+    funzioneGetTestsuiteById(rowData.id);
   };
   const openVisualizza = (rowData) => {
     setModifica(false);
-    handleOpen(rowData);
+    funzioneGetTestsuiteById(rowData.id);
   };
 
-  const handleOpen = (rowData) => {
+  const aggiornaVariabili = (rowData) => {
     setId(rowData.id);
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
+    setNumTestCases(rowData.numTestCases)
     // setTestCases([...testCases, rowData.testCases[0].nome]);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
-    // setOpen(true);
-    funzioneGetTestsuiteById(rowData.id);
   };
 
   const handleOpenTestCase = () => {
@@ -243,12 +273,12 @@ function TestSuiteTable() {
   };
 
   const handleCloseTestCase = () => {
+    SetOpenTestCase(false);
     funzioneGetTestsuiteById(id);
   };
 
   const handleCloseTestCaseUpdated = () => {
     SetOpenTestCase(false);
-    // aggiornaTestCaseAssociati();
   };
 
   const handleClose = () => {
@@ -256,57 +286,11 @@ function TestSuiteTable() {
   };
 
   const handleClose2 = () => {
-    aggiornaTestSuite();
     setOpen(false);
     // aggiornaTestCaseAssociati();
   };
 
-  //------------ FUNZIONE DELETE ------------
-
-  const functionDelete = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var raw = JSON.stringify({
-      id: idElemento,
-    });
-
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testsuite`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.error !== null) {
-          setOpenWarning(true);
-          if (result.error.code === "Internal Server Error") {
-            setWarning(
-              "Impossibile eliminare il Test Suite. L'utente non dispone delle autorizzazioni necessarie"
-            );
-          } else {
-            setWarning(
-              "Codice errore: " +
-                result.error.code +
-                "Descrizione: " +
-                result.error.description
-            );
-          }
-        } else {
-          setOpenWarning(false);
-          funzioneGetAll();
-        }
-      })
-      .catch((error) => console.log("error", error));
-    handleCloseDelete();
-  };
-
+  
   //------------ funzione apri modale delete
 
   const handleOpenDelete = (rowData) => {
@@ -337,80 +321,56 @@ function TestSuiteTable() {
   };
 
   //-------AGGIORNA TEST SUITE----------------------------
+  
+  // const aggiornaTestSuite = () => {
+  //   const invia = () => {
+  //     var myHeaders = new Headers();
+  //     myHeaders.append("Authorization", bearer);
+  //     myHeaders.append("Content-Type", "application/json");
+  //     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  const aggiornaTestSuite = () => {
-    const invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
+  //     var raw = JSON.stringify({
+  //       id: id,
+  //       version: version,
+  //       nome: nome,
+  //       descrizione: descrizione,
+  //       testCases: y,
+  //     });
 
-      var raw = JSON.stringify({
-        id: id,
-        version: version,
-        nome: nome,
-        descrizione: descrizione,
-        testCases: y,
-      });
+  //     var requestOptions = {
+  //       method: "POST",
+  //       headers: myHeaders,
+  //       body: raw,
+  //       redirect: "follow",
+  //     };
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/testsuite`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.error !== null) {
-            setOpenWarningUpdate(true);
-            if (result.error.code === "") {
-              setWarningUpdate(
-                "Impossibile aggiornare il Test Suite poichè l'utente non dispone delle autorizzazioni necessarie"
-              );
-            } else {
-              setWarning(
-                "Codice errore: " +
-                  result.error.code +
-                  "Descrizione: " +
-                  result.error.description
-              );
-            }
-          } else {
-            setOpenWarningUpdate(false);
-            funzioneGetAll();
-          }
-        })
-        .catch((error) => console.log("error", error));
-    };
-    invia();
-  };
-
-  //-----------MODALE TEST SUITE------------------
-
-  // const handleOpenTestSuite= () => {
-  //   var appoggioChiamato;
-  //   appoggioChiamato = Object.values(testCase.chiamato);
-  //   for (let i = 0; i < appoggioChiamato.length; i++) {
-  //     chiamato.push(appoggioChiamato[i].id);
-  //   }
-  //   console.log(chiamato);
-  //   setOpenChiamato(true);
+  //     fetch(`/api/testsuite`, requestOptions)
+  //       .then((response) => response.json())
+  //       .then((result) => {
+  //         if (result.error !== null) {
+  //           setOpenWarningUpdate(true);
+  //           if (result.error.code === "") {
+  //             setWarningUpdate(
+  //               "Impossibile aggiornare il Test Suite poichè l'utente non dispone delle autorizzazioni necessarie"
+  //             );
+  //           } else {
+  //             setWarning(
+  //               "Codice errore: " +
+  //               result.error.code +
+  //               "Descrizione: " +
+  //               result.error.description
+  //             );
+  //           }
+  //         } else {
+  //           setOpenWarningUpdate(false);
+  //           funzioneGetAll();
+  //         }
+  //       })
+  //       .catch((error) => console.log("error", error));
+  //   };
+  //   invia();
   // };
-
-  // const handleCloseChiamato = () => {
-  //   setOpenChiamato(false);
-  // };
-
-  // const handleCloseChiamato2 = () => {
-  //   //aggiornaUtente();
-  //   setOpenChiamato(false);
-  // };
-
-  //-------VISUALIZZA TUTTI I DATI-----------------------
-
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -585,7 +545,7 @@ function TestSuiteTable() {
                 </Button>
               </div>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Crea Test Suite",
             //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
@@ -595,19 +555,19 @@ function TestSuiteTable() {
                 <VisibilityIcon />
               </a>
             ),
-            tooltip: "Visualizza tutti i dati",
+            tooltip: "Visualizza Test Suite",
             position: "row",
             onClick: (event, rowData) => openVisualizza(rowData),
           },
           {
             icon: () => <EditIcon />,
-            tooltip: "Modifica",
+            tooltip: "Modifica Test Suite",
             onClick: (event, rowData) => openModifica(rowData),
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Remove all selected test",
+            tooltip: "Elimina Test Suite",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
@@ -680,27 +640,11 @@ function TestSuiteTable() {
                   </Col>
                 </Row>
                 <Row>
-                  {/* <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={version !== "" ? false : true}
-                      onChange={(e) => setVersion(e.target.value)}
-                      label="Versione"
-                      defaultValue={version}
-                      helperText={version !== "" ? "" : "Inserire versione"}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col> */}
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={testCases !== "" ? false : true}
-                      // onChange={(e) => setTestCases(e.target.value)}
                       label="Numero Test Case"
-                      defaultValue={arrayTestCase?.length}
-                      helperText={testCases !== "" ? "" : "Test Case"}
+                      defaultValue={numTestCases}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -813,7 +757,7 @@ function TestSuiteTable() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      onClick={handleClose2}
+                      onClick={funzioneAggiornaTestSuite}
                     />
                   )}
 
@@ -916,7 +860,7 @@ function TestSuiteTable() {
                       <ButtonClickedGreen
                         size="medium"
                         nome="Aggiorna"
-                        // onClick={handleCloseChiamato2}
+                      //onClick={funzioneAggiornaTestAssociati}
                       />
                     )}
 
@@ -924,7 +868,7 @@ function TestSuiteTable() {
                       className={classes.bottoneAnnulla}
                       onClick={handleCloseTestCase}
                       size="medium"
-                      nome={modifica === false ? "Indietro" : "Annulla"}
+                      nome={modifica === false ? "Indietroaa" : "Annullaaa"}
                     />
                   </div>
                 </div>
@@ -970,7 +914,7 @@ function TestSuiteTable() {
                         selection: true,
                         showTextRowsSelected: false,
                         selectionProps: (rowData) => ({
-                          checked: prova.includes(rowData.id),
+                          checked: testAssociati.includes(rowData.id),
                         }),
                         sorting: true,
                         actionsColumnIndex: -1,
@@ -1025,8 +969,8 @@ function TestSuiteTable() {
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      disabled={arrayIdTestCase.length === 0 ? "true" : ""}
-                      onClick={handleCloseTestCaseUpdated}
+                      // disabled={arrayIdTestCase.length === 0 ? "true" : ""}
+                      onClick={funzioneAggiornaTestCaseAssociati}
                     />
 
                     <ButtonNotClickedGreen
@@ -1078,7 +1022,7 @@ function TestSuiteTable() {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <ButtonNotClickedGreen
-                    onClick={functionDelete}
+                    onClick={funzioneDelete}
                     nome="Elimina"
                   />
                   <ButtonNotClickedGreen

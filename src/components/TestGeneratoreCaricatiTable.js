@@ -22,7 +22,7 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 
-const TestCaricatiTable = () => {
+const TestGeneratoreCaricatiTable = () => {
   const [id, setId] = useState();
   const [nome, setNome] = useState("");
   const [creationDate, setCreationDate] = useState();
@@ -44,6 +44,8 @@ const TestCaricatiTable = () => {
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [delay, setDelay] = useState();
+
+
 
   const columns = [
     {
@@ -263,7 +265,7 @@ const TestCaricatiTable = () => {
   };
 
   const testGenLoader = () => {
-    loadTestGen(id);
+    //loadTestGen(id);
     handleClose();
     getAllTestGeneratore();
   };
@@ -272,6 +274,8 @@ const TestCaricatiTable = () => {
     runTestGen(idToRun);
     handleCloseRun();
   };
+
+ 
 
   /*------------- GET TEST GEN DASH-------------*/
 
@@ -343,30 +347,32 @@ const TestCaricatiTable = () => {
       .catch((error) => console.log("error", error));
   };
 
-  /*--------------- LOAD TEST CASE -------------------*/
+   
 
-  const loadTestGen = (id) => {
-    var urlLoad = `/api/testcase/load/${id}`;
+  /*--------------- LOAD TEST GEN -------------------*/
 
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  // const loadTestGen = (id) => {
+  //   var urlLoad = `/api/testcase/load/${id}`;
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setTestGenLoad(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
+
+  //   fetch(urlLoad, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       console.log(result);
+  //       setTestGenLoad(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
 
   /*--------------- RUN TEST CASE -------------------*/
 
@@ -607,20 +613,38 @@ const TestCaricatiTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-                <ButtonClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="secondary"
                   nome="Schedula Test"
                   onClick={handleOpenSchedula}
-                />
+                >
+                  Schedula Test
+                </Button>
 
-                <ButtonNotClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
-                />
+                  id={id}
+                  onClick={testGenLoader}
+                >
+                  {" "}
+                  Carica Test{" "}
+                </Button>
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  style={{ backgroundColor: "#ffeb3b", color: "white" }}
+                  nome="Annulla"
+                  onClick={handleClose}
+                >
+                  {" "}
+                  Annulla{" "}
+                </Button>
               </div>
             </div>
           </Paper>
@@ -783,4 +807,4 @@ const TestCaricatiTable = () => {
   );
 };
 
-export default TestCaricatiTable;
+export default TestGeneratoreCaricatiTable;

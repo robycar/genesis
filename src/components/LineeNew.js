@@ -28,11 +28,11 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 function Linee() {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const [data, setData] = useState([]);
-  const [nomeLinea, setNomeLinea] = useState("");
   const [appearLine, setAppearLine] = useState([]);
-  const [createdBy, setCreatedBy] = useState("");
-  const [modifiedBy, setModifiedBy] = useState("");
   const [id, setId] = useState();
   const [numero, setNumero] = useState("");
   let ip;
@@ -45,7 +45,7 @@ function Linee() {
   const [typeLinea, setTypeLinea] = useState();
   const [caricamento, setCaricamento] = useState(false);
   const [version, setVersion] = useState(0);
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+  const [scrittaTabella, setScrittaTabella] = useState("")
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -199,37 +199,46 @@ function Linee() {
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
-    //----GET ALL LINEE----
-    (async () => {
-      setCaricamento(true);
-      setData((await getGenerale("linea")).list);
-      setCaricamento(false);
-    })();
+    if (functions.indexOf("linea.view") !== -1 ) {
+      //----GET ALL LINEE----
+      (async () => {
+        setCaricamento(true);
+        setData((await getGenerale("linea")).list);
+        setCaricamento(false);
+      })();
 
-    //-----GET APPEAR TYPE LINEA-----
-    (async () => {
-      setAppearLine((await getGenerale("typeLinea")).list);
-    })();
+      //-----GET APPEAR TYPE LINEA-----
+      (async () => {
+        setAppearLine((await getGenerale("typeLinea")).list);
+      })();
+
+      setScrittaTabella("Non è presente alcun dato da mostrare")
+
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzarequesti dati")
+    }
   };
 
   //---------------------AGGIORNA LINEA API -------------------------
 
   const funzioneAggiornaLinea = () => {
-    (async () => {
-      await postGenerale("linea", {
-        id: id,
-        numero: numero,
-        ip: ip,
-        version: version,
-        password: password,
-        porta: porta,
-        typeLinea: {
-          id: typeLinea,
-        },
-      });
+    if (functions.indexOf("linea.edit") !== -1) {
+      (async () => {
+        await postGenerale("linea", {
+          id: id,
+          numero: numero,
+          ip: ip,
+          version: version,
+          password: password,
+          porta: porta,
+          typeLinea: {
+            id: typeLinea,
+          },
+        });
 
-      funzioneGetAll();
-    })();
+        funzioneGetAll();
+      })();
+    }
   };
 
   const aggiornaLinea = () => {
@@ -240,16 +249,12 @@ function Linee() {
   /*--------- DELETE LINEA API ---------*/
 
   const funzioneDelete = () => {
-    (async () => {
-      setCaricamento(true);
-      await deleteGenerale("linea", `${idElemento}`).result;
-      funzioneGetAll();
-    })();
-  };
 
-  const functionDelete = () => {
-    deleteGenerale("linea", `${idElemento}`)
-      .then((result) => {
+    if (functions.indexOf("linea.delete") !== -1) {
+      (async () => {
+        setCaricamento(true);
+        let result = await deleteGenerale("linea", `${idElemento}`);
+
         if (result.error !== null) {
           setOpenWarning(true);
           if (result.error.code === "LINEA-0014") {
@@ -259,19 +264,18 @@ function Linee() {
           } else {
             setWarning(
               "Codice errore: " +
-                result.error.code +
-                " Descrizione: " +
-                result.code.description
+              result.error.code +
+              " Descrizione: " +
+              result.code.description
             );
           }
         } else {
-          funzioneDelete();
           setOpenWarning(false);
           funzioneGetAll();
         }
-      })
-      .catch((error) => console.log("error", error));
-    handleCloseDelete();
+        handleCloseDelete();
+      })();
+    }
   };
 
   /*--------- COLUMNS ---------*/
@@ -321,8 +325,6 @@ function Linee() {
     setOpenWarning(false);
   };
 
-  // const [btnDisabled, setBtnDisabled] = useState(true);
-
   const handleOpen = (rowData) => {
     setId(rowData.id);
     setNumero(rowData.numero);
@@ -364,35 +366,6 @@ function Linee() {
     setOpenDelete(false);
   };
 
-  // const [btnDisabled, setBtnDisabled] = useState(false);
-
-  // const handleBtn = () => {
-  //   if (
-  //     ip1 <= 255 &&
-  //     ip1 !== "" &&
-  //     ip1.length < 4 &&
-  //     ip2 <= 255 &&
-  //     ip2 !== "" &&
-  //     ip2.length < 4 &&
-  //     ip3 <= 255 &&
-  //     ip3 !== "" &&
-  //     ip3.length < 4 &&
-  //     ip4 <= 255 &&
-  //     ip4 !== "" &&
-  //     ip4.length < 4 &&
-  //     password !== "" &&
-  //     numero !== "" &&
-  //     porta !== "" &&
-  //     porta > 1000 &&
-  //     porta < 100000
-  //   ) {
-  //     setBtnDisabled(false);
-  //   } else {
-  //     setBtnDisabled(true);
-  //   }
-  // };
-  // console.log(data)
-
   return (
     <div>
       <MaterialTable
@@ -407,8 +380,6 @@ function Linee() {
           exportButton: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -421,27 +392,30 @@ function Linee() {
                 exact
                 to="/editing/linee/crealinea"
                 startIcon={<AddIcon />}
+                disabled={functions.indexOf("linea.create") === -1 || functions.indexOf("linea.view") === -1}
               >
                 LINEA SIMULATORE{" "}
               </Button>
             ),
             tooltip: "Crea Linea",
-            // onClick: (event, rowData) => alert("Load Test Suite"),
             isFreeAction: true,
           },
           {
             icon: () => <EditIcon />,
-            tooltip: "Edit",
+            tooltip: "Modifica Linea",
             onClick: (event, rowData) => handleOpen(rowData),
-            position: "row",
+            disabled: functions.indexOf("linea.edit") === -1,
+            position: "row"
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Remove all selected lines",
+            tooltip: "Elimina Linea",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
+            disabled: functions.indexOf("linea.delete") === -1,
+            position: "row"
           },
         ]}
         localization={{
@@ -449,7 +423,7 @@ function Linee() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
+            emptyDataSourceMessage: scrittaTabella,
           },
         }}
       />
@@ -637,27 +611,27 @@ function Linee() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 {ip1 <= 255 &&
-                ip1 !== "" &&
-                ip1.length < 4 &&
-                ip2 <= 255 &&
-                ip2 !== "" &&
-                ip2.length < 4 &&
-                ip3 <= 255 &&
-                ip3 !== "" &&
-                ip3.length < 4 &&
-                ip4 <= 255 &&
-                ip4 !== "" &&
-                ip4.length < 4 &&
-                password !== "" &&
-                numero !== "" &&
-                porta !== "" &&
-                porta > 1000 &&
-                porta < 100000 ? (
+                  ip1 !== "" &&
+                  ip1.length < 4 &&
+                  ip2 <= 255 &&
+                  ip2 !== "" &&
+                  ip2.length < 4 &&
+                  ip3 <= 255 &&
+                  ip3 !== "" &&
+                  ip3.length < 4 &&
+                  ip4 <= 255 &&
+                  ip4 !== "" &&
+                  ip4.length < 4 &&
+                  password !== "" &&
+                  numero !== "" &&
+                  porta !== "" &&
+                  porta > 1000 &&
+                  porta < 100000 ? (
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
                     onClick={handleClose2}
-                    // disabled={handleBtn}
+                    disabled={functions.indexOf("linea.edit") === -1}
                   />
                 ) : (
                   <ButtonClickedGreen
@@ -714,7 +688,7 @@ function Linee() {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <ButtonNotClickedGreen
-                    onClick={functionDelete}
+                    onClick={funzioneDelete}
                     nome="Elimina"
                   />
                   <ButtonNotClickedGreen

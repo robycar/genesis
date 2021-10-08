@@ -16,11 +16,10 @@ import {
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
-import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import TemplateNew from "../../components/TemplateNew";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
+import { ButtonEditing } from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -181,56 +180,8 @@ function EditingTemplate() {
             <NavbarItemEdit fontSize="large" />
           </div>
 
-          <div className={classes.buttonContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/linee"
-            >
-              LINEE
-            </Button>
-            {/* <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/lineegeneratore"
-            >
-              LINEE GENERATORE
-            </Button> */}
-            {/* </NavLink> */}
+        <ButtonEditing />
 
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/outboundproxy"
-            >
-              OUTBOUND PROXY
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/template"
-            >
-              TEMPLATE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/testcase"
-            >
-              TEST
-            </Button>
-          </div>
           <Paper className={classes.generalPaper}>
             <ListItem>
               <ListItemIcon>

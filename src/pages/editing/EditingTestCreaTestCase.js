@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
 import { Typography, Fade } from "@material-ui/core";
 import {
@@ -40,6 +38,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useHistory } from "react-router-dom";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
+import {ButtonEditing, ButtonEditingTest} from "../../components/ButtonBarraNavigazione"
 
 const drawerWidth = 240;
 
@@ -275,7 +274,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "2%",
     marginBottom: "1%",
   },
-  
+
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
@@ -305,17 +304,17 @@ function EditingTestCreaTestCase() {
   const [qntChiamanti, setQntChiamanti] = useState([]);
   let arrAppoggio = qntChiamanti;
   const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
-  const [lineaChiamante1 , setLineaChiamante1] = useState(0);
-  const [lineaChiamante2 , setLineaChiamante2] = useState(0);
-  const [lineaChiamante3 , setLineaChiamante3] = useState(0);
-  const [proxyChiamante1 , setProxyChiamante1] = useState(0);
-  const [proxyChiamante2 , setProxyChiamante2] = useState(0);
-  const [proxyChiamante3 , setProxyChiamante3] = useState(0);
+  const [lineaChiamante1, setLineaChiamante1] = useState(0);
+  const [lineaChiamante2, setLineaChiamante2] = useState(0);
+  const [lineaChiamante3, setLineaChiamante3] = useState(0);
+  const [proxyChiamante1, setProxyChiamante1] = useState(0);
+  const [proxyChiamante2, setProxyChiamante2] = useState(0);
+  const [proxyChiamante3, setProxyChiamante3] = useState(0);
 
-  const [templete , setTemplete] = useState(0)
-  
+  const [templete, setTemplete] = useState(0)
+
   const [nextDisabled, setNextDisabled] = useState(true);
-  
+
   const [isErrore, setErrore] = useState(false);
   const [messaggioErr, setMessaggioErr] = useState("");
 
@@ -420,7 +419,7 @@ function EditingTestCreaTestCase() {
     var raw = JSON.stringify({
       nome: nome,
       template: templete,
-      descrizione: descrizione === "" ? " ": descrizione,
+      descrizione: descrizione === "" ? " " : descrizione,
       expectedDuration: 57,
       chiamato: {
         linea: lineaChiamato,
@@ -453,7 +452,7 @@ function EditingTestCreaTestCase() {
   const steps = getSteps();
 
   const handleNext = () => {
-    
+
     if (activeStep + 1 === steps.length) {
       Invia();
     } else
@@ -489,7 +488,7 @@ function EditingTestCreaTestCase() {
         setLineaChiamante3(0)
         setProxyChiamante3(0)
         break;
-    
+
       default:
         break;
     }
@@ -513,396 +512,132 @@ function EditingTestCreaTestCase() {
     getLinea();
     getTemplete();
     getOBP();
-    }, [ qntChiamanti ]);
+  }, [qntChiamanti]);
 
 
-return (
-  <div className={classes.root}>
-    <CssBaseline />
-    <AppBar
-      position="absolute"
-      className={clsx(classes.appBar, openDrawer && classes.appBarShift)}
-    >
-      <Navbar />
-    </AppBar>
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, openDrawer && classes.appBarShift)}
+      >
+        <Navbar />
+      </AppBar>
 
-    <Drawer
-      variant="permanent"
-      classes={{
-        paper: clsx(classes.drawerPaper, !openDrawer && classes.drawerPaperClose),
-      }}
-      open={openDrawer}
-    >
-      <div className={classes.toolbarIcon}>
-        {/* <IconButton onClick={handleDrawerClose}>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper, !openDrawer && classes.drawerPaperClose),
+        }}
+        open={openDrawer}
+      >
+        <div className={classes.toolbarIcon}>
+          {/* <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton> */}
-      </div>
-      <Divider />
-      <List>{mainListItems}</List>
-      <Divider />
-      <List>{tertiaryListItems}</List>
-      <Divider />
-      <List>{secondaryListItems}</List>
-      <Divider />
-      <List>{quaterListItems}</List>
-    </Drawer>
-    <main className={classes.content}>
-      <div className={classes.appBarSpacer} />
-
-      <Container maxWidth="lg" className={classes.container}>
-        <div className={classes.containerNavbarItem}>
-          <NavbarItemEdit fontSize="large" />
         </div>
-      </Container>
-      <div className={classes.buttonContainer}>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/linee"
-        >
-          LINEE
-        </Button>
-       
-        {/* </NavLink> */}
+        <Divider />
+        <List>{mainListItems}</List>
+        <Divider />
+        <List>{tertiaryListItems}</List>
+        <Divider />
+        <List>{secondaryListItems}</List>
+        <Divider />
+        <List>{quaterListItems}</List>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
 
-        {/* <NavLink exact to="/dashboard/testsuite"> */}
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/outboundproxy"
-        >
-          OUTBOUND PROXY
-        </Button>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/template"
-        >
-          TEMPLATE
-        </Button>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/testcase"
-        >
-          TEST
-        </Button>
-        <div className={classes.buttonTestContainer}>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testcreatestcase"
-              >
-                TEST CASE
-              </Button>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testsuite"
-              >
-                TEST SUITE
-              </Button>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testgeneratore"
-              >
-                TEST GENERATORE
-              </Button>
-            </div>
-      </div>
-
-      {/* ----------------------------CREA TEST CASE---------------------------------------- */}
-
-      <Paper className={classes.paper} elevation={2}>
-        <CreaItem titolo="Crea Test Case" />
-
-        <Divider className={classes.divider} />
-
-        {/* ------------------------STEP 1--------------------------------- */}
-        <div className={classes.generalContainer} style={{ display: activeStep === 0 ? "" : "none" }}>
-          <Paper className={classes.paperContainer1} elevation={0}>
-            <Paper className={classes.divSelect} elevation={0}>
-              <Form.Group controlId="form.Nome">
-                <Form.Label>Nome</Form.Label>
-                <Form.Control
-                  className={classes.formControl}
-                  type="text"
-                  placeholder="Inserisci Nome"
-                  onChange={(e) => {
-                    handleChangeName(e)
-                  }}
-                />
-                <Alert
-                  severity="error"
-                  id="alertNome"
-                  style={{ display: "none" }}
-                >
-                  Nome è richiesto!
-                </Alert>
-              </Form.Group>
-            </Paper>
-          </Paper>
-
-          <Paper className={classes.paperContainer2} elevation={0}>
-            <Paper className={classes.divSelect} elevation={0}>
-              <Form.Group controlId="form.Nome">
-                <Form.Label>Descrizione</Form.Label>
-                <Form.Control
-                  className={classes.formControl}
-                  type="text"
-                  placeholder="Inserisci Descrizione"
-                  onChange={(e) => handleChangeDescrizione(e)}
-                />
-                <Alert
-                  severity="error"
-                  id="alertDescrizione"
-                  style={{ display: "none" }}
-                >
-                  Descrizione è richiesta
-                </Alert>
-              </Form.Group>
-            </Paper>
-          </Paper>
-
-        </div>
-        {/* ------------------------STEP 2--------------------------------- */}
-        <div className={classes.generalContainer} style={{ display: activeStep === 1 ? "" : "none" }}>
-
-          <div className={classes.bodyContainer}>
-            <>
-              <Typography className={classes.intestazione} variant="h6">
-                Chiamato
-              </Typography>
-              <Row >
-                <Col className={classes.col}>
-                  <Form.Group controlId="form.Numero">
-                    <Form.Label>Linea</Form.Label>
-                    <FormControl
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <Select
-                        id="selectLinea"
-                        value={lineaChiamato}
-                        onChange={(e) => handleChangeLineaChiamato(e)}
-                      >
-                        {appearLinea.map((linea) => {
-                          return (
-                            <MenuItem disabled={linea.id === lineaChiamante1 || linea.id === lineaChiamante2 || linea.id === lineaChiamante3} key={linea.id} value={linea.id}>
-                              {linea.campiConcatenati}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                      <Alert
-                        severity="error"
-                        id="alertLinea"
-                        style={{ display: "none" }}
-                      >
-                        Selezionare la Linea
-                      </Alert>
-                    </FormControl>
-                  </Form.Group>
-                </Col>
-                <Col className={classes.col}>
-                  <Form.Group >
-                    <Form.Label style={{color: lineaChiamato === 0 ? "grey" : "black"}}>OBP</Form.Label>
-                    <FormControl
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <Select
-                        id="selectOBP"
-                        value={OBPChiamato}
-                        onChange={(e) => handleChangeOBPChiamato(e)}
-                        disabled={lineaChiamato === 0}
-                      >
-                        {appearOBP.map((proxy) => {
-                          return (
-                            <MenuItem disabled={proxy.id === proxyChiamante1 || proxy.id === proxyChiamante2 || proxy.id === proxyChiamante3} key={proxy.id} value={proxy.id}>
-                              {proxy.campiConcatenati}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
-                      <Alert
-                        severity="error"
-                        id="alertOBP"
-                        style={{ display: "none" }}
-                      >
-                        Selezionare l'OBP
-                      </Alert>
-                    </FormControl>
-                  </Form.Group>
-                </Col>
-              </Row>
-            </>
+        <Container maxWidth="lg" className={classes.container}>
+          <div className={classes.containerNavbarItem}>
+            <NavbarItemEdit fontSize="large" />
           </div>
-        </div>
-        {/* ------------------------STEP 3--------------------------------- */}
-        <div className={classes.generalContainer} style={{ display: activeStep === 2 ? "" : "none" }}>
+        </Container>
 
-          <div className={classes.bodyContainer} >
-            <div className={classes.bodyContainer}>
-              {qntChiamanti.map((index) => {
-                return (<div>
-                  <>
-                    <Typography className={classes.intestazione} variant="h6">
-                      Chiamante <b>{index.index + 1}</b>
-                    </Typography>
-                    <Row >
-                      <Col className={classes.col}>
-                        <Form.Group controlId="form.Numero">
-                          <Form.Label>Linea</Form.Label>
-                          <FormControl
-                            variant="outlined"
-                            className={classes.formControl}
-                          >
-                            <Select
-                              id="selectLinea"
-                              value={qntChiamanti.index}
-                              defaultValue={index.linea}
-                              onChange={(e) => {
-                                console.log(lineaChiamato)
-                                arrAppoggio[index.index].linea = e.target.value
-                                setQntChiamanti(arrAppoggio);
-                                index.index === 0 ? setLineaChiamante1(e.target.value) : index.index === 1 ? setLineaChiamante2(e.target.value) : index.index === 2 ? setLineaChiamante3(e.target.value) : setLineaChiamante1(e.target.value)
-                              }}
-                            >
-                              {appearLinea.map((linea) => {
-                                return (
-                                  <MenuItem disabled={linea.id === lineaChiamato || linea.id === lineaChiamante1 || linea.id === lineaChiamante2 || linea.id === lineaChiamante3} key={linea.id} value={linea.id}>
-                                    {linea.campiConcatenati}
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                            <Alert
-                              severity="error"
-                              id="alertLinea"
-                              style={{ display: "none" }}
-                            >
-                              Selezionare la Linea
-                            </Alert>
-                          </FormControl>
-                        </Form.Group>
-                      </Col>
-                      <Col className={classes.col}>
-                        <Form.Group >
-                          <Form.Label style={{
-                                color : (index.index === 0 ? lineaChiamante1 === 0 ? "grey" : "black" : index.index === 1 ? lineaChiamante2 === 0 ? "grey" : "black" : index.index === 2 ? lineaChiamante3 === 0 ? "grey" : "black" : false)
-                              }}>OBP</Form.Label>
-                          <FormControl
-                            variant="outlined"
-                            className={classes.formControl}
-                          >
-                            <Select
-                              id="selectOBP"
-                              value={qntChiamanti.index}
-                              defaultValue={index.proxy}
-                              disabled={index.index === 0 ? lineaChiamante1 === 0 : index.index === 1 ? lineaChiamante2 === 0 : index.index === 2 ? lineaChiamante3 === 0 : false}
-                              onChange={(e) => {
-                                arrAppoggio[index.index].proxy = e.target.value
-                                index.index === 0 ? setProxyChiamante1(e.target.value) : index.index === 1 ? setProxyChiamante2(e.target.value) : index.index === 2 ? setProxyChiamante3(e.target.value) : setProxyChiamante1(e.target.value)
-                                setQntChiamanti(arrAppoggio);
-                              }}
-                            >
-                              {appearOBP.map((proxy) => {
-                                return (
-                                  <MenuItem disabled={proxy.id === OBPChiamato || proxy.id === proxyChiamante1 || proxy.id === proxyChiamante2 || proxy.id === proxyChiamante3} key={proxy.id} value={proxy.id}>
-                                    {proxy.campiConcatenati}
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                            <Alert
-                              severity="error"
-                              id="alertOBP"
-                              style={{ display: "none" }}
-                            >
-                              Selezionare l'OBP
-                            </Alert>
-                          </FormControl>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                  </>
-                </div>
-                )
-              })}
-            </div>
+        <ButtonEditing />
+        <ButtonEditingTest />
 
 
-            Quanti chiamanti vuoi inserire &nbsp;&nbsp;&nbsp;
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<RemoveIcon />}
-              onClick={removeArr}
-              disabled={nChiamanti < 1 ? true : false}
-            />
-            &nbsp;&nbsp;&nbsp;
-            <TextField
-              type="number"
-              style={{ width: "10px" }}
-              value={nChiamanti}
-            />
-            &nbsp;&nbsp;&nbsp;
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={addArr}
-              disabled={nChiamanti < 3 && nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === 0 ? true : false : nChiamanti === 2 ? proxyChiamante2 === 0 ? true :false : false ? false : true}
-            />
+        {/* ----------------------------CREA TEST CASE---------------------------------------- */}
+
+        <Paper className={classes.paper} elevation={2}>
+          <CreaItem titolo="Crea Test Case" />
+
+          <Divider className={classes.divider} />
+
+          {/* ------------------------STEP 1--------------------------------- */}
+          <div className={classes.generalContainer} style={{ display: activeStep === 0 ? "" : "none" }}>
+            <Paper className={classes.paperContainer1} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Nome">
+                  <Form.Label>Nome</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Nome"
+                    onChange={(e) => {
+                      handleChangeName(e)
+                    }}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertNome"
+                    style={{ display: "none" }}
+                  >
+                    Nome è richiesto!
+                  </Alert>
+                </Form.Group>
+              </Paper>
+            </Paper>
+
+            <Paper className={classes.paperContainer2} elevation={0}>
+              <Paper className={classes.divSelect} elevation={0}>
+                <Form.Group controlId="form.Nome">
+                  <Form.Label>Descrizione</Form.Label>
+                  <Form.Control
+                    className={classes.formControl}
+                    type="text"
+                    placeholder="Inserisci Descrizione"
+                    onChange={(e) => handleChangeDescrizione(e)}
+                  />
+                  <Alert
+                    severity="error"
+                    id="alertDescrizione"
+                    style={{ display: "none" }}
+                  >
+                    Descrizione è richiesta
+                  </Alert>
+                </Form.Group>
+              </Paper>
+            </Paper>
+
           </div>
+          {/* ------------------------STEP 2--------------------------------- */}
+          <div className={classes.generalContainer} style={{ display: activeStep === 1 ? "" : "none" }}>
 
-
-
-
-
-        </div>
-
-        {/* ------------------------STEP 4--------------------------------- */}
-        <div className={classes.generalContainer} style={{ display: activeStep === 3 ? "" : "none" }}>
-          <div className={classes.bodyContainer} >
             <div className={classes.bodyContainer}>
               <>
                 <Typography className={classes.intestazione} variant="h6">
-                  Templete
+                  Chiamato
                 </Typography>
                 <Row >
                   <Col className={classes.col}>
                     <Form.Group controlId="form.Numero">
+                      <Form.Label>Linea</Form.Label>
                       <FormControl
                         variant="outlined"
                         className={classes.formControl}
                       >
                         <Select
                           id="selectLinea"
-                          value={templete}
-                          onChange={(e) => setTemplete(e.target.value)}
+                          value={lineaChiamato}
+                          onChange={(e) => handleChangeLineaChiamato(e)}
                         >
-                          {appearTemplete.map((templete) => {
+                          {appearLinea.map((linea) => {
                             return (
-                              <MenuItem key={templete.id} value={templete.id}>
-                                {templete.nome}
+                              <MenuItem disabled={linea.id === lineaChiamante1 || linea.id === lineaChiamante2 || linea.id === lineaChiamante3} key={linea.id} value={linea.id}>
+                                {linea.campiConcatenati}
                               </MenuItem>
                             );
                           })}
@@ -917,42 +652,239 @@ return (
                       </FormControl>
                     </Form.Group>
                   </Col>
+                  <Col className={classes.col}>
+                    <Form.Group >
+                      <Form.Label style={{ color: lineaChiamato === 0 ? "grey" : "black" }}>OBP</Form.Label>
+                      <FormControl
+                        variant="outlined"
+                        className={classes.formControl}
+                      >
+                        <Select
+                          id="selectOBP"
+                          value={OBPChiamato}
+                          onChange={(e) => handleChangeOBPChiamato(e)}
+                          disabled={lineaChiamato === 0}
+                        >
+                          {appearOBP.map((proxy) => {
+                            return (
+                              <MenuItem disabled={proxy.id === proxyChiamante1 || proxy.id === proxyChiamante2 || proxy.id === proxyChiamante3} key={proxy.id} value={proxy.id}>
+                                {proxy.campiConcatenati}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                        <Alert
+                          severity="error"
+                          id="alertOBP"
+                          style={{ display: "none" }}
+                        >
+                          Selezionare l'OBP
+                        </Alert>
+                      </FormControl>
+                    </Form.Group>
+                  </Col>
                 </Row>
               </>
             </div>
           </div>
-        </div>
+          {/* ------------------------STEP 3--------------------------------- */}
+          <div className={classes.generalContainer} style={{ display: activeStep === 2 ? "" : "none" }}>
 
-        <Divider className={classes.divider} />
-
-        {/* -----------------------------------BOTTONI STEP------------------------------------ */}
-        <div className={classes.root}>
-          <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          <div>
-            {activeStep === steps.length ? ("") : (
-              <div>
-                <div>
-                  <Button
-                    onClick={() => {activeStep === 0 ? history.push("/editing/testcase") : handleBack()}}
-                    className={classes.backButton}
-                  >
-                    {activeStep === 0 ? 'annulla' : 'indietro'}
-                  </Button>
-                  <Button disabled={activeStep === 0 && nome === "" ? true : activeStep === 1 && OBPChiamato === 0 ? true : activeStep === 2 && (nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === false ? true : false : nChiamanti === 2 ? proxyChiamante2 === false ? true : false : nChiamanti === 3 ? proxyChiamante3 === false ? true : false : false) ? true : activeStep === 3 && templete === 0   } variant="contained" color="primary" onClick={handleNext}>
-                    {activeStep === steps.length - 1 ? 'Crea' : 'Avanti'}
-                  </Button>
-                </div>
+            <div className={classes.bodyContainer} >
+              <div className={classes.bodyContainer}>
+                {qntChiamanti.map((index) => {
+                  return (<div>
+                    <>
+                      <Typography className={classes.intestazione} variant="h6">
+                        Chiamante <b>{index.index + 1}</b>
+                      </Typography>
+                      <Row >
+                        <Col className={classes.col}>
+                          <Form.Group controlId="form.Numero">
+                            <Form.Label>Linea</Form.Label>
+                            <FormControl
+                              variant="outlined"
+                              className={classes.formControl}
+                            >
+                              <Select
+                                id="selectLinea"
+                                value={qntChiamanti.index}
+                                defaultValue={index.linea}
+                                onChange={(e) => {
+                                  console.log(lineaChiamato)
+                                  arrAppoggio[index.index].linea = e.target.value
+                                  setQntChiamanti(arrAppoggio);
+                                  index.index === 0 ? setLineaChiamante1(e.target.value) : index.index === 1 ? setLineaChiamante2(e.target.value) : index.index === 2 ? setLineaChiamante3(e.target.value) : setLineaChiamante1(e.target.value)
+                                }}
+                              >
+                                {appearLinea.map((linea) => {
+                                  return (
+                                    <MenuItem disabled={linea.id === lineaChiamato || linea.id === lineaChiamante1 || linea.id === lineaChiamante2 || linea.id === lineaChiamante3} key={linea.id} value={linea.id}>
+                                      {linea.campiConcatenati}
+                                    </MenuItem>
+                                  );
+                                })}
+                              </Select>
+                              <Alert
+                                severity="error"
+                                id="alertLinea"
+                                style={{ display: "none" }}
+                              >
+                                Selezionare la Linea
+                              </Alert>
+                            </FormControl>
+                          </Form.Group>
+                        </Col>
+                        <Col className={classes.col}>
+                          <Form.Group >
+                            <Form.Label style={{
+                              color: (index.index === 0 ? lineaChiamante1 === 0 ? "grey" : "black" : index.index === 1 ? lineaChiamante2 === 0 ? "grey" : "black" : index.index === 2 ? lineaChiamante3 === 0 ? "grey" : "black" : false)
+                            }}>OBP</Form.Label>
+                            <FormControl
+                              variant="outlined"
+                              className={classes.formControl}
+                            >
+                              <Select
+                                id="selectOBP"
+                                value={qntChiamanti.index}
+                                defaultValue={index.proxy}
+                                disabled={index.index === 0 ? lineaChiamante1 === 0 : index.index === 1 ? lineaChiamante2 === 0 : index.index === 2 ? lineaChiamante3 === 0 : false}
+                                onChange={(e) => {
+                                  arrAppoggio[index.index].proxy = e.target.value
+                                  index.index === 0 ? setProxyChiamante1(e.target.value) : index.index === 1 ? setProxyChiamante2(e.target.value) : index.index === 2 ? setProxyChiamante3(e.target.value) : setProxyChiamante1(e.target.value)
+                                  setQntChiamanti(arrAppoggio);
+                                }}
+                              >
+                                {appearOBP.map((proxy) => {
+                                  return (
+                                    <MenuItem disabled={proxy.id === OBPChiamato || proxy.id === proxyChiamante1 || proxy.id === proxyChiamante2 || proxy.id === proxyChiamante3} key={proxy.id} value={proxy.id}>
+                                      {proxy.campiConcatenati}
+                                    </MenuItem>
+                                  );
+                                })}
+                              </Select>
+                              <Alert
+                                severity="error"
+                                id="alertOBP"
+                                style={{ display: "none" }}
+                              >
+                                Selezionare l'OBP
+                              </Alert>
+                            </FormControl>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                    </>
+                  </div>
+                  )
+                })}
               </div>
-            )}
+
+
+              Quanti chiamanti vuoi inserire &nbsp;&nbsp;&nbsp;
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<RemoveIcon />}
+                onClick={removeArr}
+                disabled={nChiamanti < 1 ? true : false}
+              />
+              &nbsp;&nbsp;&nbsp;
+              <TextField
+                type="number"
+                style={{ width: "10px" }}
+                value={nChiamanti}
+              />
+              &nbsp;&nbsp;&nbsp;
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AddIcon />}
+                onClick={addArr}
+                disabled={nChiamanti < 3 && nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === 0 ? true : false : nChiamanti === 2 ? proxyChiamante2 === 0 ? true : false : false ? false : true}
+              />
+            </div>
+
+
+
+
+
           </div>
-        </div>
-        {/* <div className={classes.bottone}>
+
+          {/* ------------------------STEP 4--------------------------------- */}
+          <div className={classes.generalContainer} style={{ display: activeStep === 3 ? "" : "none" }}>
+            <div className={classes.bodyContainer} >
+              <div className={classes.bodyContainer}>
+                <>
+                  <Typography className={classes.intestazione} variant="h6">
+                    Templete
+                  </Typography>
+                  <Row >
+                    <Col className={classes.col}>
+                      <Form.Group controlId="form.Numero">
+                        <FormControl
+                          variant="outlined"
+                          className={classes.formControl}
+                        >
+                          <Select
+                            id="selectLinea"
+                            value={templete}
+                            onChange={(e) => setTemplete(e.target.value)}
+                          >
+                            {appearTemplete.map((templete) => {
+                              return (
+                                <MenuItem key={templete.id} value={templete.id}>
+                                  {templete.nome}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                          <Alert
+                            severity="error"
+                            id="alertLinea"
+                            style={{ display: "none" }}
+                          >
+                            Selezionare la Linea
+                          </Alert>
+                        </FormControl>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </>
+              </div>
+            </div>
+          </div>
+
+          <Divider className={classes.divider} />
+
+          {/* -----------------------------------BOTTONI STEP------------------------------------ */}
+          <div className={classes.root}>
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <div>
+              {activeStep === steps.length ? ("") : (
+                <div>
+                  <div>
+                    <Button
+                      onClick={() => { activeStep === 0 ? history.push("/editing/testcase") : handleBack() }}
+                      className={classes.backButton}
+                    >
+                      {activeStep === 0 ? 'annulla' : 'indietro'}
+                    </Button>
+                    <Button disabled={activeStep === 0 && nome === "" ? true : activeStep === 1 && OBPChiamato === 0 ? true : activeStep === 2 && (nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === false ? true : false : nChiamanti === 2 ? proxyChiamante2 === false ? true : false : nChiamanti === 3 ? proxyChiamante3 === false ? true : false : false) ? true : activeStep === 3 && templete === 0} variant="contained" color="primary" onClick={handleNext}>
+                      {activeStep === steps.length - 1 ? 'Crea' : 'Avanti'}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          {/* <div className={classes.bottone}>
             <ButtonClickedGreen
               className={classes.bottone}
               size="medium"
@@ -970,9 +902,9 @@ return (
               annulla
             </Button>
           </div> */}
-      </Paper>
-      {/* ------------------------MODALE ERROR-------------------- */}
-      <Modal
+        </Paper>
+        {/* ------------------------MODALE ERROR-------------------- */}
+        <Modal
           className={classes.modal}
           open={isErrore}
           onClose={handleCloseErrore}
@@ -1020,9 +952,9 @@ return (
           </Fade>
         </Modal>
 
-    </main>
-  </div>
-);
+      </main>
+    </div>
+  );
 }
 
 export default EditingTestCreaTestCase;

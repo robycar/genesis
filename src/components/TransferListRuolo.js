@@ -72,6 +72,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TransferListRuolo() {
+  
+  var functions = localStorage.getItem("funzioni").split(",");
 
   const [dataLevel, setDataLevel] = useState([]);
   const [allFunzioni, setAllFunzioni] = useState([]);
@@ -81,26 +83,29 @@ export default function TransferListRuolo() {
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
+    if (functions.indexOf("level.edit") !== -1 && functions.indexOf("level.view") !== -1) {
+      //----GET ALL FUNCTIONS----
+      (async () => {
+        setAllFunzioni((await getGenerale('funzione')).funzioni);
+      })();
 
-    //----GET ALL FUNCTIONS----
-    (async () => {
-      setAllFunzioni((await getGenerale('funzione')).funzioni);
-    })();
-
-    //-----GET APPEAR LEVEL-----
-    (async () => {
-      setDataLevel((await getGenerale('level')).livelli);
-    })();
+      //-----GET APPEAR LEVEL-----
+      (async () => {
+        setDataLevel((await getGenerale('level')).livelli);
+      })();
+    }
   }
 
   const funzioneGetLevelById = (event) => {
-    let id = event.target.value;
-    (async () => {
-      setIdSelezionato(id);
-      let result = await getByIdGenerale('level', id);
-      setfunzioniLevel(result?.level?.funzioni)
-      setNomeLevel(result?.level?.nome);
-    })();
+    if (functions.indexOf("level.edit") !== -1) {
+      let id = event.target.value;
+      (async () => {
+        setIdSelezionato(id);
+        let result = await getByIdGenerale('level', id);
+        setfunzioniLevel(result?.level?.funzioni)
+        setNomeLevel(result?.level?.nome);
+      })();
+    }
   }
 
   const funzioneAggiornaFunzioniLevel = (codici) => {
@@ -165,7 +170,7 @@ export default function TransferListRuolo() {
               key={value.nome}
               role="listitem"
               disabled={nomeLevel === "ADMIN"}
-              style={{display: idSelezionato === 0? 'none':''}}
+              style={{ display: idSelezionato === 0 ? 'none' : '' }}
               button
               onClick={handleToggle(value.codice)}
             >

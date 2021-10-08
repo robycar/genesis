@@ -9,6 +9,8 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
 import { Fade, Paper, Typography, Box } from "@material-ui/core";
 import SelectBar from "./SelectBar";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
@@ -22,6 +24,7 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
 
 const TestGeneratoreSchedulatiTable = () => {
   const [id, setId] = useState();
@@ -47,32 +50,32 @@ const TestGeneratoreSchedulatiTable = () => {
     },
     {
       title: "Loader",
-      field: "createdBy",
+      field: "loadedBy",
     },
     {
       title: "Data Inizio",
-      field: "creationDate",
+      field: "scheduleDateTime",
     },
-    {
-      title: "Data Fine",
-      field: "modifiedDate",
-    },
+    // {
+    //   title: "Data Fine",
+    //   field: "modifiedDate",
+    // },
     {
       title: "Status",
-      field: "trace",
+      field: "stato",
     },
-    {
-      title: "Trace",
-      field: "trace",
-    },
-    {
-      title: "Call-Id",
-      field: "trace",
-    },
-    {
-      title: "Report",
-      field: "trace",
-    },
+    // {
+    //   title: "Trace",
+    //   field: "trace",
+    // },
+    // {
+    //   title: "Call-Id",
+    //   field: "trace",
+    // },
+    // {
+    //   title: "Report",
+    //   field: "trace",
+    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -227,6 +230,12 @@ const TestGeneratoreSchedulatiTable = () => {
     setValue(newValue);
   };
 
+  const testGenLoader = () => {
+    //loadTestGen(id);
+    handleClose();
+    getAllTestGeneratore();
+  };
+
   /*------------- GET TEST GEN -------------*/
 
   let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
@@ -288,28 +297,31 @@ const TestGeneratoreSchedulatiTable = () => {
             position: "row",
           },
           {
-            icon: "play_circle_outlined",
-            tooltip: "Launch",
+            icon: () => <PlayCircleOutlineIcon />,
+            tooltip: "Lancia",
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
           },
           {
-            icon: "delete",
-            tooltip: "Delete all selected row",
-            onClick: () => alert("Ho cancellato le righe"),
+            icon: () => <DeleteIcon />,
+            tooltip: "Elimina Test",
+            onClick: (event, rowData) =>
+            alert("Api delete da inserire"),
+            position: "row",
+
           },
           {
             icon: () => <FilterListIcon />,
-            tooltip: "Hide/Show Filter option",
+            tooltip: "Filtro",
             isFreeAction: true,
             // onClick: () => handleChange(),
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Generatore"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Generatore",
+            tooltip: "Carica Test Generatore",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },
@@ -458,20 +470,38 @@ const TestGeneratoreSchedulatiTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-                <ButtonClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="secondary"
                   nome="Schedula Test"
                   onClick={handleOpenSchedula}
-                />
+                >
+                  Schedula Test
+                </Button>
 
-                <ButtonNotClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
-                />
+                  id={id}
+                  onClick={testGenLoader}
+                >
+                  {" "}
+                  Carica Test{" "}
+                </Button>
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  style={{ backgroundColor: "#ffeb3b", color: "white" }}
+                  nome="Annulla"
+                  onClick={handleClose}
+                >
+                  {" "}
+                  Annulla{" "}
+                </Button>
               </div>
             </div>
           </Paper>

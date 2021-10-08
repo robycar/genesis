@@ -65,7 +65,7 @@ export const mainListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
-      disabled={localStorage.getItem("livello") !== "ADMIN" && localStorage.getItem("livello") !== "test"}
+      //disabled={localStorage.getItem("livello") !== "ADMIN" && localStorage.getItem("livello") !== "test"}
       to="/amministrazione/utenze"
     >
       <ListItemIcon>
@@ -138,7 +138,7 @@ export const quaterListItems = (
     </ListItem> */}
     <div className="versione">
       <hr />
-      Beta 0.0.1
+      Beta 0.0.2
     </div>
   </div>
 );

@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
 import { Typography, Fade } from "@material-ui/core";
 import {
@@ -19,7 +17,6 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import { MenuItem, Paper } from "@material-ui/core";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
@@ -27,24 +24,14 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import SettingsIcon from "@material-ui/icons/Settings";
-import AddIcon from "@material-ui/icons/Add";
-import RemoveIcon from "@material-ui/icons/Remove";
-import acccessControl from "../../service/url";
-import TextField from "@material-ui/core/TextField";
-import Backdrop from "@material-ui/core/Backdrop";
-import Modal from "@material-ui/core/Modal";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Prova from "../../components/Prova";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { file } from "@babel/types";
 import { useHistory } from "react-router-dom";
 import { getGenerale, putGenerale } from "../../service/api";
+import {ButtonEditing, ButtonEditingTest} from "../../components/ButtonBarraNavigazione"
 
 const drawerWidth = 240;
 
@@ -385,78 +372,10 @@ function EditingTestCreaTestGeneratore() {
               <NavbarItemEdit fontSize="large" />
             </div>
           </Container>
-          <div className={classes.buttonContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/linee"
-            >
-              LINEE
-            </Button>
-
-            {/* </NavLink> */}
-
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/outboundproxy"
-            >
-              OUTBOUND PROXY
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/template"
-            >
-              TEMPLATE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/testcase"
-            >
-              TEST
-            </Button>
-            <div className={classes.buttonTestContainer}>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testcreatestcase"
-              >
-                TEST CASE
-              </Button>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testsuite"
-              >
-                TEST SUITE
-              </Button>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testgeneratore"
-              >
-                TEST GENERATORE
-              </Button>
-            </div>
-          </div>
-
+          
+          <ButtonEditing/>
+          <ButtonEditingTest/>
+          
           {/* ----------------------------CREA TEST CASE---------------------------------------- */}
 
           <Paper className={classes.paper} elevation={2}>

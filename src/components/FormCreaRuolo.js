@@ -42,6 +42,7 @@ function FormCreaRuolo() {
 
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
+  var functions = localStorage.getItem("funzioni").split(",");
 
   const checkRichiesta = (result) => {
     if (result.error == null) {
@@ -55,11 +56,14 @@ function FormCreaRuolo() {
   };
 
   const funzioneAggiungiRuolo = () => {
-    //----AGGIUNGI GRUPPO------
-    (async () => {
-      let result = await putGenerale('level', { nome: nome, desccrizione: descrizione });
-      checkRichiesta(result);
-    })();
+
+    if (functions.indexOf("level.edit") !== -1) {
+      //----AGGIUNGI GRUPPO------
+      (async () => {
+        let result = await putGenerale('level', { nome: nome, desccrizione: descrizione });
+        checkRichiesta(result);
+      })();
+    }
   }
 
   const putRuolo = () => {
@@ -120,17 +124,17 @@ function FormCreaRuolo() {
           className={classes.bottone}
           style={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <ButtonClickedGreen size="medium" nome="Crea" onClick={putRuolo} />
+          <ButtonClickedGreen disabled={functions.indexOf("level.edit") === -1} size="medium" nome="Crea" onClick={putRuolo} />
           <Button
-              component={NavLink}
-              className="button-green-disactive"
-              exact
-              to="/amministrazione/ruoli"
-              variant="contained"
-              size="medium"
-            >
-              annulla
-            </Button>
+            component={NavLink}
+            className="button-green-disactive"
+            exact
+            to="/amministrazione/ruoli"
+            variant="contained"
+            size="medium"
+          >
+            annulla
+          </Button>
         </div>
       </Form>
     </Container>

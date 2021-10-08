@@ -20,8 +20,11 @@ import loading from "../../src/assets/load.gif";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import "../styles/App.css";
+import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
 
 const TestGeneratoreRunningTable = () => {
   const [id, setId] = useState();
@@ -228,6 +231,12 @@ const TestGeneratoreRunningTable = () => {
     setValue(newValue);
   };
 
+  const testGenLoader = () => {
+    //loadTestGen(id);
+    handleClose();
+    getAllTestGeneratore();
+  };
+
   /*------------- GET TEST GEN -------------*/
 
   let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
@@ -290,17 +299,17 @@ const TestGeneratoreRunningTable = () => {
             position: "row",
           },
           {
-            icon: "play_circle_outlined",
-            tooltip: "Launch",
+            icon: () => <PlayCircleOutlineIcon />,
+            tooltip: "Lancia",
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Generatore"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Generatore",
+            tooltip: "Carica Test Generatore",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },
@@ -449,20 +458,38 @@ const TestGeneratoreRunningTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-                <ButtonClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="secondary"
                   nome="Schedula Test"
                   onClick={handleOpenSchedula}
-                />
+                >
+                  Schedula Test
+                </Button>
 
-                <ButtonNotClickedGreen
+                <Button
                   size="small"
                   variant="contained"
                   color="primary"
                   nome="Carica Test"
-                />
+                  id={id}
+                  onClick={testGenLoader}
+                >
+                  {" "}
+                  Carica Test{" "}
+                </Button>
+
+                <Button
+                  size="small"
+                  variant="contained"
+                  style={{ backgroundColor: "#ffeb3b", color: "white" }}
+                  nome="Annulla"
+                  onClick={handleClose}
+                >
+                  {" "}
+                  Annulla{" "}
+                </Button>
               </div>
             </div>
           </Paper>

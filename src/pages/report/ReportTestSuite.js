@@ -28,6 +28,8 @@ import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
 import TotalTestSuiteConclusi from "../../components/Table";
 
+import ReportCardTestSuiteGeneral from "./ReportCardTestSuiteGeneral";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -259,6 +261,12 @@ function ReportTestSuite() {
             </Button>
           </div>
             </Grid>
+            {/* INFO DASH FOR TEST CASE*/}
+          <Grid>
+            <ReportCardTestSuiteGeneral />
+          </Grid>
+
+
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <TestSuiteComplete />

@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
 import { Typography, Fade } from "@material-ui/core";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
@@ -20,7 +18,6 @@ import {
   quaterListItems,
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import { MenuItem, Paper } from "@material-ui/core";
 import CreaItem from "../../components/CreaItem";
 import { NavLink } from "react-router-dom";
@@ -28,23 +25,20 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Form from "react-bootstrap/Form";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-import acccessControl from "../../service/url";
 import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import Prova from "../../components/Prova";
-import { blue } from "@material-ui/core/colors";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useHistory } from "react-router-dom";
+import { creaTemplate } from "../../service/api";
+import { ButtonEditing } from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -292,8 +286,6 @@ function getSteps() {
     "Carica i files XML",
     "Impostare Chiamato",
     "Impostare Chiamante/i",
-    // "Gestisci i files XML",
-    // "Template",
   ];
 }
 
@@ -303,7 +295,6 @@ function EditingTemplateCreaTemplate() {
   let history = useHistory();
   const classes = useStyles();
 
-  const [data, setData] = useState([]);
   const [openDrawer, setOpenDrawer] = useState([]);
   const [nome, setNome] = useState("");
   const [durata, setDurata] = useState(0);
@@ -314,7 +305,6 @@ function EditingTemplateCreaTemplate() {
   const [nextDisabled, setNextDisabled] = useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const [chiamato, setChiamato] = useState("");
-  const [chiamanti, setChiamanti] = useState("");
   const [qntChiamanti, setQntChiamanti] = useState([]);
   const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
   const [chiamante1, setChiamante1] = useState(false);
@@ -322,31 +312,19 @@ function EditingTemplateCreaTemplate() {
   const [chiamante3, setChiamante3] = useState(false);
 
   let arrAppoggio = qntChiamanti;
-  var arrayChiamanti = [];
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files);
     setIsSelected(true);
-
-    // console.log(event.target.files);
   };
 
   const arrayValue = Object.values(selectedFile);
-  // console.log(arrayValue[0]);
 
   const handleSubmission = () => { };
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  useEffect(() => {
-    // getTypeId();
-    // getLinea();
-    // getFile();
-    // getOBP();
-    // getTemplate();
-  }, []);
 
   const handleChangeName = (e) => {
     setNome(e.target.value);
@@ -444,114 +422,38 @@ function EditingTemplateCreaTemplate() {
   };
 
   /*-------------- FUNZIONE ADD TEMPLATE --------------*/
-
-  const Invia = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var formdata = new FormData();
-    formdata.append("nome", nome);
-    formdata.append("durata", durata);
-    formdata.append("typeTemplate", tipoTemplate);
-    formdata.append("descrizione", descrizione);
-
-    if (chiamato !== "") {
-      formdata.append("chiamato", chiamato);
-    }
-    if (qntChiamanti[0]?.linea) {
-      formdata.append("chiamanti", qntChiamanti[0].linea);
-    }
-    if (qntChiamanti[1]?.linea) {
-      formdata.append("chiamanti", qntChiamanti[1].linea);
-    }
-    if (qntChiamanti[2]?.linea) {
-      formdata.append("chiamanti", qntChiamanti[2].linea);
-    }
-    if (arrayValue[0]?.name) {
-      formdata.append("file", arrayValue[0], arrayValue[0]?.name);
-    }
-    if (arrayValue[1]?.name) {
-      formdata.append("file", arrayValue[1], arrayValue[1]?.name);
-    }
-    if (arrayValue[2]?.name) {
-      formdata.append("file", arrayValue[2], arrayValue[2]?.name);
-    }
-    if (arrayValue[3]?.name) {
-      formdata.append("file", arrayValue[3], arrayValue[3]?.name);
-    }
-
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: formdata,
-      redirect: "follow",
-    };
-
-    fetch(`/api/template`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.error !== null) {
-          setOpenWarning(true);
-          if (result.error.code === "TEST-0018") {
-            setWarning(
-              "Impossibile completare l'operazione. Si sta tentando di utilizzare il file più di una volta tra chiamato e chiamanti"
-            );
-          }
-          if (result.error === "Internal Server Error") {
-            setWarning(
-              "Impossibile completare l'operazione. Si sta tentando di utilizzare il file più di una volta tra chiamato e chiamanti"
-            );
-          } else {
-            setWarning(
-              "Codice errore :" +
-              result.error.code +
-              "Descrizione " +
-              result.error.description
-            );
-          }
-        } else {
-          setOpenWarning(false);
-          history.push("/editing/template");
+  const funzioneCreaTemplate = () => {
+    //----AGGIORNA CHIAMANTI----
+    (async () => {
+      let result = await creaTemplate(nome, durata, tipoTemplate, descrizione, chiamato, qntChiamanti, arrayValue);
+      if (result.error !== null) {
+        setOpenWarning(true);
+        if (result.error.code === "TEST-0018") {
+          setWarning(
+            "Impossibile completare l'operazione. Si sta tentando di utilizzare il file più di una volta tra chiamato e chiamanti"
+          );
         }
-      })
-      .catch((error) => console.log("error", error));
-    // window.location = "/editing/template";
-    handleCloseWarning();
-  };
+        if (result.error === "Internal Server Error") {
+          setWarning(
+            "Impossibile completare l'operazione. Si sta tentando di utilizzare il file più di una volta tra chiamato e chiamanti"
+          );
+        } else {
+          setWarning(
+            "Codice errore :" +
+            result.error.code +
+            "Descrizione " +
+            result.error.description
+          );
+        }
+      } else {
+        setOpenWarning(false);
+        history.push("/editing/template");
+      }
+    })();
+  }
+ 
 
-  // if (
-  //   nome !== "" &&
-  //   durata !== "" &&
-  //   descrizione !== "" &&
-  //   tipoTemplate !== ""
-  // ) {
-  //   Invia();
-  //   // console.log(ip);
-  // } else {
-  //   if (nome === "") {
-  //     document.getElementById("alertIP").style.display = "";
-  //   } else {
-  //     document.getElementById("alertIP").style.display = "none";
-  //   }
-  //   if (durata === "") {
-  //     document.getElementById("alertNome").style.display = "";
-  //   } else {
-  //     document.getElementById("alertNome").style.display = "none";
-  //   }
-  //   if (descrizione === "") {
-  //     document.getElementById("alertPassword").style.display = "";
-  //   } else {
-  //     document.getElementById("alertPassword").style.display = "none";
-  //   }
-  //   if (tipoTemplate === "") {
-  //     document.getElementById("alertDescrizione").style.display = "";
-  //   } else {
-  //     document.getElementById("alertDescrizione").style.display = "none";
-  //   }
-  // }
-
+  
   //-------------------------CHIAMANTI E CHIAMATO --------------------------
 
   const addArr = () => {
@@ -628,12 +530,12 @@ function EditingTemplateCreaTemplate() {
   // };
 
   const salva2 = () => {
-    const Invia = () => {
+    const funzioneCreaTemplate = () => {
       //PUT
     };
 
     if (type !== "") {
-      Invia();
+      funzioneCreaTemplate();
       handleClose();
       handleClose2();
     } else {
@@ -646,7 +548,7 @@ function EditingTemplateCreaTemplate() {
 
   const handleNext = () => {
     if (activeStep + 1 === steps.length) {
-      Invia();
+      funzioneCreaTemplate();
     } else setActiveStep((prevActiveStep) => prevActiveStep + 1);
     // disabilitaNext();
   };
@@ -696,49 +598,9 @@ function EditingTemplateCreaTemplate() {
             <NavbarItemEdit fontSize="large" />
           </div>
         </Container>
-        <div className={classes.buttonContainer}>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/linee"
-          >
-            LINEE
-          </Button>
 
-          {/* </NavLink> */}
-
-          {/* <NavLink exact to="/dashboard/testsuite"> */}
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/outboundproxy"
-          >
-            OUTBOUND PROXY
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/template/createmplate"
-          >
-            TEMPLATE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/testcase"
-          >
-            TEST
-          </Button>
-        </div>
-
+        <ButtonEditing />
+        
         {/* ----------------------------CREA TEST generatore---------------------------------------- */}
 
         <Paper className={classes.paper} elevation={2}>

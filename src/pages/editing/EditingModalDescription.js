@@ -7,24 +7,18 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import Typography from "@material-ui/core/Typography";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import SelectBar from "../../components/SelectBar";
-import { TextareaAutosize } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import NavbarItemSupport from "../../components/NavbarItemSupport";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 
 const drawerWidth = 240;
 

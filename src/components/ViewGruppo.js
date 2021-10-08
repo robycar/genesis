@@ -202,7 +202,7 @@ const ViewGruppo = () => {
                 </Button>
               </div>
             ),
-            tooltip: "",
+            tooltip: "Indietro",
             isFreeAction: true,
           },
         ]}

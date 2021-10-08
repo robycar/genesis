@@ -1,4 +1,4 @@
-import React, { useEffect, useState, version } from "react";
+import React, { useEffect, useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { Button } from "@material-ui/core";
@@ -20,38 +20,54 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 const GestioneRuoli = () => {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const [data, setData] = useState([]);
   const [id, setId] = useState(0);
   const [version, setVersion] = useState(0);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [caricamento, setCaricamento] = useState(false)
+  const [scrittaTabella, setScrittaTabella] = useState("")
 
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
+
+    if (functions.indexOf("level.view") !== -1) {
     //----GET ALL USERS----
-    (async () => {
-      setCaricamento(true)
-      setData((await getGenerale('level')).livelli);
-      setCaricamento(false)
-    })();
+      (async () => {
+        setCaricamento(true)
+        setData((await getGenerale('level')).livelli);
+        setCaricamento(false)
+      })();
+
+      setScrittaTabella("Non è presente alcun dato da mostrare")
+
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzarequesti dati")
+    }
   }
   const funzioneAggiornamento = () => {
     //----GET ALL USERS----
-    (async () => {
-      setData((await postGenerale('level', {id: id, version: version, nome: nome, descrizione: descrizione})).livelli);
-      setOpen(false);
-      funzioneGetAll();
-    })();
+    if (functions.indexOf("level.edit") !== -1) {
+      (async () => {
+        setData((await postGenerale('level', { id: id, version: version, nome: nome, descrizione: descrizione })).livelli);
+        setOpen(false);
+        funzioneGetAll();
+      })();
+    }
   }
 
   const funzioneDelete = (id) => {
-    (async () => {
-      setCaricamento(true)
-      await deleteGenerale("level", id)
-      funzioneGetAll();
-    })();
+    if (functions.indexOf("level.delete") !== -1) {
+      (async () => {
+        setCaricamento(true)
+        await deleteGenerale("level", id)
+        funzioneGetAll();
+      })();
+    }
   }
 
   useEffect(() => {
@@ -213,26 +229,27 @@ const GestioneRuoli = () => {
                   activeClassName="button-green-active"
                   exact
                   to="/amministrazione/crearuolo"
+                  disabled= {functions.indexOf("level.edit") === -1}
                 >
                   CREA RUOLO
                 </Button>
               </div>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Crea Ruolo",
             isFreeAction: true,
           },
           {
             icon: () => <EditIcon />,
-            tooltip: "Edit",
+            tooltip: "Modifica",
             onClick: (event, rowData) => handleOpen(rowData),
-
+            disabled: functions.indexOf("level.edit") === -1,
             position: "row",
           },
           rowData => ({
             icon: 'delete',
-            tooltip: 'Elimina Utente',
+            tooltip: 'Elimina Ruolo',
             onClick: (event, rowData) => funzioneDelete(rowData.id),
-            disabled: rowData.nome === "ADMIN",
+            disabled: functions.indexOf("level.delete") === -1 || rowData.nome === "ADMIN",
           }),
         ]}
         localization={{
@@ -241,7 +258,7 @@ const GestioneRuoli = () => {
           },
           body: {
             emptyDataSourceMessage: (
-              "Non è presente alcun dato da mostrare"
+              scrittaTabella
             ),
           },
         }}

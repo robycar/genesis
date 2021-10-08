@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Alert from "@material-ui/lab/Alert";
 import { Typography, Fade } from "@material-ui/core";
 import {
@@ -32,7 +30,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
-import acccessControl from "../../service/url";
 import TextField from "@material-ui/core/TextField";
 import Backdrop from "@material-ui/core/Backdrop";
 import Modal from "@material-ui/core/Modal";
@@ -44,6 +41,7 @@ import {
   deleteGenerale,
   putGenerale,
 } from "../../service/api";
+import { ButtonEditing, ButtonEditingLinee } from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -246,6 +244,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditingLineaCreaLinea() {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const classes = useStyles();
   let history = useHistory();
 
@@ -265,20 +266,18 @@ function EditingLineaCreaLinea() {
   //-------------------------TYPE LINEA API ----------------
   //---- GET ALL TYPE LINEA ----
   const funzioneGetAll = () => {
-    (async () => {
-      setData((await getGenerale("typeLinea")).list);
-    })();
+    if (functions.indexOf("linea.view") !== -1) {
+      (async () => {
+        setData((await getGenerale("typeLinea")).list);
+      })();
+    }
   };
   //---- DELETE TYPE LINEA ----
   const funzioneDelete = (id) => {
-    (async () => {
-      await deleteGenerale("typeLinea", id).result;
-      funzioneGetAll();
-    })();
-  };
-  const functionDelete = () => {
-    deleteGenerale("typeLinea", typeLineaId.id)
-      .then((result) => {
+    if (functions.indexOf("user.view") !== -1) {
+      (async () => {
+        let result = await deleteGenerale("typeLinea", id).result;
+
         if (result.error !== null) {
           setOpenWarning(true);
           if (result.error.code === "LINEA-0006") {
@@ -288,19 +287,18 @@ function EditingLineaCreaLinea() {
           } else {
             setWarning(
               "Codice errore: " +
-                result.error.code +
-                " Descrizione: " +
-                result.code.description
+              result.error.code +
+              " Descrizione: " +
+              result.code.description
             );
           }
         } else {
-          funzioneDelete();
           setOpenWarning(false);
           funzioneGetAll();
         }
-      })
-      .catch((error) => console.log("error", error));
-    handleCloseRemove();
+        handleCloseRemove();
+      })();
+    }
   };
 
   //----------AGGIORNA TYPELINEA API ----
@@ -324,6 +322,45 @@ function EditingLineaCreaLinea() {
     funzioneAggiornaTypeLinea(typeLineaId);
     handleCloseEdit();
   };
+
+  //----------CREA TYPELINEA API ----
+
+  const salva2 = () => {
+    const funzioneAggiungiTypeLinea = () => {
+      (async () => {
+        await putGenerale("typeLinea", {
+          descrizione: type,
+        }).result;
+        funzioneGetAll();
+      })();
+    };
+    const Invia = () => {
+      putGenerale("typeLinea", {
+        descrizione: type,
+      })
+        .then((result) => {
+          if (result.error.code === null) {
+            return result;
+          } else if (result.error.code === "LINEA-0005") {
+            return alert("Non può essere creato un tipo linea già esistente");
+          }
+        })
+        .then((result) => {
+          funzioneAggiungiTypeLinea();
+          checkRichiesta(result.typeLinea);
+          funzioneGetAll();
+        })
+        .catch((error) => console.log("error", error));
+    };
+
+    if (type !== "") {
+      Invia();
+      handleClose();
+      handleClose2();
+    } else {
+    }
+  };
+
   useEffect(() => {
     funzioneGetAll();
   }, []);
@@ -339,7 +376,7 @@ function EditingLineaCreaLinea() {
   const [typeLineaDescrizione, setTypeLineaDescrizione] = useState("");
 
   function salva() {
-    const funzioneAggiungiUtente = () => {
+    const funzioneAggiungiLinea = () => {
       //--------------CREA LINEA------------------------
       (async () => {
         let result = await putGenerale("linea", {
@@ -383,7 +420,7 @@ function EditingLineaCreaLinea() {
         document.getElementById("alertPassword").style.display = "none";
         document.getElementById("alertIP2").style.display = "none";
 
-        funzioneAggiungiUtente();
+        funzioneAggiungiLinea();
       } else {
         document.getElementById("alertIP2").style.display = "";
       }
@@ -479,7 +516,7 @@ function EditingLineaCreaLinea() {
   const handleCloseEdit = () => {
     setOpenEdit(false);
   };
-  //--------------------MODAALE 2----------------------------------
+  //--------------------MODALE 2----------------------------------
 
   const [open2, setOpen2] = useState(false);
   const [type, setType] = useState("");
@@ -496,51 +533,6 @@ function EditingLineaCreaLinea() {
 
   const checkRichiesta = (result) => {
     setTypeLineaId(result.id);
-  };
-
-  const salva2 = () => {
-    const Invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
-      var raw = JSON.stringify({
-        descrizione: type,
-      });
-
-      var requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/typeLinea`, requestOptions)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          } else if (response.status === 409) {
-            return alert("Non può essere creato un tipo linea già esistente");
-          }
-        })
-        .then((result) => {
-          checkRichiesta(result.typeLinea);
-          funzioneGetAll();
-        })
-        .catch((error) => console.log("error", error));
-
-      // localStorage.setItem("user-info", JSON.stringify(result));
-      // history.push("/dashboard/testcase");
-      //window.location = "/editing/linee";
-    };
-
-    if (type !== "") {
-      Invia();
-      handleClose();
-      handleClose2();
-    } else {
-    }
   };
 
   return (
@@ -580,65 +572,9 @@ function EditingLineaCreaLinea() {
             <NavbarItemEdit fontSize="large" />
           </div>
         </Container>
-        <div className={classes.buttonContainer}>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/linee"
-          >
-            LINEE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/outboundproxy"
-          >
-            OUTBOUND PROXY
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/template"
-          >
-            TEMPLATE
-          </Button>
-          <Button
-            className="button-green"
-            component={NavLink}
-            activeClassName="button-green-active"
-            exact
-            to="/editing/testcase"
-          >
-            TEST
-          </Button>
 
-          <div className={classes.buttonTestContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/linee/crealinea"
-            >
-              LINEE SIMULATORE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/lineegeneratore"
-            >
-              LINEE GENERATORE
-            </Button>
-          </div>
-        </div>
+        <ButtonEditing />
+        <ButtonEditingLinee />
 
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Linea Simulatore" />
@@ -813,6 +749,7 @@ function EditingLineaCreaLinea() {
                         color="primary"
                         startIcon={<AddIcon />}
                         size="small"
+                        disabled={functions.indexOf("linea.edit") === -1}
                       >
                         TYPE
                       </Button>
@@ -824,7 +761,7 @@ function EditingLineaCreaLinea() {
                         color="secondary"
                         startIcon={<RemoveIcon />}
                         size="small"
-                        disabled={typeLineaId === 0 ? true : false}
+                        disabled={functions.indexOf("linea.delete") === -1 || typeLineaId === 0}
                       >
                         TYPE
                       </Button>
@@ -836,7 +773,7 @@ function EditingLineaCreaLinea() {
                         style={{ backgroundColor: "#ffc107" }}
                         startIcon={<EditIcon />}
                         size="small"
-                        disabled={typeLineaId === 0 ? true : false}
+                        disabled={functions.indexOf("linea.edit") === -1 || typeLineaId === 0 ? true : false}
                       >
                         TYPE
                       </Button>
@@ -1025,7 +962,7 @@ function EditingLineaCreaLinea() {
                                   <div>
                                     <Button
                                       onClick={() =>
-                                        functionDelete(typeLineaId.id)
+                                        funzioneDelete(typeLineaId.id)
                                       }
                                       variant="contained"
                                       color="secondary"
@@ -1182,6 +1119,7 @@ function EditingLineaCreaLinea() {
               size="medium"
               nome="Crea"
               onClick={salva}
+              disabled={functions.indexOf("linea.create") === -1 || functions.indexOf("linea.view") === -1}
             />
             <Button
               component={NavLink}
@@ -1190,6 +1128,7 @@ function EditingLineaCreaLinea() {
               to="/editing/linee"
               variant="contained"
               size="medium"
+              disabled={functions.indexOf("linea.create") === -1 || functions.indexOf("linea.view") === -1}
             >
               annulla
             </Button>

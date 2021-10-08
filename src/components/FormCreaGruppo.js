@@ -41,6 +41,7 @@ function FormCreaGruppo() {
   const classes = useStyles();
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
+  var functions = localStorage.getItem("funzioni").split(",");
 
   const checkRichiesta = (result) => {
     if (result.error == null) {
@@ -54,12 +55,14 @@ function FormCreaGruppo() {
   };
 
   const funzioneAggiungiGruppo = () => {
-    //----AGGIUNGI GRUPPO------
-    (async () => {
-      let result = await putGenerale('group', { nome: nome, descrizione: descrizione });
-      checkRichiesta(result);
-    })();
 
+    if (functions.indexOf("group.edit") !== -1) {
+      //----AGGIUNGI GRUPPO------
+      (async () => {
+        let result = await putGenerale('group', { nome: nome, descrizione: descrizione });
+        checkRichiesta(result);
+      })();
+    }
   }
 
   const putGroup = () => {
@@ -121,7 +124,7 @@ function FormCreaGruppo() {
           className={classes.bottone}
           style={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <ButtonClickedGreen size="medium" nome="Crea" onClick={putGroup} />
+          <ButtonClickedGreen disabled={functions.indexOf("group.edit") === -1} size="medium" nome="Crea" onClick={putGroup} />
           <Button
             component={NavLink}
             className="button-green-disactive"

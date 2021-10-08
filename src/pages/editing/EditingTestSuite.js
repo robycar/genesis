@@ -7,9 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
@@ -18,12 +16,10 @@ import {
 } from "../../components/listItems";
 import NavbarItemEdit from "../../components/NavbarItemEdit";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
-import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 import "../../styles/App.css";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
-//import TestSuiteTable from "../../components/TestSuiteTable";
 import TestSuiteTableNew from "../../components/TestSuiteTableNew";
+import {ButtonEditing, ButtonEditingTest} from "../../components/ButtonBarraNavigazione"
 
 const drawerWidth = 240;
 
@@ -174,87 +170,10 @@ function EditingTestSuite() {
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
           </div>
-
-          <div className={classes.buttonContainer}>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/linee"
-            >
-              LINEE
-            </Button>
-            {/* <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/lineegeneratore"
-            >
-              LINEE GENERATORE
-            </Button> */}
-            {/* </NavLink> */}
-
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/outboundproxy"
-            >
-              OUTBOUND PROXY
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/template"
-            >
-              TEMPLATE
-            </Button>
-            <Button
-              className="button-green"
-              component={NavLink}
-              activeClassName="button-green-active"
-              exact
-              to="/editing/testsuite"
-            >
-              TEST
-            </Button>
-            <div className={classes.buttonTestContainer}>
-              <Button
-                className="button-green"
-                component={NavLink}
-                variant="contained"
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testcase"
-              >
-                TEST CASE
-              </Button>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testsuite"
-              >
-                TEST SUITE
-              </Button>
-              <Button
-                className="button-green"
-                component={NavLink}
-                activeClassName="button-green-active"
-                exact
-                to="/editing/testgeneratore"
-              >
-                TEST GENERATORE
-              </Button>
-            </div>
-          </div>
+          
+          <ButtonEditing/>
+          <ButtonEditingTest/>
+          
           <Paper className={classes.generalPaper}>
             <ListItem>
               <ListItemIcon>

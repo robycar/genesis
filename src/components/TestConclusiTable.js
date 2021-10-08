@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import Modal from "@material-ui/core/Modal";
-import { Button } from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
+import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
@@ -37,6 +38,8 @@ const TestConclusiTable = () => {
   const [dataRun, setIdTestCaseRun] = useState(null);
   const [idTestReport, setIdTestReport] = useState();
   const [dataCase, setDataCase] = useState();
+  const [idTest, setIdTest] = useState();
+  const [dataReport, setDataReport] = useState();
 
   const columns = [
     {
@@ -65,8 +68,8 @@ const TestConclusiTable = () => {
       field: "stato",
     },
     {
-      title: "Trace",
-      field: "properties",
+      title: "Risultato",
+      field: "result",
     },
     {
       title: "Call-Id",
@@ -79,8 +82,9 @@ const TestConclusiTable = () => {
         <Button
           color="secondary"
           onClick={() => handleOpenReport(rowData.testCase.id)}
+          endIcon={<PieChartOutlinedIcon />}
         >
-          report
+          Report
         </Button>
       ),
     },
@@ -129,6 +133,15 @@ const TestConclusiTable = () => {
       width: 800,
       position: "relative",
     },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
@@ -142,6 +155,7 @@ const TestConclusiTable = () => {
     },
     typography: {
       marginTop: "3%",
+      marginBottom: "3%"
     },
 
     divTextarea: {
@@ -222,6 +236,7 @@ const TestConclusiTable = () => {
   const [openRun, setOpenRun] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
   const [openReport, setOpenReport] = React.useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -249,7 +264,7 @@ const TestConclusiTable = () => {
 
   const handleOpenReport = () => {
     setIdTestCaseRun();
-    getTestCaseReport();
+    //getTestCaseReport();
     setOpenReport(true);
   };
 
@@ -275,6 +290,18 @@ const TestConclusiTable = () => {
     runTestCase(idToRun);
     handleCloseRun();
     //alert("Run test id :  "+ idToRun);
+  };
+
+   //------------ funzione apri modale
+
+   const handleOpenDelete = (rowData) => {
+    setId(rowData.id);
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
   };
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -308,6 +335,7 @@ const TestConclusiTable = () => {
         console.log(result);
         //setAppearTest(result.testCaseList);
         setData(result.testCaseList);
+        setDataReport(result.testCaseList);
       })
       .catch((error) => console.log("error", error));
   };
@@ -420,9 +448,46 @@ const TestConclusiTable = () => {
       .catch((error) => console.log("error", error));
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     getTestCaseReport();
-  }, []);
+  }, []);*/
+
+   //-----------GET TEST CASE----------------------
+  //  const getAllTestCase = () => {
+  //   var consta = "COMPLETED";
+
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Content-Type", "application/json");
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  //   var raw = JSON.stringify({
+  //     includeTestCaseOfType: consta,
+  //     includeTestSuiteOfType: null,
+  //     includeTestGeneratoreOfType: null,
+  //   });
+
+  //   var requestOptions = {
+  //     method: "POST",
+  //     headers: myHeaders,
+  //     body: raw,
+  //     redirect: "follow",
+  //   };
+
+  //   fetch(`/api/dashboard/info`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       console.log(result);
+  //       //setAppearTest(result.testCaseList);
+  //       setData(result.testCaseList);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
+
+  // useEffect(() => {
+  //   getAllTestCase();
+  // }, []);
 
   return (
     <div>
@@ -442,36 +507,41 @@ const TestConclusiTable = () => {
           filtering: true,
         }}
         actions={[
-          {
-            icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Report",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: "play_circle_outlined",
-            tooltip: "Launch",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
+          // {
+          //   icon: () => <PieChartOutlinedIcon />,
+          //   tooltip: "Mostra Report",
+          //   onClick: (event, rowData) =>
+          //     alert("Ho cliccato " + rowData.launcher),
+          //   position: "row",
+          // },
+          // {
+          //   icon: "play_circle_outlined",
+          //   tooltip: "Lancia il Test",
+          //   onClick: (event, rowData) =>
+          //     alert("Ho cliccato " + rowData.launcher),
+          //   position: "row",
+          // },
           {
             icon: "delete",
-            tooltip: "Delete all selected row",
-            onClick: () => alert("Ho cancellato le righe"),
+            icon: () => <DeleteIcon />,
+            tooltip: "Elimina il Test",
+            onClick: (event, rowData) => {
+              handleOpenDelete(rowData);
+              setIdTest(rowData.id);
+            },
+            position: "row",
           },
           {
             icon: () => <FilterListIcon />,
-            tooltip: "Hide/Show Filter option",
+            tooltip: "Filtro",
             isFreeAction: true,
             onClick: () => handleChange(),
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Case",
+            tooltip: "Carica Test Case",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },
@@ -581,6 +651,54 @@ const TestConclusiTable = () => {
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+
+       {/* ------------------------MODALE DELETE--------------------- */}
+ <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4" style={{ color: "#ef5350"}}>
+                    Elimina Test Id <b>{" "+ id}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography} style={{paddingLeft: "16px",}}>
+                Vuoi eliminare il Test Caricato?
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    //onClick={functionDelete}
+                    onClick={() => alert("Inserire funzione Delete Loaded Test ")}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
 
@@ -738,7 +856,7 @@ const TestConclusiTable = () => {
                 <MaterialTable
                   style={{ boxShadow: "none" }}
                   title="Report"
-                  // data={data}
+                  data={dataReport}
                   columns={columns}
                   actions={[
                     {

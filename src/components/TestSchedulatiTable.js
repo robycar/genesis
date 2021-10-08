@@ -4,6 +4,7 @@ import MaterialTable from "material-table";
 import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
@@ -18,9 +19,11 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
 import loading from "../../src/assets/load.gif";
+import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
+import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
 
 const TestSchedulatiTable = () => {
   const [filter, setFilter] = useState(false);
@@ -38,6 +41,7 @@ const TestSchedulatiTable = () => {
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [dataSchedula, setDataSchedula] = useState();
+  const [idTest, setIdTest] = useState();
 
   const columns = [
     {
@@ -96,6 +100,15 @@ const TestSchedulatiTable = () => {
       width: 500,
       position: "relative",
     },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
@@ -109,6 +122,7 @@ const TestSchedulatiTable = () => {
     },
     typography: {
       marginTop: "3%",
+      marginBottom: "3%",
     },
 
     divTextarea: {
@@ -190,6 +204,7 @@ const TestSchedulatiTable = () => {
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
   const [scheduleDateTime, setSchedulaDateTime] = React.useState("");
   const [delay, setDelay] = useState(0);
+  const [openDelete, setOpenDelete] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -233,6 +248,16 @@ const TestSchedulatiTable = () => {
 
   const handleCloseRun = () => {
     setOpenRun(false);
+  };
+
+  const handleOpenDelete = (rowData) => {
+    setId(rowData.id);
+    setOpenDelete(true);
+  };
+
+  //---------- funzione chiudi modale
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
   };
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -417,33 +442,37 @@ const TestSchedulatiTable = () => {
         actions={[
           {
             icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Report",
+            tooltip: "Mostra Report",
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
           },
           {
-            icon: "play_circle_outlined",
-            tooltip: "Launch",
+            icon: () => <PlayCircleOutlineIcon />,
+            tooltip: "Lancia il Test ",
             onClick: (event, rowData) => handleOpenRun(rowData.id),
             position: "row",
           },
           {
-            icon: "delete",
-            tooltip: "Delete all selected row",
-            onClick: () => alert("Ho cancellato le righe"),
+            icon: () => <DeleteIcon />,
+            tooltip: "Elimina Test ",
+            onClick: (event, rowData) => {
+              handleOpenDelete(rowData);
+              setIdTest(rowData.id);
+            },
+            position: "row",
           },
           {
             icon: () => <FilterListIcon />,
-            tooltip: "Hide/Show Filter option",
+            tooltip: "Filtro",
             isFreeAction: true,
             onClick: () => handleChange(),
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Case"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
             ),
-            tooltip: "Load Test Suite",
+            tooltip: "Carica Test Case",
             onClick: () => handleOpen(),
             isFreeAction: true,
           },
@@ -657,6 +686,56 @@ const TestSchedulatiTable = () => {
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+
+       {/* ------------------------MODALE DELETE--------------------- */}
+       <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4" style={{ color: "#ef5350"}}>
+                    Elimina Test Id <b>{" " + id}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography} style={{paddingLeft: "16px"}}>
+                  Vuoi eliminare il Test Caricato?
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    //onClick={functionDelete}
+                    onClick={() =>
+                      alert("Inserire funzione Delete Loaded Test")
+                    }
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
 
