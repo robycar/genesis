@@ -10342,6 +10342,35 @@
 						"description": "Elimina una o più test suite. Le test suite vanno indicata utilizzando il loro identificatore numerico (campo id) separate da una virgola.\nEs.: DELETE {{contextUrl}}/api/testsuite/loaded/1,2,3\n\nNon è possibile eliminare una test suite se questa è in stato RUNNING o PAUSED.\n\nPermessi:\ntestsuite.run"
 					},
 					"response": []
+				},
+				{
+					"name": "testsuite_schedule",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"scheduleDateTime\": \"2021-10-11T07:00\",\r\n    \"delay\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/testsuite/schedule",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testsuite",
+								"schedule"
+							]
+						},
+						"description": "Schedula una test suite e restituisce la test suite caricata creata.\nTutti i parametri del json di richiesta sono obbligatori.\n- scheduleDateTime deve avere il formato yyyy**-**MM**-**dd**T**hh**:**mm e non può essere antecedente alla data/ora attuale\n- delay deve essere un intero strettamente positivo ed indica i minuti per rischedulare la test suite nel caso non possa partire nell'orario stabilito.\n\nPermessi: testsuite.run"
+					},
+					"response": []
 				}
 			]
 		},
@@ -10836,7 +10865,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"includeTestCaseOfType\": \"COMPLETED\",\r\n    \"includeTestSuiteOfType\": \"COMPLETED\",\r\n    \"includeTestGeneratoreOfType\": null\r\n}",
+							"raw": "{\r\n    \"includeRiepilogoTestCase\": false,\r\n    \"includeRiepilogoTestSuite\": true,\r\n    \"includeTestCaseOfType\": \"COMPLETED\",\r\n    \"includeTestSuiteOfType\": \"COMPLETED\",\r\n    \"includeTestGeneratoreOfType\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -10854,7 +10883,7 @@
 								"info"
 							]
 						},
-						"description": "Ottiene i dati da mostrare nella dashboard. Ogni campo \"include*\" nel json di richiesta sono opzionali e possono essere omessi. I valori ammissibili sono (case sensitive):\n- null\n- \"READY\"\n- \"SCHEDULED\"\n- \"<u>~~WAITING~~</u>\"\n- \"RUNNING\"\n- \"COMPLETED\"\n\nI dati nel json di risposta saranno popolati solo se li corrispondente campo \"include*\" è presente e diverso da `null`."
+						"description": "Ottiene i dati da mostrare nella dashboard. Ogni campo \"includeTest*\" nel json di richiesta sono opzionali e possono essere omessi. I valori ammissibili sono (case sensitive):\n- null\n- \"READY\"\n- \"SCHEDULED\"\n- \"<u>~~WAITING~~</u>\"\n- \"RUNNING\"\n- \"COMPLETED\"\n\n\nAnche i campi includeRiepilogo* sono opzionali e possono avere i seguenti valori:\n- true\n- false\n\nI dati nel json di risposta saranno popolati solo se li corrispondente campo \"include*\" è presente e diverso da `null`."
 					},
 					"response": []
 				}

@@ -1,25 +1,30 @@
 package it.reply.genesis;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.data.jdbc.repository.config.EnableJdbcAuditing;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackageClasses = {SippApplication.class})
 @EnableJdbcRepositories(basePackages = "it.reply.genesis.repository")
 @EnableJdbcAuditing
 @EnableAsync
-@ComponentScan({"it.reply.genesis"})
-public class SippApplication extends AsyncConfigurerSupport{
+@EnableScheduling
+public class SippApplication extends AsyncConfigurerSupport implements SchedulingConfigurer {
 
 	public static final String GENESIS_EXECUTOR_BEAN_NAME = "genesisExecutor";
 
@@ -65,6 +70,18 @@ public class SippApplication extends AsyncConfigurerSupport{
     executor.initialize();
     
     return executor;
+  }
+
+	
+  @Override
+  public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+    taskRegistrar.setScheduler(taskScheduledExecutor());
+    
+  }
+
+  @Bean(destroyMethod = "shutdown")
+  public ScheduledExecutorService taskScheduledExecutor() {
+    return Executors.newScheduledThreadPool(4);
   }
 	
 	

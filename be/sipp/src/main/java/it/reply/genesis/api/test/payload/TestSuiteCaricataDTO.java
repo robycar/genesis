@@ -2,6 +2,7 @@ package it.reply.genesis.api.test.payload;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,10 @@ public class TestSuiteCaricataDTO extends DTO {
   private GruppoDTO gruppo;
   
   private Timestamp loadedWhen;
+  
+  private LocalDateTime scheduleDateTime;
+  
+  private Long delay;
   
   private TestSuiteDTO testSuite;
   
@@ -60,8 +65,11 @@ public class TestSuiteCaricataDTO extends DTO {
     this.loadedBy = vo.getLoadedBy();
     this.loadedWhen = vo.getLoadedWhen();
     this.gruppo = new GruppoDTO(vo.getGruppo());
-    this.testSuite = new TestSuiteDTO(vo.getTestSuite());
-    
+    this.scheduleDateTime = vo.getScheduleDateTime();
+    this.delay = vo.getDelay();
+    if (vo.getTestSuite() != null) {
+      this.testSuite = new TestSuiteDTO(vo.getTestSuite());
+    }
     if (includeTestCases) {
       assignTestCases(vo.getTestCases());
     }
@@ -86,6 +94,8 @@ public class TestSuiteCaricataDTO extends DTO {
     writeField(sb, "version", version);
     writeField(sb, "stato", stato);
     writeField(sb, "loadedWhen", loadedWhen);
+    writeField(sb, "scheduleDateTime", scheduleDateTime);
+    writeField(sb, "delay", delay);
     writeField(sb, "loadedBy", loadedBy);
     writeField(sb, "startDate", startDate);
     writeField(sb, "startedBy", startedBy);
@@ -198,6 +208,22 @@ public class TestSuiteCaricataDTO extends DTO {
 
   public void setTestCases(List<TestCaseCaricatoDTO> testCases) {
     this.testCases = testCases;
+  }
+
+  public LocalDateTime getScheduleDateTime() {
+    return scheduleDateTime;
+  }
+
+  public void setScheduleDateTime(LocalDateTime scheduleDateTime) {
+    this.scheduleDateTime = scheduleDateTime;
+  }
+
+  public Long getDelay() {
+    return delay;
+  }
+
+  public void setDelay(Long delay) {
+    this.delay = delay;
   }
 
 }

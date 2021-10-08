@@ -1,5 +1,7 @@
 package it.reply.genesis.api.dashboard.controller;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,18 @@ public class DashboardController extends AbstractController {
         response.setTestSuiteList(testSuiteService.readTestSuiteCaricateOfType(inclusion));
       }
       
+      if (request.isIncludeRiepilogoTestCase()) {
+        LocalDate oggi = LocalDate.now();
+        response.setRiepilogoTestCaseGiorni(testCaseService.riepilogoNumerico(oggi, oggi));
+        response.setRiepilogoTestCaseSettimana(testCaseService.riepilogoNumerico(oggi.minus(Period.ofWeeks(1)), oggi));
+      }
+      
+      if (request.isIncludeRiepilogoTestSuite()) {
+        LocalDate oggi = LocalDate.now();
+        response.setRiepilogoTestSuiteGiorno(testSuiteService.riepilogoNumerico(oggi, oggi));
+        response.setRiepilogoTestSuiteSettimana(testSuiteService.riepilogoNumerico(oggi.minus(Period.ofWeeks(1)), oggi));
+      }
+     
       return ResponseEntity.ok(response);
     } catch (ApplicationException e) {
       return handleException(e, response);

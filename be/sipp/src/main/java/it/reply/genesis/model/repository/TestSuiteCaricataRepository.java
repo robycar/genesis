@@ -1,5 +1,6 @@
 package it.reply.genesis.model.repository;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -21,5 +22,8 @@ public interface TestSuiteCaricataRepository extends JpaRepository<TestSuiteCari
   Optional<TestSuiteCaricataVO> findByIdLocking(long id);
 
   List<TestSuiteCaricataVO> findByStatoIn(Collection<LoadedEntityStatus> stato, Sort sort);
+
+  Optional<IdProjection> findFirstByStatoAndScheduleDateTimeLessThanEqualOrderByScheduleDateTime(LoadedEntityStatus status,
+      LocalDateTime scheduleDateTime);
 
 }

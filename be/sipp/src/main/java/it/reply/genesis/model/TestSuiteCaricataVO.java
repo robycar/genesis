@@ -3,6 +3,7 @@ package it.reply.genesis.model;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -75,10 +76,21 @@ public class TestSuiteCaricataVO implements Serializable {
   @Column(name="STARTED_BY", length = STARTED_BY_LENGTH)
   private String startedBy;
   
+  @Column(name="SCHEDULE_DATETIME")
+  private LocalDateTime scheduleDateTime;
+  
+  @Column(name="SCHEDULE_DELAY")
+  private Long delay;
+  
   @OneToMany(mappedBy = "testSuite")
   private List<TestCaseCaricatoVO> testCases;
   
   public TestSuiteCaricataVO() {
+  }
+  
+  public TestSuiteCaricataVO(Long id) {
+    super();
+    this.id = id;
   }
 
   public Long getId() {
@@ -183,6 +195,22 @@ public class TestSuiteCaricataVO implements Serializable {
 
   public void setTestCases(List<TestCaseCaricatoVO> testCases) {
     this.testCases = testCases;
+  }
+
+  public LocalDateTime getScheduleDateTime() {
+    return scheduleDateTime;
+  }
+
+  public void setScheduleDateTime(LocalDateTime scheduleDateTime) {
+    this.scheduleDateTime = scheduleDateTime;
+  }
+
+  public Long getDelay() {
+    return delay;
+  }
+
+  public void setDelay(Long delay) {
+    this.delay = delay;
   }
 
 }

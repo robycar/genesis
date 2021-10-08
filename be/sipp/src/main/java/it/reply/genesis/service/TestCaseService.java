@@ -1,10 +1,13 @@
 package it.reply.genesis.service;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import it.reply.genesis.api.dashboard.payload.RiepilogoNumericoTestDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestCaseDTO;
@@ -41,13 +44,6 @@ public interface TestCaseService {
 
   List<TestCaseCaricatoDTO> readTestCaricatiOfType(TestListType inclusion) throws ApplicationException;
 
-  /**
-   * Avvia l'esecuzione di un test case caricato.
-   * @param id l'identificatore del test case caricato
-   * @throws ApplicationException in caso di errore
-   */
-  void runLoaded(long id) throws ApplicationException;
-
   @Transactional(rollbackFor = ApplicationException.class)
   default TestCaseCaricatoDTO readCaricato(long id) throws ApplicationException {
     return readCaricato(id, false, false);
@@ -67,5 +63,23 @@ public interface TestCaseService {
   void removeCaricati(List<Long> ids) throws ApplicationException;
   
   void removeCaricatoVO(TestCaseCaricatoVO testCase) throws ApplicationException;
+
+  RiepilogoNumericoTestDTO riepilogoNumerico(LocalDate fromDay, LocalDate toDay);
+
+  Optional<Long> findNextScheduledTestCaseToExecute();
+
+  /**
+   * Avvia l'esecuzione di un test case caricato.
+   * @param id l'identificatore del test case caricato
+   * @throws ApplicationException in caso di errore
+   */
+  void runLoaded(long id) throws ApplicationException;
+
+  /**
+   * Avvia l'esecuzione di un test case schedulato.
+   * @param id l'identificatore del test case caricato
+   * @throws ApplicationException in caso di errore
+   */
+  void runScheduled(long id) throws ApplicationException;
   
 }

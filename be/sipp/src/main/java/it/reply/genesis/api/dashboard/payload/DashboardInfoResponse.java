@@ -16,6 +16,14 @@ public class DashboardInfoResponse extends PayloadResponse {
   
   private List<TestCaseCaricatoDTO> testGeneratoList;
   
+  private RiepilogoNumericoTestDTO riepilogoTestCaseGiorni;
+  
+  private RiepilogoNumericoTestDTO riepilogoTestCaseSettimana;
+  
+  private RiepilogoNumericoTestSuiteDTO riepilogoTestSuiteGiorno;
+  
+  private RiepilogoNumericoTestSuiteDTO riepilogoTestSuiteSettimana;
+  
   public DashboardInfoResponse() {
   }
 
@@ -43,5 +51,36 @@ public class DashboardInfoResponse extends PayloadResponse {
     this.testGeneratoList = testGeneratoList;
   }
 
-  
+  public RiepilogoNumericoTestDTO getRiepilogoTestCaseGiorni() {
+    return riepilogoTestCaseGiorni;
+  }
+
+  public void setRiepilogoTestCaseGiorni(RiepilogoNumericoTestDTO riepilogoTestCaseGiorni) {
+    this.riepilogoTestCaseGiorni = riepilogoTestCaseGiorni;
+  }
+
+  public RiepilogoNumericoTestDTO getRiepilogoTestCaseSettimana() {
+    return riepilogoTestCaseSettimana;
+  }
+
+  public void setRiepilogoTestCaseSettimana(RiepilogoNumericoTestDTO riepilogoTestCaseSettimana) {
+    this.riepilogoTestCaseSettimana = riepilogoTestCaseSettimana;
+  }
+
+  public RiepilogoNumericoTestSuiteDTO getRiepilogoTestSuiteGiorno() {
+    return riepilogoTestSuiteGiorno;
+  }
+
+  public void setRiepilogoTestSuiteGiorno(RiepilogoNumericoTestSuiteDTO riepilogoTestSuiteGiorno) {
+    this.riepilogoTestSuiteGiorno = riepilogoTestSuiteGiorno;
+  }
+
+  public RiepilogoNumericoTestSuiteDTO getRiepilogoTestSuiteSettimana() {
+    return riepilogoTestSuiteSettimana;
+  }
+
+  public void setRiepilogoTestSuiteSettimana(RiepilogoNumericoTestSuiteDTO riepilogoTestSuiteSettimana) {
+    this.riepilogoTestSuiteSettimana = riepilogoTestSuiteSettimana;
+  }
+
 }
