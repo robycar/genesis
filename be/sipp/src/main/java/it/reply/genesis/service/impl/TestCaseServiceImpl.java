@@ -2,6 +2,7 @@ package it.reply.genesis.service.impl;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -48,6 +49,7 @@ import it.reply.genesis.model.TestCaseCaricatoVO;
 import it.reply.genesis.model.TestCaseLineaChiamanteVO;
 import it.reply.genesis.model.TestCaseVO;
 import it.reply.genesis.model.TestSuiteCaricataVO;
+import it.reply.genesis.model.repository.IdProjection;
 import it.reply.genesis.model.repository.TestCaseCaricatoLineaChiamanteRepository;
 import it.reply.genesis.model.repository.TestCaseCaricatoPropertyRepository;
 import it.reply.genesis.model.repository.TestCaseCaricatoRepository;
@@ -283,6 +285,14 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
       vo.setStato(dto.getStato());
     }
     
+    if (dto.getScheduleDateTime() != null) {
+      vo.setScheduleDateTime(dto.getScheduleDateTime());
+    }
+    
+    if (dto.getDelay() != null) {
+      vo.setDelay(dto.getDelay());
+    }
+    
     if (dto.getProperties() != null) {
       
       HashMap<String, String> dtoProperties = new HashMap<>(dto.getProperties());
@@ -447,16 +457,30 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     //Verifica che lo stato sia ready
     checkStatoOfTestCaseCaricato(vo, LoadedEntityStatus.READY);
     
+    internalRunTestCaseCaricato(vo);
+  }
+
+  @Override
+  public void runScheduled(long id) throws ApplicationException {
+    TestCaseCaricatoVO vo = readCaricatoVO(id, true);
+    //Verifica che lo stato sia ready
+    checkStatoOfTestCaseCaricato(vo, LoadedEntityStatus.SCHEDULED);
+    
+    internalRunTestCaseCaricato(vo);
+    
+  }
+  
+  private void internalRunTestCaseCaricato(TestCaseCaricatoVO vo) throws ApplicationException {
     vo.setStato(LoadedEntityStatus.RUNNING);
     vo.setStartDate(Instant.now());
     vo.setStartedBy(currentUsername());
 
     vo = testCaseCaricatoRepository.saveAndFlush(vo);
-    logger.debug("Lo stato del test case caricato {} e' stato spostato a RUNNING", id);
-    testCaseCaricatoRepository.flush();
+    logger.debug("Lo stato del test case caricato {} e' stato impostato a RUNNING", vo.getId());
     
     //internalAgent.runTestCaseIfQueueEmpty(vo);
     internalTestExecutor.startTestCase(vo);
+    
   }
 
   public void checkStatoOfTestCaseCaricato(TestCaseCaricatoVO vo, LoadedEntityStatus statoAtteso) throws ApplicationException {
@@ -636,10 +660,12 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
       switch (record.getStato()) {
       case COMPLETED:
         ++caricati;
-        if(ExecutionResult.OK.equals(record.getResult())) {
-          ++completatiOK;
-        } else {
-          ++completatiKO;
+        if (record.getResult() != null) {
+          if(ExecutionResult.OK.equals(record.getResult())) {
+            ++completatiOK;
+          } else {
+            ++completatiKO;
+          }
         }
         break;
       case READY:
@@ -656,10 +682,12 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
       switch (record.getStato()) {
       case COMPLETED:
         ++schedulati;
-        if (ExecutionResult.OK.equals(record.getResult())) {
-          ++completatiOK;
-        } else {
-          ++completatiKO;
+        if (record.getResult() != null) {
+          if (ExecutionResult.OK.equals(record.getResult())) {
+            ++completatiOK;
+          } else {
+            ++completatiKO;
+          }
         }
         break;
       case SCHEDULED:
@@ -678,6 +706,14 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     result.setSchedulati(schedulati);
     
     return result;
+  }
+
+  @Override
+  public Optional<Long> findNextScheduledTestCaseToExecute() {
+    logger.info("enter findNextScheduledTestCaseToExecute");
+    return testCaseCaricatoRepository.findFirstByStatoAndScheduleDateTimeLessThanEqualOrderByScheduleDateTime(LoadedEntityStatus.SCHEDULED, LocalDateTime.now())
+        .map(IdProjection::getId);
+    
   }
 
 

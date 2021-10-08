@@ -24,7 +24,11 @@ public class TestSuiteSelector extends AbstractDAO {
         .addValue("fromDay", fromDay)
         .addValue("toDay", toDay);
     
-    String sql = "SELECT STATO, COUNT(*) AS NUM FROM TEST_SUITE_CARICATA WHERE DATE(LOADED_WHEN) BETWEEN :fromDay AND :toDay GROUP BY STATO";
+    String sql = "SELECT STATO, COUNT(*) AS NUM FROM TEST_SUITE_CARICATA "
+        + " WHERE "
+        + " (SCHEDULE_DATETIME IS NULL AND DATE(LOADED_WHEN) BETWEEN :fromDay AND :toDay) "
+        + " OR SCHEDULE_DATETIME BETWEEN :fromDay AND :toDay"
+        + " GROUP BY STATO";
     
     logger.debug(sql);
     
@@ -38,13 +42,13 @@ public class TestSuiteSelector extends AbstractDAO {
         .addValue("fromDay", fromDay)
         .addValue("toDay", toDay);
     
-    final String sql = "SELECT EXECUTION_RESULT, COUNT(*) AS NUM FROM TEST_CASE_CARICATO\r\n"
-        + "WHERE ID_TEST_SUITE_CARICATA IN (\r\n"
-        + "  SELECT ID FROM TEST_SUITE_CARICATA \r\n"
-        + "  WHERE (DATE(LOADED_WHEN) BETWEEN :fromDay AND :toDay\r\n"
-        + "  )\r\n"
-        + ")\r\n"
-        + "GROUP BY(EXECUTION_RESULT)";
+    final String sql = "SELECT EXECUTION_RESULT, COUNT(*) AS NUM FROM TEST_CASE_CARICATO "
+        + "WHERE ID_TEST_SUITE_CARICATA IN ( "
+        + "  SELECT ID FROM TEST_SUITE_CARICATA "
+        + "  WHERE (SCHEDULE_DATETIME IS NULL AND DATE(LOADED_WHEN) BETWEEN :fromDay AND :toDay) "
+        + "    OR DATE(SCHEDULE_DATETIME) BETWEEN :fromDay AND :toDay "
+        + " )"
+        + " GROUP BY(EXECUTION_RESULT)";
     
     return getNamedParameterJdbcTemplate().query(sql, params, ExecutionResultTestSuite.MAPPER);
     

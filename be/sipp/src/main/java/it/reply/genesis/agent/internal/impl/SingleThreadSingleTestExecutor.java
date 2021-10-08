@@ -132,6 +132,20 @@ public class SingleThreadSingleTestExecutor implements DisposableBean, Runnable 
     }
   }
   
+  /**
+   * 
+   * @return true se c'è almeno un task in esecuzione, false altrimenti
+   */
+  public boolean isWorking() {
+    final ReentrantLock lock = this.lock;
+    lock.lock();
+    try {
+      return currentTask != null;
+    } finally {
+      lock.unlock();
+    }
+  }
+  
   private boolean offer(TestRunner task) {
     final ReentrantLock lock = this.lock;
     lock.lock();

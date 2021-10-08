@@ -29,9 +29,12 @@ import it.reply.genesis.api.test.payload.TestSuiteLoadResponse;
 import it.reply.genesis.api.test.payload.TestSuiteRemoveRequest;
 import it.reply.genesis.api.test.payload.TestSuiteRetrieveLoadedResponse;
 import it.reply.genesis.api.test.payload.TestSuiteRetrieveResponse;
+import it.reply.genesis.api.test.payload.TestSuiteScheduleRequest;
+import it.reply.genesis.api.test.payload.TestSuiteScheduleResponse;
 import it.reply.genesis.api.test.payload.TestSuiteUpdateRequest;
 import it.reply.genesis.api.test.payload.TestSuiteUpdateResponse;
 import it.reply.genesis.service.TestSuiteService;
+import it.reply.genesis.service.dto.ScheduleInfo;
 
 @RestController
 @RequestMapping(TestSuiteController.API_PATH)
@@ -139,7 +142,7 @@ public class TestSuiteController extends AbstractController {
     logger.info("enter load({})", id);
     TestSuiteLoadResponse response = new TestSuiteLoadResponse();
     try {
-      TestSuiteCaricataDTO result = testSuiteService.loadTestSuite(id);
+      TestSuiteCaricataDTO result = testSuiteService.loadTestSuite(id, null);
       logger.info("test suite caricata con id {}", result.getId());
       response.setTestSuiteCaricata(result);
       return ResponseEntity.ok(response);
@@ -191,6 +194,22 @@ public class TestSuiteController extends AbstractController {
     } catch (ApplicationException e) {
       return handleException(e, response);
     }
+  }
+  
+  @PostMapping("schedule")
+  @PreAuthorize("hasAuthority('FUN_testsuite.run')")
+  public ResponseEntity<TestSuiteScheduleResponse> schedule(@Valid @RequestBody(required=true) TestSuiteScheduleRequest request) {
+    logger.info("enter ({})", request);
+    TestSuiteScheduleResponse response = new TestSuiteScheduleResponse();
+    try {
+      ScheduleInfo scheduleInfo = new ScheduleInfo(request.getScheduleDateTime(), request.getDelay());
+      TestSuiteCaricataDTO testSuite = testSuiteService.loadTestSuite(request.getId(), scheduleInfo);
+      response.setTestSuite(testSuite);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+    
   }
   
 }

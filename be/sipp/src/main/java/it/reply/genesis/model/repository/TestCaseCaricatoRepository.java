@@ -1,6 +1,7 @@
 package it.reply.genesis.model.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public interface TestCaseCaricatoRepository extends JpaRepository<TestCaseCarica
   //List<TestCaseCaricatoVO> findByLoadedWhenBetweenAndTestSuiteIsNullAndScheduleDateIsNull(TestSuiteCaricataVO testSuite, LocalDate from, LocalDate to);
   List<StatoTest> findByLoadedWhenBetweenAndTestSuiteIsNullAndScheduleDateIsNull(LocalDate from, LocalDate to);
   
-  @Query(value="SELECT tc.ID, tc.STATO, tc.EXECUTION_RESULT FROM TEST_CASE_CARICATO tc WHERE tc.ID_TEST_SUITE_CARICATA IS NULL AND DATE(SCHEDULE_DATETIME) BETWEEN :from AND :to ", nativeQuery = true)
+  @Query(value="SELECT tc.ID, tc.STATO, tc.EXECUTION_RESULT as RESULT FROM TEST_CASE_CARICATO tc WHERE tc.ID_TEST_SUITE_CARICATA IS NULL AND DATE(SCHEDULE_DATETIME) BETWEEN :from AND :to ", nativeQuery = true)
   List<StatoTest> findScheduledInInterval(LocalDate from, LocalDate to);
   
   public interface StatoTest {
@@ -40,5 +41,8 @@ public interface TestCaseCaricatoRepository extends JpaRepository<TestCaseCarica
     ExecutionResult getResult();
     
   }
+
+  Optional<IdProjection> findFirstByStatoAndScheduleDateTimeLessThanEqualOrderByScheduleDateTime(LoadedEntityStatus scheduled,
+      LocalDateTime scheduleDateTime);
 
 }

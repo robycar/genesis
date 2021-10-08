@@ -8,9 +8,9 @@ import javax.validation.constraints.Positive;
 
 import it.reply.genesis.api.generic.payload.PayloadRequest;
 
-public class TestCaseScheduleRequest extends PayloadRequest {
+public class TestSuiteScheduleRequest extends PayloadRequest {
 
-  private static final long serialVersionUID = 7111944573166467888L;
+  private static final long serialVersionUID = 1669528140183299785L;
 
   @NotNull
   private Long id;
@@ -23,14 +23,14 @@ public class TestCaseScheduleRequest extends PayloadRequest {
   @Positive
   private Long delay;
   
-  public TestCaseScheduleRequest() {
+  public TestSuiteScheduleRequest() {
   }
 
   @Override
   protected void writeFields(StringBuilder sb) {
     writeField(sb, "id", id);
+    writeField(sb, "scheduleDateTime", scheduleDateTime);
     writeField(sb, "delay", delay);
-    writeField(sb, "scheduledDateTime", scheduleDateTime);
     
     super.writeFields(sb);
   }
@@ -42,7 +42,7 @@ public class TestCaseScheduleRequest extends PayloadRequest {
   public void setId(Long id) {
     this.id = id;
   }
-  
+
   public LocalDateTime getScheduleDateTime() {
     return scheduleDateTime;
   }
@@ -58,6 +58,5 @@ public class TestCaseScheduleRequest extends PayloadRequest {
   public void setDelay(Long delay) {
     this.delay = delay;
   }
-
   
 }

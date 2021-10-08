@@ -2,6 +2,7 @@ package it.reply.genesis.service.impl;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,11 +38,13 @@ import it.reply.genesis.model.TestSuiteVO;
 import it.reply.genesis.model.dao.ExecutionResultTestSuite;
 import it.reply.genesis.model.dao.StatoTestSuite;
 import it.reply.genesis.model.dao.TestSuiteSelector;
+import it.reply.genesis.model.repository.IdProjection;
 import it.reply.genesis.model.repository.TestCaseRepository;
 import it.reply.genesis.model.repository.TestSuiteCaricataRepository;
 import it.reply.genesis.model.repository.TestSuiteRepository;
 import it.reply.genesis.service.TestCaseService;
 import it.reply.genesis.service.TestSuiteService;
+import it.reply.genesis.service.dto.ScheduleInfo;
 import it.reply.genesis.service.dto.TestListType;
 
 @Service
@@ -190,7 +193,7 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
   }
 
   @Override
-  public TestSuiteCaricataDTO loadTestSuite(long id) throws ApplicationException {
+  public TestSuiteCaricataDTO loadTestSuite(long id, ScheduleInfo scheduleInfo) throws ApplicationException {
     logger.debug("enter loadTestSuite");
     TestSuiteVO src = readVO(id);
     
@@ -201,7 +204,13 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     vo.setLoadedBy(currentUsername());
     //vo.setLoadedWhen(new Timestamp());
     vo.setNome(src.getNome());
-    vo.setStato(LoadedEntityStatus.READY);
+    if (scheduleInfo == null) {
+      vo.setStato(LoadedEntityStatus.READY);
+    } else {
+      vo.setStato(LoadedEntityStatus.SCHEDULED);
+      vo.setScheduleDateTime(scheduleInfo.getScheduleDateTime());
+      vo.setDelay(scheduleInfo.getDelay());
+    }
     vo.setTestSuite(src);
     
     vo = testSuiteCaricataRepository.save(vo);
@@ -223,12 +232,23 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     TestSuiteCaricataVO testSuiteVO = readTestSuiteCaricataVO(id, true);
     
     checkStatoOfTestSuiteCariata(testSuiteVO, LoadedEntityStatus.READY);
-    //Cerco eventuali test suite running?
+  }
+  
+  @Override
+  public void runScheduled(long id) throws ApplicationException {
+    logger.debug("enter runScheduled");
+    TestSuiteCaricataVO testSuiteVO = readTestSuiteCaricataVO(id, true);
+    
+    checkStatoOfTestSuiteCariata(testSuiteVO, LoadedEntityStatus.SCHEDULED);
+    internalRunTestSuiteCaricata(testSuiteVO);
+  }
+
+  private void internalRunTestSuiteCaricata(TestSuiteCaricataVO testSuiteVO) throws ApplicationException {
     testSuiteVO.setStartDate(Instant.now());
     testSuiteVO.setStartedBy(currentUsername());
     testSuiteVO.setStato(LoadedEntityStatus.RUNNING);
     testSuiteVO = testSuiteCaricataRepository.saveAndFlush(testSuiteVO);
-    logger.info("Lo stato della test suite caricata {} e' stato impostato a RUNNING", id);
+    logger.info("Lo stato della test suite caricata {} e' stato impostato a RUNNING", testSuiteVO.getId());
     testExecutor.startTestSuite(new TestSuiteCaricataDTO(testSuiteVO));
   }
 
@@ -291,6 +311,14 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     
     if (dto.getStato() != null) {
       vo.setStato(dto.getStato());
+    }
+    
+    if (dto.getDelay() != null) {
+      vo.setDelay(dto.getDelay());
+    }
+    
+    if (dto.getScheduleDateTime() != null) {
+      vo.setScheduleDateTime(dto.getScheduleDateTime());
     }
     
     vo = testSuiteCaricataRepository.saveAndFlush(vo);
@@ -366,12 +394,16 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     for (StatoTestSuite record: records) {
       switch (record.getStato()) {
       case COMPLETED:
-        ++completate;
-        break;
+        completate += record.getCount();
+        //break;
       case READY:
       case PAUSED:
       case RUNNING:
-        ++caricate;
+        caricate += record.getCount();
+        break;
+      case SCHEDULED:
+        schedulate += record.getCount();
+        break;
       default:
         logger.warn("Nel metodo riepilogoNumerico trovate {} test suite che si trovano in uno stato non atteso: {}", record.getCount(), record.getStato());
       }
@@ -379,9 +411,8 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     
     List<ExecutionResultTestSuite> records2 = testSuiteSelector.retrieveTestStatusByTestSuiteCaricate(fromDay, toDay);
     for (ExecutionResultTestSuite record: records2) {
-      if (record.getResult() == null) {
-        testTotali += record.getCount();
-      } else {
+      testTotali += record.getCount();
+      if (record.getResult() != null) {
         if (ExecutionResult.OK.equals(record.getResult())) {
           testOK += record.getCount();
         } else {
@@ -399,6 +430,13 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     result.setTestOK(testOK);
     
     return result;
+  }
+
+  @Override
+  public Optional<Long> findNextScheduledTestSuiteToExecute() {
+    logger.debug("enter findNextScheduledTestSuiteToExecute");
+    return testSuiteCaricataRepository.findFirstByStatoAndScheduleDateTimeLessThanEqualOrderByScheduleDateTime(LoadedEntityStatus.SCHEDULED, LocalDateTime.now())
+        .map(IdProjection::getId);
   }
 
 }
