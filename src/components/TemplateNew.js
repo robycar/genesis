@@ -29,6 +29,9 @@ import axios from "axios";
 import { getGenerale, getByIdGenerale, postGenerale, postAddFile, postModificaFiles, deleteGenerale, deleteFiles } from "../service/api"
 
 function Template() {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const [data, setData] = useState([]);
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -54,131 +57,160 @@ function Template() {
   const [contenutoFile, setContenutoFile] = useState("");
   const [visualizzaContenutoFile, setVisualizzaContenutoFile] = useState(false);
   const [modificaContenutoFile, setModificaContenutoFile] = useState(false);
+  const [scrittaTabella, setScrittaTabella] = useState("")
 
   const funzioneGetAll = () => {
-    //----GET ALL TEMPLATE----
-    (async () => {
-      setCaricamento(true)
-      setData((await getGenerale('template')).list);
-      setCaricamento(false)
-    })();
+    if (functions.indexOf("template.view") !== -1) {
+      //----GET ALL TEMPLATE----
+      (async () => {
+        setCaricamento(true)
+        setData((await getGenerale('template')).list);
+        setCaricamento(false)
+      })();
+
+      setScrittaTabella("Non è presente alcun dato da mostrare")
+
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+    }
   }
 
   const funzioneGetTemplateById = (id) => {
-    (async () => {
-      let result = await getByIdGenerale('template', id);
-      setTemplate(result.template);
-      impostaChiama(result.template);
-    })();
+    if (functions.indexOf("template.view") !== -1) {
+      (async () => {
+        let result = await getByIdGenerale('template', id);
+        setTemplate(result.template);
+        impostaChiama(result.template);
+      })();
+    }
   }
 
   const funzioneGetAppearFileById = (id) => {
-    (async () => {
-      setCaricamentoDel(true)
-      setAppearFile((await getByIdGenerale('fs/entityfolder/TEMPLATE', id)).list);
-      setCaricamentoDel(false)
-    })();
+
+    if (functions.indexOf("template.edit") !== -1) {
+      (async () => {
+        setCaricamentoDel(true)
+        setAppearFile((await getByIdGenerale('fs/entityfolder/TEMPLATE', id)).list);
+        setCaricamentoDel(false)
+      })();
+    }
   }
 
   const funzioneAggiornaChiama = () => {
-    (async () => {
-      await postGenerale('template', { id: id, version: version, fileLinks: { CHIAMATO: [{ id: chiamato, }] } });
-      funzioneGetTemplateById(id);
-      handleCloseChiama();
-    })();
+    if (functions.indexOf("template.edit") !== -1) {
+      (async () => {
+        await postGenerale('template', { id: id, version: version, fileLinks: { CHIAMATO: [{ id: chiamato, }] } });
+        funzioneGetTemplateById(id);
+        handleCloseChiama();
+      })();
+    }
   }
 
   const funzioneAddFile = (files) => {
-    (async () => {
-      await postAddFile('fs/entityfolder/TEMPLATE', id, files);
-      funzioneGetTemplateById(id);
-      funzioneGetAppearFileById(id);
-    })();
+    if (functions.indexOf("template.view") !== -1) {
+      (async () => {
+        await postAddFile('fs/entityfolder/TEMPLATE', id, files);
+        funzioneGetTemplateById(id);
+        funzioneGetAppearFileById(id);
+      })();
+    }
   }
 
   const funzioneDeleteFile = (path) => {
-    (async () => {
-      setCaricamentoDel(true)
-      await deleteFiles('fs/entityfolder/TEMPLATE', id, path);
-      funzioneGetTemplateById(id);
-      funzioneGetAppearFileById(id);
-    })();
+    if (functions.indexOf("template.view") !== -1) {
+      (async () => {
+        setCaricamentoDel(true)
+        await deleteFiles('fs/entityfolder/TEMPLATE', id, path);
+        funzioneGetTemplateById(id);
+        funzioneGetAppearFileById(id);
+      })();
+    }
   }
 
   const funzioneDelete = () => {
-    (async () => {
-      let result = await deleteGenerale('template', idElemento);
-      if (result.error !== null) {
-        setOpenWarning(true);
-        if (result.error.code === "TEST-0011") {
-          setWarning(
-            "Impossibile eliminare un template che non appartiene al proprio gruppo"
-          );
-
-          if (result.error.status === 500) {
+    if (functions.indexOf("template.delete") !== -1) {
+      (async () => {
+        let result = await deleteGenerale('template', idElemento);
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "TEST-0011") {
             setWarning(
-              "Impossibile eliminare il template poichè associato ad uno o più Test Case"
+              "Impossibile eliminare un template che non appartiene al proprio gruppo"
+            );
+
+            if (result.error.status === 500) {
+              setWarning(
+                "Impossibile eliminare il template poichè associato ad uno o più Test Case"
+              );
+            }
+          } else {
+            setWarning(
+              "Codice errore : " +
+              result.error.code +
+              "Descrizione: " +
+              result.error.description
             );
           }
         } else {
-          setWarning(
-            "Codice errore : " +
-            result.error.code +
-            "Descrizione: " +
-            result.error.description
-          );
+          setOpenWarning(false);
+          funzioneGetAll();
+          handleCloseDelete();
         }
-      } else {
-        setOpenWarning(false);
-        funzioneGetAll();
-        handleCloseDelete();
-      }
-    })();
+      })();
+    }
   }
 
   const funzioneLoadTemplateBYId = (id) => {
-    (async () => {
-      setTemplate((await getByIdGenerale('template', id)).template);
-    })();
+    if (functions.indexOf("template.view") !== -1) {
+      (async () => {
+        setTemplate((await getByIdGenerale('template', id)).template);
+      })();
+    }
   }
 
   const funzioneAggiornaTemplate = () => {
-    (async () => {
-      await postGenerale('template', { id: id, version: version, nome: nome, durata: durata, typeTemplate: typeTemplate, descrizione: descrizione });
-      funzioneGetAll();
-      handleClose();
-    })();
+    if (functions.indexOf("template.edit") !== -1) {
+      (async () => {
+        await postGenerale('template', { id: id, version: version, nome: nome, durata: durata, typeTemplate: typeTemplate, descrizione: descrizione });
+        funzioneGetAll();
+        handleClose();
+      })();
+    }
   }
 
   const funzioneGetDownloadFile = (url) => {
-    setCaricamentoDel(true)
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    if (functions.indexOf("template.edit") !== -1) {
+      setCaricamentoDel(true)
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
 
-    fetch(`${url}`, requestOptions)
-      .then((response) => response.text())
-      .then((result) => {
-        setContenutoFile(result);
-        setVisualizzaContenutoFile(true);
-        setCaricamentoDel(false)
-      })
-      .catch((error) => console.log("error", error));
+      fetch(`${url}`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+          setContenutoFile(result);
+          setVisualizzaContenutoFile(true);
+          setCaricamentoDel(false)
+        })
+        .catch((error) => console.log("error", error));
+    }
   }
 
   const funzioneModificaFiles = () => {
-    (async () => {
-      await postModificaFiles(url, contenutoFile);
-      handleCloseModificaContenutoFile();
-    })();
+    if (functions.indexOf("template.edit") !== -1) {
+      (async () => {
+        await postModificaFiles(url, contenutoFile);
+        handleCloseModificaContenutoFile();
+      })();
+    }
   }
 
   useEffect(() => {
@@ -621,13 +653,13 @@ function Template() {
                   exact
                   to="/editing/template/createmplate"
                   startIcon={<AddIcon />}
+                  disabled={functions.indexOf("template.create") === -1}
                 >
                   template
                 </Button>
               </div>
             ),
             tooltip: "Carica Template",
-            //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
           {
@@ -644,6 +676,7 @@ function Template() {
             icon: () => <EditIcon />,
             tooltip: "Modifica",
             onClick: (event, rowData) => openModifica(rowData),
+            disabled: functions.indexOf("template.edit") === -1,
             position: "row",
           },
           {
@@ -653,6 +686,7 @@ function Template() {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
+            disabled: functions.indexOf("template.delete") === -1
           },
         ]}
         localization={{
@@ -660,7 +694,7 @@ function Template() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
+            emptyDataSourceMessage: scrittaTabella,
           },
         }}
       />

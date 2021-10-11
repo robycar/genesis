@@ -236,6 +236,7 @@ const TestSuiteCaricatiTable = () => {
   let scheduleDateTime = "";
   const [testSuiteLoad, setTestSuiteLoad] = useState({});
   const [idTest, setIdTest] = React.useState(0);
+  const [dataSchedula, setDataSchedula] = useState();
 
   const handleOpen = () => {
     getAllTestSuiteModal();
@@ -381,43 +382,43 @@ const TestSuiteCaricatiTable = () => {
 
   /*------------------ SCHEDULA TEST ------------------*/
 
-  // const schedulaTestSuite = () => {
-  //   const invia = () => {
-  //     scheduleDateTime = dataInizio + "T" + orarioInizio;
-  //     console.log(scheduleDateTime, "schedule date time");
-  //     console.log(dataInizio, "data inizio");
-  //     console.log(orarioInizio, "orario");
+  const schedulaTestSuite = () => {
+    const invia = () => {
+      scheduleDateTime = dataInizio + "T" + orarioInizio;
+      console.log(scheduleDateTime, "schedule date time");
+      console.log(dataInizio, "data inizio");
+      console.log(orarioInizio, "orario");
 
-  //     var myHeaders = new Headers();
-  //     myHeaders.append("Authorization", bearer);
-  //     myHeaders.append("Content-Type", "application/json");
-  //     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //     myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //     var raw = JSON.stringify({
-  //       id: id,
-  //       scheduleDateTime: scheduleDateTime,
-  //       delay: delay,
-  //     });
+      var raw = JSON.stringify({
+        id: id,
+        scheduleDateTime: scheduleDateTime,
+        delay: delay,
+      });
 
-  //     var requestOptions = {
-  //       method: "POST",
-  //       headers: myHeaders,
-  //       body: raw,
-  //       redirect: "follow",
-  //     };
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
 
-  //     fetch(`/api/testsuite/schedule`, requestOptions)
-  //       .then((response) => response.json())
-  //       .then((result) => {
-  //         console.log(result);
-  //         setDataSchedula(result.testSuiteCaricato);
-  //         handleCloseSchedula();
-  //       })
-  //       .catch((error) => console.log("error", error));
-  //   };
-  //   invia();
-  // };
+      fetch(`/api/testsuite/schedule`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          setDataSchedula(result.testSuiteCaricata);
+          handleCloseSchedula();
+        })
+        .catch((error) => console.log("error", error));
+    };
+    invia();
+  };
 
   /*--------------- FUNZIONE CARICA TEST SUITE -------------------*/
 
@@ -538,6 +539,7 @@ const TestSuiteCaricatiTable = () => {
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
+            disabled: true,
           },
           {
             icon: () => <PlayCircleOutlineIcon />,
@@ -776,7 +778,7 @@ const TestSuiteCaricatiTable = () => {
                   variant="contained"
                   color="primary"
                   //onClick={handleOpenSchedula}
-                  onClick={() => alert("Funzione schedula moccata")}
+                  onClick={schedulaTestSuite}
                 >
                   Conferma
                 </Button>

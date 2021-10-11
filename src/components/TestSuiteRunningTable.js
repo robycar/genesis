@@ -22,20 +22,18 @@ import { MenuItem } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Form from "react-bootstrap/Form";
 
-
 const TestSuiteRunningTable = () => {
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
-  const [nome, setNome] =useState("");
+  const [nome, setNome] = useState("");
   const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState(); 
+  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [createdBy, setCreatedBy] = useState("");
   const [testSuiteLoad, setTestSuiteLoad] = useState(null);
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [delay, setDelay] = useState();
-  
 
   const columns = [
     {
@@ -49,32 +47,32 @@ const TestSuiteRunningTable = () => {
     },
     {
       title: "Loader",
-      field: "createdBy",
+      field: "loadedBy",
     },
     {
-      title: "Data Inizio",
-      field: "creationDate",
+      title: "Data Caricamento",
+      field: "loadedWhen",
     },
-    {
-      title: "Data Fine",
-      field: "modifiedDate",
-    },
+    // {
+    //   title: "Data Fine",
+    //   field: "modifiedDate",
+    // },
     {
       title: "Status",
-      field: "trace",
+      field: "stato",
     },
-    {
-      title: "Trace",
-      field: "trace",
-    },
-    {
-      title: "Call-Id",
-      field: "trace",
-    },
-    {
-      title: "Report",
-      field: "trace",
-    },
+    // {
+    //   title: "Trace",
+    //   field: "trace",
+    // },
+    // {
+    //   title: "Call-Id",
+    //   field: "trace",
+    // },
+    // {
+    //   title: "Report",
+    //   field: "trace",
+    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -157,76 +155,11 @@ const TestSuiteRunningTable = () => {
       alignItems: "center",
       marginTop: "6%",
       justifyContent: "center",
-
     },
     select: {
       width: "400px",
     },
   }));
-
-// ------- GET TEST SUITE -----------
-let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-
-if (bearer != null) {
-  bearer = bearer.replace(/"/g, "");
-}
-
-const [appearTest, setAppearTest] = useState([]);
-const [openSchedula, setOpenSchedula] = React.useState(false);
-
-
-
-const getAllTestSuite = () => {
-var myHeaders = new Headers();
-myHeaders.append("Authorization", bearer);
-myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-var requestOptions = {
-  method: "GET",
-  headers: myHeaders,
-  redirect: "follow",
-};
-
-fetch(`/api/testsuite`, requestOptions)
-  .then((response) => response.json())
-  .then((result) => {
-    console.log(result);
-    setAppearTest(result.list);
-    setData(result.list);
-  })
-  .catch((error) => console.log("error", error));
-};
-
- /*--------------- FUNZIONE CARICA TEST SUITE -------------------*/
-
- const loadTestSuite = (id) => {
-  var urlLoad = `/api/testsuite/load/${id}`;
-
-  var myHeaders = new Headers();
-  myHeaders.append("Authorization", bearer);
-  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  var requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow",
-  };
-
-  fetch(urlLoad, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      setTestSuiteLoad(result.testSuiteCaricata);
-    })
-    .catch((error) => console.log("error", error));
-};
-
-useEffect(() => {
-getAllTestSuite();
-}, []);
-
 
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -256,6 +189,106 @@ getAllTestSuite();
     getAllTestSuite();
   };
 
+  // ------- GET TEST SUITE -----------
+  let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
+
+  if (bearer != null) {
+    bearer = bearer.replace(/"/g, "");
+  }
+
+  const [appearTest, setAppearTest] = useState([]);
+  const [openSchedula, setOpenSchedula] = React.useState(false);
+
+  const getAllTestSuite = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testsuite`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setAppearTest(result.list);
+        setData(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  /*--------------- FUNZIONE CARICA TEST SUITE -------------------*/
+
+  const loadTestSuite = (id) => {
+    var urlLoad = `/api/testsuite/load/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setTestSuiteLoad(result.testSuiteCaricata);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestSuite();
+  }, []);
+
+  /*------------ TEST SUITE RUNNING ---------------------*/
+
+  const getAllTestSuiteRunning = () => {
+    var consta = "RUNNING";
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      includeRiepilogoTestCase: false,
+      includeRiepilogoTestSuite: false,
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: consta,
+      includeTestGeneratoreOfType: null,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        //setAppearTest(result.testCaseList);
+        setData(result.testSuiteList);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestSuiteRunning();
+  }, []);
 
   return (
     <div>
@@ -281,6 +314,7 @@ getAllTestSuite();
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
+            disabled: true,
           },
           {
             icon: () => <PlayCircleOutlineIcon />,
@@ -292,8 +326,7 @@ getAllTestSuite();
           {
             icon: () => <DeleteIcon />,
             tooltip: "Elimina il Test",
-            onClick: (event, rowData) =>
-              alert("Api delete da aggiungere"),
+            onClick: (event, rowData) => alert("Api delete da aggiungere"),
             position: "row",
           },
           {
@@ -324,7 +357,7 @@ getAllTestSuite();
         // }}
       />
       {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
-        <Modal
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -420,8 +453,8 @@ getAllTestSuite();
         </Fade>
       </Modal>
 
-       {/* ------------------ MODALE SCHEDULA TEST SUITE --------------------- */}
-       <Modal
+      {/* ------------------ MODALE SCHEDULA TEST SUITE --------------------- */}
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}

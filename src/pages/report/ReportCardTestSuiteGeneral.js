@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   fixedHeight: {
-    height: 100,
+    height: "100%",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -72,8 +72,8 @@ export default function ReportCardTestSuiteGeneral() {
 
   const getDataForTestCase = () => {
     (async () => {
-      //setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestCaseGiorni);
-      setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestSuiteGiorno);
+      setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestSuiteGiorno);
+      setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestSuiteSettimana);
     })();
   }
 
@@ -98,10 +98,51 @@ export default function ReportCardTestSuiteGeneral() {
                 m={2}
                 className={classes.secondTitle}
               >
-                CARICATI
+                CARICATI GIORNO
               </Typography>
               <Typography className={classes.dataAlignCenter}>
-                <h5>{dataSettimana.caricate}</h5>
+                <h5><b>{dataGiorni.caricate}</b></h5>
+              </Typography>
+
+              <Typography
+                component="p"
+                variant="h5"
+                m={2}
+                className={classes.secondTitle}
+              >
+                CARICATI SETTIMANA
+              </Typography>
+              <Typography className={classes.dataAlignCenter}>
+                <h5><b>{dataSettimana.caricate}</b></h5>
+              </Typography>
+
+            </Paper>
+          </Grid>
+
+          <Grid item xs={20} md={4} lg={3}>
+            <Paper className={fixedHeightPaper}>
+              <Typography
+                component="p"
+                variant="h5"
+                m={2}
+                className={classes.secondTitle}
+              >
+                SCHEDULATI GIORNO
+              </Typography>
+              <Typography className={classes.dataAlignCenter}>
+                <h5><b>{dataGiorni.schedulate}</b></h5>
+              </Typography>
+
+              <Typography
+                component="p"
+                variant="h5"
+                m={2}
+                className={classes.secondTitle}
+              >
+                SCHEDULATI SETTIMANA
+              </Typography>
+              <Typography className={classes.dataAlignCenter}>
+                <h5><b>{dataSettimana.schedulate}</b></h5>
               </Typography>
             </Paper>
           </Grid>
@@ -114,10 +155,22 @@ export default function ReportCardTestSuiteGeneral() {
                 m={2}
                 className={classes.secondTitle}
               >
-                SCHEDULATI
+                PIANIFICATI GIORNO
               </Typography>
               <Typography className={classes.dataAlignCenter}>
-                <h5>{dataSettimana.schedulate}</h5>
+                <h5><b>{dataGiorni.pianificate}</b></h5>
+              </Typography>
+
+              <Typography
+                component="p"
+                variant="h5"
+                m={2}
+                className={classes.secondTitle}
+              >
+                PIANIFICATI SETTIMANA
+              </Typography>
+              <Typography className={classes.dataAlignCenter}>
+                <h5><b>{dataSettimana.pianificate}</b></h5>
               </Typography>
             </Paper>
           </Grid>
@@ -130,26 +183,22 @@ export default function ReportCardTestSuiteGeneral() {
                 m={2}
                 className={classes.secondTitle}
               >
-                PIANIFICATI
+                COMPLETATI GIORNO
               </Typography>
               <Typography className={classes.dataAlignCenter}>
-                <h5>{dataSettimana.pianificate}</h5>
+                <h5><b>{dataGiorni.completate}</b></h5>
               </Typography>
-            </Paper>
-          </Grid>
 
-          <Grid item xs={20} md={4} lg={3}>
-            <Paper className={fixedHeightPaper}>
               <Typography
                 component="p"
                 variant="h5"
                 m={2}
                 className={classes.secondTitle}
               >
-                COMPLETATI
+                COMPLETATI SETTIMANA
               </Typography>
               <Typography className={classes.dataAlignCenter}>
-                <h5>{dataSettimana.completate}</h5>
+                <h5><b>{dataSettimana.completate}</b></h5>
               </Typography>
             </Paper>
           </Grid>

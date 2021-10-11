@@ -64,7 +64,7 @@ const GestioneUtenti = () => {
       setScrittaTabella("Non è presente alcun dato da mostrare")
 
     } else {
-      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzarequesti dati")
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
     }
   }
 

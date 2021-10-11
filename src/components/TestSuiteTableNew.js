@@ -25,6 +25,8 @@ import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../s
 
 
 function TestSuiteTable() {
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const [data, setData] = useState([]);
   const [testCases, setTestCases] = useState([]);
   const [id, setId] = useState();
@@ -42,6 +44,7 @@ function TestSuiteTable() {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const arrayTestCase = testSuite?.testCases;
+  const [scrittaTabella, setScrittaTabella] = useState("")
 
   //--------------------------------MODIFICA TESTCASE ASSOCIATI A TESTSUITE-----------------------------------------------------
   const [testAssociati, setTestAssociati] = useState([]);
@@ -85,69 +88,83 @@ function TestSuiteTable() {
 
 
   const funzioneGetAll = () => {
-    (async () => {
-      setCaricamento(true)
-      setData((await getGenerale('testsuite')).list);
-      setCaricamento(false)
-    })();
+    if (functions.indexOf("testsuite.view") !== -1 && functions.indexOf("testcase.view") !== -1) {
+      (async () => {
+        setCaricamento(true)
+        setData((await getGenerale('testsuite')).list);
+        setCaricamento(false)
+      })();
 
-    (async () => {
-      setCaricamento2(true)
-      setDataTestCases((await getGenerale('testcase')).list);
-      setCaricamento2(false)
-    })();
+      (async () => {
+        setCaricamento2(true)
+        setDataTestCases((await getGenerale('testcase')).list);
+        setCaricamento2(false)
+      })();
 
+      setScrittaTabella("Non è presente alcun dato da mostrare")
+
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+    }
   }
 
   //----PRENDI TESTCASE ASSOCIATI----
   const funzioneGetTestsuiteById = (id) => {
-    (async () => {
-      let result = await getByIdGenerale('testsuite', id);
-      setTestSuite(result.testSuite);
-      aggiornaVariabili(result.testSuite)
-      impostaTestCaseAssociati(result.testSuite);
-      setOpen(true);
-    })();
+    if (functions.indexOf("testsuite.view") !== -1) {
+      (async () => {
+        let result = await getByIdGenerale('testsuite', id);
+        setTestSuite(result.testSuite);
+        aggiornaVariabili(result.testSuite)
+        impostaTestCaseAssociati(result.testSuite);
+        setOpen(true);
+      })();
+    }
   }
 
   //----AGGIORNA TESTCASE ASSOCIATI----
   const funzioneAggiornaTestCaseAssociati = () => {
-    (async () => {
-      let result = (await postGenerale('testsuite', { id: id, version: version, testCases: testAssociati }));
-      funzioneGetTestsuiteById(id)
-    })();
+    if (functions.indexOf("testsuite.edit") !== -1) {
+      (async () => {
+        let result = (await postGenerale('testsuite', { id: id, version: version, testCases: testAssociati }));
+        funzioneGetTestsuiteById(id)
+      })();
+    }
   }
 
   //----AGGIORNA TESTSUITE----
   const funzioneAggiornaTestSuite = () => {
-    (async () => {
-      await postGenerale('testsuite', {id: id, version: version, nome: nome, descrizione: descrizione,});
-      handleClose()
-    })();
+    if (functions.indexOf("testsuite.view") !== -1) {
+      (async () => {
+        await postGenerale('testsuite', { id: id, version: version, nome: nome, descrizione: descrizione, });
+        handleClose()
+      })();
+    }
   }
   //------------ FUNZIONE DELETE ------------
   const funzioneDelete = () => {
-    (async () => {
-      let result = await deleteGenerale("testsuite", idElemento)
-      if (result.error !== null) {
-        setOpenWarning(true);
-        if (result?.error?.code === "Internal Server Error") {
-          setWarning(
-            "Impossibile eliminare il Test Suite. L'utente non dispone delle autorizzazioni necessarie"
-          );
+    if (functions.indexOf("testsuite.delete") !== -1) {
+      (async () => {
+        let result = await deleteGenerale("testsuite", idElemento)
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result?.error?.code === "Internal Server Error") {
+            setWarning(
+              "Impossibile eliminare il Test Suite. L'utente non dispone delle autorizzazioni necessarie"
+            );
+          } else {
+            setWarning(
+              "Codice errore: " +
+              result.error.code +
+              "Descrizione: " +
+              result.error.description
+            );
+          }
         } else {
-          setWarning(
-            "Codice errore: " +
-            result.error.code +
-            "Descrizione: " +
-            result.error.description
-          );
+          setOpenWarning(false);
+          funzioneGetAll();
         }
-      } else {
-        setOpenWarning(false);
-        funzioneGetAll();
-      }
-    })();
+      })();
+    }
   }
 
   //----------------------------------------------------------
@@ -290,7 +307,7 @@ function TestSuiteTable() {
     // aggiornaTestCaseAssociati();
   };
 
-  
+
   //------------ funzione apri modale delete
 
   const handleOpenDelete = (rowData) => {
@@ -320,57 +337,6 @@ function TestSuiteTable() {
     setOpenWarningUpdate(false);
   };
 
-  //-------AGGIORNA TEST SUITE----------------------------
-  
-  // const aggiornaTestSuite = () => {
-  //   const invia = () => {
-  //     var myHeaders = new Headers();
-  //     myHeaders.append("Authorization", bearer);
-  //     myHeaders.append("Content-Type", "application/json");
-  //     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //     var raw = JSON.stringify({
-  //       id: id,
-  //       version: version,
-  //       nome: nome,
-  //       descrizione: descrizione,
-  //       testCases: y,
-  //     });
-
-  //     var requestOptions = {
-  //       method: "POST",
-  //       headers: myHeaders,
-  //       body: raw,
-  //       redirect: "follow",
-  //     };
-
-  //     fetch(`/api/testsuite`, requestOptions)
-  //       .then((response) => response.json())
-  //       .then((result) => {
-  //         if (result.error !== null) {
-  //           setOpenWarningUpdate(true);
-  //           if (result.error.code === "") {
-  //             setWarningUpdate(
-  //               "Impossibile aggiornare il Test Suite poichè l'utente non dispone delle autorizzazioni necessarie"
-  //             );
-  //           } else {
-  //             setWarning(
-  //               "Codice errore: " +
-  //               result.error.code +
-  //               "Descrizione: " +
-  //               result.error.description
-  //             );
-  //           }
-  //         } else {
-  //           setOpenWarningUpdate(false);
-  //           funzioneGetAll();
-  //         }
-  //       })
-  //       .catch((error) => console.log("error", error));
-  //   };
-  //   invia();
-  // };
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -540,13 +506,13 @@ function TestSuiteTable() {
                   exact
                   to="/editing/testsuite/createstsuite"
                   startIcon={<AddIcon />}
+                  disabled={functions.indexOf("testsuite.create") === -1}
                 >
                   TEST SUITE
                 </Button>
               </div>
             ),
             tooltip: "Crea Test Suite",
-            //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
           {
@@ -563,6 +529,7 @@ function TestSuiteTable() {
             icon: () => <EditIcon />,
             tooltip: "Modifica Test Suite",
             onClick: (event, rowData) => openModifica(rowData),
+            disabled: functions.indexOf("testsuite.edit") !== -1,
             position: "row",
           },
           {
@@ -572,6 +539,7 @@ function TestSuiteTable() {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
+            disabled: functions.indexOf("testsuite.delete") !== -1,
           },
         ]}
         localization={{
@@ -579,7 +547,7 @@ function TestSuiteTable() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
+            emptyDataSourceMessage: scrittaTabella,
           },
         }}
       />

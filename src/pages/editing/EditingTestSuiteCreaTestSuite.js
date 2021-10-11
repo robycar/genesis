@@ -326,30 +326,15 @@ function EditingTestCreaTestSuite() {
   let history = useHistory();
   const classes = useStyles();
 
-  const bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
-
   const [openDrawer, setOpenDrawer] = useState([]);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [nextDisabled, setNextDisabled] = useState(true);
   const [data, setData] = useState([]);
-  const [testCase, setTestCase] = useState([]);
-  const [id, setId] = useState();
-  const [nomeTitolo, setNomeTitolo] = useState("");
-  const [version, setVersion] = useState();
-  const [expectedDuration, setExpectedDuration] = useState();
-  const [durata, setDurata] = useState();
-  const [createdBy, setCreatedBy] = useState("");
-  const [modifiedBy, setModifiedBy] = useState("");
-  const [creationDate, setCreationDate] = useState("");
-  const [modifiedDate, setModifiedDate] = useState("");
-  const [chiamato, setChiamato] = useState([]);
-  const [chiamanti, setChiamanti] = useState([]);
-  const [appearLine, setAppearLine] = useState([]);
-  const [appearOBP, setAppearOBP] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isErrore, setErrore] = useState(false);
   const [messaggioErr, setMessaggioErr] = useState("");
+  var functions = localStorage.getItem("funzioni").split(",");
 
   /*------- arrayIdTestCase -----------*/
   const arrayIdTestCase = [];
@@ -359,29 +344,14 @@ function EditingTestCreaTestSuite() {
   }
 
   const funzioneGetAll = () => {
-    //----GET APPEAR TEMPLATE----
-    (async () => {
-      setData((await getGenerale('testcase')).list);
-    })();
-
-    //-----GET APPEAR OBP-----
-    (async () => {
-      setAppearOBP((await getGenerale('obp')).list);
-    })();
-
-    //-----GET APPEAR LIST-----
-    (async () => {
-      setAppearLine((await getGenerale('linea')).list);
-    })();
+    if (functions.indexOf("testsuite.create") !== -1 && functions.indexOf("test.view") !== -1) {
+      //----GET APPEAR TEMPLATE----
+      (async () => {
+        setData((await getGenerale('testcase')).list);
+      })();
+    }
   }
 
-  const funzioneGetTestcaseById = (id) => {
-    //----GET APPEAR TEMPLATE----
-    (async () => {
-      setTestCase((await getByIdGenerale('testcase', id)).testCase);
-      setOpen(true);
-    })();
-  }
 
   const checkRichiesta = (result) => {
     if (result.error == null) {
@@ -396,9 +366,11 @@ function EditingTestCreaTestSuite() {
   };
 
   const Invia = () => {
-    (async () => {
-      checkRichiesta(await putGenerale('testsuite', { nome: nome, descrizione: descrizione, testCases: arrayIdTestCase }));
-    })();
+    if (functions.indexOf("testsuite.create") !== -1) {
+      (async () => {
+        checkRichiesta(await putGenerale('testsuite', { nome: nome, descrizione: descrizione, testCases: arrayIdTestCase }));
+      })();
+    }
   }
 
   useEffect(() => {
@@ -449,93 +421,6 @@ function EditingTestCreaTestSuite() {
   ];
 
   const [open, setOpen] = React.useState(false);
-  const [openChiamato, setOpenChiamato] = React.useState(false);
-  const [openChiamanti, setOpenChiamanti] = React.useState(false);
-  const [idElemento, setIdElemento] = React.useState(0);
-  const [openDelete, setOpenDelete] = React.useState(false);
-
-
-  const handleOpen = (rowData) => {
-    setId(rowData.id);
-    setNomeTitolo(rowData.nome);
-    setNome(rowData.nome);
-    setDescrizione(rowData.descrizione);
-    setVersion(rowData.version);
-    setExpectedDuration(rowData);
-    setDurata(rowData.expectedDuration);
-    setCreatedBy(rowData.createdBy);
-    setModifiedBy(rowData.modifiedBy);
-    setCreationDate(rowData.creationDate);
-    setModifiedDate(rowData.modifiedDate);
-    funzioneGetTestcaseById(rowData.id);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleClose2 = () => {
-    // aggiornaTestCase();
-    setOpen(false);
-  };
-
-
-  //------------ funzione apri modale
-
-  const handleOpenDelete = (rowData) => {
-    setNome(rowData.nome);
-    setOpenDelete(true);
-  };
-
-  //---------- funzione chiudi modale
-  const handleCloseDelete = () => {
-    setOpenDelete(false);
-  };
-
-  //-----------MODALE CHIAMATO------------------
-  const handleOpenChiamato = () => {
-    var appoggioChiamato;
-    appoggioChiamato = Object.values(testCase.chiamato);
-    for (let i = 0; i < appoggioChiamato.length; i++) {
-      chiamato.push(appoggioChiamato[i].id);
-    }
-    console.log(chiamato);
-    setOpenChiamato(true);
-  };
-
-  const handleCloseChiamato = () => {
-    setOpenChiamato(false);
-  };
-
-  const handleCloseChiamato2 = () => {
-    //aggiornaUtente();
-    setOpenChiamato(false);
-  };
-  //---------MODALE CHIAMANTi--------------------
-  const handleOpenChiamanti = () => {
-    var appoggioChiamanti;
-    appoggioChiamanti = testCase.chiamanti;
-
-    for (let i = 0; i < appoggioChiamanti.length; i++) {
-      chiamanti[i] = [0, 0, 0, 0];
-    }
-    for (let i = 0; i < appoggioChiamanti.length; i++) {
-      chiamanti[i][0] = appoggioChiamanti[i]["proxy"].id;
-      chiamanti[i][1] = appoggioChiamanti[i]["linea"].id;
-      chiamanti[i][2] = appoggioChiamanti[i]["file"].id;
-      chiamanti[i][3] = i;
-    }
-    setOpenChiamanti(true);
-  };
-
-  const handleCloseChiamanti = () => {
-    setOpenChiamanti(false);
-  };
-
-  const handleCloseChiamanti2 = () => {
-    //aggiornaUtente();
-    setOpenChiamanti(false);
-  };
 
 
   //-----------------------SCRIPT STEPPER------------------------------
@@ -723,16 +608,16 @@ function EditingTestCreaTestSuite() {
                     ],
                   }}
                   actions={[
-                    {
-                      icon: (dat) => (
-                        <a>
-                          <VisibilityIcon />
-                        </a>
-                      ),
-                      tooltip: "Visualizza Test Suite",
-                      position: "row",
-                      onClick: (event, rowData) => handleOpen(rowData),
-                    },
+                    // {
+                    //   icon: (dat) => (
+                    //     <a>
+                    //       <VisibilityIcon />
+                    //     </a>
+                    //   ),
+                    //   tooltip: "Visualizza Test Suite",
+                    //   position: "row",
+                    //   onClick: (event, rowData) => handleOpen(rowData),
+                    // },
                   ]}
                   localization={{
                     header: {
@@ -781,6 +666,7 @@ function EditingTestCreaTestSuite() {
                     </Button>
                     <Button
                       disabled={
+                        functions.indexOf("testsuite.create") === -1 ||
                         nextDisabled ||
                         (arrayIdTestCase.length === 0 && activeStep === 1)
                       }

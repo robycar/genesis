@@ -23,9 +23,6 @@ import { Divider } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import { MenuItem } from "@material-ui/core";
 
-
-
-
 const TestSuiteSchedulatiTable = () => {
   const [id, setId] = useState();
   const [nome, setNome] = useState("");
@@ -38,8 +35,7 @@ const TestSuiteSchedulatiTable = () => {
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [delay, setDelay] = useState();
-
-
+  const [dataschedula, setDataSchedula] = useState();
 
   const columns = [
     {
@@ -153,38 +149,77 @@ const TestSuiteSchedulatiTable = () => {
     },
   }));
 
-  // ------- GET TEST SUITE -----------
   let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 
   if (bearer != null) {
     bearer = bearer.replace(/"/g, "");
   }
 
+  // ------- GET TEST SUITE -----------
+
   const [appearTest, setAppearTest] = useState([]);
   const [openSchedula, setOpenSchedula] = React.useState(false);
-
+  const [scheduleDateTime, setSchedulaDateTime] = React.useState("");
 
   const getAllTestSuite = () => {
+    var consta = "SCHEDULED";
+
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
+    var raw = JSON.stringify({
+      includeRiepilogoTestCase: false,
+      includeRiepilogoTestSuite: false,
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: consta,
+      includeTestGeneratoreOfType: null,
+    });
+
     var requestOptions = {
-      method: "GET",
+      method: "POST",
       headers: myHeaders,
+      body: raw,
       redirect: "follow",
     };
 
-    fetch(`/api/testsuite`, requestOptions)
+    fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
-        setAppearTest(result.list);
-        setData(result.list);
+        //setAppearTest(result.testCaseList);
+        setData(result.testSuiteList);
       })
       .catch((error) => console.log("error", error));
   };
+
+  useEffect(() => {
+    getAllTestSuite();
+  }, []);
+
+  // const getAllTestSuite = () => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
+
+  //   fetch(`/api/testsuite`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       console.log(result);
+  //       setAppearTest(result.list);
+  //       setData(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
 
   /*--------------- FUNZIONE CARICA TEST SUITE -------------------*/
 
@@ -214,6 +249,43 @@ const TestSuiteSchedulatiTable = () => {
   useEffect(() => {
     getAllTestSuite();
   }, []);
+
+  /*----------- SCHEDULA TEST SUITE ----------------*/
+
+  const schedulaTestSuite = () => {
+    const invia = () => {
+      scheduleDateTime = dataInizio + "T" + orarioInizio;
+
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+      var raw = JSON.stringify({
+        id: id,
+        scheduleDateTime: scheduleDateTime,
+        delay: delay,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/testsuite/schedule`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          setDataSchedula(result.testCaseCaricato);
+          handleCloseSchedula();
+        })
+        .catch((error) => console.log("error", error));
+    };
+    invia();
+  };
 
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -271,6 +343,7 @@ const TestSuiteSchedulatiTable = () => {
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
+            disabled: true,
           },
           {
             icon: () => <PlayCircleOutlineIcon />,
@@ -317,8 +390,8 @@ const TestSuiteSchedulatiTable = () => {
         //   ),
         // }}
       />
-        {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
-        <Modal
+      {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -414,8 +487,8 @@ const TestSuiteSchedulatiTable = () => {
         </Fade>
       </Modal>
 
-       {/* ------------------ MODALE SCHEDULA TEST SUITE --------------------- */}
-       <Modal
+      {/* ------------------ MODALE SCHEDULA TEST SUITE --------------------- */}
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -500,8 +573,7 @@ const TestSuiteSchedulatiTable = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  //onClick={handleOpenSchedula}
-                  onClick={() => alert("Funzione schedula moccata")}
+                  onClick={schedulaTestSuite}
                 >
                   Conferma
                 </Button>

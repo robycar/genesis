@@ -64,12 +64,12 @@ export default function TotalPlannedDaylyTestSuite() {
         m={2}
         className={classes.secondTitle}
       >
-        % COMPLETATI
+        COMPLETATI
         <Typography>
           <h5>{dataGiorni?.completate}</h5>
         </Typography>
       </Typography>
-      <Typography
+       {/*<Typography
         color="textSecondary"
         component="p"
         variant="h5"
@@ -80,7 +80,7 @@ export default function TotalPlannedDaylyTestSuite() {
           <h5>{dataGiorni?.testOK}</h5>
         </Typography>
       </Typography>
-      {/* <div>
+      <div>
         <Link color="primary" href="#" onClick={preventDefault}>
           View balance
         </Link>

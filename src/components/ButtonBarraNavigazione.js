@@ -73,6 +73,12 @@ export function ButtonEditing() {
         activeClassName="button-green-active"
         exact
         to="/editing/linee"
+        disabled={
+          functions.indexOf("linea.view") === -1 &&
+          functions.indexOf("linea.create") === -1 &&
+          functions.indexOf("linea.view") === -1 &&
+          functions.indexOf("linea.create") === -1
+        }
       >
         LINEE
       </Button>
@@ -144,50 +150,16 @@ export function ButtonEditingLinee() {
   const classes = useStyles();
   return (
     <>
-      {/* <div className={classes.buttonContainer}>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/linee"
-        >
-          LINEE
-        </Button>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/outboundproxy"
-        >
-          OUTBOUND PROXY
-        </Button>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/template"
-        >
-          TEMPLATE
-        </Button>
-        <Button
-          className="button-green"
-          component={NavLink}
-          activeClassName="button-green-active"
-          exact
-          to="/editing/testcase"
-        >
-          TEST
-        </Button>
-      </div> */}
       <Button
         className="button-green"
         component={NavLink}
         activeClassName="button-green-active"
         exact
         to="/editing/linee"
+        disabled={
+          functions.indexOf("linea.view") === -1 &&
+          functions.indexOf("linea.create") === -1
+        }
       >
         LINEE SIMULATORE
       </Button>
@@ -197,6 +169,10 @@ export function ButtonEditingLinee() {
         activeClassName="button-green-active"
         exact
         to="/editing/lineegeneratore"
+        disabled={
+          functions.indexOf("lineagen.view") === -1 &&
+          functions.indexOf("lineagen.create") === -1
+        }
       >
         LINEE GENERATORE
       </Button>

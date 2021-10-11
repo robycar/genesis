@@ -55,32 +55,32 @@ const TestRunningTable = () => {
     },
     {
       title: "Loader",
-      field: "startedBy",
-    },
-    {
-      title: "Data Inizio",
-      field: "startDate",
-    },
-    {
-      title: "Data Fine",
-      field: "endDate",
-    },
-    {
-      title: "Status",
-      field: "result",
-    },
-    {
-      title: "Trace",
-      field: "properties",
-    },
-    {
-      title: "Call-Id",
       field: "loadedBy",
     },
     {
-      title: "Report",
-      field: "pathInstance",
+      title: "Data Caricamento",
+      field: "loadedWhen",
     },
+    // {
+    //   title: "Data Fine",
+    //   field: "endDate",
+    // },
+    {
+      title: "Status",
+      field: "stato",
+    },
+    // {
+    //   title: "Trace",
+    //   field: "properties",
+    // },
+    // {
+    //   title: "Call-Id",
+    //   field: "loadedBy",
+    // },
+    // {
+    //   title: "Report",
+    //   field: "pathInstance",
+    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -243,7 +243,7 @@ const TestRunningTable = () => {
   const testCaseLoader = () => {
     loadTestCase(id);
     handleClose();
-    getAllTestCase();
+    // getAllTestCase();
   };
 
 
@@ -256,7 +256,7 @@ const TestRunningTable = () => {
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
   //-----------GET TEST CASE----------------------
-  const getAllTestCase = () => {
+  const getAllTestCaseRunning = () => {
     var consta = "RUNNING";
 
     var myHeaders = new Headers();
@@ -266,6 +266,8 @@ const TestRunningTable = () => {
     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
     var raw = JSON.stringify({
+      includeRiepilogoTestCase: false,
+      includeRiepilogoTestSuite: false,
       includeTestCaseOfType: consta,
       includeTestSuiteOfType: null,
       includeTestGeneratoreOfType: null,
@@ -289,7 +291,7 @@ const TestRunningTable = () => {
   };
 
   useEffect(() => {
-    getAllTestCase();
+    getAllTestCaseRunning();
   }, []);
 
   /*--------------- LOAD TEST CASE -------------------*/

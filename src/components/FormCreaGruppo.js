@@ -55,23 +55,24 @@ function FormCreaGruppo() {
   };
 
   const funzioneAggiungiGruppo = () => {
-
     if (functions.indexOf("group.edit") !== -1) {
       //----AGGIUNGI GRUPPO------
       (async () => {
-        let result = await putGenerale('group', { nome: nome, descrizione: descrizione });
+        let result = await putGenerale("group", {
+          nome: nome,
+          descrizione: descrizione,
+        });
         checkRichiesta(result);
       })();
     }
-  }
+  };
 
   const putGroup = () => {
     if (nome === "") {
       document.getElementById("alertGruppo2").style.display = "";
       document.getElementById("alertGruppo1").style.display = "none";
-    } else
-      funzioneAggiungiGruppo()
-  }
+    } else funzioneAggiungiGruppo();
+  };
 
   return (
     <Container maxWidth="lg" className={classes.container}>
@@ -124,7 +125,12 @@ function FormCreaGruppo() {
           className={classes.bottone}
           style={{ display: "flex", justifyContent: "flex-end" }}
         >
-          <ButtonClickedGreen disabled={functions.indexOf("group.edit") === -1} size="medium" nome="Crea" onClick={putGroup} />
+          <ButtonClickedGreen
+            disabled={functions.indexOf("group.edit") === -1}
+            size="medium"
+            nome="Crea"
+            onClick={putGroup}
+          />
           <Button
             component={NavLink}
             className="button-green-disactive"

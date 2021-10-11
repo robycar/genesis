@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   fixedHeight: {
-    height: 100,
+    height: "100%",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -72,7 +72,7 @@ export default function ReportCardTestCaseGeneral() {
   const getDataForTestCase = () => {
     (async () => {
       setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestCaseGiorni);
-      //setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestCaseSettimana);
+      setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestCaseSettimana);
     })();
   }
 
@@ -97,10 +97,22 @@ export default function ReportCardTestCaseGeneral() {
                 m={2}
                 className={classes.secondTitle}
               >
-                CARICATI
+                CARICATI GIORNO
               </Typography>
               <Typography className={classes.dataAlignCenter}>
-                <h5>{dataGiorni.caricati}</h5>
+                <h5><b>{dataGiorni.caricati}</b></h5>
+              </Typography>
+
+              <Typography
+                component="p"
+                variant="h5"
+                m={2}
+                className={classes.secondTitle}
+              >
+                CARICATI SETTIMANA
+              </Typography>
+              <Typography className={classes.dataAlignCenter}>
+                <h5><b>{dataSettimana.caricati}</b></h5>
               </Typography>
             </Paper>
           </Grid>
@@ -113,10 +125,22 @@ export default function ReportCardTestCaseGeneral() {
                 m={2}
                 className={classes.secondTitle}
               >
-                SCHEDULATI
+                SCHEDULATI GIORNO
               </Typography>
               <Typography className={classes.dataAlignCenter}>
-                <h5>{dataGiorni.schedulati}</h5>
+                <h5><b>{dataGiorni.schedulati}</b></h5>
+              </Typography>
+
+              <Typography
+                component="p"
+                variant="h5"
+                m={2}
+                className={classes.secondTitle}
+              >
+                SCHEDULATI SETTIMANA
+              </Typography>
+              <Typography className={classes.dataAlignCenter}>
+                <h5><b>{dataSettimana.schedulati}</b></h5>
               </Typography>
             </Paper>
           </Grid>
@@ -129,10 +153,22 @@ export default function ReportCardTestCaseGeneral() {
                 m={2}
                 className={classes.secondTitle}
               >
-                PIANIFICATI
+                PIANIFICATI GIORNO
               </Typography>
               <Typography className={classes.dataAlignCenter}>
-                <h5>{dataGiorni.pianificati}</h5>
+                <h5><b>{dataGiorni.pianificati}</b></h5>
+              </Typography>
+
+              <Typography
+                component="p"
+                variant="h5"
+                m={2}
+                className={classes.secondTitle}
+              >
+                PIANIFICATI SETTIMANA
+              </Typography>
+              <Typography className={classes.dataAlignCenter}>
+                <h5><b>{dataSettimana.pianificati}</b></h5>
               </Typography>
             </Paper>
           </Grid>
@@ -145,10 +181,22 @@ export default function ReportCardTestCaseGeneral() {
                 m={2}
                 className={classes.secondTitle}
               >
-                COMPLETATI
+                COMPLETATI GIORNO
               </Typography>
               <Typography className={classes.dataAlignCenter}>
-                <h5>{dataGiorni.completati}</h5>
+                <h5><b>{dataGiorni.completati}</b></h5>
+              </Typography>
+
+              <Typography
+                component="p"
+                variant="h5"
+                m={2}
+                className={classes.secondTitle}
+              >
+                COMPLETATI SETTIMANA
+              </Typography>
+              <Typography className={classes.dataAlignCenter}>
+                <h5><b>{dataSettimana.completati}</b></h5>
               </Typography>
             </Paper>
           </Grid>

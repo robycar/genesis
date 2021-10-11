@@ -1,18 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import acccessControl from "../service/url.js";
-
+import MaterialTable from "material-table";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import { postGenerale } from "../service/api";
 
 // const [dataLoad, setTestCaseLoad] = useState(null);
 // const [dataRun, setIdTestCaseRun] = useState(null);
 // const [dataCase, setDataCase] = useState();
+const columns = [
+  {
+    title: "Id",
+    field: "id",
+    defaultSort: "desc",
+  },
+  {
+    title: "Risultato",
+    field: "result",
+  },
+  {
+    title: "Trace",
+    field: "trace",
+  },
+  {
+    title: "Call-Id",
+    field: "loadedBy",
+  },
+  {
+    title: "Action",
+    field: "action",
+    render: (rowData) => alert("vedi descrizione"),
+  },
+];
 
 function ChartReport() {
   const [data, setData] = useState([]);
-
+  const [dataRecord, setDataRecord] = useState([]);
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
-
     const bearer = `Bearer ${localStorage.getItem("token")}`;
 
     var consta = "COMPLETED";
@@ -42,9 +67,28 @@ function ChartReport() {
         console.log(result);
         //setAppearTest(result.testCaseList);
         setData(result.testCaseList);
-        cicloFor();
+        cicloFor(result.testCaseList);
       })
       .catch((error) => console.log("error", error));
+  };
+
+  const ReportCardTestCaseGeneral = () => {
+    const objDashInfoTestCase = {
+      includeRiepilogoTestCase: true,
+      includeRiepilogoTestSuite: null,
+      includeTestCaseOfType: "COMPLETED",
+      includeTestSuiteOfType: null,
+      includeTestGeneratoreOfType: null,
+    };
+
+    const getDataForTestCase = () => {
+      (async () => {
+        setDataRecord(
+          (await postGenerale("dashboard/info", objDashInfoTestCase))
+            .testCaseList
+        );
+      })();
+    };
   };
 
   useEffect(() => {
@@ -55,11 +99,9 @@ function ChartReport() {
 
   const [ok, setOk] = useState(0);
   const [ko, setKo] = useState(0);
-  
 
-
-  function cicloFor() {
-    console.log(data)
+  function cicloFor(data) {
+    console.log(data);
     var appOk = 0;
     var appKo = 0;
     for (let i = 0; i < data.length; i++) {
@@ -71,19 +113,17 @@ function ChartReport() {
     }
     setOk(appOk);
     setKo(appKo);
-    
   }
-
 
   const chart = {
     labels: ["KO", "OK"],
     datasets: [
       {
         label: "# of Test Case",
-        data: [ko , ok],
+        data: [ko, ok],
         backgroundColor: [
           "red",
-          "blue",
+          "green",
           // "rgba(75, 192, 192)",
           // "rgba(153, 102, 255)",
         ],
@@ -93,7 +133,41 @@ function ChartReport() {
 
   return (
     <>
-      <Doughnut data={chart} />
+      <div>
+        <MaterialTable
+          style={{ boxShadow: "none" }}
+          title=" Total Test Case Conclusi"
+          data={dataRecord}
+          columns={columns}
+          options={{
+            // tableLayout: "fixed",
+            actionsColumnIndex: -1,
+            search: true,
+            searchFieldVariant: "outlined",
+            searchFieldAlignment: "center",
+            selection: true,
+            // columnsButton: true,
+            filtering: true,
+          }}
+          actions={[
+            {
+              icon: () => <FilterListIcon />,
+              tooltip: "Filtro",
+              isFreeAction: true,
+              // onClick: () => handleChange(),
+            },
+          ]}
+          localization={{
+            header: {
+              actions: "Azioni",
+            },
+            body: {
+              emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
+            },
+          }}
+        />
+        <Doughnut data={chart} />
+      </div>
     </>
   );
 }

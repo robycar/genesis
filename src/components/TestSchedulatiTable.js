@@ -299,7 +299,7 @@ const TestSchedulatiTable = () => {
     getAllTestCase();
   }, []);
 
-  /*------------------ SCHEDULA TEST ------------------*/
+  /*------------------ SCHEDULA TEST CASE ------------------*/
 
   const schedulaTestCase = () => {
     const invia = () => {
@@ -446,6 +446,7 @@ const TestSchedulatiTable = () => {
             onClick: (event, rowData) =>
               alert("Ho cliccato " + rowData.launcher),
             position: "row",
+            disabled: true,
           },
           {
             icon: () => <PlayCircleOutlineIcon />,

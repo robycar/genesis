@@ -36,7 +36,7 @@ import DnsIcon from "@material-ui/icons/Dns";
 import acccessControl from "../../service/url.js";
 import Alert from "@material-ui/lab/Alert";
 import { useHistory } from "react-router-dom";
-import {ButtonEditing} from "../../components/ButtonBarraNavigazione"
+import { ButtonEditing } from "../../components/ButtonBarraNavigazione"
 
 const drawerWidth = 240;
 
@@ -204,6 +204,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditingOutboundProxy() {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   let history = useHistory();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -223,26 +226,29 @@ function EditingOutboundProxy() {
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const getTypeId = () => {
-    var myHeaders = new Headers();
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    if (functions.indexOf("linea.view") !== -1) {
 
-    // console.log(bearer.toString());
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+      // console.log(bearer.toString());
 
-    fetch(`/api/typeLinea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-      })
-      .catch((error) => console.log("error", error));
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      fetch(`/api/typeLinea`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          setData(result.list);
+        })
+        .catch((error) => console.log("error", error));
+    }
   };
 
   useEffect(() => {
@@ -253,115 +259,117 @@ function EditingOutboundProxy() {
 
   function salva() {
     const Invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      var raw = JSON.stringify({
-        ipDestinazione: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
-        descrizione: descrizione,
-        porta: porta,
-        typeLinee: typeLineaId,
-      });
+      if (functions.indexOf("linea.view") !== -1) {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", bearer);
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+        myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      var requestOptions = {
-        method: "PUT",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
+        var raw = JSON.stringify({
+          ipDestinazione: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
+          descrizione: descrizione,
+          porta: porta,
+          typeLinee: typeLineaId,
+        });
+
+        var requestOptions = {
+          method: "PUT",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch(`/api/obp`, requestOptions)
+          .then((response) => response.json())
+          //.then((result) => console.log(result))
+          .catch((error) => console.log("error", error));
+
+        history.push("/editing/outboundproxy");
+      };
+      console.log(ip1 !== "", "ip1");
+      console.log(ip2 !== "", "ip2");
+      console.log(ip3 !== "", "ip3");
+      console.log(ip4 !== "", "ip4");
+      console.log(typeLineaId.length !== 0, "TipoLinea");
+      console.log(typeLineaId, "tipoLinea");
+
+      const aggiornaIP = () => {
+        if (
+          ip1 >= 0 &&
+          ip1 <= 255 &&
+          ip2 >= 0 &&
+          ip2 <= 255 &&
+          ip3 >= 0 &&
+          ip3 <= 255 &&
+          ip4 >= 0 &&
+          ip4 <= 255
+        ) {
+          document.getElementById("alertIP").style.display = "none";
+          document.getElementById("alertPorta").style.display = "none";
+          document.getElementById("alertTypeLinea").style.display = "none";
+          document.getElementById("alertIP2").style.display = "none";
+
+          Invia();
+        } else {
+          document.getElementById("alertIP2").style.display = "";
+        }
       };
 
-      fetch(`/api/obp`, requestOptions)
-        .then((response) => response.json())
-        //.then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
-
-      history.push("/editing/outboundproxy");
-    };
-    console.log(ip1 !== "", "ip1");
-    console.log(ip2 !== "", "ip2");
-    console.log(ip3 !== "", "ip3");
-    console.log(ip4 !== "", "ip4");
-    console.log(typeLineaId.length !== 0, "TipoLinea");
-    console.log(typeLineaId, "tipoLinea");
-
-    const aggiornaIP = () => {
       if (
-        ip1 >= 0 &&
-        ip1 <= 255 &&
-        ip2 >= 0 &&
-        ip2 <= 255 &&
-        ip3 >= 0 &&
-        ip3 <= 255 &&
-        ip4 >= 0 &&
-        ip4 <= 255
+        ip1 !== "" &&
+        ip2 !== "" &&
+        ip3 !== "" &&
+        ip4 !== "" &&
+        typeLineaId.length !== 0 &&
+        (porta === "" || (porta.length > 3 && porta.length < 6))
       ) {
-        document.getElementById("alertIP").style.display = "none";
-        document.getElementById("alertPorta").style.display = "none";
-        document.getElementById("alertTypeLinea").style.display = "none";
-        document.getElementById("alertIP2").style.display = "none";
+        if (porta === "") {
+          setPorta("5060");
+        }
+        if (descrizione === "") {
+          setDescrizione(" ");
+        }
 
-        Invia();
+        aggiornaIP();
       } else {
-        document.getElementById("alertIP2").style.display = "";
-      }
-    };
-
-    if (
-      ip1 !== "" &&
-      ip2 !== "" &&
-      ip3 !== "" &&
-      ip4 !== "" &&
-      typeLineaId.length !== 0 &&
-      (porta === "" || (porta.length > 3 && porta.length < 6))
-    ) {
-      if (porta === "") {
-        setPorta("5060");
-      }
-      if (descrizione === "") {
-        setDescrizione(" ");
-      }
-
-      aggiornaIP();
-    } else {
-      if (ip1 === "" || ip2 === "" || ip3 === "" || ip4 === "") {
-        document.getElementById("alertIP").style.display = "";
-      } else {
-        document.getElementById("alertIP").style.display = "none";
-      }
-      if (
-        ip1 >= 0 &&
-        ip1 <= 255 &&
-        ip2 >= 0 &&
-        ip2 <= 255 &&
-        ip3 >= 0 &&
-        ip3 <= 255 &&
-        ip4 >= 0 &&
-        ip4 <= 255
-      ) {
-        document.getElementById("alertIP2").style.display = "none";
-      } else {
-        document.getElementById("alertIP2").style.display = "";
-      }
-      if (porta.length < 4 || porta.length > 5) {
-        document.getElementById("alertPorta").style.display = "";
-        console.log(typeLineaId);
-      } else {
-        document.getElementById("alertPorta").style.display = "none";
-      }
-      if (typeLineaId.length === 0) {
-        document.getElementById("alertTypeLinea").style.display = "";
-      } else {
-        document.getElementById("alertTypeLinea").style.display = "none";
+        if (ip1 === "" || ip2 === "" || ip3 === "" || ip4 === "") {
+          document.getElementById("alertIP").style.display = "";
+        } else {
+          document.getElementById("alertIP").style.display = "none";
+        }
+        if (
+          ip1 >= 0 &&
+          ip1 <= 255 &&
+          ip2 >= 0 &&
+          ip2 <= 255 &&
+          ip3 >= 0 &&
+          ip3 <= 255 &&
+          ip4 >= 0 &&
+          ip4 <= 255
+        ) {
+          document.getElementById("alertIP2").style.display = "none";
+        } else {
+          document.getElementById("alertIP2").style.display = "";
+        }
+        if (porta.length < 4 || porta.length > 5) {
+          document.getElementById("alertPorta").style.display = "";
+          console.log(typeLineaId);
+        } else {
+          document.getElementById("alertPorta").style.display = "none";
+        }
+        if (typeLineaId.length === 0) {
+          document.getElementById("alertTypeLinea").style.display = "";
+        } else {
+          document.getElementById("alertTypeLinea").style.display = "none";
+        }
       }
     }
   }
 
   const handleChange = (event) => {
     setTypeLineaId(event.target.value);
-    console.log(typeLineaId, "typeLineaId");
   };
 
   return (
@@ -381,7 +389,7 @@ function EditingOutboundProxy() {
         }}
         open={open}
       >
-        
+
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -491,7 +499,7 @@ function EditingOutboundProxy() {
                         value={typeLineaId}
                         onChange={handleChange}
                         input={<Input />}
-                        //MenuProps={MenuProps}
+                      //MenuProps={MenuProps}
                       >
                         {data.map((prova) => {
                           return (
@@ -535,23 +543,6 @@ function EditingOutboundProxy() {
                   </Form.Group>
                 </Paper>
 
-                {/* <Paper className={classes.paper} elevation={0}>
-                <Form.Label className={classes.label2}>Porta</Form.Label>
-                <Form.Control
-                  className={classes.formControl}
-                  type="text"
-                  placeholder="Inserisci Porta"
-                  onChange={(e) => setPorta(e.target.value)}
-                />
-                <Alert
-                  severity="error"
-                  id="alertPorta"
-                  style={{ display: "none" }}
-                >
-                  Porta is required!
-                </Alert>
-              </Paper> */}
-
                 <Paper className={classes.divSelect} elevation={0}>
                   <Form.Label>Descrizione</Form.Label>
                   <Form.Control
@@ -578,6 +569,7 @@ function EditingOutboundProxy() {
                 size="medium"
                 nome="Crea"
                 onClick={salva}
+                disabled={functions.indexOf("linea.view") === -1}
               />
               <Button
                 component={NavLink}

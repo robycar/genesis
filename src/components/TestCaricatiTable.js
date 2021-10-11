@@ -34,7 +34,7 @@ const TestCaricatiTable = () => {
   const [dataCase, setDataCase] = useState();
   const [appearTest, setAppearTest] = useState([]);
   const [orarioInizio, setOrarioInizio] = useState("");
-  const [delay, setDelay] = useState(0);
+  const [delay, setDelay] = useState(60); //default 60 sec
   let scheduleDateTime = "";
   const [dataLoad, setTestCaseLoad] = useState({});
   const [dataRun, setIdTestCaseRun] = useState(null);
@@ -543,24 +543,12 @@ const TestCaricatiTable = () => {
           filtering: true,
         }}
         actions={[
-          {
-            icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Mostra Report",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
+        
           {
             icon: "play_circle_outlined",
             tooltip: "Lancia il Test",
             onClick: (event, rowData) => handleOpenRun(rowData.id),
 
-            position: "row",
-          },
-          {
-            icon: "account_tree",
-            tooltip: "Traccia",
-            onClick: (event, rowData) => console.log("Trace"),
             position: "row",
           },
           {
@@ -571,6 +559,14 @@ const TestCaricatiTable = () => {
               //setIdTest(rowData.id);
             },
             position: "row",
+          },
+          {
+            icon: () => <PieChartOutlinedIcon />,
+            tooltip: "Mostra Report",
+            onClick: (event, rowData) =>
+              alert("Ho cliccato " + rowData.launcher),
+            position: "row",
+            disabled: true,
           },
           {
             icon: () => <FilterListIcon />,

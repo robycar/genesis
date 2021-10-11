@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import Grid from "@material-ui/core/Grid";
 import { MenuItem, Button, Paper, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { NavLink } from "react-router-dom";
@@ -20,11 +19,12 @@ import { Divider } from "@material-ui/core";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
-// import { version } from "react-dom";
-import { identifier } from "@babel/types";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 function Obp() {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const [data, setData] = useState([]);
   const [appearLine, setAppearLine] = useState([]);
   const [id, setId] = useState();
@@ -38,60 +38,66 @@ function Obp() {
   const [open, setOpen] = React.useState(false);
   const [version, SetVersion] = React.useState(0);
   const [caricamento, setCaricamento] = useState(false);
+  const [scrittaTabella, setScrittaTabella] = useState("");
 
   //-------------------------OBP API----------------
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
-    //----GET ALL LINEE----
-    (async () => {
-      setCaricamento(true);
-      setData((await getGenerale("obp")).list);
-      setCaricamento(false);
-    })();
 
-    //-----GET APPEAR TYPE LINEA-----
-    (async () => {
-      setAppearLine((await getGenerale("typeLinea")).list);
-    })();
+    if (functions.indexOf("obp.view") !== -1 && functions.indexOf("linea.view") !== -1) {
+      //----GET ALL LINEE----
+      (async () => {
+        setCaricamento(true);
+        setData((await getGenerale("obp")).list);
+        setCaricamento(false);
+      })();
+
+      //-----GET APPEAR TYPE LINEA-----
+      (async () => {
+        setAppearLine((await getGenerale("typeLinea")).list);
+      })();
+    
+      setScrittaTabella("Non è presente alcun dato da mostrare")
+
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+    }
   };
 
-  
+
   const aggiornaUtente = () => {
     const invia = () => {
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
+      if (functions.indexOf("obp.edit") !== -1) {
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", bearer);
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+        myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      var raw = JSON.stringify({
-        id: id,
-        version: version,
-        ipDestinazione: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
-        descrizione: descrizione,
-        porta: porta === "" ? 5060 : porta,
+        var raw = JSON.stringify({
+          id: id,
+          version: version,
+          ipDestinazione: ip1 + "." + ip2 + "." + ip3 + "." + ip4,
+          descrizione: descrizione,
+          porta: porta === "" ? 5060 : porta,
+          typeLinee: typeLinea,
+        });
 
-        // typeLinea: {
-        //   id: typeLinea.id,
-        // },
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
 
-        typeLinee: typeLinea,
-      });
-
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      fetch(`/api/obp`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          funzioneGetAll();
-        })
-        .catch((error) => console.log("error", error));
+        fetch(`/api/obp`, requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            funzioneGetAll();
+          })
+          .catch((error) => console.log("error", error));
+      }
     };
 
     const aggiornaIP = () => {
@@ -196,14 +202,6 @@ function Obp() {
   };
 
   const handleChange = (event) => {
-    // if (typeLinea.length < 2) {
-    //   setTypeLinea([event.target.value]);
-    // } else {
-    //   setTypeLinea([...typeLinea, event.target.value]);
-    //   [...typeLinea, event.target.value];
-    // }
-    // console.log(typeLinea, "typeLineaId");
-
     setTypeLinea(event.target.value);
   };
 
@@ -244,53 +242,57 @@ function Obp() {
   };
 
   const functionDelete = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    if (functions.indexOf("obp.delete") !== -1) {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var raw = JSON.stringify({
-      id: idElemento,
-    });
+      var raw = JSON.stringify({
+        id: idElemento,
+      });
 
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+      var requestOptions = {
+        method: "DELETE",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
 
-    fetch(`/api/obp`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.error !== null) {
-          setOpenWarning(true);
-          if (result.error === "Internal Server Error") {
-            setWarning(
-              "Impossibile eliminare l'OBP poichè associato ad uno o più Test Case"
-            );
-          }
-          if (result.error.code === "LINEA-0010") {
-            setWarning(
-              "Impossibile eliminare un outbound proxy che non appartiene al proprio gruppo"
-            );
-          } else {
-            setWarning(
-              "Codice errore: " +
+      fetch(`/api/obp`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.error !== null) {
+            setOpenWarning(true);
+            if (result.error === "Internal Server Error") {
+              setWarning(
+                "Impossibile eliminare l'OBP poichè associato ad uno o più Test Case"
+              );
+            }
+            if (result.error.code === "LINEA-0010") {
+              setWarning(
+                "Impossibile eliminare un outbound proxy che non appartiene al proprio gruppo"
+              );
+            } else {
+              setWarning(
+                "Codice errore: " +
                 result.error.code +
                 "Descrizione:" +
                 result.code.description
-            );
+              );
+            }
+          } else {
+            setOpenWarning(false);
+            funzioneGetAll();
+            //resolve();
           }
-        } else {
-          setOpenWarning(false);
-          funzioneGetAll();
-          //resolve();
-        }
-      })
-      .catch((error) => console.log("error", error));
-    handleCloseDelete();
+        })
+        .catch((error) => console.log("error", error));
+      handleCloseDelete();
+
+
+    }
   };
 
   /*--------------- LAYOUT ------------*/
@@ -464,8 +466,6 @@ function Obp() {
           exportButton: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
           filtering: true,
           pageSizeOptions: [5, 10, 20, { value: data.length, label: "All" }],
         }}
@@ -479,19 +479,19 @@ function Obp() {
                 exact
                 to="/editing/outboundproxy/creaobp"
                 startIcon={<AddIcon />}
+                disabled={functions.indexOf("linea.view") === -1}
               >
                 Outbound Proxy{" "}
               </Button>
             ),
             tooltip: "Crea Outbound Proxy",
-            // onClick: (event, rowData) => alert("Load Test Suite"),
             isFreeAction: true,
           },
           {
             icon: () => <EditIcon />,
             tooltip: "Modifica Outbound Proxy",
             onClick: (event, rowData) => handleOpen(rowData),
-
+            disabled: functions.indexOf("obp.edit") === -1,
             position: "row",
           },
           {
@@ -501,6 +501,7 @@ function Obp() {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
+            disabled: functions.indexOf("obp.delete") === -1,
           },
         ]}
         localization={{
@@ -508,7 +509,7 @@ function Obp() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
+            emptyDataSourceMessage: scrittaTabella,
           },
         }}
       />
@@ -665,19 +666,19 @@ function Obp() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 {ip1 <= 255 &&
-                ip1 !== "" &&
-                ip1.length < 4 &&
-                ip2 <= 255 &&
-                ip2 !== "" &&
-                ip2.length < 4 &&
-                ip3 <= 255 &&
-                ip3 !== "" &&
-                ip3.length < 4 &&
-                ip4 <= 255 &&
-                ip4 !== "" &&
-                ip4.length < 4 &&
-                porta > 1000 &&
-                porta < 100000 ? (
+                  ip1 !== "" &&
+                  ip1.length < 4 &&
+                  ip2 <= 255 &&
+                  ip2 !== "" &&
+                  ip2.length < 4 &&
+                  ip3 <= 255 &&
+                  ip3 !== "" &&
+                  ip3.length < 4 &&
+                  ip4 <= 255 &&
+                  ip4 !== "" &&
+                  ip4.length < 4 &&
+                  porta > 1000 &&
+                  porta < 100000 ? (
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"

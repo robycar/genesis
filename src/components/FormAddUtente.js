@@ -63,7 +63,7 @@ function FormAddUtente() {
       (async () => {
         setAppearGroup((await getGenerale("group")).gruppi);
       })();
-      alert()
+     // alert()
       //-----GET APPEAR LEVEL-----
       (async () => {
         setAppearLevel((await getGenerale("level")).livelli);

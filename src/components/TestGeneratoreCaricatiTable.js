@@ -46,7 +46,6 @@ const TestGeneratoreCaricatiTable = () => {
   const [delay, setDelay] = useState();
 
 
-
   const columns = [
     {
       title: "Id",

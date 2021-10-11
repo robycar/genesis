@@ -167,7 +167,9 @@ const TestSuiteComplete = () => {
     },
     contenutoModale: {
       height: 370,
+      width: 500,
       overflowX: "hidden",
+      padding:10,
     },
     divTextarea: {
       marginTop: "20px",

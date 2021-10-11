@@ -38,7 +38,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useHistory } from "react-router-dom";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
-import {ButtonEditing, ButtonEditingTest} from "../../components/ButtonBarraNavigazione"
+import { ButtonEditing, ButtonEditingTest } from "../../components/ButtonBarraNavigazione"
 
 const drawerWidth = 240;
 
@@ -285,6 +285,8 @@ function getSteps() {
 //--------------------------FINE FUNZIONI STEPPER------------------------------
 
 function EditingTestCreaTestCase() {
+  var functions = localStorage.getItem("funzioni").split(",");
+
   let history = useHistory();
   const classes = useStyles();
 
@@ -322,76 +324,82 @@ function EditingTestCreaTestCase() {
   /*------- get linea -----------*/
 
   const getLinea = () => {
-    var myHeaders = new Headers();
+    if (functions.indexOf("linea.view") !== -1) {
+      var myHeaders = new Headers();
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    // console.log(bearer.toString());
+      // console.log(bearer.toString());
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
 
-    fetch(`/api/linea`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearLinea(result.list);
-      })
-      .catch((error) => console.log("error", error));
+      fetch(`/api/linea`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          setAppearLinea(result.list);
+        })
+        .catch((error) => console.log("error", error));
+    }
   };
 
   /*--------- get obp ---------*/
 
   const getOBP = () => {
-    var myHeaders = new Headers();
+    if (functions.indexOf("obp.view") !== -1) {
+      var myHeaders = new Headers();
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    // console.log(bearer.toString());
+      // console.log(bearer.toString());
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
 
-    fetch(`/api/obp`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearOBP(result.list);
-      })
-      .catch((error) => console.log("error", error));
+      fetch(`/api/obp`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          setAppearOBP(result.list);
+        })
+        .catch((error) => console.log("error", error));
+    }
   };
 
   /*-------- get template ---------*/
 
   const getTemplete = () => {
-    var myHeaders = new Headers();
+    if (functions.indexOf("template.view") !== -1) {
+      var myHeaders = new Headers();
 
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    // console.log(bearer.toString());
+      // console.log(bearer.toString());
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
 
-    fetch(`/api/template`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearTemplete(result.list);
-      })
-      .catch((error) => console.log("error", error));
+      fetch(`/api/template`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          setAppearTemplete(result.list);
+        })
+        .catch((error) => console.log("error", error));
+    }
   };
 
 
@@ -409,36 +417,38 @@ function EditingTestCreaTestCase() {
 
 
   const Invia = () => {
-    const result = qntChiamanti.map(({ index, ...rest }) => ({ ...rest }));
+    if (functions.indexOf("test.edit") !== -1) {
+      const result = qntChiamanti.map(({ index, ...rest }) => ({ ...rest }));
 
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-    var raw = JSON.stringify({
-      nome: nome,
-      template: templete,
-      descrizione: descrizione === "" ? " " : descrizione,
-      expectedDuration: 57,
-      chiamato: {
-        linea: lineaChiamato,
-        proxy: OBPChiamato
-      },
-      chiamanti: result
-    });
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+      var raw = JSON.stringify({
+        nome: nome,
+        template: templete,
+        descrizione: descrizione === "" ? " " : descrizione,
+        expectedDuration: 57,
+        chiamato: {
+          linea: lineaChiamato,
+          proxy: OBPChiamato
+        },
+        chiamanti: result
+      });
 
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
 
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => checkRichiesta(result))
-      .catch((error) => console.log("error", error));
+      fetch(`/api/testcase`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => checkRichiesta(result))
+        .catch((error) => console.log("error", error));
+    }
   };
 
   const handleCloseErrore = () => {
@@ -876,7 +886,11 @@ function EditingTestCreaTestCase() {
                     >
                       {activeStep === 0 ? 'annulla' : 'indietro'}
                     </Button>
-                    <Button disabled={activeStep === 0 && nome === "" ? true : activeStep === 1 && OBPChiamato === 0 ? true : activeStep === 2 && (nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === false ? true : false : nChiamanti === 2 ? proxyChiamante2 === false ? true : false : nChiamanti === 3 ? proxyChiamante3 === false ? true : false : false) ? true : activeStep === 3 && templete === 0} variant="contained" color="primary" onClick={handleNext}>
+                    <Button disabled={
+                      ( functions.indexOf("template.view") === -1 ||
+                      functions.indexOf("linea.view") === -1 ||
+                      functions.indexOf("obp.view") === -1 ) ||
+                        activeStep === 0 && nome === "" ? true : activeStep === 1 && OBPChiamato === 0 ? true : activeStep === 2 && (nChiamanti === 0 ? false : nChiamanti === 1 ? proxyChiamante1 === false ? true : false : nChiamanti === 2 ? proxyChiamante2 === false ? true : false : nChiamanti === 3 ? proxyChiamante3 === false ? true : false : false) ? true : activeStep === 3 && templete === 0} variant="contained" color="primary" onClick={handleNext}>
                       {activeStep === steps.length - 1 ? 'Crea' : 'Avanti'}
                     </Button>
                   </div>

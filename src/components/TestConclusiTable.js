@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import Modal from "@material-ui/core/Modal";
-import {Button} from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -38,8 +38,9 @@ const TestConclusiTable = () => {
   const [dataRun, setIdTestCaseRun] = useState(null);
   const [idTestReport, setIdTestReport] = useState();
   const [dataCase, setDataCase] = useState();
-  const [idTest, setIdTest] = useState();
+  // const [idTest, setIdTest] = useState();
   const [dataReport, setDataReport] = useState();
+  const [idTest, setIdTest] = useState();
 
   const columns = [
     {
@@ -75,22 +76,57 @@ const TestConclusiTable = () => {
       title: "Call-Id",
       field: "loadedBy",
     },
-    {
-      title: "Report",
-      field: "report",
-      render: (rowData) => (
-        <Button
-          color="secondary"
-          onClick={() => handleOpenReport(rowData.testCase.id)}
-          endIcon={<PieChartOutlinedIcon />}
-        >
-          Report
-        </Button>
-      ),
-    },
+    // {
+    //   title: "Report",
+    //   field: "report",
+      // render: (rowData) => (
+      //   <Button
+      //     color="secondary"
+      //     onClick={() => handleOpenReport(rowData.id)}
+      //     //onClick={() => getTestCaseRetrieve(rowData.id)}
+      //     endIcon={<PieChartOutlinedIcon />}
+      //   >
+      //     Report
+      //   </Button>
+      // ),
+    //},
   ];
 
-  
+  const columnsReport = [
+    {
+      title: "Id",
+      field: "id",
+      defaultSort: "desc",
+    },
+    {
+      title: "Nome Test",
+      field: "nome",
+    },
+    {
+      title: "Loader",
+      field: "loadedBy",
+    },
+    {
+      title: "Data Caricamento",
+      field: "loadedWhen",
+    },
+    {
+      title: "Data Fine",
+      field: "endDate",
+    },
+    {
+      title: "Status",
+      field: "stato",
+    },
+    {
+      title: "Risultato",
+      field: "result",
+    },
+    {
+      title: "Call-Id",
+      field: "loadedBy",
+    },
+  ];
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -155,7 +191,7 @@ const TestConclusiTable = () => {
     },
     typography: {
       marginTop: "3%",
-      marginBottom: "3%"
+      marginBottom: "3%",
     },
 
     divTextarea: {
@@ -235,8 +271,8 @@ const TestConclusiTable = () => {
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
-  const [openReport, setOpenReport] = React.useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openReport, setOpenReport] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -263,9 +299,8 @@ const TestConclusiTable = () => {
   };
 
   const handleOpenReport = () => {
-    setIdTestCaseRun();
-    //getTestCaseReport();
     setOpenReport(true);
+    setIdTestReport();
   };
 
   const handleCloseReport = () => {
@@ -292,9 +327,9 @@ const TestConclusiTable = () => {
     //alert("Run test id :  "+ idToRun);
   };
 
-   //------------ funzione apri modale
+  //------------ funzione apri modale
 
-   const handleOpenDelete = (rowData) => {
+  const handleOpenDelete = (rowData) => {
     setId(rowData.id);
     setOpenDelete(true);
   };
@@ -335,14 +370,10 @@ const TestConclusiTable = () => {
         console.log(result);
         //setAppearTest(result.testCaseList);
         setData(result.testCaseList);
-        setDataReport(result.testCaseList);
+        // setDataReport(result.testCaseList);
       })
       .catch((error) => console.log("error", error));
   };
-
-  useEffect(() => {
-    getAllTestCase();
-  }, []);
 
   /*--------------- LOAD TEST CASE -------------------*/
 
@@ -426,7 +457,7 @@ const TestConclusiTable = () => {
 
   /*--------------------  TEST CASE COMPLETE REPORT ---------------*/
 
-  const getTestCaseReport = (idTestReport) => {
+  const getTestCaseRetrieve = (id) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -438,21 +469,25 @@ const TestConclusiTable = () => {
       redirect: "follow",
     };
 
-    fetch(`/api/testcase/${idTestReport}`, requestOptions)
+    fetch(`/api/testcase/loaded/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
-        setIdTestReport(result.testCase);
+        setDataReport(result.testCase);
+        handleOpenReport();
       })
       .catch((error) => console.log("error", error));
   };
 
-  /*useEffect(() => {
-    getTestCaseReport();
-  }, []);*/
+  // const prova = () => {
+  //   alert("prova")
+  //   setOpenReport(true);
+  // }
 
-   //-----------GET TEST CASE----------------------
+  useEffect(() => {
+    getAllTestCase();
+  }, []);
+
+  //-----------GET TEST CASE----------------------
   //  const getAllTestCase = () => {
   //   var consta = "COMPLETED";
 
@@ -507,13 +542,13 @@ const TestConclusiTable = () => {
           filtering: true,
         }}
         actions={[
-          // {
-          //   icon: () => <PieChartOutlinedIcon />,
-          //   tooltip: "Mostra Report",
-          //   onClick: (event, rowData) =>
-          //     alert("Ho cliccato " + rowData.launcher),
-          //   position: "row",
-          // },
+          {
+            icon: () => <PieChartOutlinedIcon />,
+            tooltip: "Mostra Report",
+            onClick: () => handleOpenReport(),
+            position: "row",
+            color: "red",
+          },
           // {
           //   icon: "play_circle_outlined",
           //   tooltip: "Lancia il Test",
@@ -654,8 +689,8 @@ const TestConclusiTable = () => {
         </Fade>
       </Modal>
 
-       {/* ------------------------MODALE DELETE--------------------- */}
- <Modal
+      {/* ------------------------MODALE DELETE--------------------- */}
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -671,14 +706,21 @@ const TestConclusiTable = () => {
             <Paper className={classes.paperModaleDelete} elevation={1}>
               <div>
                 <ListItem>
-                  <Typography className={classes.intestazione} variant="h4" style={{ color: "#ef5350"}}>
-                    Elimina Test Id <b>{" "+ id}</b>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#ef5350" }}
+                  >
+                    Elimina Test Id <b>{" " + id}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography className={classes.typography} style={{paddingLeft: "16px",}}>
-                Vuoi eliminare il Test Caricato?
+                <Typography
+                  className={classes.typography}
+                  style={{ paddingLeft: "16px" }}
+                >
+                  Vuoi eliminare il Test Caricato?
                 </Typography>
 
                 <Divider className={classes.divider} />
@@ -688,7 +730,9 @@ const TestConclusiTable = () => {
                 >
                   <ButtonNotClickedGreen
                     //onClick={functionDelete}
-                    onClick={() => alert("Inserire funzione Delete Loaded Test ")}
+                    onClick={() =>
+                      alert("Inserire funzione Delete Loaded Test ")
+                    }
                     nome="Elimina"
                   />
                   <ButtonNotClickedGreen
@@ -836,7 +880,6 @@ const TestConclusiTable = () => {
 
       {/* ----------------MODALE REPORT ------------------*/}
 
-      
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -857,7 +900,7 @@ const TestConclusiTable = () => {
                   style={{ boxShadow: "none" }}
                   title="Report"
                   data={dataReport}
-                  columns={columns}
+                  columns={columnsReport}
                   actions={[
                     {
                       icon: () => (
@@ -878,15 +921,14 @@ const TestConclusiTable = () => {
                       // onClick: () => handleOpen(),
                       isFreeAction: true,
                     },
-                   
                   ]}
                   components={{
-                    Action: props => (
+                    Action: (props) => (
                       <Button
                         onClick={handleCloseReport}
                         color="primary"
                         variant="contained"
-                        style={{textTransform: 'none'}}
+                        style={{ textTransform: "none" }}
                         size="small"
                       >
                         Chiudi

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import { IconButton, Paper, Typography } from "@material-ui/core";
-import acccessControl from "../service/url.js";
+import { Paper, Typography } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { MenuItem } from "@material-ui/core";
@@ -17,7 +16,6 @@ import TextField from "@material-ui/core/TextField";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import GetAppIcon from "@material-ui/icons/GetApp";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
@@ -27,7 +25,8 @@ import Button from "@material-ui/core/Button";
 import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 function TestGeneratoreTableNew() {
-  const [file, setFile] = useState([]);
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const [data, setData] = useState([]);
   const [id, setId] = useState();
   const [nomeTitolo, setNomeTitolo] = useState("");
@@ -47,61 +46,77 @@ function TestGeneratoreTableNew() {
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
+  const [scrittaTabella, setScrittaTabella] = useState("")
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const funzioneGetAll = () => {
-    //----GET ALL USERS----
-    (async () => {
-      setCaricamento(true)
-      setData((await getGenerale('testgen')).list);
-      setCaricamento(false)
-    })();
+    if (functions.indexOf("testgen.view") !== -1 && functions.indexOf("obp.view") !== -1 && functions.indexOf("lineagen.view") !== -1) {
+      //----GET ALL USERS----
+      (async () => {
+        setCaricamento(true)
+        setData((await getGenerale('testgen')).list);
+        setCaricamento(false)
+      })();
 
-    //-----GET APPEAR OBP-----
-    (async () => {
-      setAppearOBP((await getGenerale('obp')).list);
-    })();
+      //-----GET APPEAR OBP-----
+      (async () => {
+        setAppearOBP((await getGenerale('obp')).list);
+      })();
 
-    //-----GET APPEAR LINEA-----
-    (async () => {
-      setAppearLine((await getGenerale('lineageneratore')).list);
-    })();
+      //-----GET APPEAR LINEA-----
+      (async () => {
+        setAppearLine((await getGenerale('lineageneratore')).list);
+      })();
+
+      setScrittaTabella("Non è presente alcun dato da mostrare")
+
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+    }
   }
 
   const funzioneGetTestgenById = (id) => {
+    if (functions.indexOf("testgen.view") !== -1){
     (async () => {
       setAllVariables((await getByIdGenerale('testgen', id)).testGeneratore);
       funzioneGetAll();
     })();
-
+  }
   }
 
   const funzioneAggiornaChiamato = () => {
+    if (functions.indexOf("testgen.edit") !== -1){
     //----AGGIORNA CHIAMATO----
     (async () => {
       await postGenerale('testgen', { id: id, version: version, lineaChiamato: { id: lineaChiamato }, proxyChiamato: { id: OBPChiamato } });
       funzioneGetTestgenById(id)
     })();
   }
+  }
   const funzioneAggiornaChiamante = () => {
+    if (functions.indexOf("testgen.edit") !== -1){
     //----AGGIORNA CHIAMANTE----
     (async () => {
       await postGenerale('testgen', { id: id, version: version, lineaChiamante: { id: lineaChiamante }, proxyChiamante: { id: OBPChiamante } });
       funzioneGetTestgenById(id)
     })();
   }
-  
+  }
+
 
   const funzioneAggiornaTestgen = () => {
+    if (functions.indexOf("testgen.edit") !== -1){
     //----AGGIORNA TESTCASE----
     (async () => {
-      await postGenerale('testgen', { id: id, version: version, nome: nome, descrizione: descrizione === "" ? " " : descrizione});
+      await postGenerale('testgen', { id: id, version: version, nome: nome, descrizione: descrizione === "" ? " " : descrizione });
       funzioneGetTestgenById(id);
     })();
   }
+  }
 
   const funzioneDelete = () => {
+    if (functions.indexOf("testgen.delete") !== -1){
     (async () => {
       setCaricamento(true)
       let result = await deleteGenerale("testcase", idElemento);
@@ -127,6 +142,7 @@ function TestGeneratoreTableNew() {
         setOpenDelete(false)
       }
     })();
+  }
   }
   useEffect(() => {
     funzioneGetAll();
@@ -247,7 +263,7 @@ function TestGeneratoreTableNew() {
   const handleCloseChiamante = () => {
     funzioneGetTestgenById(id)
     setOpenChiamanti(false);
-  }; 
+  };
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -393,13 +409,13 @@ function TestGeneratoreTableNew() {
                   exact
                   to="/editing/testgeneratore/createstgeneratore"
                   startIcon={<AddIcon />}
+                  disabled={functions.indexOf("testgen.create") === -1 || functions.indexOf("template.view") === -1 || functions.indexOf("lineagen.view") === -1 || functions.indexOf("obp.view") === -1}
                 >
                   TEST GENERATORE
                 </Button>
               </div>
             ),
             tooltip: "Crea Test Generatore",
-            //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
           {
@@ -416,6 +432,7 @@ function TestGeneratoreTableNew() {
             icon: () => <EditIcon />,
             tooltip: "Modifica Test",
             onClick: (event, rowData) => openModifica(rowData),
+            disabled:functions.indexOf("testgen.edit") === -1,
             position: "row",
           },
           {
@@ -425,6 +442,7 @@ function TestGeneratoreTableNew() {
               handleOpenDelete();
               setIdElemento(rowData.id);
             },
+            disabled: functions.indexOf("testgen.delete") === -1,
           },
         ]}
         localization={{
@@ -432,7 +450,7 @@ function TestGeneratoreTableNew() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
+            emptyDataSourceMessage: scrittaTabella,
           },
         }}
       />

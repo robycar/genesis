@@ -72,18 +72,18 @@ const TestSuiteConclusiTable = () => {
       title: "Call-Id",
       field: "loadedBy",
     },
-    {
-      title: "Report",
-      field: "report",
-      render: (rowData) => (
-        <Button
-          color="secondary"
-          onClick={() => handleOpenReport(rowData.testSuite.id)}
-        >
-          report
-        </Button>
-      ),
-    },
+    // {
+    //   title: "Report",
+    //   field: "report",
+    //   render: (rowData) => (
+    //     <Button
+    //       color="secondary"
+    //       onClick={() => handleOpenReport(rowData.testSuite.id)}
+    //     >
+    //       report
+    //     </Button>
+    //   ),
+    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -314,10 +314,6 @@ const TestSuiteConclusiTable = () => {
       .catch((error) => console.log("error", error));
   };
 
-  useEffect(() => {
-    getAllTestSuite();
-  }, []);
-
   return (
     <div>
       <MaterialTable
@@ -339,8 +335,7 @@ const TestSuiteConclusiTable = () => {
           {
             icon: () => <PieChartOutlinedIcon />,
             tooltip: "Report",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            onClick: () => handleOpenReport(),
             position: "row",
           },
           {
@@ -593,13 +588,20 @@ const TestSuiteConclusiTable = () => {
             <Paper className={classes.paperModaleDelete} elevation={1}>
               <div>
                 <ListItem>
-                  <Typography className={classes.intestazione} variant="h4" style={{ color: "#ef5350"}}>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#ef5350" }}
+                  >
                     Elimina Test Id <b>{" " + id}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography className={classes.typography} style={{paddingLeft: "16px"}}>
+                <Typography
+                  className={classes.typography}
+                  style={{ paddingLeft: "16px" }}
+                >
                   Vuoi eliminare il Test Caricato?
                 </Typography>
 

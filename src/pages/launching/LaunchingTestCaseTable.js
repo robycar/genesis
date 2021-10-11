@@ -85,7 +85,6 @@ function LaunTestCaseTable() {
       .catch((error) => console.log("error", error));
   };
 
-
   //-----------GET TEST CASE BY ID----------------------
   const getTestCaseById = (id) => {
     var myHeaders = new Headers();
@@ -401,13 +400,12 @@ function LaunTestCaseTable() {
 
   //---------MODALE LANCIO TEST CASE
   const handleCloseRun = () => {
-    setOpenRun(false);
+    deleteTestCaricato(testCaseLoad);
   };
 
   const runCaseLoder = () => {
     runTestCase(testCaseLoad);
-    handleCloseRun();
-    //alert("Run test id :  "+ idToRun);
+    
   };
 
   const handleOpenRun = (idRun) => {
@@ -483,7 +481,34 @@ function LaunTestCaseTable() {
       .catch((error) => console.log("error", error));
   };
 
-  console.log(testCaseLoad, "id test case caricato");
+  // console.log(testCaseLoad, "id test case caricato");
+
+  /*----------- DELETE TEST CARICATO ----------------*/
+
+  const deleteTestCaricato = (id) => {
+    var urlLoadDelete = `/api/testcase/loaded/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    // myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoadDelete, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setOpenRun(false);
+        // getAllTestCase();
+        console.log(result);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   //------------------- RUN TEST CASE ------------------
 
@@ -506,6 +531,7 @@ function LaunTestCaseTable() {
       .then((result) => {
         console.log(result);
         setIdTestCaseRun(result.list);
+        setOpenRun(false);
       })
       .catch((error) => console.log("error", error));
   };

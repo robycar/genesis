@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../styles/App.css";
-import {Paper, Typography } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
@@ -26,6 +26,9 @@ import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../s
 
 
 function TestCaseTable() {
+
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const [data, setData] = useState([]);
   const [id, setId] = useState();
   const [nomeTitolo, setNomeTitolo] = useState("");
@@ -47,87 +50,104 @@ function TestCaseTable() {
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
+  const [scrittaTabella, setScrittaTabella] = useState("")
 
 
   const funzioneGetAll = () => {
-    //----GET ALL USERS----
-    (async () => {
-      setCaricamento(true)
-      setData((await getGenerale('testcase')).list);
-      setCaricamento(false)
-    })();
+    if (functions.indexOf("test.view") !== -1 && functions.indexOf("obp.view") !== -1 && functions.indexOf("linea.view") !== -1) {
+      //----GET ALL USERS----
+      (async () => {
+        setCaricamento(true)
+        setData((await getGenerale('testcase')).list);
+        setCaricamento(false)
+      })();
 
-    //-----GET APPEAR OBP-----
-    (async () => {
-      setAppearOBP((await getGenerale('obp')).list);
-    })();
+      //-----GET APPEAR OBP-----
+      (async () => {
+        setAppearOBP((await getGenerale('obp')).list);
+      })();
 
-    //-----GET APPEAR LINEA-----
-    (async () => {
-      setAppearLine((await getGenerale('linea')).list);
-    })();
+      //-----GET APPEAR LINEA-----
+      (async () => {
+        setAppearLine((await getGenerale('linea')).list);
+      })();
+
+      setScrittaTabella("Non è presente alcun dato da mostrare")
+
+    } else {
+      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+    }
   }
 
   const funzioneGetTestcaseById = (id) => {
-    (async () => {
-      setAllVariables((await getByIdGenerale('testcase', id)).testCase);
-      funzioneGetAll();
-    })();
-
+    if (functions.indexOf("test.view") !== -1) {
+      (async () => {
+        setAllVariables((await getByIdGenerale('testcase', id)).testCase);
+        funzioneGetAll();
+      })();
+    }
   }
 
   const funzioneAggiornaChiamato = () => {
-    //----AGGIORNA CHIAMATO----
-    (async () => {
-      await postGenerale('testcase', { id: id, version: version, chiamato: { linea: { id: lineaChiamato }, proxy: { id: proxyChiamato } } });
-      funzioneGetTestcaseById(id)
-    })();
+    if (functions.indexOf("test.edit") !== -1) {
+      //----AGGIORNA CHIAMATO----
+      (async () => {
+        await postGenerale('testcase', { id: id, version: version, chiamato: { linea: { id: lineaChiamato }, proxy: { id: proxyChiamato } } });
+        funzioneGetTestcaseById(id)
+      })();
+    }
   }
 
   const funzioneAggiornaChiamanti = () => {
-    //----AGGIORNA CHIAMANTI----
-    (async () => {
-      await postGenerale('testcase', { id: id, version: version, chiamanti });
-      funzioneGetTestcaseById(id)
-    })();
+    if (functions.indexOf("test.edit") !== -1) {
+      //----AGGIORNA CHIAMANTI----
+      (async () => {
+        await postGenerale('testcase', { id: id, version: version, chiamanti });
+        funzioneGetTestcaseById(id)
+      })();
+    }
   }
 
   const funzioneAggiornaTestcase = () => {
-    //----AGGIORNA TESTCASE----
-    (async () => {
-      await postGenerale('testcase', {id: id, version: version, nome: nome, descrizione: descrizione});
-      funzioneGetTestcaseById(id);
-    })();
+    if (functions.indexOf("test.edit") !== -1) {
+      //----AGGIORNA TESTCASE----
+      (async () => {
+        await postGenerale('testcase', { id: id, version: version, nome: nome, descrizione: descrizione });
+        funzioneGetTestcaseById(id);
+      })();
+    }
   }
 
   const funzioneDelete = () => {
-    (async () => {
-      setCaricamento(true)
-      let result = await deleteGenerale("testcase", idElemento);
-      if (result?.error !== null) {
-        setOpenWarning(true);
-        if (result?.error?.code === "TEST-0009") {
-          setWarning(
-            "Non è possibile eliminare un test case che non appartiene al proprio gruppo"
-          );
-        }
-        else if (result?.error === "Internal Server Error") {
-          setWarning(
-            "Non è possibile eliminare il TestCase perchè associato ad una o più TestSuite"
-          );
+    if (functions.indexOf("test.delete") !== -1) {
+      (async () => {
+        setCaricamento(true)
+        let result = await deleteGenerale("testcase", idElemento);
+        if (result?.error !== null) {
+          setOpenWarning(true);
+          if (result?.error?.code === "TEST-0009") {
+            setWarning(
+              "Non è possibile eliminare un test case che non appartiene al proprio gruppo"
+            );
+          }
+          else if (result?.error === "Internal Server Error") {
+            setWarning(
+              "Non è possibile eliminare il TestCase perchè associato ad una o più TestSuite"
+            );
+          } else {
+            setWarning(
+              "Codice errore:" +
+              result.error.code +
+              "Descrizione" +
+              result.code.description
+            );
+          }
         } else {
-          setWarning(
-            "Codice errore:" +
-            result.error.code +
-            "Descrizione" +
-            result.code.description
-          );
+          funzioneGetAll();
+          setOpenDelete(false)
         }
-      } else {
-        funzioneGetAll();
-        setOpenDelete(false)
-      }
-    })();
+      })();
+    }
   }
 
   const columns = [
@@ -446,13 +466,13 @@ function TestCaseTable() {
                   exact
                   to="/editing/testcreatestcase"
                   startIcon={<AddIcon />}
+                  disabled={functions.indexOf("test.edit") === -1}
                 >
                   TEST CASE
                 </Button>
               </div>
             ),
             tooltip: "Crea Test Case",
-            //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
           {
@@ -469,6 +489,7 @@ function TestCaseTable() {
             icon: () => <EditIcon />,
             tooltip: "Modifica Test Case",
             onClick: (event, rowData) => openModifica(rowData),
+            disabled: functions.indexOf("test.edit") === -1,
             position: "row",
           },
           {
@@ -478,6 +499,7 @@ function TestCaseTable() {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
+            disabled: functions.indexOf("test.delete") === -1
           },
         ]}
         localization={{
@@ -485,7 +507,7 @@ function TestCaseTable() {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
+            emptyDataSourceMessage: scrittaTabella,
           },
         }}
       />
