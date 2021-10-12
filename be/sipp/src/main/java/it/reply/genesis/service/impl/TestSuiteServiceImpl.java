@@ -232,6 +232,7 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     TestSuiteCaricataVO testSuiteVO = readTestSuiteCaricataVO(id, true);
     
     checkStatoOfTestSuiteCariata(testSuiteVO, LoadedEntityStatus.READY);
+    internalRunTestSuiteCaricata(testSuiteVO);
   }
   
   @Override
