@@ -35,7 +35,8 @@ const TestSuiteSchedulatiTable = () => {
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [delay, setDelay] = useState();
-  const [dataschedula, setDataSchedula] = useState();
+
+  const [dataSchedula, setDataSchedula] = useState();
 
   const columns = [
     {
@@ -119,10 +120,12 @@ const TestSuiteSchedulatiTable = () => {
       flexDirection: "row",
       alignItems: "center",
     },
+    divIntestazione: {
+      marginBottom: "2%",
+    },
     icon: {
       transform: "scale(1.8)",
       color: "#47B881",
-      marginTop: "9px",
     },
     bottoni: {
       display: "flex",
@@ -161,43 +164,45 @@ const TestSuiteSchedulatiTable = () => {
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [scheduleDateTime, setSchedulaDateTime] = React.useState("");
 
-  const getAllTestSuite = () => {
-    var consta = "SCHEDULED";
+ const getAllTestSuite = () => {
+  var consta = "SCHEDULED";
 
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", bearer);
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var raw = JSON.stringify({
-      includeRiepilogoTestCase: false,
-      includeRiepilogoTestSuite: false,
-      includeTestCaseOfType: null,
-      includeTestSuiteOfType: consta,
-      includeTestGeneratoreOfType: null,
-    });
+  var raw = JSON.stringify({
+    "includeRiepilogoTestCase": false,
+    "includeRiepilogoTestSuite": false,
+    "includeTestCaseOfType": null,
+    "includeTestSuiteOfType": consta,
+    "includeTestGeneratoreOfType": null
+  });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`/api/dashboard/info`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
-        setData(result.testSuiteList);
-      })
-      .catch((error) => console.log("error", error));
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
   };
 
-  useEffect(() => {
-    getAllTestSuite();
-  }, []);
+  fetch(`/api/dashboard/info`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      //setAppearTest(result.testCaseList);
+      setData(result.testSuiteList);
+    })
+    .catch((error) => console.log("error", error));
+};
+
+useEffect(() => {
+  getAllTestSuite();
+}, []);
+
+
 
   // const getAllTestSuite = () => {
   //   var myHeaders = new Headers();

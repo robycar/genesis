@@ -6,7 +6,6 @@ import { Button } from "@material-ui/core";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ChartReport from "../components/ChartReport";
-
 import TextField from "@material-ui/core/TextField";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -29,6 +28,8 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import { IconButton } from "@material-ui/core";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+import { Doughnut } from "react-chartjs-2";
+
 
 const TestSuiteComplete = () => {
   const columns = [
@@ -80,7 +81,7 @@ const TestSuiteComplete = () => {
     },
   ];
 
-  const columnsTestcases = [
+  const columnsVisualizzaTestcases = [
     {
       title: "ID Test",
       field: "id",
@@ -95,36 +96,59 @@ const TestSuiteComplete = () => {
       title: "Descrizione",
       field: "descrizione",
     },
-    // {
-    //   title: "Durata Attesa",
-    //   field: "expectedDuration",
-    // },
-    {
+      {
       title: "Versione",
       field: "version",
       hidden: true,
     },
     {
-      title: "Data Creazione",
-      field: "creationDate",
+      title: "Data Caricamento",
+      field: "loadedWhen",
     },
     {
-      title: "Data Modifica",
-      field: "modifiedDate",
+      title: "Caricato Da",
+      field: "loadedBy",
     },
     {
-      title: "Creato da",
-      field: "createdBy",
+      title: "Data Fine",
+      field: "endDate",
     },
     {
-      title: "Modificato da",
-      field: "modifiedBy",
+      title: "Stato",
+      field: "stato",
     },
     {
       title: "Template",
       field: "template.nome",
     },
   ];
+
+  const columnsTestcases = [
+    {
+      title: "Id",
+      field: "id",
+      defaultSort: "desc",
+    },
+    {
+      title: "Risultato",
+      field: "result",
+    },
+    {
+      title: "Trace",
+      field: "trace",
+    },
+    {
+      title: "Call-Id",
+      field: "loadedBy",
+    },
+    {
+      title: "Action",
+      field: "action",
+    },
+  ];
+
+
+ 
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -167,7 +191,7 @@ const TestSuiteComplete = () => {
     },
     contenutoModale: {
       height: 370,
-      width: 500,
+      // width: 500,
       overflowX: "hidden",
       padding:10,
     },
@@ -227,6 +251,14 @@ const TestSuiteComplete = () => {
       alignItems: "center",
       justifyContent: "center",
     },
+    contenutoModaleGrafico: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      height: 370,
+      overflowX: "hidden",
+    },
   }));
 
   const handleChange = () => {
@@ -242,16 +274,17 @@ const TestSuiteComplete = () => {
   const [descrizione, setDescrizione] = useState("");
   const [idToRun, setIdToRun] = useState();
   const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [loadedBy, setLoadedBy] = useState("");
+  const [loadedWhen, setLoadedWhen] = useState("");
   const [data, setData] = useState();
-  const [createdBy, setCreatedBy] = useState("");
-  const [modifiedBy, setModifiedBy] = useState("");
   const [testCases, setTestCases] = useState([]);
   const [testSuite, setTestSuite] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [version, setVersion] = useState();
   const [openTestCase, SetOpenTestCase] = React.useState(false);
+  const arrayTestCaseAssociati = testSuite?.testCases; 
 
   const arrayTestCase = testSuite?.testCases;
   const [appearTest, setAppearTest] = useState([]);
@@ -263,10 +296,12 @@ const TestSuiteComplete = () => {
   const [caricamento2, setCaricamento2] = useState(false);
   const [openGrafico, setOpenGrafico] = useState(false);
   const [dataTestCases, setDataTestCases] = useState();
+  const [testCaseAssociati, setTestCaseAssociati] = useState([]);
+
 
   const [prova, setProva] = useState([]);
 
-  const setTestCaseAssociati = (testsuite) => {
+  const setTestCaseAssociatiArray = (testsuite) => {
     let x = [];
 
     //console.log("--------"+testsuite)
@@ -301,7 +336,7 @@ const TestSuiteComplete = () => {
   //console.log(arrayTestCase, " Array di test case");
 
   var arrayId = [];
-  arrayTestCase?.forEach(function (obj) {
+  arrayTestCaseAssociati?.forEach(function (obj) {
     arrayId?.push(obj.id);
   });
 
@@ -317,10 +352,10 @@ const TestSuiteComplete = () => {
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
     // setTestCases([...testCases, rowData.testCases[0].nome]);
-    setCreatedBy(rowData.createdBy);
-    setModifiedBy(rowData.modifiedBy);
-    setCreationDate(rowData.creationDate);
-    setModifiedDate(rowData.modifiedDate);
+    setStartDate(rowData.startDate);
+    setEndDate(rowData.endDate);
+    setLoadedBy(rowData.loadedBy);
+    setLoadedWhen(rowData.loadedWhen);
     // setOpen(true);
     getTestSuiteCompletedById(rowData.id);
   };
@@ -406,7 +441,9 @@ const TestSuiteComplete = () => {
       .then((response) => response.json())
       .then((result) => {
         setTestSuite(result.testSuite);
-        setTestCaseAssociati(result.testSuite);
+        setTestCaseAssociati(result.testSuite.testCases);
+        setTestCaseAssociatiArray(result.testSuite);
+        cicloFor(result.testSuite.testCases);
         setOpen(true);
         SetOpenTestCase(false);
       })
@@ -549,6 +586,46 @@ const TestSuiteComplete = () => {
     )),
   };
 
+
+   /*------ Funzione calcolo percentuali -------*/
+
+   const [ok, setOk] = useState(0);
+   const [ko, setKo] = useState(0);
+ 
+   function cicloFor(data) {
+     console.log(data);
+     var appOk = 0;
+     var appKo = 0;
+     for (let i = 0; i < data.length; i++) {
+       if (data[i].result === "KO") {
+         appKo += 1;
+       } else {
+         appOk += 1;
+       }
+     }
+     setOk(appOk);
+     setKo(appKo);
+   }
+ 
+   const chart = {
+     labels: ["KO", "OK"],
+     datasets: [
+       {
+         label: "# of Test Case",
+         data: [ko, ok],
+         backgroundColor: [
+           "red",
+           "green",
+           // "rgba(75, 192, 192)",
+           // "rgba(153, 102, 255)",
+         ],
+       },
+     ],
+     options: {
+       maintainAspectRatio: false,
+     },
+   };
+
   return (
     <div>
       <MaterialTable
@@ -688,7 +765,7 @@ const TestSuiteComplete = () => {
                       error={testCases !== "" ? false : true}
                       // onChange={(e) => setTestCases(e.target.value)}
                       label="Numero Test Case"
-                      defaultValue={arrayTestCase?.length}
+                      defaultValue={arrayTestCaseAssociati?.length}
                       helperText={testCases !== "" ? "" : "Test Case"}
                       InputProps={{
                         readOnly: true,
@@ -733,13 +810,13 @@ const TestSuiteComplete = () => {
                 </div>
 
                 <Row>
-                  <Col className={classes.col}>
+                <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={createdBy !== "" ? false : true}
-                      onChange={(e) => setCreatedBy(e.target.value)}
-                      label="Creato da"
-                      defaultValue={createdBy}
+                      error={loadedBy !== "" ? false : true}
+                      onChange={(e) => setLoadedBy(e.target.value)}
+                      label="Caricato da"
+                      defaultValue={loadedBy}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -748,10 +825,10 @@ const TestSuiteComplete = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={modifiedBy !== "" ? false : true}
-                      onChange={(e) => setModifiedBy(e.target.value)}
-                      label="Modificato da"
-                      defaultValue={modifiedBy}
+                      error={loadedWhen !== "" ? false : true}
+                      onChange={(e) => setLoadedWhen(e.target.value)}
+                      label="Data caricamento"
+                      defaultValue={loadedWhen}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -760,13 +837,13 @@ const TestSuiteComplete = () => {
                 </Row>
 
                 <Row>
-                  <Col className={classes.col}>
+                <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={modifiedDate !== "" ? false : true}
-                      onChange={(e) => setModifiedDate(e.target.value)}
-                      label="Data Modifica "
-                      defaultValue={modifiedDate}
+                      error={endDate !== "" ? false : true}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      label="Data Fine "
+                      defaultValue={endDate}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -775,10 +852,10 @@ const TestSuiteComplete = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={creationDate !== "" ? false : true}
-                      onChange={(e) => setCreationDate(e.target.value)}
-                      label="Data Creazione "
-                      defaultValue={creationDate}
+                      error={startDate !== "" ? false : true}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      label="Data Inizio "
+                      defaultValue={startDate}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -834,8 +911,8 @@ const TestSuiteComplete = () => {
                   <MaterialTable
                     style={{ boxShadow: "none" }}
                     title="Test Case"
-                    data={arrayTestCase}
-                    columns={columnsTestcases}
+                    data={arrayTestCaseAssociati}
+                    columns={columnsVisualizzaTestcases}
                     isLoading={caricamento2}
                     options={{
                       selection: false,
@@ -915,17 +992,65 @@ const TestSuiteComplete = () => {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Test Case KO-OK
+                    Test Case KO/OK associati
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
 
-              <Form className={classes.contenutoModale}>
-                <div className={classes.chart}>
-                  <ChartReport />
+              {/* <Form className={classes.contenutoModale}>
+                <div className={classes.chart}><ChartReport /></div>
+              </Form> */}
+
+              <div className={classes.contenutoModaleGrafico}>
+                <MaterialTable
+                  style={{ boxShadow: "none" }}
+                  title="Test Case"
+                  data={testCaseAssociati}
+                  columns={columnsTestcases}
+                  isLoading={caricamento2}
+                  options={{
+                    selection: false,
+                    sorting: true,
+                    actionsColumnIndex: -1,
+                    search: true,
+                    searchFieldVariant: "outlined",
+                    filtering: true,
+                    searchFieldAlignment: "left",
+                    // pageSizeOptions: [
+                    //   5,
+                    //   10,
+                    //   20,
+                    //   { value: data.length, label: "All" },
+                    // ],
+                  }}
+                  // actions={[
+                  //   {
+                  //     icon: (dat) => (
+                  //       <a>
+                  //         <VisibilityIcon />
+                  //       </a>
+                  //     ),
+                  //     tooltip: "Visualizza tutti i dati",
+                  //     position: "row",
+                  //     onClick: (event, rowData) => openVisualizza(rowData),
+                  //   },
+                  // ]}
+                  localization={{
+                    header: {
+                      actions: "Azioni",
+                    },
+                    body: {
+                      emptyDataSourceMessage:
+                        "Non è presente alcun dato da mostrare",
+                    },
+                  }}
+                />
+
+                <div>
+                  <Doughnut data={chart} className={classes.grafico} />
                 </div>
-              </Form>
+              </div>
               <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
 
@@ -937,7 +1062,7 @@ const TestSuiteComplete = () => {
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseGrafico}
                     size="medium"
-                    color="primary"
+                    color="secondary"
                     variant="outlined"
                   >
                     {" "}

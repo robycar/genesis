@@ -50,9 +50,9 @@ function LaunchingTestSuiteTable() {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const [idTestSuiteRun, setIdTestSuiteRun] = useState(0);
- const [testSuiteLoad, setTestSuiteLoad] = useState(); 
+  const [testSuiteLoad, setTestSuiteLoad] = useState();
+  const [testCaseLoad, setTestCaseLoad] = useState();
   const [idToRun, setIdToRun] = useState();
-  const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
   const [openRun, setOpenRun] = React.useState(false);
 
@@ -247,8 +247,6 @@ function LaunchingTestSuiteTable() {
     // Invia();
   }, []);
 
-
-
   //----------------FUNZIONE LOAD AND RUN TEST SUITE---------------
 
   const loadTestSuite = (id) => {
@@ -271,12 +269,11 @@ function LaunchingTestSuiteTable() {
         console.log(result);
         //setTestSuiteLoad(result.testSuiteCaricata);
         setTestSuiteLoad(result.testSuiteCaricata.id);
-        
       })
       .catch((error) => console.log("error", error));
   };
 
-console.log(testSuiteLoad, "id test caricato")
+  // console.log(testSuiteLoad, "id test caricato");
   // /*--------------- FUNZIONE RUN TEST SUITE -------------------*/
 
   const runTestSuite = (idRun) => {
@@ -317,7 +314,55 @@ console.log(testSuiteLoad, "id test caricato")
       .catch((error) => console.log("error", error));
   };
 
-  // console.log(testSuite.testCases, "sono test suite");
+  /*--------------- LOAD TEST CASE -------------------*/
+
+  const loadTestCase = (id) => {
+    var urlLoad = `/api/testcase/load/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setTestCaseLoad(result.testCaseCaricato.id);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  /*--------------- RUN TEST CASE -------------------*/
+
+  const runTestCase = (idRun) => {
+    var urlLoad = `/api/testcase/runloaded/${idRun}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        setIdTestCaseRun(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   const columns = [
     {
@@ -420,6 +465,8 @@ console.log(testSuiteLoad, "id test caricato")
     },
   ];
   const [open, setOpen] = React.useState(false);
+    const [openRunTestCase, setOpenRunTestCase] = React.useState(false);
+  ;
   const [modifica, setModifica] = React.useState(false);
   const [openTestSuite, SetOpenTestSuite] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -477,6 +524,10 @@ console.log(testSuiteLoad, "id test caricato")
     setOpenRun(false);
   };
 
+  const handleCloseRunTestCase = () => {
+    setOpenRunTestCase(false);
+  };
+
   const testSuiteLoader = () => {
     loadTestSuite(id);
     handleClose();
@@ -490,6 +541,11 @@ console.log(testSuiteLoad, "id test caricato")
     //alert("Run test id :  "+ idToRun);
   };
 
+  const runCaseLoader = () => {
+    runTestCase(testCaseLoad);
+    handleCloseRunTestCase();
+    //alert("Run test id :  "+ idToRun);
+  };
 
   const handleOpenRun = (idRun) => {
     loadTestSuite(idRun);
@@ -498,11 +554,24 @@ console.log(testSuiteLoad, "id test caricato")
     setOpen(false);
   };
 
+  const handleOpenRunTestCase = (idRun) => {
+    loadTestCase(idRun);
+    setIdToRun(idRun);
+    setOpenRunTestCase(true);
+    // setOpen(false);
+  };
+
   const handleLoadData = (rowDataaa) => {
     setIdToRun(rowDataaa.id);
     //loadTestSuite(idToRun);
     runSuiteLoader(rowDataaa.id);
   };
+
+    const handleLoadDataTestCase = (rowDataaa) => {
+      setIdToRun(rowDataaa.id);
+      //loadTestSuite(idToRun);
+      runCaseLoader(rowDataaa.id);
+    };
 
   //------------ FUNZIONE DELETE ------------
 
@@ -736,7 +805,7 @@ console.log(testSuiteLoad, "id test caricato")
       width: 800,
       // position: "relative",
     },
-    paperModaleLaunch:{
+    paperModaleLaunch: {
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
@@ -899,7 +968,7 @@ console.log(testSuiteLoad, "id test caricato")
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
                     {modifica === false ? "Visualizza " : "Modifica "} Test
-                    Suite{" "} <b>{" " + nome}</b>
+                    Suite <b>{" " + nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -1145,9 +1214,9 @@ console.log(testSuiteLoad, "id test caricato")
                                                 },*/
                         {
                           icon: () => <PlayCircleFilledIcon />,
-                          tooltip: "Lancia Test Suite",
+                          tooltip: "Lancia Test Case",
                           onClick: (event, rowData) =>
-                            handleOpenRun(rowData.id),
+                            handleOpenRunTestCase(rowData.id),
                         },
                       ]}
                       localization={{
@@ -1445,7 +1514,7 @@ console.log(testSuiteLoad, "id test caricato")
         </Fade>
       </Modal>
 
-      {/* ------------------ MODALE AVVIA TEST CASE --------------------- */}
+      {/* ------------------ MODALE AVVIA TEST SUITE --------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -1459,6 +1528,58 @@ console.log(testSuiteLoad, "id test caricato")
         }}
       >
         <Fade in={openRun}>
+          <Paper className={classes.paperModaleLaunch} elevation={1}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h4">
+                  Lancio Test Suite
+                </Typography>
+              </ListItem>
+
+              <Divider className={classes.divider} />
+              <Typography className={classes.info}>
+                <p>Vuoi lanciare il test suite da te selezionato ?</p>
+              </Typography>
+              <Divider />
+
+              <div className={classes.bottone}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleLoadData}
+                >
+                  Lancio
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseRun}
+                >
+                  Annulla
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+      {/* ------------------ MODALE AVVIA TEST CASE--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openRunTestCase}
+        onClose={handleCloseRunTestCase}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openRunTestCase}>
           <Paper className={classes.paperModaleLaunch} elevation={1}>
             <div>
               <ListItem button>
@@ -1480,7 +1601,7 @@ console.log(testSuiteLoad, "id test caricato")
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleLoadData}
+                  onClick={handleLoadDataTestCase}
                 >
                   Lancio
                 </Button>
@@ -1488,7 +1609,7 @@ console.log(testSuiteLoad, "id test caricato")
                 <Button
                   variant="contained"
                   color="secondary"
-                  onClick={handleCloseRun}
+                  onClick={handleCloseRunTestCase}
                 >
                   Annulla
                 </Button>

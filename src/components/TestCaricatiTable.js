@@ -139,7 +139,6 @@ const TestCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginBottom: "2%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -218,10 +217,7 @@ const TestCaricatiTable = () => {
     },
 
     divIntestazione: {
-      display: "flex",
-      alignItems: "center",
-      padding: "2%",
-      marginBottom: "1%",
+      marginBottom: "2%",
     },
     intestazioneModaleError: {
       color: "#ef5350",

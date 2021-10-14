@@ -21,8 +21,12 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../service/api";
-
+import {
+  getGenerale,
+  getByIdGenerale,
+  postGenerale,
+  deleteGenerale,
+} from "../service/api";
 
 function TestSuiteTable() {
   var functions = localStorage.getItem("funzioni").split(",");
@@ -44,7 +48,7 @@ function TestSuiteTable() {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const arrayTestCase = testSuite?.testCases;
-  const [scrittaTabella, setScrittaTabella] = useState("")
+  const [scrittaTabella, setScrittaTabella] = useState("");
 
   //--------------------------------MODIFICA TESTCASE ASSOCIATI A TESTSUITE-----------------------------------------------------
   const [testAssociati, setTestAssociati] = useState([]);
@@ -57,7 +61,6 @@ function TestSuiteTable() {
     }
     setTestAssociati(x);
   };
-
 
   const modificaTestSelezionati = (testcase) => {
     let x = [...testAssociati];
@@ -83,68 +86,79 @@ function TestSuiteTable() {
     arrayId?.push(obj.id);
   });
 
-
   //----Bearer-------------------------
 
-
   const funzioneGetAll = () => {
-    if (functions.indexOf("testsuite.view") !== -1 && functions.indexOf("testcase.view") !== -1) {
+    if (
+      functions.indexOf("testsuite.view") !== -1 &&
+      functions.indexOf("test.view") !== -1
+    ) {
       (async () => {
-        setCaricamento(true)
-        setData((await getGenerale('testsuite')).list);
-        setCaricamento(false)
+        setCaricamento(true);
+        setData((await getGenerale("testsuite")).list);
+        setCaricamento(false);
       })();
 
       (async () => {
-        setCaricamento2(true)
-        setDataTestCases((await getGenerale('testcase')).list);
-        setCaricamento2(false)
+        setCaricamento2(true);
+        setDataTestCases((await getGenerale("testcase")).list);
+        setCaricamento2(false);
       })();
 
-      setScrittaTabella("Non è presente alcun dato da mostrare")
-
+      setScrittaTabella("Non è presente alcun dato da mostrare");
     } else {
-      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+      setScrittaTabella(
+        "Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella"
+      );
     }
-  }
+  };
 
   //----PRENDI TESTCASE ASSOCIATI----
   const funzioneGetTestsuiteById = (id) => {
     if (functions.indexOf("testsuite.view") !== -1) {
       (async () => {
-        let result = await getByIdGenerale('testsuite', id);
+        let result = await getByIdGenerale("testsuite", id);
         setTestSuite(result.testSuite);
-        aggiornaVariabili(result.testSuite)
+        aggiornaVariabili(result.testSuite);
         impostaTestCaseAssociati(result.testSuite);
         setOpen(true);
       })();
     }
-  }
+  };
 
   //----AGGIORNA TESTCASE ASSOCIATI----
   const funzioneAggiornaTestCaseAssociati = () => {
     if (functions.indexOf("testsuite.edit") !== -1) {
       (async () => {
-        let result = (await postGenerale('testsuite', { id: id, version: version, testCases: testAssociati }));
-        funzioneGetTestsuiteById(id)
+        let result = await postGenerale("testsuite", {
+          id: id,
+          version: version,
+          testCases: testAssociati,
+        });
+        funzioneGetTestsuiteById(id);
       })();
     }
-  }
+  };
 
   //----AGGIORNA TESTSUITE----
   const funzioneAggiornaTestSuite = () => {
     if (functions.indexOf("testsuite.view") !== -1) {
       (async () => {
-        await postGenerale('testsuite', { id: id, version: version, nome: nome, descrizione: descrizione, });
-        handleClose()
+        await postGenerale("testsuite", {
+          id: id,
+          version: version,
+          nome: nome,
+          descrizione: descrizione,
+        });
+        handleClose();
       })();
     }
-  }
+  };
   //------------ FUNZIONE DELETE ------------
   const funzioneDelete = () => {
     if (functions.indexOf("testsuite.delete") !== -1) {
       (async () => {
-        let result = await deleteGenerale("testsuite", idElemento)
+        let result = await deleteGenerale("testsuite", idElemento);
         if (result.error !== null) {
           setOpenWarning(true);
           if (result?.error?.code === "Internal Server Error") {
@@ -154,9 +168,9 @@ function TestSuiteTable() {
           } else {
             setWarning(
               "Codice errore: " +
-              result.error.code +
-              "Descrizione: " +
-              result.error.description
+                result.error.code +
+                "Descrizione: " +
+                result.error.description
             );
           }
         } else {
@@ -165,7 +179,7 @@ function TestSuiteTable() {
         }
       })();
     }
-  }
+  };
 
   //----------------------------------------------------------
   useEffect(() => {
@@ -188,14 +202,19 @@ function TestSuiteTable() {
       field: "descrizione",
       width: "5%",
     },
-
     {
-      title: "Data Creazione",
+      title: "Data di creazione",
       field: "creationDate",
+      render: (rowData) => {
+        return rowData.creationDate.replace("T", " / ").replace(".000+00:00", "");
+      },
     },
     {
-      title: "Data Modifica",
+      title: "Data di modifica",
       field: "modifiedDate",
+      render: (rowData) => {
+        return rowData.modifiedDate.replace("T", " / ").replace(".000+00:00", "");
+      },
     },
     {
       title: "Creato da",
@@ -212,7 +231,7 @@ function TestSuiteTable() {
     {
       title: "Durata Complessiva",
       field: "durata",
-    }
+    },
   ];
 
   const columnsTestcases = [
@@ -277,7 +296,7 @@ function TestSuiteTable() {
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
-    setNumTestCases(rowData.numTestCases)
+    setNumTestCases(rowData.numTestCases);
     // setTestCases([...testCases, rowData.testCases[0].nome]);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
@@ -306,7 +325,6 @@ function TestSuiteTable() {
     setOpen(false);
     // aggiornaTestCaseAssociati();
   };
-
 
   //------------ funzione apri modale delete
 
@@ -529,7 +547,7 @@ function TestSuiteTable() {
             icon: () => <EditIcon />,
             tooltip: "Modifica Test Suite",
             onClick: (event, rowData) => openModifica(rowData),
-            disabled: functions.indexOf("testsuite.edit") !== -1,
+            disabled: functions.indexOf("testsuite.edit") === -1,
             position: "row",
           },
           {
@@ -539,7 +557,7 @@ function TestSuiteTable() {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
-            disabled: functions.indexOf("testsuite.delete") !== -1,
+            disabled: functions.indexOf("testsuite.delete") === -1,
           },
         ]}
         localization={{
@@ -828,7 +846,7 @@ function TestSuiteTable() {
                       <ButtonClickedGreen
                         size="medium"
                         nome="Aggiorna"
-                      //onClick={funzioneAggiornaTestAssociati}
+                        //onClick={funzioneAggiornaTestAssociati}
                       />
                     )}
 

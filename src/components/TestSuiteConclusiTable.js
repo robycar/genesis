@@ -22,17 +22,24 @@ import Select from "@material-ui/core/Select";
 import { MenuItem } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import TextField from "@material-ui/core/TextField";
+
 
 const TestSuiteConclusiTable = () => {
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
   const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [data, setData] = useState();
+  const [loadedBy, setLoadedBy] = useState("");
+  const [stato, setStato] = useState("");
+  const [result, setResult] = useState("");
+  const [callId, setCallId] = useState("");
   const [createdBy, setCreatedBy] = useState("");
   const [idTest, setIdTest] = useState();
-  const [openReport, setOpenReport] = React.useState(false);
   const [testSuiteLoad, setTestSuiteLoad] = useState(null);
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
@@ -64,26 +71,14 @@ const TestSuiteConclusiTable = () => {
       title: "Status",
       field: "stato",
     },
-    // {
-    //   title: "Trace",
-    //   field: "trace",
-    // },
+    {
+      title: "Risultato",
+      field: "result",
+    },
     {
       title: "Call-Id",
       field: "loadedBy",
     },
-    // {
-    //   title: "Report",
-    //   field: "report",
-    //   render: (rowData) => (
-    //     <Button
-    //       color="secondary"
-    //       onClick={() => handleOpenReport(rowData.testSuite.id)}
-    //     >
-    //       report
-    //     </Button>
-    //   ),
-    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -104,13 +99,13 @@ const TestSuiteConclusiTable = () => {
       justifyContent: "center",
       marginBottom: "5%",
     },
-    peperModaleReport: {
+    paperModaleReport: {
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "3%",
       height: "fit-content",
-      width: 700,
+      width: 800,
       position: "relative",
     },
     paperModaleDelete: {
@@ -162,10 +157,12 @@ const TestSuiteConclusiTable = () => {
       flexDirection: "row",
       alignItems: "center",
     },
+    divIntestazione: {
+      marginBottom: "2%",
+    },
     icon: {
       transform: "scale(1.8)",
       color: "#47B881",
-      marginTop: "9px",
     },
     bottoni: {
       display: "flex",
@@ -192,6 +189,16 @@ const TestSuiteConclusiTable = () => {
     select: {
       width: "400px",
     },
+    col: {
+      padding: "3%",
+      height: "106px",
+    },
+    row: {
+      width: "600px",
+    },
+    textField: {
+      width: "300px",
+    },
   }));
 
   const classes = useStyles();
@@ -200,6 +207,7 @@ const TestSuiteConclusiTable = () => {
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [appearTest, setAppearTest] = useState([]);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
 
   //------------ funzione apri modale
 
@@ -237,12 +245,26 @@ const TestSuiteConclusiTable = () => {
     setOpen(false);
   };
 
-  const handleOpenReport = () => {
-    setOpenReport(true);
+  // --------------- MODALE VISUALIZZA REPORT ------------//
+
+  const openReport = (rowData) => {
+    handleOpenReport(rowData);
+    setOpenVisualizzaReport(true);
+  };
+
+  const handleOpenReport = (rowData) => {
+    setId(rowData.id);
+    setNome(rowData.nome);
+    setLoadedBy(rowData.loadedBy);
+    setStartDate(rowData.startDate);
+    setEndDate(rowData.endDate);
+    setStato(rowData.stato);
+    setResult(rowData.result);
+    setCallId(rowData.loadedBy);
   };
 
   const handleCloseReport = () => {
-    setOpenReport(false);
+    setOpenVisualizzaReport(false);
   };
 
   // ------- GET TEST SUITE -----------
@@ -334,8 +356,8 @@ const TestSuiteConclusiTable = () => {
         actions={[
           {
             icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Report",
-            onClick: () => handleOpenReport(),
+            tooltip: "Mostra Report",
+            onClick: (event, rowData) => openReport(rowData),
             position: "row",
           },
           {
@@ -628,12 +650,13 @@ const TestSuiteConclusiTable = () => {
         </Fade>
       </Modal>
 
-      {/* ----------------MODALE REPORT ------------------*/}
+      {/*------------------ MODALE VISUALIZZA REPORT-------------*/}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={openReport}
+        open={openVisualizzaReport}
         onClose={handleCloseReport}
         closeAfterTransition
         BackdropComponent={Backdrop}
@@ -641,50 +664,133 @@ const TestSuiteConclusiTable = () => {
           timeout: 500,
         }}
       >
-        <Fade in={openReport}>
+        <Fade in={openVisualizzaReport}>
           <div>
             <Paper className={classes.paperModaleReport} elevation={1}>
               <div>
-                <MaterialTable
-                  style={{ boxShadow: "none" }}
-                  title="Report"
-                  // data={data}
-                  columns={columns}
-                  actions={[
-                    {
-                      icon: () => (
-                        <div>
-                          <Button
-                            size="small"
-                            color="secondary"
-                            component={NavLink}
-                            activeClassName="button-green-active"
-                            exact
-                            to="/report/testsuite"
-                          >
-                            Vai alla sezione report
-                          </Button>
-                        </div>
-                      ),
-                      tooltip: "Vai ai Report",
-                      // onClick: () => handleOpen(),
-                      isFreeAction: true,
-                    },
-                  ]}
-                  components={{
-                    Action: (props) => (
-                      <Button
-                        onClick={handleCloseReport}
-                        color="primary"
-                        variant="contained"
-                        style={{ textTransform: "none" }}
-                        size="small"
-                      >
-                        Chiudi
-                      </Button>
-                    ),
-                  }}
-                />
+                <ListItem>
+                  <Typography
+                    style={{ color: "#1665D8", alignItems: "center" }}
+                    variant="h4"
+                  >
+                    Visualizza Test Case <b>{nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Id"
+                      defaultValue={id}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Nome"
+                      defaultValue={nome}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Loader"
+                      defaultValue={loadedBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Call-Id"
+                      defaultValue={callId}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data Inizio"
+                      defaultValue={startDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data Fine"
+                      defaultValue={endDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Status"
+                      defaultValue={stato}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      defaultValue={result}
+                      label="Risultato"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <Button
+                    href="/report/testsuite"
+                    className={classes.bottoneAnnulla}
+                  >
+                    Vai alla Sezione Report
+                  </Button>
+
+                  <ButtonClickedBlue
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseReport}
+                    size="medium"
+                    nome="Chiudi"
+                  />
+                </div>
               </div>
             </Paper>
           </div>

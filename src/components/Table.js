@@ -28,6 +28,8 @@ import ButtonClickedGreen from "./ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import { IconButton } from "@material-ui/core";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+import { Doughnut } from "react-chartjs-2";
+import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 const TotalTestSuiteConclusi = () => {
   const columns = [
@@ -81,6 +83,27 @@ const TotalTestSuiteConclusi = () => {
 
   const columnsTestcases = [
     {
+      title: "Id",
+      field: "id",
+      defaultSort: "desc",
+    },
+    {
+      title: "Nome Test",
+      field: "nome",
+    },
+    {
+      title: "Risultato",
+      field: "result",
+    },
+    {
+      title: "Call-Id",
+      field: "loadedBy",
+    },
+  ];
+
+
+  const columnsVisualizzaTestcases = [
+    {
       title: "ID Test",
       field: "id",
       defaultSort: "desc",
@@ -94,36 +117,33 @@ const TotalTestSuiteConclusi = () => {
       title: "Descrizione",
       field: "descrizione",
     },
-    // {
-    //   title: "Durata Attesa",
-    //   field: "expectedDuration",
-    // },
-    {
+      {
       title: "Versione",
       field: "version",
       hidden: true,
     },
     {
-      title: "Data Creazione",
-      field: "creationDate",
+      title: "Data caricamento",
+      field: "loadedWhen",
     },
     {
-      title: "Data Modifica",
-      field: "modifiedDate",
+      title: "Caricato da",
+      field: "loadedBy",
     },
     {
-      title: "Creato da",
-      field: "createdBy",
+      title: "Data Fine",
+      field: "endDate",
     },
+    
     {
-      title: "Modificato da",
-      field: "modifiedBy",
+      title: "Stato",
+      field: "stato",
     },
     {
       title: "Template",
       field: "template.nome",
     },
-  ];
+  ]
 
   const useStyles = makeStyles((theme) => ({
     modal: {
@@ -232,6 +252,14 @@ const TotalTestSuiteConclusi = () => {
       alignItems: "center",
       justifyContent: "center",
     },
+    contenutoModaleGrafico: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      height: 370,
+      overflowX: "hidden",
+    },
   }));
 
   const handleChange = () => {
@@ -247,11 +275,11 @@ const TotalTestSuiteConclusi = () => {
   const [descrizione, setDescrizione] = useState("");
   const [idToRun, setIdToRun] = useState();
   const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [data, setData] = useState();
-  const [createdBy, setCreatedBy] = useState("");
-  const [modifiedBy, setModifiedBy] = useState("");
+  const [loadedBy, setLoadedBy] = useState("");
+  const [loadedWhen, setLoadedWhen] = useState("");
   const [testCases, setTestCases] = useState([]);
   const [testSuite, setTestSuite] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -259,19 +287,32 @@ const TotalTestSuiteConclusi = () => {
   const [openTestCase, SetOpenTestCase] = React.useState(false);
   const [dataTestCases, setDataTestCases] = useState();
   const arrayTestCase = testSuite?.testCases;
+  const arrayTestCaseAssociati = testSuite?.testCases; 
   const [appearTest, setAppearTest] = useState([]);
   const [openExport, setOpenExport] = useState(false);
   const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
   const [dataCase, setDataCase] = useState();
+  const [creationDate, setCreationDate] = useState();
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const [openGrafico, setOpenGrafico] = useState(false);
   const [prova, setProva] = useState([]);
-  const setTestCaseAssociati = (testsuite) => {
+  const [testCaseAssociati, setTestCaseAssociati] = useState([]);
+
+  const [testCase, setTestCase] = useState({})
+  const [openTestCaseSel, setOpenTestCaseSel] = useState(false)
+  
+  const [appearLine, setAppearLine] = useState([]);
+  const [appearOBP, setAppearOBP] = useState([]);
+
+  const [openChiamato, setOpenChiamato] = React.useState(false);
+  const [openChiamanti, setOpenChiamanti] = React.useState(false);
+  //---------------------------------------------------------------------------------------------------------------------------------
+
+  const setTestCaseAssociatiArray = (testsuite) => {
     let x = [];
 
-    //console.log("--------"+testsuite)
     for (let i = 0; i < testsuite.testCases.length; i++) {
       x.push(testsuite.testCases[i].id);
     }
@@ -290,8 +331,6 @@ const TotalTestSuiteConclusi = () => {
     // aggiornaTestCaseAssociati(x);
   };
 
-  //---------------------------------------------------------------------------------------------------------------------------------
-
   /*------- arrayIdTestCase -----------*/
   const arrayIdTestCase = [];
   for (let index = 0; index < selectedRows?.length; index++) {
@@ -303,7 +342,7 @@ const TotalTestSuiteConclusi = () => {
   //console.log(arrayTestCase, " Array di test case");
 
   var arrayId = [];
-  arrayTestCase?.forEach(function (obj) {
+  arrayTestCaseAssociati?.forEach(function (obj) {
     arrayId?.push(obj.id);
   });
 
@@ -319,19 +358,22 @@ const TotalTestSuiteConclusi = () => {
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
     // setTestCases([...testCases, rowData.testCases[0].nome]);
-    setCreatedBy(rowData.createdBy);
-    setModifiedBy(rowData.modifiedBy);
-    setCreationDate(rowData.creationDate);
-    setModifiedDate(rowData.modifiedDate);
+    setStartDate(rowData.startDate);
+    setEndDate(rowData.endDate);
+    setLoadedBy(rowData.loadedBy);
+    setLoadedWhen(rowData.loadedWhen);
     // setOpen(true);
     getTestSuiteCompleteById(rowData.id);
+    setCreationDate(rowData.creationDate);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleOpenGrafico = () => {
+  const handleOpenGrafico = (rowData) => {
+    setId(rowData.id);
+    getTestSuiteCompleteById(rowData.id);
     setOpenGrafico(true);
   };
 
@@ -377,6 +419,14 @@ const TotalTestSuiteConclusi = () => {
   const openVisualizza = (rowData) => {
     handleOpen(rowData);
   };
+  
+  const openVisualizzaTestcaseSel = (rowData) => {
+    getTestCaseById(rowData.testCase.id)
+  };
+
+  const handleCloseTestCaseSel = ()=>{
+    setOpenTestCaseSel(false)
+  }
 
   const handleOpenTestCase = () => {
     SetOpenTestCase(true);
@@ -389,6 +439,38 @@ const TotalTestSuiteConclusi = () => {
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
+  const funzioneGetAll = () => {
+    (async () => {
+      setAppearOBP((await getGenerale('obp')).list);
+    })();
+
+    //-----GET APPEAR LINEA-----
+    (async () => {
+      setAppearLine((await getGenerale('linea')).list);
+    })();
+  }
+  
+  const getTestCaseById = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result)
+        setTestCase(result.testCase)
+        setOpenTestCaseSel(true)
+      })
+      .catch((error) => console.log("error", error));
+  };
   //------------------------- GET TEST SUITE BY ID ------------------------------
 
   const getTestSuiteCompleteById = (id) => {
@@ -407,12 +489,14 @@ const TotalTestSuiteConclusi = () => {
       .then((response) => response.json())
       .then((result) => {
         setTestSuite(result.testSuite);
-        setTestCaseAssociati(result.testSuite);
-        setOpen(true);
-        SetOpenTestCase(false);
+        setTestCaseAssociati(result.testSuite.testCases);
+        setTestCaseAssociatiArray(result.testSuite);
+        cicloFor(result.testSuite.testCases);
+        // SetOpenTestCase(false);
       })
       .catch((error) => console.log("error", error));
   };
+
 
   //-----------GET TEST SUITE COMPLETE----------------------
   const getAllTestSuiteComplete = () => {
@@ -448,9 +532,8 @@ const TotalTestSuiteConclusi = () => {
   };
 
   useEffect(() => {
+    funzioneGetAll();
     getAllTestSuiteComplete();
-    getAllTestSuite();
-    //getAllTestCase();
     getAllTestCaseAssociati();
   }, []);
 
@@ -557,29 +640,6 @@ const TotalTestSuiteConclusi = () => {
       .catch((error) => console.log("error", error));
   };
 
-  //-----------GET TEST SUITE----------------------
-  const getAllTestSuite = () => {
-    setCaricamento(true);
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testsuite`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setData(result.list);
-        setCaricamento(false);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
   const tableIcons = {
     Export: React.forwardRef((props, ref) => (
       <Button size="small" variant="contained" color="secondary">
@@ -588,6 +648,57 @@ const TotalTestSuiteConclusi = () => {
     )),
   };
 
+  /*------ Funzione calcolo percentuali -------*/
+
+  const [ok, setOk] = useState(0);
+  const [ko, setKo] = useState(0);
+
+  function cicloFor(data) {
+    console.log(data);
+    var appOk = 0;
+    var appKo = 0;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].result === "KO") {
+        appKo += 1;
+      } else {
+        appOk += 1;
+      }
+    }
+    setOk(appOk);
+    setKo(appKo);
+  }
+
+  const chart = {
+    labels: ["KO", "OK"],
+    datasets: [
+      {
+        label: "# of Test Case",
+        data: [ko, ok],
+        backgroundColor: [
+          "red",
+          "green",
+        ],
+      },
+    ],
+    options: {
+      maintainAspectRatio: false,
+    },
+  };
+
+  
+  const handleOpenChiamato = () => {
+    setOpenChiamato(true);
+  };
+  const handleOpenChiamanti = () => {
+    setOpenChiamanti(true);
+  };
+
+  const handleCloseChiamato = () => {
+    setOpenChiamato(false);
+  };
+  const handleCloseChiamanti = () => {
+    setOpenChiamanti(false);
+  };
   return (
     <div>
       <MaterialTable
@@ -613,18 +724,6 @@ const TotalTestSuiteConclusi = () => {
           },
         }}
         actions={[
-          // {
-          //   icon: () => (
-          //     <div>
-          //       <Button size="small" variant="contained" color="secondary">
-          //         EXPORT
-          //       </Button>
-          //     </div>
-          //   ),
-          //   tooltip: "Export Test Suite Table",
-          //   onClick: () => handleOpenExport(),
-          //   isFreeAction: true,
-          // },
           {
             icon: (dat) => (
               <a>
@@ -682,25 +781,18 @@ const TotalTestSuiteConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={id !== "" ? false : true}
-                      onChange={(e) => setId(e.target.value)}
                       label="Id"
                       defaultValue={id}
-                      // helperText={nome !== "" ? "" : "Lo status è richiesto"}
                       InputProps={{
                         readOnly: true,
-                        // readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={nome !== "" ? false : true}
-                      onChange={(e) => setNome(e.target.value)}
                       label="Nome"
                       defaultValue={nome}
-                      helperText={nome !== "" ? "" : "Inserire Nome"}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -708,27 +800,11 @@ const TotalTestSuiteConclusi = () => {
                   </Col>
                 </Row>
                 <Row>
-                  {/* <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={version !== "" ? false : true}
-                      onChange={(e) => setVersion(e.target.value)}
-                      label="Versione"
-                      defaultValue={version}
-                      helperText={version !== "" ? "" : "Inserire versione"}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col> */}
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={testCases !== "" ? false : true}
-                      // onChange={(e) => setTestCases(e.target.value)}
                       label="Numero Test Case"
-                      defaultValue={arrayTestCase?.length}
-                      helperText={testCases !== "" ? "" : "Test Case"}
+                      defaultValue={arrayTestCaseAssociati?.length}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -741,13 +817,8 @@ const TotalTestSuiteConclusi = () => {
                       multiline
                       rows={2}
                       className={classes.textArea}
-                      error={descrizione !== "" ? false : true}
-                      onChange={(e) => setDescrizione(e.target.value)}
                       label="Descrizione"
                       defaultValue={descrizione}
-                      helperText={
-                        descrizione !== "" ? "" : "Descrizione richiesta"
-                      }
                       InputProps={{
                         readOnly: true,
                       }}
@@ -775,10 +846,10 @@ const TotalTestSuiteConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={createdBy !== "" ? false : true}
-                      onChange={(e) => setCreatedBy(e.target.value)}
-                      label="Creato da"
-                      defaultValue={createdBy}
+                      error={loadedBy !== "" ? false : true}
+                      onChange={(e) => setLoadedBy(e.target.value)}
+                      label="Caricato da"
+                      defaultValue={loadedBy}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -787,10 +858,10 @@ const TotalTestSuiteConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={modifiedBy !== "" ? false : true}
-                      onChange={(e) => setModifiedBy(e.target.value)}
-                      label="Modificato da"
-                      defaultValue={modifiedBy}
+                      error={loadedWhen !== "" ? false : true}
+                      onChange={(e) => setLoadedWhen(e.target.value)}
+                      label="Data caricamento"
+                      defaultValue={loadedWhen}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -802,10 +873,10 @@ const TotalTestSuiteConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={modifiedDate !== "" ? false : true}
-                      onChange={(e) => setModifiedDate(e.target.value)}
-                      label="Data Modifica "
-                      defaultValue={modifiedDate}
+                      error={endDate !== "" ? false : true}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      label="Data Fine "
+                      defaultValue={endDate}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -814,10 +885,10 @@ const TotalTestSuiteConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={creationDate !== "" ? false : true}
-                      onChange={(e) => setCreationDate(e.target.value)}
-                      label="Data Creazione "
-                      defaultValue={creationDate}
+                      error={startDate !== "" ? false : true}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      label="Data Inizio "
+                      defaultValue={startDate}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -873,8 +944,8 @@ const TotalTestSuiteConclusi = () => {
                   <MaterialTable
                     style={{ boxShadow: "none" }}
                     title="Test Case"
-                    data={arrayTestCase}
-                    columns={columnsTestcases}
+                    data={arrayTestCaseAssociati}
+                    columns={columnsVisualizzaTestcases}
                     isLoading={caricamento2}
                     options={{
                       selection: false,
@@ -934,6 +1005,302 @@ const TotalTestSuiteConclusi = () => {
         </Fade>
       </Modal>
 
+      
+      {/*------------------ MODALE VISUALIZZA/MODIFICA -------------*/}
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openTestCaseSel}
+        onClose={handleCloseTestCaseSel}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openTestCaseSel}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    TestCase <b>{testCase.nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Nome"
+                      defaultValue={testCase.nome}
+                      InputProps={{
+                        readOnly:true
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Template"
+                      defaultValue={testCase?.template?.nome}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      multiline
+                      rows={2}
+                      className={classes.textArea}
+                      label="Descrizione"
+                      defaultValue={testCase.descrizione}
+                      InputProps={{
+                        readOnly: true
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    padding: "2%",
+                  }}
+                >
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Vedi Chiamato"
+                    onClick={handleOpenChiamato}
+                  />
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Vedi Chiamante/i"
+                    onClick={handleOpenChiamanti}
+                  />
+                </div>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Creato Da"
+                      value={testCase.createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data di creazione"
+                      value={testCase?.creationDate?.replace("T", " / ")?.replace(".000+00:00", "")}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Modificato da"
+                      value={testCase.modifiedBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data di Modifica"
+                      value={testCase?.modifiedDate?.replace("T", " / ")?.replace(".000+00:00", "")}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseTestCaseSel}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE CHIAMATO--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamato}
+        onClose={handleCloseChiamato}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamato}>
+          <div>
+            <Paper className={classes.paperModale}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Chiamato <b>{testCase.nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Linea"
+                      value={testCase?.chiamato?.linea?.campiConcatenati}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Outboundproxy"
+                      value={testCase?.chiamato?.proxy?.campiConcatenati}
+                      InputProps={{
+                        readOnly: true
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamato}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+      {/* ------------------------MODALE CHIAMANTi--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamanti}
+        onClose={handleCloseChiamanti}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamanti}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Chiamante/i <b>{testCase.nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                {testCase?.chiamanti?.map((chiamante, index) => (
+                  <>
+                    <Typography className={classes.intestazione} variant="h6">
+                      Chiamante <b>{index + 1}</b>
+                    </Typography>
+                    <Row>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          label="Linea "
+                          value={testCase?.chiamanti[index]?.linea?.campiConcatenati}
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        />
+                      </Col>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          label="Outboundproxy"
+                          value={testCase?.chiamanti[index]?.proxy?.campiConcatenati}
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        />
+                      </Col>
+                    </Row>
+                  </>
+                ))}
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamanti}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
       {/*---------------- MODALE VISUALIZZA GRAFICO ------------------*/}
 
       <Modal
@@ -954,17 +1321,60 @@ const TotalTestSuiteConclusi = () => {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Test Case KO-OK
+                    Test Case KO/OK associati
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
 
-              <Form className={classes.contenutoModale}>
-                <div className={classes.chart}>
-                  <ChartReport />
+              {/* <Form className={classes.contenutoModale}>
+                <div className={classes.chart}><ChartReport /></div>
+              </Form> */}
+
+              <div className={classes.contenutoModaleGrafico}>
+                <MaterialTable
+                  style={{ boxShadow: "none" }}
+                  title="Test Case"
+                  data={testCaseAssociati}
+                  columns={columnsTestcases}
+                  isLoading={caricamento2}
+                  options={{
+                    selection: false,
+                    sorting: true,
+                    actionsColumnIndex: -1,
+                    search: true,
+                    searchFieldVariant: "outlined",
+                    filtering: true,
+                    searchFieldAlignment: "left",
+                   
+                  }}
+                  actions={[
+                    {
+                      icon: (dat) => (
+                        <a>
+                          <VisibilityIcon />
+                        </a>
+                      ),
+                      tooltip: "Visualizza tutti i dati",
+                      position: "row",
+                      onClick: (event, rowData) => openVisualizzaTestcaseSel(rowData),
+                    },
+                  ]}
+                  localization={{
+                    header: {
+                      actions: "Azioni",
+                    },
+                    body: {
+                      emptyDataSourceMessage:
+                        "Non è presente alcun dato da mostrare",
+                    },
+                  }}
+                />
+
+                <div>
+                  <Doughnut data={chart} className={classes.grafico} />
                 </div>
-              </Form>
+              </div>
               <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
 

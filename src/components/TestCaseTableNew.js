@@ -166,12 +166,18 @@ function TestCaseTable() {
       field: "descrizione",
     },
     {
-      title: "Data Creazione",
+      title: "Data di creazione",
       field: "creationDate",
+      render: (rowData) => {
+        return rowData.creationDate.replace("T", " / ").replace(".000+00:00", "");
+      },
     },
     {
-      title: "Data Modifica",
+      title: "Data di modifica",
       field: "modifiedDate",
+      render: (rowData) => {
+        return rowData.modifiedDate.replace("T", " / ").replace(".000+00:00", "");
+      },
     },
     {
       title: "Creato da",
@@ -619,7 +625,6 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setCreatedBy(e.target.value)}
                       label="Creato Da"
                       value={createdBy}
                       InputProps={{
@@ -631,8 +636,7 @@ function TestCaseTable() {
                     <TextField
                       className={classes.textField}
                       label="Data di creazione"
-                      onChange={(e) => setCreationDate(e.target.value)}
-                      value={creationDate}
+                      value={creationDate.replace("T", " / ").replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -644,7 +648,6 @@ function TestCaseTable() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setModifiedBy(e.target.value)}
                       label="Modificato da"
                       value={modifiedBy}
                       InputProps={{
@@ -656,8 +659,7 @@ function TestCaseTable() {
                     <TextField
                       className={classes.textField}
                       label="Data di Modifica"
-                      onChange={(e) => setModifiedDate(e.target.value)}
-                      value={modifiedDate}
+                      value={modifiedDate.replace("T", " / ").replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}

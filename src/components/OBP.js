@@ -22,7 +22,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 
 function Obp() {
-
   var functions = localStorage.getItem("funzioni").split(",");
 
   const [data, setData] = useState([]);
@@ -36,7 +35,7 @@ function Obp() {
   const [descrizione, setDescrizione] = useState("");
   const [typeLinea, setTypeLinea] = useState([]);
   const [open, setOpen] = React.useState(false);
-  const [version, SetVersion] = React.useState(0);
+  const [version, setVersion] = React.useState(0);
   const [caricamento, setCaricamento] = useState(false);
   const [scrittaTabella, setScrittaTabella] = useState("");
 
@@ -44,8 +43,10 @@ function Obp() {
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
-
-    if (functions.indexOf("obp.view") !== -1 && functions.indexOf("linea.view") !== -1) {
+    if (
+      functions.indexOf("obp.view") !== -1 &&
+      functions.indexOf("linea.view") !== -1
+    ) {
       //----GET ALL LINEE----
       (async () => {
         setCaricamento(true);
@@ -57,14 +58,14 @@ function Obp() {
       (async () => {
         setAppearLine((await getGenerale("typeLinea")).list);
       })();
-    
-      setScrittaTabella("Non è presente alcun dato da mostrare")
 
+      setScrittaTabella("Non è presente alcun dato da mostrare");
     } else {
-      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+      setScrittaTabella(
+        "Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella"
+      );
     }
   };
-
 
   const aggiornaUtente = () => {
     const invia = () => {
@@ -142,7 +143,6 @@ function Obp() {
         for (let index = 0; index < rowData.typeLinee.length; index++) {
           prova += ", " + rowData.typeLinee[index].descrizione;
         }
-        // prova.replace("!, ", "");
         return prova.replace("!, ", "");
       },
     },
@@ -157,10 +157,20 @@ function Obp() {
     {
       title: "Data di creazione",
       field: "creationDate",
+      render: (rowData) => {
+        return rowData.creationDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
+      },
     },
     {
       title: "Data di modifica",
       field: "modifiedDate",
+      render: (rowData) => {
+        return rowData.modifiedDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
+      },
     },
     {
       title: "Creato da",
@@ -195,10 +205,9 @@ function Obp() {
 
     setPorta(rowData.porta);
     setDescrizione(rowData.descrizione);
-    SetVersion(rowData.version);
+    setVersion(rowData.version);
     setTypeLinea([...typeLinea, rowData.typeLinee[0].id]);
     setOpen(true);
-    console.log(typeLinea, "type");
   };
 
   const handleChange = (event) => {
@@ -216,17 +225,11 @@ function Obp() {
   /*-------------- MODALE ERROR ------------*/
 
   const [openWarning, setOpenWarning] = useState(false);
-  // const [openWarning1, setOpenWarning] = useState(false);
   const [warning, setWarning] = useState("");
-  // const [warning1, setWarning1] = useState("");
 
   const handleCloseWarning = () => {
     setOpenWarning(false);
   };
-
-  // const handleCloseWarning1 = () => {
-  //   setOpenWarning1(false);
-  // };
 
   /*------------------ MODALE DELETE ---------------------*/
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -277,9 +280,9 @@ function Obp() {
             } else {
               setWarning(
                 "Codice errore: " +
-                result.error.code +
-                "Descrizione:" +
-                result.code.description
+                  result.error.code +
+                  "Descrizione:" +
+                  result.code.description
               );
             }
           } else {
@@ -290,8 +293,6 @@ function Obp() {
         })
         .catch((error) => console.log("error", error));
       handleCloseDelete();
-
-
     }
   };
 
@@ -644,12 +645,19 @@ function Obp() {
 
                 <Col className={classes.colIp}>
                   <TextField
-                    className={classes.textField}
+                    SelectProps={{
+                      multiple: true,
+                      onChange: handleChange,
+                    }}
                     select
                     label="Tipo Linea"
                     value={appearLine.id}
                     defaultValue={typeLinea}
-                    onChange={(e) => setTypeLinea(e.target.value)}
+                    onChange={(e) => {
+                      setTypeLinea(e.target.value);
+
+                      console.log(typeLinea);
+                    }}
                   >
                     {appearLine.map((typeLinea) => (
                       <MenuItem key={typeLinea.id} value={typeLinea.id}>
@@ -666,19 +674,19 @@ function Obp() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 {ip1 <= 255 &&
-                  ip1 !== "" &&
-                  ip1.length < 4 &&
-                  ip2 <= 255 &&
-                  ip2 !== "" &&
-                  ip2.length < 4 &&
-                  ip3 <= 255 &&
-                  ip3 !== "" &&
-                  ip3.length < 4 &&
-                  ip4 <= 255 &&
-                  ip4 !== "" &&
-                  ip4.length < 4 &&
-                  porta > 1000 &&
-                  porta < 100000 ? (
+                ip1 !== "" &&
+                ip1.length < 4 &&
+                ip2 <= 255 &&
+                ip2 !== "" &&
+                ip2.length < 4 &&
+                ip3 <= 255 &&
+                ip3 !== "" &&
+                ip3.length < 4 &&
+                ip4 <= 255 &&
+                ip4 !== "" &&
+                ip4.length < 4 &&
+                porta > 1000 &&
+                porta < 100000 ? (
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"

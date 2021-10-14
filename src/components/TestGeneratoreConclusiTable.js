@@ -20,11 +20,13 @@ import loading from "../../src/assets/load.gif";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import TextField from "@material-ui/core/TextField";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import DeleteIcon from "@material-ui/icons/Delete";
-
 
 const TestGeneratoreConclusiTable = () => {
   const [id, setId] = useState();
@@ -32,13 +34,17 @@ const TestGeneratoreConclusiTable = () => {
   const [creationDate, setCreationDate] = useState();
   const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [createdBy, setCreatedBy] = useState("");
   const [name, setName] = useState("");
   const [rate, setRate] = useState();
+  const [loadedBy, setLoadedBy] = useState("");
+  const [stato, setStato] = useState("");
+  const [result, setResult] = useState("");
+  const [callId, setCallId] = useState("");
   const [testDuration, setTestDuration] = useState();
   const [callDuration, setCallDuration] = useState();
-
-
 
   const columns = [
     {
@@ -74,17 +80,16 @@ const TestGeneratoreConclusiTable = () => {
       title: "Call-Id",
       field: "loadedBy",
     },
-    {
-      title: "Report",
-      field: "report",
-      render: (rowData) => (
-        <Button color="secondary" onClick={() => handleOpenReport()}>
-          report
-        </Button>
-      ),
-    },
+    // {
+    //   title: "Report",
+    //   field: "report",
+    //   render: (rowData) => (
+    //     <Button color="secondary" onClick={() => handleOpenReport()}>
+    //       report
+    //     </Button>
+    //   ),
+    // },
   ];
-
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -108,7 +113,16 @@ const TestGeneratoreConclusiTable = () => {
       position: "relative",
       display: "flex",
       flexDirection: "column",
-      alignItems: "center"
+      alignItems: "center",
+    },
+    paperModaleReport: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 800,
+      position: "relative",
     },
     modal: {
       display: "flex",
@@ -132,7 +146,6 @@ const TestGeneratoreConclusiTable = () => {
     divSelectBar: {
       marginTop: "25px",
       marginBottom: "5%",
-
     },
     selectBar: {
       width: "50%",
@@ -171,7 +184,7 @@ const TestGeneratoreConclusiTable = () => {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
-      marginBottom: "2%"
+      marginBottom: "2%",
     },
     divIntestazione: {
       marginBottom: "2%",
@@ -184,6 +197,10 @@ const TestGeneratoreConclusiTable = () => {
       flexDirection: "column",
       alignItems: "center",
       marginTop: "3%",
+    },
+    contenutoModale: {
+      height: 370,
+      overflowX: "hidden",
     },
     delayPaper: {
       padding: "3%",
@@ -200,7 +217,7 @@ const TestGeneratoreConclusiTable = () => {
       width: "80%",
       alignItems: "center",
       marginTop: "5%",
-      marginBottom: "5%"
+      marginBottom: "5%",
     },
     bottone: {
       display: "flex",
@@ -209,6 +226,16 @@ const TestGeneratoreConclusiTable = () => {
       marginTop: "6%",
       justifyContent: "center",
     },
+    col: {
+      padding: "3%",
+      height: "106px",
+    },
+    row: {
+      width: "600px",
+    },
+    textField: {
+      width: "300px",
+    },
   }));
 
   const classes = useStyles();
@@ -216,8 +243,7 @@ const TestGeneratoreConclusiTable = () => {
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
-  const [openReport, setOpenReport] = React.useState(false);
-
+const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -229,7 +255,7 @@ const TestGeneratoreConclusiTable = () => {
 
   const handleOpenSchedula = () => {
     setOpenSchedula(true);
-    setOpen(false);
+   // setOpen(false);
   };
 
   const handleCloseSchedula = () => {
@@ -240,20 +266,33 @@ const TestGeneratoreConclusiTable = () => {
     setValue(newValue);
   };
 
-  const handleOpenReport = () => {
-    setOpenReport(true);
-  };
-
-  const handleCloseReport = () => {
-    setOpenReport(false);
-  };
-
   const testGenLoader = () => {
     //loadTestGen(id);
     handleClose();
     getAllTestGeneratore();
   };
 
+  // --------------- MODALE VISUALIZZA REPORT ------------//
+
+  const openReport = (rowData) => {
+    handleOpenReport(rowData);
+    setOpenVisualizzaReport(true);
+  };
+
+  const handleOpenReport = (rowData) => {
+    setId(rowData.id);
+    setNome(rowData.nome);
+    setLoadedBy(rowData.loadedBy);
+    setStartDate(rowData.startDate);
+    setEndDate(rowData.endDate);
+    setStato(rowData.stato);
+    setResult(rowData.result);
+    setCallId(rowData.loadedBy);
+  };
+
+  const handleCloseReport = () => {
+    setOpenVisualizzaReport(false);
+  };
 
   /*------------- GET TEST GEN -------------*/
 
@@ -282,7 +321,7 @@ const TestGeneratoreConclusiTable = () => {
       .then((result) => {
         console.log(result);
         setAppearTest(result.list);
-        setData(result.list)
+        setData(result.list);
       })
       .catch((error) => console.log("error", error));
   };
@@ -310,9 +349,16 @@ const TestGeneratoreConclusiTable = () => {
         actions={[
           {
             icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Report",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            tooltip: "Mostra Report",
+            onClick: (event, rowData) => openReport(rowData),
+            position: "row",
+          },
+          {
+            icon: () => <DeleteIcon />,
+            tooltip: "Elimina il Test",
+            onClick: (event, rowData) => {
+              alert("inserire api delete");
+            },
             position: "row",
           },
           // {
@@ -336,18 +382,18 @@ const TestGeneratoreConclusiTable = () => {
             actions: "Azioni",
           },
         }}
-      // components={{
-      //   Toolbar: (props) => (
-      //     <div>
-      //       <MTableToolbar {...props} />
-      //       <div className="button-load-test">
-      //         <Button variant="contained" color="primary">
-      //           LOAD TEST CASE
-      //         </Button>
-      //       </div>
-      //     </div>
-      //   ),
-      // }}
+        // components={{
+        //   Toolbar: (props) => (
+        //     <div>
+        //       <MTableToolbar {...props} />
+        //       <div className="button-load-test">
+        //         <Button variant="contained" color="primary">
+        //           LOAD TEST CASE
+        //         </Button>
+        //       </div>
+        //     </div>
+        //   ),
+        // }}
       />
       {/* ------------------ MODALE LOAD TEST GENERATORE --------------------- */}
       <Modal
@@ -403,72 +449,75 @@ const TestGeneratoreConclusiTable = () => {
                       })}
                     </Select>
                     <br />
-                    {name && <>
-                      <Form.Label>Rate </Form.Label>
-                      <FormControl variant="outlined">
-                        <Select
-                          className={classes.select}
-                          value={rate}
-                          onChange={(e) => setRate(e.target.value)}
-                        >
-                          {[5, 10, 15, 20, 25].map((rate) => {
-                            return (
-                              <MenuItem
-                                style={{ width: "423px" }}
-                                key={rate}
-                                value={rate}
-                              >
-                                {rate} secondi
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                      <br />
-                      <Form.Label>Durata Test (s)</Form.Label>
-                      <FormControl variant="outlined">
-                        <Select
-                          className={classes.select}
-                          value={testDuration}
-                          onChange={(e) => setTestDuration(e.target.value)}
-                        >
-                          {[{ label: "5 minuti", value: 5 },
-                          { label: "10 minuti", value: 10 },
-                          { label: "20 minuti", value: 20 },
-                          { label: "30 minuti", value: 30 },
-                          { label: "60 minuti", value: 60 },
-                          { label: "120 minuti", value: 120 },
-                          { label: "360 minuti", value: 360 },
-                          { label: "720 minuti", value: 720 },
-                          { label: "24 ore", value: 1440 },
-                          { label: "48 ore", value: 2880 }
-                          ].map((testDuration) => {
-                            return (
-                              <MenuItem
-                                style={{ width: "423px" }}
-                                key={testDuration.label}
-                                value={testDuration.value}
-                              >
-                                {testDuration.label}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                      <br />
-                      <Form.Label>Durata Chiamata </Form.Label>
-                      <Form.Control
-                        max={rate * 60 * testDuration}
-                        type="number"
-                        value={callDuration}
-                        placeholder="60"
-                        onChange={(e) => {
-                          const newValue = parseInt(e.target.value);
-                          const maxValue = rate * 60 * testDuration;
-                          setCallDuration(Math.min(newValue, maxValue));
-                        }}
-                      />
-                    </>}
+                    {name && (
+                      <>
+                        <Form.Label>Rate </Form.Label>
+                        <FormControl variant="outlined">
+                          <Select
+                            className={classes.select}
+                            value={rate}
+                            onChange={(e) => setRate(e.target.value)}
+                          >
+                            {[5, 10, 15, 20, 25].map((rate) => {
+                              return (
+                                <MenuItem
+                                  style={{ width: "423px" }}
+                                  key={rate}
+                                  value={rate}
+                                >
+                                  {rate} secondi
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        <br />
+                        <Form.Label>Durata Test (s)</Form.Label>
+                        <FormControl variant="outlined">
+                          <Select
+                            className={classes.select}
+                            value={testDuration}
+                            onChange={(e) => setTestDuration(e.target.value)}
+                          >
+                            {[
+                              { label: "5 minuti", value: 5 },
+                              { label: "10 minuti", value: 10 },
+                              { label: "20 minuti", value: 20 },
+                              { label: "30 minuti", value: 30 },
+                              { label: "60 minuti", value: 60 },
+                              { label: "120 minuti", value: 120 },
+                              { label: "360 minuti", value: 360 },
+                              { label: "720 minuti", value: 720 },
+                              { label: "24 ore", value: 1440 },
+                              { label: "48 ore", value: 2880 },
+                            ].map((testDuration) => {
+                              return (
+                                <MenuItem
+                                  style={{ width: "423px" }}
+                                  key={testDuration.label}
+                                  value={testDuration.value}
+                                >
+                                  {testDuration.label}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        <br />
+                        <Form.Label>Durata Chiamata </Form.Label>
+                        <Form.Control
+                          max={rate * 60 * testDuration}
+                          type="number"
+                          value={callDuration}
+                          placeholder="60"
+                          onChange={(e) => {
+                            const newValue = parseInt(e.target.value);
+                            const maxValue = rate * 60 * testDuration;
+                            setCallDuration(Math.min(newValue, maxValue));
+                          }}
+                        />
+                      </>
+                    )}
                   </FormControl>
                 </Form.Group>
               </div>
@@ -511,7 +560,7 @@ const TestGeneratoreConclusiTable = () => {
             </div>
           </Paper>
         </Fade>
-      </Modal >
+      </Modal>
 
       {/* ------------------ MODALE SCHEDULA TEST GENERATORE --------------------- */}
       <Modal
@@ -546,7 +595,6 @@ const TestGeneratoreConclusiTable = () => {
                   <div className={classes.divInput}>
                     <label for="start">Start date:</label>
                     <input
-
                       type="date"
                       id="start"
                       name="trip-start"
@@ -560,7 +608,6 @@ const TestGeneratoreConclusiTable = () => {
                 <Paper elevation={2} className={classes.delayPaper}>
                   <Typography variant="h5">Delay</Typography>
                   <div className={classes.divInput}>
-
                     <label for="appt">Start Time:</label>
                     <input
                       style={{ width: "135px" }}
@@ -594,12 +641,13 @@ const TestGeneratoreConclusiTable = () => {
         </Fade>
       </Modal>
 
-       {/* ----------------MODALE REPORT ------------------*/}
-       <Modal
+      {/*------------------ MODALE VISUALIZZA REPORT-------------*/}
+
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={openReport}
+        open={openVisualizzaReport}
         onClose={handleCloseReport}
         closeAfterTransition
         BackdropComponent={Backdrop}
@@ -607,50 +655,133 @@ const TestGeneratoreConclusiTable = () => {
           timeout: 500,
         }}
       >
-        <Fade in={openReport}>
+        <Fade in={openVisualizzaReport}>
           <div>
             <Paper className={classes.paperModaleReport} elevation={1}>
               <div>
-                <MaterialTable
-                  style={{ boxShadow: "none" }}
-                  title="Report"
-                  // data={data}
-                  columns={columns}
-                  actions={[
-                    {
-                      icon: () => (
-                        <div>
-                          <Button
-                            size="small"
-                            color="secondary"
-                            component={NavLink}
-                            activeClassName="button-green-active"
-                            exact
-                            to="/report/testgeneratore"
-                          >
-                            Vai alla sezione report
-                          </Button>
-                        </div>
-                      ),
-                      tooltip: "Vai ai Report",
-                      // onClick: () => handleOpen(),
-                      isFreeAction: true,
-                    },
-                  ]}
-                  components={{
-                    Action: props => (
-                      <Button
-                        onClick={handleCloseReport}
-                        color="primary"
-                        variant="contained"
-                        style={{textTransform: 'none'}}
-                        size="small"
-                      >
-                        Chiudi
-                      </Button>
-                    ),
-                  }}
-                />
+                <ListItem>
+                  <Typography
+                    style={{ color: "#1665D8", alignItems: "center" }}
+                    variant="h4"
+                  >
+                    Visualizza Test Generatore <b>{nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Id"
+                      defaultValue={id}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Nome"
+                      defaultValue={nome}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Loader"
+                      defaultValue={loadedBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Call-Id"
+                      defaultValue={callId}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data Inizio"
+                      defaultValue={startDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data Fine"
+                      defaultValue={endDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Status"
+                      defaultValue={stato}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      defaultValue={result}
+                      label="Risultato"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <Button
+                    href="/report/testgeneratore"
+                    className={classes.bottoneAnnulla}
+                  >
+                    Vai alla Sezione Report
+                  </Button>
+
+                  <ButtonClickedBlue
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseReport}
+                    size="medium"
+                    nome="Chiudi"
+                  />
+                </div>
               </div>
             </Paper>
           </div>

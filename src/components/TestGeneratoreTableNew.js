@@ -167,12 +167,18 @@ function TestGeneratoreTableNew() {
       field: "template.nome",
     },
     {
-      title: "Creato da",
-      field: "createdBy",
+      title: "Data di creazione",
+      field: "creationDate",
+      render: (rowData) => {
+        return rowData.creationDate.replace("T", " / ").replace(".000+00:00", "");
+      },
     },
     {
-      title: "Data Creazione",
-      field: "creationDate",
+      title: "Data di modifica",
+      field: "modifiedDate",
+      render: (rowData) => {
+        return rowData.modifiedDate.replace("T", " / ").replace(".000+00:00", "");
+      },
     },
     {
       title: "Modificato da",
@@ -561,8 +567,6 @@ function TestGeneratoreTableNew() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={createdBy !== "" ? false : true}
-                      onChange={(e) => setCreatedBy(e.target.value)}
                       label="Creato da"
                       defaultValue={createdBy}
                       InputProps={{
@@ -573,10 +577,8 @@ function TestGeneratoreTableNew() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={creationDate !== "" ? false : true}
-                      onChange={(e) => setCreationDate(e.target.value)}
                       label="Data Creazione"
-                      defaultValue={creationDate}
+                      defaultValue={creationDate.replace("T", " / ").replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -588,8 +590,6 @@ function TestGeneratoreTableNew() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={modifiedBy !== "" ? false : true}
-                      onChange={(e) => setModifiedBy(e.target.value)}
                       label="Modificato da"
                       defaultValue={modifiedBy}
                       InputProps={{
@@ -600,10 +600,8 @@ function TestGeneratoreTableNew() {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={modifiedDate !== "" ? false : true}
-                      onChange={(e) => setModifiedDate(e.target.value)}
                       label="Data Modifica"
-                      defaultValue={modifiedDate}
+                      defaultValue={modifiedDate.replace("T", " / ").replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}

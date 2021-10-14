@@ -247,12 +247,18 @@ function Template() {
       hidden: true,
     },
     {
-      title: "Data modifica",
-      field: "modifiedDate",
+      title: "Data di creazione",
+      field: "creationDate",
+      render: (rowData) => {
+        return rowData.creationDate.replace("T", " / ").replace(".000+00:00", "");
+      },
     },
     {
-      title: "Data creazione",
-      field: "creationDate",
+      title: "Data di modifica",
+      field: "modifiedDate",
+      render: (rowData) => {
+        return rowData.modifiedDate.replace("T", " / ").replace(".000+00:00", "");
+      },
     },
     {
       title: "Modificato da",

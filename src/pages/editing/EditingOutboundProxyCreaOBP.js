@@ -36,7 +36,7 @@ import DnsIcon from "@material-ui/icons/Dns";
 import acccessControl from "../../service/url.js";
 import Alert from "@material-ui/lab/Alert";
 import { useHistory } from "react-router-dom";
-import { ButtonEditing } from "../../components/ButtonBarraNavigazione"
+import { ButtonEditing } from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -204,7 +204,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditingOutboundProxy() {
-
   var functions = localStorage.getItem("funzioni").split(",");
 
   let history = useHistory();
@@ -226,9 +225,7 @@ function EditingOutboundProxy() {
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const getTypeId = () => {
-
     if (functions.indexOf("linea.view") !== -1) {
-
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -258,9 +255,8 @@ function EditingOutboundProxy() {
   //put descrizione e ip
 
   function salva() {
-    const Invia = () => {
-
-      if (functions.indexOf("linea.view") !== -1) {
+    if (functions.indexOf("linea.view") !== -1) {
+      const Invia = () => {
         var myHeaders = new Headers();
         myHeaders.append("Authorization", bearer);
         myHeaders.append("Content-Type", "application/json");
@@ -288,12 +284,6 @@ function EditingOutboundProxy() {
 
         history.push("/editing/outboundproxy");
       };
-      console.log(ip1 !== "", "ip1");
-      console.log(ip2 !== "", "ip2");
-      console.log(ip3 !== "", "ip3");
-      console.log(ip4 !== "", "ip4");
-      console.log(typeLineaId.length !== 0, "TipoLinea");
-      console.log(typeLineaId, "tipoLinea");
 
       const aggiornaIP = () => {
         if (
@@ -389,7 +379,6 @@ function EditingOutboundProxy() {
         }}
         open={open}
       >
-
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -499,7 +488,7 @@ function EditingOutboundProxy() {
                         value={typeLineaId}
                         onChange={handleChange}
                         input={<Input />}
-                      //MenuProps={MenuProps}
+                        //MenuProps={MenuProps}
                       >
                         {data.map((prova) => {
                           return (

@@ -33,8 +33,10 @@ import MaterialTable from "material-table";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { getGenerale, getByIdGenerale, putGenerale } from "../../service/api";
-import { ButtonEditing, ButtonEditingTest } from "../../components/ButtonBarraNavigazione"
-
+import {
+  ButtonEditing,
+  ButtonEditingTest,
+} from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -345,42 +347,49 @@ function EditingTestCreaTestSuite() {
 
   const funzioneGetAll = () => {
     if (functions.indexOf("testsuite.create") !== -1 && functions.indexOf("test.view") !== -1) {
-      //----GET APPEAR TEMPLATE----
-      (async () => {
-        setData((await getGenerale('testcase')).list);
-      })();
+    //----GET APPEAR TEMPLATE----
+    (async () => {
+      setData((await getGenerale("testcase")).list);
+    })();
     }
-  }
-
+  };
 
   const checkRichiesta = (result) => {
     if (result.error == null) {
       history.push("/editing/testsuite");
     } else if (result.error.code === "TEST-0012") {
-      setMessaggioErr("Il nome inserito per il TestSuite è già stato assegnato ad un altro TestSuite")
-      setErrore(true)
+      setMessaggioErr(
+        "Il nome inserito per il TestSuite è già stato assegnato ad un altro TestSuite"
+      );
+      setErrore(true);
     } else {
-      setMessaggioErr(result.error.description)
-      setErrore(true)
+      setMessaggioErr(result.error.description);
+      setErrore(true);
     }
   };
 
   const Invia = () => {
     if (functions.indexOf("testsuite.create") !== -1) {
-      (async () => {
-        checkRichiesta(await putGenerale('testsuite', { nome: nome, descrizione: descrizione, testCases: arrayIdTestCase }));
-      })();
+    (async () => {
+      checkRichiesta(
+        await putGenerale("testsuite", {
+          nome: nome,
+          descrizione: descrizione,
+          testCases: arrayIdTestCase,
+        })
+      );
+    })();
     }
-  }
+  };
 
   useEffect(() => {
     funzioneGetAll();
   }, []);
 
   const handleCloseErrore = () => {
-    setErrore(false)
-    setActiveStep(0)
-  }
+    setErrore(false);
+    setActiveStep(0);
+  };
   //-----------------------Data Columns------------------------------
 
   const columns = [
@@ -422,7 +431,6 @@ function EditingTestCreaTestSuite() {
 
   const [open, setOpen] = React.useState(false);
 
-
   //-----------------------SCRIPT STEPPER------------------------------
 
   const [activeStep, setActiveStep] = React.useState(0);
@@ -457,7 +465,6 @@ function EditingTestCreaTestSuite() {
   };
 
   useEffect(() => {
-
     if (activeStep === 0) {
       if (nome === "") {
         setNextDisabled(true);
@@ -665,11 +672,6 @@ function EditingTestCreaTestSuite() {
                       {activeStep === 0 ? "annulla" : "indietro"}
                     </Button>
                     <Button
-                      disabled={
-                        functions.indexOf("testsuite.create") === -1 ||
-                        nextDisabled ||
-                        (arrayIdTestCase.length === 0 && activeStep === 1)
-                      }
                       variant="contained"
                       color="primary"
                       onClick={handleNext}
@@ -682,6 +684,12 @@ function EditingTestCreaTestSuite() {
             </div>
           </div>
         </Paper>
+
+        {/*disabled={
+                        functions.indexOf("testsuite.create") === -1 ||
+                        nextDisabled ||
+                        (arrayIdTestCase.length === 0 && activeStep === 1)
+                      }
         {/* ------------------------MODALE ERROR-------------------- */}
         <Modal
           className={classes.modal}
@@ -730,7 +738,6 @@ function EditingTestCreaTestSuite() {
             </div>
           </Fade>
         </Modal>
-
       </main>
     </div>
   );

@@ -19,6 +19,9 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
 import loading from "../../src/assets/load.gif";
+import TextField from "@material-ui/core/TextField";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
@@ -29,10 +32,13 @@ const TestConclusiTable = () => {
   const [id, setId] = useState();
   const [idToRun, setIdToRun] = useState();
   const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [data, setData] = useState();
-  const [createdBy, setCreatedBy] = useState("");
+  const [loadedBy, setLoadedBy] = useState("");
+  const [stato, setStato] = useState("");
+  const [result, setResult] = useState("");
+  const [callId, setCallId] = useState("");
   const [appearTest, setAppearTest] = useState([]);
   const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
@@ -59,56 +65,6 @@ const TestConclusiTable = () => {
     {
       title: "Data Inizio",
       field: "startDate",
-    },
-    {
-      title: "Data Fine",
-      field: "endDate",
-    },
-    {
-      title: "Status",
-      field: "stato",
-    },
-    {
-      title: "Risultato",
-      field: "result",
-    },
-    {
-      title: "Call-Id",
-      field: "loadedBy",
-    },
-    // {
-    //   title: "Report",
-    //   field: "report",
-      // render: (rowData) => (
-      //   <Button
-      //     color="secondary"
-      //     onClick={() => handleOpenReport(rowData.id)}
-      //     //onClick={() => getTestCaseRetrieve(rowData.id)}
-      //     endIcon={<PieChartOutlinedIcon />}
-      //   >
-      //     Report
-      //   </Button>
-      // ),
-    //},
-  ];
-
-  const columnsReport = [
-    {
-      title: "Id",
-      field: "id",
-      defaultSort: "desc",
-    },
-    {
-      title: "Nome Test",
-      field: "nome",
-    },
-    {
-      title: "Loader",
-      field: "loadedBy",
-    },
-    {
-      title: "Data Caricamento",
-      field: "loadedWhen",
     },
     {
       title: "Data Fine",
@@ -164,7 +120,7 @@ const TestConclusiTable = () => {
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
-      padding: "3%",
+      padding: "5%",
       height: "fit-content",
       width: 800,
       position: "relative",
@@ -178,6 +134,7 @@ const TestConclusiTable = () => {
       width: 500,
       position: "relative",
     },
+
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
@@ -202,6 +159,9 @@ const TestConclusiTable = () => {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
+    },
+    divIntestazione: {
+      marginBottom: "2%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -246,6 +206,10 @@ const TestConclusiTable = () => {
       alignItems: "center",
       marginTop: "3%",
     },
+    contenutoModale: {
+      height: 370,
+      overflowX: "hidden",
+    },
     divInput: {
       display: "flex",
       flexDirection: "column",
@@ -261,6 +225,16 @@ const TestConclusiTable = () => {
       marginTop: "6%",
       justifyContent: "center",
     },
+    col: {
+      padding: "3%",
+      height: "106px",
+    },
+    row: {
+      width: "600px",
+    },
+    textField: {
+      width: "300px",
+    },
   }));
 
   const handleChange = () => {
@@ -272,7 +246,7 @@ const TestConclusiTable = () => {
   const [openRun, setOpenRun] = React.useState(false);
   const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
   const [openDelete, setOpenDelete] = useState(false);
-  const [openReport, setOpenReport] = useState(false);
+  const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -298,15 +272,6 @@ const TestConclusiTable = () => {
     setOpen(false);
   };
 
-  const handleOpenReport = () => {
-    setOpenReport(true);
-    setIdTestReport();
-  };
-
-  const handleCloseReport = () => {
-    setOpenReport(false);
-  };
-
   const handleCloseRun = () => {
     setOpenRun(false);
   };
@@ -325,6 +290,28 @@ const TestConclusiTable = () => {
     runTestCase(idToRun);
     handleCloseRun();
     //alert("Run test id :  "+ idToRun);
+  };
+
+  // --------------- MODALE VISUALIZZA REPORT ------------//
+
+  const openReport = (rowData) => {
+    handleOpenReport(rowData);
+    setOpenVisualizzaReport(true);
+  };
+
+  const handleOpenReport = (rowData) => {
+    setId(rowData.id);
+    setNome(rowData.nome);
+    setLoadedBy(rowData.loadedBy);
+    setStartDate(rowData.startDate);
+    setEndDate(rowData.endDate);
+    setStato(rowData.stato);
+    setResult(rowData.result);
+    setCallId(rowData.loadedBy);
+  };
+
+  const handleCloseReport = () => {
+    setOpenVisualizzaReport(false);
   };
 
   //------------ funzione apri modale
@@ -545,9 +532,9 @@ const TestConclusiTable = () => {
           {
             icon: () => <PieChartOutlinedIcon />,
             tooltip: "Mostra Report",
-            onClick: () => handleOpenReport(),
+            onClick: (event, rowData) => openReport(rowData),
             position: "row",
-            color: "red",
+            backgrounColor: "red",
           },
           // {
           //   icon: "play_circle_outlined",
@@ -878,13 +865,13 @@ const TestConclusiTable = () => {
         </Fade>
       </Modal>
 
-      {/* ----------------MODALE REPORT ------------------*/}
+      {/*------------------ MODALE VISUALIZZA REPORT-------------*/}
 
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={openReport}
+        open={openVisualizzaReport}
         onClose={handleCloseReport}
         closeAfterTransition
         BackdropComponent={Backdrop}
@@ -892,50 +879,133 @@ const TestConclusiTable = () => {
           timeout: 500,
         }}
       >
-        <Fade in={openReport}>
+        <Fade in={openVisualizzaReport}>
           <div>
             <Paper className={classes.paperModaleReport} elevation={1}>
               <div>
-                <MaterialTable
-                  style={{ boxShadow: "none" }}
-                  title="Report"
-                  data={dataReport}
-                  columns={columnsReport}
-                  actions={[
-                    {
-                      icon: () => (
-                        <div>
-                          <Button
-                            size="small"
-                            color="secondary"
-                            component={NavLink}
-                            activeClassName="button-green-active"
-                            exact
-                            to="/report/testcase"
-                          >
-                            Vai alla sezione report
-                          </Button>
-                        </div>
-                      ),
-                      tooltip: "Vai ai Report",
-                      // onClick: () => handleOpen(),
-                      isFreeAction: true,
-                    },
-                  ]}
-                  components={{
-                    Action: (props) => (
-                      <Button
-                        onClick={handleCloseReport}
-                        color="primary"
-                        variant="contained"
-                        style={{ textTransform: "none" }}
-                        size="small"
-                      >
-                        Chiudi
-                      </Button>
-                    ),
-                  }}
-                />
+                <ListItem>
+                  <Typography
+                    style={{ color: "#1665D8", alignItems: "center" }}
+                    variant="h4"
+                  >
+                    Visualizza Test Case <b>{nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Id"
+                      defaultValue={id}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Nome"
+                      defaultValue={nome}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Loader"
+                      defaultValue={loadedBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Call-Id"
+                      defaultValue={callId}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data Inizio"
+                      defaultValue={startDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data Fine"
+                      defaultValue={endDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Status"
+                      defaultValue={stato}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      defaultValue={result}
+                      label="Risultato"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <Button
+                    href="/report/testcase"
+                    className={classes.bottoneAnnulla}
+                  >
+                    Vai alla Sezione Report
+                  </Button>
+
+                  <ButtonClickedBlue
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseReport}
+                    size="medium"
+                    nome="Chiudi"
+                  />
+                </div>
               </div>
             </Paper>
           </div>

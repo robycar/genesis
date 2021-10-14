@@ -29,13 +29,17 @@ const columns = [
   {
     title: "Action",
     field: "action",
-    render: (rowData) => alert("vedi descrizione"),
   },
 ];
 
 function ChartReport() {
   const [data, setData] = useState([]);
   const [dataRecord, setDataRecord] = useState([]);
+
+  const handleChange = () => {
+    console.log("action");
+  };
+
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
     const bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -134,7 +138,7 @@ function ChartReport() {
   return (
     <>
       <div>
-        <MaterialTable
+        {/* <MaterialTable
           style={{ boxShadow: "none" }}
           title=" Total Test Case Conclusi"
           data={dataRecord}
@@ -154,7 +158,7 @@ function ChartReport() {
               icon: () => <FilterListIcon />,
               tooltip: "Filtro",
               isFreeAction: true,
-              // onClick: () => handleChange(),
+              onClick: () => handleChange(),
             },
           ]}
           localization={{
@@ -165,7 +169,7 @@ function ChartReport() {
               emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
             },
           }}
-        />
+        /> */}
         <Doughnut data={chart} />
       </div>
     </>

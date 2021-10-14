@@ -113,6 +113,13 @@ const TestSuiteCaricatiTable = () => {
       width: 500,
       position: "relative",
     },
+    info: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: "6%",
+      justifyContent: "center",
+    },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
@@ -138,6 +145,9 @@ const TestSuiteCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
+    },
+    divIntestazione: {
+      marginBottom: "2%",
     },
     paperModaleDelete: {
       backgroundColor: theme.palette.background.paper,

@@ -139,6 +139,9 @@ const TestRunningTable = () => {
       flexDirection: "row",
       alignItems: "center",
     },
+    divIntestazione: {
+      marginBottom: "2%",
+    },
     icon: {
       transform: "scale(1.8)",
       color: "#47B881",
@@ -243,7 +246,7 @@ const TestRunningTable = () => {
   const testCaseLoader = () => {
     loadTestCase(id);
     handleClose();
-    // getAllTestCase();
+    getAllTestCaseRunning();
   };
 
 
