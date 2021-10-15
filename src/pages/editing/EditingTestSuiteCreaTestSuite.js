@@ -346,11 +346,14 @@ function EditingTestCreaTestSuite() {
   }
 
   const funzioneGetAll = () => {
-    if (functions.indexOf("testsuite.create") !== -1 && functions.indexOf("test.view") !== -1) {
-    //----GET APPEAR TEMPLATE----
-    (async () => {
-      setData((await getGenerale("testcase")).list);
-    })();
+    if (
+      functions.indexOf("testsuite.create") !== -1 &&
+      functions.indexOf("test.view") !== -1
+    ) {
+      //----GET APPEAR TEMPLATE----
+      (async () => {
+        setData((await getGenerale("testcase")).list);
+      })();
     }
   };
 
@@ -370,15 +373,15 @@ function EditingTestCreaTestSuite() {
 
   const Invia = () => {
     if (functions.indexOf("testsuite.create") !== -1) {
-    (async () => {
-      checkRichiesta(
-        await putGenerale("testsuite", {
-          nome: nome,
-          descrizione: descrizione,
-          testCases: arrayIdTestCase,
-        })
-      );
-    })();
+      (async () => {
+        checkRichiesta(
+          await putGenerale("testsuite", {
+            nome: nome,
+            descrizione: descrizione,
+            testCases: arrayIdTestCase,
+          })
+        );
+      })();
     }
   };
 
@@ -614,23 +617,23 @@ function EditingTestCreaTestSuite() {
                       { value: data.length, label: "All" },
                     ],
                   }}
-                  actions={[
-                    // {
-                    //   icon: (dat) => (
-                    //     <a>
-                    //       <VisibilityIcon />
-                    //     </a>
-                    //   ),
-                    //   tooltip: "Visualizza Test Suite",
-                    //   position: "row",
-                    //   onClick: (event, rowData) => handleOpen(rowData),
-                    // },
-                  ]}
-                  localization={{
-                    header: {
-                      actions: "Azioni",
-                    },
-                  }}
+                  // actions={[
+                  //   {
+                  //     icon: (dat) => (
+                  //       <a>
+                  //         <VisibilityIcon />
+                  //       </a>
+                  //     ),
+                  //     tooltip: "Visualizza Test Suite",
+                  //     position: "row",
+                  //     onClick: (event, rowData) => handleOpen(rowData),
+                  //   },
+                  // ]}
+                  // localization={{
+                  //   header: {
+                  //     actions: "Azioni",
+                  //   },
+                  // }}
                 />
               </div>
               <Alert

@@ -68,15 +68,15 @@ const TotalTestCaseConclusi = () => {
       title: "Call-Id",
       field: "loadedBy",
     },
-    {
-      title: "Report",
-      field: "pathInstance",
-      render: () => (
-        <IconButton>
-          <PostAddOutlinedIcon onClick={(event) => alert("Show Report")} />
-        </IconButton>
-      ),
-    },
+    // {
+    //   title: "Report",
+    //   field: "pathInstance",
+    //   render: () => (
+    //     <IconButton>
+    //       <PostAddOutlinedIcon onClick={(event) => alert("Show Report")} />
+    //     </IconButton>
+    //   ),
+    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -201,6 +201,10 @@ const TotalTestCaseConclusi = () => {
   const [descrizione, setDescrizione] = useState("");
   const [idToRun, setIdToRun] = useState();
   const [nome, setNome] = useState("");
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [loadedBy, setLoadedBy] = useState("");
+  const [loadedWhen, setLoadedWhen] = useState("");
   const [creationDate, setCreationDate] = useState();
   const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
@@ -221,7 +225,7 @@ const TotalTestCaseConclusi = () => {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const [openGrafico, setOpenGrafico] = useState(false);
-
+  const [openReport, setOpenReport] = useState(false);
   const [prova, setProva] = useState([]);
 
   const setTestCaseAssociati = (testsuite) => {
@@ -279,12 +283,18 @@ const TotalTestCaseConclusi = () => {
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
+    setOpenReport(true);
+    setStartDate(rowData.startDate);
+    setEndDate(rowData.endDate);
+    setLoadedBy(rowData.loadedBy);
+    setLoadedWhen(rowData.loadedWhen);
     // setOpen(true);
-    // getTestSuiteById(rowData.id);
+    getTestCaseCompleteById(rowData.id);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setOpenReport(false);
   };
 
   const handleOpenGrafico = () => {
@@ -347,28 +357,25 @@ const TotalTestCaseConclusi = () => {
 
   //------------------------- GET TEST SUITE BY ID ------------------------------
 
-  // const getTestSuiteById = (id) => {
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+ //--------------- GET TEST CASE BY ID ------------------------
 
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
+ const getTestCaseCompleteById = () => {
+  var myHeaders = new Headers();
+  myHeaders.append("Authorization", bearer);
+  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   fetch(`/api/testsuite/` + id, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setTestSuite(result.testSuite);
-  //       setTestCaseAssociati(result.testSuite);
-  //       setOpen(true);
-  //       SetOpenTestCase(false);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
+  var requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  fetch(`/api/testcase/loaded/${id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
+};
 
   //-----------GET TEST SUITE COMPLETE----------------------
   // const getAllTestSuiteComplete = () => {
@@ -541,16 +548,16 @@ const TotalTestCaseConclusi = () => {
           //   onClick: () => handleOpenExport(),
           //   isFreeAction: true,
           // },
-          // {
-          //   icon: (dat) => (
-          //     <a>
-          //       <VisibilityIcon />
-          //     </a>
-          //   ),
-          //   tooltip: "Visualizza tutti i dati",
-          //   position: "row",
-          //   onClick: (event, rowData) => openVisualizza(rowData),
-          // },
+          {
+            icon: (dat) => (
+              <a>
+                <VisibilityIcon />
+              </a>
+            ),
+            tooltip: "Visualizza Test Case",
+            position: "row",
+            onClick: (event, rowData) => openVisualizza(rowData),
+          },
           // {
           //   icon: (dat) => (
           //     <a>
@@ -568,12 +575,12 @@ const TotalTestCaseConclusi = () => {
           },
         }}
       />
-      {/*------------ MODALE VISUALIZZA TEST CASE ASSOCIATI --------------------*/}
+      {/*------------ MODALE VISUALIZZA TEST CASE  --------------------*/}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={open}
+        open={openReport}
         onClose={handleClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
@@ -581,13 +588,13 @@ const TotalTestCaseConclusi = () => {
           timeout: 500,
         }}
       >
-        <Fade in={open}>
+        <Fade in={openReport}>
           <div>
             <Paper className={classes.paperModale} elevation={1}>
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Test Suite <b>{nome}</b>
+                    Test Case <b>{nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -598,14 +605,11 @@ const TotalTestCaseConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={id !== "" ? false : true}
                       onChange={(e) => setId(e.target.value)}
                       label="Id"
                       defaultValue={id}
-                      // helperText={nome !== "" ? "" : "Lo status è richiesto"}
                       InputProps={{
                         readOnly: true,
-                        // readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
@@ -624,32 +628,18 @@ const TotalTestCaseConclusi = () => {
                   </Col>
                 </Row>
                 <Row>
-                  {/* <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={version !== "" ? false : true}
-                      onChange={(e) => setVersion(e.target.value)}
-                      label="Versione"
-                      defaultValue={version}
-                      helperText={version !== "" ? "" : "Inserire versione"}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col> */}
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={testCases !== "" ? false : true}
-                      // onChange={(e) => setTestCases(e.target.value)}
-                      label="Numero Test Case"
-                      defaultValue={arrayTestCase?.length}
-                      helperText={testCases !== "" ? "" : "Test Case"}
+                      onChange={(e) => setVersion(e.target.value)}
+                      label="Versione"
+                      defaultValue={version}
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
+                 
                 </Row>
                 <Row>
                   <Col className={classes.col}>
@@ -657,56 +647,10 @@ const TotalTestCaseConclusi = () => {
                       multiline
                       rows={2}
                       className={classes.textArea}
-                      error={descrizione !== "" ? false : true}
                       onChange={(e) => setDescrizione(e.target.value)}
                       label="Descrizione"
                       defaultValue={descrizione}
-                      helperText={
-                        descrizione !== "" ? "" : "Descrizione richiesta"
-                      }
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "2%",
-                  }}
-                >
-                  <ButtonClickedGreen
-                    size="medium"
-                    nome={"Vedi test Case associati"}
-                    onClick={handleOpenTestCase}
-                  />
-                </div>
-
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={createdBy !== "" ? false : true}
-                      onChange={(e) => setCreatedBy(e.target.value)}
-                      label="Creato da"
-                      defaultValue={createdBy}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={modifiedBy !== "" ? false : true}
-                      onChange={(e) => setModifiedBy(e.target.value)}
-                      label="Modificato da"
-                      defaultValue={modifiedBy}
+                      
                       InputProps={{
                         readOnly: true,
                       }}
@@ -718,10 +662,9 @@ const TotalTestCaseConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={modifiedDate !== "" ? false : true}
-                      onChange={(e) => setModifiedDate(e.target.value)}
-                      label="Data Modifica "
-                      defaultValue={modifiedDate}
+                      onChange={(e) => setLoadedBy(e.target.value)}
+                      label="Caricato da"
+                      defaultValue={loadedBy}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -730,10 +673,34 @@ const TotalTestCaseConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={creationDate !== "" ? false : true}
-                      onChange={(e) => setCreationDate(e.target.value)}
-                      label="Data Creazione "
-                      defaultValue={creationDate}
+                      onChange={(e) => setLoadedWhen(e.target.value)}
+                      label="Data caricamento"
+                      defaultValue={loadedWhen}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      label="Data Fine "
+                      defaultValue={endDate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      label="Data Inizio "
+                      defaultValue={startDate}
                       InputProps={{
                         readOnly: true,
                       }}
