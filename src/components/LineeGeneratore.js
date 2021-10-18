@@ -26,9 +26,9 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
+import { tableIcons } from "../components/Icons";
 
 function LineeGeneratore() {
-
   var functions = localStorage.getItem("funzioni").split(",");
 
   const [data, setData] = useState([]);
@@ -48,14 +48,17 @@ function LineeGeneratore() {
   const [pathCSV, setPathCSV] = useState("");
   const [caricamento, setCaricamento] = useState(false);
   const [version, setVersion] = useState(0);
-  const [scrittaTabella, setScrittaTabella] = useState("")
+  const [scrittaTabella, setScrittaTabella] = useState("");
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
 
   //-------------------------LINEE GENERATORE API----------------
 
   const funzioneGetAll = () => {
-    if (functions.indexOf("lineagen.view") !== -1 && functions.indexOf("linea.view") !== -1) {
+    if (
+      functions.indexOf("lineagen.view") !== -1 &&
+      functions.indexOf("linea.view") !== -1
+    ) {
       //----GET ALL LINEE----
       (async () => {
         setCaricamento(true);
@@ -68,10 +71,11 @@ function LineeGeneratore() {
         setAppearLine((await getGenerale("typeLinea")).list);
       })();
 
-      setScrittaTabella("Non è presente alcun dato da mostrare")
-
+      setScrittaTabella("Non è presente alcun dato da mostrare");
     } else {
-      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+      setScrittaTabella(
+        "Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella"
+      );
     }
   };
 
@@ -191,9 +195,9 @@ function LineeGeneratore() {
           } else {
             setWarning(
               "Codice errore: " +
-              result.error.code +
-              " Descrizione: " +
-              result.code.description
+                result.error.code +
+                " Descrizione: " +
+                result.code.description
             );
           }
         } else {
@@ -205,7 +209,6 @@ function LineeGeneratore() {
       .catch((error) => console.log("error", error));
     handleCloseDelete();
   };
-
 
   //------------ funzione apri modale
 
@@ -223,7 +226,6 @@ function LineeGeneratore() {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -235,11 +237,9 @@ function LineeGeneratore() {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginLeft: "2%",
       marginRight: "2%",
@@ -266,8 +266,6 @@ function LineeGeneratore() {
       alignItems: "center",
     },
     iconModaleError: {
-      // width: "15%",
-      // height: "15%",
       marginRight: "4%",
       transform: "scale(1.9)",
       color: "#ef5350",
@@ -288,7 +286,6 @@ function LineeGeneratore() {
       boxShadow: theme.shadows[5],
       padding: "4%",
       width: "fit-content",
-      // height: "80%",
     },
     paperModaleDelete: {
       backgroundColor: theme.palette.background.paper,
@@ -325,7 +322,6 @@ function LineeGeneratore() {
     bottone: {
       marginLeft: "55px",
       marginTop: "5%",
-      // marginBottom: "2%",
     },
     bottoneAnnulla: {
       width: "128px",
@@ -334,12 +330,9 @@ function LineeGeneratore() {
     separatoreIp: {
       display: "flex",
       alignItems: "center",
-      // marginRight: "2%",
-      // marginLeft: "2%",
-      // marginBottom: "2%",
+
       fontWeight: "600px",
       lineHeigth: "2%",
-      //fontSize: "2px",
     },
     textFieldIp: {
       width: "110px",
@@ -361,6 +354,7 @@ function LineeGeneratore() {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Total Lines"
         data={data}
@@ -384,7 +378,10 @@ function LineeGeneratore() {
                 exact
                 to="/editing/linee/crealineageneratore"
                 startIcon={<AddIcon />}
-                disabled={ functions.indexOf("lineagen.create") === -1 || functions.indexOf("linea.view") === -1}
+                disabled={
+                  functions.indexOf("lineagen.create") === -1 ||
+                  functions.indexOf("linea.view") === -1
+                }
               >
                 LINEA GENERATORE{" "}
               </Button>
@@ -406,7 +403,7 @@ function LineeGeneratore() {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
-            disabled: functions.indexOf("lineagen.delete") === -1
+            disabled: functions.indexOf("lineagen.delete") === -1,
           },
         ]}
         localization={{
@@ -606,27 +603,26 @@ function LineeGeneratore() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 {ip1 <= 255 &&
-                  ip1 !== "" &&
-                  ip1.length < 4 &&
-                  ip2 <= 255 &&
-                  ip2 !== "" &&
-                  ip2.length < 4 &&
-                  ip3 <= 255 &&
-                  ip3 !== "" &&
-                  ip3.length < 4 &&
-                  ip4 <= 255 &&
-                  ip4 !== "" &&
-                  ip4.length < 4 &&
-                  password !== "" &&
-                  numero !== "" &&
-                  porta !== "" &&
-                  porta > 1000 &&
-                  porta < 100000 ? (
+                ip1 !== "" &&
+                ip1.length < 4 &&
+                ip2 <= 255 &&
+                ip2 !== "" &&
+                ip2.length < 4 &&
+                ip3 <= 255 &&
+                ip3 !== "" &&
+                ip3.length < 4 &&
+                ip4 <= 255 &&
+                ip4 !== "" &&
+                ip4.length < 4 &&
+                password !== "" &&
+                numero !== "" &&
+                porta !== "" &&
+                porta > 1000 &&
+                porta < 100000 ? (
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"
                     onClick={handleClose2}
-                  // disabled={handleBtn}
                   />
                 ) : (
                   <ButtonClickedGreen

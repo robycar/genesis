@@ -5,31 +5,23 @@ import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import ChartReport from "../components/ChartReport";
 import TextField from "@material-ui/core/TextField";
-import ButtonClickedBlue from "./ButtonClickedBlue";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import PieChartOutlinedIcon from "@mui/icons-material/PieChartOutlined";
-import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
-import BackupIcon from "@material-ui/icons/Backup";
-import FormControl from "@material-ui/core/FormControl";
 import Form from "react-bootstrap/Form";
-import Select from "@material-ui/core/Select";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
-import loading from "../../src/assets/load.gif";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import { IconButton } from "@material-ui/core";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import { Doughnut } from "react-chartjs-2";
-
+import { tableIcons } from "../components/Icons";
+import WhireShark from "../assets/logoShark2.png";
+import "../styles/App.css";
 
 const TestSuiteComplete = () => {
   const columns = [
@@ -39,7 +31,6 @@ const TestSuiteComplete = () => {
       defaultSort: "desc",
       headerStyle: {
         backgroundColor: "beige",
-        //color: "#FFF"
       },
     },
     {
@@ -71,13 +62,9 @@ const TestSuiteComplete = () => {
       field: "loadedBy",
     },
     {
-      title: "Report",
+      title: "Trace",
       field: "pathInstance",
-      render: () => (
-        <IconButton>
-          <PostAddOutlinedIcon onClick={(event) => alert("Show Report")} />
-        </IconButton>
-      ),
+      render: () => <img className={classes.img} src={WhireShark} />,
     },
   ];
 
@@ -96,7 +83,7 @@ const TestSuiteComplete = () => {
       title: "Descrizione",
       field: "descrizione",
     },
-      {
+    {
       title: "Versione",
       field: "version",
       hidden: true,
@@ -147,9 +134,6 @@ const TestSuiteComplete = () => {
     },
   ];
 
-
- 
-
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
@@ -193,7 +177,7 @@ const TestSuiteComplete = () => {
       height: 370,
       // width: 500,
       overflowX: "hidden",
-      padding:10,
+      padding: 10,
     },
     divTextarea: {
       marginTop: "20px",
@@ -259,20 +243,17 @@ const TestSuiteComplete = () => {
       height: 370,
       overflowX: "hidden",
     },
+    img: {
+      width: "30px",
+      height: "30px",
+      borderRadius: "15px",
+    },
   }));
 
-  const handleChange = () => {
-    setFilter(!filter);
-  };
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [openSchedula, setOpenSchedula] = React.useState(false);
-  const [openRun, setOpenRun] = React.useState(false);
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
-  const [filter, setFilter] = useState(false);
-  const [id, setId] = useState();
+  const [id, setId] = useState(0);
   const [descrizione, setDescrizione] = useState("");
-  const [idToRun, setIdToRun] = useState();
   const [nome, setNome] = useState("");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -284,43 +265,28 @@ const TestSuiteComplete = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [version, setVersion] = useState();
   const [openTestCase, SetOpenTestCase] = React.useState(false);
-  const arrayTestCaseAssociati = testSuite?.testCases; 
+  const arrayTestCaseAssociati = testSuite?.testCases;
 
-  const arrayTestCase = testSuite?.testCases;
-  const [appearTest, setAppearTest] = useState([]);
-  const [openExport, setOpenExport] = useState(false);
-  const [dataLoad, setTestCaseLoad] = useState(null);
-  const [dataRun, setIdTestCaseRun] = useState(null);
-  const [dataCase, setDataCase] = useState();
-  const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const [openGrafico, setOpenGrafico] = useState(false);
   const [dataTestCases, setDataTestCases] = useState();
   const [testCaseAssociati, setTestCaseAssociati] = useState([]);
 
+  const [testCase, setTestCase] = useState({});
+  const [openTestCaseSel, setOpenTestCaseSel] = useState(false);
+
+  const [openChiamato, setOpenChiamato] = React.useState(false);
+  const [openChiamanti, setOpenChiamanti] = React.useState(false);
 
   const [prova, setProva] = useState([]);
 
   const setTestCaseAssociatiArray = (testsuite) => {
     let x = [];
 
-    //console.log("--------"+testsuite)
     for (let i = 0; i < testsuite.testCases.length; i++) {
       x.push(testsuite.testCases[i].id);
     }
     setProva(x);
-  };
-
-  let y = [...prova];
-
-  const modificaTestSelezionati = (testcase) => {
-    if (prova.includes(testcase.id)) {
-      y.splice(y.indexOf(testcase.id), 1);
-    } else {
-      y.push(testcase.id);
-    }
-    setProva(y);
-    // aggiornaTestCaseAssociati(x);
   };
 
   //---------------------------------------------------------------------------------------------------------------------------------
@@ -332,18 +298,10 @@ const TestSuiteComplete = () => {
     arrayIdTestCase?.push(element);
   }
 
-  // console.log(selectedRows, " Righe selezionati");
-  //console.log(arrayTestCase, " Array di test case");
-
   var arrayId = [];
   arrayTestCaseAssociati?.forEach(function (obj) {
     arrayId?.push(obj.id);
   });
-
-  const handleOpenExport = () => {
-    setOpenExport(true);
-    getAllTestCaseModal();
-  };
 
   const handleOpen = (rowData) => {
     setOpen(true);
@@ -351,12 +309,10 @@ const TestSuiteComplete = () => {
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
-    // setTestCases([...testCases, rowData.testCases[0].nome]);
     setStartDate(rowData.startDate);
     setEndDate(rowData.endDate);
     setLoadedBy(rowData.loadedBy);
     setLoadedWhen(rowData.loadedWhen);
-    // setOpen(true);
     getTestSuiteCompletedById(rowData.id);
   };
 
@@ -364,48 +320,32 @@ const TestSuiteComplete = () => {
     setOpen(false);
   };
 
-  const handleOpenSchedula = () => {
-    setOpenSchedula(true);
-    setOpen(false);
-  };
-
-  const handleCloseSchedula = () => {
-    setOpenSchedula(false);
-  };
-
-  const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_);
-    setOpenRun(true);
-    setOpen(false);
-  };
-
-  const handleCloseRun = () => {
-    setOpenRun(false);
-  };
-
-  const handleChangeData = (newValue) => {
-    setValue(newValue);
-  };
-
-  // const testCaseLoader = () => {
-  //   loadTestCase(id);
-  //   handleClose();
-  //   getAllTestCase();
-  // };
-
-  // const runCaseLoder = () => {
-  //   runTestCase(idToRun);
-  //   handleCloseRun();
-  //   //alert("Run test id :  "+ idToRun);
-  // };
-
   const openVisualizza = (rowData) => {
-    //getTestSuiteById();
     handleOpen(rowData);
   };
 
-  const handleOpenGrafico = () => {
-    setOpenGrafico(true);
+  const openVisualizzaTestcaseSel = (rowData) => {
+    getTestCaseById(rowData.testCase.id);
+  };
+  const handleCloseTestCaseSel = () => {
+    setOpenTestCaseSel(false);
+  };
+  const handleOpenChiamato = () => {
+    setOpenChiamato(true);
+  };
+  const handleOpenChiamanti = () => {
+    setOpenChiamanti(true);
+  };
+
+  const handleCloseChiamato = () => {
+    setOpenChiamato(false);
+  };
+  const handleCloseChiamanti = () => {
+    setOpenChiamanti(false);
+  };
+  const handleOpenGrafico = (rowData) => {
+    setId(rowData.id);
+    getTestSuiteCompleteById(rowData.id, true);
   };
 
   const handleCloseGrafico = () => {
@@ -476,51 +416,7 @@ const TestSuiteComplete = () => {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
         setData(result.testSuiteList);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  //-------------   GET TEST SUITE BY ID -------------
-
-  // const getTestSuiteById = () => {
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`/api/testsuite/${id}`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => console.log(result))
-  //     .catch((error) => console.log("error", error));
-  // };
-
-  /*--------------- GET TEST CASE -------------------*/
-
-  const getAllTestCaseModal = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setAppearTest(result.list);
-        setDataCase(result.list);
       })
       .catch((error) => console.log("error", error));
   };
@@ -548,121 +444,109 @@ const TestSuiteComplete = () => {
       .catch((error) => console.log("error", error));
   };
 
-  //-----------GET TEST SUITE----------------------
-  // const getAllTestSuite = () => {
-  //   setCaricamento(true);
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
+  const getTestCaseById = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
 
-  //   fetch(`/api/testsuite`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setData(result.list);
-  //       setCaricamento(false);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
+    fetch(`/api/testcase/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTestCase(result.testCase);
+        setOpenTestCaseSel(true);
+      })
+      .catch((error) => console.log("error", error));
+  };
+  //------------------------- GET TEST SUITE BY ID ------------------------------
+
+  const getTestSuiteCompleteById = (id, open) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testsuite/loaded/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTestSuite(result.testSuite);
+        setTestCaseAssociati(result.testSuite.testCases);
+        setTestCaseAssociatiArray(result.testSuite);
+        cicloFor(result.testSuite.testCases);
+        setOpenGrafico(open);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   useEffect(() => {
     getAllTestSuiteComplete();
-    //getAllTestSuite();
     getAllTestCase();
-    //getTestSuiteCompletedById();
   }, []);
 
-  const tableIcons = {
-    Export: React.forwardRef((props, ref) => (
-      <Button size="small" variant="contained" color="secondary">
-        EXPORT
-      </Button>
-    )),
+  /*------ Funzione calcolo percentuali -------*/
+
+  const [ok, setOk] = useState(0);
+  const [ko, setKo] = useState(0);
+
+  function cicloFor(data) {
+    var appOk = 0;
+    var appKo = 0;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].result === "KO") {
+        appKo += 1;
+      } else {
+        appOk += 1;
+      }
+    }
+    setOk(appOk);
+    setKo(appKo);
+  }
+
+  const chart = {
+    labels: ["KO", "OK"],
+    datasets: [
+      {
+        label: "# of Test Case",
+        data: [ko, ok],
+        backgroundColor: ["red", "green"],
+      },
+    ],
+    options: {
+      maintainAspectRatio: false,
+    },
   };
-
-
-   /*------ Funzione calcolo percentuali -------*/
-
-   const [ok, setOk] = useState(0);
-   const [ko, setKo] = useState(0);
- 
-   function cicloFor(data) {
-     console.log(data);
-     var appOk = 0;
-     var appKo = 0;
-     for (let i = 0; i < data.length; i++) {
-       if (data[i].result === "KO") {
-         appKo += 1;
-       } else {
-         appOk += 1;
-       }
-     }
-     setOk(appOk);
-     setKo(appKo);
-   }
- 
-   const chart = {
-     labels: ["KO", "OK"],
-     datasets: [
-       {
-         label: "# of Test Case",
-         data: [ko, ok],
-         backgroundColor: [
-           "red",
-           "green",
-           // "rgba(75, 192, 192)",
-           // "rgba(153, 102, 255)",
-         ],
-       },
-     ],
-     options: {
-       maintainAspectRatio: false,
-     },
-   };
 
   return (
     <div>
       <MaterialTable
         icons={tableIcons}
         style={{ boxShadow: "none" }}
-        title="Ultimi 30 Test Suite Completi"
+        title="Ultimi 30 Test Suite Completati"
         data={data}
         columns={columns}
         options={{
-          //tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "center",
           exportButton: true,
-
-          // selection: true,
-          // columnsButton: true,
-          // filtering: true,
           headerStyle: {
             backgroundColor: "beige",
-            //color: '#FFF'
           },
         }}
         actions={[
-          // {
-          //   icon: () => (
-          //     <div>
-          //       <Button size="small" variant="contained" color="secondary">
-          //         EXPORT
-          //       </Button>
-          //     </div>
-          //   ),
-          //   tooltip: "Export Test Suite Table",
-          //   onClick: () => handleOpenExport(),
-          //   isFreeAction: true,
-          // },
           {
             icon: (dat) => (
               <a>
@@ -810,7 +694,7 @@ const TestSuiteComplete = () => {
                 </div>
 
                 <Row>
-                <Col className={classes.col}>
+                  <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       error={loadedBy !== "" ? false : true}
@@ -837,7 +721,7 @@ const TestSuiteComplete = () => {
                 </Row>
 
                 <Row>
-                <Col className={classes.col}>
+                  <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
                       error={endDate !== "" ? false : true}
@@ -909,6 +793,7 @@ const TestSuiteComplete = () => {
               <Form className={classes.contenutoModale}>
                 <>
                   <MaterialTable
+                    icons={tableIcons}
                     style={{ boxShadow: "none" }}
                     title="Test Case"
                     data={arrayTestCaseAssociati}
@@ -922,25 +807,7 @@ const TestSuiteComplete = () => {
                       searchFieldVariant: "outlined",
                       filtering: true,
                       searchFieldAlignment: "left",
-                      // pageSizeOptions: [
-                      //   5,
-                      //   10,
-                      //   20,
-                      //   { value: data.length, label: "All" },
-                      // ],
                     }}
-                    // actions={[
-                    //   {
-                    //     icon: (dat) => (
-                    //       <a>
-                    //         <VisibilityIcon />
-                    //       </a>
-                    //     ),
-                    //     tooltip: "Visualizza tutti i dati",
-                    //     position: "row",
-                    //     onClick: (event, rowData) => openVisualizza(rowData),
-                    //   },
-                    // ]}
                     localization={{
                       header: {
                         actions: "Azioni",
@@ -998,12 +865,9 @@ const TestSuiteComplete = () => {
                 <Divider className={classes.divider} />
               </div>
 
-              {/* <Form className={classes.contenutoModale}>
-                <div className={classes.chart}><ChartReport /></div>
-              </Form> */}
-
               <div className={classes.contenutoModaleGrafico}>
                 <MaterialTable
+                  icons={tableIcons}
                   style={{ boxShadow: "none" }}
                   title="Test Case"
                   data={testCaseAssociati}
@@ -1017,25 +881,20 @@ const TestSuiteComplete = () => {
                     searchFieldVariant: "outlined",
                     filtering: true,
                     searchFieldAlignment: "left",
-                    // pageSizeOptions: [
-                    //   5,
-                    //   10,
-                    //   20,
-                    //   { value: data.length, label: "All" },
-                    // ],
                   }}
-                  // actions={[
-                  //   {
-                  //     icon: (dat) => (
-                  //       <a>
-                  //         <VisibilityIcon />
-                  //       </a>
-                  //     ),
-                  //     tooltip: "Visualizza tutti i dati",
-                  //     position: "row",
-                  //     onClick: (event, rowData) => openVisualizza(rowData),
-                  //   },
-                  // ]}
+                  actions={[
+                    {
+                      icon: (dat) => (
+                        <a>
+                          <VisibilityIcon />
+                        </a>
+                      ),
+                      tooltip: "Visualizza tutti i dati",
+                      position: "row",
+                      onClick: (event, rowData) =>
+                        openVisualizzaTestcaseSel(rowData),
+                    },
+                  ]}
                   localization={{
                     header: {
                       actions: "Azioni",
@@ -1068,6 +927,307 @@ const TestSuiteComplete = () => {
                     {" "}
                     Chiudi
                   </Button>
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/*------------------ MODALE TestCaseSel -------------*/}
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openTestCaseSel}
+        onClose={handleCloseTestCaseSel}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openTestCaseSel}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    TestCase <b>{testCase.nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Nome"
+                      defaultValue={testCase.nome}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Template"
+                      defaultValue={testCase?.template?.nome}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      multiline
+                      rows={2}
+                      className={classes.textArea}
+                      label="Descrizione"
+                      defaultValue={testCase.descrizione}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    padding: "2%",
+                  }}
+                >
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Vedi Chiamato"
+                    onClick={handleOpenChiamato}
+                  />
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Vedi Chiamante/i"
+                    onClick={handleOpenChiamanti}
+                  />
+                </div>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Creato Da"
+                      value={testCase.createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data di creazione"
+                      value={testCase?.creationDate
+                        ?.replace("T", " / ")
+                        ?.replace(".000+00:00", "")}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Modificato da"
+                      value={testCase.modifiedBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data di Modifica"
+                      value={testCase?.modifiedDate
+                        ?.replace("T", " / ")
+                        ?.replace(".000+00:00", "")}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseTestCaseSel}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE CHIAMATO--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamato}
+        onClose={handleCloseChiamato}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamato}>
+          <div>
+            <Paper className={classes.paperModale}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Chiamato <b>{testCase.nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Linea"
+                      value={testCase?.chiamato?.linea?.campiConcatenati}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Outboundproxy"
+                      value={testCase?.chiamato?.proxy?.campiConcatenati}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamato}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+      {/* ------------------------MODALE CHIAMANTi--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamanti}
+        onClose={handleCloseChiamanti}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamanti}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Chiamante/i <b>{testCase.nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                {testCase?.chiamanti?.map((chiamante, index) => (
+                  <>
+                    <Typography className={classes.intestazione} variant="h6">
+                      Chiamante <b>{index + 1}</b>
+                    </Typography>
+                    <Row>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          label="Linea "
+                          value={
+                            testCase?.chiamanti[index]?.linea?.campiConcatenati
+                          }
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        />
+                      </Col>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          label="Outboundproxy"
+                          value={
+                            testCase?.chiamanti[index]?.proxy?.campiConcatenati
+                          }
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        />
+                      </Col>
+                    </Row>
+                  </>
+                ))}
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamanti}
+                    size="medium"
+                    nome="Indietro"
+                  />
                 </div>
               </div>
             </Paper>

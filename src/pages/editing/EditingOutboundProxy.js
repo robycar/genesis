@@ -21,6 +21,7 @@ import "../../styles/App.css";
 import LanguageIcon from "@material-ui/icons/Language";
 import { ButtonEditing } from "../../components/ButtonBarraNavigazione";
 
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -117,7 +118,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
     padding: "2%",
-    // marginTop: "2%",
   },
   divider: {
     width: "90%",
@@ -150,7 +150,6 @@ function EditingOutboundProxy() {
         }}
         open={open}
       >
-        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -163,7 +162,6 @@ function EditingOutboundProxy() {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="xl" className={classes.container}>
-
           <div className={classes.containerNavbarItem}>
             <NavbarItemEdit fontSize="large" />
           </div>

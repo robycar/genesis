@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -7,39 +7,19 @@ import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Navbar from "../../components/Navbar";
 import NavbarItemLaunch from "../../components/NavbarItemLaunch";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import SelectAutocompleteTestCase from "../../components/SelectAutocompleteTestCase";
-import SelectAutocompleteTestSuite from "../../components/SelectAutocompleteTestSuite";
-import accessControl from "../../service/url.js";
-
-import Grid from "@material-ui/core/Grid";
-import Orders from "../../components/Orders";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
-import NavbarItem from "../../components/NavbarItem";
-import TestCaseTableNew from "../../components/TestCaseTableNew";
-
-import Form from "react-bootstrap/Form";
-import FormControl from "@material-ui/core/FormControl";
-import { MenuItem } from "@material-ui/core";
-import Select from "@material-ui/core/Select";
-
-import LaunchingTestCaseCard from "../launching/LaunchingTestCaseCard";
-
 import LaunTestCaseTable from "../launching/LaunchingTestCaseTable";
-import acccessControl from "../../service/url";
 
 const drawerWidth = 240;
 
@@ -48,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24,
   },
   toolbarIcon: {
     display: "flex",
@@ -131,7 +111,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-around",
     padding: "20px",
-    // backgroundColor: "red",
     width: "100%",
   },
   paperTest: {
@@ -175,7 +154,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "flex-end",
     marginTop: "15px",
-    // marginLeft: "62px",
   },
   buttonNotClickedGreen: {
     backgroundColor: "white",
@@ -233,157 +211,12 @@ const useStyles = makeStyles((theme) => ({
 let bearer = `Bearer ${localStorage.getItem("token")}`;
 
 function LaunchingTestCase() {
-  const [testSuites, setTestSuites] = useState([]);
-  const [testCases, setTestCases] = useState([]);
-  const [appearTest, setAppearTest] = useState([]);
-  const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-
-  //DATA FOR LAUNCH TEST AND LOAD
-  const [id, setId] = useState();
-  const [idToRun, setIdToRun] = useState();
-  const [data, setData] = useState();
-  const [dataLoad, setTestCaseLoad] = useState(null);
-  const [dataRun, setIdTestCaseRun] = useState(null);
-  const [dataCase, setDataCase] = useState();
-
-  const testCaseLoader = () => {
-    loadTestCase(id);
-  };
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  const hadleLoadData = (rowDataaa) => {
-    runCaseLoder(rowDataaa.id);
-  };
-
-  const runCaseLoder = () => {
-    runTestCase(idToRun);
-  };
-
-  useEffect(() => {});
-
-  const loadTestSuite = () => {
-    if (testSuites.length > 0) {
-      return;
-    }
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", accessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testsuite`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setTestSuites(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  const loadTestCases = (id) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", accessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase/${id}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setTestCases(result.testSuite.testCases);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  /*--------------- GET TEST CASE -------------------*/
-
-  const getAllTestCaseModal = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setAppearTest(result.list);
-        setDataCase(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  /*--------------- LOAD TEST CASE -------------------*/
-
-  const loadTestCase = (id) => {
-    var urlLoad = `/api/testcase/load/${id}`;
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setTestCaseLoad(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  const runTestCase = (idRun) => {
-    var urlLoad = `/api/testcase/runloaded/${idRun}`;
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setIdTestCaseRun(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  useEffect(() => {
-    getAllTestCaseModal();
-  }, []);
+   const classes = useStyles();
 
   return (
     <div className={classes.root}>
@@ -420,7 +253,6 @@ function LaunchingTestCase() {
           </div>
 
           <div className={classes.bottonTest}>
-            {/* <NavLink exact to="/dashboard/testcase"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -430,9 +262,7 @@ function LaunchingTestCase() {
             >
               Test Case
             </Button>
-            {/* </NavLink> */}
 
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -442,7 +272,6 @@ function LaunchingTestCase() {
             >
               Test Suite
             </Button>
-            {/* </NavLink> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -468,23 +297,6 @@ function LaunchingTestCase() {
               </Paper>
               <Paper className={classes.paperTest}>
                 <div className={classes.divSelectBar}>
-                  {/* display post from the API 
-                  {appearTest && (
-                    <div className="">
-
-                      {/* loop over the posts 
-                      {appearTest.map((testCase, index) => (
-                        <div key={index}>
-                          <h2></h2>
-                          <LaunchingTestCaseCard nome={testCase.nome}
-                            id={testCase.id}
-                            desc={testCase.descrizione}
-                            createdBy={testCase.createdBy} />
-                        </div>
-                      ))}
-                    </div>
-
-                  )}*/}
                   <LaunTestCaseTable />
                 </div>
               </Paper>

@@ -7,7 +7,6 @@ import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import Button from "@material-ui/core/Button";
 import { Divider } from "@material-ui/core";
@@ -153,7 +152,6 @@ export default function TestCaseCard(props) {
         fetch(urlLoad, requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                console.log(result);
                 setTestCaseLoad(result.list);
             })
             .catch((error) => console.log("error", error));
@@ -178,7 +176,6 @@ export default function TestCaseCard(props) {
         fetch(urlLoad, requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                console.log(result);
                 setIdTestCaseRun(result.list);
             })
             .catch((error) => console.log("error", error));

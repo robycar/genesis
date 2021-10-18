@@ -22,7 +22,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../service/api";
+import {
+  getGenerale,
+  getByIdGenerale,
+  postGenerale,
+  deleteGenerale,
+} from "../service/api";
+import { tableIcons } from "../components/Icons";
 
 function TestGeneratoreTableNew() {
   var functions = localStorage.getItem("funzioni").split(",");
@@ -38,7 +44,6 @@ function TestGeneratoreTableNew() {
   const [modifiedBy, setModifiedBy] = useState("");
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
-
   const [lineaChiamato, setLineaChiamato] = useState(0);
   const [lineaChiamante, setLineaChiamante] = useState(0);
   const [OBPChiamato, setOBPChiamato] = useState(0);
@@ -46,104 +51,121 @@ function TestGeneratoreTableNew() {
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
-  const [scrittaTabella, setScrittaTabella] = useState("")
+  const [scrittaTabella, setScrittaTabella] = useState("");
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
   const funzioneGetAll = () => {
-    if (functions.indexOf("testgen.view") !== -1 && functions.indexOf("obp.view") !== -1 && functions.indexOf("lineagen.view") !== -1) {
+    if (
+      functions.indexOf("testgen.view") !== -1 &&
+      functions.indexOf("obp.view") !== -1 &&
+      functions.indexOf("lineagen.view") !== -1
+    ) {
       //----GET ALL USERS----
       (async () => {
-        setCaricamento(true)
-        setData((await getGenerale('testgen')).list);
-        setCaricamento(false)
+        setCaricamento(true);
+        setData((await getGenerale("testgen")).list);
+        setCaricamento(false);
       })();
 
       //-----GET APPEAR OBP-----
       (async () => {
-        setAppearOBP((await getGenerale('obp')).list);
+        setAppearOBP((await getGenerale("obp")).list);
       })();
 
       //-----GET APPEAR LINEA-----
       (async () => {
-        setAppearLine((await getGenerale('lineageneratore')).list);
+        setAppearLine((await getGenerale("lineageneratore")).list);
       })();
 
-      setScrittaTabella("Non è presente alcun dato da mostrare")
-
+      setScrittaTabella("Non è presente alcun dato da mostrare");
     } else {
-      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+      setScrittaTabella(
+        "Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella"
+      );
     }
-  }
+  };
 
   const funzioneGetTestgenById = (id) => {
-    if (functions.indexOf("testgen.view") !== -1){
-    (async () => {
-      setAllVariables((await getByIdGenerale('testgen', id)).testGeneratore);
-      funzioneGetAll();
-    })();
-  }
-  }
+    if (functions.indexOf("testgen.view") !== -1) {
+      (async () => {
+        setAllVariables((await getByIdGenerale("testgen", id)).testGeneratore);
+        funzioneGetAll();
+      })();
+    }
+  };
 
   const funzioneAggiornaChiamato = () => {
-    if (functions.indexOf("testgen.edit") !== -1){
-    //----AGGIORNA CHIAMATO----
-    (async () => {
-      await postGenerale('testgen', { id: id, version: version, lineaChiamato: { id: lineaChiamato }, proxyChiamato: { id: OBPChiamato } });
-      funzioneGetTestgenById(id)
-    })();
-  }
-  }
+    if (functions.indexOf("testgen.edit") !== -1) {
+      //----AGGIORNA CHIAMATO----
+      (async () => {
+        await postGenerale("testgen", {
+          id: id,
+          version: version,
+          lineaChiamato: { id: lineaChiamato },
+          proxyChiamato: { id: OBPChiamato },
+        });
+        funzioneGetTestgenById(id);
+      })();
+    }
+  };
   const funzioneAggiornaChiamante = () => {
-    if (functions.indexOf("testgen.edit") !== -1){
-    //----AGGIORNA CHIAMANTE----
-    (async () => {
-      await postGenerale('testgen', { id: id, version: version, lineaChiamante: { id: lineaChiamante }, proxyChiamante: { id: OBPChiamante } });
-      funzioneGetTestgenById(id)
-    })();
-  }
-  }
-
+    if (functions.indexOf("testgen.edit") !== -1) {
+      //----AGGIORNA CHIAMANTE----
+      (async () => {
+        await postGenerale("testgen", {
+          id: id,
+          version: version,
+          lineaChiamante: { id: lineaChiamante },
+          proxyChiamante: { id: OBPChiamante },
+        });
+        funzioneGetTestgenById(id);
+      })();
+    }
+  };
 
   const funzioneAggiornaTestgen = () => {
-    if (functions.indexOf("testgen.edit") !== -1){
-    //----AGGIORNA TESTCASE----
-    (async () => {
-      await postGenerale('testgen', { id: id, version: version, nome: nome, descrizione: descrizione === "" ? " " : descrizione });
-      funzioneGetTestgenById(id);
-    })();
-  }
-  }
+    if (functions.indexOf("testgen.edit") !== -1) {
+      //----AGGIORNA TESTCASE----
+      (async () => {
+        await postGenerale("testgen", {
+          id: id,
+          version: version,
+          nome: nome,
+          descrizione: descrizione === "" ? " " : descrizione,
+        });
+        funzioneGetTestgenById(id);
+      })();
+    }
+  };
 
   const funzioneDelete = () => {
-    if (functions.indexOf("testgen.delete") !== -1){
-    (async () => {
-      setCaricamento(true)
-      let result = await deleteGenerale("testcase", idElemento);
-      if (result?.error !== null) {
+    if (functions.indexOf("testgen.delete") !== -1) {
+      (async () => {
+        setCaricamento(true);
+        let result = await deleteGenerale("testcase", idElemento);
+        if (result?.error !== null) {
+          if (result?.error === "Internal Server Error") {
+            setWarning(
+              "Non è possibile eliminare il TestCase perchè associato ad una o più TestSuite"
+            );
+          } else {
+            setWarning(
+              "Codice errore:" +
+                result.error.code +
+                "Descrizione" +
+                result.code.description
+            );
+          }
 
-        if (result?.error === "Internal Server Error") {
-          setWarning(
-            "Non è possibile eliminare il TestCase perchè associato ad una o più TestSuite"
-          );
+          setOpenWarning(true);
         } else {
-          setWarning(
-            "Codice errore:" +
-            result.error.code +
-            "Descrizione" +
-            result.code.description
-          )
+          funzioneGetAll();
+          setOpenDelete(false);
         }
-
-        setOpenWarning(true);
-
-      } else {
-        funzioneGetAll();
-        setOpenDelete(false)
-      }
-    })();
-  }
-  }
+      })();
+    }
+  };
   useEffect(() => {
     funzioneGetAll();
   }, []);
@@ -170,14 +192,18 @@ function TestGeneratoreTableNew() {
       title: "Data di creazione",
       field: "creationDate",
       render: (rowData) => {
-        return rowData.creationDate.replace("T", " / ").replace(".000+00:00", "");
+        return rowData.creationDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
       },
     },
     {
       title: "Data di modifica",
       field: "modifiedDate",
       render: (rowData) => {
-        return rowData.modifiedDate.replace("T", " / ").replace(".000+00:00", "");
+        return rowData.modifiedDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
       },
     },
     {
@@ -224,14 +250,13 @@ function TestGeneratoreTableNew() {
   };
 
   const handleOpen = (rowData) => {
-    setAllVariables(rowData)
+    setAllVariables(rowData);
     setOpen(true);
-  }
+  };
 
   const handleClose = () => {
     setOpen(false);
   };
-
 
   /*--------------MODALE DELETE TEST GENERATORE -----------*/
   const [openWarning, setOpenWarning] = useState(false);
@@ -257,7 +282,7 @@ function TestGeneratoreTableNew() {
   };
 
   const handleCloseChiamato = () => {
-    funzioneGetTestgenById(id)
+    funzioneGetTestgenById(id);
     setOpenChiamato(false);
   };
 
@@ -267,7 +292,7 @@ function TestGeneratoreTableNew() {
   };
 
   const handleCloseChiamante = () => {
-    funzioneGetTestgenById(id)
+    funzioneGetTestgenById(id);
     setOpenChiamanti(false);
   };
 
@@ -275,7 +300,6 @@ function TestGeneratoreTableNew() {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -287,12 +311,10 @@ function TestGeneratoreTableNew() {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -307,7 +329,6 @@ function TestGeneratoreTableNew() {
       height: "fit-content",
       width: 500,
       position: "relative",
-
     },
     contenutoModale: {
       height: 370,
@@ -337,7 +358,6 @@ function TestGeneratoreTableNew() {
     bottone: {
       marginLeft: "55px",
       marginTop: "5%",
-      // marginBottom: "2%",
     },
     modal: {
       display: "flex",
@@ -389,6 +409,7 @@ function TestGeneratoreTableNew() {
   return (
     <div>
       <MaterialTable
+      icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Test Generatore"
         data={data}
@@ -415,7 +436,12 @@ function TestGeneratoreTableNew() {
                   exact
                   to="/editing/testgeneratore/createstgeneratore"
                   startIcon={<AddIcon />}
-                  disabled={functions.indexOf("testgen.create") === -1 || functions.indexOf("template.view") === -1 || functions.indexOf("lineagen.view") === -1 || functions.indexOf("obp.view") === -1}
+                  disabled={
+                    functions.indexOf("testgen.create") === -1 ||
+                    functions.indexOf("template.view") === -1 ||
+                    functions.indexOf("lineagen.view") === -1 ||
+                    functions.indexOf("obp.view") === -1
+                  }
                 >
                   TEST GENERATORE
                 </Button>
@@ -438,7 +464,7 @@ function TestGeneratoreTableNew() {
             icon: () => <EditIcon />,
             tooltip: "Modifica Test",
             onClick: (event, rowData) => openModifica(rowData),
-            disabled:functions.indexOf("testgen.edit") === -1,
+            disabled: functions.indexOf("testgen.edit") === -1,
             position: "row",
           },
           {
@@ -578,7 +604,9 @@ function TestGeneratoreTableNew() {
                     <TextField
                       className={classes.textField}
                       label="Data Creazione"
-                      defaultValue={creationDate.replace("T", " / ").replace(".000+00:00", "")}
+                      defaultValue={creationDate
+                        .replace("T", " / ")
+                        .replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -601,7 +629,9 @@ function TestGeneratoreTableNew() {
                     <TextField
                       className={classes.textField}
                       label="Data Modifica"
-                      defaultValue={modifiedDate.replace("T", " / ").replace(".000+00:00", "")}
+                      defaultValue={modifiedDate
+                        .replace("T", " / ")
+                        .replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -682,7 +712,11 @@ function TestGeneratoreTableNew() {
                           key={linea.id}
                           value={linea.id}
                         >
-                          {linea.ip + ":" + linea.porta + "-" + linea.typeLinea.descrizione}
+                          {linea.ip +
+                            ":" +
+                            linea.porta +
+                            "-" +
+                            linea.typeLinea.descrizione}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -789,7 +823,11 @@ function TestGeneratoreTableNew() {
                           key={linea.id}
                           value={linea.id}
                         >
-                          {linea.ip + ":" + linea.porta + "-" + linea.typeLinea.descrizione}
+                          {linea.ip +
+                            ":" +
+                            linea.porta +
+                            "-" +
+                            linea.typeLinea.descrizione}
                         </MenuItem>
                       ))}
                     </TextField>

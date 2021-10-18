@@ -116,7 +116,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    //backgroundColor: "yellow",
     alignItems: "center",
     marginLeft: "1%",
   },
@@ -145,7 +144,6 @@ const useStyles = makeStyles((theme) => ({
   },
   divSelect: {
     padding: "5%",
-    // height: "115.6px",
   },
   bottone: {
     marginLeft: "65%",
@@ -164,7 +162,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
     padding: "2%",
-    // marginTop: "2%",
   },
   InputSelect: {
     width: "364.8px",
@@ -174,7 +171,6 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    // width: "20vw",
     width: "340px",
     display: "flex",
   },
@@ -191,7 +187,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "2%",
     fontWeight: "600px",
     lineHeigth: "2%",
-    //fontSize: "2px",
   },
   select: {
     widht: "380x",
@@ -256,8 +251,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   iconModaleError: {
-    // width: "15%",
-    // height: "15%",
     marginRight: "4%",
     transform: "scale(1.9)",
     color: "#ef5350",
@@ -301,7 +294,6 @@ function EditingTemplateCreaTemplate() {
   const [descrizione, setDescrizione] = useState("");
   const [tipoTemplate, setTipoTemplate] = useState("");
   const [selectedFile, setSelectedFile] = useState([]);
-  const [isSelected, setIsSelected] = useState(false);
   const [nextDisabled, setNextDisabled] = useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const [chiamato, setChiamato] = useState("");
@@ -315,16 +307,11 @@ function EditingTemplateCreaTemplate() {
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files);
-    setIsSelected(true);
   };
 
   const arrayValue = Object.values(selectedFile);
 
-  const handleSubmission = () => { };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const handleSubmission = () => {};
 
   const handleChangeName = (e) => {
     setNome(e.target.value);
@@ -381,20 +368,20 @@ function EditingTemplateCreaTemplate() {
         nChiamanti <= 3 && nChiamanti === 0
           ? false
           : nChiamanti === 1
-            ? chiamante1 === false
-              ? true
-              : false
-            : nChiamanti === 2
-              ? chiamante2 === false
-                ? true
-                : false
-              : nChiamanti === 3
-                ? chiamante3 === false
-                  ? true
-                  : false
-                : false
-                  ? false
-                  : true
+          ? chiamante1 === false
+            ? true
+            : false
+          : nChiamanti === 2
+          ? chiamante2 === false
+            ? true
+            : false
+          : nChiamanti === 3
+          ? chiamante3 === false
+            ? true
+            : false
+          : false
+          ? false
+          : true
       ) {
         setNextDisabled(true);
       } else {
@@ -425,7 +412,15 @@ function EditingTemplateCreaTemplate() {
   const funzioneCreaTemplate = () => {
     //----AGGIORNA CHIAMANTI----
     (async () => {
-      let result = await creaTemplate(nome, durata, tipoTemplate, descrizione, chiamato, qntChiamanti, arrayValue);
+      let result = await creaTemplate(
+        nome,
+        durata,
+        tipoTemplate,
+        descrizione,
+        chiamato,
+        qntChiamanti,
+        arrayValue
+      );
       if (result.error !== null) {
         setOpenWarning(true);
         if (result.error.code === "TEST-0018") {
@@ -440,9 +435,9 @@ function EditingTemplateCreaTemplate() {
         } else {
           setWarning(
             "Codice errore :" +
-            result.error.code +
-            "Descrizione " +
-            result.error.description
+              result.error.code +
+              "Descrizione " +
+              result.error.description
           );
         }
       } else {
@@ -450,25 +445,20 @@ function EditingTemplateCreaTemplate() {
         history.push("/editing/template");
       }
     })();
-  }
- 
+  };
 
-  
   //-------------------------CHIAMANTI E CHIAMATO --------------------------
 
   const addArr = () => {
     arrAppoggio.push({ linea: 0, proxy: 0, index: arrAppoggio.length });
     setQntChiamanti(arrAppoggio);
     setNChiamanti(qntChiamanti.length);
-    console.log(qntChiamanti);
-    console.log(qntChiamanti[0].linea, "Quantita");
   };
 
   const removeArr = () => {
     arrAppoggio.pop();
     setQntChiamanti(arrAppoggio);
     setNChiamanti(qntChiamanti.length);
-    // console.log(qntChiamanti);
 
     switch (qntChiamanti.length) {
       case 0:
@@ -492,7 +482,6 @@ function EditingTemplateCreaTemplate() {
   //--------------------MODALI TYPE LINEE---------------------------------
 
   const [open, setOpen] = React.useState(false);
-  const [openRemove, setOpenRemove] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -500,14 +489,6 @@ function EditingTemplateCreaTemplate() {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleOpenRemove = () => {
-    setOpenRemove(true);
-  };
-
-  const handleCloseRemove = () => {
-    setOpenRemove(false);
   };
 
   //--------------------MODALE 2----------------------------------
@@ -524,15 +505,9 @@ function EditingTemplateCreaTemplate() {
   };
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
-  // const checkRichiesta = (result) => {
-  //   console.log(result);
-  //   setTypeLineaId(result.id);
-  // };
 
   const salva2 = () => {
-    const funzioneCreaTemplate = () => {
-      //PUT
-    };
+    const funzioneCreaTemplate = () => {};
 
     if (type !== "") {
       funzioneCreaTemplate();
@@ -550,7 +525,6 @@ function EditingTemplateCreaTemplate() {
     if (activeStep + 1 === steps.length) {
       funzioneCreaTemplate();
     } else setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    // disabilitaNext();
   };
 
   const handleBack = () => {
@@ -600,7 +574,7 @@ function EditingTemplateCreaTemplate() {
         </Container>
 
         <ButtonEditing />
-        
+
         {/* ----------------------------CREA TEST generatore---------------------------------------- */}
 
         <Paper className={classes.paper} elevation={2}>
@@ -711,7 +685,6 @@ function EditingTemplateCreaTemplate() {
               <Paper className={classes.divSelect} elevation={0}>
                 <>
                   <input
-                    // accept=".xml"
                     className={classes.input}
                     id="contained-button-file"
                     multiple
@@ -769,7 +742,12 @@ function EditingTemplateCreaTemplate() {
                           {arrayValue.map((file) => {
                             return (
                               <MenuItem
-                                disabled={chiamato === file.name || qntChiamanti[0]?.linea === file.name || qntChiamanti[1]?.linea === file.name || qntChiamanti[2]?.linea === file.name}
+                                disabled={
+                                  chiamato === file.name ||
+                                  qntChiamanti[0]?.linea === file.name ||
+                                  qntChiamanti[1]?.linea === file.name ||
+                                  qntChiamanti[2]?.linea === file.name
+                                }
                                 key={file.name}
                                 value={file.name}
                               >
@@ -827,23 +805,30 @@ function EditingTemplateCreaTemplate() {
                                   id="selectLinea"
                                   value={qntChiamanti.index}
                                   onChange={(e) => {
-                                    arrAppoggio = [...qntChiamanti]
+                                    arrAppoggio = [...qntChiamanti];
                                     arrAppoggio[index].linea = e.target.value;
                                     setQntChiamanti(arrAppoggio);
 
                                     index === 0
                                       ? setChiamante1(true)
                                       : index === 1
-                                        ? setChiamante2(true)
-                                        : index === 2
-                                          ? setChiamante3(true)
-                                          : setChiamante1(false);
+                                      ? setChiamante2(true)
+                                      : index === 2
+                                      ? setChiamante3(true)
+                                      : setChiamante1(false);
                                   }}
                                 >
                                   {arrayValue.map((file) => {
                                     return (
                                       <MenuItem
-                                        disabled={chiamato === file.name || qntChiamanti[0]?.linea === file.name || qntChiamanti[1]?.linea === file.name || qntChiamanti[2]?.linea === file.name}
+                                        disabled={
+                                          chiamato === file.name ||
+                                          qntChiamanti[0]?.linea ===
+                                            file.name ||
+                                          qntChiamanti[1]?.linea ===
+                                            file.name ||
+                                          qntChiamanti[2]?.linea === file.name
+                                        }
                                         key={file.name}
                                         value={file.name}
                                       >
@@ -892,16 +877,16 @@ function EditingTemplateCreaTemplate() {
                   nChiamanti < 3 && nChiamanti === 0
                     ? false
                     : nChiamanti === 1
-                      ? chiamante1 === false
-                        ? true
-                        : false
-                      : nChiamanti === 2
-                        ? chiamante2 === false
-                          ? true
-                          : false
-                        : false
-                          ? false
-                          : true
+                    ? chiamante1 === false
+                      ? true
+                      : false
+                    : nChiamanti === 2
+                    ? chiamante2 === false
+                      ? true
+                      : false
+                    : false
+                    ? false
+                    : true
                 }
               />
             </div>
@@ -952,24 +937,6 @@ function EditingTemplateCreaTemplate() {
               )}
             </div>
           </div>
-          {/* <div className={classes.bottone}>
-            <ButtonClickedGreen
-              className={classes.bottone}
-              size="medium"
-              nome="Crea"
-              onClick={salva}
-            />
-            <Button
-              component={NavLink}
-              className="button-green-disactive"
-              exact
-              to="/editing/linee"
-              variant="contained"
-              size="medium"
-            >
-              annulla
-            </Button>
-          </div> */}
         </Paper>
       </main>
 

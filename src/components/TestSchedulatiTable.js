@@ -23,25 +23,20 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
+import { tableIcons } from "../components/Icons";
 import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
 
 const TestSchedulatiTable = () => {
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
   const [idToRun, setIdToRun] = useState();
-  const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
-  const [createdBy, setCreatedBy] = useState("");
-  const [dataCase, setDataCase] = useState();
   const [appearTest, setAppearTest] = useState([]);
-  const [dataLoad, setTestCaseLoad] = useState(null);
-  const [dataRun, setIdTestCaseRun] = useState(null);
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [dataSchedula, setDataSchedula] = useState();
   const [idTest, setIdTest] = useState();
+  const [idTestCaseRun, setIdTestCaseRun] = useState();
 
   const columns = [
     {
@@ -72,7 +67,6 @@ const TestSchedulatiTable = () => {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -89,7 +83,6 @@ const TestSchedulatiTable = () => {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperModale: {
       backgroundColor: theme.palette.background.paper,
@@ -112,7 +105,6 @@ const TestSchedulatiTable = () => {
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "1%",
     },
@@ -204,14 +196,12 @@ const TestSchedulatiTable = () => {
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
   const [scheduleDateTime, setSchedulaDateTime] = React.useState("");
   const [delay, setDelay] = useState(0);
   const [openDelete, setOpenDelete] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
-    // getAllTestCaseModal();
   };
 
   const handleClose = () => {
@@ -227,12 +217,7 @@ const TestSchedulatiTable = () => {
     setOpenSchedula(false);
   };
 
-  const handleChangeData = (newValue) => {
-    setValue(newValue);
-  };
-
   const testCaseLoader = () => {
-    // loadTestCase(id);
     handleClose();
     getAllTestCase();
   };
@@ -240,7 +225,6 @@ const TestSchedulatiTable = () => {
   const runCaseLoder = () => {
     runTestCase(idToRun);
     handleCloseRun();
-    //alert("Run test id :  "+ idToRun);
   };
 
   const handleOpenRun = (idRun_) => {
@@ -268,7 +252,6 @@ const TestSchedulatiTable = () => {
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
     var consta = "SCHEDULED";
-
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
@@ -291,8 +274,6 @@ const TestSchedulatiTable = () => {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
         setData(result.testCaseList);
       })
       .catch((error) => console.log("error", error));
@@ -307,10 +288,6 @@ const TestSchedulatiTable = () => {
   const schedulaTestCase = () => {
     const invia = () => {
       scheduleDateTime = dataInizio + "T" + orarioInizio;
-      console.log(scheduleDateTime, "schedule date time");
-      console.log(dataInizio, "data inizio");
-      console.log(orarioInizio, "orario");
-
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
       myHeaders.append("Content-Type", "application/json");
@@ -333,7 +310,6 @@ const TestSchedulatiTable = () => {
       fetch(`/api/testcase/schedule`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           setDataSchedula(result.testCaseCaricato);
           handleCloseSchedula();
         })
@@ -341,34 +317,6 @@ const TestSchedulatiTable = () => {
     };
     invia();
   };
-
-  /*--------------- LOAD TEST CASE -------------------*/
-
-  // const loadTestCase = (id) => {
-
-  //   var urlLoad = `/api/testcase/load/${id}`;
-
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(urlLoad, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       setTestCaseLoad(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-
-  // };
-
   /*--------------- RUN TEST CASE -------------------*/
 
   const runTestCase = (idRun) => {
@@ -388,58 +336,30 @@ const TestSchedulatiTable = () => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setIdTestCaseRun(result.list);
       })
       .catch((error) => console.log("error", error));
   };
 
   const handleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
     setIdToRun(rowDataaa.id);
     runCaseLoder(rowDataaa.id);
   };
 
-  /*--------------- GET TEST CASE -------------------*/
-
-  //  const getAllTestCaseModal = () => {
-
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`/api/testcase`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       setAppearTest(result.list);
-  //       setDataCase(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
-
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Case Schedulati"
         data={data}
         columns={columns}
         options={{
-          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -472,14 +392,14 @@ const TestSchedulatiTable = () => {
             isFreeAction: true,
             onClick: () => handleChange(),
           },
-          {
-            icon: () => (
-              <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
-            ),
-            tooltip: "Carica Test Case",
-            onClick: () => handleOpen(),
-            isFreeAction: true,
-          },
+          // {
+          //   icon: () => (
+          //     <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
+          //   ),
+          //   tooltip: "Carica Test Case",
+          //   onClick: () => handleOpen(),
+          //   isFreeAction: true,
+          // },
         ]}
         localization={{
           header: {
@@ -693,8 +613,8 @@ const TestSchedulatiTable = () => {
         </Fade>
       </Modal>
 
-       {/* ------------------------MODALE DELETE--------------------- */}
-       <Modal
+      {/* ------------------------MODALE DELETE--------------------- */}
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -710,13 +630,20 @@ const TestSchedulatiTable = () => {
             <Paper className={classes.paperModaleDelete} elevation={1}>
               <div>
                 <ListItem>
-                  <Typography className={classes.intestazione} variant="h4" style={{ color: "#ef5350"}}>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#ef5350" }}
+                  >
                     Elimina Test Id <b>{" " + id}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography className={classes.typography} style={{paddingLeft: "16px"}}>
+                <Typography
+                  className={classes.typography}
+                  style={{ paddingLeft: "16px" }}
+                >
                   Vuoi eliminare il Test Caricato?
                 </Typography>
 
@@ -726,7 +653,6 @@ const TestSchedulatiTable = () => {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <ButtonNotClickedGreen
-                    //onClick={functionDelete}
                     onClick={() =>
                       alert("Inserire funzione Delete Loaded Test")
                     }

@@ -17,26 +17,16 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
-import loading from "../../src/assets/load.gif";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
+import { tableIcons } from "../components/Icons";
+import SelectAutocompleteTestGeneratore from "../components/SelectAutocompleteTestGeneratore";
 
 const TestGeneratoreCaricatiTable = () => {
   const [id, setId] = useState();
-  const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
-  const [createdBy, setCreatedBy] = useState("");
   const [filter, setFilter] = useState(false);
   const [idToRun, setIdToRun] = useState();
-  const [dataLoad, setTestGenLoad] = useState(null);
   const [dataRun, setIdTestGenRun] = useState(null);
-  const [includeTestCaseOfType, setincludeTestCaseOfType] = useState("");
-  const [includeTestSuiteOfType, setincludeTestSuiteOfType] = useState("");
-  const [includeTestGeneratoreOfType, setincludeTestGeneratoreOfType] =
-    useState("");
   const [name, setName] = useState("");
   const [rate, setRate] = useState();
   const [testDuration, setTestDuration] = useState();
@@ -44,7 +34,6 @@ const TestGeneratoreCaricatiTable = () => {
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [delay, setDelay] = useState();
-
 
   const columns = [
     {
@@ -90,7 +79,6 @@ const TestGeneratoreCaricatiTable = () => {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -107,7 +95,6 @@ const TestGeneratoreCaricatiTable = () => {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperModale: {
       backgroundColor: theme.palette.background.paper,
@@ -124,7 +111,6 @@ const TestGeneratoreCaricatiTable = () => {
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "1%",
     },
@@ -225,11 +211,9 @@ const TestGeneratoreCaricatiTable = () => {
     setFilter(!filter);
   };
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
 
   const handleOpen = () => {
     setOpen(true);
@@ -253,10 +237,6 @@ const TestGeneratoreCaricatiTable = () => {
     setOpenSchedula(false);
   };
 
-  const handleChangeData = (newValue) => {
-    setValue(newValue);
-  };
-
   const handleOpenRun = (idRun_) => {
     setIdToRun(idRun_);
     setOpen(true);
@@ -264,7 +244,6 @@ const TestGeneratoreCaricatiTable = () => {
   };
 
   const testGenLoader = () => {
-    //loadTestGen(id);
     handleClose();
     getAllTestGeneratore();
   };
@@ -273,8 +252,6 @@ const TestGeneratoreCaricatiTable = () => {
     runTestGen(idToRun);
     handleCloseRun();
   };
-
- 
 
   /*------------- GET TEST GEN DASH-------------*/
 
@@ -309,8 +286,6 @@ const TestGeneratoreCaricatiTable = () => {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testGenList);
         setData(result.testCaseist);
       })
       .catch((error) => console.log("error", error));
@@ -339,39 +314,11 @@ const TestGeneratoreCaricatiTable = () => {
     fetch(`/api/testgen`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setAppearTest(result.list);
         setData(result.list);
       })
       .catch((error) => console.log("error", error));
   };
-
-   
-
-  /*--------------- LOAD TEST GEN -------------------*/
-
-  // const loadTestGen = (id) => {
-  //   var urlLoad = `/api/testcase/load/${id}`;
-
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(urlLoad, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       setTestGenLoad(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
 
   /*--------------- RUN TEST CASE -------------------*/
 
@@ -392,21 +339,19 @@ const TestGeneratoreCaricatiTable = () => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setIdTestGenRun(result.list);
       })
       .catch((error) => console.log("error", error));
   };
 
   const handleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
     runGenLoader(rowDataaa.id);
   };
 
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Generatore Caricati"
         data={data}
@@ -416,8 +361,6 @@ const TestGeneratoreCaricatiTable = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -429,19 +372,19 @@ const TestGeneratoreCaricatiTable = () => {
             position: "row",
           },
           {
-            icon: "play_circle_outlined",
+            icon: tableIcons.PlayCircleOutlineIcon,
             tooltip: "Launch",
             onClick: (event, rowData) => handleOpenRun(rowData.launcher),
             position: "row",
           },
           {
-            icon: "account_tree",
+            icon:"",
             tooltip: "Trace",
-            onClick: (event, rowData) => console.log("Trace"),
-            position: "row",
+            // onClick: (event, rowData) => console.log("Trace"),
+            //position: "row",
           },
           {
-            icon: "delete",
+            icon: tableIcons.Delete,
             tooltip: "Delete all selected row",
             onClick: () => alert("Ho cancellato le righe"),
           },
@@ -453,7 +396,7 @@ const TestGeneratoreCaricatiTable = () => {
           },
           {
             icon: () => (
-              <ButtonClickedBlue nome="Load Test Generatore"></ButtonClickedBlue>
+              <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
             ),
             tooltip: "Load Test Generatore",
             onClick: () => handleOpen(),
@@ -467,22 +410,6 @@ const TestGeneratoreCaricatiTable = () => {
           body: {
             emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
-          // body: {
-          //   emptyDataSourceMessage: (
-          //     <div
-          //       style={{
-          //         display: "flex",
-          //         justifyContent: "center",
-          //         alignItems: "center",
-          //         height: "10vh",
-          //         width: "10vh",
-          //         margin: "0 auto",
-          //       }}
-          //     >
-          //       <img src={loading} alt="loading" />
-          //     </div>
-          //   ),
-          // },
         }}
       />
 
@@ -522,90 +449,85 @@ const TestGeneratoreCaricatiTable = () => {
                 <Form.Group>
                   <Form.Label>Nome del Test Generatore</Form.Label>
                   <FormControl variant="outlined">
-                    <Select
-                      className={classes.select}
+                    <SelectAutocompleteTestGeneratore
+                      className={classes.SelectAutocompleteTestGeneratore}
                       value={appearTest.nome}
-                      onChange={(e) => setName(e.target.value)}
-                    >
-                      {appearTest.map((prova) => {
-                        return (
-                          <MenuItem
-                            style={{ width: "423px" }}
-                            key={prova.id}
-                            value={prova.id}
-                          >
-                            {prova.nome}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
+                      items={appearTest?.map((i) => ({
+                        id: i.id,
+                        nome: i.nome,
+                      }))}
+                      onChange={(id) => setId(id)}
+                    />
                     <br />
-                    {name && <>
-                      <Form.Label>Rate </Form.Label>
-                      <FormControl variant="outlined">
-                        <Select
-                          className={classes.select}
-                          value={rate}
-                          onChange={(e) => setRate(e.target.value)}
-                        >
-                          {[5, 10, 15, 20, 25].map((rate) => {
-                            return (
-                              <MenuItem
-                                style={{ width: "423px" }}
-                                key={rate}
-                                value={rate}
-                              >
-                                {rate} secondi
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                      <br />
-                      <Form.Label>Durata Test (s)</Form.Label>
-                      <FormControl variant="outlined">
-                        <Select
-                          className={classes.select}
-                          value={testDuration}
-                          onChange={(e) => setTestDuration(e.target.value)}
-                        >
-                          {[{ label: "5 minuti", value: 5 },
-                          { label: "10 minuti", value: 10 },
-                          { label: "20 minuti", value: 20 },
-                          { label: "30 minuti", value: 30 },
-                          { label: "60 minuti", value: 60 },
-                          { label: "120 minuti", value: 120 },
-                          { label: "360 minuti", value: 360 },
-                          { label: "720 minuti", value: 720 },
-                          { label: "24 ore", value: 1440 },
-                          { label: "48 ore", value: 2880 }
-                          ].map((testDuration) => {
-                            return (
-                              <MenuItem
-                                style={{ width: "423px" }}
-                                key={testDuration.label}
-                                value={testDuration.value}
-                              >
-                                {testDuration.label}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                      <br />
-                      <Form.Label>Durata Chiamata </Form.Label>
-                      <Form.Control
-                        max={rate * 60 * testDuration}
-                        type="number"
-                        value={callDuration}
-                        placeholder="60"
-                        onChange={(e) => {
-                          const newValue = parseInt(e.target.value);
-                          const maxValue = rate * 60 * testDuration;
-                          setCallDuration(Math.min(newValue, maxValue));
-                        }}
-                      />
-                    </>}
+                    {name && (
+                      <>
+                        <Form.Label>Rate </Form.Label>
+                        <FormControl variant="outlined">
+                          <Select
+                            className={classes.select}
+                            value={rate}
+                            onChange={(e) => setRate(e.target.value)}
+                          >
+                            {[5, 10, 15, 20, 25].map((rate) => {
+                              return (
+                                <MenuItem
+                                  style={{ width: "423px" }}
+                                  key={rate}
+                                  value={rate}
+                                >
+                                  {rate} secondi
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        <br />
+                        <Form.Label>Durata Test (s)</Form.Label>
+                        <FormControl variant="outlined">
+                          <Select
+                            className={classes.select}
+                            value={testDuration}
+                            onChange={(e) => setTestDuration(e.target.value)}
+                          >
+                            {[
+                              { label: "5 minuti", value: 5 },
+                              { label: "10 minuti", value: 10 },
+                              { label: "20 minuti", value: 20 },
+                              { label: "30 minuti", value: 30 },
+                              { label: "60 minuti", value: 60 },
+                              { label: "120 minuti", value: 120 },
+                              { label: "360 minuti", value: 360 },
+                              { label: "720 minuti", value: 720 },
+                              { label: "24 ore", value: 1440 },
+                              { label: "48 ore", value: 2880 },
+                            ].map((testDuration) => {
+                              return (
+                                <MenuItem
+                                  style={{ width: "423px" }}
+                                  key={testDuration.label}
+                                  value={testDuration.value}
+                                >
+                                  {testDuration.label}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        <br />
+                        <Form.Label>Durata Chiamata </Form.Label>
+                        <Form.Control
+                          max={rate * 60 * testDuration}
+                          type="number"
+                          value={callDuration}
+                          placeholder="60"
+                          onChange={(e) => {
+                            const newValue = parseInt(e.target.value);
+                            const maxValue = rate * 60 * testDuration;
+                            setCallDuration(Math.min(newValue, maxValue));
+                          }}
+                        />
+                      </>
+                    )}
                   </FormControl>
                 </Form.Group>
               </div>
@@ -648,7 +570,7 @@ const TestGeneratoreCaricatiTable = () => {
             </div>
           </Paper>
         </Fade>
-      </Modal >
+      </Modal>
 
       {/* ------------------ MODALE SCHEDULA TEST GENERATORE --------------------- */}
       <Modal
@@ -715,7 +637,7 @@ const TestGeneratoreCaricatiTable = () => {
                 <Paper elevation={2} className={classes.delayPaper}>
                   <Typography variant="h5">Delay</Typography>
                   <div className={classes.divInput}>
-                    <label for="appt" >Delay:</label>
+                    <label for="appt">Delay:</label>
                     <input
                       style={{ width: "100px" }}
                       type="number"

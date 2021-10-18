@@ -12,16 +12,15 @@ import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
-import SelectBar from "./SelectBar";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import acccessControl from "../service/url.js";
-import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
 import { Divider } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import { MenuItem } from "@material-ui/core";
+import { tableIcons } from "../components/Icons";
 
 const TestSuiteSchedulatiTable = () => {
   const [id, setId] = useState();
@@ -66,7 +65,6 @@ const TestSuiteSchedulatiTable = () => {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -93,12 +91,10 @@ const TestSuiteSchedulatiTable = () => {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -144,8 +140,6 @@ const TestSuiteSchedulatiTable = () => {
       alignItems: "center",
       marginTop: "6%",
       justifyContent: "center",
-
-      // marginBottom: "2%",
     },
     select: {
       width: "400px",
@@ -164,67 +158,41 @@ const TestSuiteSchedulatiTable = () => {
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [scheduleDateTime, setSchedulaDateTime] = React.useState("");
 
- const getAllTestSuite = () => {
-  var consta = "SCHEDULED";
+  const getAllTestSuite = () => {
+    var consta = "SCHEDULED";
 
-  var myHeaders = new Headers();
-  myHeaders.append("Authorization", bearer);
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  myHeaders.append("Access-Control-Allow-Credentials", "true");
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-  var raw = JSON.stringify({
-    "includeRiepilogoTestCase": false,
-    "includeRiepilogoTestSuite": false,
-    "includeTestCaseOfType": null,
-    "includeTestSuiteOfType": consta,
-    "includeTestGeneratoreOfType": null
-  });
+    var raw = JSON.stringify({
+      includeRiepilogoTestCase: false,
+      includeRiepilogoTestSuite: false,
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: consta,
+      includeTestGeneratoreOfType: null,
+    });
 
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.testSuiteList);
+      })
+      .catch((error) => console.log("error", error));
   };
 
-  fetch(`/api/dashboard/info`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      //setAppearTest(result.testCaseList);
-      setData(result.testSuiteList);
-    })
-    .catch((error) => console.log("error", error));
-};
-
-useEffect(() => {
-  getAllTestSuite();
-}, []);
-
-
-
-  // const getAllTestSuite = () => {
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   var requestOptions = {
-  //     method: "GET",
-  //     headers: myHeaders,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`/api/testsuite`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       setAppearTest(result.list);
-  //       setData(result.list);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
+  useEffect(() => {
+    getAllTestSuite();
+  }, []);
 
   /*--------------- FUNZIONE CARICA TEST SUITE -------------------*/
 
@@ -245,7 +213,6 @@ useEffect(() => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTestSuiteLoad(result.testSuiteCaricata);
       })
       .catch((error) => console.log("error", error));
@@ -283,7 +250,6 @@ useEffect(() => {
       fetch(`/api/testsuite/schedule`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           setDataSchedula(result.testCaseCaricato);
           handleCloseSchedula();
         })
@@ -293,7 +259,6 @@ useEffect(() => {
   };
 
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -320,25 +285,23 @@ useEffect(() => {
   const testSuiteLoader = () => {
     loadTestSuite(id);
     handleClose();
-    console.log("testSuite Loader");
     getAllTestSuite();
   };
 
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Suite Schedulati"
         data={data}
         columns={columns}
         options={{
-          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -368,32 +331,20 @@ useEffect(() => {
             isFreeAction: true,
             onClick: () => handleChange(),
           },
-          {
-            icon: () => (
-              <ButtonClickedBlue nome="Carica Test Suite"></ButtonClickedBlue>
-            ),
-            tooltip: "Carica Test Suite",
-            onClick: () => handleOpen(),
-            isFreeAction: true,
-          },
+          // {
+          //   icon: () => (
+          //     <ButtonClickedBlue nome="Carica Test Suite"></ButtonClickedBlue>
+          //   ),
+          //   tooltip: "Carica Test Suite",
+          //   onClick: () => handleOpen(),
+          //   isFreeAction: true,
+          // },
         ]}
         localization={{
           header: {
             actions: "Azioni",
           },
         }}
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
       {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
       <Modal

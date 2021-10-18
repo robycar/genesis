@@ -6,7 +6,6 @@ import { Button } from "@material-ui/core";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import { Fade, Paper, Typography } from "@material-ui/core";
-import SelectBar from "./SelectBar";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
@@ -16,27 +15,20 @@ import Form from "react-bootstrap/Form";
 import Select from "@material-ui/core/Select";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
-import loading from "../../src/assets/load.gif";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import TextField from "@material-ui/core/TextField";
 import "../styles/App.css";
-import { NavLink } from "react-router-dom";
-import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { tableIcons } from "./Icons";
 
 const TestGeneratoreConclusiTable = () => {
   const [id, setId] = useState();
   const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [createdBy, setCreatedBy] = useState("");
   const [name, setName] = useState("");
   const [rate, setRate] = useState();
   const [loadedBy, setLoadedBy] = useState("");
@@ -80,22 +72,12 @@ const TestGeneratoreConclusiTable = () => {
       title: "Call-Id",
       field: "loadedBy",
     },
-    // {
-    //   title: "Report",
-    //   field: "report",
-    //   render: (rowData) => (
-    //     <Button color="secondary" onClick={() => handleOpenReport()}>
-    //       report
-    //     </Button>
-    //   ),
-    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -134,12 +116,10 @@ const TestGeneratoreConclusiTable = () => {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -239,11 +219,9 @@ const TestGeneratoreConclusiTable = () => {
   }));
 
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
-const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
+  const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -255,19 +233,13 @@ const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
 
   const handleOpenSchedula = () => {
     setOpenSchedula(true);
-   // setOpen(false);
   };
 
   const handleCloseSchedula = () => {
     setOpenSchedula(false);
   };
 
-  const handleChangeData = (newValue) => {
-    setValue(newValue);
-  };
-
   const testGenLoader = () => {
-    //loadTestGen(id);
     handleClose();
     getAllTestGeneratore();
   };
@@ -319,7 +291,6 @@ const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
     fetch(`/api/testgen`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setAppearTest(result.list);
         setData(result.list);
       })
@@ -333,6 +304,7 @@ const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Total Test Generatore Conclusi"
         data={data}
@@ -342,8 +314,6 @@ const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -362,38 +332,19 @@ const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
             position: "row",
           },
           // {
-          //   icon: "play_circle_outlined",
-          //   tooltip: "Lancia",
-          //   onClick: (event, rowData) =>
-          //     alert("Ho cliccato " + rowData.launcher),
-          //   position: "row",
+          //   icon: () => (
+          //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
+          //   ),
+          //   tooltip: "Carica Test Generatore",
+          //   onClick: () => handleOpen(),
+          //   isFreeAction: true,
           // },
-          {
-            icon: () => (
-              <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
-            ),
-            tooltip: "Carica Test Generatore",
-            onClick: () => handleOpen(),
-            isFreeAction: true,
-          },
         ]}
         localization={{
           header: {
             actions: "Azioni",
           },
         }}
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
       {/* ------------------ MODALE LOAD TEST GENERATORE --------------------- */}
       <Modal

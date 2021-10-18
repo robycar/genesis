@@ -2,7 +2,6 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-//import Title from "./Title";
 import { useEffect, useState } from "react";
 import { postGenerale } from "../../service/api";
 import Grid from "@material-ui/core/Grid";

@@ -27,12 +27,12 @@ import {
   postGenerale,
   deleteGenerale,
 } from "../service/api";
+import { tableIcons } from "../components/Icons";
 
 function TestSuiteTable() {
   var functions = localStorage.getItem("funzioni").split(",");
 
   const [data, setData] = useState([]);
-  const [testCases, setTestCases] = useState([]);
   const [id, setId] = useState();
   const [numTestCases, setNumTestCases] = useState();
   const [nome, setNome] = useState("");
@@ -206,14 +206,18 @@ function TestSuiteTable() {
       title: "Data di creazione",
       field: "creationDate",
       render: (rowData) => {
-        return rowData.creationDate.replace("T", " / ").replace(".000+00:00", "");
+        return rowData.creationDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
       },
     },
     {
       title: "Data di modifica",
       field: "modifiedDate",
       render: (rowData) => {
-        return rowData.modifiedDate.replace("T", " / ").replace(".000+00:00", "");
+        return rowData.modifiedDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
       },
     },
     {
@@ -277,7 +281,6 @@ function TestSuiteTable() {
   ];
   const [open, setOpen] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
-  const [openTestSuite, SetOpenTestSuite] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [idElemento, setIdElemento] = React.useState(0);
   const [openTestCase, SetOpenTestCase] = React.useState(false);
@@ -297,7 +300,6 @@ function TestSuiteTable() {
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
     setNumTestCases(rowData.numTestCases);
-    // setTestCases([...testCases, rowData.testCases[0].nome]);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
@@ -313,17 +315,8 @@ function TestSuiteTable() {
     funzioneGetTestsuiteById(id);
   };
 
-  const handleCloseTestCaseUpdated = () => {
-    SetOpenTestCase(false);
-  };
-
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleClose2 = () => {
-    setOpen(false);
-    // aggiornaTestCaseAssociati();
   };
 
   //------------ funzione apri modale delete
@@ -348,7 +341,6 @@ function TestSuiteTable() {
 
   //-------- MODALE ERROR AGGIORNA TEST SUITE -------------//
 
-  const [warningUpdate, setWarningUpdate] = useState("");
   const [openWarningUpdate, setOpenWarningUpdate] = useState(false);
 
   const handleCloseWarningUpdate = () => {
@@ -359,7 +351,6 @@ function TestSuiteTable() {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -371,12 +362,10 @@ function TestSuiteTable() {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -405,17 +394,13 @@ function TestSuiteTable() {
     bottone: {
       marginLeft: "55px",
       marginTop: "5%",
-      // marginBottom: "2%",
     },
     modal: {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
     },
-    // divider: {
-    //   marginTop: "3%",
-    //   marginBottom: "5",
-    // },
+
     paperModale: {
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
@@ -433,13 +418,11 @@ function TestSuiteTable() {
       marginButton: "2%",
       height: 800,
       width: 800,
-      // position: "relative",
     },
 
     paperContainer2: {
       flexDirection: "column",
       padding: "20px",
-      // marginBottom: "10%",
     },
     paperModaleDelete: {
       backgroundColor: theme.palette.background.paper,
@@ -479,8 +462,6 @@ function TestSuiteTable() {
       alignItems: "center",
     },
     iconModaleError: {
-      // width: "15%",
-      // height: "15%",
       marginRight: "4%",
       transform: "scale(1.9)",
       color: "#ef5350",
@@ -498,6 +479,7 @@ function TestSuiteTable() {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Test Suite"
         data={data}
@@ -546,14 +528,14 @@ function TestSuiteTable() {
           {
             icon: () => <EditIcon />,
             tooltip: "Modifica Test Suite",
-            onClick: (event, rowData) => openModifica(rowData),
+            onClick: (rowData) => openModifica(rowData),
             disabled: functions.indexOf("testsuite.edit") === -1,
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
             tooltip: "Elimina Test Suite",
-            onClick: (event, rowData) => {
+            onClick: (rowData) => {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
@@ -604,10 +586,8 @@ function TestSuiteTable() {
                       onChange={(e) => setId(e.target.value)}
                       label="Id"
                       defaultValue={id}
-                      // helperText={nome !== "" ? "" : "Lo status è richiesto"}
                       InputProps={{
                         readOnly: modifica === true,
-                        // readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
@@ -790,6 +770,7 @@ function TestSuiteTable() {
                 <Form className={classes.contenutoModale}>
                   <>
                     <MaterialTable
+                      icons={tableIcons}
                       style={{ boxShadow: "none" }}
                       title="Test Case"
                       data={arrayTestCase}
@@ -810,18 +791,6 @@ function TestSuiteTable() {
                           { value: data.length, label: "All" },
                         ],
                       }}
-                      // actions={[
-                      //   {
-                      //     icon: (dat) => (
-                      //       <a>
-                      //         <VisibilityIcon />
-                      //       </a>
-                      //     ),
-                      //     tooltip: "Visualizza tutti i dati",
-                      //     position: "row",
-                      //     onClick: (event, rowData) => openVisualizza(rowData),
-                      //   },
-                      // ]}
                       localization={{
                         header: {
                           actions: "Azioni",
@@ -843,11 +812,7 @@ function TestSuiteTable() {
                     {modifica === false ? (
                       ""
                     ) : (
-                      <ButtonClickedGreen
-                        size="medium"
-                        nome="Aggiorna"
-                        //onClick={funzioneAggiornaTestAssociati}
-                      />
+                      <ButtonClickedGreen size="medium" nome="Aggiorna" />
                     )}
 
                     <ButtonNotClickedGreen
@@ -892,6 +857,7 @@ function TestSuiteTable() {
                 <Form className={classes.contenutoModale}>
                   <>
                     <MaterialTable
+                      icons={tableIcons}
                       style={{ boxShadow: "none" }}
                       title="Test Case"
                       data={dataTestCases}
@@ -915,28 +881,10 @@ function TestSuiteTable() {
                           { value: dataTestCases.length, label: "All" },
                         ],
                       }}
-                      onSelectionChange={
-                        (rows, testcase) => {
-                          setSelectedRows(rows);
-                          modificaTestSelezionati(testcase);
-                        }
-                        // for (let i = 0; i < rows.length; i++) {
-                        //   // console.log(rows[i].id);
-                        //   return selectedRows.push(rows[i].id);
-                        // }
-                      }
-                      // actions={[
-                      //   {
-                      //     icon: (dat) => (
-                      //       <a>
-                      //         <VisibilityIcon />
-                      //       </a>
-                      //     ),
-                      //     tooltip: "Visualizza tutti i dati",
-                      //     position: "row",
-                      //     onClick: (event, rowData) => openVisualizza(rowData),
-                      //   },
-                      // ]}
+                      onSelectionChange={(rows, testcase) => {
+                        setSelectedRows(rows);
+                        modificaTestSelezionati(testcase);
+                      }}
                       localization={{
                         header: {
                           actions: "Azioni",
@@ -951,11 +899,9 @@ function TestSuiteTable() {
                     className={classes.bottone}
                     style={{ display: "flex", justifyContent: "flex-end" }}
                   >
-                    {/* {arrayIdTestCase.length < 0 ? () : ()} */}
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"
-                      // disabled={arrayIdTestCase.length === 0 ? "true" : ""}
                       onClick={funzioneAggiornaTestCaseAssociati}
                     />
 

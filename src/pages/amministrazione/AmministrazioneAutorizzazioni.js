@@ -129,9 +129,6 @@ const useStyles = makeStyles((theme) => ({
 function AmministrazioneAutorizzazioni() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   return (
     <div className={classes.root}>

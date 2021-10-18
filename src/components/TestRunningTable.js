@@ -17,28 +17,19 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
-
-import loading from "../../src/assets/load.gif";
-import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import DeleteIcon from "@material-ui/icons/Delete";
+import { tableIcons } from "../components/Icons";
+
 
 const TestRunningTable = () => {
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
   const [idToRun, setIdToRun] = useState();
-
-  const [nome, setNome] =useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState(); 
   const [data, setData] = useState();
   const [dataCase, setDataCase] = useState();
-  const [createdBy, setCreatedBy] = useState("");
   const [appearTest, setAppearTest] = useState([]);
-
   const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
 
@@ -61,33 +52,17 @@ const TestRunningTable = () => {
       title: "Data Caricamento",
       field: "loadedWhen",
     },
-    // {
-    //   title: "Data Fine",
-    //   field: "endDate",
-    // },
+
     {
       title: "Status",
       field: "stato",
     },
-    // {
-    //   title: "Trace",
-    //   field: "properties",
-    // },
-    // {
-    //   title: "Call-Id",
-    //   field: "loadedBy",
-    // },
-    // {
-    //   title: "Report",
-    //   field: "pathInstance",
-    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -104,7 +79,6 @@ const TestRunningTable = () => {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperModale: {
       backgroundColor: theme.palette.background.paper,
@@ -118,7 +92,6 @@ const TestRunningTable = () => {
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "1%",
     },
@@ -209,7 +182,7 @@ const TestRunningTable = () => {
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -230,17 +203,13 @@ const TestRunningTable = () => {
   };
 
   const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_)
-    setOpenRun(true)
+    setIdToRun(idRun_);
+    setOpenRun(true);
     setOpen(false);
   };
 
   const handleCloseRun = () => {
     setOpenRun(false);
-  };
-
-  const handleChangeData = (newValue) => {
-    setValue(newValue);
   };
 
   const testCaseLoader = () => {
@@ -249,12 +218,10 @@ const TestRunningTable = () => {
     getAllTestCaseRunning();
   };
 
-
   const runCaseLoder = () => {
     runTestCase(idToRun);
     handleCloseRun();
-    //alert("Run test id :  "+ idToRun);
-  }
+  };
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
@@ -286,8 +253,6 @@ const TestRunningTable = () => {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
         setData(result.testCaseList);
       })
       .catch((error) => console.log("error", error));
@@ -300,7 +265,6 @@ const TestRunningTable = () => {
   /*--------------- LOAD TEST CASE -------------------*/
 
   const loadTestCase = (id) => {
-   
     var urlLoad = `/api/testcase/load/${id}`;
 
     var myHeaders = new Headers();
@@ -317,17 +281,14 @@ const TestRunningTable = () => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTestCaseLoad(result.list);
       })
       .catch((error) => console.log("error", error));
-        
   };
 
   /*--------------- RUN TEST CASE -------------------*/
 
   const runTestCase = (idRun) => {
-   
     var urlLoad = `/api/testcase/runloaded/${idRun}`;
 
     var myHeaders = new Headers();
@@ -344,28 +305,22 @@ const TestRunningTable = () => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setIdTestCaseRun(result.list);
       })
       .catch((error) => console.log("error", error));
-        
   };
 
   const hadleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
     runCaseLoder(rowDataaa.id);
   };
 
-   /*--------------- GET TEST CASE -------------------*/
+  /*--------------- GET TEST CASE -------------------*/
 
-   const getAllTestCaseModal = () => {
-
+  const getAllTestCaseModal = () => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
-
 
     var requestOptions = {
       method: "GET",
@@ -376,7 +331,6 @@ const TestRunningTable = () => {
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setAppearTest(result.list);
         setDataCase(result.list);
       })
@@ -386,18 +340,17 @@ const TestRunningTable = () => {
   return (
     <div>
       <MaterialTable
+      icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Case Schedulati"
         data={data}
         columns={columns}
         options={{
-          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -418,8 +371,7 @@ const TestRunningTable = () => {
           {
             icon: () => <DeleteIcon />,
             tooltip: "Elimina Test",
-            onClick: (event, rowData) =>
-            alert("Api delete da inserire"),
+            onClick: (event, rowData) => alert("Api delete da inserire"),
             position: "row",
           },
           {
@@ -428,23 +380,21 @@ const TestRunningTable = () => {
             isFreeAction: true,
             onClick: () => handleChange(),
           },
-          {
-            icon: () => (
-              <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
-            ),
-            tooltip: "Carica Test Case",
-            onClick: () => handleOpen(),
-            isFreeAction: true,
-          },
+          // {
+          //   icon: () => (
+          //     <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
+          //   ),
+          //   tooltip: "Carica Test Case",
+          //   onClick: () => handleOpen(),
+          //   isFreeAction: true,
+          // },
         ]}
         localization={{
           header: {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-              "Non è presente alcun dato da mostrare"
-            ),
+            emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
       />
@@ -496,7 +446,6 @@ const TestRunningTable = () => {
                             value={prova.id}
                           >
                             {prova.nome}
-                            
                           </MenuItem>
                         );
                       })}
@@ -507,7 +456,7 @@ const TestRunningTable = () => {
               <Divider className={classes.divider} />
 
               <div className={classes.bottone}>
-              <Button
+                <Button
                   size="small"
                   variant="contained"
                   color="secondary"
@@ -532,7 +481,7 @@ const TestRunningTable = () => {
                 <Button
                   size="small"
                   variant="contained"
-                  style={{backgroundColor:"#ffeb3b", color: "white"}}
+                  style={{ backgroundColor: "#ffeb3b", color: "white" }}
                   nome="Annulla"
                   onClick={handleClose}
                 >
@@ -607,10 +556,7 @@ const TestRunningTable = () => {
               <Divider />
 
               <div className={classes.bottone}>
-                <Button 
-                  variant="contained" 
-                  color="primary"
-                >
+                <Button variant="contained" color="primary">
                   Conferma
                 </Button>
 
@@ -653,14 +599,14 @@ const TestRunningTable = () => {
               </ListItem>
 
               <Divider className={classes.divider} />
-                <Typography className={classes.info}>
-                  <p>Vuoi lanciare il test case da te selezionato ?</p>
-                </Typography>
+              <Typography className={classes.info}>
+                <p>Vuoi lanciare il test case da te selezionato ?</p>
+              </Typography>
               <Divider />
 
               <div className={classes.bottone}>
-                <Button 
-                  variant="contained" 
+                <Button
+                  variant="contained"
                   color="primary"
                   onClick={hadleLoadData}
                 >

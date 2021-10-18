@@ -110,7 +110,6 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
     display: "flex",
     flexDirection: "column",
-    // backgroundColor: "blue",
   },
 
   fixedHeight: {
@@ -121,7 +120,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
   paper: {
-    //backgroundColor: "yellow",
     display: "flex",
     alignItems: "center",
     padding: "3%",
@@ -142,7 +140,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
     padding: "2%",
-    // marginTop: "2%",
   },
   divider: {
     width: "90%",
@@ -152,14 +149,12 @@ const useStyles = makeStyles((theme) => ({
 
   bottone: {
     marginLeft: "75%",
-    // marginTop: "2%",
-    // marginBottom: "2%",
+
     padding: "2%",
   },
   divSelect: {
     padding: "3%",
     width: "52%",
-    // height: "115.6px",
   },
 
   multipleSelect: {
@@ -167,7 +162,6 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    // width: "20vw",
     width: "300px",
     display: "flex",
   },
@@ -178,18 +172,15 @@ const useStyles = makeStyles((theme) => ({
   divIp: {
     display: "flex",
     flexDirection: "row",
-    //alignItems: "flex-end",
     alignItems: "center",
   },
   separatoreIp: {
     marginBottom: "2%",
     fontWeight: "600px",
     lineHeigth: "2%",
-    //fontSize: "2px",
   },
   generalContainer: {
     display: "flex",
-    // marginTop: "5%",
     flexDirection: "row",
     alignItems: "center",
     padding: "4%",
@@ -231,8 +222,6 @@ function EditingOutboundProxy() {
       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
       myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      // console.log(bearer.toString());
-
       var requestOptions = {
         method: "GET",
         headers: myHeaders,
@@ -252,7 +241,7 @@ function EditingOutboundProxy() {
     getTypeId();
   }, []);
 
-  //put descrizione e ip
+  //-----------------------put descrizione e ip
 
   function salva() {
     if (functions.indexOf("linea.view") !== -1) {
@@ -279,7 +268,6 @@ function EditingOutboundProxy() {
 
         fetch(`/api/obp`, requestOptions)
           .then((response) => response.json())
-          //.then((result) => console.log(result))
           .catch((error) => console.log("error", error));
 
         history.push("/editing/outboundproxy");
@@ -488,7 +476,6 @@ function EditingOutboundProxy() {
                         value={typeLineaId}
                         onChange={handleChange}
                         input={<Input />}
-                        //MenuProps={MenuProps}
                       >
                         {data.map((prova) => {
                           return (

@@ -1,4 +1,4 @@
-import React, { version } from "react";
+import React from "react";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
@@ -22,6 +22,8 @@ import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
 import { useHistory } from "react-router-dom";
 import SettingsIcon from "@material-ui/icons/Settings";
+import { tableIcons } from "../components/Icons";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const GestioneRuoli = () => {
 
@@ -256,6 +258,7 @@ const GestioneRuoli = () => {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Gestione Gruppi"
         data={data}
@@ -300,7 +303,7 @@ const GestioneRuoli = () => {
             isFreeAction: true,
           },
           rowData => ({
-            icon: 'delete',
+            icon: ()=> <DeleteIcon/>,
             tooltip: 'Elimina Gruppo',
             onClick: (event, rowData) => funzioneDelete(rowData.id),
             disabled: functions.indexOf("group.delete") === -1

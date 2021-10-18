@@ -9,7 +9,6 @@ import "../styles/App.css";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    // width: "20vw",
     width: "340px",
     display: "flex",
   },
@@ -34,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 function SelectBar(props) {
   const classes = useStyles();
   const [test, setTest] = React.useState("");
-
   const inputLabel = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
   React.useEffect(() => {
@@ -59,7 +57,6 @@ function SelectBar(props) {
         value={test}
         onChange={handleChange}
         labelWidth={labelWidth}
-        // label="Age"
       >
         <MenuItem value="">
           <em>None</em>

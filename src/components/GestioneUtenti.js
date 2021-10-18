@@ -19,6 +19,8 @@ import Row from "react-bootstrap/Row";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
+import { tableIcons } from "../components/Icons";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const GestioneUtenti = () => {
 
@@ -242,6 +244,7 @@ const GestioneUtenti = () => {
   return (
     <div>
       <MaterialTable
+      icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Gestione Utenti"
         data={data}
@@ -285,7 +288,7 @@ const GestioneUtenti = () => {
               disabled: (functions.indexOf("user.edit") === -1)
             }),
           rowData => ({
-            icon: 'delete',
+            icon:()=><DeleteIcon/>,
             tooltip: 'Elimina Utente',
             onClick: (event, rowData) => funzioneDelete(rowData.id),
             disabled: (functions.indexOf("user.delete") === -1 || rowData.level.nome === "ADMIN") || (rowData.username === localStorage.getItem("username"))

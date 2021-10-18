@@ -22,11 +22,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../service/api";
-
+import {
+  getGenerale,
+  getByIdGenerale,
+  postGenerale,
+  deleteGenerale,
+} from "../service/api";
+import { tableIcons } from "../components/Icons";
 
 function TestCaseTable() {
-
   var functions = localStorage.getItem("funzioni").split(",");
 
   const [data, setData] = useState([]);
@@ -50,78 +54,95 @@ function TestCaseTable() {
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
-  const [scrittaTabella, setScrittaTabella] = useState("")
-
+  const [scrittaTabella, setScrittaTabella] = useState("");
 
   const funzioneGetAll = () => {
-    if (functions.indexOf("test.view") !== -1 && functions.indexOf("obp.view") !== -1 && functions.indexOf("linea.view") !== -1) {
+    if (
+      functions.indexOf("test.view") !== -1 &&
+      functions.indexOf("obp.view") !== -1 &&
+      functions.indexOf("linea.view") !== -1
+    ) {
       //----GET ALL USERS----
       (async () => {
-        setCaricamento(true)
-        setData((await getGenerale('testcase')).list);
-        setCaricamento(false)
+        setCaricamento(true);
+        setData((await getGenerale("testcase")).list);
+        setCaricamento(false);
       })();
 
       //-----GET APPEAR OBP-----
       (async () => {
-        setAppearOBP((await getGenerale('obp')).list);
+        setAppearOBP((await getGenerale("obp")).list);
       })();
 
       //-----GET APPEAR LINEA-----
       (async () => {
-        setAppearLine((await getGenerale('linea')).list);
+        setAppearLine((await getGenerale("linea")).list);
       })();
 
-      setScrittaTabella("Non è presente alcun dato da mostrare")
-
+      setScrittaTabella("Non è presente alcun dato da mostrare");
     } else {
-      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+      setScrittaTabella(
+        "Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella"
+      );
     }
-  }
+  };
 
   const funzioneGetTestcaseById = (id) => {
     if (functions.indexOf("test.view") !== -1) {
       (async () => {
-        setAllVariables((await getByIdGenerale('testcase', id)).testCase);
+        setAllVariables((await getByIdGenerale("testcase", id)).testCase);
         funzioneGetAll();
+        setOpenChiamato(true);
       })();
     }
-  }
+  };
 
   const funzioneAggiornaChiamato = () => {
     if (functions.indexOf("test.edit") !== -1) {
       //----AGGIORNA CHIAMATO----
       (async () => {
-        await postGenerale('testcase', { id: id, version: version, chiamato: { linea: { id: lineaChiamato }, proxy: { id: proxyChiamato } } });
-        funzioneGetTestcaseById(id)
+        await postGenerale("testcase", {
+          id: id,
+          version: version,
+          chiamato: {
+            linea: { id: lineaChiamato },
+            proxy: { id: proxyChiamato },
+          },
+        });
+        funzioneGetTestcaseById(id);
       })();
     }
-  }
+  };
 
   const funzioneAggiornaChiamanti = () => {
     if (functions.indexOf("test.edit") !== -1) {
       //----AGGIORNA CHIAMANTI----
       (async () => {
-        await postGenerale('testcase', { id: id, version: version, chiamanti });
-        funzioneGetTestcaseById(id)
+        await postGenerale("testcase", { id: id, version: version, chiamanti });
+        funzioneGetTestcaseById(id);
       })();
     }
-  }
+  };
 
   const funzioneAggiornaTestcase = () => {
     if (functions.indexOf("test.edit") !== -1) {
       //----AGGIORNA TESTCASE----
       (async () => {
-        await postGenerale('testcase', { id: id, version: version, nome: nome, descrizione: descrizione });
+        await postGenerale("testcase", {
+          id: id,
+          version: version,
+          nome: nome,
+          descrizione: descrizione,
+        });
         funzioneGetTestcaseById(id);
       })();
     }
-  }
+  };
 
   const funzioneDelete = () => {
     if (functions.indexOf("test.delete") !== -1) {
       (async () => {
-        setCaricamento(true)
+        setCaricamento(true);
         let result = await deleteGenerale("testcase", idElemento);
         if (result?.error !== null) {
           setOpenWarning(true);
@@ -129,26 +150,25 @@ function TestCaseTable() {
             setWarning(
               "Non è possibile eliminare un test case che non appartiene al proprio gruppo"
             );
-          }
-          else if (result?.error === "Internal Server Error") {
+          } else if (result?.error === "Internal Server Error") {
             setWarning(
               "Non è possibile eliminare il TestCase perchè associato ad una o più TestSuite"
             );
           } else {
             setWarning(
               "Codice errore:" +
-              result.error.code +
-              "Descrizione" +
-              result.code.description
+                result.error.code +
+                "Descrizione" +
+                result.code.description
             );
           }
         } else {
           funzioneGetAll();
-          setOpenDelete(false)
+          setOpenDelete(false);
         }
       })();
     }
-  }
+  };
 
   const columns = [
     {
@@ -169,14 +189,18 @@ function TestCaseTable() {
       title: "Data di creazione",
       field: "creationDate",
       render: (rowData) => {
-        return rowData.creationDate.replace("T", " / ").replace(".000+00:00", "");
+        return rowData.creationDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
       },
     },
     {
       title: "Data di modifica",
       field: "modifiedDate",
       render: (rowData) => {
-        return rowData.modifiedDate.replace("T", " / ").replace(".000+00:00", "");
+        return rowData.modifiedDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
       },
     },
     {
@@ -229,7 +253,7 @@ function TestCaseTable() {
     setTemplate(rowData.template.nome);
     setChiamato(rowData.chiamato);
     setChiamanti(rowData.chiamanti);
-    setChiama(rowData)
+    setChiama(rowData);
   };
 
   const handleClose = () => {
@@ -242,10 +266,9 @@ function TestCaseTable() {
   const [warning, setWarning] = useState("");
 
   const handleCloseWarning = () => {
-    setCaricamento(false)
+    setCaricamento(false);
     setOpenWarning(false);
   };
-
 
   //------------ funzione apri modale delete
 
@@ -269,19 +292,18 @@ function TestCaseTable() {
     var appoggioChiamanti = rowData.chiamanti;
 
     for (let i = 0; i < Object.keys(rowData.chiamanti).length; i++) {
-      delete appoggioChiamanti[i].file
+      delete appoggioChiamanti[i].file;
       appoggioChiamanti[i].linea = { id: rowData.chiamanti[i].linea.id };
       appoggioChiamanti[i].proxy = { id: rowData.chiamanti[i].proxy.id };
     }
     setMapChiamanti(Object.keys(rowData.chiamanti));
-  }
+  };
 
   const handleOpenChiamato = () => {
-    setOpenChiamato(true);
+    funzioneGetTestcaseById(id);
   };
 
   const handleCloseChiamato = () => {
-    funzioneGetTestcaseById(id)
     setOpenChiamato(false);
   };
 
@@ -293,10 +315,9 @@ function TestCaseTable() {
     setChiamanti(e);
   };
   const handleCloseChiamanti = () => {
-    funzioneGetTestcaseById(id)
+    funzioneGetTestcaseById(id);
     setOpenChiamanti(false);
   };
-
 
   useEffect(() => {
     funzioneGetAll();
@@ -434,6 +455,7 @@ function TestCaseTable() {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         detailPanel={(rowData) => {
           return (
             <div
@@ -505,7 +527,7 @@ function TestCaseTable() {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
-            disabled: functions.indexOf("test.delete") === -1
+            disabled: functions.indexOf("test.delete") === -1,
           },
         ]}
         localization={{
@@ -636,7 +658,9 @@ function TestCaseTable() {
                     <TextField
                       className={classes.textField}
                       label="Data di creazione"
-                      value={creationDate.replace("T", " / ").replace(".000+00:00", "")}
+                      value={creationDate
+                        .replace("T", " / ")
+                        .replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -659,7 +683,9 @@ function TestCaseTable() {
                     <TextField
                       className={classes.textField}
                       label="Data di Modifica"
-                      value={modifiedDate.replace("T", " / ").replace(".000+00:00", "")}
+                      value={modifiedDate
+                        .replace("T", " / ")
+                        .replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -736,7 +762,16 @@ function TestCaseTable() {
                       }}
                     >
                       {appearLine.map((linea) => (
-                        <MenuItem disabled={linea.id === lineaChiamato || linea.id === chiamanti[0]?.linea.id || linea.id === chiamanti[1]?.linea.id || linea.id === chiamanti[2]?.linea.id} key={linea.id} value={linea.id}>
+                        <MenuItem
+                          disabled={
+                            linea.id === lineaChiamato ||
+                            linea.id === chiamanti[0]?.linea.id ||
+                            linea.id === chiamanti[1]?.linea.id ||
+                            linea.id === chiamanti[2]?.linea.id
+                          }
+                          key={linea.id}
+                          value={linea.id}
+                        >
                           {linea.campiConcatenati}
                         </MenuItem>
                       ))}
@@ -756,7 +791,16 @@ function TestCaseTable() {
                       }}
                     >
                       {appearOBP.map((proxy) => (
-                        <MenuItem disabled={proxy.id === proxyChiamato || proxy.id === chiamanti[0]?.proxy.id || proxy.id === chiamanti[1]?.proxy.id || proxy.id === chiamanti[2]?.proxy.id} key={proxy.id} value={proxy.id}>
+                        <MenuItem
+                          disabled={
+                            proxy.id === proxyChiamato ||
+                            proxy.id === chiamanti[0]?.proxy.id ||
+                            proxy.id === chiamanti[1]?.proxy.id ||
+                            proxy.id === chiamanti[2]?.proxy.id
+                          }
+                          key={proxy.id}
+                          value={proxy.id}
+                        >
                           {proxy.campiConcatenati}
                         </MenuItem>
                       ))}
@@ -841,7 +885,16 @@ function TestCaseTable() {
                           }}
                         >
                           {appearLine.map((linea) => (
-                            <MenuItem disabled={linea.id === lineaChiamato || linea.id === chiamanti[0]?.linea.id || linea.id === chiamanti[1]?.linea.id || linea.id === chiamanti[2]?.linea.id} key={linea.id} value={linea.id}>
+                            <MenuItem
+                              disabled={
+                                linea.id === lineaChiamato ||
+                                linea.id === chiamanti[0]?.linea.id ||
+                                linea.id === chiamanti[1]?.linea.id ||
+                                linea.id === chiamanti[2]?.linea.id
+                              }
+                              key={linea.id}
+                              value={linea.id}
+                            >
                               {linea.campiConcatenati}
                             </MenuItem>
                           ))}
@@ -863,7 +916,16 @@ function TestCaseTable() {
                           }}
                         >
                           {appearOBP.map((proxy) => (
-                            <MenuItem disabled={proxy.id === proxyChiamato || proxy.id === chiamanti[0]?.proxy.id || proxy.id === chiamanti[1]?.proxy.id || proxy.id === chiamanti[2]?.proxy.id} key={proxy.id} value={proxy.id}>
+                            <MenuItem
+                              disabled={
+                                proxy.id === proxyChiamato ||
+                                proxy.id === chiamanti[0]?.proxy.id ||
+                                proxy.id === chiamanti[1]?.proxy.id ||
+                                proxy.id === chiamanti[2]?.proxy.id
+                              }
+                              key={proxy.id}
+                              value={proxy.id}
+                            >
                               {proxy.campiConcatenati}
                             </MenuItem>
                           ))}

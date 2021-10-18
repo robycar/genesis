@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../../styles/App.css";
-
-import DeleteIcon from "@material-ui/icons/Delete";
 import { Paper, Typography } from "@material-ui/core";
 import acccessControl from "../../service/url.js";
 import Divider from "@material-ui/core/Divider";
-import { MenuItem } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import AddIcon from "@material-ui/icons/Add";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -21,16 +16,12 @@ import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Tooltip from "@material-ui/core/Tooltip";
-
-import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
+import { tableIcons } from "../../components/Icons";
 
 function LaunchingTestSuiteTable() {
   const [data, setData] = useState([]);
@@ -45,7 +36,6 @@ function LaunchingTestSuiteTable() {
   const [dataTestCases, setDataTestCases] = useState([]);
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
-  const [durataComplessiva, setDurataComplessiva] = useState("");
   const [testSuite, setTestSuite] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
@@ -57,51 +47,10 @@ function LaunchingTestSuiteTable() {
   const [openRun, setOpenRun] = React.useState(false);
 
   const arrayTestCase = testSuite?.testCases;
-  //Array di case checked + quelli seza checked
   const newArr1 = arrayTestCase?.map((v) => ({
     ...v,
     tableData: { checked: true },
   }));
-  // console.log(newArr1, " Array di test case modificato");
-
-  console.log(dataTestCases, "Lista di test cases");
-
-  // Prova
-  // const arrayEmpty = [];
-  // for (let index = 0; index < dataTestCases.length; index++) {
-  //   const elemento = dataTestCases[index];
-
-  //   for (let index = 0; index < newArr1?.length; index++) {
-  //     if (elemento.id === newArr1[index].id) {
-  //       arrayEmpty.push(newArr1[index]);
-  //     }
-  //   }
-
-  //   if (!arrayEmpty.includes(elemento)) {
-  //     arrayEmpty.push(elemento);
-
-  //     console.log(!arrayEmpty.includes(elemento.id));
-  //   }
-
-  //   console.log(dataTestCases[index], "data");
-  //   newArr1?.push(elemento);
-  // }
-
-  // Sostituzione array checked con quelli senza check che hanno lo seddo id
-  const res = dataTestCases.map(
-    (obj) => newArr1?.find((o) => o.id === obj.id) || obj
-  );
-
-  /// Array di testCase associati con il flag
-
-  // for (let index = 0; index < dataTestCases.length; index++) {
-  //   const elemento = dataTestCases[index];
-
-  //   // console.log(dataTestCases[index], "data");
-  //   newArr1?.push(elemento);
-  // }
-
-  // console.log(dataTestCases, "dataTestCases");
 
   /*------- arrayIdTestCase -----------*/
   const arrayIdTestCase = [];
@@ -110,32 +59,13 @@ function LaunchingTestSuiteTable() {
     arrayIdTestCase?.push(element);
   }
 
-  // console.log(selectedRows, " Righe selezionati");
-  console.log(arrayTestCase, " Array di test case");
-
   var arrayId = [];
   arrayTestCase?.forEach(function (obj) {
     arrayId?.push(obj.id);
   });
-  console.log(arrayId, "ID associati");
-
-  console.log(arrayIdTestCase, "Id test case selezionati");
-
-  //Pusho gli ID associati nell'array di test Case
-  // for (let index = 0; index < arrayId.length; index++) {
-  //   const element = arrayId[index];
-  //   arrayIdTestCase?.push(element);
-  // }
-  // console.log(arrayIdTestCase, "Id test case totali");
-  //Tolgo gli ID duplicati
-  // const uniqueArray = [...new Set(arrayIdTestCase)];
-
-  // console.log(uniqueArray);
 
   //----Bearer-------------------------
-
   let bearer = `Bearer ${localStorage.getItem("token")}`;
-
   if (bearer != null) {
     bearer = bearer.replace(/"/g, "");
   }
@@ -234,17 +164,15 @@ function LaunchingTestSuiteTable() {
 
       fetch(`/api/testsuite`, requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
+        .then((result) => result)
         .catch((error) => console.log("error", error));
       getAllTestSuite();
-      // window.location = "/editing/testsuite";
     };
   };
 
   useEffect(() => {
     getAllTestSuite();
     getAllTestCase();
-    // Invia();
   }, []);
 
   //----------------FUNZIONE LOAD AND RUN TEST SUITE---------------
@@ -266,19 +194,13 @@ function LaunchingTestSuiteTable() {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setTestSuiteLoad(result.testSuiteCaricata);
         setTestSuiteLoad(result.testSuiteCaricata.id);
       })
       .catch((error) => console.log("error", error));
   };
-
-  // console.log(testSuiteLoad, "id test caricato");
   // /*--------------- FUNZIONE RUN TEST SUITE -------------------*/
-
   const runTestSuite = (idRun) => {
     var urlLoad = `/api/testsuite/loaded/run/${idRun}`;
-
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -307,7 +229,6 @@ function LaunchingTestSuiteTable() {
           }
         } else {
           setOpenWarning(false);
-          console.log(result);
           setIdTestSuiteRun(result.list);
         }
       })
@@ -333,7 +254,6 @@ function LaunchingTestSuiteTable() {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTestCaseLoad(result.testCaseCaricato.id);
       })
       .catch((error) => console.log("error", error));
@@ -358,7 +278,6 @@ function LaunchingTestSuiteTable() {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setIdTestCaseRun(result.list);
       })
       .catch((error) => console.log("error", error));
@@ -369,19 +288,11 @@ function LaunchingTestSuiteTable() {
       title: "ID Test",
       field: "id",
       defaultSort: "desc",
-      // tableData: { checked: true },
     },
     {
       title: "Nome",
       field: "nome",
     },
-
-    /*{
-            title: "Descrizione",
-            field: "descrizione",
-            width: "5%",
-        },*/
-
     {
       title: "Data Creazione",
       field: "creationDate",
@@ -401,22 +312,7 @@ function LaunchingTestSuiteTable() {
     {
       title: "Numero di Test Case",
       field: "numTestCases",
-      // render: (rowData) => {
-      //   let prova = "!";
-      //   for (let index = 0; index < rowData.testCases.length; index++){
-      //     prova += ", " +rowData.testCases[index].nome;
-      //   }
-      //   return prova.replace("!, ", "")
-      // },
     },
-    // {
-    //   title: "Durata Complessiva",
-    //   field: "durata",
-    // },
-    // {
-    //   title: "Gruppo",
-    //   field: "gruppo.nome",
-    // },
   ];
 
   const columnsTestcases = [
@@ -430,14 +326,6 @@ function LaunchingTestSuiteTable() {
       title: "Nome",
       field: "nome",
     },
-    /*{
-            title: "Descrizione",
-            field: "descrizione",
-        },*/
-    // {
-    //   title: "Durata Attesa",
-    //   field: "expectedDuration",
-    // },
     {
       title: "Versione",
       field: "version",
@@ -465,8 +353,7 @@ function LaunchingTestSuiteTable() {
     },
   ];
   const [open, setOpen] = React.useState(false);
-    const [openRunTestCase, setOpenRunTestCase] = React.useState(false);
-  ;
+  const [openRunTestCase, setOpenRunTestCase] = React.useState(false);
   const [modifica, setModifica] = React.useState(false);
   const [openTestSuite, SetOpenTestSuite] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -487,12 +374,10 @@ function LaunchingTestSuiteTable() {
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
-    // setTestCases([...testCases, rowData.testCases[0].nome]);
     setCreatedBy(rowData.createdBy);
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
-    // setOpen(true);
     getTestSuiteById(rowData.id);
   };
 
@@ -531,20 +416,17 @@ function LaunchingTestSuiteTable() {
   const testSuiteLoader = () => {
     loadTestSuite(id);
     handleClose();
-    console.log("testSuite Loader");
     getAllTestSuite();
   };
 
   const runSuiteLoader = () => {
     runTestSuite(testSuiteLoad);
     handleCloseRun();
-    //alert("Run test id :  "+ idToRun);
   };
 
   const runCaseLoader = () => {
     runTestCase(testCaseLoad);
     handleCloseRunTestCase();
-    //alert("Run test id :  "+ idToRun);
   };
 
   const handleOpenRun = (idRun) => {
@@ -558,20 +440,17 @@ function LaunchingTestSuiteTable() {
     loadTestCase(idRun);
     setIdToRun(idRun);
     setOpenRunTestCase(true);
-    // setOpen(false);
   };
 
   const handleLoadData = (rowDataaa) => {
     setIdToRun(rowDataaa.id);
-    //loadTestSuite(idToRun);
     runSuiteLoader(rowDataaa.id);
   };
 
-    const handleLoadDataTestCase = (rowDataaa) => {
-      setIdToRun(rowDataaa.id);
-      //loadTestSuite(idToRun);
-      runCaseLoader(rowDataaa.id);
-    };
+  const handleLoadDataTestCase = (rowDataaa) => {
+    setIdToRun(rowDataaa.id);
+    runCaseLoader(rowDataaa.id);
+  };
 
   //------------ FUNZIONE DELETE ------------
 
@@ -631,7 +510,7 @@ function LaunchingTestSuiteTable() {
     setOpenDelete(false);
   };
 
-  //-----------
+  //------------------------------------------
   const [warning, setWarning] = useState("");
   const [openWarning, setOpenWarning] = useState(false);
 
@@ -700,34 +579,12 @@ function LaunchingTestSuiteTable() {
     invia();
   };
 
-  //-----------MODALE TEST SUITE------------------
-
-  // const handleOpenTestSuite= () => {
-  //   var appoggioChiamato;
-  //   appoggioChiamato = Object.values(testCase.chiamato);
-  //   for (let i = 0; i < appoggioChiamato.length; i++) {
-  //     chiamato.push(appoggioChiamato[i].id);
-  //   }
-  //   console.log(chiamato);
-  //   setOpenChiamato(true);
-  // };
-
-  // const handleCloseChiamato = () => {
-  //   setOpenChiamato(false);
-  // };
-
-  // const handleCloseChiamato2 = () => {
-  //   //aggiornaUtente();
-  //   setOpenChiamato(false);
-  // };
-
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -739,12 +596,10 @@ function LaunchingTestSuiteTable() {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -782,10 +637,6 @@ function LaunchingTestSuiteTable() {
       alignItems: "center",
       justifyContent: "center",
     },
-    // divider: {
-    //   marginTop: "3%",
-    //   marginBottom: "5",
-    // },
     paperModale: {
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
@@ -803,7 +654,6 @@ function LaunchingTestSuiteTable() {
       marginButton: "2%",
       height: 800,
       width: 800,
-      // position: "relative",
     },
     paperModaleLaunch: {
       backgroundColor: theme.palette.background.paper,
@@ -817,7 +667,6 @@ function LaunchingTestSuiteTable() {
     paperContainer2: {
       flexDirection: "column",
       padding: "20px",
-      // marginBottom: "10%",
     },
     paperModaleDelete: {
       backgroundColor: theme.palette.background.paper,
@@ -857,8 +706,6 @@ function LaunchingTestSuiteTable() {
       alignItems: "center",
     },
     iconModaleError: {
-      // width: "15%",
-      // height: "15%",
       marginRight: "4%",
       transform: "scale(1.9)",
       color: "#ef5350",
@@ -883,6 +730,7 @@ function LaunchingTestSuiteTable() {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Test Suite"
         data={data}
@@ -900,22 +748,8 @@ function LaunchingTestSuiteTable() {
         }}
         actions={[
           {
-            icon: () => (
-              <div className={classes.buttonRight}>
-                {/*<Button
-                                    className="button-green"
-                                    component={NavLink}
-                                    activeClassName="button-green-active"
-                                    exact
-                                    to="/editing/testsuite/createstsuite"
-                                    startIcon={<AddIcon />}
-                                >
-                                    TEST SUITE
-                                </Button>*/}
-              </div>
-            ),
+            icon: () => <div className={classes.buttonRight}></div>,
             tooltip: "Crea Test Suite",
-            //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
           {
@@ -983,10 +817,8 @@ function LaunchingTestSuiteTable() {
                       onChange={(e) => setId(e.target.value)}
                       label="Id"
                       defaultValue={id}
-                      // helperText={nome !== "" ? "" : "Lo status è richiesto"}
                       InputProps={{
                         readOnly: modifica === true,
-                        // readOnly: modifica === false ? true : false,
                       }}
                     />
                   </Col>
@@ -1022,7 +854,6 @@ function LaunchingTestSuiteTable() {
                     <TextField
                       className={classes.textField}
                       error={testCases !== "" ? false : true}
-                      // onChange={(e) => setTestCases(e.target.value)}
                       label="Numero Test Case"
                       defaultValue={arrayTestCase?.length}
                       helperText={testCases !== "" ? "" : "Test Case"}
@@ -1185,6 +1016,7 @@ function LaunchingTestSuiteTable() {
                 <Form className={classes.contenutoModale}>
                   <>
                     <MaterialTable
+                      icons={tableIcons}
                       style={{ boxShadow: "none" }}
                       title="Test Case"
                       data={arrayTestCase}
@@ -1206,12 +1038,6 @@ function LaunchingTestSuiteTable() {
                         ],
                       }}
                       actions={[
-                        /*{
-                                                    icon: () => <FileUploadIcon />,
-                                                    tooltip: "Load",
-                                                    onClick: (event, rowData) => loadTestCase(rowData.id),
-                                                    position: "row",
-                                                },*/
                         {
                           icon: () => <PlayCircleFilledIcon />,
                           tooltip: "Lancia Test Case",
@@ -1240,11 +1066,7 @@ function LaunchingTestSuiteTable() {
                     {modifica === false ? (
                       ""
                     ) : (
-                      <ButtonClickedGreen
-                        size="medium"
-                        nome="Aggiorna"
-                        // onClick={handleCloseChiamato2}
-                      />
+                      <ButtonClickedGreen size="medium" nome="Aggiorna" />
                     )}
 
                     <ButtonNotClickedGreen
@@ -1289,15 +1111,13 @@ function LaunchingTestSuiteTable() {
                 <Form className={classes.contenutoModale}>
                   <>
                     <MaterialTable
+                      icons={tableIcons}
                       style={{ boxShadow: "none" }}
                       title="Test Case"
                       data={dataTestCases}
                       columns={columnsTestcases}
                       options={{
                         selection: true,
-                        // selectionProps: (rowData) => ({
-                        //   checked: (rowData.tableData === rowData.id) === 1,
-                        // }),
                         sorting: true,
                         actionsColumnIndex: -1,
                         search: true,
@@ -1311,28 +1131,9 @@ function LaunchingTestSuiteTable() {
                           { value: data.length, label: "All" },
                         ],
                       }}
-                      onSelectionChange={
-                        (rows) => {
-                          setSelectedRows(rows);
-                          console.log(rows, "Row");
-                        }
-                        // for (let i = 0; i < rows.length; i++) {
-                        //   // console.log(rows[i].id);
-                        //   return selectedRows.push(rows[i].id);
-                        // }
-                      }
-                      // actions={[
-                      //   {
-                      //     icon: (dat) => (
-                      //       <a>
-                      //         <VisibilityIcon />
-                      //       </a>
-                      //     ),
-                      //     tooltip: "Visualizza tutti i dati",
-                      //     position: "row",
-                      //     onClick: (event, rowData) => openVisualizza(rowData),
-                      //   },
-                      // ]}
+                      onSelectionChange={(rows) => {
+                        setSelectedRows(rows);
+                      }}
                       localization={{
                         header: {
                           actions: "Azioni",
@@ -1347,7 +1148,6 @@ function LaunchingTestSuiteTable() {
                     className={classes.bottone}
                     style={{ display: "flex", justifyContent: "flex-end" }}
                   >
-                    {/* {arrayIdTestCase.length < 0 ? () : ()} */}
                     <ButtonClickedGreen
                       size="medium"
                       nome="Aggiorna"

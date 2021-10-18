@@ -9,7 +9,7 @@ export default function SelectAutocompleteTestCase(props) {
       id="combo-box-demo"
       options={props.items??[]}
       getOptionLabel={(option) => option.nome}
-      style={{ width: 300 }}
+      style={{ width: 400 }}
       renderInput={(params) => (
         <TextField {...params} label="Selezione Test Case" variant="outlined" />
       )}

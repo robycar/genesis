@@ -26,8 +26,17 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import { NavLink } from "react-router-dom";
+import {
+  getGenerale,
+  getByIdGenerale,
+  postGenerale,
+  deleteGenerale,
+} from "../service/api";
+import { tableIcons } from "../components/Icons";
 
 const TestConclusiTable = () => {
+  var functions = localStorage.getItem("funzioni").split(",");
+
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
   const [idToRun, setIdToRun] = useState();
@@ -42,11 +51,21 @@ const TestConclusiTable = () => {
   const [appearTest, setAppearTest] = useState([]);
   const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
-  const [idTestReport, setIdTestReport] = useState();
   const [dataCase, setDataCase] = useState();
-  // const [idTest, setIdTest] = useState();
   const [dataReport, setDataReport] = useState();
   const [idTest, setIdTest] = useState();
+  const [openChiamato, setOpenChiamato] = React.useState(false);
+  const [openChiamanti, setOpenChiamanti] = React.useState(false);
+  const [testCase, setTestCase] = useState({});
+  const [appearLine, setAppearLine] = useState([]);
+  const [appearOBP, setAppearOBP] = useState([]);
+  const [lineaChiamato, setLineaChiamato] = useState(0);
+  const [proxyChiamato, setProxyChiamato] = useState(0);
+  const [chiamato, setChiamato] = useState();
+  const [chiamanti, setChiamanti] = useState({});
+  const [mapChiamanti, setMapChiamanti] = useState([]);
+  const [dataTestcase, setDataTestCase] = useState([]);
+  const [nomeTitolo, setNomeTitolo] = useState("");
 
   const columns = [
     {
@@ -88,7 +107,6 @@ const TestConclusiTable = () => {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -105,7 +123,6 @@ const TestConclusiTable = () => {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperModale: {
       backgroundColor: theme.palette.background.paper,
@@ -134,11 +151,19 @@ const TestConclusiTable = () => {
       width: 500,
       position: "relative",
     },
+    paperModale: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 800,
+      position: "relative",
+    },
 
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "1%",
     },
@@ -209,6 +234,7 @@ const TestConclusiTable = () => {
     contenutoModale: {
       height: 370,
       overflowX: "hidden",
+      padding: "2%",
     },
     divInput: {
       display: "flex",
@@ -237,6 +263,47 @@ const TestConclusiTable = () => {
     },
   }));
 
+  const funzioneGetAll = () => {
+    if (
+      functions.indexOf("test.view") !== -1 &&
+      functions.indexOf("obp.view") !== -1 &&
+      functions.indexOf("linea.view") !== -1
+    ) {
+      //   //----GET ALL USERS----
+      (async () => {
+        //     setCaricamento(true)
+        setDataTestCase((await getGenerale("testcase")).list);
+        //     setCaricamento(false)
+      })();
+
+      //-----GET APPEAR OBP-----
+      (async () => {
+        setAppearOBP((await getGenerale("obp")).list);
+      })();
+
+      //-----GET APPEAR LINEA-----
+      (async () => {
+        setAppearLine((await getGenerale("linea")).list);
+      })();
+
+      //   setScrittaTabella("Non è presente alcun dato da mostrare")
+
+      // } else {
+      //   setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+      // }
+    }
+  };
+
+  const funzioneGetTestcaseById = (id) => {
+    if (functions.indexOf("test.view") !== -1) {
+      (async () => {
+        setAllVariables((await getByIdGenerale("testcase", id)).testCase);
+        funzioneGetAll();
+        setOpenChiamato(true);
+      })();
+    }
+  };
+
   const handleChange = () => {
     setFilter(!filter);
   };
@@ -248,9 +315,16 @@ const TestConclusiTable = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openVisualizzaReport, setOpenVisualizzaReport] = useState(false);
 
-  const handleOpen = () => {
+  const handleOpen = (rowData) => {
     setOpen(true);
     getAllTestCaseModal();
+    setAllVariables(rowData);
+  };
+
+  const setAllVariables = (rowData) => {
+    setChiamato(rowData.chiamato);
+    setChiamanti(rowData.chiamanti);
+    setChiama(rowData);
   };
 
   const handleClose = () => {
@@ -289,7 +363,44 @@ const TestConclusiTable = () => {
   const runCaseLoder = () => {
     runTestCase(idToRun);
     handleCloseRun();
-    //alert("Run test id :  "+ idToRun);
+  };
+
+  //-----------MODALE CHIAMATO------------------
+  const setChiama = (rowData) => {
+    //-----chiamato------
+    setLineaChiamato(rowData.chiamato.linea.id);
+    setProxyChiamato(rowData.chiamato.proxy.id);
+
+    //-----chiamanti-----
+    var appoggioChiamanti = rowData.chiamanti;
+
+    for (let i = 0; i < Object.keys(rowData.chiamanti).length; i++) {
+      delete appoggioChiamanti[i].file;
+      appoggioChiamanti[i].linea = { id: rowData.chiamanti[i].linea.id };
+      appoggioChiamanti[i].proxy = { id: rowData.chiamanti[i].proxy.id };
+    }
+    setMapChiamanti(Object.keys(rowData.chiamanti));
+  };
+
+  const handleOpenChiamato = () => {
+    funzioneGetTestcaseById(id);
+  };
+
+  const handleCloseChiamato = () => {
+    //funzioneGetTestcaseById(id);
+    setOpenChiamato(false);
+  };
+
+  //---------MODALE CHIAMANTi--------------------
+  const handleOpenChiamanti = () => {
+    setOpenChiamanti(true);
+  };
+  const impostaChiamanti = (e) => {
+    setChiamanti(e);
+  };
+  const handleCloseChiamanti = () => {
+    funzioneGetTestcaseById(id);
+    setOpenChiamanti(false);
   };
 
   // --------------- MODALE VISUALIZZA REPORT ------------//
@@ -354,10 +465,7 @@ const TestConclusiTable = () => {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
         setData(result.testCaseList);
-        // setDataReport(result.testCaseList);
       })
       .catch((error) => console.log("error", error));
   };
@@ -381,7 +489,6 @@ const TestConclusiTable = () => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTestCaseLoad(result.list);
       })
       .catch((error) => console.log("error", error));
@@ -406,15 +513,12 @@ const TestConclusiTable = () => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setIdTestCaseRun(result.list);
       })
       .catch((error) => console.log("error", error));
   };
 
   const hadleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
     runCaseLoder(rowDataaa.id);
   };
 
@@ -435,7 +539,6 @@ const TestConclusiTable = () => {
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setAppearTest(result.list);
         setDataCase(result.list);
       })
@@ -465,67 +568,25 @@ const TestConclusiTable = () => {
       .catch((error) => console.log("error", error));
   };
 
-  // const prova = () => {
-  //   alert("prova")
-  //   setOpenReport(true);
-  // }
-
   useEffect(() => {
     getAllTestCase();
+    funzioneGetAll();
   }, []);
-
-  //-----------GET TEST CASE----------------------
-  //  const getAllTestCase = () => {
-  //   var consta = "COMPLETED";
-
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Content-Type", "application/json");
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   var raw = JSON.stringify({
-  //     includeTestCaseOfType: consta,
-  //     includeTestSuiteOfType: null,
-  //     includeTestGeneratoreOfType: null,
-  //   });
-
-  //   var requestOptions = {
-  //     method: "POST",
-  //     headers: myHeaders,
-  //     body: raw,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`/api/dashboard/info`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       //setAppearTest(result.testCaseList);
-  //       setData(result.testCaseList);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
-
-  // useEffect(() => {
-  //   getAllTestCase();
-  // }, []);
 
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Case Conclusi"
         data={data}
         columns={columns}
         options={{
-          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "center",
           selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -536,15 +597,7 @@ const TestConclusiTable = () => {
             position: "row",
             backgrounColor: "red",
           },
-          // {
-          //   icon: "play_circle_outlined",
-          //   tooltip: "Lancia il Test",
-          //   onClick: (event, rowData) =>
-          //     alert("Ho cliccato " + rowData.launcher),
-          //   position: "row",
-          // },
           {
-            icon: "delete",
             icon: () => <DeleteIcon />,
             tooltip: "Elimina il Test",
             onClick: (event, rowData) => {
@@ -559,14 +612,14 @@ const TestConclusiTable = () => {
             isFreeAction: true,
             onClick: () => handleChange(),
           },
-          {
-            icon: () => (
-              <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
-            ),
-            tooltip: "Carica Test Case",
-            onClick: () => handleOpen(),
-            isFreeAction: true,
-          },
+          // {
+          //   icon: () => (
+          //     <ButtonClickedBlue nome="Carica Test Case"></ButtonClickedBlue>
+          //   ),
+          //   tooltip: "Carica Test Case",
+          //   onClick: () => handleOpen(),
+          //   isFreeAction: true,
+          // },
         ]}
         localization={{
           header: {
@@ -716,7 +769,6 @@ const TestConclusiTable = () => {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <ButtonNotClickedGreen
-                    //onClick={functionDelete}
                     onClick={() =>
                       alert("Inserire funzione Delete Loaded Test ")
                     }
@@ -940,6 +992,28 @@ const TestConclusiTable = () => {
                     />
                   </Col>
                 </Row>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    padding: "2%",
+                  }}
+                >
+                  <ButtonClickedBlue
+                    size="medium"
+                    nome="Vedi Chiamato"
+                    onClick={handleOpenChiamato}
+                  />
+                  <ButtonClickedBlue
+                    size="medium"
+                    nome="Vedi Chiamante/i"
+                    onClick={handleOpenChiamanti}
+                  />
+                </div>
+
                 <Row>
                   <Col className={classes.col}>
                     <TextField
@@ -1004,6 +1078,225 @@ const TestConclusiTable = () => {
                     onClick={handleCloseReport}
                     size="medium"
                     nome="Chiudi"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE CHIAMATO--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamato}
+        onClose={handleCloseChiamato}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamato}>
+          <div>
+            <Paper className={classes.paperModale}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Chiamato <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      label="Linea"
+                      value={lineaChiamato}
+                      onChange={(e) => setLineaChiamato(e.target.value)}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    >
+                      {appearLine.map((linea) => (
+                        <MenuItem
+                          disabled={
+                            linea.id === lineaChiamato ||
+                            linea.id === chiamanti[0]?.linea.id ||
+                            linea.id === chiamanti[1]?.linea.id ||
+                            linea.id === chiamanti[2]?.linea.id
+                          }
+                          key={linea.id}
+                          value={linea.id}
+                        >
+                          {linea.campiConcatenati}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      select
+                      label="Outboundproxy"
+                      value={proxyChiamato}
+                      onChange={(e) => {
+                        setProxyChiamato(e.target.value);
+                      }}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    >
+                      {appearOBP.map((proxy) => (
+                        <MenuItem
+                          disabled={
+                            proxy.id === proxyChiamato ||
+                            proxy.id === chiamanti[0]?.proxy.id ||
+                            proxy.id === chiamanti[1]?.proxy.id ||
+                            proxy.id === chiamanti[2]?.proxy.id
+                          }
+                          key={proxy.id}
+                          value={proxy.id}
+                        >
+                          {proxy.campiConcatenati}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamato}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+      {/* ------------------------MODALE CHIAMANTi--------------------- */}
+      <Modal
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamanti}
+        onClose={handleCloseChiamanti}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamanti}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Chiamanti <b>{nomeTitolo}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                {mapChiamanti.map((chiamante, index) => (
+                  <>
+                    <Typography className={classes.intestazione} variant="h6">
+                      Chiamante <b>{index + 1}</b>
+                    </Typography>
+                    <Row>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          select
+                          label="Linea "
+                          value={chiamanti[index].linea.id}
+                          onChange={(e) => {
+                            var p1 = [...chiamanti];
+                            p1[index].linea.id = e.target.value;
+                            impostaChiamanti(p1);
+                          }}
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        >
+                          {appearLine.map((linea) => (
+                            <MenuItem
+                              disabled={
+                                linea.id === lineaChiamato ||
+                                linea.id === chiamanti[0]?.linea.id ||
+                                linea.id === chiamanti[1]?.linea.id ||
+                                linea.id === chiamanti[2]?.linea.id
+                              }
+                              key={linea.id}
+                              value={linea.id}
+                            >
+                              {linea.campiConcatenati}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Col>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          select
+                          label="Outboundproxy"
+                          value={chiamanti[index].proxy.id}
+                          onChange={(e) => {
+                            var p1 = [...chiamanti];
+                            p1[index].proxy.id = e.target.value;
+                            impostaChiamanti(p1);
+                          }}
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        >
+                          {appearOBP.map((proxy) => (
+                            <MenuItem
+                              disabled={
+                                proxy.id === proxyChiamato ||
+                                proxy.id === chiamanti[0]?.proxy.id ||
+                                proxy.id === chiamanti[1]?.proxy.id ||
+                                proxy.id === chiamanti[2]?.proxy.id
+                              }
+                              key={proxy.id}
+                              value={proxy.id}
+                            >
+                              {proxy.campiConcatenati}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Col>
+                    </Row>
+                  </>
+                ))}
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamanti}
+                    size="medium"
+                    nome="Indietro"
                   />
                 </div>
               </div>

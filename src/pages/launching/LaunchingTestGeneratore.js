@@ -7,35 +7,19 @@ import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Navbar from "../../components/Navbar";
 import NavbarItemLaunch from "../../components/NavbarItemLaunch";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
   tertiaryListItems,
   quaterListItems,
 } from "../../components/listItems";
-import ButtonClickedGreen from "../../components/ButtonClickedGreen";
-import SelectAutocompleteTestCase from "../../components/SelectAutocompleteTestCase";
-import SelectAutocompleteTestSuite from "../../components/SelectAutocompleteTestSuite";
 import accessControl from "../../service/url.js";
-import Grid from "@material-ui/core/Grid";
-import Orders from "../../components/Orders";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
-import NavbarItem from "../../components/NavbarItem";
-import TestCaseTableNew from "../../components/TestCaseTableNew";
-import Form from "react-bootstrap/Form";
-import FormControl from "@material-ui/core/FormControl";
-import { MenuItem } from "@material-ui/core";
-import Select from "@material-ui/core/Select";
-
-import LaunchingTestCaseCard from "../launching/LaunchingTestCaseCard";
-import LaunchingTestSuiteTable from "../launching/LaunchingTestSuiteTable";
 import LaunchingTestGeneratoreTable from "../launching/LaunchingTestGeneratoreTable";
 
 
@@ -49,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24,
   },
   toolbarIcon: {
     display: "flex",
@@ -132,7 +116,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-around",
     padding: "20px",
-    // backgroundColor: "red",
     width: "100%",
   },
   paperTest: {
@@ -176,7 +159,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "flex-end",
     marginTop: "15px",
-    // marginLeft: "62px",
   },
   buttonNotClickedGreen: {
     backgroundColor: "white",
@@ -245,7 +227,6 @@ function LaunchingTestGeneratore() {
   //DATA FOR LAUNCH TEST AND LOAD
   const [id, setId] = useState();
   const [idToRun, setIdToRun] = useState();
-  const [data, setData] = useState();
   const [dataLoad, setTestCaseLoad] = useState(null);
   const [dataRun, setIdTestCaseRun] = useState(null);
   const [dataCase, setDataCase] = useState();
@@ -334,7 +315,6 @@ function LaunchingTestGeneratore() {
     fetch(`/api/testcase`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setAppearTest(result.list);
         setDataCase(result.list);
       })
@@ -361,7 +341,6 @@ function LaunchingTestGeneratore() {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTestCaseLoad(result.list);
       })
       .catch((error) => console.log("error", error));
@@ -386,7 +365,6 @@ function LaunchingTestGeneratore() {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setIdTestCaseRun(result.list);
       })
       .catch((error) => console.log("error", error));
@@ -434,7 +412,6 @@ function LaunchingTestGeneratore() {
           </div>
 
           <div className={classes.bottonTest}>
-            {/* <NavLink exact to="/dashboard/testcase"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -444,9 +421,6 @@ function LaunchingTestGeneratore() {
             >
               Test Case
             </Button>
-            {/* </NavLink> */}
-
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -456,7 +430,6 @@ function LaunchingTestGeneratore() {
             >
               Test Suite
             </Button>
-            {/* </NavLink> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -483,24 +456,6 @@ function LaunchingTestGeneratore() {
               </Paper>
               <Paper className={classes.paperTest}>
                 <div className={classes.divSelectBar}>
-
-                  {/* display post from the API 
-                  {appearTest && (
-                    <div className="">
-
-                      {/* loop over the posts 
-                      {appearTest.map((testCase, index) => (
-                        <div key={index}>
-                          <h2></h2>
-                          <LaunchingTestCaseCard nome={testCase.nome}
-                            id={testCase.id}
-                            desc={testCase.descrizione}
-                            createdBy={testCase.createdBy} />
-                        </div>
-                      ))}
-                    </div>
-
-                  )}*/}
                   <LaunchingTestGeneratoreTable />
 
                 </div>

@@ -26,10 +26,18 @@ import { makeStyles } from "@material-ui/core/styles";
 import acccessControl from "../service/url.js";
 import fileDownload from "js-file-download";
 import axios from "axios";
-import { getGenerale, getByIdGenerale, postGenerale, postAddFile, postModificaFiles, deleteGenerale, deleteFiles } from "../service/api"
+import {
+  getGenerale,
+  getByIdGenerale,
+  postGenerale,
+  postAddFile,
+  postModificaFiles,
+  deleteGenerale,
+  deleteFiles,
+} from "../service/api";
+import { tableIcons } from "../components/Icons";
 
 function Template() {
-
   var functions = localStorage.getItem("funzioni").split(",");
 
   const [data, setData] = useState([]);
@@ -57,80 +65,86 @@ function Template() {
   const [contenutoFile, setContenutoFile] = useState("");
   const [visualizzaContenutoFile, setVisualizzaContenutoFile] = useState(false);
   const [modificaContenutoFile, setModificaContenutoFile] = useState(false);
-  const [scrittaTabella, setScrittaTabella] = useState("")
+  const [scrittaTabella, setScrittaTabella] = useState("");
 
   const funzioneGetAll = () => {
     if (functions.indexOf("template.view") !== -1) {
       //----GET ALL TEMPLATE----
       (async () => {
-        setCaricamento(true)
-        setData((await getGenerale('template')).list);
-        setCaricamento(false)
+        setCaricamento(true);
+        setData((await getGenerale("template")).list);
+        setCaricamento(false);
       })();
 
-      setScrittaTabella("Non è presente alcun dato da mostrare")
-
+      setScrittaTabella("Non è presente alcun dato da mostrare");
     } else {
-      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+      setScrittaTabella(
+        "Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella"
+      );
     }
-  }
+  };
 
   const funzioneGetTemplateById = (id) => {
     if (functions.indexOf("template.view") !== -1) {
       (async () => {
-        let result = await getByIdGenerale('template', id);
+        let result = await getByIdGenerale("template", id);
         setTemplate(result.template);
         impostaChiama(result.template);
       })();
     }
-  }
+  };
 
   const funzioneGetAppearFileById = (id) => {
-
     if (functions.indexOf("template.edit") !== -1) {
       (async () => {
-        setCaricamentoDel(true)
-        setAppearFile((await getByIdGenerale('fs/entityfolder/TEMPLATE', id)).list);
-        setCaricamentoDel(false)
+        setCaricamentoDel(true);
+        setAppearFile(
+          (await getByIdGenerale("fs/entityfolder/TEMPLATE", id)).list
+        );
+        setCaricamentoDel(false);
       })();
     }
-  }
+  };
 
   const funzioneAggiornaChiama = () => {
     if (functions.indexOf("template.edit") !== -1) {
       (async () => {
-        await postGenerale('template', { id: id, version: version, fileLinks: { CHIAMATO: [{ id: chiamato, }] } });
+        await postGenerale("template", {
+          id: id,
+          version: version,
+          fileLinks: { CHIAMATO: [{ id: chiamato }] },
+        });
         funzioneGetTemplateById(id);
         handleCloseChiama();
       })();
     }
-  }
+  };
 
   const funzioneAddFile = (files) => {
     if (functions.indexOf("template.view") !== -1) {
       (async () => {
-        await postAddFile('fs/entityfolder/TEMPLATE', id, files);
+        await postAddFile("fs/entityfolder/TEMPLATE", id, files);
         funzioneGetTemplateById(id);
         funzioneGetAppearFileById(id);
       })();
     }
-  }
+  };
 
   const funzioneDeleteFile = (path) => {
     if (functions.indexOf("template.view") !== -1) {
       (async () => {
-        setCaricamentoDel(true)
-        await deleteFiles('fs/entityfolder/TEMPLATE', id, path);
+        setCaricamentoDel(true);
+        await deleteFiles("fs/entityfolder/TEMPLATE", id, path);
         funzioneGetTemplateById(id);
         funzioneGetAppearFileById(id);
       })();
     }
-  }
+  };
 
   const funzioneDelete = () => {
     if (functions.indexOf("template.delete") !== -1) {
       (async () => {
-        let result = await deleteGenerale('template', idElemento);
+        let result = await deleteGenerale("template", idElemento);
         if (result.error !== null) {
           setOpenWarning(true);
           if (result.error.code === "TEST-0011") {
@@ -146,9 +160,9 @@ function Template() {
           } else {
             setWarning(
               "Codice errore : " +
-              result.error.code +
-              "Descrizione: " +
-              result.error.description
+                result.error.code +
+                "Descrizione: " +
+                result.error.description
             );
           }
         } else {
@@ -158,29 +172,36 @@ function Template() {
         }
       })();
     }
-  }
+  };
 
   const funzioneLoadTemplateBYId = (id) => {
     if (functions.indexOf("template.view") !== -1) {
       (async () => {
-        setTemplate((await getByIdGenerale('template', id)).template);
+        setTemplate((await getByIdGenerale("template", id)).template);
       })();
     }
-  }
+  };
 
   const funzioneAggiornaTemplate = () => {
     if (functions.indexOf("template.edit") !== -1) {
       (async () => {
-        await postGenerale('template', { id: id, version: version, nome: nome, durata: durata, typeTemplate: typeTemplate, descrizione: descrizione });
+        await postGenerale("template", {
+          id: id,
+          version: version,
+          nome: nome,
+          durata: durata,
+          typeTemplate: typeTemplate,
+          descrizione: descrizione,
+        });
         funzioneGetAll();
         handleClose();
       })();
     }
-  }
+  };
 
   const funzioneGetDownloadFile = (url) => {
     if (functions.indexOf("template.edit") !== -1) {
-      setCaricamentoDel(true)
+      setCaricamentoDel(true);
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
       myHeaders.append("Content-Type", "application/json");
@@ -198,11 +219,11 @@ function Template() {
         .then((result) => {
           setContenutoFile(result);
           setVisualizzaContenutoFile(true);
-          setCaricamentoDel(false)
+          setCaricamentoDel(false);
         })
         .catch((error) => console.log("error", error));
     }
-  }
+  };
 
   const funzioneModificaFiles = () => {
     if (functions.indexOf("template.edit") !== -1) {
@@ -211,7 +232,7 @@ function Template() {
         handleCloseModificaContenutoFile();
       })();
     }
-  }
+  };
 
   useEffect(() => {
     funzioneGetAll();
@@ -250,14 +271,18 @@ function Template() {
       title: "Data di creazione",
       field: "creationDate",
       render: (rowData) => {
-        return rowData.creationDate.replace("T", " / ").replace(".000+00:00", "");
+        return rowData.creationDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
       },
     },
     {
       title: "Data di modifica",
       field: "modifiedDate",
       render: (rowData) => {
-        return rowData.modifiedDate.replace("T", " / ").replace(".000+00:00", "");
+        return rowData.modifiedDate
+          .replace("T", " / ")
+          .replace(".000+00:00", "");
       },
     },
     {
@@ -352,7 +377,7 @@ function Template() {
   const changeHandler = (event) => {
     funzioneAddFile(event.target.files);
   };
-  const handleSubmission = () => { };
+  const handleSubmission = () => {};
 
   /*--------------MODALE VISUALIZZA CONTENUTO FILE -----------*/
 
@@ -389,8 +414,6 @@ function Template() {
   };
 
   //------------ FUNZIONE DELETE TEMPLATE------------
-
-
   //------------ funzione apri modale
 
   const handleOpenDelete = (rowData) => {
@@ -401,13 +424,6 @@ function Template() {
   //---------- funzione chiudi modale
   const handleCloseDelete = () => {
     setOpenDelete(false);
-  };
-
-
-  const downloadAll = (folders) => {
-    folders.forEach((folder) => {
-      downloadSingleFile(folder);
-    });
   };
 
   const downloadSingleFile = (folder) => {
@@ -429,11 +445,9 @@ function Template() {
       });
   };
 
-
   const aggiornaTemplate = () => {
     funzioneAggiornaTemplate();
   };
-
 
   ///////////////////////////////////////////////
 
@@ -441,7 +455,6 @@ function Template() {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -453,12 +466,10 @@ function Template() {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -486,21 +497,18 @@ function Template() {
     },
     bottone: {
       display: "flex",
-      // alignItems: "center",
       justifyContent: "flex-end",
       marginTop: "4%",
       marginBottom: "2%",
     },
     bottoniModaleFile: {
       display: "flex",
-      // alignItems: "center",
       justifyContent: "flex-end",
       marginTop: "4%",
       marginBottom: "2%",
     },
     bottoniModaleChiamanti: {
       display: "flex",
-      // alignItems: "center",
       justifyContent: "flex-end",
       marginTop: "4%",
       marginBottom: "2%",
@@ -550,7 +558,6 @@ function Template() {
       padding: "5%",
       minHeight: "300px",
       height: "fit-content",
-      //minWidht: 650,
       width: 650,
       position: "relative",
     },
@@ -571,9 +578,7 @@ function Template() {
     textField: {
       width: "270px",
     },
-    // bottoneAnnulla: {
-    //   width: "128px",
-    // },
+
     typography: {
       padding: "3%",
     },
@@ -583,8 +588,6 @@ function Template() {
       alignItems: "center",
     },
     iconModaleError: {
-      // width: "15%",
-      // height: "15%",
       marginRight: "4%",
       transform: "scale(1.9)",
       color: "#ef5350",
@@ -602,18 +605,6 @@ function Template() {
     textArea: {
       width: 600,
     },
-    // caricaFile: {
-    //   "&:hover": {
-    //     backgroundColor: "white",
-    //     color: "#47B881",
-    //   },
-    //   backgroundColor: "#47B881",
-    //   color: "white",
-    //   border: "1px solid #47B881",
-    //   marginRight: "10px",
-    //   marginLeft: "10px",
-    //   //width: "200px",
-    // },
   }));
 
   const classes = useStyles();
@@ -621,6 +612,7 @@ function Template() {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         detailPanel={(rowData) => {
           return (
             <div
@@ -692,7 +684,7 @@ function Template() {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },
-            disabled: functions.indexOf("template.delete") === -1
+            disabled: functions.indexOf("template.delete") === -1,
           },
         ]}
         localization={{
@@ -799,7 +791,9 @@ function Template() {
                   <Col className={classes.col}>
                     <TextField
                       label="Data Creazione"
-                      defaultValue={creationDate.replace("T", " / ").replace(".000+00:00", "")}
+                      defaultValue={creationDate
+                        .replace("T", " / ")
+                        .replace(".000+00:00", "")}
                       className={classes.textField}
                       InputProps={{
                         readOnly: true,
@@ -823,7 +817,9 @@ function Template() {
                     <TextField
                       className={classes.textField}
                       label="Data Modifica"
-                      defaultValue={modifiedDate.replace("T", " / ").replace(".000+00:00", "")}
+                      defaultValue={modifiedDate
+                        .replace("T", " / ")
+                        .replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -889,7 +885,11 @@ function Template() {
               <div>
                 <Form className={classes.contenutoModaleChiama}>
                   <Typography
-                    style={{ color: "#47B881", marginTop: "2%", marginLeft: "16px" }}
+                    style={{
+                      color: "#47B881",
+                      marginTop: "2%",
+                      marginLeft: "16px",
+                    }}
                     variant="h6"
                   >
                     Chiamato
@@ -923,15 +923,17 @@ function Template() {
                     </TextField>
                   </Col>
 
-                  {/* <Divider
-                style={{ display: chiamanti.length === 0 ? "none" : "" }}
-                className={classes.divider}
-              /> */}
-
                   {chiamanti.map((chiamante, index) => (
                     <div>
-                      <Typography style={{ color: "#47B881", marginTop: "2%", marginLeft: "16px" }}
-                        variant="h6" variant="h6">
+                      <Typography
+                        style={{
+                          color: "#47B881",
+                          marginTop: "2%",
+                          marginLeft: "16px",
+                        }}
+                        variant="h6"
+                        variant="h6"
+                      >
                         Chiamante <b>{index + 1}</b>
                       </Typography>
                       <Col className={classes.col}>
@@ -973,9 +975,7 @@ function Template() {
 
               <Divider className={classes.divider} />
               <div className={classes.bottoniModaleChiamanti}>
-                {modifica === false ? (
-                  null
-                ) : (
+                {modifica === false ? null : (
                   <>
                     <ButtonClickedGreen
                       size="medium"
@@ -1022,6 +1022,7 @@ function Template() {
               <div>
                 <Divider className={classes.divider} />
                 <MaterialTable
+                  icons={tableIcons}
                   title={
                     modifica === true ? "Modifica File" : "Visualizza File"
                   }
@@ -1033,13 +1034,6 @@ function Template() {
                     sorting: true,
                     actionsColumnIndex: -1,
                     search: false,
-
-                    // pageSizeOptions: [
-                    //   5,
-                    //   10,
-                    //   20,
-                    //   { value: appearFile.length, label: "All" },
-                    // ],
                   }}
                   actions={[
                     {
@@ -1066,7 +1060,6 @@ function Template() {
                       onClick: (event, rowData) => {
                         handleOpenVisualizzaContenutoFile(rowData);
                       },
-                      // position: "row",
                     },
                     {
                       icon: () => <EditIcon />,
@@ -1096,7 +1089,6 @@ function Template() {
                   {modifica === true && (
                     <>
                       <input
-                        // accept=".xml"
                         style={{ display: "none" }}
                         className={classes.input}
                         id="contained-button-file"
@@ -1237,13 +1229,6 @@ function Template() {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  {/* <ButtonNotClickedGreen
-                    className={classes.bottoneAnnulla}
-                    onClick={handleCloseVisualizzaContenutoFile}
-                    size="medium"
-                    nome="Indietro"
-                  /> */}
-
                   {modificaContenutoFile === false ? (
                     ""
                   ) : (

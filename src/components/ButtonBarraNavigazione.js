@@ -6,6 +6,12 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     marginBottom: "20px",
   },
+  buttonTestContainer: {
+    marginBottom: "10px",
+  },
+  buttonLinee: {
+    marginBottom: "10px",
+  }
 }));
 
 var functions = localStorage.getItem("funzioni")?.split(",");
@@ -149,7 +155,7 @@ export function ButtonEditingTest() {
 export function ButtonEditingLinee() {
   const classes = useStyles();
   return (
-    <>
+     <div className={classes.buttonLinee}>
       <Button
         className="button-green"
         component={NavLink}
@@ -176,6 +182,7 @@ export function ButtonEditingLinee() {
       >
         LINEE GENERATORE
       </Button>
-    </>
+      </div>
+    
   );
 }

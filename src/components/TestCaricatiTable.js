@@ -24,6 +24,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
+import { tableIcons } from "../components/Icons";
+import SelectAutocompleteTestCase from "./SelectAutocompleteTestCase";
 
 const TestCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
@@ -524,6 +526,7 @@ const TestCaricatiTable = () => {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Total Test Case Caricati"
         data={data}
@@ -539,9 +542,8 @@ const TestCaricatiTable = () => {
           filtering: true,
         }}
         actions={[
-        
           {
-            icon: "play_circle_outlined",
+            icon: tableIcons.PlayCircleOutlineIcon,
             tooltip: "Lancia il Test",
             onClick: (event, rowData) => handleOpenRun(rowData.id),
 
@@ -631,23 +633,15 @@ const TestCaricatiTable = () => {
                 <Form.Group>
                   <Form.Label>Nome del Test Case</Form.Label>
                   <FormControl variant="outlined">
-                    <Select
-                      className={classes.select}
+                    <SelectAutocompleteTestCase
+                      className={classes.SelectAutocompleteTestCase}
                       value={appearTest.nome}
-                      onChange={(e) => setId(e.target.value)}
-                    >
-                      {appearTest.map((prova) => {
-                        return (
-                          <MenuItem
-                            style={{ width: "423px" }}
-                            key={prova.id}
-                            value={prova.id}
-                          >
-                            {prova.nome}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
+                      items={appearTest?.map((i) => ({
+                        id: i.id,
+                        nome: i.nome,
+                      }))}
+                      onChange={(id) => setId(id)}
+                    />
                   </FormControl>
                 </Form.Group>
               </div>

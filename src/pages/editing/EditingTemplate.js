@@ -117,7 +117,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
     padding: "2%",
-    // marginTop: "2%",
   },
   divider: {
     width: "90%",

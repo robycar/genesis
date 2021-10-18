@@ -6,11 +6,9 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
@@ -24,17 +22,12 @@ import Button from "@material-ui/core/Button";
 import Card from "../../components/Card";
 import { NavLink } from "react-router-dom";
 
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  // toolbar: {
-  //   paddingRight: 24, // keep right padding when drawer closed
-  //   background: "red",
-  // },
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
@@ -162,7 +155,6 @@ function DashboardTestSuite() {
         }}
         open={open}
       >
-        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -176,20 +168,10 @@ function DashboardTestSuite() {
         <div className={classes.appBarSpacer} />
 
         <Container maxWidth="xl" className={classes.container}>
-          {/* <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-          </Typography> */}
-
           <div className={classes.containerNavbarItem}>
             <NavbarItem />
           </div>
           <div className={classes.bottonTest}>
-            {/* <NavLink exact to="/dashboard/testcase"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -199,9 +181,6 @@ function DashboardTestSuite() {
             >
               Test Case
             </Button>
-            {/* </NavLink> */}
-
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -211,7 +190,6 @@ function DashboardTestSuite() {
             >
               Test suite
             </Button>
-            {/* </NavLink> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -224,8 +202,6 @@ function DashboardTestSuite() {
           </div>
           <Grid container spacing={3}>
             <Card />
-
-            {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <OrdersTestSuite />
@@ -240,4 +216,3 @@ function DashboardTestSuite() {
 
 export default DashboardTestSuite;
 
-// DashboardTestSuiteContainer;

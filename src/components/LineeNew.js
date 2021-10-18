@@ -26,9 +26,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
+import { tableIcons } from "../components/Icons";
 
 function Linee() {
-
   var functions = localStorage.getItem("funzioni").split(",");
 
   const [data, setData] = useState([]);
@@ -45,7 +45,7 @@ function Linee() {
   const [typeLinea, setTypeLinea] = useState();
   const [caricamento, setCaricamento] = useState(false);
   const [version, setVersion] = useState(0);
-  const [scrittaTabella, setScrittaTabella] = useState("")
+  const [scrittaTabella, setScrittaTabella] = useState("");
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -63,12 +63,10 @@ function Linee() {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -138,7 +136,6 @@ function Linee() {
     bottone: {
       marginLeft: "55px",
       marginTop: "5%",
-      // marginBottom: "2%",
     },
     bottoneAnnulla: {
       width: "128px",
@@ -147,12 +144,9 @@ function Linee() {
     separatoreIp: {
       display: "flex",
       alignItems: "center",
-      // marginRight: "2%",
-      // marginLeft: "2%",
-      // marginBottom: "2%",
+
       fontWeight: "600px",
       lineHeigth: "2%",
-      //fontSize: "2px",
     },
     textFieldIp: {
       width: "110px",
@@ -179,8 +173,6 @@ function Linee() {
       alignItems: "center",
     },
     iconModaleError: {
-      // width: "15%",
-      // height: "15%",
       marginRight: "4%",
       transform: "scale(1.9)",
       color: "#ef5350",
@@ -199,7 +191,7 @@ function Linee() {
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
-    if (functions.indexOf("linea.view") !== -1 ) {
+    if (functions.indexOf("linea.view") !== -1) {
       //----GET ALL LINEE----
       (async () => {
         setCaricamento(true);
@@ -212,10 +204,11 @@ function Linee() {
         setAppearLine((await getGenerale("typeLinea")).list);
       })();
 
-      setScrittaTabella("Non è presente alcun dato da mostrare")
-
+      setScrittaTabella("Non è presente alcun dato da mostrare");
     } else {
-      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+      setScrittaTabella(
+        "Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella"
+      );
     }
   };
 
@@ -249,7 +242,6 @@ function Linee() {
   /*--------- DELETE LINEA API ---------*/
 
   const funzioneDelete = () => {
-
     if (functions.indexOf("linea.delete") !== -1) {
       (async () => {
         setCaricamento(true);
@@ -264,9 +256,9 @@ function Linee() {
           } else {
             setWarning(
               "Codice errore: " +
-              result.error.code +
-              " Descrizione: " +
-              result.code.description
+                result.error.code +
+                " Descrizione: " +
+                result.code.description
             );
           }
         } else {
@@ -369,6 +361,7 @@ function Linee() {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Total Lines"
         data={data}
@@ -392,7 +385,10 @@ function Linee() {
                 exact
                 to="/editing/linee/crealinea"
                 startIcon={<AddIcon />}
-                disabled={functions.indexOf("linea.create") === -1 || functions.indexOf("linea.view") === -1}
+                disabled={
+                  functions.indexOf("linea.create") === -1 ||
+                  functions.indexOf("linea.view") === -1
+                }
               >
                 LINEA SIMULATORE{" "}
               </Button>
@@ -405,7 +401,7 @@ function Linee() {
             tooltip: "Modifica Linea",
             onClick: (event, rowData) => handleOpen(rowData),
             disabled: functions.indexOf("linea.edit") === -1,
-            position: "row"
+            position: "row",
           },
           {
             icon: () => <DeleteIcon />,
@@ -415,7 +411,7 @@ function Linee() {
               setIdElemento(rowData.id);
             },
             disabled: functions.indexOf("linea.delete") === -1,
-            position: "row"
+            position: "row",
           },
         ]}
         localization={{
@@ -611,22 +607,22 @@ function Linee() {
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
                 {ip1 <= 255 &&
-                  ip1 !== "" &&
-                  ip1.length < 4 &&
-                  ip2 <= 255 &&
-                  ip2 !== "" &&
-                  ip2.length < 4 &&
-                  ip3 <= 255 &&
-                  ip3 !== "" &&
-                  ip3.length < 4 &&
-                  ip4 <= 255 &&
-                  ip4 !== "" &&
-                  ip4.length < 4 &&
-                  password !== "" &&
-                  numero !== "" &&
-                  porta !== "" &&
-                  porta > 1000 &&
-                  porta < 100000 ? (
+                ip1 !== "" &&
+                ip1.length < 4 &&
+                ip2 <= 255 &&
+                ip2 !== "" &&
+                ip2.length < 4 &&
+                ip3 <= 255 &&
+                ip3 !== "" &&
+                ip3.length < 4 &&
+                ip4 <= 255 &&
+                ip4 !== "" &&
+                ip4.length < 4 &&
+                password !== "" &&
+                numero !== "" &&
+                porta !== "" &&
+                porta > 1000 &&
+                porta < 100000 ? (
                   <ButtonClickedGreen
                     size="medium"
                     nome="Aggiorna"

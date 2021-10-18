@@ -18,6 +18,8 @@ import Divider from "@material-ui/core/Divider";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { tableIcons } from "../components/Icons";
 
 const GestioneRuoli = () => {
 
@@ -205,6 +207,7 @@ const GestioneRuoli = () => {
   return (
     <div>
       <MaterialTable
+      icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Gestione Ruoli"
         data={data}
@@ -246,7 +249,7 @@ const GestioneRuoli = () => {
             position: "row",
           },
           rowData => ({
-            icon: 'delete',
+            icon: ()=><DeleteIcon/>,
             tooltip: 'Elimina Ruolo',
             onClick: (event, rowData) => funzioneDelete(rowData.id),
             disabled: functions.indexOf("level.delete") === -1 || rowData.nome === "ADMIN",

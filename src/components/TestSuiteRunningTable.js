@@ -8,28 +8,23 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import { Fade, Paper, Typography } from "@material-ui/core";
-import SelectBar from "./SelectBar";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import "../styles/App.css";
 import acccessControl from "../service/url.js";
-import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
 import { Divider } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import { MenuItem } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Form from "react-bootstrap/Form";
+import { tableIcons } from "../components/Icons";
+
 
 const TestSuiteRunningTable = () => {
-  const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
-  const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
-  const [createdBy, setCreatedBy] = useState("");
   const [testSuiteLoad, setTestSuiteLoad] = useState(null);
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
@@ -53,33 +48,16 @@ const TestSuiteRunningTable = () => {
       title: "Data Caricamento",
       field: "loadedWhen",
     },
-    // {
-    //   title: "Data Fine",
-    //   field: "modifiedDate",
-    // },
     {
       title: "Status",
       field: "stato",
     },
-    // {
-    //   title: "Trace",
-    //   field: "trace",
-    // },
-    // {
-    //   title: "Call-Id",
-    //   field: "trace",
-    // },
-    // {
-    //   title: "Report",
-    //   field: "trace",
-    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -97,12 +75,10 @@ const TestSuiteRunningTable = () => {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -165,7 +141,6 @@ const TestSuiteRunningTable = () => {
   }));
 
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -188,7 +163,6 @@ const TestSuiteRunningTable = () => {
   const testSuiteLoader = () => {
     loadTestSuite(id);
     handleClose();
-    console.log("testSuite Loader");
     getAllTestSuite();
   };
 
@@ -217,7 +191,6 @@ const TestSuiteRunningTable = () => {
     fetch(`/api/testsuite`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setAppearTest(result.list);
         setData(result.list);
       })
@@ -243,7 +216,6 @@ const TestSuiteRunningTable = () => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTestSuiteLoad(result.testSuiteCaricata);
       })
       .catch((error) => console.log("error", error));
@@ -282,8 +254,6 @@ const TestSuiteRunningTable = () => {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
         setData(result.testSuiteList);
       })
       .catch((error) => console.log("error", error));
@@ -296,18 +266,16 @@ const TestSuiteRunningTable = () => {
   return (
     <div>
       <MaterialTable
+      icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Total Test Suite Running"
         data={data}
         columns={columns}
         options={{
-          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -332,32 +300,20 @@ const TestSuiteRunningTable = () => {
             onClick: (event, rowData) => alert("Api delete da aggiungere"),
             position: "row",
           },
-          {
-            icon: () => (
-              <ButtonClickedBlue nome="Carica Test Suite"></ButtonClickedBlue>
-            ),
-            tooltip: "Carica Test Suite",
-            onClick: () => handleOpen(),
-            isFreeAction: true,
-          },
+          // {
+          //   icon: () => (
+          //     <ButtonClickedBlue nome="Carica Test Suite"></ButtonClickedBlue>
+          //   ),
+          //   tooltip: "Carica Test Suite",
+          //   onClick: () => handleOpen(),
+          //   isFreeAction: true,
+          // },
         ]}
         localization={{
           header: {
             actions: "Azioni",
           },
         }}
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
       {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
       <Modal
@@ -542,7 +498,6 @@ const TestSuiteRunningTable = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  //onClick={handleOpenSchedula}
                   onClick={() => alert("Funzione schedula moccata")}
                 >
                   Conferma

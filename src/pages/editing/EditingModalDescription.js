@@ -116,10 +116,6 @@ const useStyles = makeStyles((theme) => ({
   card: {
     alignItems: "center",
 
-    // marginLeft: "10px",
-    // marginRight: "10px",
-    // marginTop: "10px",
-    // marginBottom: "10px",
   },
   modalContainer: {
     width: "full-width",
@@ -141,7 +137,6 @@ const useStyles = makeStyles((theme) => ({
   paperTop: {
     backgroundColor: "#47B881",
     height: "20%",
-    //opacity: "25%",
   },
   paperBottom: {
     backgrounColor: "#FFFFFF",
@@ -172,7 +167,6 @@ const useStyles = makeStyles((theme) => ({
     height: "260px",
     border: "1px solid rgba(0, 0, 0, 0.32)",
     marginTop: "10px",
-    // fontFamily: "Roboto",
   },
   bottone: {
     size: "small",

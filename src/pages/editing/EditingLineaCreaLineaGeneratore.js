@@ -110,6 +110,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
+    marginLeft: "2%"
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -120,9 +121,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    //backgroundColor: "yellow",
     alignItems: "center",
-    marginLeft: "1%",
   },
   fixedHeight: {
     height: 240,
@@ -148,7 +147,6 @@ const useStyles = makeStyles((theme) => ({
   },
   divSelect: {
     padding: "5%",
-    // height: "115.6px",
   },
   bottone: {
     marginLeft: "65%",
@@ -171,7 +169,6 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    // width: "20vw",
     width: "340px",
     display: "flex",
   },
@@ -188,7 +185,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "2%",
     fontWeight: "600px",
     lineHeigth: "2%",
-    //fontSize: "2px",
   },
   select: {
     widht: "380x",

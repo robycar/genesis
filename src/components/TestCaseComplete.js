@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import MaterialTable, { MTableHeader } from "material-table";
+import MaterialTable from "material-table";
 import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import acccessControl from "../service/url.js";
-import { IconButton } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
-import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -16,7 +14,10 @@ import ListItem from "@material-ui/core/ListItem";
 import Form from "react-bootstrap/Form";
 import TextField from "@material-ui/core/TextField";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
+import { tableIcons } from "../components/Icons";
+import ButtonClickedGreen from "./ButtonClickedGreen";
+import WhireShark from "../assets/logoShark2.png";
+
 
 const TestCaseComplete = () => {
   const columns = [
@@ -57,15 +58,13 @@ const TestCaseComplete = () => {
       title: "Call-Id",
       field: "loadedBy",
     },
-    // {
-    //   title: "Report",
-    //   field: "pathInstance",
-    //   render: () => (
-    //     <IconButton>
-    //       <PostAddOutlinedIcon onClick={(event)=> alert("Show Report")}/>
-    //     </IconButton>
-    //   ),
-    // },
+    {
+      title: "Trace",
+      field: "pathInstance",
+      render: () => (
+         <img className={classes.img} src={WhireShark} />
+      ),
+    },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -174,47 +173,30 @@ const TestCaseComplete = () => {
       marginTop: "5%",
       // marginBottom: "2%",
     },
+    img: {
+      width: "30px",
+      height: "30px",
+      borderRadius: "15px"
+    }
   }));
 
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
   const [data, setData] = useState();
-  const [id, setId] = useState();
-  const [descrizione, setDescrizione] = useState("");
-  const [nome, setNome] = useState("");
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [loadedBy, setLoadedBy] = useState("");
-  const [loadedWhen, setLoadedWhen] = useState("");
-  const [version, setVersion] = useState();
-  const [openReport, setOpenReport] = useState(false);
+
+  const [testCase, setTestCase] = useState({})
+  const [openTestCaseSel, setOpenTestCaseSel] = useState(false)
+
+  const [openChiamato, setOpenChiamato] = React.useState(false);
+  const [openChiamanti, setOpenChiamanti] = React.useState(false);
 
   const openVisualizza = (rowData) => {
-    handleOpen(rowData);
+    getTestCaseById(rowData.testCase.id)
   };
 
-  const handleOpen = (rowData) => {
-    setOpenReport(true);
-    getTestCaseCompleteById(rowData.id);
-    setId(rowData.id);
-    setNome(rowData.nome);
-    setDescrizione(rowData.descrizione);
-    setVersion(rowData.version);
-    setStartDate(rowData.startDate);
-    setEndDate(rowData.endDate);
-    setLoadedBy(rowData.loadedBy);
-    setLoadedWhen(rowData.loadedWhen);
-  };
-
-  const handleClose = () => {
-    setOpenReport(false);
-  };
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  //--------------- GET TEST CASE BY ID ------------------------
-
-  const getTestCaseCompleteById = () => {
+  const getTestCaseById = (id) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -226,11 +208,15 @@ const TestCaseComplete = () => {
       redirect: "follow",
     };
 
-    fetch(`/api/testcase/loaded/${id}`, requestOptions)
+    fetch(`/api/testcase/${id}`, requestOptions)
       .then((response) => response.json())
-      .then((result) => console.log(result))
+      .then((result) => {
+        setTestCase(result.testCase)
+        setOpenTestCaseSel(true)
+      })
       .catch((error) => console.log("error", error));
   };
+
 
   //-----------GET TEST CASE COMPLETED----------------------
   const getAllTestCase = () => {
@@ -269,12 +255,23 @@ const TestCaseComplete = () => {
     getAllTestCase();
   }, []);
 
-  const tableIcons = {
-    Export: React.forwardRef((props, ref) => (
-      <Button size="small" variant="contained" color="secondary">
-        EXPORT
-      </Button>
-    )),
+
+  const handleCloseTestCaseSel = () => {
+    setOpenTestCaseSel(false)
+  }
+
+  const handleOpenChiamato = () => {
+    setOpenChiamato(true);
+  };
+  const handleOpenChiamanti = () => {
+    setOpenChiamanti(true);
+  };
+
+  const handleCloseChiamato = () => {
+    setOpenChiamato(false);
+  };
+  const handleCloseChiamanti = () => {
+    setOpenChiamanti(false);
   };
 
   return (
@@ -282,11 +279,10 @@ const TestCaseComplete = () => {
       <MaterialTable
         icons={tableIcons}
         style={{ boxShadow: "none" }}
-        title="Ultimi 30 Test Case Conclusi"
+        title="Ultimi 30 Test Case Completati"
         data={data}
         columns={columns}
         options={{
-          //tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
@@ -294,12 +290,7 @@ const TestCaseComplete = () => {
           exportButton: true,
           headerStyle: {
             backgroundColor: "beige",
-            //color: '#FFF'
           },
-
-          // selection: true,
-          // columnsButton: true,
-          // filtering: true,
         }}
         actions={[
           {
@@ -321,26 +312,27 @@ const TestCaseComplete = () => {
         }}
       />
 
-      {/*------------ MODALE VISUALIZZA TEST CASE  --------------------*/}
+      {/*------------------ MODALE TestCaseSel -------------*/}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={openReport}
-        onClose={handleClose}
+        open={openTestCaseSel}
+        onClose={handleCloseTestCaseSel}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Fade in={openReport}>
+        <Fade in={openTestCaseSel}>
           <div>
             <Paper className={classes.paperModale} elevation={1}>
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Test Case <b>{nome}</b>
+                    TestCase <b>{testCase.nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -351,51 +343,77 @@ const TestCaseComplete = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      error={id !== "" ? false : true}
-                      onChange={(e) => setId(e.target.value)}
-                      label="Id"
-                      defaultValue={id}
-                      // helperText={nome !== "" ? "" : "Lo status è richiesto"}
-                      InputProps={{
-                        readOnly: true,
-                        // readOnly: modifica === false ? true : false,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setNome(e.target.value)}
                       label="Nome"
-                      defaultValue={nome}
+                      defaultValue={testCase.nome}
                       InputProps={{
-                        readOnly: true,
+                        readOnly: true
                       }}
                     />
                   </Col>
-                </Row>
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setVersion(e.target.value)}
-                      label="Versione"
-                      defaultValue={version}
+                      label="Template"
+                      defaultValue={testCase?.template?.nome}
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
                 </Row>
+
                 <Row>
                   <Col className={classes.col}>
                     <TextField
                       multiline
                       rows={2}
                       className={classes.textArea}
-                      onChange={(e) => setDescrizione(e.target.value)}
                       label="Descrizione"
-                      defaultValue={descrizione}
+                      defaultValue={testCase.descrizione}
+                      InputProps={{
+                        readOnly: true
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    padding: "2%",
+                  }}
+                >
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Vedi Chiamato"
+                    onClick={handleOpenChiamato}
+                  />
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Vedi Chiamante/i"
+                    onClick={handleOpenChiamanti}
+                  />
+                </div>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Creato Da"
+                      value={testCase.createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data di creazione"
+                      value={testCase?.creationDate?.replace("T", " / ")?.replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -407,9 +425,8 @@ const TestCaseComplete = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setLoadedBy(e.target.value)}
-                      label="Caricato da"
-                      defaultValue={loadedBy}
+                      label="Modificato da"
+                      value={testCase.modifiedBy}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -418,34 +435,8 @@ const TestCaseComplete = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setLoadedWhen(e.target.value)}
-                      label="Data caricamento"
-                      defaultValue={loadedWhen}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      label="Data Fine "
-                      defaultValue={endDate}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      label="Data Inizio "
-                      defaultValue={startDate}
+                      label="Data di Modifica"
+                      value={testCase?.modifiedDate?.replace("T", " / ")?.replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -453,15 +444,160 @@ const TestCaseComplete = () => {
                   </Col>
                 </Row>
               </Form>
-              <div >
+              <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
                 <div
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
+
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
-                    onClick={handleClose}
+                    onClick={handleCloseTestCaseSel}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE CHIAMATO--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamato}
+        onClose={handleCloseChiamato}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamato}>
+          <div>
+            <Paper className={classes.paperModale}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Chiamato <b>{testCase.nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Linea"
+                      value={testCase?.chiamato?.linea?.campiConcatenati}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Outboundproxy"
+                      value={testCase?.chiamato?.proxy?.campiConcatenati}
+                      InputProps={{
+                        readOnly: true
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamato}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+      {/* ------------------------MODALE CHIAMANTi--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamanti}
+        onClose={handleCloseChiamanti}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamanti}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Chiamante/i <b>{testCase.nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                {testCase?.chiamanti?.map((chiamante, index) => (
+                  <>
+                    <Typography className={classes.intestazione} variant="h6">
+                      Chiamante <b>{index + 1}</b>
+                    </Typography>
+                    <Row>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          label="Linea "
+                          value={testCase?.chiamanti[index]?.linea?.campiConcatenati}
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        />
+                      </Col>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          label="Outboundproxy"
+                          value={testCase?.chiamanti[index]?.proxy?.campiConcatenati}
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        />
+                      </Col>
+                    </Row>
+                  </>
+                ))}
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamanti}
                     size="medium"
                     nome="Indietro"
                   />

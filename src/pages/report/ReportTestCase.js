@@ -6,12 +6,10 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Navbar from "../../components/Navbar";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
@@ -20,9 +18,6 @@ import {
 } from "../../components/listItems";
 import TestCaseComplete from "../../components/TestCaseComplete";
 import NavbarItemReport from "../../components/NavbarItemReport";
-import Table from "../../components/Table";
-import { Typography } from "@material-ui/core";
-import ChartReport from "../../components/ChartReport.js";
 import "../../styles/App.css";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
@@ -176,10 +171,6 @@ const useStyles = makeStyles((theme) => ({
 function ReportTestCase() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
 
 
   return (

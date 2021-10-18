@@ -5,29 +5,20 @@ import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { IconButton } from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
-import ChartReport from "../components/ChartReport";
-import ButtonClickedBlue from "./ButtonClickedBlue";
-import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import VisibilityIcon from "@material-ui/icons/Visibility";
 import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
-import BackupIcon from "@material-ui/icons/Backup";
-import FormControl from "@material-ui/core/FormControl";
 import Form from "react-bootstrap/Form";
-import Select from "@material-ui/core/Select";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
-import loading from "../../src/assets/load.gif";
 import ButtonNotClickedGreen from "./ButtonNotClickedGreen";
-import ButtonClickedGreen from "./ButtonClickedGreen";
 import acccessControl from "../service/url.js";
-import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import { tableIcons } from "../components/Icons";
+import ButtonClickedGreen from "./ButtonClickedGreen";
+import WhireShark from "../assets/logoShark2.png";
+
 
 const TotalTestCaseConclusi = () => {
   const columns = [
@@ -37,7 +28,6 @@ const TotalTestCaseConclusi = () => {
       defaultSort: "desc",
       headerStyle: {
         backgroundColor: "beige",
-        //color: "#FFF"
       },
     },
     {
@@ -68,15 +58,13 @@ const TotalTestCaseConclusi = () => {
       title: "Call-Id",
       field: "loadedBy",
     },
-    // {
-    //   title: "Report",
-    //   field: "pathInstance",
-    //   render: () => (
-    //     <IconButton>
-    //       <PostAddOutlinedIcon onClick={(event) => alert("Show Report")} />
-    //     </IconButton>
-    //   ),
-    // },
+    {
+      title: "Trace",
+      field: "pathInstance",
+      render: () => (
+         <img className={classes.img} src={WhireShark} />
+      ),
+    },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -186,69 +174,36 @@ const TotalTestCaseConclusi = () => {
       alignItems: "center",
       justifyContent: "center",
     },
+    img: {
+      width: "30px",
+      height: "30px",
+      borderRadius: "15px"
+    }
   }));
 
-  const handleChange = () => {
-    setFilter(!filter);
-  };
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [openSchedula, setOpenSchedula] = React.useState(false);
-  const [openRun, setOpenRun] = React.useState(false);
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
-  const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
   const [descrizione, setDescrizione] = useState("");
-  const [idToRun, setIdToRun] = useState();
   const [nome, setNome] = useState("");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [loadedBy, setLoadedBy] = useState("");
   const [loadedWhen, setLoadedWhen] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
-  const [createdBy, setCreatedBy] = useState("");
-  const [modifiedBy, setModifiedBy] = useState("");
-  const [testCases, setTestCases] = useState([]);
   const [testSuite, setTestSuite] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
   const [version, setVersion] = useState();
-  const [openTestCase, SetOpenTestCase] = React.useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const arrayTestCase = testSuite?.testCases;
-  const [appearTest, setAppearTest] = useState([]);
-  const [openExport, setOpenExport] = useState(false);
-  const [dataLoad, setTestCaseLoad] = useState(null);
-  const [dataRun, setIdTestCaseRun] = useState(null);
-  const [dataCase, setDataCase] = useState();
-  const [caricamento, setCaricamento] = useState(false);
-  const [caricamento2, setCaricamento2] = useState(false);
-  const [openGrafico, setOpenGrafico] = useState(false);
   const [openReport, setOpenReport] = useState(false);
-  const [prova, setProva] = useState([]);
 
-  const setTestCaseAssociati = (testsuite) => {
-    let x = [];
+  const [testCase, setTestCase] = useState({})
+  const [openTestCaseSel, setOpenTestCaseSel] = useState(false)
 
-    //console.log("--------"+testsuite)
-    for (let i = 0; i < testsuite.testCases.length; i++) {
-      x.push(testsuite.testCases[i].id);
-    }
-    setProva(x);
-  };
+  const [openChiamato, setOpenChiamato] = React.useState(false);
+  const [openChiamanti, setOpenChiamanti] = React.useState(false);
 
-  let y = [...prova];
-
-  const modificaTestSelezionati = (testcase) => {
-    if (prova.includes(testcase.id)) {
-      y.splice(y.indexOf(testcase.id), 1);
-    } else {
-      y.push(testcase.id);
-    }
-    setProva(y);
-    // aggiornaTestCaseAssociati(x);
-  };
 
   //---------------------------------------------------------------------------------------------------------------------------------
 
@@ -259,162 +214,21 @@ const TotalTestCaseConclusi = () => {
     arrayIdTestCase?.push(element);
   }
 
-  // console.log(selectedRows, " Righe selezionati");
-  //console.log(arrayTestCase, " Array di test case");
-
   var arrayId = [];
   arrayTestCase?.forEach(function (obj) {
     arrayId?.push(obj.id);
   });
 
-  const handleOpenExport = () => {
-    setOpenExport(true);
-    // getAllTestCaseModal();
-  };
-
-  const handleOpen = (rowData) => {
-    setOpen(true);
-    setId(rowData.id);
-    setNome(rowData.nome);
-    setDescrizione(rowData.descrizione);
-    setVersion(rowData.version);
-    // setTestCases([...testCases, rowData.testCases[0].nome]);
-    setCreatedBy(rowData.createdBy);
-    setModifiedBy(rowData.modifiedBy);
-    setCreationDate(rowData.creationDate);
-    setModifiedDate(rowData.modifiedDate);
-    setOpenReport(true);
-    setStartDate(rowData.startDate);
-    setEndDate(rowData.endDate);
-    setLoadedBy(rowData.loadedBy);
-    setLoadedWhen(rowData.loadedWhen);
-    // setOpen(true);
-    getTestCaseCompleteById(rowData.id);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setOpenReport(false);
-  };
-
-  const handleOpenGrafico = () => {
-    setOpenGrafico(true);
-  };
-
-  const handleCloseGrafico = () => {
-    setOpenGrafico(false);
-  };
-
-  const handleOpenSchedula = () => {
-    setOpenSchedula(true);
-    setOpen(false);
-  };
-
-  const handleCloseSchedula = () => {
-    setOpenSchedula(false);
-  };
-
-  const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_);
-    setOpenRun(true);
-    setOpen(false);
-  };
-
-  const handleCloseRun = () => {
-    setOpenRun(false);
-  };
-
-  const handleChangeData = (newValue) => {
-    setValue(newValue);
-  };
-
-  const testCaseLoader = () => {
-    loadTestCase(id);
-    handleClose();
-    getAllTestCase();
-  };
-
-  const runCaseLoder = () => {
-    runTestCase(idToRun);
-    handleCloseRun();
-    //alert("Run test id :  "+ idToRun);
-  };
 
   const openVisualizza = (rowData) => {
-    handleOpen(rowData);
+    getTestCaseById(rowData.testCase.id)
   };
 
-  const handleOpenTestCase = () => {
-    SetOpenTestCase(true);
-  };
-
-  const handleCloseTestCase = () => {
-    // getTestSuiteById(id);
-    SetOpenTestCase(false);
-  };
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
-  //------------------------- GET TEST SUITE BY ID ------------------------------
 
- //--------------- GET TEST CASE BY ID ------------------------
-
- const getTestCaseCompleteById = () => {
-  var myHeaders = new Headers();
-  myHeaders.append("Authorization", bearer);
-  myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  var requestOptions = {
-    method: "GET",
-    headers: myHeaders,
-    redirect: "follow",
-  };
-
-  fetch(`/api/testcase/loaded/${id}`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
-};
-
-  //-----------GET TEST SUITE COMPLETE----------------------
-  // const getAllTestSuiteComplete = () => {
-  //   var consta = "COMPLETED";
-
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Authorization", bearer);
-  //   myHeaders.append("Content-Type", "application/json");
-  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-  //   var raw = JSON.stringify({
-  //     includeTestCaseOfType: null,
-  //     includeTestSuiteOfType: consta,
-  //     includeTestGeneratoreOfType: null,
-  //   });
-
-  //   var requestOptions = {
-  //     method: "POST",
-  //     headers: myHeaders,
-  //     body: raw,
-  //     redirect: "follow",
-  //   };
-
-  //   fetch(`/api/dashboard/info`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       console.log(result);
-  //       //setAppearTest(result.testCaseList);
-  //       setData(result.testSuiteList);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
-
-  /*--------------- LOAD TEST CASE -------------------*/
-
-  const loadTestCase = (id) => {
-    var urlLoad = `/api/testcase/load/${id}`;
-
+  const getTestCaseById = (id) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -426,45 +240,15 @@ const TotalTestCaseConclusi = () => {
       redirect: "follow",
     };
 
-    fetch(urlLoad, requestOptions)
+    fetch(`/api/testcase/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        setTestCaseLoad(result.list);
+        setTestCase(result.testCase)
+        setOpenTestCaseSel(true)
       })
       .catch((error) => console.log("error", error));
   };
 
-  /*--------------- RUN TEST CASE -------------------*/
-
-  const runTestCase = (idRun) => {
-    var urlLoad = `/api/testcase/runloaded/${idRun}`;
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setIdTestCaseRun(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  const hadleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
-    runCaseLoder(rowDataaa.id);
-  };
 
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
@@ -492,8 +276,6 @@ const TotalTestCaseConclusi = () => {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
         setData(result.testCaseList);
       })
       .catch((error) => console.log("error", error));
@@ -503,13 +285,25 @@ const TotalTestCaseConclusi = () => {
     getAllTestCase();
   }, []);
 
-  const tableIcons = {
-    Export: React.forwardRef((props, ref) => (
-      <Button size="small" variant="contained" color="secondary">
-        EXPORT
-      </Button>
-    )),
+
+  const handleCloseTestCaseSel = () => {
+    setOpenTestCaseSel(false)
+  }
+
+  const handleOpenChiamato = () => {
+    setOpenChiamato(true);
   };
+  const handleOpenChiamanti = () => {
+    setOpenChiamanti(true);
+  };
+
+  const handleCloseChiamato = () => {
+    setOpenChiamato(false);
+  };
+  const handleCloseChiamanti = () => {
+    setOpenChiamanti(false);
+  };
+
 
   return (
     <div>
@@ -520,34 +314,16 @@ const TotalTestCaseConclusi = () => {
         data={data}
         columns={columns}
         options={{
-          //tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "center",
           exportButton: true,
-
-          // selection: true,
-          // columnsButton: true,
-          // filtering: true,
           headerStyle: {
             backgroundColor: "beige",
-            //color: '#FFF'
           },
         }}
         actions={[
-          // {
-          //   icon: () => (
-          //     <div>
-          //       <Button size="small" variant="contained" color="secondary">
-          //         EXPORT
-          //       </Button>
-          //     </div>
-          //   ),
-          //   tooltip: "Export Test Case Table",
-          //   onClick: () => handleOpenExport(),
-          //   isFreeAction: true,
-          // },
           {
             icon: (dat) => (
               <a>
@@ -558,16 +334,6 @@ const TotalTestCaseConclusi = () => {
             position: "row",
             onClick: (event, rowData) => openVisualizza(rowData),
           },
-          // {
-          //   icon: (dat) => (
-          //     <a>
-          //       <PieChartOutlinedIcon />
-          //     </a>
-          //   ),
-          //   tooltip: "Visualizza Grafico",
-          //   position: "row",
-          //   onClick: (event, rowData) => handleOpenGrafico(rowData),
-          // },
         ]}
         localization={{
           header: {
@@ -575,26 +341,28 @@ const TotalTestCaseConclusi = () => {
           },
         }}
       />
-      {/*------------ MODALE VISUALIZZA TEST CASE  --------------------*/}
+
+      {/*------------------ MODALE TestCaseSel -------------*/}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={openReport}
-        onClose={handleClose}
+        open={openTestCaseSel}
+        onClose={handleCloseTestCaseSel}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Fade in={openReport}>
+        <Fade in={openTestCaseSel}>
           <div>
             <Paper className={classes.paperModale} elevation={1}>
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Test Case <b>{nome}</b>
+                    TestCase <b>{testCase.nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -605,52 +373,77 @@ const TotalTestCaseConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setId(e.target.value)}
-                      label="Id"
-                      defaultValue={id}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      error={nome !== "" ? false : true}
-                      onChange={(e) => setNome(e.target.value)}
                       label="Nome"
-                      defaultValue={nome}
-                      helperText={nome !== "" ? "" : "Inserire Nome"}
+                      defaultValue={testCase.nome}
                       InputProps={{
-                        readOnly: true,
+                        readOnly: true
                       }}
                     />
                   </Col>
-                </Row>
-                <Row>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setVersion(e.target.value)}
-                      label="Versione"
-                      defaultValue={version}
+                      label="Template"
+                      defaultValue={testCase?.template?.nome}
                       InputProps={{
                         readOnly: true,
                       }}
                     />
                   </Col>
-                 
                 </Row>
+
                 <Row>
                   <Col className={classes.col}>
                     <TextField
                       multiline
                       rows={2}
                       className={classes.textArea}
-                      onChange={(e) => setDescrizione(e.target.value)}
                       label="Descrizione"
-                      defaultValue={descrizione}
-                      
+                      defaultValue={testCase.descrizione}
+                      InputProps={{
+                        readOnly: true
+                      }}
+                    />
+                  </Col>
+                </Row>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-around",
+                    padding: "2%",
+                  }}
+                >
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Vedi Chiamato"
+                    onClick={handleOpenChiamato}
+                  />
+                  <ButtonClickedGreen
+                    size="medium"
+                    nome="Vedi Chiamante/i"
+                    onClick={handleOpenChiamanti}
+                  />
+                </div>
+
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Creato Da"
+                      value={testCase.createdBy}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Data di creazione"
+                      value={testCase?.creationDate?.replace("T", " / ")?.replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -662,9 +455,8 @@ const TotalTestCaseConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setLoadedBy(e.target.value)}
-                      label="Caricato da"
-                      defaultValue={loadedBy}
+                      label="Modificato da"
+                      value={testCase.modifiedBy}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -673,34 +465,8 @@ const TotalTestCaseConclusi = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      onChange={(e) => setLoadedWhen(e.target.value)}
-                      label="Data caricamento"
-                      defaultValue={loadedWhen}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      label="Data Fine "
-                      defaultValue={endDate}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Col>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      label="Data Inizio "
-                      defaultValue={startDate}
+                      label="Data di Modifica"
+                      value={testCase?.modifiedDate?.replace("T", " / ")?.replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -714,9 +480,10 @@ const TotalTestCaseConclusi = () => {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
+
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
-                    onClick={handleClose}
+                    onClick={handleCloseTestCaseSel}
                     size="medium"
                     nome="Indietro"
                   />
@@ -727,60 +494,149 @@ const TotalTestCaseConclusi = () => {
         </Fade>
       </Modal>
 
-      {/* ---------------- MODALE VISUALIZZA GRAFICO ------------------
-
+      {/* ------------------------MODALE CHIAMATO--------------------- */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={openGrafico}
-        onClose={handleCloseGrafico}
+        open={openChiamato}
+        onClose={handleCloseChiamato}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
       >
-        <Fade in={openGrafico}>
+        <Fade in={openChiamato}>
           <div>
-            <Paper className={classes.paperContainer2} elevation={1}>
+            <Paper className={classes.paperModale}>
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Test Case KO-OK
+                    Chiamato <b>{testCase.nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
 
               <Form className={classes.contenutoModale}>
-                <div className={classes.chart}>
-                  <ChartReport />
-                </div>
+                <Row>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Linea"
+                      value={testCase?.chiamato?.linea?.campiConcatenati}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </Col>
+                  <Col className={classes.col}>
+                    <TextField
+                      className={classes.textField}
+                      label="Outboundproxy"
+                      value={testCase?.chiamato?.proxy?.campiConcatenati}
+                      InputProps={{
+                        readOnly: true
+                      }}
+                    />
+                  </Col>
+                </Row>
               </Form>
               <div className={classes.buttonModale}>
                 <Divider className={classes.divider} />
-
                 <div
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  <Button
+
+                  <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
-                    onClick={handleCloseGrafico}
+                    onClick={handleCloseChiamato}
                     size="medium"
-                    color="secondary"
-                    variant="outlined"
-                  >
-                    {" "}
-                    Chiudi
-                  </Button>
+                    nome="Indietro"
+                  />
                 </div>
               </div>
             </Paper>
           </div>
         </Fade>
-      </Modal> */}
+      </Modal>
+      {/* ------------------------MODALE CHIAMANTi--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openChiamanti}
+        onClose={handleCloseChiamanti}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openChiamanti}>
+          <div>
+            <Paper className={classes.paperModale} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography className={classes.intestazione} variant="h4">
+                    Chiamante/i <b>{testCase.nome}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+              </div>
+
+              <Form className={classes.contenutoModale}>
+                {testCase?.chiamanti?.map((chiamante, index) => (
+                  <>
+                    <Typography className={classes.intestazione} variant="h6">
+                      Chiamante <b>{index + 1}</b>
+                    </Typography>
+                    <Row>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          label="Linea "
+                          value={testCase?.chiamanti[index]?.linea?.campiConcatenati}
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        />
+                      </Col>
+                      <Col className={classes.col}>
+                        <TextField
+                          className={classes.textField}
+                          label="Outboundproxy"
+                          value={testCase?.chiamanti[index]?.proxy?.campiConcatenati}
+                          InputProps={{
+                            readOnly: true,
+                          }}
+                        />
+                      </Col>
+                    </Row>
+                  </>
+                ))}
+              </Form>
+              <div className={classes.buttonModale}>
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+
+                  <ButtonNotClickedGreen
+                    className={classes.bottoneAnnulla}
+                    onClick={handleCloseChiamanti}
+                    size="medium"
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 };

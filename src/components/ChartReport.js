@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import acccessControl from "../service/url.js";
-import MaterialTable from "material-table";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import { postGenerale } from "../service/api";
 
-// const [dataLoad, setTestCaseLoad] = useState(null);
-// const [dataRun, setIdTestCaseRun] = useState(null);
-// const [dataCase, setDataCase] = useState();
 const columns = [
   {
     title: "Id",
@@ -33,12 +27,6 @@ const columns = [
 ];
 
 function ChartReport() {
-  const [data, setData] = useState([]);
-  const [dataRecord, setDataRecord] = useState([]);
-
-  const handleChange = () => {
-    console.log("action");
-  };
 
   //-----------GET TEST CASE----------------------
   const getAllTestCase = () => {
@@ -68,32 +56,11 @@ function ChartReport() {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
-        setData(result.testCaseList);
         cicloFor(result.testCaseList);
       })
       .catch((error) => console.log("error", error));
   };
 
-  const ReportCardTestCaseGeneral = () => {
-    const objDashInfoTestCase = {
-      includeRiepilogoTestCase: true,
-      includeRiepilogoTestSuite: null,
-      includeTestCaseOfType: "COMPLETED",
-      includeTestSuiteOfType: null,
-      includeTestGeneratoreOfType: null,
-    };
-
-    const getDataForTestCase = () => {
-      (async () => {
-        setDataRecord(
-          (await postGenerale("dashboard/info", objDashInfoTestCase))
-            .testCaseList
-        );
-      })();
-    };
-  };
 
   useEffect(() => {
     getAllTestCase();
@@ -105,7 +72,6 @@ function ChartReport() {
   const [ko, setKo] = useState(0);
 
   function cicloFor(data) {
-    console.log(data);
     var appOk = 0;
     var appKo = 0;
     for (let i = 0; i < data.length; i++) {
@@ -128,8 +94,6 @@ function ChartReport() {
         backgroundColor: [
           "red",
           "green",
-          // "rgba(75, 192, 192)",
-          // "rgba(153, 102, 255)",
         ],
       },
     ],
@@ -138,38 +102,6 @@ function ChartReport() {
   return (
     <>
       <div>
-        {/* <MaterialTable
-          style={{ boxShadow: "none" }}
-          title=" Total Test Case Conclusi"
-          data={dataRecord}
-          columns={columns}
-          options={{
-            // tableLayout: "fixed",
-            actionsColumnIndex: -1,
-            search: true,
-            searchFieldVariant: "outlined",
-            searchFieldAlignment: "center",
-            selection: true,
-            // columnsButton: true,
-            filtering: true,
-          }}
-          actions={[
-            {
-              icon: () => <FilterListIcon />,
-              tooltip: "Filtro",
-              isFreeAction: true,
-              onClick: () => handleChange(),
-            },
-          ]}
-          localization={{
-            header: {
-              actions: "Azioni",
-            },
-            body: {
-              emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
-            },
-          }}
-        /> */}
         <Doughnut data={chart} />
       </div>
     </>

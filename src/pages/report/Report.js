@@ -170,14 +170,6 @@ function Report() {
     setOpen(false);
   };
 
-  // const table = [
-  //     {col1:"", col2:"Run", col3:"Passed", col4:"N/A", col5:"Failed"},
-  //     {col1:"Registrazione",col2: 159, col3:6.0, col4:24, col5:4.0},
-  //     {col1:"Plug-In", col2: 237, col3:9.0, col4:37, col5:4.3},
-  //     {col1:"Focus P-CSCF", col2:262, col3:16.0, col4:24, col5:6.0},
-  //     {col1:"Total", col2:305, col3:3.7, col4:67, col5:4.3},
-  //   ]
-
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -232,9 +224,6 @@ function Report() {
             >
               Test Case
             </Button>
-            {/* </NavLink> */}
-
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
               className="button-green"
               component={NavLink}

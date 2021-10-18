@@ -20,7 +20,6 @@ import NavbarItemEdit from "../../components/NavbarItemEdit";
 import { ListItem, ListItemIcon, Paper, Typography } from "@material-ui/core";
 import "../../styles/App.css";
 import EqualizerIcon from "@material-ui/icons/Equalizer";
-//import TestSuiteTable from "../../components/TestSuiteTable";
 import TestGeneratoreTableNew from "../../components/TestGeneratoreTableNew";
 import {ButtonEditing, ButtonEditingTest} from "../../components/ButtonBarraNavigazione"
 
@@ -104,10 +103,7 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  buttonContainer: {
-    marginBottom: "20px",
-    marginTop: "2%",
-  },
+ 
   generalPaper: {
     alignItems: "baseline",
   },
@@ -136,9 +132,7 @@ const useStyles = makeStyles((theme) => ({
 function EditingTestGeneratore() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+ 
 
   return (
     <div className={classes.root}>

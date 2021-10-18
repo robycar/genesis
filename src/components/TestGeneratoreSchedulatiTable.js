@@ -8,7 +8,6 @@ import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
 import { Fade, Paper, Typography, Box } from "@material-ui/core";
-import SelectBar from "./SelectBar";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -19,24 +18,17 @@ import FormControl from "@material-ui/core/FormControl";
 import Form from "react-bootstrap/Form";
 import Select from "@material-ui/core/Select";
 import { MenuItem } from "@material-ui/core";
-import loading from "../../src/assets/load.gif";
-import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
+import { tableIcons } from "./Icons";
 
 const TestGeneratoreSchedulatiTable = () => {
   const [id, setId] = useState();
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
-  const [createdBy, setCreatedBy] = useState("");
   const [name, setName] = useState("");
   const [rate, setRate] = useState();
   const [testDuration, setTestDuration] = useState();
   const [callDuration, setCallDuration] = useState();
-
 
   const columns = [
     {
@@ -56,33 +48,16 @@ const TestGeneratoreSchedulatiTable = () => {
       title: "Data Inizio",
       field: "scheduleDateTime",
     },
-    // {
-    //   title: "Data Fine",
-    //   field: "modifiedDate",
-    // },
     {
       title: "Status",
       field: "stato",
     },
-    // {
-    //   title: "Trace",
-    //   field: "trace",
-    // },
-    // {
-    //   title: "Call-Id",
-    //   field: "trace",
-    // },
-    // {
-    //   title: "Report",
-    //   field: "trace",
-    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -100,12 +75,10 @@ const TestGeneratoreSchedulatiTable = () => {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -152,7 +125,7 @@ const TestGeneratoreSchedulatiTable = () => {
       position: "relative",
       display: "flex",
       flexDirection: "column",
-      alignItems: "center"
+      alignItems: "center",
     },
     bottone: {
       display: "flex",
@@ -169,7 +142,7 @@ const TestGeneratoreSchedulatiTable = () => {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-around",
-      marginBottom: "2%"
+      marginBottom: "2%",
     },
     divIntestazione: {
       marginBottom: "2%",
@@ -198,16 +171,13 @@ const TestGeneratoreSchedulatiTable = () => {
       width: "80%",
       alignItems: "center",
       marginTop: "5%",
-      marginBottom: "5%"
+      marginBottom: "5%",
     },
   }));
 
-
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
 
   const handleOpen = () => {
     setOpen(true);
@@ -226,12 +196,7 @@ const TestGeneratoreSchedulatiTable = () => {
     setOpenSchedula(false);
   };
 
-  const handleChangeData = (newValue) => {
-    setValue(newValue);
-  };
-
   const testGenLoader = () => {
-    //loadTestGen(id);
     handleClose();
     getAllTestGeneratore();
   };
@@ -261,9 +226,8 @@ const TestGeneratoreSchedulatiTable = () => {
     fetch(`/api/testgen`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setAppearTest(result.list);
-        setData(result.list)
+        setData(result.list);
       })
       .catch((error) => console.log("error", error));
   };
@@ -275,6 +239,7 @@ const TestGeneratoreSchedulatiTable = () => {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Generatore Schedulati"
         data={data}
@@ -284,8 +249,6 @@ const TestGeneratoreSchedulatiTable = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -306,43 +269,28 @@ const TestGeneratoreSchedulatiTable = () => {
           {
             icon: () => <DeleteIcon />,
             tooltip: "Elimina Test",
-            onClick: (event, rowData) =>
-            alert("Api delete da inserire"),
+            onClick: (event, rowData) => alert("Api delete da inserire"),
             position: "row",
-
           },
           {
             icon: () => <FilterListIcon />,
             tooltip: "Filtro",
             isFreeAction: true,
-            // onClick: () => handleChange(),
           },
-          {
-            icon: () => (
-              <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
-            ),
-            tooltip: "Carica Test Generatore",
-            onClick: () => handleOpen(),
-            isFreeAction: true,
-          },
+          // {
+          //   icon: () => (
+          //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
+          //   ),
+          //   tooltip: "Carica Test Generatore",
+          //   onClick: () => handleOpen(),
+          //   isFreeAction: true,
+          // },
         ]}
         localization={{
           header: {
             actions: "Azioni",
           },
         }}
-      // components={{
-      //   Toolbar: (props) => (
-      //     <div>
-      //       <MTableToolbar {...props} />
-      //       <div className="button-load-test">
-      //         <Button variant="contained" color="primary">
-      //           LOAD TEST CASE
-      //         </Button>
-      //       </div>
-      //     </div>
-      //   ),
-      // }}
       />
       {/* ------------------ MODALE LOAD TEST GENERATORE --------------------- */}
       <Modal
@@ -398,72 +346,75 @@ const TestGeneratoreSchedulatiTable = () => {
                       })}
                     </Select>
                     <br />
-                    {name && <>
-                      <Form.Label>Rate </Form.Label>
-                      <FormControl variant="outlined">
-                        <Select
-                          className={classes.select}
-                          value={rate}
-                          onChange={(e) => setRate(e.target.value)}
-                        >
-                          {[5, 10, 15, 20, 25].map((rate) => {
-                            return (
-                              <MenuItem
-                                style={{ width: "423px" }}
-                                key={rate}
-                                value={rate}
-                              >
-                                {rate} secondi
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                      <br />
-                      <Form.Label>Durata Test (s)</Form.Label>
-                      <FormControl variant="outlined">
-                        <Select
-                          className={classes.select}
-                          value={testDuration}
-                          onChange={(e) => setTestDuration(e.target.value)}
-                        >
-                          {[{ label: "5 minuti", value: 5 },
-                          { label: "10 minuti", value: 10 },
-                          { label: "20 minuti", value: 20 },
-                          { label: "30 minuti", value: 30 },
-                          { label: "60 minuti", value: 60 },
-                          { label: "120 minuti", value: 120 },
-                          { label: "360 minuti", value: 360 },
-                          { label: "720 minuti", value: 720 },
-                          { label: "24 ore", value: 1440 },
-                          { label: "48 ore", value: 2880 }
-                          ].map((testDuration) => {
-                            return (
-                              <MenuItem
-                                style={{ width: "423px" }}
-                                key={testDuration.label}
-                                value={testDuration.value}
-                              >
-                                {testDuration.label}
-                              </MenuItem>
-                            );
-                          })}
-                        </Select>
-                      </FormControl>
-                      <br />
-                      <Form.Label>Durata Chiamata </Form.Label>
-                      <Form.Control
-                        max={rate * 60 * testDuration}
-                        type="number"
-                        value={callDuration}
-                        placeholder="60"
-                        onChange={(e) => {
-                          const newValue = parseInt(e.target.value);
-                          const maxValue = rate * 60 * testDuration;
-                          setCallDuration(Math.min(newValue, maxValue));
-                        }}
-                      />
-                    </>}
+                    {name && (
+                      <>
+                        <Form.Label>Rate </Form.Label>
+                        <FormControl variant="outlined">
+                          <Select
+                            className={classes.select}
+                            value={rate}
+                            onChange={(e) => setRate(e.target.value)}
+                          >
+                            {[5, 10, 15, 20, 25].map((rate) => {
+                              return (
+                                <MenuItem
+                                  style={{ width: "423px" }}
+                                  key={rate}
+                                  value={rate}
+                                >
+                                  {rate} secondi
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        <br />
+                        <Form.Label>Durata Test (s)</Form.Label>
+                        <FormControl variant="outlined">
+                          <Select
+                            className={classes.select}
+                            value={testDuration}
+                            onChange={(e) => setTestDuration(e.target.value)}
+                          >
+                            {[
+                              { label: "5 minuti", value: 5 },
+                              { label: "10 minuti", value: 10 },
+                              { label: "20 minuti", value: 20 },
+                              { label: "30 minuti", value: 30 },
+                              { label: "60 minuti", value: 60 },
+                              { label: "120 minuti", value: 120 },
+                              { label: "360 minuti", value: 360 },
+                              { label: "720 minuti", value: 720 },
+                              { label: "24 ore", value: 1440 },
+                              { label: "48 ore", value: 2880 },
+                            ].map((testDuration) => {
+                              return (
+                                <MenuItem
+                                  style={{ width: "423px" }}
+                                  key={testDuration.label}
+                                  value={testDuration.value}
+                                >
+                                  {testDuration.label}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        <br />
+                        <Form.Label>Durata Chiamata </Form.Label>
+                        <Form.Control
+                          max={rate * 60 * testDuration}
+                          type="number"
+                          value={callDuration}
+                          placeholder="60"
+                          onChange={(e) => {
+                            const newValue = parseInt(e.target.value);
+                            const maxValue = rate * 60 * testDuration;
+                            setCallDuration(Math.min(newValue, maxValue));
+                          }}
+                        />
+                      </>
+                    )}
                   </FormControl>
                 </Form.Group>
               </div>
@@ -506,10 +457,10 @@ const TestGeneratoreSchedulatiTable = () => {
             </div>
           </Paper>
         </Fade>
-      </Modal >
+      </Modal>
 
       {/* ------------------ MODALE SCHEDULA TEST GENERATORE --------------------- */}
-      < Modal
+      <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -541,7 +492,6 @@ const TestGeneratoreSchedulatiTable = () => {
                   <div className={classes.divInput}>
                     <label for="start">Start date:</label>
                     <input
-
                       type="date"
                       id="start"
                       name="trip-start"
@@ -555,7 +505,6 @@ const TestGeneratoreSchedulatiTable = () => {
                 <Paper elevation={2} className={classes.delayPaper}>
                   <Typography variant="h5">Delay</Typography>
                   <div className={classes.divInput}>
-
                     <label for="appt">Start Time:</label>
                     <input
                       style={{ width: "135px" }}
@@ -587,8 +536,8 @@ const TestGeneratoreSchedulatiTable = () => {
             </div>
           </Paper>
         </Fade>
-      </Modal >
-    </div >
+      </Modal>
+    </div>
   );
 };
 

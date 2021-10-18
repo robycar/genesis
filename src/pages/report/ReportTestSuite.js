@@ -6,12 +6,10 @@ import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Navbar from "../../components/Navbar";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
@@ -21,12 +19,9 @@ import {
 import TestSuiteComplete from "../../components/TestSuiteComplete";
 import NavbarItemReport from "../../components/NavbarItemReport";
 import Table from "../../components/Table";
-import { Typography } from "@material-ui/core";
-import ChartReport from "../../components/ChartReport.js";
 import "../../styles/App.css";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
-import TotalTestSuiteConclusi from "../../components/Table";
 
 import ReportCardTestSuiteGeneral from "./ReportCardTestSuiteGeneral";
 
@@ -175,17 +170,6 @@ const useStyles = makeStyles((theme) => ({
 function ReportTestSuite() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  // const table = [
-  //     {col1:"", col2:"Run", col3:"Passed", col4:"N/A", col5:"Failed"},
-  //     {col1:"Registrazione",col2: 159, col3:6.0, col4:24, col5:4.0},
-  //     {col1:"Plug-In", col2: 237, col3:9.0, col4:37, col5:4.3},
-  //     {col1:"Focus P-CSCF", col2:262, col3:16.0, col4:24, col5:6.0},
-  //     {col1:"Total", col2:305, col3:3.7, col4:67, col5:4.3},
-  //   ]
 
   return (
     <div className={classes.root}>
@@ -278,19 +262,7 @@ function ReportTestSuite() {
               <Paper className={classes.paper}>
               <Table />
               </Paper>
-            </Grid>
-
-        
-      
-            {/* <Paper className={classes.paperImg}>
-              <Typography className={classes.titleImg}>
-                Test Suite-CB Fibra
-              </Typography>
-              <div className={classes.chart}>
-                <ChartReport />
-              </div>
-            </Paper> */}
-     
+            </Grid>     
         </Container>
       </main>
     </div>

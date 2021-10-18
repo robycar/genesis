@@ -20,6 +20,7 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import { getGenerale, postGenerale, deleteGenerale } from "../service/api";
+import { tableIcons } from "../components/Icons";
 
 function Obp() {
   var functions = localStorage.getItem("funzioni").split(",");
@@ -288,7 +289,6 @@ function Obp() {
           } else {
             setOpenWarning(false);
             funzioneGetAll();
-            //resolve();
           }
         })
         .catch((error) => console.log("error", error));
@@ -302,7 +302,6 @@ function Obp() {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -321,12 +320,10 @@ function Obp() {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -366,7 +363,6 @@ function Obp() {
       boxShadow: theme.shadows[5],
       padding: "4%",
       width: "fit-content",
-      // height: "80%",
     },
     modal: {
       display: "flex",
@@ -396,7 +392,6 @@ function Obp() {
     bottone: {
       marginLeft: "55px",
       marginTop: "5%",
-      // marginBottom: "2%",
     },
     bottoneAnnulla: {
       width: "128px",
@@ -405,12 +400,9 @@ function Obp() {
     separatoreIp: {
       display: "flex",
       alignItems: "center",
-      // marginRight: "2%",
-      // marginLeft: "2%",
-      // marginBottom: "2%",
+
       fontWeight: "600px",
       lineHeigth: "2%",
-      //fontSize: "2px",
     },
     textFieldIp: {
       width: "110px",
@@ -428,8 +420,6 @@ function Obp() {
       alignItems: "center",
     },
     iconModaleError: {
-      // width: "15%",
-      // height: "15%",
       marginRight: "4%",
       transform: "scale(1.9)",
       color: "#ef5350",
@@ -455,6 +445,7 @@ function Obp() {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Outbound Proxy"
         data={data}

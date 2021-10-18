@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
-import TextField from "@material-ui/core/TextField";
 import Modal from "@material-ui/core/Modal";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { Button } from "@material-ui/core";
@@ -22,19 +21,15 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
-import PlayCircleOutline from "@material-ui/icons/PlayCircleOutline";
+import { tableIcons } from "../components/Icons";
+import SelectAutocompleteTestSuite from "../components/SelectAutocompleteTestSuite";
 
 const TestSuiteCaricatiTable = () => {
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
-  const [nome, setNome] = useState("");
-  const [creationDate, setCreationDate] = useState();
-  const [modifiedDate, setModifiedDate] = useState();
   const [data, setData] = useState();
   const [dataSuite, setDataSuite] = useState();
-  const [createdBy, setCreatedBy] = useState("");
   const [delay, setDelay] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [idToRun, setIdToRun] = useState();
@@ -59,22 +54,10 @@ const TestSuiteCaricatiTable = () => {
       title: "Data Inizio",
       field: "loadedWhen",
     },
-    // {
-    //   title: "Data Fine",
-    //   field: "modifiedDate",
-    // },
     {
       title: "Status",
       field: "stato",
     },
-    // {
-    //   title: "Trace",
-    //   field: "trace",
-    // },
-    // {
-    //   title: "Call-Id",
-    //   field: "trace",
-    // },
     {
       title: "Call-Id",
       field: "loadedBy",
@@ -85,7 +68,6 @@ const TestSuiteCaricatiTable = () => {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -102,7 +84,6 @@ const TestSuiteCaricatiTable = () => {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperModale: {
       backgroundColor: theme.palette.background.paper,
@@ -123,7 +104,6 @@ const TestSuiteCaricatiTable = () => {
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "1%",
     },
@@ -134,7 +114,6 @@ const TestSuiteCaricatiTable = () => {
     typography: {
       marginTop: "3%",
       marginBottom: "3%",
-      // paddingLeft: "16px"
     },
 
     divTextarea: {
@@ -169,8 +148,6 @@ const TestSuiteCaricatiTable = () => {
       alignItems: "center",
       marginTop: "6%",
       justifyContent: "center",
-
-      // marginBottom: "2%",
     },
     select: {
       width: "400px",
@@ -291,7 +268,6 @@ const TestSuiteCaricatiTable = () => {
   };
 
   const handleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
     setIdToRun(rowDataaa.id);
     runSuiteLoader(rowDataaa.id);
   };
@@ -355,8 +331,6 @@ const TestSuiteCaricatiTable = () => {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-        //setAppearTest(result.testCaseList);
         setData(result.testSuiteList);
       })
       .catch((error) => console.log("error", error));
@@ -383,7 +357,6 @@ const TestSuiteCaricatiTable = () => {
     fetch(`/api/testsuite`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setAppearTest(result.list);
         setDataSuite(result.list);
       })
@@ -395,10 +368,6 @@ const TestSuiteCaricatiTable = () => {
   const schedulaTestSuite = () => {
     const invia = () => {
       scheduleDateTime = dataInizio + "T" + orarioInizio;
-      console.log(scheduleDateTime, "schedule date time");
-      console.log(dataInizio, "data inizio");
-      console.log(orarioInizio, "orario");
-
       var myHeaders = new Headers();
       myHeaders.append("Authorization", bearer);
       myHeaders.append("Content-Type", "application/json");
@@ -421,7 +390,6 @@ const TestSuiteCaricatiTable = () => {
       fetch(`/api/testsuite/schedule`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           setDataSchedula(result.testSuiteCaricata);
           handleCloseSchedula();
         })
@@ -449,7 +417,6 @@ const TestSuiteCaricatiTable = () => {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTestSuiteLoad(result.list);
         getAllTestSuite();
       })
@@ -489,7 +456,6 @@ const TestSuiteCaricatiTable = () => {
           }
         } else {
           setOpenWarning(false);
-          console.log(result);
           setIdTestSuiteRun(result.list);
         }
       })
@@ -505,7 +471,6 @@ const TestSuiteCaricatiTable = () => {
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    // myHeaders.append("Access-Control-Allow-Credentials", "true");
 
     var requestOptions = {
       method: "DELETE",
@@ -518,7 +483,6 @@ const TestSuiteCaricatiTable = () => {
       .then((result) => {
         setOpenDelete(false);
         getAllTestSuite();
-        console.log(result);
       })
       .catch((error) => console.log("error", error));
   };
@@ -528,18 +492,17 @@ const TestSuiteCaricatiTable = () => {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Suite Caricati"
         data={data}
         columns={columns}
         options={{
-          // tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           selection: true,
-          // columnsButton: true,
           filtering: true,
         }}
         actions={[
@@ -590,18 +553,6 @@ const TestSuiteCaricatiTable = () => {
             emptyDataSourceMessage: "Non è presente alcun dato da mostrare",
           },
         }}
-        // components={{
-        //   Toolbar: (props) => (
-        //     <div>
-        //       <MTableToolbar {...props} />
-        //       <div className="button-load-test">
-        //         <Button variant="contained" color="primary">
-        //           LOAD TEST CASE
-        //         </Button>
-        //       </div>
-        //     </div>
-        //   ),
-        // }}
       />
 
       {/* ------------------ MODALE LOAD TEST CASE --------------------- */}
@@ -639,25 +590,15 @@ const TestSuiteCaricatiTable = () => {
               <div className={classes.divSelectBar}>
                 <Form.Group>
                   <Form.Label>Nome del Test Suite</Form.Label>
-                  <FormControl variant="outlined">
-                    <Select
-                      className={classes.select}
-                      value={appearTest.nome}
-                      onChange={(e) => setId(e.target.value)}
-                    >
-                      {appearTest.map((prova) => {
-                        return (
-                          <MenuItem
-                            style={{ width: "423px" }}
-                            key={prova.id}
-                            value={prova.id}
-                          >
-                            {prova.nome}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
+                  <SelectAutocompleteTestSuite
+                    className={classes.SelectAutocompleteTestSuite}
+                    value={appearTest.nome}
+                    items={appearTest?.map((i) => ({
+                      id: i.id,
+                      nome: i.nome,
+                    }))}
+                    onChange={(id) => setId(id)}
+                  />
                 </Form.Group>
               </div>
               <Divider className={classes.divider} />
@@ -787,7 +728,6 @@ const TestSuiteCaricatiTable = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  //onClick={handleOpenSchedula}
                   onClick={schedulaTestSuite}
                 >
                   Conferma
@@ -948,7 +888,6 @@ const TestSuiteCaricatiTable = () => {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <ButtonNotClickedGreen
-                    //onClick={functionDelete}
                     onClick={handleDelete}
                     nome="Elimina"
                   />

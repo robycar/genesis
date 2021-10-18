@@ -37,6 +37,7 @@ import {
   ButtonEditing,
   ButtonEditingTest,
 } from "../../components/ButtonBarraNavigazione";
+import { tableIcons } from "../../components/Icons";
 
 const drawerWidth = 240;
 
@@ -104,6 +105,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
+    marginLeft: "2%",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -111,27 +113,17 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    marginLeft: "1%",
-    // display: "flex",
-    // overflow: "auto",
-    // flexDirection: "column",
-    // backgroundColor: "yellow",
-    // alignItems: "center",
-    // marginLeft: "1%",
-    // widh: "100%",
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
   },
   fixedHeight: {
     height: 240,
   },
   buttonContainer: {
     marginBottom: "20px",
-    marginLeft: "1%",
+    marginLeft: "2%",
   },
-  // generalContainer: {
-  //   display: "flex",
-  //   marginTop: "5%",
-  // },
-
   firstStep: {
     display: "flex",
     marginTop: "5%",
@@ -149,7 +141,6 @@ const useStyles = makeStyles((theme) => ({
   },
   divSelect: {
     padding: "5%",
-    // height: "115.6px",
   },
   bottone: {
     marginLeft: "65%",
@@ -168,7 +159,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
     padding: "2%",
-    // marginTop: "2%",
   },
   InputSelect: {
     width: "364.8px",
@@ -178,7 +168,6 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    // width: "20vw",
     width: "340px",
     display: "flex",
   },
@@ -195,7 +184,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "2%",
     fontWeight: "600px",
     lineHeigth: "2%",
-    //fontSize: "2px",
   },
   select: {
     widht: "380x",
@@ -295,8 +283,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   iconModaleError: {
-    // width: "15%",
-    // height: "15%",
     marginRight: "4%",
     transform: "scale(1.9)",
     color: "#ef5350",
@@ -327,7 +313,6 @@ function getSteps() {
 function EditingTestCreaTestSuite() {
   let history = useHistory();
   const classes = useStyles();
-
   const [openDrawer, setOpenDrawer] = useState([]);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
@@ -336,6 +321,7 @@ function EditingTestCreaTestSuite() {
   const [selectedRows, setSelectedRows] = useState([]);
   const [isErrore, setErrore] = useState(false);
   const [messaggioErr, setMessaggioErr] = useState("");
+
   var functions = localStorage.getItem("funzioni").split(",");
 
   /*------- arrayIdTestCase -----------*/
@@ -431,8 +417,6 @@ function EditingTestCreaTestSuite() {
       field: "template.nome",
     },
   ];
-
-  const [open, setOpen] = React.useState(false);
 
   //-----------------------SCRIPT STEPPER------------------------------
 
@@ -585,23 +569,17 @@ function EditingTestCreaTestSuite() {
             style={{ display: activeStep === 1 ? "" : "none" }}
           >
             <div>
-              {/* <Paper className={classes.generalContainer} elevation={1}> */}
               <Typography variant="h6">
                 Seleziona i Test Case da associare:
               </Typography>
               <div>
                 <MaterialTable
+                  icons={tableIcons}
                   style={{ boxShadow: "none" }}
                   title="Test Case"
                   data={data}
                   columns={columns}
-                  onSelectionChange={
-                    (rows) => setSelectedRows(rows)
-                    // for (let i = 0; i < rows.length; i++) {
-                    //   // console.log(rows[i].id);
-                    //   return selectedRows.push(rows[i].id);
-                    // }
-                  }
+                  onSelectionChange={(rows) => setSelectedRows(rows)}
                   options={{
                     selection: true,
                     sorting: true,
@@ -643,7 +621,6 @@ function EditingTestCreaTestSuite() {
               >
                 Selezionare almeno un Test Case da associare!
               </Alert>
-              {/* </Paper> */}
             </div>
           </div>
 
@@ -688,11 +665,6 @@ function EditingTestCreaTestSuite() {
           </div>
         </Paper>
 
-        {/*disabled={
-                        functions.indexOf("testsuite.create") === -1 ||
-                        nextDisabled ||
-                        (arrayIdTestCase.length === 0 && activeStep === 1)
-                      }
         {/* ------------------------MODALE ERROR-------------------- */}
         <Modal
           className={classes.modal}

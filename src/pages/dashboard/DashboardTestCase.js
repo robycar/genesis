@@ -24,17 +24,12 @@ import Button from "@material-ui/core/Button";
 import Card from "../../components/Card";
 import { NavLink } from "react-router-dom";
 
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  // toolbar: {
-  //   paddingRight: 24, // keep right padding when drawer closed
-  //   background: "red",
-  // },
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
@@ -162,7 +157,6 @@ function DashboardTestCase() {
         }}
         open={open}
       >
-        
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
@@ -176,20 +170,10 @@ function DashboardTestCase() {
         <div className={classes.appBarSpacer} />
 
         <Container maxWidth="xl" className={classes.container}>
-          {/* <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-          </Typography> */}
-
           <div className={classes.containerNavbarItem}>
             <NavbarItem />
           </div>
           <div className={classes.bottonTest}>
-            {/* <NavLink exact to="/dashboard/testcase"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -199,9 +183,7 @@ function DashboardTestCase() {
             >
               Test Case
             </Button>
-            {/* </NavLink> */}
 
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -211,7 +193,7 @@ function DashboardTestCase() {
             >
               Test Suite
             </Button>
-            {/* </NavLink> */}
+
             <Button
               className="button-green"
               component={NavLink}
@@ -225,7 +207,6 @@ function DashboardTestCase() {
           <Grid container spacing={3}>
             <Card />
 
-            {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Orders />
@@ -239,5 +220,3 @@ function DashboardTestCase() {
 }
 
 export default DashboardTestCase;
-
-// DashboardTestCaseContainer

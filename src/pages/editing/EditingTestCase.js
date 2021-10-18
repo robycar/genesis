@@ -101,10 +101,7 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
-  buttonContainer: {
-    marginBottom: "20px",
-    marginTop: "2%",
-  },
+ 
   generalPaper: {
     alignItems: "baseline",
   },
@@ -118,7 +115,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
     padding: "2%",
-    // marginTop: "2%",
   },
   divider: {
     width: "90%",
@@ -133,9 +129,7 @@ const useStyles = makeStyles((theme) => ({
 function EditingTestTestCase() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+
 
   return (
     <div className={classes.root}>

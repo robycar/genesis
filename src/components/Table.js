@@ -6,30 +6,24 @@ import { Button } from "@material-ui/core";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import TextField from "@material-ui/core/TextField";
-import ChartReport from "../components/ChartReport";
-import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
-import BackupIcon from "@material-ui/icons/Backup";
-import FormControl from "@material-ui/core/FormControl";
 import Form from "react-bootstrap/Form";
-import Select from "@material-ui/core/Select";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
-import loading from "../../src/assets/load.gif";
 import ButtonNotClickedGreen from "./ButtonNotClickedGreen";
 import ButtonClickedGreen from "./ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import { IconButton } from "@material-ui/core";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import { Doughnut } from "react-chartjs-2";
-import { getGenerale, getByIdGenerale, postGenerale, deleteGenerale } from "../service/api";
+import { getGenerale} from "../service/api";
+import { tableIcons } from "../components/Icons";
+import WhireShark from "../assets/logoShark2.png";
+
 
 const TotalTestSuiteConclusi = () => {
   const columns = [
@@ -71,12 +65,10 @@ const TotalTestSuiteConclusi = () => {
       field: "loadedBy",
     },
     {
-      title: "Report",
+      title: "Trace",
       field: "pathInstance",
       render: () => (
-        <IconButton>
-          <PostAddOutlinedIcon onClick={(event) => alert("Show Report")} />
-        </IconButton>
+         <img className={classes.img} src={WhireShark} />
       ),
     },
   ];
@@ -260,6 +252,11 @@ const TotalTestSuiteConclusi = () => {
       height: 370,
       overflowX: "hidden",
     },
+    img: {
+      width: "30px",
+      height: "30px",
+      borderRadius: "15px"
+    }
   }));
 
   const handleChange = () => {
@@ -267,44 +264,33 @@ const TotalTestSuiteConclusi = () => {
   };
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [openSchedula, setOpenSchedula] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
-  const [value, setValue] = React.useState(new Date("2014-08-18T21:11:54"));
   const [filter, setFilter] = useState(false);
-  const [id, setId] = useState();
+  const [id, setId] = useState(0);
   const [descrizione, setDescrizione] = useState("");
-  const [idToRun, setIdToRun] = useState();
   const [nome, setNome] = useState("");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [data, setData] = useState();
   const [loadedBy, setLoadedBy] = useState("");
   const [loadedWhen, setLoadedWhen] = useState("");
-  const [testCases, setTestCases] = useState([]);
   const [testSuite, setTestSuite] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [version, setVersion] = useState();
   const [openTestCase, SetOpenTestCase] = React.useState(false);
   const [dataTestCases, setDataTestCases] = useState();
-  const arrayTestCase = testSuite?.testCases;
   const arrayTestCaseAssociati = testSuite?.testCases; 
-  const [appearTest, setAppearTest] = useState([]);
-  const [openExport, setOpenExport] = useState(false);
-  const [dataLoad, setTestCaseLoad] = useState(null);
-  const [dataRun, setIdTestCaseRun] = useState(null);
-  const [dataCase, setDataCase] = useState();
   const [creationDate, setCreationDate] = useState();
-  const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const [openGrafico, setOpenGrafico] = useState(false);
   const [prova, setProva] = useState([]);
   const [testCaseAssociati, setTestCaseAssociati] = useState([]);
-
-  const [testCase, setTestCase] = useState({})
-  const [openTestCaseSel, setOpenTestCaseSel] = useState(false)
   
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
+  
+    const [testCase, setTestCase] = useState({})
+    const [openTestCaseSel, setOpenTestCaseSel] = useState(false)
 
   const [openChiamato, setOpenChiamato] = React.useState(false);
   const [openChiamanti, setOpenChiamanti] = React.useState(false);
@@ -319,18 +305,6 @@ const TotalTestSuiteConclusi = () => {
     setProva(x);
   };
 
-  let y = [...prova];
-
-  const modificaTestSelezionati = (testcase) => {
-    if (prova.includes(testcase.id)) {
-      y.splice(y.indexOf(testcase.id), 1);
-    } else {
-      y.push(testcase.id);
-    }
-    setProva(y);
-    // aggiornaTestCaseAssociati(x);
-  };
-
   /*------- arrayIdTestCase -----------*/
   const arrayIdTestCase = [];
   for (let index = 0; index < selectedRows?.length; index++) {
@@ -338,18 +312,10 @@ const TotalTestSuiteConclusi = () => {
     arrayIdTestCase?.push(element);
   }
 
-  // console.log(selectedRows, " Righe selezionati");
-  //console.log(arrayTestCase, " Array di test case");
-
   var arrayId = [];
   arrayTestCaseAssociati?.forEach(function (obj) {
     arrayId?.push(obj.id);
   });
-
-  const handleOpenExport = () => {
-    setOpenExport(true);
-    getAllTestCaseModal();
-  };
 
   const handleOpen = (rowData) => {
     setOpen(true);
@@ -357,13 +323,11 @@ const TotalTestSuiteConclusi = () => {
     setNome(rowData.nome);
     setDescrizione(rowData.descrizione);
     setVersion(rowData.version);
-    // setTestCases([...testCases, rowData.testCases[0].nome]);
     setStartDate(rowData.startDate);
     setEndDate(rowData.endDate);
     setLoadedBy(rowData.loadedBy);
     setLoadedWhen(rowData.loadedWhen);
-    // setOpen(true);
-    getTestSuiteCompleteById(rowData.id);
+    getTestSuiteCompleteById(rowData.id, false);
     setCreationDate(rowData.creationDate);
   };
 
@@ -373,47 +337,15 @@ const TotalTestSuiteConclusi = () => {
 
   const handleOpenGrafico = (rowData) => {
     setId(rowData.id);
-    getTestSuiteCompleteById(rowData.id);
-    setOpenGrafico(true);
+    getTestSuiteCompleteById(rowData.id, true);
   };
 
   const handleCloseGrafico = () => {
     setOpenGrafico(false);
   };
 
-  const handleOpenSchedula = () => {
-    setOpenSchedula(true);
-    setOpen(false);
-  };
-
-  const handleCloseSchedula = () => {
-    setOpenSchedula(false);
-  };
-
-  const handleOpenRun = (idRun_) => {
-    setIdToRun(idRun_);
-    setOpenRun(true);
-    setOpen(false);
-  };
-
   const handleCloseRun = () => {
     setOpenRun(false);
-  };
-
-  const handleChangeData = (newValue) => {
-    setValue(newValue);
-  };
-
-  const testCaseLoader = () => {
-    loadTestCase(id);
-    handleClose();
-    //getAllTestCase();
-  };
-
-  const runCaseLoder = () => {
-    runTestCase(idToRun);
-    handleCloseRun();
-    //alert("Run test id :  "+ idToRun);
   };
 
   const openVisualizza = (rowData) => {
@@ -429,11 +361,11 @@ const TotalTestSuiteConclusi = () => {
   }
 
   const handleOpenTestCase = () => {
+    getTestSuiteCompleteById(id, false);
     SetOpenTestCase(true);
   };
 
   const handleCloseTestCase = () => {
-    getTestSuiteCompleteById(id);
     SetOpenTestCase(false);
   };
 
@@ -465,7 +397,6 @@ const TotalTestSuiteConclusi = () => {
     fetch(`/api/testcase/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result)
         setTestCase(result.testCase)
         setOpenTestCaseSel(true)
       })
@@ -473,7 +404,7 @@ const TotalTestSuiteConclusi = () => {
   };
   //------------------------- GET TEST SUITE BY ID ------------------------------
 
-  const getTestSuiteCompleteById = (id) => {
+  const getTestSuiteCompleteById = (id, open) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -492,7 +423,7 @@ const TotalTestSuiteConclusi = () => {
         setTestCaseAssociati(result.testSuite.testCases);
         setTestCaseAssociatiArray(result.testSuite);
         cicloFor(result.testSuite.testCases);
-        // SetOpenTestCase(false);
+        setOpenGrafico(open);
       })
       .catch((error) => console.log("error", error));
   };
@@ -537,86 +468,6 @@ const TotalTestSuiteConclusi = () => {
     getAllTestCaseAssociati();
   }, []);
 
-  /*--------------- LOAD TEST CASE -------------------*/
-
-  const loadTestCase = (id) => {
-    var urlLoad = `/api/testcase/load/${id}`;
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setTestCaseLoad(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  /*--------------- RUN TEST CASE -------------------*/
-
-  const runTestCase = (idRun) => {
-    var urlLoad = `/api/testcase/runloaded/${idRun}`;
-
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(urlLoad, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setIdTestCaseRun(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  const hadleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
-    //setIdToRun(rowDataaa.id);
-    runCaseLoder(rowDataaa.id);
-  };
-
-  /*--------------- GET TEST CASE -------------------*/
-
-  const getAllTestCaseModal = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-
-    fetch(`/api/testcase`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        console.log(result);
-        setAppearTest(result.list);
-        setDataCase(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
-
   //-----------GET TEST CASE ASSOCIATI----------------------
   const getAllTestCaseAssociati = () => {
     //setCaricamento2(true);
@@ -640,13 +491,6 @@ const TotalTestSuiteConclusi = () => {
       .catch((error) => console.log("error", error));
   };
 
-  const tableIcons = {
-    Export: React.forwardRef((props, ref) => (
-      <Button size="small" variant="contained" color="secondary">
-        EXPORT
-      </Button>
-    )),
-  };
 
   /*------ Funzione calcolo percentuali -------*/
 
@@ -708,19 +552,13 @@ const TotalTestSuiteConclusi = () => {
         data={data}
         columns={columns}
         options={{
-          //tableLayout: "fixed",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "center",
           exportButton: true,
-
-          // selection: true,
-          // columnsButton: true,
-          // filtering: true,
           headerStyle: {
             backgroundColor: "beige",
-            //color: '#FFF'
           },
         }}
         actions={[
@@ -947,6 +785,7 @@ const TotalTestSuiteConclusi = () => {
                     data={arrayTestCaseAssociati}
                     columns={columnsVisualizzaTestcases}
                     isLoading={caricamento2}
+                    icons={tableIcons}
                     options={{
                       selection: false,
                       sorting: true,
@@ -955,25 +794,7 @@ const TotalTestSuiteConclusi = () => {
                       searchFieldVariant: "outlined",
                       filtering: true,
                       searchFieldAlignment: "left",
-                      // pageSizeOptions: [
-                      //   5,
-                      //   10,
-                      //   20,
-                      //   { value: data.length, label: "All" },
-                      // ],
                     }}
-                    // actions={[
-                    //   {
-                    //     icon: (dat) => (
-                    //       <a>
-                    //         <VisibilityIcon />
-                    //       </a>
-                    //     ),
-                    //     tooltip: "Visualizza tutti i dati",
-                    //     position: "row",
-                    //     onClick: (event, rowData) => openVisualizza(rowData),
-                    //   },
-                    // ]}
                     localization={{
                       header: {
                         actions: "Azioni",
@@ -1006,7 +827,7 @@ const TotalTestSuiteConclusi = () => {
       </Modal>
 
       
-      {/*------------------ MODALE VISUALIZZA/MODIFICA -------------*/}
+      {/*------------------ MODALE TestCaseSel -------------*/}
 
       <Modal
         aria-labelledby="transition-modal-title"
@@ -1338,6 +1159,7 @@ const TotalTestSuiteConclusi = () => {
                   data={testCaseAssociati}
                   columns={columnsTestcases}
                   isLoading={caricamento2}
+                  icons={tableIcons}
                   options={{
                     selection: false,
                     sorting: true,

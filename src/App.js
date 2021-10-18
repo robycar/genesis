@@ -1,11 +1,9 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Editing from "./pages/editing/Editing";
-import Launching from "./pages/launching/Launching";
 import Report from "./pages/report/Report";
 import ReportTestSuite from "./pages/report/ReportTestSuite";
 import ReportTestCase from "./pages/report/ReportTestCase";
 import ReportTestGeneratore from "./pages/report/ReportTestGeneratore";
-//import Supporto from "./pages/Supporto";
 import DashboardTestCase from "./pages/dashboard/DashboardTestCase";
 import DashboardTestSuite from "./pages/dashboard/DashboardTestSuite";
 import DashboardTestGeneratore from "./pages/dashboard/DashboardTestGeneratore";
@@ -16,7 +14,6 @@ import EditingOutboundProxy from "./pages/editing/EditingOutboundProxy";
 import EditingOutboundProxyCreaOBP from "./pages/editing/EditingOutboundProxyCreaOBP";
 import EditingTemplate from "./pages/editing/EditingTemplate";
 import EditingTemplateCreaTemplate from "./pages/editing/EditingTemplateCreaTemplate";
-// import EditingTest from "./pages/editing/EditingTest";
 import Amministrazione from "./pages/amministrazione/Amministrazione";
 import AmministrazioneAutorizzazioni from "./pages/amministrazione/AmministrazioneAutorizzazioni";
 import AmministrazioneRuoli from "./pages/amministrazione/AmministrazioneRuoli";
@@ -32,14 +29,11 @@ import AmministrazioneAddUtente from "./pages/amministrazione/AmministrazioneAdd
 import AmministrazioneCreaRuolo from "./pages/amministrazione/AmministrazioneCreaRuolo";
 import AmministrazioneViewGruppo from "./pages/amministrazione/AmministrazioneViewGruppo";
 import AmministrazioneViewGruppoCreaGruppo from "./pages/amministrazione/AmministrazioneViewGruppoCreaGruppo";
-import AmministrazioneViewGruppoAddPartecipante from "./pages/amministrazione/AmministrazioneViewGruppoAddPartecipante";
-// import LoginChiara from "./pages/login/LoginChiara";
 import Login from "./pages/Login";
 import EditingLineeGeneratore from "./pages/editing/EditingLineeGeneratore";
 import EditingTestGeneratore from "./pages/editing/EditingTestGeneratore";
 import EditingLineaCreaLineaGeneratore from "./pages/editing/EditingLineaCreaLineaGeneratore";
 import EditingTestGeneratoreCreaTestGeneratore from "./pages/editing/EditingTestGeneratoreCreaTestGeneratore";
-
 import LaunchingTestCase from "./pages/launching/LaunchingTestCase";
 import LaunchingTestSuite from "./pages/launching/LaunchingTestSuite";
 import LaunchingTestGeneratore from "./pages/launching/LaunchingTestGeneratore";
@@ -48,7 +42,6 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        {/* <Route path="/" exact component={Dashboard} /> */}
         <Route path="/" exact component={Login} />
         <Route path="/dashboard/testcase" exact component={DashboardTestCase} />
         <Route
@@ -56,15 +49,23 @@ function App() {
           exact
           component={DashboardTestSuite}
         />
-         <Route
+        <Route
           path="/dashboard/testgeneratore"
           exact
           component={DashboardTestGeneratore}
         />
         <Route path="/launching/" exact component={LaunchingTestCase} />
         <Route path="/launching/testcase" exact component={LaunchingTestCase} />
-        <Route path="/launching/testsuite" exact component={LaunchingTestSuite} />
-        <Route path="/launching/testgeneratore" exact component={LaunchingTestGeneratore} />
+        <Route
+          path="/launching/testsuite"
+          exact
+          component={LaunchingTestSuite}
+        />
+        <Route
+          path="/launching/testgeneratore"
+          exact
+          component={LaunchingTestGeneratore}
+        />
         <Route path="/editing" exact component={Editing} />
         <Route path="/editing/linee" exact component={EditingLinee} />
         <Route
@@ -88,11 +89,6 @@ function App() {
           exact
           component={EditingTemplateCreaTemplate}
         />
-        {/* <Route
-          path="/editing/test/testcase"
-          exact
-          component={EditingTestTestCase}
-        /> */}
         <Route path="/editing/testcase" exact component={EditingTestCase} />
         <Route path="/editing/testsuite" exact component={EditingTestSuite} />
         <Route
@@ -117,7 +113,6 @@ function App() {
           exact
           component={EditingTestGeneratoreCreaTestGeneratore}
         />
-
 
         <Route
           path="/editing/testsuite/createstsuite"
@@ -158,7 +153,11 @@ function App() {
         <Route path="/report" exact component={Report} />
         <Route path="/report/testsuite" exact component={ReportTestSuite} />
         <Route path="/report/testcase" exact component={ReportTestCase} />
-        <Route path="/report/testgeneratore" exact component={ReportTestGeneratore} />
+        <Route
+          path="/report/testgeneratore"
+          exact
+          component={ReportTestGeneratore}
+        />
         <Route path="/supporto" exact component={Supporto} />
         <Route path="/supporto/support" exact component={Supporto} />
         <Route path="/documentation" exact component={Documentation} />
@@ -174,16 +173,10 @@ function App() {
           component={AmministrazioneViewGruppoCreaGruppo}
         />
         <Route
-          path="/amministrazione/addpartecipante"
-          exact
-          component={AmministrazioneViewGruppoAddPartecipante}
-        />
-        <Route
           path="/editing/lineegeneratore"
           exact
           component={EditingLineeGeneratore}
         />
-        {/* <Route path="/login" exact component={LoginChiara} /> */}
       </Switch>
     </BrowserRouter>
   );

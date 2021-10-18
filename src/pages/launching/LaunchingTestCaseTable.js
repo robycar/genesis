@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../../styles/App.css";
-import { IconButton, Paper, Typography, Link } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 import acccessControl from "../../service/url.js";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import AddIcon from "@material-ui/icons/Add";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -18,22 +15,17 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import SettingsIcon from "@material-ui/icons/Settings";
-import GetAppIcon from "@material-ui/icons/GetApp";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import BackupIcon from "@material-ui/icons/Backup";
+import { tableIcons } from "../../components/Icons";
 
 function LaunTestCaseTable() {
-  const [file, setFile] = useState([]);
   const [data, setData] = useState([]);
-  const [testCase, setTestCase] = useState([]);
   const [id, setId] = useState();
   const [nomeTitolo, setNomeTitolo] = useState("");
   const [nome, setNome] = useState("");
@@ -51,7 +43,6 @@ function LaunTestCaseTable() {
   const [proxyChiamato, setProxyChiamato] = useState(0);
   const [chiamanti, setChiamanti] = useState({});
   const [mapChiamanti, setMapChiamanti] = useState([]);
-  let arrAppoggioChiamanti = {};
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
@@ -187,7 +178,6 @@ function LaunTestCaseTable() {
 
   //------------UPDATE CHIAMANTI-----------------
   const updateChiamante = () => {
-    console.log("prova", chiamanti);
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
@@ -386,7 +376,6 @@ function LaunTestCaseTable() {
       appoggioChiamanti[i].linea = { id: chiamanti[i].linea.id };
       appoggioChiamanti[i].proxy = { id: chiamanti[i].proxy.id };
     }
-    console.log(Object.values(chiamanti));
     setMapChiamanti(Object.keys(chiamanti));
 
     setOpenChiamanti(true);
@@ -405,7 +394,6 @@ function LaunTestCaseTable() {
 
   const runCaseLoder = () => {
     runTestCase(testCaseLoad);
-    
   };
 
   const handleOpenRun = (idRun) => {
@@ -416,9 +404,7 @@ function LaunTestCaseTable() {
   };
 
   const hadleLoadData = (rowDataaa) => {
-    //console.log(rowDataaa.id);
     setIdToRun(rowDataaa.id);
-    //loadTestCase(idToRun);
     runCaseLoder(rowDataaa.id);
   };
 
@@ -475,14 +461,10 @@ function LaunTestCaseTable() {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setTestCaseLoad(result.testCaseCaricato.id);
       })
       .catch((error) => console.log("error", error));
   };
-
-  // console.log(testCaseLoad, "id test case caricato");
-
   /*----------- DELETE TEST CARICATO ----------------*/
 
   const deleteTestCaricato = (id) => {
@@ -492,7 +474,6 @@ function LaunTestCaseTable() {
     myHeaders.append("Authorization", bearer);
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    // myHeaders.append("Access-Control-Allow-Credentials", "true");
 
     var requestOptions = {
       method: "DELETE",
@@ -504,8 +485,6 @@ function LaunTestCaseTable() {
       .then((response) => response.json())
       .then((result) => {
         setOpenRun(false);
-        // getAllTestCase();
-        console.log(result);
       })
       .catch((error) => console.log("error", error));
   };
@@ -529,7 +508,6 @@ function LaunTestCaseTable() {
     fetch(urlLoad, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         setIdTestCaseRun(result.list);
         setOpenRun(false);
       })
@@ -548,7 +526,6 @@ function LaunTestCaseTable() {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -560,12 +537,10 @@ function LaunTestCaseTable() {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -676,8 +651,6 @@ function LaunTestCaseTable() {
       alignItems: "center",
     },
     iconModaleError: {
-      // width: "15%",
-      // height: "15%",
       marginRight: "4%",
       transform: "scale(1.9)",
       color: "#ef5350",
@@ -696,18 +669,19 @@ function LaunTestCaseTable() {
   return (
     <div>
       <MaterialTable
-        detailPanel={(rowData) => {
-          return (
-            <div
-              style={{
-                fontSize: 16,
-                marginLeft: 2,
-              }}
-            >
-              {"  "} {rowData.descrizione}
-            </div>
-          );
-        }}
+        icons={tableIcons}
+        // detailPanel={(rowData) => {
+        //   return (
+        //     <div
+        //       style={{
+        //         fontSize: 16,
+        //         marginLeft: 2,
+        //       }}
+        //     >
+        //       {"  "} {rowData.descrizione}
+        //     </div>
+        //   );
+        // }}
         style={{ boxShadow: "none" }}
         title="Test Case"
         data={data}
@@ -725,23 +699,8 @@ function LaunTestCaseTable() {
         }}
         actions={[
           {
-            icon: () => (
-              /*<div className={classes.buttonRight}>
-                              <Button
-                                className="button-green"
-                                component={NavLink}
-                                activeClassName="button-green-active"
-                                exact
-                                to="/editing/testcreatestcase"
-                                startIcon={<AddIcon />}
-                              >
-                                TEST CASE
-                              </Button>
-                            </div>*/
-              <div></div>
-            ),
+            icon: () => <div></div>,
             tooltip: "Crea Test Case",
-            //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
           {
@@ -754,20 +713,6 @@ function LaunTestCaseTable() {
             position: "row",
             onClick: (event, rowData) => openVisualizza(rowData),
           },
-          /*{
-                        icon: () => <FileUploadIcon />,
-                        tooltip: "Load",
-                        onClick: (event, rowData) => loadTestCase(rowData.id),
-                        position: "row",
-                    },
-                    {
-                       icon: () => <DeleteIcon />,
-                       tooltip: "Remove all selected test",
-                       onClick: (event, rowData) => {
-                         handleOpenDelete(rowData);
-                         setIdElemento(rowData.id);
-                       }, 
-                     },*/
           {
             icon: () => <PlayCircleFilledIcon />,
             tooltip: "Lancia Test Case",
@@ -1104,7 +1049,6 @@ function LaunTestCaseTable() {
                           onChange={(e) => {
                             var p1 = chiamanti;
                             p1[chiamante].linea.id = e.target.value;
-                            console.log(p1);
                             impostaChiamanti(p1);
                           }}
                           InputProps={{
@@ -1127,7 +1071,6 @@ function LaunTestCaseTable() {
                           onChange={(e) => {
                             var p1 = chiamanti;
                             p1[chiamante].proxy.id = e.target.value;
-                            console.log(p1);
                             impostaChiamanti(p1);
                           }}
                           InputProps={{

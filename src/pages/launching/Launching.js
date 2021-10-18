@@ -7,12 +7,10 @@ import AppBar from "@material-ui/core/AppBar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import Navbar from "../../components/Navbar";
 import NavbarItemLaunch from "../../components/NavbarItemLaunch";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {
   mainListItems,
   secondaryListItems,
@@ -23,12 +21,9 @@ import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import SelectAutocompleteTestCase from "../../components/SelectAutocompleteTestCase";
 import SelectAutocompleteTestSuite from "../../components/SelectAutocompleteTestSuite";
 import accessControl from "../../service/url.js";
-
-import Grid from "@material-ui/core/Grid";
-import Orders from "../../components/Orders";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
-import NavbarItem from "../../components/NavbarItem";
+
 
 const drawerWidth = 240;
 
@@ -37,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24,
   },
   toolbarIcon: {
     display: "flex",
@@ -120,7 +115,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-around",
     padding: "20px",
-    // backgroundColor: "red",
     width: "100%",
   },
   paperTest: {
@@ -163,7 +157,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "flex-end",
     marginTop: "15px",
-    // marginLeft: "62px",
   },
   buttonNotClickedGreen: {
     backgroundColor: "white",
@@ -290,7 +283,6 @@ function Launching() {
           </div>
 
           <div className={classes.bottonTest}>
-            {/* <NavLink exact to="/dashboard/testcase"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -300,9 +292,6 @@ function Launching() {
             >
               Test Case
             </Button>
-            {/* </NavLink> */}
-
-            {/* <NavLink exact to="/dashboard/testsuite"> */}
             <Button
               className="button-green"
               component={NavLink}
@@ -312,7 +301,6 @@ function Launching() {
             >
               Test Suite
             </Button>
-            {/* </NavLink> */}  
             <Button
               className="button-green"
               component={NavLink}
@@ -336,14 +324,12 @@ function Launching() {
                 </Typography>
               </Paper>
               <div className={classes.containerSelect}>
-                {/* <SelectBar nome="Selezione Test Suite" /> */}
                 <SelectAutocompleteTestSuite
                  items={testSuites?.map(i => ({id: i.id, nome: i.nome}))} 
                  onChange ={(id) => {loadTestCases(id)}}/>
               </div>
 
               <div>
-                {/* <SelectBar nome="Selezione Test Case" /> */}
                 <SelectAutocompleteTestCase 
                 items={testCases?.map(i => ({value: i.id, nome: i.nome, testCases: i.testCases}))} 
                 />
@@ -403,4 +389,3 @@ function Launching() {
 }
 
 export default Launching;
-// Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MzIxNDY2NDAsImlhdCI6MTYzMjE0MzA0MCwidXNlcm5hbWUiOiJ0ZXN0In0.K2nhbP1jbR11bVV-2nF3fmVrDHPaZzC6zWsttYir3ZrlIQnzT175nQhn19sC50RHswA_7D52Oj48I0ax_KCoAw

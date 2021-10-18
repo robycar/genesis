@@ -5,6 +5,7 @@ import { Button } from "@material-ui/core";
 import "../styles/App.css";
 import { NavLink } from "react-router-dom";
 import acccessControl from "../service/url.js";
+import { tableIcons } from "../components/Icons";
 
 const ViewGruppo = () => {
   const [data, setData] = useState([]);
@@ -78,7 +79,6 @@ const ViewGruppo = () => {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -140,6 +140,7 @@ const ViewGruppo = () => {
   return (
     <div>
       <MaterialTable
+      icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Partecipanti"
         data={data}
@@ -149,44 +150,7 @@ const ViewGruppo = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
-          // selection: true,
-          // columnsButton: true,
-          // filtering: true,
         }}
-        // editable={{
-        //   onRowDelete: (oldData) =>
-        //     new Promise((resolve, reject) => {
-        //       var myHeaders = new Headers();
-        //       myHeaders.append("Authorization", bearer);
-        //       myHeaders.append("Content-Type", "application/json");
-        //       myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-        //       myHeaders.append("Access-Control-Allow-Credentials", "true");
-
-        //       var raw = JSON.stringify({
-        //         "user": {
-        //           id: oldData.id,
-        //           gruppo: null
-        //         }
-        //       });
-
-        //       var requestOptions = {
-        //         method: "POST",
-        //         headers: myHeaders,
-        //         body: raw,
-        //         redirect: "follow",
-        //       };
-
-        //       fetch(`/api/user`, requestOptions)
-        //         .then((response) => response.json())
-        //         .then((result) => {
-        //           console.log(result)
-        //           getGruppo();
-        //           resolve();
-        //         })
-
-        //         .catch((error) => console.log("error", error));
-        //     }),
-        // }}
         actions={[
           {
             icon: () => (

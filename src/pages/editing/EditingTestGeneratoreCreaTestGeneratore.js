@@ -31,7 +31,10 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useHistory } from "react-router-dom";
 import { getGenerale, putGenerale } from "../../service/api";
-import { ButtonEditing, ButtonEditingTest } from "../../components/ButtonBarraNavigazione"
+import {
+  ButtonEditing,
+  ButtonEditingTest,
+} from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -99,6 +102,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
+    marginLeft: "2%",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -109,17 +113,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "column",
-    //backgroundColor: "yellow",
     alignItems: "center",
-    marginLeft: "1%",
   },
   fixedHeight: {
     height: 240,
   },
-  buttonContainer: {
-    marginBottom: "20px",
-    marginLeft: "1%",
-  },
+
   generalContainer: {
     display: "flex",
     marginTop: "5%",
@@ -137,7 +136,6 @@ const useStyles = makeStyles((theme) => ({
   },
   divSelect: {
     padding: "5%",
-    // height: "115.6px",
   },
   bottone: {
     marginLeft: "65%",
@@ -156,7 +154,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#66788A",
     lineHeight: "20px",
     padding: "2%",
-    // marginTop: "2%",
   },
   InputSelect: {
     width: "364.8px",
@@ -166,7 +163,6 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(1),
-    // width: "20vw",
     width: "340px",
     display: "flex",
   },
@@ -183,7 +179,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "2%",
     fontWeight: "600px",
     lineHeigth: "2%",
-    //fontSize: "2px",
   },
   select: {
     widht: "380x",
@@ -274,33 +269,45 @@ function EditingTestCreaTestGeneratore() {
 
   /*------- get linea -----------*/
   const funzioneGetAll = () => {
-    if (functions.indexOf("template.view") !== -1 && functions.indexOf("obp.view") !== -1 && functions.indexOf("lineagen.view") !== -1) {
+    if (
+      functions.indexOf("template.view") !== -1 &&
+      functions.indexOf("obp.view") !== -1 &&
+      functions.indexOf("lineagen.view") !== -1
+    ) {
       //----GET APPEAR TEMPLATE----
       (async () => {
-        setAppearTemplate((await getGenerale('template')).list);
+        setAppearTemplate((await getGenerale("template")).list);
       })();
 
       //-----GET APPEAR OBP-----
       (async () => {
-        setAppearOBP((await getGenerale('obp')).list);
+        setAppearOBP((await getGenerale("obp")).list);
       })();
 
       //-----GET APPEAR LIST-----
       (async () => {
-        setAppearLinea((await getGenerale('lineageneratore')).list);
+        setAppearLinea((await getGenerale("lineageneratore")).list);
       })();
     }
-  }
+  };
 
   const funzioneAggiungiTestgeneratore = () => {
     if (functions.indexOf("testgen.view") !== -1) {
       //----AGGIUNGI GRUPPO------
       (async () => {
-        await putGenerale('testgen', { nome: nome, template: template, descrizione: descrizione === "" ? " " : descrizione, lineaChiamante: lineaChiamante, lineaChiamato: lineaChiamato, proxyChiamante: OBPChiamante, proxyChiamato: OBPChiamato, });
-        history.push("/editing/testgeneratore")
+        await putGenerale("testgen", {
+          nome: nome,
+          template: template,
+          descrizione: descrizione === "" ? " " : descrizione,
+          lineaChiamante: lineaChiamante,
+          lineaChiamato: lineaChiamato,
+          proxyChiamante: OBPChiamante,
+          proxyChiamato: OBPChiamato,
+        });
+        history.push("/editing/testgeneratore");
       })();
     }
-  }
+  };
 
   //-----------------------SCRIPT STEPPER------------------------------
 
@@ -369,6 +376,7 @@ function EditingTestCreaTestGeneratore() {
         <Divider />
         <List>{quaterListItems}</List>
       </Drawer>
+
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
 
@@ -462,8 +470,16 @@ function EditingTestCreaTestGeneratore() {
                         >
                           {appearLinea.map((linea) => {
                             return (
-                              <MenuItem disabled={linea.id === lineaChiamante} key={linea.id} value={linea.id}>
-                                {linea.ip + ":" + linea.porta + "-" + linea.typeLinea.descrizione}
+                              <MenuItem
+                                disabled={linea.id === lineaChiamante}
+                                key={linea.id}
+                                value={linea.id}
+                              >
+                                {linea.ip +
+                                  ":" +
+                                  linea.porta +
+                                  "-" +
+                                  linea.typeLinea.descrizione}
                               </MenuItem>
                             );
                           })}
@@ -499,7 +515,11 @@ function EditingTestCreaTestGeneratore() {
                         >
                           {appearOBP.map((proxy) => {
                             return (
-                              <MenuItem disabled={proxy.id === OBPChiamante} key={proxy.id} value={proxy.id}>
+                              <MenuItem
+                                disabled={proxy.id === OBPChiamante}
+                                key={proxy.id}
+                                value={proxy.id}
+                              >
                                 {proxy.campiConcatenati}
                               </MenuItem>
                             );
@@ -544,8 +564,16 @@ function EditingTestCreaTestGeneratore() {
                         >
                           {appearLinea.map((linea) => {
                             return (
-                              <MenuItem disabled={linea.id === lineaChiamato} key={linea.id} value={linea.id}>
-                                {linea.ip + ":" + linea.porta + "-" + linea.typeLinea.descrizione}
+                              <MenuItem
+                                disabled={linea.id === lineaChiamato}
+                                key={linea.id}
+                                value={linea.id}
+                              >
+                                {linea.ip +
+                                  ":" +
+                                  linea.porta +
+                                  "-" +
+                                  linea.typeLinea.descrizione}
                               </MenuItem>
                             );
                           })}
@@ -581,7 +609,11 @@ function EditingTestCreaTestGeneratore() {
                         >
                           {appearOBP.map((proxy) => {
                             return (
-                              <MenuItem disabled={proxy.id === OBPChiamato} key={proxy.id} value={proxy.id}>
+                              <MenuItem
+                                disabled={proxy.id === OBPChiamato}
+                                key={proxy.id}
+                                value={proxy.id}
+                              >
                                 {proxy.campiConcatenati}
                               </MenuItem>
                             );
@@ -627,10 +659,7 @@ function EditingTestCreaTestGeneratore() {
                           >
                             {appearTemplate.map((template) => {
                               return (
-                                <MenuItem
-                                  key={template.id}
-                                  value={template.id}
-                                >
+                                <MenuItem key={template.id} value={template.id}>
                                   {template.nome}
                                 </MenuItem>
                               );
@@ -684,10 +713,10 @@ function EditingTestCreaTestGeneratore() {
                         activeStep === 0 && nome === ""
                           ? true
                           : activeStep === 1 && OBPChiamato === 0
-                            ? true
-                            : activeStep === 2 && OBPChiamante === 0
-                              ? true
-                              : activeStep === 3 && template === 0
+                          ? true
+                          : activeStep === 2 && OBPChiamante === 0
+                          ? true
+                          : activeStep === 3 && template === 0
                       }
                       variant="contained"
                       color="primary"
@@ -700,29 +729,10 @@ function EditingTestCreaTestGeneratore() {
               )}
             </div>
           </div>
-          {/* <div className={classes.bottone}>
-            <ButtonClickedGreen
-              className={classes.bottone}
-              size="medium"
-              nome="Crea"
-              onClick={salva}
-            />
-            <Button
-              component={NavLink}
-              className="button-green-disactive"
-              exact
-              to="/editing/linee"
-              variant="contained"
-              size="medium"
-            >
-              annulla
-            </Button>
-          </div> */}
         </Paper>
       </main>
     </div>
   );
-};
-
+}
 
 export default EditingTestCreaTestGeneratore;

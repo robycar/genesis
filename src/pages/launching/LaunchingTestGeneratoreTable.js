@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import MaterialTable from "material-table";
 import "../../styles/App.css";
-import { IconButton, Paper, Typography } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 import acccessControl from "../../service/url.js";
 import Divider from "@material-ui/core/Divider";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { MenuItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import AddIcon from "@material-ui/icons/Add";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -17,16 +16,13 @@ import TextField from "@material-ui/core/TextField";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import GetAppIcon from "@material-ui/icons/GetApp";
 import ButtonNotClickedGreen from "../../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import { NavLink } from "react-router-dom";
-import Button from "@material-ui/core/Button";
+import { tableIcons } from "../../components/Icons";
 
 function LaunchingTestGeneratoreTable() {
-  const [file, setFile] = useState([]);
   const [data, setData] = useState([]);
   const [id, setId] = useState();
   const [nomeTitolo, setNomeTitolo] = useState("");
@@ -38,7 +34,6 @@ function LaunchingTestGeneratoreTable() {
   const [modifiedBy, setModifiedBy] = useState("");
   const [creationDate, setCreationDate] = useState("");
   const [modifiedDate, setModifiedDate] = useState("");
-
   const [lineaChiamato, setLineaChiamato] = useState(0);
   const [lineaChiamante, setLineaChiamante] = useState(0);
   const [OBPChiamato, setOBPChiamato] = useState(0);
@@ -46,7 +41,6 @@ function LaunchingTestGeneratoreTable() {
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
   const [caricamento, setCaricamento] = useState(false);
-
   let bearer = `Bearer ${localStorage.getItem("token")}`;
 
   //-----------GET TEST GENERATORE----------------------
@@ -384,7 +378,6 @@ function LaunchingTestGeneratoreTable() {
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
-      // border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       display: "flex",
@@ -396,12 +389,10 @@ function LaunchingTestGeneratoreTable() {
       height: "20%",
       display: "flex",
       alignItems: "center",
-      //opacity: "25%",
     },
     paperBottom: {
       padding: "2%",
       backgrounColor: "#FFFFFF",
-      //justifyContent: "center",
       flexDirection: "column",
       marginTop: "5%",
     },
@@ -416,7 +407,6 @@ function LaunchingTestGeneratoreTable() {
       height: "fit-content",
       width: 500,
       position: "relative",
-    
     },
     contenutoModale: {
       height: 370,
@@ -446,7 +436,6 @@ function LaunchingTestGeneratoreTable() {
     bottone: {
       marginLeft: "55px",
       marginTop: "5%",
-      // marginBottom: "2%",
     },
     modal: {
       display: "flex",
@@ -498,6 +487,7 @@ function LaunchingTestGeneratoreTable() {
   return (
     <div>
       <MaterialTable
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title="Test Generatore"
         data={data}
@@ -515,22 +505,8 @@ function LaunchingTestGeneratoreTable() {
         }}
         actions={[
           {
-            icon: () => (
-              <div className={classes.buttonRight}>
-                {/*<Button
-                  className="button-green"
-                  component={NavLink}
-                  activeClassName="button-green-active"
-                  exact
-                  to="/editing/testgeneratore/createstgeneratore"
-                  startIcon={<AddIcon />}
-                >
-                  TEST GENERATORE
-                </Button>*/}
-                </div>
-            ),
+            icon: () => <div className={classes.buttonRight}></div>,
             tooltip: "Crea Test Generatore",
-            //onClick: () => funzioneFor(),
             isFreeAction: true,
           },
           {
