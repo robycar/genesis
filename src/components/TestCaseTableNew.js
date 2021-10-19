@@ -792,12 +792,6 @@ function TestCaseTable() {
                     >
                       {appearOBP.map((proxy) => (
                         <MenuItem
-                          disabled={
-                            proxy.id === proxyChiamato ||
-                            proxy.id === chiamanti[0]?.proxy.id ||
-                            proxy.id === chiamanti[1]?.proxy.id ||
-                            proxy.id === chiamanti[2]?.proxy.id
-                          }
                           key={proxy.id}
                           value={proxy.id}
                         >
@@ -917,12 +911,6 @@ function TestCaseTable() {
                         >
                           {appearOBP.map((proxy) => (
                             <MenuItem
-                              disabled={
-                                proxy.id === proxyChiamato ||
-                                proxy.id === chiamanti[0]?.proxy.id ||
-                                proxy.id === chiamanti[1]?.proxy.id ||
-                                proxy.id === chiamanti[2]?.proxy.id
-                              }
                               key={proxy.id}
                               value={proxy.id}
                             >

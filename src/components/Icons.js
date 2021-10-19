@@ -47,5 +47,4 @@ export const tableIcons = {
   PlayCircleOutlineIcon: forwardRef((props, ref) => (
     <PlayCircleOutlineIcon {...props} ref={ref} />
   )),
-  // Trace: forwardRef((props, ref) => <Trace {...props} ref={ref} />),
 };

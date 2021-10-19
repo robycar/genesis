@@ -9,8 +9,6 @@ import { tableIcons } from "../components/Icons";
 import WhireShark from "../assets/logoShark2.png";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
-
-
 const TestGeneratoreComplete = () => {
   const columns = [
     {
@@ -49,9 +47,7 @@ const TestGeneratoreComplete = () => {
     {
       title: "Trace",
       field: "pathInstance",
-      render: () => (
-         <img className={classes.img} src={WhireShark} />
-      ),
+      render: () => <img className={classes.img} src={WhireShark} />,
     },
   ];
 
@@ -165,8 +161,8 @@ const TestGeneratoreComplete = () => {
     img: {
       width: "30px",
       height: "30px",
-      borderRadius: "15px"
-    }
+      borderRadius: "15px",
+    },
   }));
 
   const classes = useStyles();
@@ -209,8 +205,6 @@ const TestGeneratoreComplete = () => {
     getAllTestCase();
   }, []);
 
-
-
   return (
     <div>
       <MaterialTable
@@ -229,18 +223,18 @@ const TestGeneratoreComplete = () => {
             backgroundColor: "beige",
           },
         }}
-        actions={[
-          {
-            icon: (dat) => (
-              <a>
-                <VisibilityIcon />
-              </a>
-            ),
-            tooltip: "Visualizza Test Generatore",
-            position: "row",
-            // onClick: (event, rowData) => openVisualizza(rowData),
-          },
-        ]}
+        // actions={[
+        //   {
+        //     icon: (dat) => (
+        //       <a>
+        //         <VisibilityIcon />
+        //       </a>
+        //     ),
+        //     tooltip: "Visualizza Test Generatore",
+        //     position: "row",
+        //     onClick: (event, rowData) => openVisualizza(rowData),
+        //   },
+        // ]}
         localization={{
           header: {
             actions: "Azioni",

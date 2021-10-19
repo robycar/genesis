@@ -269,30 +269,30 @@ const TestGeneratoreRunningTable = () => {
           searchFieldAlignment: "left",
           filtering: true,
         }}
-        actions={[
-          {
-            icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Report",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: () => <PlayCircleOutlineIcon />,
-            tooltip: "Lancia",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          // {
-          //   icon: () => (
-          //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
-          //   ),
-          //   tooltip: "Carica Test Generatore",
-          //   onClick: () => handleOpen(),
-          //   isFreeAction: true,
-          // },
-        ]}
+        // actions={[
+        //   {
+        //     icon: () => <PieChartOutlinedIcon />,
+        //     tooltip: "Report",
+        //     onClick: (event, rowData) =>
+        //       alert("Ho cliccato " + rowData.launcher),
+        //     position: "row",
+        //   },
+        //   {
+        //     icon: () => <PlayCircleOutlineIcon />,
+        //     tooltip: "Lancia",
+        //     onClick: (event, rowData) =>
+        //       alert("Ho cliccato " + rowData.launcher),
+        //     position: "row",
+        //   },
+        //   // {
+        //   //   icon: () => (
+        //   //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
+        //   //   ),
+        //   //   tooltip: "Carica Test Generatore",
+        //   //   onClick: () => handleOpen(),
+        //   //   isFreeAction: true,
+        //   // },
+        // ]}
         localization={{
           header: {
             actions: "Azioni",

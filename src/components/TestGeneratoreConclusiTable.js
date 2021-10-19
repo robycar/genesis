@@ -316,30 +316,30 @@ const TestGeneratoreConclusiTable = () => {
           searchFieldAlignment: "left",
           filtering: true,
         }}
-        actions={[
-          {
-            icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Mostra Report",
-            onClick: (event, rowData) => openReport(rowData),
-            position: "row",
-          },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Elimina il Test",
-            onClick: (event, rowData) => {
-              alert("inserire api delete");
-            },
-            position: "row",
-          },
-          // {
-          //   icon: () => (
-          //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
-          //   ),
-          //   tooltip: "Carica Test Generatore",
-          //   onClick: () => handleOpen(),
-          //   isFreeAction: true,
-          // },
-        ]}
+        // actions={[
+        //   {
+        //     icon: () => <PieChartOutlinedIcon />,
+        //     tooltip: "Mostra Report",
+        //     onClick: (event, rowData) => openReport(rowData),
+        //     position: "row",
+        //   },
+        //   {
+        //     icon: () => <DeleteIcon />,
+        //     tooltip: "Elimina il Test",
+        //     onClick: (event, rowData) => {
+        //       alert("inserire api delete");
+        //     },
+        //     position: "row",
+        //   },
+        //   // {
+        //   //   icon: () => (
+        //   //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
+        //   //   ),
+        //   //   tooltip: "Carica Test Generatore",
+        //   //   onClick: () => handleOpen(),
+        //   //   isFreeAction: true,
+        //   // },
+        // ]}
         localization={{
           header: {
             actions: "Azioni",

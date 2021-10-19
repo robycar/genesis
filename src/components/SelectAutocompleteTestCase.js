@@ -7,7 +7,10 @@ export default function SelectAutocompleteTestCase(props) {
   return (
     <Autocomplete
       id="combo-box-demo"
-      options={props.items??[]}
+      onChange={(a, i) => {
+        props.onChange(i?.id);
+      }}
+      options={props.items ?? []}
       getOptionLabel={(option) => option.nome}
       style={{ width: 400 }}
       renderInput={(params) => (

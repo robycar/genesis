@@ -251,41 +251,41 @@ const TestGeneratoreSchedulatiTable = () => {
           searchFieldAlignment: "left",
           filtering: true,
         }}
-        actions={[
-          {
-            icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Report",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: () => <PlayCircleOutlineIcon />,
-            tooltip: "Lancia",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Elimina Test",
-            onClick: (event, rowData) => alert("Api delete da inserire"),
-            position: "row",
-          },
-          {
-            icon: () => <FilterListIcon />,
-            tooltip: "Filtro",
-            isFreeAction: true,
-          },
-          // {
-          //   icon: () => (
-          //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
-          //   ),
-          //   tooltip: "Carica Test Generatore",
-          //   onClick: () => handleOpen(),
-          //   isFreeAction: true,
-          // },
-        ]}
+        // actions={[
+        //   {
+        //     icon: () => <PieChartOutlinedIcon />,
+        //     tooltip: "Report",
+        //     onClick: (event, rowData) =>
+        //       alert("Ho cliccato " + rowData.launcher),
+        //     position: "row",
+        //   },
+        //   {
+        //     icon: () => <PlayCircleOutlineIcon />,
+        //     tooltip: "Lancia",
+        //     onClick: (event, rowData) =>
+        //       alert("Ho cliccato " + rowData.launcher),
+        //     position: "row",
+        //   },
+        //   {
+        //     icon: () => <DeleteIcon />,
+        //     tooltip: "Elimina Test",
+        //     onClick: (event, rowData) => alert("Api delete da inserire"),
+        //     position: "row",
+        //   },
+        //   {
+        //     icon: () => <FilterListIcon />,
+        //     tooltip: "Filtro",
+        //     isFreeAction: true,
+        //   },
+        //   // {
+        //   //   icon: () => (
+        //   //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
+        //   //   ),
+        //   //   tooltip: "Carica Test Generatore",
+        //   //   onClick: () => handleOpen(),
+        //   //   isFreeAction: true,
+        //   // },
+        // ]}
         localization={{
           header: {
             actions: "Azioni",

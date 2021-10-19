@@ -672,11 +672,6 @@ function EditingTestCreaTestCase() {
                           {appearOBP.map((proxy) => {
                             return (
                               <MenuItem
-                                disabled={
-                                  proxy.id === proxyChiamante1 ||
-                                  proxy.id === proxyChiamante2 ||
-                                  proxy.id === proxyChiamante3
-                                }
                                 key={proxy.id}
                                 value={proxy.id}
                               >
@@ -824,12 +819,6 @@ function EditingTestCreaTestCase() {
                                   {appearOBP.map((proxy) => {
                                     return (
                                       <MenuItem
-                                        disabled={
-                                          proxy.id === OBPChiamato ||
-                                          proxy.id === proxyChiamante1 ||
-                                          proxy.id === proxyChiamante2 ||
-                                          proxy.id === proxyChiamante3
-                                        }
                                         key={proxy.id}
                                         value={proxy.id}
                                       >
