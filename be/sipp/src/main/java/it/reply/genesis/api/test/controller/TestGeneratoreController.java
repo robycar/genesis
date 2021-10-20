@@ -22,8 +22,11 @@ import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.payload.PayloadResponse;
 import it.reply.genesis.api.test.payload.TestGeneratoreAddRequest;
 import it.reply.genesis.api.test.payload.TestGeneratoreAddResponse;
+import it.reply.genesis.api.test.payload.TestGeneratoreCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestGeneratoreDTO;
 import it.reply.genesis.api.test.payload.TestGeneratoreListResponse;
+import it.reply.genesis.api.test.payload.TestGeneratoreLoadRequest;
+import it.reply.genesis.api.test.payload.TestGeneratoreLoadResponse;
 import it.reply.genesis.api.test.payload.TestGeneratoreRemoveRequet;
 import it.reply.genesis.api.test.payload.TestGeneratoreRetrieveResponse;
 import it.reply.genesis.api.test.payload.TestGeneratoreUpdateRequest;
@@ -55,6 +58,24 @@ public class TestGeneratoreController extends AbstractController {
       response.setList(result);
       
       return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+  }
+  
+  @PostMapping("load")
+  @PreAuthorize("hasAuthority('FUN_testgen.run')")
+  public ResponseEntity<TestGeneratoreLoadResponse> load(@Valid @RequestBody(required=true) TestGeneratoreLoadRequest request) {
+    logger.info("enter load");
+    TestGeneratoreLoadResponse response = new TestGeneratoreLoadResponse();
+    try {
+      TestGeneratoreCaricatoDTO dto = new TestGeneratoreCaricatoDTO();
+      dto.setId(request.getId());
+      dto.setRate(request.getRate());
+      dto.setDurataTraffico(request.getDurataTraffico());
+      TestGeneratoreCaricatoDTO result = testGeneratoreService.loadTestGeneratore(dto, null);
+      response.setTestGeneratoreCaricato(result);
+      return ResponseEntity.status(HttpStatus.CREATED).body(response);
     } catch (ApplicationException e) {
       return handleException(e, response);
     }

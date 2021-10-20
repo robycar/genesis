@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.engine.jdbc.BlobProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -277,6 +278,35 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     
     return result;
     
+  }
+
+  @Override
+  public FileSystemVO copyFile(FileSystemScope targetScope, long targetId, FileSystemVO fileVO)
+      throws ApplicationException {
+    logger.debug("enter copyFile");
+    
+    String username = currentUsername();
+    if (StringUtils.isEmpty(username)) {
+      username = fileVO.getCreatedBy();
+    }
+    
+    FileSystemVO result = fileSystemRepository.findByScopeAndIdRefAndPath(targetScope, targetId, fileVO.getPath())
+        .orElse(null);
+    if (result == null) {
+      result = new FileSystemVO();
+      result.init(username);
+      result.setModifiedDate(fileVO.getModifiedDate());
+      result.setIdRef(targetId);
+      result.setScope(targetScope);
+      result.setPath(fileVO.getPath());
+    } else {
+      result.modifiedBy(username);
+    }
+    
+    result.setContentType(fileVO.getContentType());
+    result.setContent(fileVO.getContent());
+    
+    return fileSystemRepository.save(result);
   }
 
   

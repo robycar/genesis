@@ -117,4 +117,6 @@ public interface LineaService {
   LineaGeneratoreDTO readLineaGeneratore(long id) throws ApplicationException;
 
   LineaGeneratoreVO readLineaGeneratoreVO(long id) throws ApplicationException;
+
+  LineaGeneratoreVO cloneLineaVO(LineaGeneratoreVO lineaVO) throws ApplicationException;
 }

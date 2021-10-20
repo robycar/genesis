@@ -15,18 +15,23 @@ import org.springframework.transaction.annotation.Transactional;
 import it.reply.genesis.AppError;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
+import it.reply.genesis.api.test.payload.TestGeneratoreCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestGeneratoreDTO;
 import it.reply.genesis.model.FileSystemScope;
 import it.reply.genesis.model.FileSystemVO;
+import it.reply.genesis.model.LoadedEntityStatus;
 import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TemplateVO;
+import it.reply.genesis.model.TestGeneratoreCaricatoVO;
 import it.reply.genesis.model.TestGeneratoreVO;
+import it.reply.genesis.model.repository.TestGeneratoreCaricatoRepository;
 import it.reply.genesis.model.repository.TestGeneratoreRepository;
 import it.reply.genesis.service.FileSystemService;
 import it.reply.genesis.service.LineaService;
 import it.reply.genesis.service.OBPService;
 import it.reply.genesis.service.TemplateService;
 import it.reply.genesis.service.TestGeneratoreService;
+import it.reply.genesis.service.dto.ScheduleInfo;
 
 @Service
 @Transactional(rollbackFor = ApplicationException.class)
@@ -34,6 +39,9 @@ public class TestGeneratoreServiceImpl extends AbstractService implements TestGe
 
   @Autowired
   private TestGeneratoreRepository testGeneratoreRepository;
+  
+  @Autowired
+  private TestGeneratoreCaricatoRepository testGeneratoreCaricatoRepository;
   
   @Autowired
   private TemplateService templateService;
@@ -159,6 +167,39 @@ public class TestGeneratoreServiceImpl extends AbstractService implements TestGe
   public List<Long> findTestIdUsingProxy(OutboundProxyVO proxy) throws ApplicationException {
     logger.debug("enter findTestIdUsingProxy");
     return testGeneratoreRepository.findIdByProxyChiamanteOrChiamato(proxy);
+  }
+
+  @Override
+  public TestGeneratoreCaricatoDTO loadTestGeneratore(TestGeneratoreCaricatoDTO testDTO, ScheduleInfo scheduleInfo) throws ApplicationException {
+    logger.debug("enter loadTestGeneratore");
+    TestGeneratoreVO testVO = readTestGeneratoreVO(testDTO.getId());
+    
+    TestGeneratoreCaricatoVO vo = new TestGeneratoreCaricatoVO();
+    vo.init(currentUsername());
+    vo.setDescrizione(testVO.getDescrizione());
+    vo.setDurataTraffico(testDTO.getDurataTraffico());
+    vo.setGruppo(currentGroup());
+    vo.setLineaChiamante(lineaService.cloneLineaVO(testVO.getLineaChiamante()));
+    vo.setLineaChiamato(lineaService.cloneLineaVO(testVO.getLineaChiamato()));
+    vo.setNome(testVO.getNome());
+    vo.setProxyChiamante(testVO.getProxyChiamante());
+    vo.setProxyChiamato(testVO.getProxyChiamato());
+    vo.setRate(testDTO.getRate());
+    vo.setTemplate(testVO.getTemplate());
+    vo.setTestGeneratore(testVO);
+    
+    
+    if (scheduleInfo != null) {
+      vo.setDelay(scheduleInfo.getDelay());
+      vo.setScheduleDateTime(scheduleInfo.getScheduleDateTime());
+      vo.setStato(LoadedEntityStatus.SCHEDULED);
+    } else {
+      vo.setStato(LoadedEntityStatus.READY);
+    }
+    
+    vo = testGeneratoreCaricatoRepository.saveAndFlush(vo);
+    
+    return new TestGeneratoreCaricatoDTO(vo);
   }
 
 }

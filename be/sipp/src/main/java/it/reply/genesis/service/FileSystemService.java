@@ -49,4 +49,6 @@ public interface FileSystemService {
 
   long deleteFolder(FileSystemScope testCaricato, long idref);
 
+  FileSystemVO copyFile(FileSystemScope targetScope, long targetId, FileSystemVO fileVO) throws ApplicationException;
+
 }

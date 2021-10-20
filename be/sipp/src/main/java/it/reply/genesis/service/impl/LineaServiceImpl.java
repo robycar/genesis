@@ -382,6 +382,22 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     return new LineaGeneratoreDTO(lineaVO);
   }
 
+  @Override
+  public LineaGeneratoreVO cloneLineaVO(LineaGeneratoreVO in) throws ApplicationException {
+    LineaGeneratoreVO vo = new LineaGeneratoreVO();
+    vo.modifiedBy(currentUsername());
+    vo.setCreatedBy(in.getCreatedBy());
+    vo.setCreationDate(in.getCreationDate());
+    vo.setGruppo(in.getGruppo());
+    vo.setIp(in.getIp());
+    vo.setPorta(in.getPorta());
+    vo.setTypeLinea(in.getTypeLinea());
+    vo = lineaGeneratoreRepository.save(vo);
+    
+    vo.setPathCSV(fileSystemService.copyFile(FileSystemScope.LINEA_GENERATORE, vo.getId(), in.getPathCSV()));
+
+    return lineaGeneratoreRepository.saveAndFlush(vo);
+  }
 
 
 
