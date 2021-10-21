@@ -279,27 +279,27 @@ const TestSuiteRunningTable = () => {
           filtering: true,
         }}
         actions={[
-          {
-            icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Mostra Repoet",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-            disabled: true,
-          },
-          {
-            icon: () => <PlayCircleOutlineIcon />,
-            tooltip: "Lancia il Test",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Elimina il Test",
-            onClick: (event, rowData) => alert("Api delete da aggiungere"),
-            position: "row",
-          },
+          // {
+          //   icon: () => <PieChartOutlinedIcon />,
+          //   tooltip: "Mostra Repoet",
+          //   onClick: (event, rowData) =>
+          //     alert("Ho cliccato " + rowData.launcher),
+          //   position: "row",
+          //   disabled: true,
+          // },
+          // {
+          //   icon: () => <PlayCircleOutlineIcon />,
+          //   tooltip: "Lancia il Test",
+          //   onClick: (event, rowData) =>
+          //     alert("Ho cliccato " + rowData.launcher),
+          //   position: "row",
+          // },
+          // {
+          //   icon: () => <DeleteIcon />,
+          //   tooltip: "Elimina il Test",
+          //   onClick: (event, rowData) => alert("Api delete da aggiungere"),
+          //   position: "row",
+          // },
           // {
           //   icon: () => (
           //     <ButtonClickedBlue nome="Carica Test Suite"></ButtonClickedBlue>

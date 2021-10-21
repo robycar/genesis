@@ -354,26 +354,26 @@ const TestRunningTable = () => {
           filtering: true,
         }}
         actions={[
-          {
-            icon: () => <PieChartOutlinedIcon />,
-            tooltip: "Mostra Report",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: () => <PlayCircleOutlineIcon />,
-            tooltip: "Lancio",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
-            position: "row",
-          },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Elimina Test",
-            onClick: (event, rowData) => alert("Api delete da inserire"),
-            position: "row",
-          },
+          // {
+          //   icon: () => <PieChartOutlinedIcon />,
+          //   tooltip: "Mostra Report",
+          //   onClick: (event, rowData) =>
+          //     alert("Ho cliccato " + rowData.launcher),
+          //   position: "row",
+          // },
+          // {
+          //   icon: () => <PlayCircleOutlineIcon />,
+          //   tooltip: "Lancio",
+          //   onClick: (event, rowData) =>
+          //     alert("Ho cliccato " + rowData.launcher),
+          //   position: "row",
+          // },
+          // {
+          //   icon: () => <DeleteIcon />,
+          //   tooltip: "Elimina Test",
+          //   onClick: (event, rowData) => alert("Api delete da inserire"),
+          //   position: "row",
+          // },
           {
             icon: () => <FilterListIcon />,
             tooltip: "Filtro",

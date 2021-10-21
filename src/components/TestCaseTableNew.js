@@ -763,12 +763,6 @@ function TestCaseTable() {
                     >
                       {appearLine.map((linea) => (
                         <MenuItem
-                          disabled={
-                            linea.id === lineaChiamato ||
-                            linea.id === chiamanti[0]?.linea.id ||
-                            linea.id === chiamanti[1]?.linea.id ||
-                            linea.id === chiamanti[2]?.linea.id
-                          }
                           key={linea.id}
                           value={linea.id}
                         >
@@ -880,12 +874,6 @@ function TestCaseTable() {
                         >
                           {appearLine.map((linea) => (
                             <MenuItem
-                              disabled={
-                                linea.id === lineaChiamato ||
-                                linea.id === chiamanti[0]?.linea.id ||
-                                linea.id === chiamanti[1]?.linea.id ||
-                                linea.id === chiamanti[2]?.linea.id
-                              }
                               key={linea.id}
                               value={linea.id}
                             >

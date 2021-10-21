@@ -267,6 +267,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "2%",
     marginBottom: "1%",
   },
+  typography: {
+    padding: "2%",
+    marginTop: "1%"
+  },
 }));
 
 //--------------------------FUNZIONI STEPPER------------------------------
@@ -627,11 +631,6 @@ function EditingTestCreaTestCase() {
                           {appearLinea.map((linea) => {
                             return (
                               <MenuItem
-                                disabled={
-                                  linea.id === lineaChiamante1 ||
-                                  linea.id === lineaChiamante2 ||
-                                  linea.id === lineaChiamante3
-                                }
                                 key={linea.id}
                                 value={linea.id}
                               >
@@ -740,12 +739,6 @@ function EditingTestCreaTestCase() {
                                   {appearLinea.map((linea) => {
                                     return (
                                       <MenuItem
-                                        disabled={
-                                          linea.id === lineaChiamato ||
-                                          linea.id === lineaChiamante1 ||
-                                          linea.id === lineaChiamante2 ||
-                                          linea.id === lineaChiamante3
-                                        }
                                         key={linea.id}
                                         value={linea.id}
                                       >
@@ -891,7 +884,7 @@ function EditingTestCreaTestCase() {
               <div className={classes.bodyContainer}>
                 <>
                   <Typography className={classes.intestazione} variant="h6">
-                    Templete
+                    Template
                   </Typography>
                   <Row>
                     <Col className={classes.col}>

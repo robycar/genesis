@@ -29,11 +29,13 @@ const TestGeneratoreCaricatiTable = () => {
   const [dataRun, setIdTestGenRun] = useState(null);
   const [name, setName] = useState("");
   const [rate, setRate] = useState();
-  const [testDuration, setTestDuration] = useState();
+  const [durataTraffico, setDurataTraffico] = useState();
   const [callDuration, setCallDuration] = useState();
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [delay, setDelay] = useState();
+  const [dataGen, setDataGen] = useState();
+  const [dataLoad, setDataLoad] = useState();
 
   const columns = [
     {
@@ -51,7 +53,7 @@ const TestGeneratoreCaricatiTable = () => {
     },
     {
       title: "Data Inizio",
-      field: "creationDate",
+      field: "z",
     },
     {
       title: "Data Fine",
@@ -144,7 +146,8 @@ const TestGeneratoreCaricatiTable = () => {
       justifyContent: "center",
     },
     select: {
-      width: "400px",
+      marginTop: "2%",
+      width: "150px",
     },
     divContent: {
       padding: "2%",
@@ -214,6 +217,7 @@ const TestGeneratoreCaricatiTable = () => {
   const [open, setOpen] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
+  const [openLoad, setOpenLoad] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -244,13 +248,23 @@ const TestGeneratoreCaricatiTable = () => {
   };
 
   const testGenLoader = () => {
-    handleClose();
+    loadTestGen();
+    handleCloseLoad();
     getAllTestGeneratore();
   };
 
   const runGenLoader = () => {
     runTestGen(idToRun);
     handleCloseRun();
+  };
+
+  const handleOpenLoad = () => {
+    setOpenLoad(true);
+    setOpen(false);
+  };
+
+  const handleCloseLoad = () => {
+    setOpenLoad(false);
   };
 
   /*------------- GET TEST GEN DASH-------------*/
@@ -286,7 +300,7 @@ const TestGeneratoreCaricatiTable = () => {
     fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setData(result.testCaseist);
+        setData(result.testGeneratoList);
       })
       .catch((error) => console.log("error", error));
   };
@@ -315,7 +329,7 @@ const TestGeneratoreCaricatiTable = () => {
       .then((response) => response.json())
       .then((result) => {
         setAppearTest(result.list);
-        setData(result.list);
+        setDataGen(result.list);
       })
       .catch((error) => console.log("error", error));
   };
@@ -348,6 +362,43 @@ const TestGeneratoreCaricatiTable = () => {
     runGenLoader(rowDataaa.id);
   };
 
+  /*------------- LOAD TEST GEN -------------------*/
+
+  const loadTestGen = () => {
+    const invia = () => {
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", bearer);
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+      myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+      var raw = JSON.stringify({
+        id: id,
+        rate: rate,
+        durataTraffico: durataTraffico,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      fetch(`/api/testgen/load`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          setDataLoad(result.testGeneratoreCaricato);
+          handleCloseLoad();
+        })
+        .catch((error) => console.log("error", error));
+    };
+    invia();
+  };
+
+console.log(data)
+
   return (
     <div>
       <MaterialTable
@@ -378,7 +429,7 @@ const TestGeneratoreCaricatiTable = () => {
             position: "row",
           },
           {
-            icon:"",
+            icon: "",
             tooltip: "Trace",
             // onClick: (event, rowData) => console.log("Trace"),
             //position: "row",
@@ -450,7 +501,7 @@ const TestGeneratoreCaricatiTable = () => {
                   <Form.Label>Nome del Test Generatore</Form.Label>
                   <FormControl variant="outlined">
                     <SelectAutocompleteTestGeneratore
-                      className={classes.SelectAutocompleteTestGeneratore}
+                      className={classes.SelectAutocompleteTestGen}
                       value={appearTest.nome}
                       items={appearTest?.map((i) => ({
                         id: i.id,
@@ -458,76 +509,6 @@ const TestGeneratoreCaricatiTable = () => {
                       }))}
                       onChange={(id) => setId(id)}
                     />
-                    <br />
-                    {name && (
-                      <>
-                        <Form.Label>Rate </Form.Label>
-                        <FormControl variant="outlined">
-                          <Select
-                            className={classes.select}
-                            value={rate}
-                            onChange={(e) => setRate(e.target.value)}
-                          >
-                            {[5, 10, 15, 20, 25].map((rate) => {
-                              return (
-                                <MenuItem
-                                  style={{ width: "423px" }}
-                                  key={rate}
-                                  value={rate}
-                                >
-                                  {rate} secondi
-                                </MenuItem>
-                              );
-                            })}
-                          </Select>
-                        </FormControl>
-                        <br />
-                        <Form.Label>Durata Test (s)</Form.Label>
-                        <FormControl variant="outlined">
-                          <Select
-                            className={classes.select}
-                            value={testDuration}
-                            onChange={(e) => setTestDuration(e.target.value)}
-                          >
-                            {[
-                              { label: "5 minuti", value: 5 },
-                              { label: "10 minuti", value: 10 },
-                              { label: "20 minuti", value: 20 },
-                              { label: "30 minuti", value: 30 },
-                              { label: "60 minuti", value: 60 },
-                              { label: "120 minuti", value: 120 },
-                              { label: "360 minuti", value: 360 },
-                              { label: "720 minuti", value: 720 },
-                              { label: "24 ore", value: 1440 },
-                              { label: "48 ore", value: 2880 },
-                            ].map((testDuration) => {
-                              return (
-                                <MenuItem
-                                  style={{ width: "423px" }}
-                                  key={testDuration.label}
-                                  value={testDuration.value}
-                                >
-                                  {testDuration.label}
-                                </MenuItem>
-                              );
-                            })}
-                          </Select>
-                        </FormControl>
-                        <br />
-                        <Form.Label>Durata Chiamata </Form.Label>
-                        <Form.Control
-                          max={rate * 60 * testDuration}
-                          type="number"
-                          value={callDuration}
-                          placeholder="60"
-                          onChange={(e) => {
-                            const newValue = parseInt(e.target.value);
-                            const maxValue = rate * 60 * testDuration;
-                            setCallDuration(Math.min(newValue, maxValue));
-                          }}
-                        />
-                      </>
-                    )}
                   </FormControl>
                 </Form.Group>
               </div>
@@ -550,7 +531,7 @@ const TestGeneratoreCaricatiTable = () => {
                   color="primary"
                   nome="Carica Test"
                   id={id}
-                  onClick={testGenLoader}
+                  onClick={handleOpenLoad}
                 >
                   {" "}
                   Carica Test{" "}
@@ -565,6 +546,132 @@ const TestGeneratoreCaricatiTable = () => {
                 >
                   {" "}
                   Annulla{" "}
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      {/*------------------------- MODALE LOAD TEST GEN 2 ------------------ */}
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openLoad}
+        onClose={handleCloseLoad}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openLoad}>
+          <Paper className={classes.paperModale} elevation={1}>
+            <div>
+              <ListItem button style={{ marginLeft: "12%" }}>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h4">
+                  Carica Test Generatore
+                </Typography>
+              </ListItem>
+              <Divider className={classes.divider} />
+
+              <div className={classes.divSubContent1}>
+                <Paper elevation={2} className={classes.calendarPaper}>
+                  <Typography variant="h5">Rate</Typography>
+                  <FormControl variant="outlined">
+                    <Select
+                      className={classes.select}
+                      value={rate}
+                      onChange={(e) => setRate(e.target.value)}
+                    >
+                      {[5, 10, 15, 20, 25].map((rate) => {
+                        return (
+                          <MenuItem
+                            style={{ width: "200px" }}
+                            key={rate}
+                            value={rate}
+                          >
+                            {rate} secondi
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Paper>
+
+                <Paper elevation={2} className={classes.orarioPaper}>
+                  <Typography variant="h5">Durata Test</Typography>
+                  <FormControl variant="outlined">
+                    <Select
+                      className={classes.select}
+                      value={durataTraffico}
+                      onChange={(e) => setDurataTraffico(e.target.value)}
+                    >
+                      {[
+                        { label: "5 minuti", value: 5 },
+                        { label: "10 minuti", value: 10 },
+                        { label: "20 minuti", value: 20 },
+                        { label: "30 minuti", value: 30 },
+                        { label: "60 minuti", value: 60 },
+                        { label: "120 minuti", value: 120 },
+                        { label: "360 minuti", value: 360 },
+                        { label: "720 minuti", value: 720 },
+                        { label: "24 ore", value: 1440 },
+                        { label: "48 ore", value: 2880 },
+                      ].map((durataTraffico) => {
+                        return (
+                          <MenuItem
+                            style={{ width: "200px" }}
+                            key={durataTraffico.label}
+                            value={durataTraffico.value}
+                          >
+                            {durataTraffico.label}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Paper>
+              </div>
+
+              {/* <div className={classes.divSubContent2}>
+                <Paper elevation={2} className={classes.delayPaper}> */}
+              {/* <Form.Label>Durata Chiamata </Form.Label>
+                        <Form.Control
+                          max={rate * 60 * durataTraffico}
+                          type="number"
+                          value={callDuration}
+                          placeholder="60"
+                          onChange={(e) => {
+                            const newValue = parseInt(e.target.value);
+                            const maxValue = rate * 60 * durataTraffico;
+                            setCallDuration(Math.min(newValue, maxValue));
+                          }}
+                        /> */}
+              {/* </Paper>
+              </div> */}
+              <Divider />
+
+              <div className={classes.bottone}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={testGenLoader}
+                >
+                  Conferma
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseLoad}
+                >
+                  Annulla
                 </Button>
               </div>
             </div>
