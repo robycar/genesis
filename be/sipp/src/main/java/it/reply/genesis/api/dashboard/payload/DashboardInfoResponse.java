@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.reply.genesis.api.generic.payload.PayloadResponse;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
+import it.reply.genesis.api.test.payload.TestGeneratoreCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestSuiteCaricataDTO;
 
 public class DashboardInfoResponse extends PayloadResponse {
@@ -14,7 +15,7 @@ public class DashboardInfoResponse extends PayloadResponse {
   
   private List<TestSuiteCaricataDTO> testSuiteList;
   
-  private List<TestCaseCaricatoDTO> testGeneratoList;
+  private List<TestGeneratoreCaricatoDTO> testGeneratoList;
   
   private RiepilogoNumericoTestDTO riepilogoTestCaseGiorni;
   
@@ -43,11 +44,11 @@ public class DashboardInfoResponse extends PayloadResponse {
     this.testSuiteList = testSuiteList;
   }
 
-  public List<TestCaseCaricatoDTO> getTestGeneratoList() {
+  public List<TestGeneratoreCaricatoDTO> getTestGeneratoList() {
     return testGeneratoList;
   }
 
-  public void setTestGeneratoList(List<TestCaseCaricatoDTO> testGeneratoList) {
+  public void setTestGeneratoList(List<TestGeneratoreCaricatoDTO> testGeneratoList) {
     this.testGeneratoList = testGeneratoList;
   }
 

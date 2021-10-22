@@ -3,10 +3,12 @@ package it.reply.genesis.api.test.payload;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
 import it.reply.genesis.api.admin.payload.GruppoDTO;
+import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.payload.DTO;
 import it.reply.genesis.api.linea.payload.LineaGeneratoreDTO;
 import it.reply.genesis.api.linea.payload.OutboundProxyDTO;
@@ -56,7 +58,13 @@ public class TestGeneratoreCaricatoDTO extends DTO {
   
   private Long durataTraffico;
   
+  private Integer version;
+  
+  private String pathInstance;
+  
   private TestGeneratoreDTO testGeneratore;
+  
+  private List<FileDTO> folder;
   
 
   public TestGeneratoreCaricatoDTO() {
@@ -67,21 +75,24 @@ public class TestGeneratoreCaricatoDTO extends DTO {
   }
 
   public TestGeneratoreCaricatoDTO(TestGeneratoreCaricatoVO vo) {
+    this(vo, false);
+  }
+  
+  public TestGeneratoreCaricatoDTO(TestGeneratoreCaricatoVO vo, 
+      boolean includeLinee) {
     this.id = vo.getId();
+    this.version = vo.getVersion();
     this.endDate = vo.getEndDate();
     this.startDate = vo.getStartDate();
-    this.lineaChiamante = new LineaGeneratoreDTO(vo.getLineaChiamante());
-    this.lineaChiamato = new LineaGeneratoreDTO(vo.getLineaChiamato());
     this.loadedBy = vo.getCreatedBy();
     this.loadedWhen = vo.getCreationDate();
     this.nome = vo.getNome();
     this.descrizione = vo.getDescrizione();
-    this.proxyChiamante = new OutboundProxyDTO(vo.getProxyChiamante());
-    this.proxyChiamato = new OutboundProxyDTO(vo.getProxyChiamato());
     this.rate = vo.getRate();
     this.durataTraffico = vo.getDurataTraffico();
     this.scheduleDateTime = vo.getScheduleDateTime();
     this.delay = vo.getDelay();
+    this.pathInstance = vo.getPathInstance();
     if (vo.getTemplate() != null) {
       this.template = new TemplateDTO(vo.getTemplate());
     }
@@ -92,6 +103,12 @@ public class TestGeneratoreCaricatoDTO extends DTO {
       this.gruppo = new GruppoDTO(vo.getGruppo());
     }
     this.stato = vo.getStato();
+    if (includeLinee) {
+      this.lineaChiamante = new LineaGeneratoreDTO(vo.getLineaChiamante());
+      this.lineaChiamato = new LineaGeneratoreDTO(vo.getLineaChiamato());
+      this.proxyChiamante = new OutboundProxyDTO(vo.getProxyChiamante());
+      this.proxyChiamato = new OutboundProxyDTO(vo.getProxyChiamato());
+    }
   }
 
   @Override
@@ -100,6 +117,7 @@ public class TestGeneratoreCaricatoDTO extends DTO {
     writeField(sb, "nome", nome);
     writeField(sb, "stato", stato);
     writeField(sb, "rate", rate);
+    writeField(sb, "version", version);
     
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "loadedBy", loadedBy);
@@ -109,6 +127,7 @@ public class TestGeneratoreCaricatoDTO extends DTO {
     writeField(sb, "durataTraffico", durataTraffico);
     writeField(sb, "startDate", startDate);
     writeField(sb, "endDate", endDate);
+    writeField(sb, "pathInstance", pathInstance);
     writeField(sb, "gruppo", gruppo);
     writeField(sb, "lineaChiamante", lineaChiamante);
     writeField(sb, "lineaChiamato", lineaChiamato);
@@ -116,6 +135,7 @@ public class TestGeneratoreCaricatoDTO extends DTO {
     writeField(sb, "proxyChiamato", proxyChiamato);
     writeField(sb, "template", template);
     writeField(sb, "testGeneratore", testGeneratore);
+    writeField(sb, "folder", folder);
 
     
     super.writeFields(sb);
@@ -279,6 +299,31 @@ public class TestGeneratoreCaricatoDTO extends DTO {
 
   public void setDurataTraffico(Long durataTraffico) {
     this.durataTraffico = durataTraffico;
+  }
+
+  public Integer getVersion() {
+    return version;
+  }
+
+  public void setVersion(Integer version) {
+    this.version = version;
+  }
+
+  public List<FileDTO> getFolder() {
+    return folder;
+  }
+
+  public TestGeneratoreCaricatoDTO setFolder(List<FileDTO> folder) {
+    this.folder = folder;
+    return this;
+  }
+
+  public String getPathInstance() {
+    return pathInstance;
+  }
+
+  public void setPathInstance(String pathInstance) {
+    this.pathInstance = pathInstance;
   }
 
 }

@@ -1,6 +1,8 @@
 package it.reply.genesis.api.auth.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.auth0.jwt.impl.PublicClaims;
 
 import it.reply.genesis.AppError;
 import it.reply.genesis.api.admin.payload.UserDTO;
@@ -65,7 +69,9 @@ public class AuthController {
 			logger.debug("login. Authentication: {}, Principal: {}", authentication,
 					authentication == null ? null : authentication.getPrincipal());
 
-			String token = jwtComponent.createToken(username);
+			HashMap<String, Object> claims = new HashMap<>();
+			
+			String token = jwtComponent.createToken(username, claims);
 			
 			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 			
@@ -83,6 +89,7 @@ public class AuthController {
 			response.setAccessToken(token);
 			response.setTokenType(LoginResponse.BEARER);
 			response.setUsername(userDetails.getUsername());
+			response.setTokenExpiration((Date) claims.get(PublicClaims.EXPIRES_AT));
 			if (userDetails instanceof GenesisUser) {
 			  GenesisUser u = (GenesisUser)userDetails;
 			  UserDTO userDTO = u.getOriginalUser();

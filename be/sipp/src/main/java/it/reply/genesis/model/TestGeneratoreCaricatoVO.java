@@ -3,6 +3,7 @@ package it.reply.genesis.model;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -35,11 +36,11 @@ public class TestGeneratoreCaricatoVO extends BaseEntity {
   @Column(name="STATO", nullable = false)
   private LoadedEntityStatus stato;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.REMOVE)
   @JoinColumn(name="ID_LINEA_CHIAMANTE")
   private LineaGeneratoreVO lineaChiamante;
   
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.REMOVE)
   @JoinColumn(name="ID_LINEA_CHIAMATO")
   private LineaGeneratoreVO lineaChiamato;
   
@@ -75,6 +76,12 @@ public class TestGeneratoreCaricatoVO extends BaseEntity {
   
   @Column(name="END_DATE")
   private Instant endDate;
+  
+  @Column(name="STARTED_BY")
+  private String startedBy;
+  
+  @Column(name="PATH_INSTANCE")
+  private String pathInstance;
   
   @ManyToOne
   @JoinColumn(name="ID_GRUPPO")
@@ -217,6 +224,22 @@ public class TestGeneratoreCaricatoVO extends BaseEntity {
 
   public void setStato(LoadedEntityStatus stato) {
     this.stato = stato;
+  }
+
+  public String getStartedBy() {
+    return startedBy;
+  }
+
+  public void setStartedBy(String startedBy) {
+    this.startedBy = startedBy;
+  }
+
+  public String getPathInstance() {
+    return pathInstance;
+  }
+
+  public void setPathInstance(String pathInstance) {
+    this.pathInstance = pathInstance;
   }
 
 }

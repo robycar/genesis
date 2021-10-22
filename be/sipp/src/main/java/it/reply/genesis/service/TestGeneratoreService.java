@@ -2,11 +2,14 @@ package it.reply.genesis.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestGeneratoreCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestGeneratoreDTO;
 import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.service.dto.ScheduleInfo;
+import it.reply.genesis.service.dto.TestListType;
 
 public interface TestGeneratoreService {
 
@@ -39,5 +42,15 @@ public interface TestGeneratoreService {
    * @throws ApplicationException in caso di errori
    */
   TestGeneratoreCaricatoDTO loadTestGeneratore(TestGeneratoreCaricatoDTO testDTO, ScheduleInfo scheduleInfo) throws ApplicationException;
+
+  List<TestGeneratoreCaricatoDTO> readTestCaricatiOfType(TestListType inclusion);
+
+  void runLoaded(long id) throws ApplicationException;
+
+  TestGeneratoreCaricatoDTO retrieveCaricato(long id, boolean includeDetails, boolean locking) throws ApplicationException;
+
+  TestGeneratoreCaricatoDTO updateTestGeneratoreCaricato(TestGeneratoreCaricatoDTO testDTO) throws ApplicationException;
+
+  void removeCaricati(@Valid List<Long> ids) throws ApplicationException;
 
 }

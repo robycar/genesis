@@ -37,6 +37,7 @@ import it.reply.genesis.model.repository.LineaGeneratoreRepository;
 import it.reply.genesis.model.repository.TemplateRepository;
 import it.reply.genesis.model.repository.TestCaseCaricatoRepository;
 import it.reply.genesis.model.repository.TestCaseRepository;
+import it.reply.genesis.model.repository.TestGeneratoreCaricatoRepository;
 import it.reply.genesis.service.FileSystemService;
 
 @Service
@@ -167,6 +168,9 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
   @Autowired
   private TestCaseCaricatoRepository testCaseCaricatoRepository;
   
+  @Autowired
+  private TestGeneratoreCaricatoRepository testGeneratoreCaricatoRepository;
+  
   private BaseEntity checkFolderExists(FileSystemScope scope, long idRef) throws ApplicationException {
     logger.debug("enter checkFolderExists");
     
@@ -179,6 +183,9 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
       return testCaseRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_NOT_FOUND, idRef));
     case TEST_CARICATO:
       testCaseCaricatoRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_CARICATO_NOT_FOUND, idRef));
+      break;
+    case TESTGEN_CARICATO:
+      testGeneratoreCaricatoRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_GEN_CARICATO_NOT_FOUND, idRef));
       break;
       //return null;
     }

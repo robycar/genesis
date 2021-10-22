@@ -2,7 +2,6 @@ package it.reply.genesis.api.dashboard.controller;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import it.reply.genesis.api.dashboard.payload.DashboardInfoResponse;
 import it.reply.genesis.api.generic.controller.AbstractController;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.service.TestCaseService;
+import it.reply.genesis.service.TestGeneratoreService;
 import it.reply.genesis.service.TestSuiteService;
 import it.reply.genesis.service.dto.TestListType;
 
@@ -31,6 +31,9 @@ public class DashboardController extends AbstractController {
   
   @Autowired
   private TestSuiteService testSuiteService;
+  
+  @Autowired
+  private TestGeneratoreService testGeneratoreService;
   
   public DashboardController() {
   }
@@ -48,8 +51,9 @@ public class DashboardController extends AbstractController {
         response.setTestCaseList(testCaseService.readTestCaricatiOfType(inclusion));
       }
       
-      if (request.getIncludeTestGeneratoreOfType() != null) {
-        response.setTestGeneratoList(Collections.emptyList());
+      inclusion = request.getIncludeTestGeneratoreOfType();
+      if (inclusion != null) {
+        response.setTestGeneratoList(testGeneratoreService.readTestCaricatiOfType(inclusion));
       }
       
       inclusion = request.getIncludeTestSuiteOfType();

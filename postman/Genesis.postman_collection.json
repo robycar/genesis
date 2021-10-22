@@ -10970,6 +10970,521 @@
 							"body": "{\n    \"error\": null,\n    \"testGeneratoreCaricato\": {\n        \"id\": 2,\n        \"nome\": \"Fantastic Plastic Pants\",\n        \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n        \"lineaChiamante\": {\n            \"modifiedDate\": \"2021-10-19T10:50:06.634+00:00\",\n            \"creationDate\": \"2021-10-19T10:29:57.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 7,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"descrizione\": \"fibra\"\n            },\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-10-19T10:50:06.542+00:00\",\n                \"creationDate\": \"2021-10-19T10:50:06.534+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 76,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/7/76\"\n            }\n        },\n        \"lineaChiamato\": {\n            \"modifiedDate\": \"2021-10-19T10:50:06.894+00:00\",\n            \"creationDate\": \"2021-10-19T10:30:19.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 8,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"descrizione\": \"fibra\"\n            },\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-10-19T10:50:06.735+00:00\",\n                \"creationDate\": \"2021-10-19T10:50:06.734+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 77,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/8/77\"\n            }\n        },\n        \"proxyChiamante\": {\n            \"modifiedDate\": \"2021-10-06T07:57:41.000+00:00\",\n            \"creationDate\": \"2021-10-06T07:57:41.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"ipDestinazione\": \"8.40.37.10\",\n            \"descrizione\": \"Praesentium deleniti eligendi. Et culpa repudiandae quas praesentium enim. Qui quis at consequatur rerum eaque id officia et.\",\n            \"porta\": 150,\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"typeLinee\": [\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 2,\n                    \"descrizione\": \"fibra 2\"\n                }\n            ],\n            \"campiConcatenati\": \"8.40.37.10 - 150\"\n        },\n        \"proxyChiamato\": {\n            \"modifiedDate\": \"2021-10-06T07:57:43.000+00:00\",\n            \"creationDate\": \"2021-10-06T07:57:43.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 2,\n            \"ipDestinazione\": \"175.180.209.213\",\n            \"descrizione\": \"Ex perspiciatis perspiciatis est sapiente fugiat facere. Deleniti rem ullam recusandae quasi. Sint voluptatibus ut sed dolore repellat quo. Velit et labore sapiente omnis repellendus natus in.\",\n            \"porta\": 883,\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"typeLinee\": [\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 2,\n                    \"descrizione\": \"fibra 2\"\n                }\n            ],\n            \"campiConcatenati\": \"175.180.209.213 - 883\"\n        },\n        \"template\": {\n            \"modifiedDate\": \"2021-10-06T07:57:58.000+00:00\",\n            \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"nome\": \"MioTemplate\",\n            \"durata\": 5,\n            \"typeTemplate\": \"Reale\",\n            \"descrizione\": \"Descrizione molto lunga per questo template\",\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"folder\": null,\n            \"fileLinks\": null\n        },\n        \"stato\": \"READY\",\n        \"gruppo\": {\n            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"modifiedBy\": \"init\",\n            \"createdBy\": \"init\",\n            \"version\": 1,\n            \"id\": 1,\n            \"nome\": \"test\",\n            \"descrizione\": \"Gruppo di test\"\n        },\n        \"loadedWhen\": \"2021-10-19T10:50:02.373+00:00\",\n        \"scheduleDateTime\": null,\n        \"delay\": null,\n        \"startDate\": null,\n        \"endDate\": null,\n        \"loadedBy\": \"test\",\n        \"startedBy\": null,\n        \"rate\": 1,\n        \"durataTraffico\": 1,\n        \"testGeneratore\": {\n            \"modifiedDate\": \"2021-10-19T10:30:42.000+00:00\",\n            \"creationDate\": \"2021-10-19T10:30:41.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"nome\": \"Fantastic Plastic Pants\",\n            \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n            \"lineaChiamante\": {\n                \"modifiedDate\": \"2021-10-19T10:30:03.000+00:00\",\n                \"creationDate\": \"2021-10-19T10:29:57.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 1,\n                \"id\": 1,\n                \"ip\": \"127.0.0.1\",\n                \"porta\": 1234,\n                \"typeLinea\": {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"pathCSV\": {\n                    \"modifiedDate\": \"2021-10-19T10:29:58.000+00:00\",\n                    \"creationDate\": \"2021-10-19T10:29:58.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 70,\n                    \"path\": \"yarn-error.log\",\n                    \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/1/70\"\n                }\n            },\n            \"lineaChiamato\": {\n                \"modifiedDate\": \"2021-10-19T10:30:20.000+00:00\",\n                \"creationDate\": \"2021-10-19T10:30:19.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 1,\n                \"id\": 2,\n                \"ip\": \"127.0.0.1\",\n                \"porta\": 1234,\n                \"typeLinea\": {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"pathCSV\": {\n                    \"modifiedDate\": \"2021-10-19T10:30:19.000+00:00\",\n                    \"creationDate\": \"2021-10-19T10:30:19.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 71,\n                    \"path\": \"yarn-error.log\",\n                    \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/2/71\"\n                }\n            },\n            \"proxyChiamante\": {\n                \"modifiedDate\": \"2021-10-06T07:57:41.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:41.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"ipDestinazione\": \"8.40.37.10\",\n                \"descrizione\": \"Praesentium deleniti eligendi. Et culpa repudiandae quas praesentium enim. Qui quis at consequatur rerum eaque id officia et.\",\n                \"porta\": 150,\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"typeLinee\": [\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 1,\n                        \"descrizione\": \"fibra\"\n                    },\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 2,\n                        \"descrizione\": \"fibra 2\"\n                    }\n                ],\n                \"campiConcatenati\": \"8.40.37.10 - 150\"\n            },\n            \"proxyChiamato\": {\n                \"modifiedDate\": \"2021-10-06T07:57:43.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:43.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 2,\n                \"ipDestinazione\": \"175.180.209.213\",\n                \"descrizione\": \"Ex perspiciatis perspiciatis est sapiente fugiat facere. Deleniti rem ullam recusandae quasi. Sint voluptatibus ut sed dolore repellat quo. Velit et labore sapiente omnis repellendus natus in.\",\n                \"porta\": 883,\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"typeLinee\": [\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 1,\n                        \"descrizione\": \"fibra\"\n                    },\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 2,\n                        \"descrizione\": \"fibra 2\"\n                    }\n                ],\n                \"campiConcatenati\": \"175.180.209.213 - 883\"\n            },\n            \"template\": {\n                \"modifiedDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"nome\": \"MioTemplate\",\n                \"durata\": 5,\n                \"typeTemplate\": \"Reale\",\n                \"descrizione\": \"Descrizione molto lunga per questo template\",\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"folder\": null,\n                \"fileLinks\": null\n            }\n        }\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "testgen_schedule",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"rate\": 1,\r\n    \"durataTraffico\": 1,\r\n    \"scheduleDateTime\": \"2021-10-22T16:00\",\r\n    \"delay\": 5\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{contextUrl}}/api/testgen/schedule",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testgen",
+								"schedule"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "testgen_schedule failed validation data schedulazione prima di oggi",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"rate\": 1,\r\n    \"durataTraffico\": 1,\r\n    \"scheduleDateTime\": \"2021-10-22T07:00\",\r\n    \"delay\": 5\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/testgen/schedule",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testgen",
+										"schedule"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Oct 2021 13:48:00 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"timestamp\": \"2021-10-22T13:48:00.031+00:00\",\n    \"status\": 400,\n    \"error\": \"Bad Request\",\n    \"trace\": \"org.springframework.web.bind.MethodArgumentNotValidException: Validation failed for argument [0] in public org.springframework.http.ResponseEntity<it.reply.genesis.api.test.payload.TestGeneratoreScheduleResponse> it.reply.genesis.api.test.controller.TestGeneratoreController.schedule(it.reply.genesis.api.test.payload.TestGeneratoreScheduleRequest): [Field error in object 'testGeneratoreScheduleRequest' on field 'scheduleDateTime': rejected value [2021-10-22T07:00]; codes [FutureOrPresent.testGeneratoreScheduleRequest.scheduleDateTime,FutureOrPresent.scheduleDateTime,FutureOrPresent.java.time.LocalDateTime,FutureOrPresent]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [testGeneratoreScheduleRequest.scheduleDateTime,scheduleDateTime]; arguments []; default message [scheduleDateTime]]; default message [deve essere una data nel presente o nel futuro]] \\r\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:139)\\r\\n\\tat org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:121)\\r\\n\\tat org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:170)\\r\\n\\tat org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:137)\\r\\n\\tat org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:106)\\r\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:894)\\r\\n\\tat org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)\\r\\n\\tat org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)\\r\\n\\tat org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1063)\\r\\n\\tat org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:963)\\r\\n\\tat org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)\\r\\n\\tat org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)\\r\\n\\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:652)\\r\\n\\tat org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)\\r\\n\\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:733)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:113)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:327)\\r\\n\\tat org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)\\r\\n\\tat org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:121)\\r\\n\\tat org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:115)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:126)\\r\\n\\tat org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:81)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:105)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:149)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat it.reply.genesis.security.TokenAuthenticationFilter.doFilterInternal(TokenAuthenticationFilter.java:67)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103)\\r\\n\\tat org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)\\r\\n\\tat org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:110)\\r\\n\\tat org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:80)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)\\r\\n\\tat org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:211)\\r\\n\\tat org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:183)\\r\\n\\tat org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:358)\\r\\n\\tat org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:271)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)\\r\\n\\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)\\r\\n\\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\\r\\n\\tat org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202)\\r\\n\\tat org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)\\r\\n\\tat org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:542)\\r\\n\\tat org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:143)\\r\\n\\tat org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)\\r\\n\\tat org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)\\r\\n\\tat org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:357)\\r\\n\\tat org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:374)\\r\\n\\tat org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)\\r\\n\\tat org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:893)\\r\\n\\tat org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1707)\\r\\n\\tat org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)\\r\\n\\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\\r\\n\\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\\r\\n\\tat org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)\\r\\n\\tat java.base/java.lang.Thread.run(Thread.java:834)\\r\\n\",\n    \"message\": \"Validation failed for object='testGeneratoreScheduleRequest'. Error count: 1\",\n    \"errors\": [\n        {\n            \"codes\": [\n                \"FutureOrPresent.testGeneratoreScheduleRequest.scheduleDateTime\",\n                \"FutureOrPresent.scheduleDateTime\",\n                \"FutureOrPresent.java.time.LocalDateTime\",\n                \"FutureOrPresent\"\n            ],\n            \"arguments\": [\n                {\n                    \"codes\": [\n                        \"testGeneratoreScheduleRequest.scheduleDateTime\",\n                        \"scheduleDateTime\"\n                    ],\n                    \"arguments\": null,\n                    \"defaultMessage\": \"scheduleDateTime\",\n                    \"code\": \"scheduleDateTime\"\n                }\n            ],\n            \"defaultMessage\": \"deve essere una data nel presente o nel futuro\",\n            \"objectName\": \"testGeneratoreScheduleRequest\",\n            \"field\": \"scheduleDateTime\",\n            \"rejectedValue\": \"2021-10-22T07:00:00\",\n            \"bindingFailure\": false,\n            \"code\": \"FutureOrPresent\"\n        }\n    ],\n    \"path\": \"/api/testgen/schedule\"\n}"
+						},
+						{
+							"name": "testgen_schedule success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"rate\": 1,\r\n    \"durataTraffico\": 1,\r\n    \"scheduleDateTime\": \"2021-10-22T16:00\",\r\n    \"delay\": 5\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/testgen/schedule",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testgen",
+										"schedule"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Oct 2021 13:49:24 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"testGeneratoreCaricato\": {\n        \"id\": 3,\n        \"nome\": \"Fantastic Plastic Pants\",\n        \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n        \"lineaChiamante\": {\n            \"modifiedDate\": \"2021-10-22T13:49:23.245+00:00\",\n            \"creationDate\": \"2021-10-19T10:29:57.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 9,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"descrizione\": \"fibra\"\n            },\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-10-22T13:49:19.491+00:00\",\n                \"creationDate\": \"2021-10-22T13:49:19.487+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 78,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/9/78\"\n            }\n        },\n        \"lineaChiamato\": {\n            \"modifiedDate\": \"2021-10-22T13:49:23.723+00:00\",\n            \"creationDate\": \"2021-10-19T10:30:19.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 10,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"descrizione\": \"fibra\"\n            },\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-10-22T13:49:23.402+00:00\",\n                \"creationDate\": \"2021-10-22T13:49:23.401+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 79,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/10/79\"\n            }\n        },\n        \"proxyChiamante\": {\n            \"modifiedDate\": \"2021-10-06T07:57:41.000+00:00\",\n            \"creationDate\": \"2021-10-06T07:57:41.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"ipDestinazione\": \"8.40.37.10\",\n            \"descrizione\": \"Praesentium deleniti eligendi. Et culpa repudiandae quas praesentium enim. Qui quis at consequatur rerum eaque id officia et.\",\n            \"porta\": 150,\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"typeLinee\": [\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 2,\n                    \"descrizione\": \"fibra 2\"\n                }\n            ],\n            \"campiConcatenati\": \"8.40.37.10 - 150\"\n        },\n        \"proxyChiamato\": {\n            \"modifiedDate\": \"2021-10-06T07:57:43.000+00:00\",\n            \"creationDate\": \"2021-10-06T07:57:43.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 2,\n            \"ipDestinazione\": \"175.180.209.213\",\n            \"descrizione\": \"Ex perspiciatis perspiciatis est sapiente fugiat facere. Deleniti rem ullam recusandae quasi. Sint voluptatibus ut sed dolore repellat quo. Velit et labore sapiente omnis repellendus natus in.\",\n            \"porta\": 883,\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"typeLinee\": [\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 2,\n                    \"descrizione\": \"fibra 2\"\n                }\n            ],\n            \"campiConcatenati\": \"175.180.209.213 - 883\"\n        },\n        \"template\": {\n            \"modifiedDate\": \"2021-10-06T07:57:58.000+00:00\",\n            \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"nome\": \"MioTemplate\",\n            \"durata\": 5,\n            \"typeTemplate\": \"Reale\",\n            \"descrizione\": \"Descrizione molto lunga per questo template\",\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"folder\": null,\n            \"fileLinks\": null\n        },\n        \"stato\": \"SCHEDULED\",\n        \"gruppo\": {\n            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"modifiedBy\": \"init\",\n            \"createdBy\": \"init\",\n            \"version\": 1,\n            \"id\": 1,\n            \"nome\": \"test\",\n            \"descrizione\": \"Gruppo di test\"\n        },\n        \"loadedWhen\": \"2021-10-22T13:49:18.651+00:00\",\n        \"scheduleDateTime\": \"2021-10-22T16:00:00\",\n        \"delay\": 5,\n        \"startDate\": null,\n        \"endDate\": null,\n        \"loadedBy\": \"test\",\n        \"startedBy\": null,\n        \"rate\": 1,\n        \"durataTraffico\": 1,\n        \"testGeneratore\": {\n            \"modifiedDate\": \"2021-10-19T10:30:42.000+00:00\",\n            \"creationDate\": \"2021-10-19T10:30:41.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"nome\": \"Fantastic Plastic Pants\",\n            \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n            \"lineaChiamante\": {\n                \"modifiedDate\": \"2021-10-19T10:30:03.000+00:00\",\n                \"creationDate\": \"2021-10-19T10:29:57.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 1,\n                \"id\": 1,\n                \"ip\": \"127.0.0.1\",\n                \"porta\": 1234,\n                \"typeLinea\": {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"pathCSV\": {\n                    \"modifiedDate\": \"2021-10-19T10:29:58.000+00:00\",\n                    \"creationDate\": \"2021-10-19T10:29:58.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 70,\n                    \"path\": \"yarn-error.log\",\n                    \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/1/70\"\n                }\n            },\n            \"lineaChiamato\": {\n                \"modifiedDate\": \"2021-10-19T10:30:20.000+00:00\",\n                \"creationDate\": \"2021-10-19T10:30:19.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 1,\n                \"id\": 2,\n                \"ip\": \"127.0.0.1\",\n                \"porta\": 1234,\n                \"typeLinea\": {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"pathCSV\": {\n                    \"modifiedDate\": \"2021-10-19T10:30:19.000+00:00\",\n                    \"creationDate\": \"2021-10-19T10:30:19.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 71,\n                    \"path\": \"yarn-error.log\",\n                    \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/2/71\"\n                }\n            },\n            \"proxyChiamante\": {\n                \"modifiedDate\": \"2021-10-06T07:57:41.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:41.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"ipDestinazione\": \"8.40.37.10\",\n                \"descrizione\": \"Praesentium deleniti eligendi. Et culpa repudiandae quas praesentium enim. Qui quis at consequatur rerum eaque id officia et.\",\n                \"porta\": 150,\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"typeLinee\": [\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 1,\n                        \"descrizione\": \"fibra\"\n                    },\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 2,\n                        \"descrizione\": \"fibra 2\"\n                    }\n                ],\n                \"campiConcatenati\": \"8.40.37.10 - 150\"\n            },\n            \"proxyChiamato\": {\n                \"modifiedDate\": \"2021-10-06T07:57:43.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:43.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 2,\n                \"ipDestinazione\": \"175.180.209.213\",\n                \"descrizione\": \"Ex perspiciatis perspiciatis est sapiente fugiat facere. Deleniti rem ullam recusandae quasi. Sint voluptatibus ut sed dolore repellat quo. Velit et labore sapiente omnis repellendus natus in.\",\n                \"porta\": 883,\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"typeLinee\": [\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 1,\n                        \"descrizione\": \"fibra\"\n                    },\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 2,\n                        \"descrizione\": \"fibra 2\"\n                    }\n                ],\n                \"campiConcatenati\": \"175.180.209.213 - 883\"\n            },\n            \"template\": {\n                \"modifiedDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"nome\": \"MioTemplate\",\n                \"durata\": 5,\n                \"typeTemplate\": \"Reale\",\n                \"descrizione\": \"Descrizione molto lunga per questo template\",\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"folder\": null,\n                \"fileLinks\": null\n            }\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "testgen_loaded_retrieve",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testgen/loaded/1",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testgen",
+								"loaded",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "testgen_loaded_retrieve success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/testgen/loaded/1",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testgen",
+										"loaded",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Oct 2021 14:30:37 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"testGeneratoreCaricato\": {\n        \"id\": 1,\n        \"nome\": \"Fantastic Plastic Pants\",\n        \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n        \"lineaChiamante\": {\n            \"modifiedDate\": \"2021-10-19T10:46:00.000+00:00\",\n            \"creationDate\": \"2021-10-19T10:29:57.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 5,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"descrizione\": \"fibra\"\n            },\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-10-19T10:45:58.000+00:00\",\n                \"creationDate\": \"2021-10-19T10:45:58.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 74,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/5/74\"\n            }\n        },\n        \"lineaChiamato\": {\n            \"modifiedDate\": \"2021-10-19T10:46:06.000+00:00\",\n            \"creationDate\": \"2021-10-19T10:30:19.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 1,\n            \"id\": 6,\n            \"ip\": \"127.0.0.1\",\n            \"porta\": 1234,\n            \"typeLinea\": {\n                \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"descrizione\": \"fibra\"\n            },\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"pathCSV\": {\n                \"modifiedDate\": \"2021-10-19T10:46:04.000+00:00\",\n                \"creationDate\": \"2021-10-19T10:46:04.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 75,\n                \"path\": \"yarn-error.log\",\n                \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/6/75\"\n            }\n        },\n        \"proxyChiamante\": {\n            \"modifiedDate\": \"2021-10-06T07:57:41.000+00:00\",\n            \"creationDate\": \"2021-10-06T07:57:41.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"ipDestinazione\": \"8.40.37.10\",\n            \"descrizione\": \"Praesentium deleniti eligendi. Et culpa repudiandae quas praesentium enim. Qui quis at consequatur rerum eaque id officia et.\",\n            \"porta\": 150,\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"typeLinee\": [\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 2,\n                    \"descrizione\": \"fibra 2\"\n                }\n            ],\n            \"campiConcatenati\": \"8.40.37.10 - 150\"\n        },\n        \"proxyChiamato\": {\n            \"modifiedDate\": \"2021-10-06T07:57:43.000+00:00\",\n            \"creationDate\": \"2021-10-06T07:57:43.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 2,\n            \"ipDestinazione\": \"175.180.209.213\",\n            \"descrizione\": \"Ex perspiciatis perspiciatis est sapiente fugiat facere. Deleniti rem ullam recusandae quasi. Sint voluptatibus ut sed dolore repellat quo. Velit et labore sapiente omnis repellendus natus in.\",\n            \"porta\": 883,\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"typeLinee\": [\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                {\n                    \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 2,\n                    \"descrizione\": \"fibra 2\"\n                }\n            ],\n            \"campiConcatenati\": \"175.180.209.213 - 883\"\n        },\n        \"template\": {\n            \"modifiedDate\": \"2021-10-06T07:57:58.000+00:00\",\n            \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"nome\": \"MioTemplate\",\n            \"durata\": 5,\n            \"typeTemplate\": \"Reale\",\n            \"descrizione\": \"Descrizione molto lunga per questo template\",\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"folder\": null,\n            \"fileLinks\": null\n        },\n        \"stato\": \"READY\",\n        \"gruppo\": {\n            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"modifiedBy\": \"init\",\n            \"createdBy\": \"init\",\n            \"version\": 1,\n            \"id\": 1,\n            \"nome\": \"test\",\n            \"descrizione\": \"Gruppo di test\"\n        },\n        \"loadedWhen\": \"2021-10-19T10:45:43.000+00:00\",\n        \"scheduleDateTime\": null,\n        \"delay\": null,\n        \"startDate\": null,\n        \"endDate\": null,\n        \"loadedBy\": \"test\",\n        \"startedBy\": null,\n        \"rate\": 1,\n        \"durataTraffico\": 1,\n        \"testGeneratore\": {\n            \"modifiedDate\": \"2021-10-19T10:30:42.000+00:00\",\n            \"creationDate\": \"2021-10-19T10:30:41.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 0,\n            \"id\": 1,\n            \"nome\": \"Fantastic Plastic Pants\",\n            \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\n            \"lineaChiamante\": {\n                \"modifiedDate\": \"2021-10-19T10:30:03.000+00:00\",\n                \"creationDate\": \"2021-10-19T10:29:57.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 1,\n                \"id\": 1,\n                \"ip\": \"127.0.0.1\",\n                \"porta\": 1234,\n                \"typeLinea\": {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"pathCSV\": {\n                    \"modifiedDate\": \"2021-10-19T10:29:58.000+00:00\",\n                    \"creationDate\": \"2021-10-19T10:29:58.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 70,\n                    \"path\": \"yarn-error.log\",\n                    \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/1/70\"\n                }\n            },\n            \"lineaChiamato\": {\n                \"modifiedDate\": \"2021-10-19T10:30:20.000+00:00\",\n                \"creationDate\": \"2021-10-19T10:30:19.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 1,\n                \"id\": 2,\n                \"ip\": \"127.0.0.1\",\n                \"porta\": 1234,\n                \"typeLinea\": {\n                    \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 1,\n                    \"descrizione\": \"fibra\"\n                },\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"pathCSV\": {\n                    \"modifiedDate\": \"2021-10-19T10:30:19.000+00:00\",\n                    \"creationDate\": \"2021-10-19T10:30:19.000+00:00\",\n                    \"modifiedBy\": \"test\",\n                    \"createdBy\": \"test\",\n                    \"version\": 0,\n                    \"id\": 71,\n                    \"path\": \"yarn-error.log\",\n                    \"url\": \"/api/fs/entityfolder/LINEA_GENERATORE/2/71\"\n                }\n            },\n            \"proxyChiamante\": {\n                \"modifiedDate\": \"2021-10-06T07:57:41.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:41.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"ipDestinazione\": \"8.40.37.10\",\n                \"descrizione\": \"Praesentium deleniti eligendi. Et culpa repudiandae quas praesentium enim. Qui quis at consequatur rerum eaque id officia et.\",\n                \"porta\": 150,\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"typeLinee\": [\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 1,\n                        \"descrizione\": \"fibra\"\n                    },\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 2,\n                        \"descrizione\": \"fibra 2\"\n                    }\n                ],\n                \"campiConcatenati\": \"8.40.37.10 - 150\"\n            },\n            \"proxyChiamato\": {\n                \"modifiedDate\": \"2021-10-06T07:57:43.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:43.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 2,\n                \"ipDestinazione\": \"175.180.209.213\",\n                \"descrizione\": \"Ex perspiciatis perspiciatis est sapiente fugiat facere. Deleniti rem ullam recusandae quasi. Sint voluptatibus ut sed dolore repellat quo. Velit et labore sapiente omnis repellendus natus in.\",\n                \"porta\": 883,\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"typeLinee\": [\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:15.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 1,\n                        \"descrizione\": \"fibra\"\n                    },\n                    {\n                        \"modifiedDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"creationDate\": \"2021-10-06T07:57:21.000+00:00\",\n                        \"modifiedBy\": \"test\",\n                        \"createdBy\": \"test\",\n                        \"version\": 0,\n                        \"id\": 2,\n                        \"descrizione\": \"fibra 2\"\n                    }\n                ],\n                \"campiConcatenati\": \"175.180.209.213 - 883\"\n            },\n            \"template\": {\n                \"modifiedDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"nome\": \"MioTemplate\",\n                \"durata\": 5,\n                \"typeTemplate\": \"Reale\",\n                \"descrizione\": \"Descrizione molto lunga per questo template\",\n                \"gruppo\": {\n                    \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                    \"modifiedBy\": \"init\",\n                    \"createdBy\": \"init\",\n                    \"version\": 1,\n                    \"id\": 1,\n                    \"nome\": \"test\",\n                    \"descrizione\": \"Gruppo di test\"\n                },\n                \"folder\": null,\n                \"fileLinks\": null\n            }\n        }\n    }\n}"
+						},
+						{
+							"name": "testgen_loaded_retrieve not found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/testgen/loaded/5",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testgen",
+										"loaded",
+										"5"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Oct 2021 14:30:52 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"TEST-0026\",\n        \"description\": \"Test generatore caricato non trovato: 5\"\n    },\n    \"testGeneratoreCaricato\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "testgen_loaded_run",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testgen/loaded/run/1",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testgen",
+								"loaded",
+								"run",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "testgen_loaded_run success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/testgen/loaded/run/1",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"testgen",
+										"loaded",
+										"run",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 22 Oct 2021 16:40:57 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "testgen_loaded_delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/testgen/loaded/1,2,3",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"testgen",
+								"loaded",
+								"1,2,3"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "Api per i test generatore"
@@ -10984,7 +11499,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"includeRiepilogoTestCase\": true,\r\n    \"includeRiepilogoTestSuite\": true,\r\n    \"includeTestCaseOfType\": null,\r\n    \"includeTestSuiteOfType\": \"COMPLETED\",\r\n    \"includeTestGeneratoreOfType\": null\r\n}",
+							"raw": "{\r\n    \"includeRiepilogoTestCase\": true,\r\n    \"includeRiepilogoTestSuite\": true,\r\n    \"includeTestCaseOfType\": null,\r\n    \"includeTestSuiteOfType\": null,\r\n    \"includeTestGeneratoreOfType\": \"READY\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

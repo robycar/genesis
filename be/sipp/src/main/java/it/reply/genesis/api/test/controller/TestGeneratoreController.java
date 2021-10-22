@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.reply.genesis.api.generic.controller.AbstractController;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.payload.PayloadResponse;
+import it.reply.genesis.api.test.payload.TeseGeneratoreRetrieveCaricatoResponse;
 import it.reply.genesis.api.test.payload.TestGeneratoreAddRequest;
 import it.reply.genesis.api.test.payload.TestGeneratoreAddResponse;
 import it.reply.genesis.api.test.payload.TestGeneratoreCaricatoDTO;
@@ -29,9 +30,12 @@ import it.reply.genesis.api.test.payload.TestGeneratoreLoadRequest;
 import it.reply.genesis.api.test.payload.TestGeneratoreLoadResponse;
 import it.reply.genesis.api.test.payload.TestGeneratoreRemoveRequet;
 import it.reply.genesis.api.test.payload.TestGeneratoreRetrieveResponse;
+import it.reply.genesis.api.test.payload.TestGeneratoreScheduleRequest;
+import it.reply.genesis.api.test.payload.TestGeneratoreScheduleResponse;
 import it.reply.genesis.api.test.payload.TestGeneratoreUpdateRequest;
 import it.reply.genesis.api.test.payload.TestGeneratoreUpdateResponse;
 import it.reply.genesis.service.TestGeneratoreService;
+import it.reply.genesis.service.dto.ScheduleInfo;
 
 @RestController
 @RequestMapping(TestGeneratoreController.API_PATH)
@@ -76,6 +80,26 @@ public class TestGeneratoreController extends AbstractController {
       TestGeneratoreCaricatoDTO result = testGeneratoreService.loadTestGeneratore(dto, null);
       response.setTestGeneratoreCaricato(result);
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+  }
+  
+  @PostMapping("schedule")
+  @PreAuthorize("hasAuthority('FUN_testgen.run')")
+  public ResponseEntity<TestGeneratoreScheduleResponse> schedule(@Valid @RequestBody(required=true) TestGeneratoreScheduleRequest request) {
+    logger.info("enter load");
+    TestGeneratoreScheduleResponse response = new TestGeneratoreScheduleResponse();
+    try {
+      TestGeneratoreCaricatoDTO dto = new TestGeneratoreCaricatoDTO();
+      dto.setId(request.getId());
+      dto.setRate(request.getRate());
+      dto.setDurataTraffico(request.getDurataTraffico());
+      ScheduleInfo scheduleInfo = new ScheduleInfo(request.getScheduleDateTime(), request.getDelay());
+      
+      TestGeneratoreCaricatoDTO result = testGeneratoreService.loadTestGeneratore(dto, scheduleInfo);
+      response.setTestGeneratoreCaricato(result);
+      return ResponseEntity.ok(response);
     } catch (ApplicationException e) {
       return handleException(e, response);
     }
@@ -159,4 +183,49 @@ public class TestGeneratoreController extends AbstractController {
     }
   }
 
+  @GetMapping("loaded/run/{id}")
+  @PreAuthorize("hasAuthority('FUN_testgen.run')")
+  public ResponseEntity<PayloadResponse> run(@PathVariable(required=true) Long id) {
+    logger.info("enter run({})", id);
+    PayloadResponse response = new PayloadResponse();
+    try {
+      testGeneratoreService.runLoaded(id);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+  }
+
+  @GetMapping("loaded/{id}")
+  @PreAuthorize("hasAuthority('FUN_testgen.run')")
+  public ResponseEntity<TeseGeneratoreRetrieveCaricatoResponse> retrieveCaricato(@PathVariable(required=true) Long id) {
+    logger.info("enter retrieveCaricato({})", id);
+    TeseGeneratoreRetrieveCaricatoResponse response = new TeseGeneratoreRetrieveCaricatoResponse();
+    try {
+      TestGeneratoreCaricatoDTO result = testGeneratoreService.retrieveCaricato(id, true, false);
+      response.setTestGeneratoreCaricato(result);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+  }
+
+  @DeleteMapping("loaded/{ids}")
+  @PreAuthorize("hasAuthority('FUN_testgen.run')")
+  public ResponseEntity<PayloadResponse>removeLoaded(@Valid @PathVariable(required=true)List<Long> ids) {
+    logger.info("enter removeLoaded({})", ids);
+    PayloadResponse response = new PayloadResponse();
+    try {
+      if (ids.isEmpty()) {
+        logger.info("Chiamata la funzione removeLoaded senza indicare gli id delle test suite da eliminare");
+      } else {
+        testGeneratoreService.removeCaricati(ids);
+      }
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+
+  }
+  
 }

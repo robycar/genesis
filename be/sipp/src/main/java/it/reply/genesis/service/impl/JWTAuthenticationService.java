@@ -45,7 +45,7 @@ public class JWTAuthenticationService implements UserAuthenticationService {
 		
 		return userRepository.findByUsername(username)
 				.filter(user -> Objects.equals(password, user.getPassword()))
-				.map(user -> jwtComponent.createToken(username))
+				.map(user -> jwtComponent.createToken(username, null))
 				.orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
 	}
 

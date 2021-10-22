@@ -1,5 +1,6 @@
 package it.reply.genesis.api.auth.payload;
 
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,6 +18,9 @@ public class LoginResponse extends PayloadResponse {
 	
 	@JsonProperty("token_type")
 	private String tokenType;
+	
+	@JsonProperty("token_expiration")
+	private Date tokenExpiration;
 	
 	private String username;
 //	private List<String> roles;
@@ -94,6 +98,7 @@ public class LoginResponse extends PayloadResponse {
     writeField(sb, "accessToken", accessToken);
     writeField(sb, "functions", functions);
     writeField(sb, "tokenType", tokenType);
+    writeField(sb, "tokenExpiration", tokenExpiration);
     writeField(sb, "username", username);
     writeField(sb, "internalUserId", internalUserId);
     writeField(sb, "applicationInfo", applicationInfo);
@@ -118,6 +123,15 @@ public class LoginResponse extends PayloadResponse {
   public void setCurrentGroup(String currentGroup) {
     this.currentGroup = currentGroup;
   }
+
+  public Date getTokenExpiration() {
+    return tokenExpiration;
+  }
+
+  public void setTokenExpiration(Date tokenExpiration) {
+    this.tokenExpiration = tokenExpiration;
+  }
+
 	
 	
 }

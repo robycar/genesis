@@ -425,7 +425,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     
     LoadedEntityStatus stato;
     switch (inclusion) {
-    case COMPLETED: 
+    case COMPLETED:
       stato = LoadedEntityStatus.COMPLETED;
       break;
     case SCHEDULED:

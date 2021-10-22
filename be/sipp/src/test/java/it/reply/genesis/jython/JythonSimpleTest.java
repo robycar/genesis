@@ -15,9 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 import it.reply.genesis.agent.ServiceManager;
+import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestCaseLineaDTO;
 
@@ -29,6 +31,8 @@ public class JythonSimpleTest {
   
   public static final String testFile2 = "scripts/t2.py";
   
+  @Autowired
+  private ServiceManager serviceManager;
   
   private static final Logger logger = LoggerFactory.getLogger(JythonSimpleTest.class);
   
@@ -55,8 +59,6 @@ public class JythonSimpleTest {
     
   }
   
-  @Autowired
-  private ServiceManager serviceManager;
   
   @Test
   public void testDirectoryResult() {
@@ -70,9 +72,32 @@ public class JythonSimpleTest {
       testCaseCaricato.setId(9L);
       
       interpreter.set("testCaseCaricato", testCaseCaricato);
-      interpreter.set("logger", LoggerFactory.getLogger("main_py"));
+      interpreter.set("logger", LoggerFactory.getLogger("jython.main_py"));
       interpreter.set("serviceManager", serviceManager);
       
+      interpreter.execfile(testDir.resolve("main.py").toString());
+    }
+    
+  }
+  
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
+  
+  @Test
+  public void testSalvataggioEsitoTest() throws ApplicationException {
+    logger.debug("enter testSalvataggioEsitoTest");
+    Path testDir = Paths.get("test-resources", "d2");
+    logger.info("Test dir: {}", testDir);
+    assertTrue(testDir.toFile().isDirectory());
+    Long idTest = jdbcTemplate.queryForObject("SELECT MIN(id) FROM TEST_CASE_CARICATO", Long.class);
+    assertNotNull(idTest);
+
+    TestCaseCaricatoDTO testCaseCaricato = serviceManager.getTestCaseService().readCaricato(idTest, true, true);
+    testCaseCaricato.setPathInstance(testDir.toAbsolutePath().toString());
+    try (PythonInterpreter interpreter = new PythonInterpreter()) {
+      interpreter.set("testCaseCaricato", testCaseCaricato);
+      interpreter.set("logger", "jython.d2.main_py");
+      interpreter.set("serviceManager", serviceManager);
       interpreter.execfile(testDir.resolve("main.py").toString());
     }
     

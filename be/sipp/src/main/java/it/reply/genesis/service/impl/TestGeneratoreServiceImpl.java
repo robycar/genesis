@@ -1,8 +1,13 @@
 package it.reply.genesis.service.impl;
 
+import java.time.Instant;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -13,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.reply.genesis.AppError;
+import it.reply.genesis.agent.internal.impl.SingleThreadSingleTestExecutor;
+import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.api.test.payload.TestGeneratoreCaricatoDTO;
@@ -32,6 +39,7 @@ import it.reply.genesis.service.OBPService;
 import it.reply.genesis.service.TemplateService;
 import it.reply.genesis.service.TestGeneratoreService;
 import it.reply.genesis.service.dto.ScheduleInfo;
+import it.reply.genesis.service.dto.TestListType;
 
 @Service
 @Transactional(rollbackFor = ApplicationException.class)
@@ -55,6 +63,8 @@ public class TestGeneratoreServiceImpl extends AbstractService implements TestGe
   @Autowired
   private FileSystemService fileSystemService;
   
+  @Autowired
+  private SingleThreadSingleTestExecutor testExecutor;
   
   @Override
   public List<TestGeneratoreDTO> listTestGeneratore() throws ApplicationException {
@@ -197,9 +207,146 @@ public class TestGeneratoreServiceImpl extends AbstractService implements TestGe
       vo.setStato(LoadedEntityStatus.READY);
     }
     
+    vo = testGeneratoreCaricatoRepository.save(vo);
+    
+    List<Pair<FileSystemVO, FileSystemVO>> fileCopiati = fileSystemService.copyFilesThroughScope(
+        FileSystemScope.TEMPLATE, testVO.getTemplate().getId(), 
+        FileSystemScope.TESTGEN_CARICATO, vo.getId());
+    
+    testGeneratoreCaricatoRepository.flush();
+    
+    return new TestGeneratoreCaricatoDTO(vo, true)
+        .setFolder(fileCopiati.stream()
+            .map(Pair::getSecond)
+            .map(FileDTO::new)
+            .collect(Collectors.toList()));
+  }
+
+  @Override
+  public List<TestGeneratoreCaricatoDTO> readTestCaricatiOfType(TestListType inclusion) {
+    logger.debug("enter readTestCaricatiOfType");
+    Collection<LoadedEntityStatus> stato;
+    //String orderBy = "id";
+    Sort.Order order;
+    switch (inclusion) {
+    case COMPLETED: 
+      stato = Collections.singleton(LoadedEntityStatus.COMPLETED);
+      order = Sort.Order.desc("endDate");
+      break;
+    case SCHEDULED:
+      stato = Collections.singleton(LoadedEntityStatus.SCHEDULED);
+      order = Sort.Order.asc("scheduleDateTime");
+      break;
+    case READY:
+      stato = Collections.singleton(LoadedEntityStatus.READY);
+      order = Sort.Order.desc("id");
+      break;
+    case RUNNING:
+      stato = List.of(LoadedEntityStatus.RUNNING, LoadedEntityStatus.PAUSED);
+      order = Sort.Order.asc("startDate");
+      break;
+    default:
+      return Collections.emptyList();
+    }
+
+    List<TestGeneratoreCaricatoVO> result = testGeneratoreCaricatoRepository.findByStatoIn(stato, Sort.by(order));
+    
+    return result.stream()
+        .map(TestGeneratoreCaricatoDTO::new)
+        .collect(Collectors.toList());
+  }
+
+  @Override
+  public void runLoaded(long id) throws ApplicationException {
+    logger.debug("enter runLoaded");
+    TestGeneratoreCaricatoVO testGeneratoreCarcatoVO = readTestGeneratoreCaricatoVO(id, true);
+    
+    checkStatoOfTestGeneratoreCaricato(testGeneratoreCarcatoVO, LoadedEntityStatus.READY);
+    internalRunTestGeneratoreCaricato(testGeneratoreCarcatoVO);
+  }
+
+  private void internalRunTestGeneratoreCaricato(TestGeneratoreCaricatoVO testCaricatoVO) throws ApplicationException {
+    testCaricatoVO.setStartDate(Instant.now());
+    testCaricatoVO.setStartedBy(currentUsername());
+    testCaricatoVO.setStato(LoadedEntityStatus.RUNNING);
+    testCaricatoVO = testGeneratoreCaricatoRepository.saveAndFlush(testCaricatoVO);
+    logger.info("Lo stato del test case generatore caricato {} e' stato impostato a RUNNING", testCaricatoVO.getId());
+    testExecutor.startTestGeneratore(new TestGeneratoreCaricatoDTO(testCaricatoVO));
+  }
+
+  private void checkStatoOfTestGeneratoreCaricato(TestGeneratoreCaricatoVO vo, LoadedEntityStatus expectedStatus) throws ApplicationException {
+    if (!expectedStatus.equals(vo.getStato())) {
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_GEN_CARICATO_WRONG_EXPECTED_STATE, vo.getId(), vo.getStato(), expectedStatus);
+    }
+    
+  }
+
+  private TestGeneratoreCaricatoVO readTestGeneratoreCaricatoVO(long id, boolean locking) throws ApplicationException {
+    Optional<TestGeneratoreCaricatoVO> result;
+    
+    if (locking) {
+      result = testGeneratoreCaricatoRepository.findByIdLocking(id);
+    } else {
+      result = testGeneratoreCaricatoRepository.findById(id);
+    }
+    return result.orElseThrow(() -> 
+      makeError(HttpStatus.NOT_FOUND, AppError.TEST_GEN_CARICATO_NOT_FOUND, id));
+  }
+
+  @Override
+  public TestGeneratoreCaricatoDTO retrieveCaricato(long id, boolean includeDetails, boolean locking) throws ApplicationException {
+    TestGeneratoreCaricatoVO vo = readTestGeneratoreCaricatoVO(id, locking);
+    return new TestGeneratoreCaricatoDTO(vo, includeDetails);
+  }
+
+  @Override
+  public TestGeneratoreCaricatoDTO updateTestGeneratoreCaricato(TestGeneratoreCaricatoDTO dto)
+      throws ApplicationException {
+    logger.debug("enter updateTestGeneratoreCaricato");
+    TestGeneratoreCaricatoVO vo = readTestGeneratoreCaricatoVO(dto.getId(), true);
+    
+    if (dto.getStartedBy() != null) {
+      vo.setStartedBy(dto.getStartedBy());
+    }
+    
+    if (dto.getStartDate() != null) {
+      vo.setStartDate(dto.getStartDate());
+    }
+
+    if (dto.getEndDate() != null) {
+      vo.setEndDate(dto.getEndDate());
+    }
+    
+    if (dto.getStato() != null) {
+      vo.setStato(dto.getStato());
+    }
+    
+    if (dto.getScheduleDateTime() != null) {
+      vo.setScheduleDateTime(dto.getScheduleDateTime());
+    }
+    
+    if (dto.getDelay() != null) {
+      vo.setDelay(dto.getDelay());
+    }
+    
     vo = testGeneratoreCaricatoRepository.saveAndFlush(vo);
     
-    return new TestGeneratoreCaricatoDTO(vo);
+    return new TestGeneratoreCaricatoDTO(vo, true);
+  }
+
+  @Override
+  public void removeCaricati(@Valid List<Long> ids) throws ApplicationException {
+    logger.debug("enter removeCaricati");
+    for (Long id: ids) {
+      TestGeneratoreCaricatoVO vo = readTestGeneratoreCaricatoVO(id, true);
+      if (LoadedEntityStatus.PAUSED.equals(vo.getStato()) || LoadedEntityStatus.RUNNING.equals(vo.getStato())) {
+        throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_GEN_CARICATO_WRONG_STATE, vo.getId(), vo.getStato());
+      }
+      logger.debug("Elimino il test generatore caricato {}:{}:{}", id, vo.getNome(), vo.getStato());
+      fileSystemService.deleteFolder(FileSystemScope.TESTGEN_CARICATO, id);
+      testGeneratoreCaricatoRepository.delete(vo);
+      testGeneratoreCaricatoRepository.flush();
+    }
   }
 
 }

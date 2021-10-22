@@ -20,6 +20,7 @@ import it.reply.genesis.agent.TestRunner;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.exception.ApplicationExceptionFactory;
 import it.reply.genesis.api.test.payload.TestCaseCaricatoDTO;
+import it.reply.genesis.api.test.payload.TestGeneratoreCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestSuiteCaricataDTO;
 import it.reply.genesis.model.FileSystemScope;
 import it.reply.genesis.model.LoadedEntityStatus;
@@ -132,6 +133,13 @@ public class SingleThreadSingleTestExecutor implements DisposableBean, Runnable 
     }
   }
   
+  public void startTestGeneratore(TestGeneratoreCaricatoDTO testGeneratoreCaricatoDTO) throws ApplicationException {
+    TestGeneratoreCaricatoRunner runner = new TestGeneratoreCaricatoRunner(serviceManager, testGeneratoreCaricatoDTO);
+    if (!offer(runner)) {
+      throw applicationExceptionFactory.makeError(logger, HttpStatus.CONFLICT, AppError.AGENT_RUNNING_QUEUE_NOT_EMPTY);
+    }
+  }
+
   /**
    * 
    * @return true se c'è almeno un task in esecuzione, false altrimenti
@@ -174,6 +182,7 @@ public class SingleThreadSingleTestExecutor implements DisposableBean, Runnable 
       lock.unlock();
     }
   }
+
 
 
 }

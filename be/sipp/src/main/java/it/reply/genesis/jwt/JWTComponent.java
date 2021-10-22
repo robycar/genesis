@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 @Component
@@ -36,13 +37,23 @@ public class JWTComponent {
 		this.defaultExpiration = defaultExpirationInMillis;
 	}
 	
-	public String createToken(String username) {
+	public String createToken(String username, Map<String, Object> settedClaims) {
 		Instant issuedAt = Instant.now();
-		return JWT.create()
-			.withIssuedAt(Date.from(issuedAt))
-			.withExpiresAt(Date.from(issuedAt.plusMillis(this.defaultExpiration)))
+
+		Date tokenExpiration = Date.from(issuedAt.plusMillis(this.defaultExpiration));
+		Date tokenIssuedAt = Date.from(issuedAt);
+		String token = JWT.create()
+			.withIssuedAt(tokenIssuedAt)
+			.withExpiresAt(tokenExpiration)
 			.withClaim(CLAIM_USERNAME, username)
 			.sign(this.algorithm);
+		
+		if (settedClaims != null) {
+		  settedClaims.put(PublicClaims.ISSUED_AT, tokenIssuedAt);
+		  settedClaims.put(PublicClaims.EXPIRES_AT, tokenExpiration);
+		}
+		
+		return token;
 	}
 	
 	public Map<String, Object> verifyToken(String token) throws TokenVerificationException {
