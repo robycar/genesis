@@ -21,8 +21,8 @@ import NavbarItem from "../../components/NavbarItem";
 import Button from "@material-ui/core/Button";
 import Card from "../../components/Card";
 import { NavLink } from "react-router-dom";
-import TotalPlannedWeeKlyTestSuite from "../../components/TotalPlannedWeeKlyTestSuite";
-import TotalPlannedDaylyTestSuite from "../../components/TotalPlannedDaylyTestSuite";
+import TotalPlannedWeeKlyTestGen from "../../components/TotalPlannedWeeklyTestGen";
+import TotalPlannedDailyTestGen from "../../components/TotalPlannedDailyTestGen";
 
 const drawerWidth = 240;
 
@@ -206,12 +206,12 @@ function DashboardTestGeneratore() {
               <Grid container spacing={4} style={{ justifyContent: "center" }}>
                 <Grid item xs={20} md={4} lg={3}>
                   <Paper className={fixedHeightPaper}>
-                    <TotalPlannedDaylyTestSuite />
+                    <TotalPlannedDailyTestGen />
                   </Paper>
                 </Grid>
                 <Grid item xs={20} md={4} lg={3}>
                   <Paper className={fixedHeightPaper}>
-                    <TotalPlannedWeeKlyTestSuite />
+                    <TotalPlannedWeeKlyTestGen />
                   </Paper>
                 </Grid>
               </Grid>

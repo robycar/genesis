@@ -345,6 +345,7 @@ const TestSuiteConclusiTable = () => {
           {
             icon: () => <DeleteIcon />,
             tooltip: "Elimina il Test",
+            disabled: "true",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
               setIdTest(rowData.id);
@@ -646,7 +647,7 @@ const TestSuiteConclusiTable = () => {
                     style={{ color: "#1665D8", alignItems: "center" }}
                     variant="h4"
                   >
-                    Visualizza Test Case <b>{nome}</b>
+                    Visualizza Test Suite <b>{nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />

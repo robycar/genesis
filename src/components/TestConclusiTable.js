@@ -599,6 +599,7 @@ const TestConclusiTable = () => {
           },
           {
             icon: () => <DeleteIcon />,
+            disabled: "true",
             tooltip: "Elimina il Test",
             onClick: (event, rowData) => {
               handleOpenDelete(rowData);
