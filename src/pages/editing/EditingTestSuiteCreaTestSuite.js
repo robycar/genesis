@@ -504,8 +504,8 @@ function EditingTestCreaTestSuite() {
           </div>
         </Container>
 
-        <ButtonEditing />
-        <ButtonEditingTest />
+        <ButtonEditing nome="test"/>
+        <ButtonEditingTest nome="testsuite"/>
 
         {/* ----------------------------CREA TEST SUITE---------------------------------------- */}
 

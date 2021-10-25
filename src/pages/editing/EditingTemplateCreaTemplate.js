@@ -573,7 +573,7 @@ function EditingTemplateCreaTemplate() {
           </div>
         </Container>
 
-        <ButtonEditing />
+        <ButtonEditing nome="template"/>
 
         {/* ----------------------------CREA TEST generatore---------------------------------------- */}
 

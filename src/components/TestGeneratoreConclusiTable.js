@@ -50,15 +50,15 @@ const TestGeneratoreConclusiTable = () => {
     },
     {
       title: "Loader",
-      field: "createdBy",
+      field: "loadedBy",
     },
     {
       title: "Data Inizio",
-      field: "creationDate",
+      field: "startDate",
     },
     {
       title: "Data Fine",
-      field: "modifiedDate",
+      field: "endDate",
     },
     {
       title: "Status",
@@ -241,7 +241,7 @@ const TestGeneratoreConclusiTable = () => {
 
   const testGenLoader = () => {
     handleClose();
-    getAllTestGeneratore();
+    // getAllTestGeneratore();
   };
 
   // --------------- MODALE VISUALIZZA REPORT ------------//
@@ -274,32 +274,40 @@ const TestGeneratoreConclusiTable = () => {
     bearer = bearer.replace(/"/g, "");
   }
 
-  const [appearTest, setAppearTest] = useState([]);
 
-  const getAllTestGeneratore = () => {
+  const getAllTestGeneratoreCompleted = () => {
+    var consta = "COMPLETED";
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Access-Control-Allow-Origin", acccessControl);
     myHeaders.append("Access-Control-Allow-Credentials", "true");
 
+    var raw = JSON.stringify({
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: null,
+      includeTestGeneratoreOfType: consta,
+    });
+
     var requestOptions = {
-      method: "GET",
+      method: "POST",
       headers: myHeaders,
+      body: raw,
       redirect: "follow",
     };
 
-    fetch(`/api/testgen`, requestOptions)
+    fetch(`/api/dashboard/info`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setAppearTest(result.list);
-        setData(result.list);
+        setData(result.testGeneratoList);
       })
       .catch((error) => console.log("error", error));
   };
 
   useEffect(() => {
-    getAllTestGeneratore();
+    getAllTestGeneratoreCompleted();
   }, []);
+
 
   return (
     <div>
@@ -316,21 +324,23 @@ const TestGeneratoreConclusiTable = () => {
           searchFieldAlignment: "left",
           filtering: true,
         }}
-        // actions={[
-        //   {
-        //     icon: () => <PieChartOutlinedIcon />,
-        //     tooltip: "Mostra Report",
-        //     onClick: (event, rowData) => openReport(rowData),
-        //     position: "row",
-        //   },
-        //   {
-        //     icon: () => <DeleteIcon />,
-        //     tooltip: "Elimina il Test",
-        //     onClick: (event, rowData) => {
-        //       alert("inserire api delete");
-        //     },
-        //     position: "row",
-        //   },
+        actions={[
+          {
+            icon: () => <PieChartOutlinedIcon />,
+            tooltip: "Mostra Report",
+            onClick: (event, rowData) => openReport(rowData),
+            position: "row",
+          },
+          {
+            icon: () => <DeleteIcon />,
+            disabled: "true",
+            tooltip: "Elimina il Test",
+            onClick: (event, rowData) => {
+              // handleOpenDelete(rowData);
+              // setIdTest(rowData.id);
+            },
+            position: "row",
+          },
         //   // {
         //   //   icon: () => (
         //   //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
@@ -339,7 +349,7 @@ const TestGeneratoreConclusiTable = () => {
         //   //   onClick: () => handleOpen(),
         //   //   isFreeAction: true,
         //   // },
-        // ]}
+        ]}
         localization={{
           header: {
             actions: "Azioni",
@@ -347,7 +357,7 @@ const TestGeneratoreConclusiTable = () => {
         }}
       />
       {/* ------------------ MODALE LOAD TEST GENERATORE --------------------- */}
-      <Modal
+      {/* <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -511,10 +521,10 @@ const TestGeneratoreConclusiTable = () => {
             </div>
           </Paper>
         </Fade>
-      </Modal>
+      </Modal> */}
 
       {/* ------------------ MODALE SCHEDULA TEST GENERATORE --------------------- */}
-      <Modal
+      {/* <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
@@ -590,7 +600,7 @@ const TestGeneratoreConclusiTable = () => {
             </div>
           </Paper>
         </Fade>
-      </Modal>
+      </Modal> */}
 
       {/*------------------ MODALE VISUALIZZA REPORT-------------*/}
 

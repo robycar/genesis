@@ -179,7 +179,7 @@ function EditingTemplate() {
             <NavbarItemEdit fontSize="large" />
           </div>
 
-        <ButtonEditing />
+        <ButtonEditing nome="template"/>
 
           <Paper className={classes.generalPaper}>
             <ListItem>

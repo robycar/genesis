@@ -21,6 +21,7 @@ import { Divider } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import { MenuItem } from "@material-ui/core";
 import { tableIcons } from "../components/Icons";
+import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 
 const TestSuiteSchedulatiTable = () => {
   const [id, setId] = useState();
@@ -34,8 +35,17 @@ const TestSuiteSchedulatiTable = () => {
   const [dataInizio, setDataInizio] = useState();
   const [orarioInizio, setOrarioInizio] = useState();
   const [delay, setDelay] = useState();
-
   const [dataSchedula, setDataSchedula] = useState();
+  const [selectedRows, setSelectedRows] = useState();
+  const [openDeleteMultipli, setOpenDeleteMultipli] = useState();
+
+  //Creazione Array con gli id da eliminare
+  const deleteIdArray = [];
+  const deleteIdToFilter = selectedRows?.filter((data) => {
+    return deleteIdArray.push(data.id);
+  });
+
+  const idToDelete = deleteIdArray.toString();
 
   const columns = [
     {
@@ -133,6 +143,7 @@ const TestSuiteSchedulatiTable = () => {
     },
     typography: {
       marginTop: "3%",
+      marginBottom: "3%",
     },
     bottone: {
       display: "flex",
@@ -143,6 +154,23 @@ const TestSuiteSchedulatiTable = () => {
     },
     select: {
       width: "400px",
+    },
+    info: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: "3%",
+      marginBottom: "3%",
+      justifyContent: "center",
+    },
+    paperModaleDelete: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
     },
   }));
 
@@ -260,6 +288,10 @@ const TestSuiteSchedulatiTable = () => {
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [idTestSuiteRun, setIdTestSuiteRun] = useState();
+  const [idToRun, setIdToRun] = useState();
+  const [openRun, setOpenRun] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -288,9 +320,134 @@ const TestSuiteSchedulatiTable = () => {
     getAllTestSuite();
   };
 
+  const handleOpenRun = (idRun) => {
+    setIdToRun(idRun);
+    setOpenRun(true);
+    setOpen(false);
+  };
+
+  const handleCloseRun = () => {
+    setOpenRun(false);
+  };
+
+  const runSuiteLoader = () => {
+    runTestSuite(idToRun);
+    handleCloseRun();
+  };
+
+  const handleLoadData = (rowDataaa) => {
+    setIdToRun(rowDataaa.id);
+    runSuiteLoader(rowDataaa.id);
+  };
+
+  const handleOpenDelete = (rowData) => {
+    setId(rowData.id);
+    setOpenDelete(true);
+  };
+
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  const handleDelete = () => {
+    deleteTestCaricato(id);
+  };
+  //---------- funzione elimina TestSuite Multipli
+  const handleDeleteMultipli = () => {
+    deleteTestSuiteCaricatoMultipli(idToDelete);
+  };
+  //------------ funzione apri modale delete Multipli
+  const handleOpenDeleteMultipli = () => {
+    setOpenDeleteMultipli(true);
+  };
+  //---------- funzione chiudi modale delete Multipli
+  const handleCloseDeleteMultipli = () => {
+    setOpenDeleteMultipli(false);
+  };
+
+  /*--------------- RUN TEST SUITE -------------------*/
+
+  const runTestSuite = (idRun) => {
+    var urlLoad = `/api/testsuite/loaded/run/${idRun}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setIdTestSuiteRun(result.list);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  /*----------- DELETE TEST CARICATO ----------------*/
+
+  const deleteTestCaricato = (id) => {
+    var urlLoadDelete = `/api/testsuite/loaded/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    // myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoadDelete, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setOpenDelete(false);
+        getAllTestSuite();
+        console.log(result);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  /*----------- DELETE TESTSUITE MULTIPLI ----------------*/
+
+  const deleteTestSuiteCaricatoMultipli = (id) => {
+    var urlLoadDelete = `/api/testsuite/loaded/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoadDelete, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setOpenDeleteMultipli(false);
+        getAllTestSuite();
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   return (
     <div>
       <MaterialTable
+        onSelectionChange={(rows) => {
+          setSelectedRows(rows);
+          console.log(rows);
+        }}
         icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Suite Schedulati"
@@ -316,14 +473,18 @@ const TestSuiteSchedulatiTable = () => {
           {
             icon: () => <PlayCircleOutlineIcon />,
             tooltip: "Lancia il Test",
-            onClick: (event, rowData) =>
-              alert("Ho cliccato " + rowData.launcher),
+            onClick: (event, rowData) => handleOpenRun(rowData.id),
+
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
-            tooltip: "Elimina il Test",
-            onClick: () => alert("Api deleter da aggiungere"),
+            tooltip: "Elimina Test",
+            onClick: (event, rowData) => {
+              handleOpenDelete(rowData);
+            },
+            position: "row",
+            disabled: selectedRows?.length > 0,
           },
           {
             icon: () => <FilterListIcon />,
@@ -544,6 +705,175 @@ const TestSuiteSchedulatiTable = () => {
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ------------------ MODALE AVVIA TEST SUITE --------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openRun}
+        onClose={handleCloseRun}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openRun}>
+          <Paper className={classes.paperModale} elevation={1}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h4">
+                  Lancio Test Suite
+                </Typography>
+              </ListItem>
+
+              <Divider className={classes.divider} />
+              <Typography className={classes.info}>
+                Vuoi lanciare il test suite da te selezionato ?
+              </Typography>
+              <Divider />
+
+              <div className={classes.bottone}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleLoadData}
+                >
+                  Lancio
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseRun}
+                >
+                  Annulla
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE DELETE--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDelete}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDelete}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#ef5350" }}
+                  >
+                    Elimina Test Id <b>{" " + id}</b>
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                <Typography
+                  className={classes.typography}
+                  style={{ paddingLeft: "16px" }}
+                >
+                  Vuoi eliminare il Test Caricato?
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleDelete}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+      {/* ------------------------MODALE DELETE MULTIPLI --------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDeleteMultipli}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDeleteMultipli}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#ef5350" }}
+                  >
+                    Elimina i test suite selezionati
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                {selectedRows?.length > 1 ? (
+                  <Typography
+                    className={classes.typography}
+                    style={{ paddingLeft: "16px" }}
+                  >
+                    Vuoi eliminare i TestSuite Caricati?
+                  </Typography>
+                ) : (
+                  <Typography
+                    className={classes.typography}
+                    style={{ paddingLeft: "16px" }}
+                  >
+                    Vuoi eliminare il Test Caricato?
+                  </Typography>
+                )}
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleDeleteMultipli}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDeleteMultipli}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
     </div>

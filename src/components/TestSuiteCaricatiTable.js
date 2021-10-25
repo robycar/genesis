@@ -35,6 +35,16 @@ const TestSuiteCaricatiTable = () => {
   const [idToRun, setIdToRun] = useState();
   const [idTestSuiteRun, setIdTestSuiteRun] = useState(0);
   const [dataInizio, setDataInizio] = useState();
+  const [selectedRows, setSelectedRows] = useState();
+  const [openDeleteMultipli, setOpenDeleteMultipli] = useState();
+
+  //Creazione Array con gli id da eliminare
+  const deleteIdArray = [];
+  const deleteIdToFilter = selectedRows?.filter((data) => {
+    return deleteIdArray.push(data.id);
+  });
+
+  const idToDelete = deleteIdArray.toString();
 
   const columns = [
     {
@@ -297,6 +307,18 @@ const TestSuiteCaricatiTable = () => {
   const handleDelete = () => {
     deleteTestSuiteCaricato(id);
   };
+  //---------- funzione elimina TestSuite Multipli
+  const handleDeleteMultipli = () => {
+    deleteTestSuiteCaricatoMultipli(idToDelete);
+  };
+  //------------ funzione apri modale delete Multipli
+  const handleOpenDeleteMultipli = () => {
+    setOpenDeleteMultipli(true);
+  };
+  //---------- funzione chiudi modale delete Multipli
+  const handleCloseDeleteMultipli = () => {
+    setOpenDeleteMultipli(false);
+  };
 
   /*------------- GET TEST SUITE DASHBOARD -------------*/
 
@@ -487,11 +509,40 @@ const TestSuiteCaricatiTable = () => {
       .catch((error) => console.log("error", error));
   };
 
+  /*----------- DELETE TESTSUITE MULTIPLI ----------------*/
+
+  const deleteTestSuiteCaricatoMultipli = (id) => {
+    var urlLoadDelete = `/api/testsuite/loaded/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoadDelete, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setOpenDeleteMultipli(false);
+        getAllTestSuite();
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   const classes = useStyles();
 
   return (
     <div>
       <MaterialTable
+        onSelectionChange={(rows) => {
+          setSelectedRows(rows);
+          console.log(rows);
+        }}
         icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Suite Caricati"
@@ -506,6 +557,13 @@ const TestSuiteCaricatiTable = () => {
           filtering: true,
         }}
         actions={[
+          {
+            tooltip: "Elimina i test suite selezionati",
+            icon: tableIcons.Delete,
+            onClick: () => {
+              handleOpenDeleteMultipli();
+            },
+          },
           {
             icon: () => <PieChartOutlinedIcon />,
             tooltip: "Mostra Report",
@@ -529,6 +587,7 @@ const TestSuiteCaricatiTable = () => {
               setIdTest(rowData.id);
             },
             position: "row",
+            disabled: selectedRows?.length > 0,
           },
           {
             icon: () => <FilterListIcon />,
@@ -773,7 +832,7 @@ const TestSuiteCaricatiTable = () => {
 
               <Divider className={classes.divider} />
               <Typography className={classes.info}>
-                <p>Vuoi lanciare il test case da te selezionato ?</p>
+                <p>Vuoi lanciare il test suite da te selezionato ?</p>
               </Typography>
               <Divider />
 
@@ -893,6 +952,69 @@ const TestSuiteCaricatiTable = () => {
                   />
                   <ButtonNotClickedGreen
                     onClick={handleCloseDelete}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/* ------------------------MODALE DELETE MULTIPLI --------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDeleteMultipli}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDeleteMultipli}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#ef5350" }}
+                  >
+                    Elimina i test suite selezionati
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                {selectedRows?.length > 1 ? (
+                  <Typography
+                    className={classes.typography}
+                    style={{ paddingLeft: "16px" }}
+                  >
+                    Vuoi eliminare i TestSuite Caricati?
+                  </Typography>
+                ) : (
+                  <Typography
+                    className={classes.typography}
+                    style={{ paddingLeft: "16px" }}
+                  >
+                    Vuoi eliminare il Test Caricato?
+                  </Typography>
+                )}
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleDeleteMultipli}
+                    nome="Elimina"
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDeleteMultipli}
                     nome="Indietro"
                   />
                 </div>

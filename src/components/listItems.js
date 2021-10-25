@@ -65,7 +65,7 @@ export const mainListItems = (
       component={NavLink}
       activeClassName="nav-active"
       exact
-      //disabled={localStorage.getItem("livello") !== "ADMIN" && localStorage.getItem("livello") !== "test"}
+      disabled={localStorage.getItem("livello") !== "ADMIN" && localStorage.getItem("livello") !== "test"}
       to="/amministrazione/utenze"
     >
       <ListItemIcon>
@@ -117,28 +117,16 @@ export const tertiaryListItems = (
       <ListItemIcon>
         <DescriptionIcon />
       </ListItemIcon>
-      <ListItemText primary="Documentation" />
+      <ListItemText primary="Documentazione" />
     </ListItem>
   </div>
 );
 
 export const quaterListItems = (
   <div className="nav-link">
-    {/* <ListItem
-      button
-      component={NavLink}
-      activeClassName="nav-active"
-      exact
-      to="/login"
-    >
-      <ListItemIcon>
-        <LockOpenIcon />
-      </ListItemIcon>
-      <ListItemText primary="Login" />
-    </ListItem> */}
     <div className="versione">
       <hr />
-      Beta 0.0.1
+      Versione {localStorage.getItem("versione")}
     </div>
   </div>
 );

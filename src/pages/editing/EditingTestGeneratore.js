@@ -168,8 +168,8 @@ function EditingTestGeneratore() {
             <NavbarItemEdit fontSize="large" />
           </div>
 
-          <ButtonEditing/>
-          <ButtonEditingTest/>
+          <ButtonEditing nome="test"/>
+          <ButtonEditingTest nome="testgeneratore"/>
           
           <Paper className={classes.generalPaper}>
             <ListItem>

@@ -21,6 +21,9 @@ import ButtonClickedGreen from "../../components/ButtonClickedGreen";
 import { makeStyles } from "@material-ui/core/styles";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { tableIcons } from "../../components/Icons";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import BackupIcon from "@material-ui/icons/Backup";
+import { Button } from "@material-ui/core";
 
 function LaunchingTestGeneratoreTable() {
   const [data, setData] = useState([]);
@@ -372,6 +375,72 @@ function LaunchingTestGeneratoreTable() {
       })
       .catch((error) => console.log("error", error));
   };
+
+  //---------LANCIA TEST------------
+  
+  const [idToRun, setIdToRun] = useState();
+  const [openRun, setOpenRun] = React.useState(false);
+  const [dataRun, setIdTestGenRun] = useState(null);
+
+  const handleOpenRun = (idRun) => {
+    setIdToRun(idRun);
+    setOpenRun(true);
+    setOpen(false);
+  };
+  
+  const handleCloseRun = () => {
+    setOpenRun(false);
+  };
+  
+  const runGenLoader = () => {
+    runTestGen(idToRun);
+    handleCloseRun();
+  };
+  /*--------------- RUN TEST GEN -------------------*/
+
+  const runTestGen = (idRun) => {
+    var urlLoad = `/api/testgen/loaded/run/${idRun}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoad, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.error !== null) {
+          setOpenWarning(true);
+          if (result.error.code === "TEST-0027") {
+            setWarning("Il test selezionato è già stato lanciato");
+          } else {
+            setWarning(
+              "Codice errore: " +
+                result.error.code +
+                "Descrizione" +
+                result.error.description
+            );
+          }
+        } else {
+          setOpenWarning(false);
+          setIdTestGenRun(result.list);
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const handleLoadData = (rowDataaa) => {
+    runGenLoader(rowDataaa.id);
+    setIdToRun(rowDataaa.id);
+  };
+
+
   //-------VISUALIZZA TUTTI I DATI-----------------------
 
   const useStyles = makeStyles((theme) => ({
@@ -510,6 +579,12 @@ function LaunchingTestGeneratoreTable() {
             isFreeAction: true,
           },
           {
+            icon: tableIcons.PlayCircleOutlineIcon,
+            tooltip: "Lancia il Test",
+            onClick: (event, rowData) => handleOpenRun(rowData.id),
+            position: "row",
+          },
+          {
             icon: (dat) => (
               <a>
                 <VisibilityIcon />
@@ -543,6 +618,58 @@ function LaunchingTestGeneratoreTable() {
           },
         }}
       />
+ {/* ------------------ MODALE AVVIA TEST GEN --------------------- */}
+ <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openRun}
+        onClose={handleCloseRun}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openRun}>
+          <Paper className={classes.paperModale} elevation={1}>
+            <div>
+              <ListItem button>
+                <ListItemIcon>
+                  <BackupIcon className={classes.icon} />
+                </ListItemIcon>
+                <Typography className={classes.intestazione} variant="h4">
+                  Lancio Test Generatore
+                </Typography>
+              </ListItem>
+
+              <Divider className={classes.divider} />
+              <Typography className={classes.info}>
+                <p>Vuoi lanciare il test generatore da te selezionato ?</p>
+              </Typography>
+              <Divider />
+
+              <div className={classes.bottone}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleLoadData}
+                >
+                  Lancio
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseRun}
+                >
+                  Annulla
+                </Button>
+              </div>
+            </div>
+          </Paper>
+        </Fade>
+      </Modal>
 
       {/*------------------ MODALE VISUALIZZA/MODIFICA -------------*/}
 

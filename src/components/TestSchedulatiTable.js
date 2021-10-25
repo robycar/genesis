@@ -37,6 +37,16 @@ const TestSchedulatiTable = () => {
   const [dataSchedula, setDataSchedula] = useState();
   const [idTest, setIdTest] = useState();
   const [idTestCaseRun, setIdTestCaseRun] = useState();
+  const [selectedRows, setSelectedRows] = useState();
+  const [openDeleteMultipli, setOpenDeleteMultipli] = useState();
+
+  //Creazione Array con gli id da eliminare
+  const deleteIdArray = [];
+  const deleteIdToFilter = selectedRows?.filter((data) => {
+    return deleteIdArray.push(data.id);
+  });
+
+  const idToDelete = deleteIdArray.toString();
 
   const columns = [
     {
@@ -184,7 +194,8 @@ const TestSchedulatiTable = () => {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginTop: "6%",
+      marginTop: "3%",
+      marginBottom: "3%",
       justifyContent: "center",
     },
   }));
@@ -245,6 +256,22 @@ const TestSchedulatiTable = () => {
   //---------- funzione chiudi modale
   const handleCloseDelete = () => {
     setOpenDelete(false);
+  };
+
+  const handleDelete = () => {
+    deleteTestCaricato(id);
+  };
+  //---------- funzione elimina TestCase Multipli
+  const handleDeleteMultipli = () => {
+    deleteTestCaricatoMultipli(idToDelete);
+  };
+  //------------ funzione apri modale delete Multipli
+  const handleOpenDeleteMultipli = () => {
+    setOpenDeleteMultipli(true);
+  };
+  //---------- funzione chiudi modale delete Multipli
+  const handleCloseDeleteMultipli = () => {
+    setOpenDeleteMultipli(false);
   };
 
   let bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -346,9 +373,66 @@ const TestSchedulatiTable = () => {
     runCaseLoder(rowDataaa.id);
   };
 
+  /*----------- DELETE TEST CARICATO ----------------*/
+
+  const deleteTestCaricato = (id) => {
+    var urlLoadDelete = `/api/testcase/loaded/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    // myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoadDelete, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setOpenDelete(false);
+        getAllTestCase();
+        console.log(result);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  /*----------- DELETE TEST CARICATO MULTIPLI ----------------*/
+
+  const deleteTestCaricatoMultipli = (id) => {
+    var urlLoadDelete = `/api/testcase/loaded/${id}`;
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    // myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(urlLoadDelete, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setOpenDeleteMultipli(false);
+        getAllTestCase();
+        console.log(result);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   return (
     <div>
       <MaterialTable
+        onSelectionChange={(rows) => {
+          setSelectedRows(rows);
+        }}
         icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Case Schedulati"
@@ -363,6 +447,13 @@ const TestSchedulatiTable = () => {
           filtering: true,
         }}
         actions={[
+          {
+            tooltip: "Elimina i test selezionati",
+            icon: tableIcons.Delete,
+            onClick: () => {
+              handleOpenDeleteMultipli();
+            },
+          },
           {
             icon: () => <PieChartOutlinedIcon />,
             tooltip: "Mostra Report",
@@ -385,6 +476,7 @@ const TestSchedulatiTable = () => {
               setIdTest(rowData.id);
             },
             position: "row",
+            disabled: selectedRows?.length > 0,
           },
           {
             icon: () => <FilterListIcon />,
@@ -653,9 +745,7 @@ const TestSchedulatiTable = () => {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <ButtonNotClickedGreen
-                    onClick={() =>
-                      alert("Inserire funzione Delete Loaded Test")
-                    }
+                    onClick={handleDelete}
                     nome="Elimina"
                   />
                   <ButtonNotClickedGreen
@@ -696,7 +786,7 @@ const TestSchedulatiTable = () => {
 
               <Divider className={classes.divider} />
               <Typography className={classes.info}>
-                <p>Vuoi lanciare il test case da te selezionato ?</p>
+                Vuoi lanciare il test case da te selezionato ?
               </Typography>
               <Divider />
 
@@ -719,6 +809,69 @@ const TestSchedulatiTable = () => {
               </div>
             </div>
           </Paper>
+        </Fade>
+      </Modal>
+      {/* ------------------------MODALE DELETE MULTIPLI--------------------- */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openDeleteMultipli}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openDeleteMultipli}>
+          <div>
+            <Paper className={classes.paperModaleDelete} elevation={1}>
+              <div>
+                <ListItem>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#ef5350" }}
+                  >
+                    Elimina i test selezionati
+                  </Typography>
+                </ListItem>
+                <Divider className={classes.divider} />
+
+                {selectedRows?.length > 1 ? (
+                  <Typography
+                    className={classes.typography}
+                    style={{ paddingLeft: "16px" }}
+                  >
+                    Vuoi eliminare i Test Caricati?
+                  </Typography>
+                ) : (
+                  <Typography
+                    className={classes.typography}
+                    style={{ paddingLeft: "16px" }}
+                  >
+                    Vuoi eliminare il Test Caricato?
+                  </Typography>
+                )}
+
+                <Divider className={classes.divider} />
+                <div
+                  className={classes.bottone}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <ButtonNotClickedGreen
+                    //onClick={functionDelete}
+                    nome="Elimina"
+                    onClick={handleDeleteMultipli}
+                  />
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseDeleteMultipli}
+                    nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
         </Fade>
       </Modal>
     </div>

@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { NavLink } from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import "../styles/App.css"
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -16,14 +17,13 @@ const useStyles = makeStyles((theme) => ({
 
 var functions = localStorage.getItem("funzioni")?.split(",");
 
-export function ButtonAmministrazione() {
+export function ButtonAmministrazione(props) {
   const classes = useStyles();
   return (
     <div className={classes.buttonContainer}>
       <Button
-        className="button-green"
+        className={props.nome==="utenze"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/amministrazione/utenze"
         disabled={
@@ -35,18 +35,16 @@ export function ButtonAmministrazione() {
         UTENZE
       </Button>
       <Button
-        className="button-green"
+        className={props.nome==="ruoli"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/amministrazione/ruoli"
       >
         RUOLI
       </Button>
       <Button
-        className="button-green"
+        className={props.nome==="autorizzazioni"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/amministrazione/autorizzazioni"
         disabled={
@@ -57,9 +55,8 @@ export function ButtonAmministrazione() {
         AUTORIZZAZIONI
       </Button>
       <Button
-        className="button-green"
+        className={props.nome==="gruppo"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/amministrazione/gruppo"
       >
@@ -69,14 +66,13 @@ export function ButtonAmministrazione() {
   );
 }
 
-export function ButtonEditing() {
+export function ButtonEditing(props) {
   const classes = useStyles();
   return (
     <div className={classes.buttonContainer}>
       <Button
-        className="button-green"
+        className={props.nome ==="linee" ?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/editing/linee"
         disabled={
@@ -89,27 +85,24 @@ export function ButtonEditing() {
         LINEE
       </Button>
       <Button
-        className="button-green"
+        className={props.nome==="obp"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/editing/outboundproxy"
       >
         OUTBOUND PROXY
       </Button>
       <Button
-        className="button-green"
+        className={props.nome==="template"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/editing/template"
       >
         TEMPLATE
       </Button>
       <Button
-        className="button-green"
+        className={props.nome==="test"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/editing/testcase"
       >
@@ -118,32 +111,29 @@ export function ButtonEditing() {
     </div>
   );
 }
-export function ButtonEditingTest() {
+export function ButtonEditingTest(props) {
   const classes = useStyles();
   return (
     <div className={classes.buttonTestContainer}>
       <Button
-        className="button-green"
+        className={props.nome==="testcase"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/editing/testcase"
       >
         TEST CASE
       </Button>
       <Button
-        className="button-green"
+        className={props.nome==="testsuite"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/editing/testsuite"
       >
         TEST SUITE
       </Button>
       <Button
-        className="button-green"
+        className={props.nome==="testgeneratore"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/editing/testgeneratore"
       >
@@ -152,14 +142,13 @@ export function ButtonEditingTest() {
     </div>
   );
 }
-export function ButtonEditingLinee() {
+export function ButtonEditingLinee(props) {
   const classes = useStyles();
   return (
      <div className={classes.buttonLinee}>
       <Button
-        className="button-green"
+        className={props.nome==="simulatore"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/editing/linee"
         disabled={
@@ -170,9 +159,8 @@ export function ButtonEditingLinee() {
         LINEE SIMULATORE
       </Button>
       <Button
-        className="button-green"
+        className={props.nome==="generatore"?"button-green-active":"button-green"}
         component={NavLink}
-        activeClassName="button-green-active"
         exact
         to="/editing/lineegeneratore"
         disabled={

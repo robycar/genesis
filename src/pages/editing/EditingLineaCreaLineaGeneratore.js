@@ -582,8 +582,8 @@ function EditingLineaCreaLineaGeneratore() {
           </div>
         </Container>
 
-        <ButtonEditing />
-        <ButtonEditingLinee />
+        <ButtonEditing nome="linee"/>
+        <ButtonEditingLinee nome="generatore"/>
 
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Linea Generatore" />

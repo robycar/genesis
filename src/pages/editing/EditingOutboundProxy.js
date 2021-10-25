@@ -166,7 +166,7 @@ function EditingOutboundProxy() {
             <NavbarItemEdit fontSize="large" />
           </div>
 
-          <ButtonEditing />
+          <ButtonEditing nome="obp"/>
           <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>
               <ListItemIcon>

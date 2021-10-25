@@ -170,8 +170,8 @@ function EditingTestSuite() {
             <NavbarItemEdit fontSize="large" />
           </div>
           
-          <ButtonEditing/>
-          <ButtonEditingTest/>
+          <ButtonEditing nome="test"/>
+          <ButtonEditingTest nome="testsuite"/>
           
           <Paper className={classes.generalPaper}>
             <ListItem>

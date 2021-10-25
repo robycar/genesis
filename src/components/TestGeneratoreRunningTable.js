@@ -36,31 +36,16 @@ const TestGeneratoreRunningTable = () => {
     },
     {
       title: "Loader",
-      field: "createdBy",
+      field: "loadedBy",
     },
     {
-      title: "Data Inizio",
-      field: "creationDate",
+      title: "Data Caricamento",
+      field: "loadedWhen",
     },
-    {
-      title: "Data Fine",
-      field: "modifiedDate",
-    },
+
     {
       title: "Status",
-      field: "trace",
-    },
-    {
-      title: "Trace",
-      field: "trace",
-    },
-    {
-      title: "Call-Id",
-      field: "trace",
-    },
-    {
-      title: "Report",
-      field: "trace",
+      field: "stato",
     },
   ];
 
@@ -192,6 +177,7 @@ const TestGeneratoreRunningTable = () => {
   const [rate, setRate] = useState();
   const [testDuration, setTestDuration] = useState();
   const [callDuration, setCallDuration] = useState();
+  const [appearTest, setAppearTest] = useState([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -227,7 +213,42 @@ const TestGeneratoreRunningTable = () => {
     bearer = bearer.replace(/"/g, "");
   }
 
-  const [appearTest, setAppearTest] = useState([]);
+  //-----------GET TEST GEN RUNNING----------------------
+  const getAllTestGenRunning = () => {
+    var consta = "RUNNING";
+
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var raw = JSON.stringify({
+      includeRiepilogoTestCase: false,
+      includeRiepilogoTestSuite: false,
+      includeTestCaseOfType: null,
+      includeTestSuiteOfType: null,
+      includeTestGeneratoreOfType: consta,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`/api/dashboard/info`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result.testGeneratoList);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    getAllTestGenRunning();
+  }, []);
 
   const getAllTestGeneratore = () => {
     var myHeaders = new Headers();
@@ -269,30 +290,6 @@ const TestGeneratoreRunningTable = () => {
           searchFieldAlignment: "left",
           filtering: true,
         }}
-        // actions={[
-        //   {
-        //     icon: () => <PieChartOutlinedIcon />,
-        //     tooltip: "Report",
-        //     onClick: (event, rowData) =>
-        //       alert("Ho cliccato " + rowData.launcher),
-        //     position: "row",
-        //   },
-        //   {
-        //     icon: () => <PlayCircleOutlineIcon />,
-        //     tooltip: "Lancia",
-        //     onClick: (event, rowData) =>
-        //       alert("Ho cliccato " + rowData.launcher),
-        //     position: "row",
-        //   },
-        //   // {
-        //   //   icon: () => (
-        //   //     <ButtonClickedBlue nome="Carica Test Generatore"></ButtonClickedBlue>
-        //   //   ),
-        //   //   tooltip: "Carica Test Generatore",
-        //   //   onClick: () => handleOpen(),
-        //   //   isFreeAction: true,
-        //   // },
-        // ]}
         localization={{
           header: {
             actions: "Azioni",

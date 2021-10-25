@@ -386,8 +386,8 @@ function EditingTestCreaTestGeneratore() {
           </div>
         </Container>
 
-        <ButtonEditing />
-        <ButtonEditingTest />
+        <ButtonEditing nome="test"/>
+        <ButtonEditingTest nome="testgeneratore"/>
 
         {/* ----------------------------CREA TEST CASE---------------------------------------- */}
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -119,44 +119,49 @@ const useStyles = makeStyles((theme) => ({
 function Navbar() {
   const classes = useStyles();
 
-  let history=useHistory()
-  
+  let history = useHistory()
+
   const logOut = () => {
-    localStorage.setItem("token", "");
-    localStorage.setItem("username", "");
-    localStorage.setItem("livello", "");
-    localStorage.setItem("gruppo", "");
-    localStorage.setItem("funzioni", "");
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("livello");
+    localStorage.removeItem("gruppo");
+    localStorage.removeItem("funzioni");
+    localStorage.removeItem("versione");
+    localStorage.removeItem("token_expiration");
     history.push("/");
   };
+
+  setInterval(function () {
+    if (localStorage.getItem("token_expiration")) {
+      var x = [];
+      x = (localStorage?.getItem("token_expiration")?.split("T"))
+      x[1] = x[1]?.split(":")
+
+      var dataExp = [x[0], parseInt(x[1][0]), parseInt(x[1][1])]
+
+      var data = new Date();
+      var tempo = []
+      tempo.push(data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate())
+      tempo.push(data.getHours())
+      tempo.push(data.getMinutes())
+      if (tempo[0] === dataExp[0] && tempo[1] === dataExp[1] && tempo[2] === dataExp[2]) {
+        logOut()
+      }
+    }
+  }, 3000)
+
+
+
   return (
     <>
       <CssBaseline />
       <Toolbar className={classes.toolbar} boxShadow={0}>
-        {/* <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-        >
-          <MenuIcon />
-        </IconButton> */}
-        {/* <Typography
-          component="h1"
-          variant="h6"
-          color="#0a0a0aack"
-          noWrap
-          className={classes.title}
-        >
-          Dashboard
-        </Typography> */}
         <img src={logo} alt="Logo" className={classes.logo} />
         <div className={classes.contentToolbar}>
           <ButtonGroup>
-            <IconButton 
-            // onClick={()=>ruolo(1)} 
-            color="black">
+            <IconButton
+              color="black">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon className={classes.icon} />
               </Badge>

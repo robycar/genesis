@@ -167,8 +167,8 @@ function EditingLineeGeneratore() {
             <NavbarItemEdit fontSize="large" />
           </div>
 
-          <ButtonEditing />
-          <ButtonEditingLinee />
+          <ButtonEditing nome="linee"/>
+          <ButtonEditingLinee nome="generatore"/>
 
           <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>

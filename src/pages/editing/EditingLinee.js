@@ -171,8 +171,8 @@ function EditingLinee() {
             <NavbarItemEdit fontSize="large" />
           </div>
 
-          <ButtonEditing />
-          <ButtonEditingLinee />
+          <ButtonEditing nome="linee"/>
+          <ButtonEditingLinee nome="simulatore"/>
 
           <Paper className={classes.generalPaper} elevation={1}>
             <ListItem>

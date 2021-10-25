@@ -546,8 +546,8 @@ function EditingTestCreaTestCase() {
           </div>
         </Container>
 
-        <ButtonEditing />
-        <ButtonEditingTest />
+        <ButtonEditing nome="test"/>
+        <ButtonEditingTest nome="testcase"/>
 
         {/* ----------------------------CREA TEST CASE---------------------------------------- */}
 

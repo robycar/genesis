@@ -165,8 +165,8 @@ function EditingTestTestCase() {
             <NavbarItemEdit fontSize="large" />
           </div>
 
-          <ButtonEditing/>
-          <ButtonEditingTest/>
+          <ButtonEditing nome="test"/>
+          <ButtonEditingTest nome="testcase"/>
           
           <Paper className={classes.generalPaper}>
             <ListItem>
