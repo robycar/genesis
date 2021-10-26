@@ -287,7 +287,6 @@ const TestGeneratoreCaricatiTable = () => {
   const testGenLoader = () => {
     loadTestGen();
     handleCloseLoad();
-    getAllTestGeneratore();
   };
 
   const runGenLoader = () => {
@@ -525,7 +524,7 @@ const TestGeneratoreCaricatiTable = () => {
         .then((result) => {
           console.log(result);
           setDataLoad(result.testGeneratoreCaricato);
-          handleCloseLoad();
+          getAllTestGeneratore();
         })
         .catch((error) => console.log("error", error));
     };
