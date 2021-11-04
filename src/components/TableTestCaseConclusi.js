@@ -56,7 +56,7 @@ const TotalTestCaseConclusi = () => {
     },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      // field: "loadedBy",
     },
     {
       title: "Trace",
@@ -317,11 +317,15 @@ const TotalTestCaseConclusi = () => {
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "center",
+          searchFieldAlignment: "left",
+          selection: true,
+          filtering: true,
           exportButton: true,
           headerStyle: {
             backgroundColor: "beige",
           },
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {

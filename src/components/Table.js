@@ -20,10 +20,9 @@ import acccessControl from "../service/url.js";
 import { IconButton } from "@material-ui/core";
 import PostAddOutlinedIcon from "@mui/icons-material/PostAddOutlined";
 import { Doughnut } from "react-chartjs-2";
-import { getGenerale} from "../service/api";
+import { getGenerale } from "../service/api";
 import { tableIcons } from "../components/Icons";
 import WhireShark from "../assets/logoShark2.png";
-
 
 const TotalTestSuiteConclusi = () => {
   const columns = [
@@ -62,14 +61,12 @@ const TotalTestSuiteConclusi = () => {
     },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      // field: "loadedBy",
     },
     {
       title: "Trace",
       field: "pathInstance",
-      render: () => (
-         <img className={classes.img} src={WhireShark} />
-      ),
+      render: () => <img className={classes.img} src={WhireShark} />,
     },
   ];
 
@@ -93,7 +90,6 @@ const TotalTestSuiteConclusi = () => {
     },
   ];
 
-
   const columnsVisualizzaTestcases = [
     {
       title: "ID Test",
@@ -109,7 +105,7 @@ const TotalTestSuiteConclusi = () => {
       title: "Descrizione",
       field: "descrizione",
     },
-      {
+    {
       title: "Versione",
       field: "version",
       hidden: true,
@@ -126,7 +122,7 @@ const TotalTestSuiteConclusi = () => {
       title: "Data Fine",
       field: "endDate",
     },
-    
+
     {
       title: "Stato",
       field: "stato",
@@ -135,14 +131,10 @@ const TotalTestSuiteConclusi = () => {
       title: "Template",
       field: "template.nome",
     },
-  ]
+  ];
 
   const useStyles = makeStyles((theme) => ({
-    modal: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    },
+    
     paper: {
       width: 500,
       backgroundColor: theme.palette.background.paper,
@@ -177,8 +169,9 @@ const TotalTestSuiteConclusi = () => {
       position: "relative",
     },
     paperContainer2: {
-      //flexDirection: "column",
+      flexDirection: "column",
       padding: "20px",
+      height: "800px",
       // marginBottom: "10%",
       position: "relative",
       alignItems: "center",
@@ -187,6 +180,7 @@ const TotalTestSuiteConclusi = () => {
     contenutoModale: {
       height: 370,
       overflowX: "hidden",
+      padding: 10,
     },
     divTextarea: {
       marginTop: "20px",
@@ -206,15 +200,14 @@ const TotalTestSuiteConclusi = () => {
       marginTop: "20px",
     },
     bottone: {
-      marginLeft: "55px",
-      marginTop: "5%",
+      marginTop: "2%",
       // marginBottom: "2%",
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
+      marginTop: "3%",
       flexDirection: "row",
-      marginBottom: "5%",
+      marginBottom: "2%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -249,14 +242,14 @@ const TotalTestSuiteConclusi = () => {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      height: 370,
       overflowX: "hidden",
+      height: "500px",
     },
     img: {
       width: "30px",
       height: "30px",
-      borderRadius: "15px"
-    }
+      borderRadius: "15px",
+    },
   }));
 
   const handleChange = () => {
@@ -279,18 +272,18 @@ const TotalTestSuiteConclusi = () => {
   const [version, setVersion] = useState();
   const [openTestCase, SetOpenTestCase] = React.useState(false);
   const [dataTestCases, setDataTestCases] = useState();
-  const arrayTestCaseAssociati = testSuite?.testCases; 
+  const arrayTestCaseAssociati = testSuite?.testCases;
   const [creationDate, setCreationDate] = useState();
   const [caricamento2, setCaricamento2] = useState(false);
   const [openGrafico, setOpenGrafico] = useState(false);
   const [prova, setProva] = useState([]);
   const [testCaseAssociati, setTestCaseAssociati] = useState([]);
-  
+
   const [appearLine, setAppearLine] = useState([]);
   const [appearOBP, setAppearOBP] = useState([]);
-  
-    const [testCase, setTestCase] = useState({})
-    const [openTestCaseSel, setOpenTestCaseSel] = useState(false)
+
+  const [testCase, setTestCase] = useState({});
+  const [openTestCaseSel, setOpenTestCaseSel] = useState(false);
 
   const [openChiamato, setOpenChiamato] = React.useState(false);
   const [openChiamanti, setOpenChiamanti] = React.useState(false);
@@ -351,14 +344,14 @@ const TotalTestSuiteConclusi = () => {
   const openVisualizza = (rowData) => {
     handleOpen(rowData);
   };
-  
+
   const openVisualizzaTestcaseSel = (rowData) => {
-    getTestCaseById(rowData.testCase.id)
+    getTestCaseById(rowData.testCase.id);
   };
 
-  const handleCloseTestCaseSel = ()=>{
-    setOpenTestCaseSel(false)
-  }
+  const handleCloseTestCaseSel = () => {
+    setOpenTestCaseSel(false);
+  };
 
   const handleOpenTestCase = () => {
     getTestSuiteCompleteById(id, false);
@@ -373,15 +366,15 @@ const TotalTestSuiteConclusi = () => {
 
   const funzioneGetAll = () => {
     (async () => {
-      setAppearOBP((await getGenerale('obp')).list);
+      setAppearOBP((await getGenerale("obp")).list);
     })();
 
     //-----GET APPEAR LINEA-----
     (async () => {
-      setAppearLine((await getGenerale('linea')).list);
+      setAppearLine((await getGenerale("linea")).list);
     })();
-  }
-  
+  };
+
   const getTestCaseById = (id) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", bearer);
@@ -397,8 +390,8 @@ const TotalTestSuiteConclusi = () => {
     fetch(`/api/testcase/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        setTestCase(result.testCase)
-        setOpenTestCaseSel(true)
+        setTestCase(result.testCase);
+        setOpenTestCaseSel(true);
       })
       .catch((error) => console.log("error", error));
   };
@@ -427,7 +420,6 @@ const TotalTestSuiteConclusi = () => {
       })
       .catch((error) => console.log("error", error));
   };
-
 
   //-----------GET TEST SUITE COMPLETE----------------------
   const getAllTestSuiteComplete = () => {
@@ -491,7 +483,6 @@ const TotalTestSuiteConclusi = () => {
       .catch((error) => console.log("error", error));
   };
 
-
   /*------ Funzione calcolo percentuali -------*/
 
   const [ok, setOk] = useState(0);
@@ -518,10 +509,7 @@ const TotalTestSuiteConclusi = () => {
       {
         label: "# of Test Case",
         data: [ko, ok],
-        backgroundColor: [
-          "red",
-          "green",
-        ],
+        backgroundColor: ["red", "green"],
       },
     ],
     options: {
@@ -529,7 +517,6 @@ const TotalTestSuiteConclusi = () => {
     },
   };
 
-  
   const handleOpenChiamato = () => {
     setOpenChiamato(true);
   };
@@ -555,11 +542,14 @@ const TotalTestSuiteConclusi = () => {
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "center",
+          searchFieldAlignment: "left",
+          selection: true,
+          filtering: true,
           exportButton: true,
           headerStyle: {
             backgroundColor: "beige",
           },
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
         }}
         actions={[
           {
@@ -781,7 +771,7 @@ const TotalTestSuiteConclusi = () => {
                 <>
                   <MaterialTable
                     style={{ boxShadow: "none" }}
-                    title="Test Case"
+                    title="Test Case Associati"
                     data={arrayTestCaseAssociati}
                     columns={columnsVisualizzaTestcases}
                     isLoading={caricamento2}
@@ -794,6 +784,12 @@ const TotalTestSuiteConclusi = () => {
                       searchFieldVariant: "outlined",
                       filtering: true,
                       searchFieldAlignment: "left",
+                      pageSizeOptions: [
+                        5,
+                        10,
+                        20,
+                        { value: data?.length, label: "All" },
+                      ],
                     }}
                     localization={{
                       header: {
@@ -826,7 +822,6 @@ const TotalTestSuiteConclusi = () => {
         </Fade>
       </Modal>
 
-      
       {/*------------------ MODALE TestCaseSel -------------*/}
 
       <Modal
@@ -861,7 +856,7 @@ const TotalTestSuiteConclusi = () => {
                       label="Nome"
                       defaultValue={testCase.nome}
                       InputProps={{
-                        readOnly:true
+                        readOnly: true,
                       }}
                     />
                   </Col>
@@ -886,7 +881,7 @@ const TotalTestSuiteConclusi = () => {
                       label="Descrizione"
                       defaultValue={testCase.descrizione}
                       InputProps={{
-                        readOnly: true
+                        readOnly: true,
                       }}
                     />
                   </Col>
@@ -928,7 +923,9 @@ const TotalTestSuiteConclusi = () => {
                     <TextField
                       className={classes.textField}
                       label="Data di creazione"
-                      value={testCase?.creationDate?.replace("T", " / ")?.replace(".000+00:00", "")}
+                      value={testCase?.creationDate
+                        ?.replace("T", " / ")
+                        ?.replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -951,7 +948,9 @@ const TotalTestSuiteConclusi = () => {
                     <TextField
                       className={classes.textField}
                       label="Data di Modifica"
-                      value={testCase?.modifiedDate?.replace("T", " / ")?.replace(".000+00:00", "")}
+                      value={testCase?.modifiedDate
+                        ?.replace("T", " / ")
+                        ?.replace(".000+00:00", "")}
                       InputProps={{
                         readOnly: true,
                       }}
@@ -965,7 +964,6 @@ const TotalTestSuiteConclusi = () => {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseTestCaseSel}
@@ -1022,7 +1020,7 @@ const TotalTestSuiteConclusi = () => {
                       label="Outboundproxy"
                       value={testCase?.chiamato?.proxy?.campiConcatenati}
                       InputProps={{
-                        readOnly: true
+                        readOnly: true,
                       }}
                     />
                   </Col>
@@ -1034,7 +1032,6 @@ const TotalTestSuiteConclusi = () => {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseChiamato}
@@ -1083,7 +1080,9 @@ const TotalTestSuiteConclusi = () => {
                         <TextField
                           className={classes.textField}
                           label="Linea "
-                          value={testCase?.chiamanti[index]?.linea?.campiConcatenati}
+                          value={
+                            testCase?.chiamanti[index]?.linea?.campiConcatenati
+                          }
                           InputProps={{
                             readOnly: true,
                           }}
@@ -1093,7 +1092,9 @@ const TotalTestSuiteConclusi = () => {
                         <TextField
                           className={classes.textField}
                           label="Outboundproxy"
-                          value={testCase?.chiamanti[index]?.proxy?.campiConcatenati}
+                          value={
+                            testCase?.chiamanti[index]?.proxy?.campiConcatenati
+                          }
                           InputProps={{
                             readOnly: true,
                           }}
@@ -1109,7 +1110,6 @@ const TotalTestSuiteConclusi = () => {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-
                   <ButtonNotClickedGreen
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseChiamanti}
@@ -1142,24 +1142,20 @@ const TotalTestSuiteConclusi = () => {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Test Case KO/OK associati
+                    Test Case KO/OK associati al Test Suite{" "}
+                    <b>{testSuite.nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
-
-              {/* <Form className={classes.contenutoModale}>
-                <div className={classes.chart}><ChartReport /></div>
-              </Form> */}
-
               <div className={classes.contenutoModaleGrafico}>
                 <MaterialTable
+                  icons={tableIcons}
                   style={{ boxShadow: "none" }}
                   title="Test Case"
                   data={testCaseAssociati}
                   columns={columnsTestcases}
                   isLoading={caricamento2}
-                  icons={tableIcons}
                   options={{
                     selection: false,
                     sorting: true,
@@ -1168,7 +1164,13 @@ const TotalTestSuiteConclusi = () => {
                     searchFieldVariant: "outlined",
                     filtering: true,
                     searchFieldAlignment: "left",
-                   
+                    exportButton: true,
+                    pageSizeOptions: [
+                      5,
+                      10,
+                      20,
+                      { value: data?.length, label: "All" },
+                    ],
                   }}
                   actions={[
                     {
@@ -1179,7 +1181,8 @@ const TotalTestSuiteConclusi = () => {
                       ),
                       tooltip: "Visualizza tutti i dati",
                       position: "row",
-                      onClick: (event, rowData) => openVisualizzaTestcaseSel(rowData),
+                      onClick: (event, rowData) =>
+                        openVisualizzaTestcaseSel(rowData),
                     },
                   ]}
                   localization={{
@@ -1205,7 +1208,7 @@ const TotalTestSuiteConclusi = () => {
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
                   <Button
-                    className={classes.bottoneAnnulla}
+                    
                     onClick={handleCloseGrafico}
                     size="medium"
                     color="secondary"

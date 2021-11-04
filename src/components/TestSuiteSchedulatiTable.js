@@ -61,10 +61,14 @@ const TestSuiteSchedulatiTable = () => {
       title: "Loader",
       field: "loadedBy",
     },
-    {
-      title: "Data Inizio",
-      field: "scheduleDateTime",
-    },
+    // {
+    //   title: "Linea Chiamato",
+    //   field: "testSuiteList.testSuite.testCases",
+    // },
+    // {
+    //   title: "Linea Chiamante",
+    //   field: "testSuiteList.testSuite.testCases",
+    // },
     {
       title: "Status",
       field: "stato",
@@ -142,8 +146,11 @@ const TestSuiteSchedulatiTable = () => {
       marginBottom: "2%",
     },
     typography: {
+      display: "flex",
       marginTop: "3%",
       marginBottom: "3%",
+      alignItems: "center",
+      marginLeft: "18px",
     },
     bottone: {
       display: "flex",
@@ -460,6 +467,8 @@ const TestSuiteSchedulatiTable = () => {
           searchFieldAlignment: "left",
           selection: true,
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {
@@ -790,7 +799,6 @@ const TestSuiteSchedulatiTable = () => {
 
                 <Typography
                   className={classes.typography}
-                  style={{ paddingLeft: "16px" }}
                 >
                   Vuoi eliminare il Test Caricato?
                 </Typography>
@@ -844,14 +852,12 @@ const TestSuiteSchedulatiTable = () => {
                 {selectedRows?.length > 1 ? (
                   <Typography
                     className={classes.typography}
-                    style={{ paddingLeft: "16px" }}
                   >
-                    Vuoi eliminare i TestSuite Caricati?
+                    Vuoi eliminare i Test suite caricati?
                   </Typography>
                 ) : (
                   <Typography
                     className={classes.typography}
-                    style={{ paddingLeft: "16px" }}
                   >
                     Vuoi eliminare il Test Caricato?
                   </Typography>

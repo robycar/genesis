@@ -152,7 +152,7 @@ export default function Login() {
       localStorage.setItem("gruppo", result.currentGroup);
       localStorage.setItem("funzioni", result.functions);
       localStorage.setItem("versione", result?.applicationInfo?.version);
-      localStorage.setItem("token_expiration", result?.token_expiration?.replace("+00:00" , ""));
+      localStorage.setItem("token_expiration", result.token_expiration.replace("+00:00" , ""));
 
       timer();
 

@@ -1034,6 +1034,8 @@ function Template() {
                     sorting: true,
                     actionsColumnIndex: -1,
                     search: false,
+                    pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
                   }}
                   actions={[
                     {

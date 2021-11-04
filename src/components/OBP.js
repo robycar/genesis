@@ -315,6 +315,9 @@ function Obp() {
       flexDirection: "column",
       alignItems: "center",
     },
+    textArea: {
+      width: "564px",
+    },
 
     paperTop: {
       height: "20%",
@@ -334,6 +337,9 @@ function Obp() {
       width: "50%",
       height: "100",
       marginTop: "50px",
+    },
+    select: {
+      width: "264px",
     },
     divTextarea: {
       marginTop: "20px",
@@ -369,9 +375,10 @@ function Obp() {
       alignItems: "center",
       justifyContent: "center",
     },
-
     col: {
       padding: "3%",
+      height: "106px",
+      width: "90px",
     },
     colIp: {
       width: "110px",
@@ -621,6 +628,7 @@ function Obp() {
                         ? false
                         : true
                     }
+                    className={classes.textField}
                     onChange={(e) => setPorta(e.target.value)}
                     label="Porta"
                     type="number"
@@ -634,21 +642,14 @@ function Obp() {
                   />
                 </Col>
 
-                <Col className={classes.colIp}>
+                <Col className={classes.col}>
                   <TextField
-                    SelectProps={{
-                      multiple: true,
-                      onChange: handleChange,
-                    }}
+                    className={classes.select}
                     select
                     label="Tipo Linea"
-                    value={appearLine.id}
+                    value={appearLine?.id}
                     defaultValue={typeLinea}
-                    onChange={(e) => {
-                      setTypeLinea(e.target.value);
-
-                      console.log(typeLinea);
-                    }}
+                    onChange={(e) => setTypeLinea(e.target.value)}
                   >
                     {appearLine.map((typeLinea) => (
                       <MenuItem key={typeLinea.id} value={typeLinea.id}>
@@ -656,6 +657,23 @@ function Obp() {
                       </MenuItem>
                     ))}
                   </TextField>
+                </Col>
+              </Row>
+
+              <Row className={classes.row}>
+                <Col className={classes.col}>
+                  <TextField
+                    multiline
+                    rows={2}
+                    className={classes.textArea}
+                    error={descrizione !== "" ? false : true}
+                    onChange={(e) => setDescrizione(e.target.value)}
+                    label="Descrizione"
+                    defaultValue={descrizione}
+                    helperText={
+                      descrizione !== "" ? "" : "Descrizione richiesta"
+                    }
+                  />
                 </Col>
               </Row>
 

@@ -53,7 +53,7 @@ const TestGeneratoreConclusiTable = () => {
       field: "loadedBy",
     },
     {
-      title: "Data Inizio",
+      title: "Data Inizio Test",
       field: "startDate",
     },
     {
@@ -70,7 +70,7 @@ const TestGeneratoreConclusiTable = () => {
     },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      field: "",
     },
   ];
 
@@ -323,6 +323,8 @@ const TestGeneratoreConclusiTable = () => {
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {

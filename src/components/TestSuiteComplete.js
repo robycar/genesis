@@ -59,7 +59,7 @@ const TestSuiteComplete = () => {
     },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      // field: "loadedBy",
     },
     {
       title: "Trace",
@@ -117,6 +117,10 @@ const TestSuiteComplete = () => {
       defaultSort: "desc",
     },
     {
+      title: "Nome Test",
+      field: "nome",
+    },
+    {
       title: "Risultato",
       field: "result",
     },
@@ -128,10 +132,10 @@ const TestSuiteComplete = () => {
       title: "Call-Id",
       field: "loadedBy",
     },
-    {
-      title: "Action",
-      field: "action",
-    },
+    // {
+    //   title: "Action",
+    //   field: "action",
+    // },
   ];
 
   const useStyles = makeStyles((theme) => ({
@@ -171,7 +175,11 @@ const TestSuiteComplete = () => {
     paperContainer2: {
       flexDirection: "column",
       padding: "20px",
+      height: "800px",
       // marginBottom: "10%",
+      position: "relative",
+      alignItems: "center",
+      justifyContent: "center",
     },
     contenutoModale: {
       height: 370,
@@ -197,15 +205,14 @@ const TestSuiteComplete = () => {
       marginTop: "20px",
     },
     bottone: {
-      marginLeft: "55px",
-      marginTop: "5%",
+      marginTop: "2%",
       // marginBottom: "2%",
     },
     intestazione: {
       color: "#47B881",
-      marginTop: "5%",
+      marginTop: "3%",
       flexDirection: "row",
-      marginBottom: "5%",
+      marginBottom: "2%",
     },
     icon: {
       transform: "scale(1.8)",
@@ -240,13 +247,16 @@ const TestSuiteComplete = () => {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      height: 370,
       overflowX: "hidden",
+      height: "500px",
     },
     img: {
       width: "30px",
       height: "30px",
       borderRadius: "15px",
+    },
+    bottoneAnnulla: {
+      marginTop: "2%",
     },
   }));
 
@@ -540,11 +550,14 @@ const TestSuiteComplete = () => {
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "center",
+          searchFieldAlignment: "left",
+          selection: true,
+          filtering: true,
           exportButton: true,
           headerStyle: {
             backgroundColor: "beige",
           },
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
         }}
         actions={[
           {
@@ -807,6 +820,12 @@ const TestSuiteComplete = () => {
                       searchFieldVariant: "outlined",
                       filtering: true,
                       searchFieldAlignment: "left",
+                      pageSizeOptions: [
+                        5,
+                        10,
+                        20,
+                        { value: data?.length, label: "All" },
+                      ],
                     }}
                     localization={{
                       header: {
@@ -859,7 +878,8 @@ const TestSuiteComplete = () => {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    Test Case KO/OK associati
+                    Test Case KO/OK associati al Test Suite{" "}
+                    <b>{testSuite.nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -869,7 +889,7 @@ const TestSuiteComplete = () => {
                 <MaterialTable
                   icons={tableIcons}
                   style={{ boxShadow: "none" }}
-                  title="Test Case"
+                  title="Test Case Associati"
                   data={testCaseAssociati}
                   columns={columnsTestcases}
                   isLoading={caricamento2}
@@ -881,6 +901,13 @@ const TestSuiteComplete = () => {
                     searchFieldVariant: "outlined",
                     filtering: true,
                     searchFieldAlignment: "left",
+                    exportButton: true,
+                    pageSizeOptions: [
+                      5,
+                      10,
+                      20,
+                      { value: data?.length, label: "All" },
+                    ],
                   }}
                   actions={[
                     {
@@ -910,24 +937,21 @@ const TestSuiteComplete = () => {
                   <Doughnut data={chart} className={classes.grafico} />
                 </div>
               </div>
-              <div className={classes.buttonModale}>
-                <Divider className={classes.divider} />
+              <Divider className={classes.divider} />
 
-                <div
-                  className={classes.bottone}
-                  style={{ display: "flex", justifyContent: "flex-end" }}
+              <div
+                className={classes.bottone}
+                style={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                <Button
+                  onClick={handleCloseGrafico}
+                  size="medium"
+                  color="secondary"
+                  variant="outlined"
                 >
-                  <Button
-                    className={classes.bottoneAnnulla}
-                    onClick={handleCloseGrafico}
-                    size="medium"
-                    color="secondary"
-                    variant="outlined"
-                  >
-                    {" "}
-                    Chiudi
-                  </Button>
-                </div>
+                  {" "}
+                  Chiudi
+                </Button>
               </div>
             </Paper>
           </div>

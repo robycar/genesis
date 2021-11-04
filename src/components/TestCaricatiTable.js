@@ -66,22 +66,26 @@ const TestCaricatiTable = () => {
       title: "Loader",
       field: "loadedBy",
     },
-    {
-      title: "Data Inizio",
-      field: "loadedWhen",
-    },
+    // {
+    //   title: "Data Inizio",
+    //   field: "loadedWhen",
+    // },
 
     {
       title: "Status",
       field: "stato",
     },
-    // {
-    //   title: "Trace",
-    //   field: "result",
-    // },
+    {
+      title: "Linea Chiamato",
+      field: "testCaseList.testCase.chiamato",
+    },
+    {
+      title: "Linea Chiamante",
+      field: "testCaseList.testCase.chiamanti",
+    },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      field: "",
     },
   ];
 
@@ -138,9 +142,11 @@ const TestCaricatiTable = () => {
       marginBottom: "5%",
     },
     typography: {
+      display: "flex",
       marginTop: "3%",
       marginBottom: "3%",
-      // paddingLeft: "16px"
+      alignItems: "center",
+      marginLeft: "18px",
     },
 
     divTextarea: {
@@ -584,6 +590,8 @@ const TestCaricatiTable = () => {
           selection: true,
           // columnsButton: true,
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {
@@ -970,10 +978,7 @@ const TestCaricatiTable = () => {
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography
-                  className={classes.typography}
-                  style={{ paddingLeft: "16px" }}
-                >
+                <Typography className={classes.typography}>
                   Vuoi eliminare il Test Caricato?
                 </Typography>
 
@@ -1026,17 +1031,11 @@ const TestCaricatiTable = () => {
                 <Divider className={classes.divider} />
 
                 {selectedRows?.length > 1 ? (
-                  <Typography
-                    className={classes.typography}
-                    style={{ paddingLeft: "16px" }}
-                  >
+                  <Typography className={classes.typography}>
                     Vuoi eliminare i Test Caricati?
                   </Typography>
                 ) : (
-                  <Typography
-                    className={classes.typography}
-                    style={{ paddingLeft: "16px" }}
-                  >
+                  <Typography className={classes.typography}>
                     Vuoi eliminare il Test Caricato?
                   </Typography>
                 )}

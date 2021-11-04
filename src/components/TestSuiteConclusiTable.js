@@ -55,13 +55,21 @@ const TestSuiteConclusiTable = () => {
       field: "loadedBy",
     },
     {
-      title: "Data Inizio",
+      title: "Data Inizio Test",
       field: "startDate",
     },
     {
       title: "Data Fine",
       field: "endDate",
     },
+    // {
+    //   title: "Linea Chiamato",
+    //   field: "testSuiteList.testSuite.testCases",
+    // },
+    // {
+    //   title: "Linea Chiamante",
+    //   field: "testSuiteList.testSuite.testCases",
+    // },
     {
       title: "Status",
       field: "stato",
@@ -72,7 +80,7 @@ const TestSuiteConclusiTable = () => {
     },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      field: "",
     },
   ];
 
@@ -334,6 +342,8 @@ const TestSuiteConclusiTable = () => {
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {

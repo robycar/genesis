@@ -7,7 +7,6 @@ import ButtonClickedBlue from "./ButtonClickedBlue";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import "../styles/App.css";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
@@ -33,6 +32,7 @@ import {
   deleteGenerale,
 } from "../service/api";
 import { tableIcons } from "../components/Icons";
+import "../styles/App.css";
 
 const TestConclusiTable = () => {
   var functions = localStorage.getItem("funzioni").split(",");
@@ -82,12 +82,20 @@ const TestConclusiTable = () => {
       field: "loadedBy",
     },
     {
-      title: "Data Inizio",
+      title: "Data Inizio Test",
       field: "startDate",
     },
     {
       title: "Data Fine",
       field: "endDate",
+    },
+    {
+      title: "Linea Chiamato",
+      field: "testCaseList.testCase.chiamato",
+    },
+    {
+      title: "Linea Chiamante",
+      field: "testCaseList.testCase.chiamanti",
     },
     {
       title: "Status",
@@ -99,7 +107,7 @@ const TestConclusiTable = () => {
     },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      field: "",
     },
   ];
 
@@ -263,50 +271,50 @@ const TestConclusiTable = () => {
     },
   }));
 
-  const funzioneGetAll = () => {
-    if (
-      functions.indexOf("test.view") !== -1 &&
-      functions.indexOf("obp.view") !== -1 &&
-      functions.indexOf("linea.view") !== -1
-    ) {
-      //   //----GET ALL USERS----
-      (async () => {
-        //     setCaricamento(true)
-        setDataTestCase((await getGenerale("testcase")).list);
-        //     setCaricamento(false)
-      })();
+  // const funzioneGetAll = () => {
+  //   if (
+  //     functions.indexOf("test.view") !== -1 &&
+  //     functions.indexOf("obp.view") !== -1 &&
+  //     functions.indexOf("linea.view") !== -1
+  //   ) {
+  //     //   //----GET ALL USERS----
+  //     (async () => {
+  //       //     setCaricamento(true)
+  //       setDataTestCase((await getGenerale("testcase")).list);
+  //       //     setCaricamento(false)
+  //     })();
 
-      //-----GET APPEAR OBP-----
-      (async () => {
-        setAppearOBP((await getGenerale("obp")).list);
-      })();
+  //     //-----GET APPEAR OBP-----
+  //     (async () => {
+  //       setAppearOBP((await getGenerale("obp")).list);
+  //     })();
 
-      //-----GET APPEAR LINEA-----
-      (async () => {
-        setAppearLine((await getGenerale("linea")).list);
-      })();
+  //     //-----GET APPEAR LINEA-----
+  //     (async () => {
+  //       setAppearLine((await getGenerale("linea")).list);
+  //     })();
 
-      //   setScrittaTabella("Non è presente alcun dato da mostrare")
+  //     //   setScrittaTabella("Non è presente alcun dato da mostrare")
 
-      // } else {
-      //   setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
-      // }
-    }
-  };
+  //     // } else {
+  //     //   setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+  //     // }
+  //   }
+  // };
 
-  const funzioneGetTestcaseById = (id) => {
-    if (functions.indexOf("test.view") !== -1) {
-      (async () => {
-        setAllVariables((await getByIdGenerale("testcase", id)).testCase);
-        funzioneGetAll();
-        setOpenChiamato(true);
-      })();
-    }
-  };
+  // const funzioneGetTestcaseById = (id) => {
+  //   if (functions.indexOf("test.view") !== -1) {
+  //     (async () => {
+  //       setAllVariables((await getByIdGenerale("testcase", id)).testCase);
+  //       funzioneGetAll();
+  //       setOpenChiamato(true);
+  //     })();
+  //   }
+  // };
 
-  const handleChange = () => {
-    setFilter(!filter);
-  };
+  // const handleChange = () => {
+  //   setFilter(!filter);
+  // };
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
@@ -383,7 +391,7 @@ const TestConclusiTable = () => {
   };
 
   const handleOpenChiamato = () => {
-    funzioneGetTestcaseById(id);
+    setOpenChiamato(true);
   };
 
   const handleCloseChiamato = () => {
@@ -399,7 +407,6 @@ const TestConclusiTable = () => {
     setChiamanti(e);
   };
   const handleCloseChiamanti = () => {
-    funzioneGetTestcaseById(id);
     setOpenChiamanti(false);
   };
 
@@ -419,6 +426,7 @@ const TestConclusiTable = () => {
     setStato(rowData.stato);
     setResult(rowData.result);
     setCallId(rowData.loadedBy);
+    getTestCaseById(rowData.testCase.id);
   };
 
   const handleCloseReport = () => {
@@ -545,6 +553,27 @@ const TestConclusiTable = () => {
       .catch((error) => console.log("error", error));
   };
 
+  const getTestCaseById = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", bearer);
+    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(`/api/testcase/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setTestCase(result.testCase);
+        // setOpenTestCaseSel(true);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   /*--------------------  TEST CASE COMPLETE REPORT ---------------*/
 
   const getTestCaseRetrieve = (id) => {
@@ -570,7 +599,7 @@ const TestConclusiTable = () => {
 
   useEffect(() => {
     getAllTestCase();
-    funzioneGetAll();
+    // funzioneGetAll();
   }, []);
 
   return (
@@ -585,9 +614,10 @@ const TestConclusiTable = () => {
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",
-          searchFieldAlignment: "center",
+          searchFieldAlignment: "left",
           selection: true,
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
         }}
         actions={[
           {
@@ -611,7 +641,7 @@ const TestConclusiTable = () => {
             icon: () => <FilterListIcon />,
             tooltip: "Filtro",
             isFreeAction: true,
-            onClick: () => handleChange(),
+            // onClick: () => handleChange(),
           },
           // {
           //   icon: () => (
@@ -1105,8 +1135,12 @@ const TestConclusiTable = () => {
             <Paper className={classes.paperModale}>
               <div>
                 <ListItem>
-                  <Typography className={classes.intestazione} variant="h4">
-                    Chiamato <b>{nomeTitolo}</b>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#1665D8" }}
+                  >
+                    Chiamato <b>{testCase.nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -1117,58 +1151,22 @@ const TestConclusiTable = () => {
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      select
                       label="Linea"
-                      value={lineaChiamato}
-                      onChange={(e) => setLineaChiamato(e.target.value)}
+                      value={testCase?.chiamato?.linea?.campiConcatenati}
                       InputProps={{
                         readOnly: true,
                       }}
-                    >
-                      {appearLine.map((linea) => (
-                        <MenuItem
-                          disabled={
-                            linea.id === lineaChiamato ||
-                            linea.id === chiamanti[0]?.linea.id ||
-                            linea.id === chiamanti[1]?.linea.id ||
-                            linea.id === chiamanti[2]?.linea.id
-                          }
-                          key={linea.id}
-                          value={linea.id}
-                        >
-                          {linea.campiConcatenati}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                    />
                   </Col>
                   <Col className={classes.col}>
                     <TextField
                       className={classes.textField}
-                      select
                       label="Outboundproxy"
-                      value={proxyChiamato}
-                      onChange={(e) => {
-                        setProxyChiamato(e.target.value);
-                      }}
+                      value={testCase?.chiamato?.proxy?.campiConcatenati}
                       InputProps={{
                         readOnly: true,
                       }}
-                    >
-                      {appearOBP.map((proxy) => (
-                        <MenuItem
-                          disabled={
-                            proxy.id === proxyChiamato ||
-                            proxy.id === chiamanti[0]?.proxy.id ||
-                            proxy.id === chiamanti[1]?.proxy.id ||
-                            proxy.id === chiamanti[2]?.proxy.id
-                          }
-                          key={proxy.id}
-                          value={proxy.id}
-                        >
-                          {proxy.campiConcatenati}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                    />
                   </Col>
                 </Row>
               </Form>
@@ -1178,7 +1176,7 @@ const TestConclusiTable = () => {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  <ButtonNotClickedGreen
+                  <ButtonClickedBlue
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseChiamato}
                     size="medium"
@@ -1192,6 +1190,7 @@ const TestConclusiTable = () => {
       </Modal>
       {/* ------------------------MODALE CHIAMANTi--------------------- */}
       <Modal
+        aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={openChiamanti}
@@ -1207,81 +1206,51 @@ const TestConclusiTable = () => {
             <Paper className={classes.paperModale} elevation={1}>
               <div>
                 <ListItem>
-                  <Typography className={classes.intestazione} variant="h4">
-                    Chiamanti <b>{nomeTitolo}</b>
+                  <Typography
+                    className={classes.intestazione}
+                    variant="h4"
+                    style={{ color: "#1665D8" }}
+                  >
+                    Chiamante/i <b>{testCase.nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
               </div>
 
               <Form className={classes.contenutoModale}>
-                {mapChiamanti.map((chiamante, index) => (
+                {testCase?.chiamanti?.map((chiamante, index) => (
                   <>
-                    <Typography className={classes.intestazione} variant="h6">
+                    <Typography
+                      className={classes.intestazione}
+                      variant="h6"
+                      style={{ color: "#1665D8" }}
+                    >
                       Chiamante <b>{index + 1}</b>
                     </Typography>
                     <Row>
                       <Col className={classes.col}>
                         <TextField
                           className={classes.textField}
-                          select
                           label="Linea "
-                          value={chiamanti[index].linea.id}
-                          onChange={(e) => {
-                            var p1 = [...chiamanti];
-                            p1[index].linea.id = e.target.value;
-                            impostaChiamanti(p1);
-                          }}
+                          value={
+                            testCase?.chiamanti[index]?.linea?.campiConcatenati
+                          }
                           InputProps={{
                             readOnly: true,
                           }}
-                        >
-                          {appearLine.map((linea) => (
-                            <MenuItem
-                              disabled={
-                                linea.id === lineaChiamato ||
-                                linea.id === chiamanti[0]?.linea.id ||
-                                linea.id === chiamanti[1]?.linea.id ||
-                                linea.id === chiamanti[2]?.linea.id
-                              }
-                              key={linea.id}
-                              value={linea.id}
-                            >
-                              {linea.campiConcatenati}
-                            </MenuItem>
-                          ))}
-                        </TextField>
+                        />
                       </Col>
                       <Col className={classes.col}>
                         <TextField
                           className={classes.textField}
-                          select
                           label="Outboundproxy"
-                          value={chiamanti[index].proxy.id}
-                          onChange={(e) => {
-                            var p1 = [...chiamanti];
-                            p1[index].proxy.id = e.target.value;
-                            impostaChiamanti(p1);
-                          }}
+                          value={
+                            testCase?.chiamanti[index]?.proxy?.campiConcatenati
+                          }
                           InputProps={{
                             readOnly: true,
                           }}
-                        >
-                          {appearOBP.map((proxy) => (
-                            <MenuItem
-                              disabled={
-                                proxy.id === proxyChiamato ||
-                                proxy.id === chiamanti[0]?.proxy.id ||
-                                proxy.id === chiamanti[1]?.proxy.id ||
-                                proxy.id === chiamanti[2]?.proxy.id
-                              }
-                              key={proxy.id}
-                              value={proxy.id}
-                            >
-                              {proxy.campiConcatenati}
-                            </MenuItem>
-                          ))}
-                        </TextField>
+                        />
                       </Col>
                     </Row>
                   </>
@@ -1293,7 +1262,7 @@ const TestConclusiTable = () => {
                   className={classes.bottone}
                   style={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  <ButtonNotClickedGreen
+                  <ButtonClickedBlue
                     className={classes.bottoneAnnulla}
                     onClick={handleCloseChiamanti}
                     size="medium"

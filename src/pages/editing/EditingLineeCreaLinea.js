@@ -41,7 +41,10 @@ import {
   deleteGenerale,
   putGenerale,
 } from "../../service/api";
-import { ButtonEditing, ButtonEditingLinee } from "../../components/ButtonBarraNavigazione";
+import {
+  ButtonEditing,
+  ButtonEditingLinee,
+} from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -109,8 +112,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
-    marginLeft: "2%"
-
+    marginLeft: "2%",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -241,7 +243,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditingLineaCreaLinea() {
-
   var functions = localStorage.getItem("funzioni").split(",");
 
   const classes = useStyles();
@@ -284,9 +285,9 @@ function EditingLineaCreaLinea() {
           } else {
             setWarning(
               "Codice errore: " +
-              result.error.code +
-              " Descrizione: " +
-              result.code.description
+                result.error.code +
+                " Descrizione: " +
+                result.code.description
             );
           }
         } else {
@@ -570,8 +571,8 @@ function EditingLineaCreaLinea() {
           </div>
         </Container>
 
-        <ButtonEditing nome="linee"/>
-        <ButtonEditingLinee nome="simulatore"/>
+        <ButtonEditing nome="linee" />
+        <ButtonEditingLinee nome="simulatore" />
 
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Linea Simulatore" />
@@ -758,7 +759,10 @@ function EditingLineaCreaLinea() {
                         color="secondary"
                         startIcon={<RemoveIcon />}
                         size="small"
-                        disabled={functions.indexOf("linea.delete") === -1 || typeLineaId === 0}
+                        disabled={
+                          functions.indexOf("linea.delete") === -1 ||
+                          typeLineaId === 0
+                        }
                       >
                         TYPE
                       </Button>
@@ -770,7 +774,12 @@ function EditingLineaCreaLinea() {
                         style={{ backgroundColor: "#ffc107" }}
                         startIcon={<EditIcon />}
                         size="small"
-                        disabled={functions.indexOf("linea.edit") === -1 || typeLineaId === 0 ? true : false}
+                        disabled={
+                          functions.indexOf("linea.edit") === -1 ||
+                          typeLineaId === 0
+                            ? true
+                            : false
+                        }
                       >
                         TYPE
                       </Button>
@@ -1116,7 +1125,10 @@ function EditingLineaCreaLinea() {
               size="medium"
               nome="Crea"
               onClick={salva}
-              disabled={functions.indexOf("linea.create") === -1 || functions.indexOf("linea.view") === -1}
+              disabled={
+                functions.indexOf("linea.create") === -1 ||
+                functions.indexOf("linea.view") === -1
+              }
             />
             <Button
               component={NavLink}
@@ -1125,7 +1137,10 @@ function EditingLineaCreaLinea() {
               to="/editing/linee"
               variant="contained"
               size="medium"
-              disabled={functions.indexOf("linea.create") === -1 || functions.indexOf("linea.view") === -1}
+              disabled={
+                functions.indexOf("linea.create") === -1 ||
+                functions.indexOf("linea.view") === -1
+              }
             >
               annulla
             </Button>

@@ -17,7 +17,7 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { Button } from "@material-ui/core";
-
+ 
 export const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -33,11 +33,17 @@ export const tableIcons = {
     </Button>
   )),
   Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => (
+    <FirstPage {...props} style={{ display: "none" }} ref={ref} />
+  )),
+  LastPage: forwardRef((props, ref) => (
+    <LastPage {...props} style={{ visibility: "hidden" }} ref={ref} />
+  )),
+  NextPage: forwardRef((props, ref) => (
+    <ChevronRight {...props} style={{ visibility: "hidden" }} ref={ref} />
+  )),
   PreviousPage: forwardRef((props, ref) => (
-    <ChevronLeft {...props} ref={ref} />
+    <ChevronLeft {...props} style={{ visibility: "hidden" }} ref={ref} />
   )),
   ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
   Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),

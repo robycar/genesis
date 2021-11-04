@@ -39,8 +39,8 @@ const TestGeneratoreRunningTable = () => {
       field: "loadedBy",
     },
     {
-      title: "Data Caricamento",
-      field: "loadedWhen",
+      title: "Data Inizio test",
+      field: "startDate",
     },
 
     {
@@ -202,7 +202,7 @@ const TestGeneratoreRunningTable = () => {
 
   const testGenLoader = () => {
     handleClose();
-    getAllTestGeneratore();
+    // getAllTestGeneratore();
   };
 
   /*------------- GET TEST GEN -------------*/
@@ -250,30 +250,30 @@ const TestGeneratoreRunningTable = () => {
     getAllTestGenRunning();
   }, []);
 
-  const getAllTestGeneratore = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", bearer);
-    myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-    myHeaders.append("Access-Control-Allow-Credentials", "true");
+  // const getAllTestGeneratore = () => {
+  //   var myHeaders = new Headers();
+  //   myHeaders.append("Authorization", bearer);
+  //   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+  //   myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+  //   var requestOptions = {
+  //     method: "GET",
+  //     headers: myHeaders,
+  //     redirect: "follow",
+  //   };
 
-    fetch(`/api/testgen`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        setAppearTest(result.list);
-        setData(result.list);
-      })
-      .catch((error) => console.log("error", error));
-  };
+  //   fetch(`/api/testgen`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setAppearTest(result.list);
+  //       setData(result.list);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
 
-  useEffect(() => {
-    getAllTestGeneratore();
-  }, []);
+  // useEffect(() => {
+  //   getAllTestGeneratore();
+  // }, []);
 
   return (
     <div>
@@ -289,6 +289,8 @@ const TestGeneratoreRunningTable = () => {
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         localization={{
           header: {

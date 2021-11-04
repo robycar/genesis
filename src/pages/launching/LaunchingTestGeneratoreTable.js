@@ -24,6 +24,8 @@ import { tableIcons } from "../../components/Icons";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import BackupIcon from "@material-ui/icons/Backup";
 import { Button } from "@material-ui/core";
+import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
+
 
 function LaunchingTestGeneratoreTable() {
   const [data, setData] = useState([]);
@@ -482,7 +484,11 @@ function LaunchingTestGeneratoreTable() {
       overflowX: "hidden",
     },
     typography: {
-      padding: "3%",
+      display: "flex",
+      marginTop: "3%",
+      marginBottom: "3%",
+      alignItems: "center",
+      marginLeft: "18px",
     },
     selectBar: {
       width: "50%",
@@ -500,7 +506,6 @@ function LaunchingTestGeneratoreTable() {
     icon: {
       transform: "scale(1.8)",
       color: "#47B881",
-      marginTop: "9px",
     },
     bottone: {
       marginLeft: "55px",
@@ -527,6 +532,19 @@ function LaunchingTestGeneratoreTable() {
       width: 800,
       position: "relative",
     },
+    paperModaleLaunch: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 550,
+      position: "relative",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginBottom: "1%"
+    },
     contenutoModale: {
       height: 370,
       overflowX: "hidden",
@@ -547,6 +565,21 @@ function LaunchingTestGeneratoreTable() {
     },
     textArea: {
       width: "660px",
+    },
+    info: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: "3%",
+      marginBottom: "3%",
+      justifyContent: "center",
+    },
+    bottone: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: "6%",
+      justifyContent: "center",
     },
   }));
 
@@ -579,12 +612,6 @@ function LaunchingTestGeneratoreTable() {
             isFreeAction: true,
           },
           {
-            icon: tableIcons.PlayCircleOutlineIcon,
-            tooltip: "Lancia il Test",
-            onClick: (event, rowData) => handleOpenRun(rowData.id),
-            position: "row",
-          },
-          {
             icon: (dat) => (
               <a>
                 <VisibilityIcon />
@@ -595,19 +622,26 @@ function LaunchingTestGeneratoreTable() {
             onClick: (event, rowData) => openVisualizza(rowData),
           },
           {
-            icon: () => <EditIcon />,
-            tooltip: "Modifica Test Generatore",
-            onClick: (event, rowData) => openModifica(rowData),
+            icon: () => <PlayCircleFilledIcon />,
+            tooltip: "Lancia il Test",
+            onClick: (event, rowData) => handleOpenRun(rowData.id),
             position: "row",
           },
-          {
-            icon: () => <DeleteIcon />,
-            tooltip: "Elimina Test Generatore",
-            onClick: (event, rowData) => {
-              handleOpenDelete();
-              setIdElemento(rowData.id);
-            },
-          },
+         
+          // {
+          //   icon: () => <EditIcon />,
+          //   tooltip: "Modifica Test Generatore",
+          //   onClick: (event, rowData) => openModifica(rowData),
+          //   position: "row",
+          // },
+          // {
+          //   icon: () => <DeleteIcon />,
+          //   tooltip: "Elimina Test Generatore",
+          //   onClick: (event, rowData) => {
+          //     handleOpenDelete();
+          //     setIdElemento(rowData.id);
+          //   },
+          // },
         ]}
         localization={{
           header: {
@@ -632,7 +666,7 @@ function LaunchingTestGeneratoreTable() {
         }}
       >
         <Fade in={openRun}>
-          <Paper className={classes.paperModale} elevation={1}>
+          <Paper className={classes.paperModaleLaunch} elevation={1}>
             <div>
               <ListItem button>
                 <ListItemIcon>
@@ -645,7 +679,7 @@ function LaunchingTestGeneratoreTable() {
 
               <Divider className={classes.divider} />
               <Typography className={classes.info}>
-                <p>Vuoi lanciare il test generatore da te selezionato ?</p>
+                Vuoi lanciare il test generatore da te selezionato ?
               </Typography>
               <Divider />
 

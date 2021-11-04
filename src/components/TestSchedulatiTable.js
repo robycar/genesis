@@ -63,8 +63,12 @@ const TestSchedulatiTable = () => {
       field: "loadedBy",
     },
     {
-      title: "Data Inizio",
-      field: "scheduleDateTime",
+      title: "Linea Chiamato",
+      field: "testCaseList.testCase.chiamato",
+    },
+    {
+      title: "Linea Chiamante",
+      field: "testCaseList.testCase.chiamanti",
     },
 
     {
@@ -123,8 +127,11 @@ const TestSchedulatiTable = () => {
       marginBottom: "5%",
     },
     typography: {
+      display: "flex",
       marginTop: "3%",
       marginBottom: "3%",
+      alignItems: "center",
+      marginLeft: "18px",
     },
 
     divTextarea: {
@@ -445,6 +452,8 @@ const TestSchedulatiTable = () => {
           searchFieldAlignment: "left",
           selection: true,
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {
@@ -732,10 +741,7 @@ const TestSchedulatiTable = () => {
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography
-                  className={classes.typography}
-                  style={{ paddingLeft: "16px" }}
-                >
+                <Typography className={classes.typography}>
                   Vuoi eliminare il Test Caricato?
                 </Typography>
 
@@ -839,17 +845,11 @@ const TestSchedulatiTable = () => {
                 <Divider className={classes.divider} />
 
                 {selectedRows?.length > 1 ? (
-                  <Typography
-                    className={classes.typography}
-                    style={{ paddingLeft: "16px" }}
-                  >
+                  <Typography className={classes.typography}>
                     Vuoi eliminare i Test Caricati?
                   </Typography>
                 ) : (
-                  <Typography
-                    className={classes.typography}
-                    style={{ paddingLeft: "16px" }}
-                  >
+                  <Typography className={classes.typography}>
                     Vuoi eliminare il Test Caricato?
                   </Typography>
                 )}

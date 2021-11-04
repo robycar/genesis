@@ -33,6 +33,7 @@ function TestSuiteTable() {
   var functions = localStorage.getItem("funzioni").split(",");
 
   const [data, setData] = useState([]);
+  const [testCases, setTestCases] = useState([]);
   const [id, setId] = useState();
   const [numTestCases, setNumTestCases] = useState();
   const [nome, setNome] = useState("");
@@ -48,6 +49,7 @@ function TestSuiteTable() {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamento2, setCaricamento2] = useState(false);
   const arrayTestCase = testSuite?.testCases;
+  const [testCasesNome, setTestCasesNome] = useState("");
   const [scrittaTabella, setScrittaTabella] = useState("");
 
   //--------------------------------MODIFICA TESTCASE ASSOCIATI A TESTSUITE-----------------------------------------------------
@@ -151,6 +153,7 @@ function TestSuiteTable() {
           descrizione: descrizione,
         });
         handleClose();
+        funzioneGetAll();
       })();
     }
   };
@@ -176,6 +179,7 @@ function TestSuiteTable() {
         } else {
           setOpenWarning(false);
           funzioneGetAll();
+          handleCloseDelete();
         }
       })();
     }
@@ -304,6 +308,7 @@ function TestSuiteTable() {
     setModifiedBy(rowData.modifiedBy);
     setCreationDate(rowData.creationDate);
     setModifiedDate(rowData.modifiedDate);
+    setTestCasesNome(rowData.testCases.nome);
   };
 
   const handleOpenTestCase = () => {
@@ -480,6 +485,18 @@ function TestSuiteTable() {
     <div>
       <MaterialTable
         icons={tableIcons}
+        detailPanel={(rowData) => {
+          return (
+            <div
+              style={{
+                fontSize: 16,
+                marginLeft: 2,
+              }}
+            >
+              {"  "} {rowData.numTestCases}
+            </div>
+          );
+        }}
         style={{ boxShadow: "none" }}
         title="Test Suite"
         data={data}
@@ -528,14 +545,14 @@ function TestSuiteTable() {
           {
             icon: () => <EditIcon />,
             tooltip: "Modifica Test Suite",
-            onClick: (rowData) => openModifica(rowData),
+            onClick: (event, rowData) => openModifica(rowData),
             disabled: functions.indexOf("testsuite.edit") === -1,
             position: "row",
           },
           {
             icon: () => <DeleteIcon />,
             tooltip: "Elimina Test Suite",
-            onClick: (rowData) => {
+            onClick: (event, rowData) => {
               handleOpenDelete(rowData);
               setIdElemento(rowData.id);
             },

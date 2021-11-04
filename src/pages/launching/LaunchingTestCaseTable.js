@@ -557,7 +557,11 @@ function LaunTestCaseTable() {
       position: "relative",
     },
     typography: {
-      padding: "3%",
+      display: "flex",
+      marginTop: "3%",
+      marginBottom: "3%",
+      alignItems: "center",
+      marginLeft: "18px",
     },
     selectBar: {
       width: "50%",
@@ -659,7 +663,8 @@ function LaunTestCaseTable() {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginTop: "6%",
+      marginTop: "3%",
+      marginBottom: "3%",
       justifyContent: "center",
     },
   }));
@@ -1241,7 +1246,7 @@ function LaunTestCaseTable() {
 
               <Divider className={classes.divider} />
               <Typography className={classes.info}>
-                <p>Vuoi lanciare il test case da te selezionato ?</p>
+                Vuoi lanciare il test case da te selezionato ?
               </Typography>
               <Divider />
 

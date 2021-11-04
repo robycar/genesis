@@ -272,6 +272,8 @@ const GestioneRuoli = () => {
           searchFieldAlignment: "left",
           filtering: true,
           sorting: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {

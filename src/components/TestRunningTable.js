@@ -22,7 +22,6 @@ import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { tableIcons } from "../components/Icons";
 
-
 const TestRunningTable = () => {
   const [filter, setFilter] = useState(false);
   const [id, setId] = useState();
@@ -49,8 +48,16 @@ const TestRunningTable = () => {
       field: "loadedBy",
     },
     {
-      title: "Data Caricamento",
+      title: "Data Inizio Test",
       field: "loadedWhen",
+    },
+    {
+      title: "Linea Chiamato",
+      field: "testCaseList.testCase.chiamato",
+    },
+    {
+      title: "Linea Chiamante",
+      field: "testCaseList.testCase.chiamanti",
     },
 
     {
@@ -182,7 +189,6 @@ const TestRunningTable = () => {
   const [open, setOpen] = React.useState(false);
   const [openSchedula, setOpenSchedula] = React.useState(false);
   const [openRun, setOpenRun] = React.useState(false);
-
 
   const handleOpen = () => {
     setOpen(true);
@@ -340,7 +346,7 @@ const TestRunningTable = () => {
   return (
     <div>
       <MaterialTable
-      icons={tableIcons}
+        icons={tableIcons}
         style={{ boxShadow: "none" }}
         title=" Total Test Case Schedulati"
         data={data}
@@ -352,6 +358,8 @@ const TestRunningTable = () => {
           searchFieldAlignment: "left",
           selection: true,
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           // {

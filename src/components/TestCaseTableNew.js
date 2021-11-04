@@ -97,6 +97,16 @@ function TestCaseTable() {
     }
   };
 
+  const funzioneGetTestcaseByIdUpdate = (id) => {
+    if (functions.indexOf("test.view") !== -1) {
+      (async () => {
+        setAllVariables((await getByIdGenerale("testcase", id)).testCase);
+        funzioneGetAll();
+        setOpen(false);
+      })();
+    }
+  };
+
   const funzioneAggiornaChiamato = () => {
     if (functions.indexOf("test.edit") !== -1) {
       //----AGGIORNA CHIAMATO----
@@ -134,7 +144,7 @@ function TestCaseTable() {
           nome: nome,
           descrizione: descrizione,
         });
-        funzioneGetTestcaseById(id);
+        funzioneGetTestcaseByIdUpdate(id);
       })();
     }
   };
@@ -456,18 +466,18 @@ function TestCaseTable() {
     <div>
       <MaterialTable
         icons={tableIcons}
-        detailPanel={(rowData) => {
-          return (
-            <div
-              style={{
-                fontSize: 16,
-                marginLeft: 2,
-              }}
-            >
-              {"  "} {rowData.descrizione}
-            </div>
-          );
-        }}
+        // detailPanel={(rowData) => {
+        //   return (
+        //     <div
+        //       style={{
+        //         fontSize: 16,
+        //         marginLeft: 2,
+        //       }}
+        //     >
+        //       {"  "} {rowData.descrizione}
+        //     </div>
+        //   );
+        // }}
         style={{ boxShadow: "none" }}
         title="Test Case"
         data={data}

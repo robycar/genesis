@@ -37,6 +37,7 @@ const TestSuiteCaricatiTable = () => {
   const [dataInizio, setDataInizio] = useState();
   const [selectedRows, setSelectedRows] = useState();
   const [openDeleteMultipli, setOpenDeleteMultipli] = useState();
+  const [testCases, setTestCases] = useState("");
 
   //Creazione Array con gli id da eliminare
   const deleteIdArray = [];
@@ -61,16 +62,20 @@ const TestSuiteCaricatiTable = () => {
       field: "loadedBy",
     },
     {
-      title: "Data Inizio",
-      field: "loadedWhen",
+      title: "Test Associati",
+      field: "testSuiteList.testCases",
     },
+    // {
+    //   title: "Linea Chiamante",
+    //   field: "testSuiteList.testSuite.testCases",
+    // },
     {
       title: "Status",
       field: "stato",
     },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      field: "",
     },
   ];
 
@@ -108,7 +113,8 @@ const TestSuiteCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginTop: "6%",
+      marginTop: "3%",
+      marginBottom: "3%",
       justifyContent: "center",
     },
     paperBottom: {
@@ -539,6 +545,18 @@ const TestSuiteCaricatiTable = () => {
   return (
     <div>
       <MaterialTable
+        detailPanel={(rowData) => {
+          return (
+            <div
+              style={{
+                fontSize: 16,
+                marginLeft: 2,
+              }}
+            >
+              {"  "} {rowData.testCases}
+            </div>
+          );
+        }}
         onSelectionChange={(rows) => {
           setSelectedRows(rows);
           console.log(rows);
@@ -555,6 +573,8 @@ const TestSuiteCaricatiTable = () => {
           searchFieldAlignment: "left",
           selection: true,
           filtering: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {
@@ -832,7 +852,7 @@ const TestSuiteCaricatiTable = () => {
 
               <Divider className={classes.divider} />
               <Typography className={classes.info}>
-                <p>Vuoi lanciare il test suite da te selezionato ?</p>
+                Vuoi lanciare il test suite da te selezionato ?
               </Typography>
               <Divider />
 

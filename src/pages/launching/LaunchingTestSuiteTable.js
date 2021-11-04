@@ -698,7 +698,11 @@ function LaunchingTestSuiteTable() {
       width: "128px",
     },
     typography: {
-      padding: "3%",
+      display: "flex",
+      marginTop: "3%",
+      marginBottom: "3%",
+      alignItems: "center",
+      marginLeft: "18px",
     },
     intestazioneModaleError: {
       color: "#ef5350",
@@ -720,7 +724,8 @@ function LaunchingTestSuiteTable() {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
-      marginTop: "6%",
+      marginTop: "3%",
+      marginBottom: "3%",
       justifyContent: "center",
     },
   }));
@@ -1341,7 +1346,7 @@ function LaunchingTestSuiteTable() {
 
               <Divider className={classes.divider} />
               <Typography className={classes.info}>
-                <p>Vuoi lanciare il test suite da te selezionato ?</p>
+                Vuoi lanciare il test suite da te selezionato ?
               </Typography>
               <Divider />
 
@@ -1387,13 +1392,13 @@ function LaunchingTestSuiteTable() {
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
                 <Typography className={classes.intestazione} variant="h4">
-                  Lancio Test Case
+                  Lancio Test Suite
                 </Typography>
               </ListItem>
 
               <Divider className={classes.divider} />
               <Typography className={classes.info}>
-                <p>Vuoi lanciare il test case da te selezionato ?</p>
+                Vuoi lanciare il test suite da te selezionato ?
               </Typography>
               <Divider />
 

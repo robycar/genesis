@@ -115,11 +115,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 function Navbar() {
   const classes = useStyles();
 
-  let history = useHistory()
+  let history = useHistory();
 
   const logOut = () => {
     localStorage.removeItem("token");
@@ -135,23 +134,27 @@ function Navbar() {
   setInterval(function () {
     if (localStorage.getItem("token_expiration")) {
       var x = [];
-      x = (localStorage?.getItem("token_expiration")?.split("T"))
-      x[1] = x[1]?.split(":")
+      x = localStorage?.getItem("token_expiration")?.split("T");
+      x[1] = x[1]?.split(":");
 
-      var dataExp = [x[0], parseInt(x[1][0]), parseInt(x[1][1])]
+      var dataExp = [x[0], parseInt(x[1][0]), parseInt(x[1][1])];
 
       var data = new Date();
-      var tempo = []
-      tempo.push(data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate())
-      tempo.push(data.getHours())
-      tempo.push(data.getMinutes())
-      if (tempo[0] === dataExp[0] && tempo[1] === dataExp[1] && tempo[2] === dataExp[2]) {
-        logOut()
+      var tempo = [];
+      tempo.push(
+        data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate()
+      );
+      tempo.push(data.getHours());
+      tempo.push(data.getMinutes());
+      if (
+        tempo[0] === dataExp[0] &&
+        tempo[1] === dataExp[1] &&
+        tempo[2] === dataExp[2]
+      ) {
+        logOut();
       }
     }
-  }, 3000)
-
-
+  }, 3000);
 
   return (
     <>
@@ -160,8 +163,7 @@ function Navbar() {
         <img src={logo} alt="Logo" className={classes.logo} />
         <div className={classes.contentToolbar}>
           <ButtonGroup>
-            <IconButton
-              color="black">
+            <IconButton color="black">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon className={classes.icon} />
               </Badge>

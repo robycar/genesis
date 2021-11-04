@@ -150,6 +150,8 @@ const ViewGruppo = () => {
           search: true,
           searchFieldVariant: "outlined",
           searchFieldAlignment: "left",
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {

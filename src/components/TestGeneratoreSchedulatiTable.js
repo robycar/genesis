@@ -55,10 +55,10 @@ const TestGeneratoreSchedulatiTable = () => {
       title: "Loader",
       field: "loadedBy",
     },
-    {
-      title: "Data Inizio",
-      field: "scheduleDateTime",
-    },
+    // {
+    //   title: "Data Inizio",
+    //   field: "scheduleDateTime",
+    // },
     {
       title: "Status",
       field: "stato",
@@ -98,7 +98,11 @@ const TestGeneratoreSchedulatiTable = () => {
       marginBottom: "5%",
     },
     typography: {
+      display: "flex",
       marginTop: "3%",
+      marginBottom: "3%",
+      alignItems: "center",
+      marginLeft: "18px",
     },
     selectBar: {
       width: "50%",
@@ -132,11 +136,12 @@ const TestGeneratoreSchedulatiTable = () => {
       boxShadow: theme.shadows[5],
       padding: "3%",
       height: "fit-content",
-      width: 500,
+      width: 550,
       position: "relative",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+      marginBottom: "1%"
     },
     paperModaleDelete: {
       backgroundColor: theme.palette.background.paper,
@@ -415,6 +420,8 @@ const TestGeneratoreSchedulatiTable = () => {
           searchFieldAlignment: "left",
           filtering: true,
           selection: true,
+          pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
+
         }}
         actions={[
           {
@@ -550,7 +557,6 @@ const TestGeneratoreSchedulatiTable = () => {
 
                 <Typography
                   className={classes.typography}
-                  style={{ marginLeft: "3%", marginBottom: "3%" }}
                 >
                   Vuoi eliminare il Test Caricato?
                 </Typography>
@@ -605,14 +611,12 @@ const TestGeneratoreSchedulatiTable = () => {
                 {selectedRows?.length > 1 ? (
                   <Typography
                     className={classes.typography}
-                    style={{ marginLeft: "3%", marginBottom: "3%" }}
                   >
                     Vuoi eliminare i Test Caricati?
                   </Typography>
                 ) : (
                   <Typography
                     className={classes.typography}
-                    style={{ marginLeft: "3%", marginBottom: "3%" }}
                   >
                     Vuoi eliminare il Test Caricato?
                   </Typography>
