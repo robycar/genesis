@@ -22,6 +22,12 @@ import it.reply.genesis.model.TestCaseCaricatoVO;
 public class TestCaseCaricatoDTO extends DTO {
 
   private static final long serialVersionUID = 5319137074629513311L;
+  
+  public static final String PROPERTY_CALL_ID = "call-id";
+  
+  public static final String PROPERTY_PCAP = "pcap";
+  
+  public static final String CALL_ID_VALUE_IF_MISSING = "Non disponibile";
 
   private Long id;
   
@@ -192,6 +198,22 @@ public class TestCaseCaricatoDTO extends DTO {
     super.writeFields(sb);
   }
 
+  // Campi virtuali:
+  public String getCallId() {
+    if (properties != null) {
+      return properties.getOrDefault(PROPERTY_CALL_ID, CALL_ID_VALUE_IF_MISSING);
+    }
+    return CALL_ID_VALUE_IF_MISSING;
+  }
+  
+  public String getPcap() {
+    if (properties != null) {
+      return properties.get(PROPERTY_PCAP);
+    }
+    return null;
+  }
+  
+  
   public Long getId() {
     return id;
   }

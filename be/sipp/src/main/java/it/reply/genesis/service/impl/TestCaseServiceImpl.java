@@ -97,7 +97,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
 
   @Autowired
   private SingleThreadSingleTestExecutor internalTestExecutor;
-
+  
   public TestCaseServiceImpl() {
   }
 
@@ -446,8 +446,28 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     
     List<TestCaseCaricatoVO> result = testCaseCaricatoRepository.findByStatoAndTestSuite(stato, null, Sort.by(Direction.DESC, "id"));
 
+    final Map<Long, String> callIdMap = testCaseCaricatoPropertyRepository.findByKeyAndTestCaseCaricatoIn(TestCaseCaricatoDTO.PROPERTY_CALL_ID, result)
+    .stream()
+    .collect(Collectors.toMap(p -> p.getTestCaseCaricato().getId(), TestCaseCaricatoPropertyVO::getValue));
+    
+    final Map<Long, String> pcapMap = testCaseCaricatoPropertyRepository.findByKeyAndTestCaseCaricatoIn(TestCaseCaricatoDTO.PROPERTY_PCAP, result)
+        .stream()
+        .collect(Collectors.toMap(p -> p.getTestCaseCaricato().getId(), TestCaseCaricatoPropertyVO::getValue));
+    
     return result.stream()
         .map(TestCaseCaricatoDTO::new)
+        .map(tc -> {
+          tc.setProperties(new HashMap<>(2));
+          String val = callIdMap.get(tc.getId());
+          if (val != null) {
+            tc.getProperties().put(TestCaseCaricatoDTO.PROPERTY_CALL_ID, val);
+          }
+          val = pcapMap.get(tc.getId());
+          if (val != null) {
+            tc.getProperties().put(TestCaseCaricatoDTO.PROPERTY_PCAP, val);
+          }
+          return tc;
+        })
         .collect(Collectors.toList());
   }
 
