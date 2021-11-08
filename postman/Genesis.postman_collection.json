@@ -7,7 +7,17 @@
 	"item": [
 		{
 			"name": "test",
-			"item": [],
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				}
+			],
 			"event": [
 				{
 					"listen": "prerequest",
@@ -11499,7 +11509,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"includeRiepilogoTestCase\": true,\r\n    \"includeRiepilogoTestSuite\": true,\r\n    \"includeTestCaseOfType\": null,\r\n    \"includeTestSuiteOfType\": null,\r\n    \"includeTestGeneratoreOfType\": \"READY\"\r\n}",
+							"raw": "{\r\n    \"includeRiepilogoTestCase\": false,\r\n    \"includeRiepilogoTestSuite\": false,\r\n    \"includeRiepilogoTestGeneratore\": true,\r\n    \"includeTestCaseOfType\": \"COMPLETED\",\r\n    \"includeTestSuiteOfType\": null,\r\n    \"includeTestGeneratoreOfType\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
