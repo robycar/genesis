@@ -18,7 +18,7 @@ const columns = [
   },
   {
     title: "Call-Id",
-    field: "loadedBy",
+    field: "callId",
   },
   {
     title: "Action",

@@ -22,7 +22,6 @@ import TextField from "@material-ui/core/TextField";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
-import ButtonClickedGreen from "../components/ButtonClickedGreen";
 import acccessControl from "../service/url.js";
 import { NavLink } from "react-router-dom";
 import {
@@ -107,7 +106,7 @@ const TestConclusiTable = () => {
     },
     {
       title: "Call-Id",
-      field: "",
+      field: "callId",
     },
   ];
 

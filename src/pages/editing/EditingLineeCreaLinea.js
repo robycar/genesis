@@ -261,6 +261,11 @@ function EditingLineaCreaLinea() {
     setOpenWarning(false);
   };
 
+  const handleOpenWarningCreateError = () => {
+    setOpenWarning(true);
+    setWarning("Non può essere creato un tipo linea già esistente");
+  };
+
   //-------------------------TYPE LINEA API ----------------
   //---- GET ALL TYPE LINEA ----
   const funzioneGetAll = () => {
@@ -270,31 +275,32 @@ function EditingLineaCreaLinea() {
       })();
     }
   };
-  //---- DELETE TYPE LINEA ----
-  const funzioneDelete = (id) => {
-    if (functions.indexOf("user.view") !== -1) {
-      (async () => {
-        let result = await deleteGenerale("typeLinea", id).result;
 
-        if (result.error !== null) {
-          setOpenWarning(true);
-          if (result.error.code === "LINEA-0006") {
-            setWarning(
-              "Impossibile eliminare il Tipo Linea perche appartiene a una Linea o a un OBP"
-            );
-          } else {
-            setWarning(
-              "Codice errore: " +
-                result.error.code +
-                " Descrizione: " +
-                result.code.description
-            );
-          }
-        } else {
-          setOpenWarning(false);
-          funzioneGetAll();
-        }
-        handleCloseRemove();
+  const functionDelete = (id) => {
+    if (functions.indexOf("linea.delete") !== -1) {
+      (async () => {
+        await deleteGenerale("typeLinea", id)
+          .then((result) => {
+            if (result.error !== null) {
+              setOpenWarning(true);
+              if (result.error.code === "LINEA-0006") {
+                setWarning(
+                  "Impossibile eliminare il Tipo Linea perche appartiene a una Linea o a un OBP"
+                );
+              } else {
+                setWarning(
+                  "Codice errore: " +
+                    result.error.code +
+                    " Descrizione: " +
+                    result.code.description
+                );
+              }
+            } else {
+              funzioneGetAll();
+              handleCloseRemove();
+            }
+          })
+          .catch((error) => console.log("error", error));
       })();
     }
   };
@@ -323,16 +329,8 @@ function EditingLineaCreaLinea() {
 
   //----------CREA TYPELINEA API ----
 
-  const salva2 = () => {
+  const functionAggiungiTypeLinea = () => {
     const funzioneAggiungiTypeLinea = () => {
-      (async () => {
-        await putGenerale("typeLinea", {
-          descrizione: type,
-        }).result;
-        funzioneGetAll();
-      })();
-    };
-    const Invia = () => {
       putGenerale("typeLinea", {
         descrizione: type,
       })
@@ -340,11 +338,10 @@ function EditingLineaCreaLinea() {
           if (result.error.code === null) {
             return result;
           } else if (result.error.code === "LINEA-0005") {
-            return alert("Non può essere creato un tipo linea già esistente");
+            return handleOpenWarningCreateError();
           }
         })
         .then((result) => {
-          funzioneAggiungiTypeLinea();
           checkRichiesta(result.typeLinea);
           funzioneGetAll();
         })
@@ -352,7 +349,7 @@ function EditingLineaCreaLinea() {
     };
 
     if (type !== "") {
-      Invia();
+      funzioneAggiungiTypeLinea();
       handleClose();
       handleClose2();
     } else {
@@ -499,6 +496,7 @@ function EditingLineaCreaLinea() {
   };
   const handleClose = () => {
     setOpen(false);
+    funzioneGetAll();
   };
 
   const handleOpenRemove = () => {
@@ -525,6 +523,7 @@ function EditingLineaCreaLinea() {
 
   const handleClose2 = () => {
     setOpen2(false);
+    funzioneGetAll();
   };
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -887,7 +886,9 @@ function EditingLineaCreaLinea() {
                                                 <Button
                                                   variant="contained"
                                                   color="secondary"
-                                                  onClick={salva2}
+                                                  onClick={
+                                                    functionAggiungiTypeLinea
+                                                  }
                                                 >
                                                   Conferma
                                                 </Button>
@@ -968,7 +969,7 @@ function EditingLineaCreaLinea() {
                                   <div>
                                     <Button
                                       onClick={() =>
-                                        funzioneDelete(typeLineaId.id)
+                                        functionDelete(typeLineaId.id)
                                       }
                                       variant="contained"
                                       color="secondary"

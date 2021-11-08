@@ -42,7 +42,10 @@ import {
   putGenerale,
   putFileCsv,
 } from "../../service/api";
-import { ButtonEditing, ButtonEditingLinee } from "../../components/ButtonBarraNavigazione";
+import {
+  ButtonEditing,
+  ButtonEditingLinee,
+} from "../../components/ButtonBarraNavigazione";
 
 const drawerWidth = 240;
 
@@ -110,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
-    marginLeft: "2%"
+    marginLeft: "2%",
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -255,7 +258,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function EditingLineaCreaLineaGeneratore() {
-
   var functions = localStorage.getItem("funzioni").split(",");
 
   const classes = useStyles();
@@ -263,9 +265,19 @@ function EditingLineaCreaLineaGeneratore() {
 
   const [data, setData] = useState([]);
   const [openDrawer, setOpenDrawer] = useState([]);
+  const [openWarning, setOpenWarning] = useState(false);
+  const [warning, setWarning] = useState("");
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+  const handleOpenWarning = () => {
+    setOpenWarning(false);
+  };
+
+  const handleOpenWarningCreateError = () => {
+    setOpenWarning(true);
+    setWarning("Non può essere creato un tipo linea già esistente");
   };
 
   //-------------------------TYPE LINEA API ----------------
@@ -282,16 +294,34 @@ function EditingLineaCreaLineaGeneratore() {
   const removeTypeLinea = (id) => {
     if (functions.indexOf("linea.delete") !== -1) {
       (async () => {
-        await deleteGenerale("typeLinea", id).result;
-        funzioneGetAll();
-        handleCloseRemove();
+        await deleteGenerale("typeLinea", id)
+          .then((result) => {
+            if (result.error !== null) {
+              setOpenWarning(true);
+              if (result.error.code === "LINEA-0006") {
+                setWarning(
+                  "Impossibile eliminare il Tipo Linea perche appartiene a una Linea o a un OBP"
+                );
+              } else {
+                setWarning(
+                  "Codice errore: " +
+                    result.error.code +
+                    " Descrizione: " +
+                    result.code.description
+                );
+              }
+            } else {
+              funzioneGetAll();
+              handleCloseRemove();
+            }
+          })
+          .catch((error) => console.log("error", error));
       })();
     }
   };
 
   //----------AGGIORNA TYPELINEA API ----
   const funzioneAggiornaTypeLinea = (typeLinea) => {
-
     if (functions.indexOf("linea.edit") !== -1) {
       (async () => {
         await postGenerale("typeLinea", {
@@ -330,7 +360,6 @@ function EditingLineaCreaLineaGeneratore() {
 
   function salva() {
     const funzioneAggiungiLineaGeneratore = () => {
-
       if (functions.indexOf("lineagen.create") !== -1) {
         let result = (async () => {
           await putFileCsv(
@@ -441,7 +470,7 @@ function EditingLineaCreaLineaGeneratore() {
     console.log(event.target.files);
   };
 
-  const handleSubmission = () => { };
+  const handleSubmission = () => {};
 
   const arrayValue = Object.values(selectedFile);
 
@@ -468,6 +497,7 @@ function EditingLineaCreaLineaGeneratore() {
   };
   const handleClose = () => {
     setOpen(false);
+    funzioneGetAll();
   };
 
   const handleOpenRemove = () => {
@@ -495,6 +525,7 @@ function EditingLineaCreaLineaGeneratore() {
 
   const handleClose2 = () => {
     setOpen2(false);
+    funzioneGetAll();
   };
 
   const bearer = `Bearer ${localStorage.getItem("token")}`;
@@ -505,42 +536,30 @@ function EditingLineaCreaLineaGeneratore() {
 
   //----------CREA TYPELINEA API ----
 
-  const salva2 = () => {
+  const functionAggiungiTypeLinea = () => {
     const funzioneAggiungiTypeLinea = () => {
-      (async () => {
-        await putGenerale("typeLinea", {
-          descrizione: type,
-        }).result;
-        funzioneGetAll();
-      })();
-    };
-    const Invia = () => {
-
-      if (functions.indexOf("linea.edit") !== -1) {
-        putGenerale("typeLinea", {
-          descrizione: type,
+      putGenerale("typeLinea", {
+        descrizione: type,
+      })
+        .then((result) => {
+          if (result.error.code === null) {
+            return result;
+          } else if (result.error.code === "LINEA-0005") {
+            return handleOpenWarningCreateError();
+          }
         })
-          .then((result) => {
-            if (result.error.code === null) {
-              return result;
-            } else if (result.error.code === "LINEA-0005") {
-              return alert("Non può essere creato un tipo linea già esistente");
-            }
-          })
-          .then((result) => {
-            funzioneAggiungiTypeLinea();
-            checkRichiesta(result.typeLinea);
-            funzioneGetAll();
-          })
-          .catch((error) => console.log("error", error));
-      };
+        .then((result) => {
+          checkRichiesta(result.typeLinea);
+          funzioneGetAll();
+        })
+        .catch((error) => console.log("error", error));
+    };
 
-      if (type !== "") {
-        Invia();
-        handleClose();
-        handleClose2();
-      } else {
-      }
+    if (type !== "") {
+      funzioneAggiungiTypeLinea();
+      handleClose();
+      handleClose2();
+    } else {
     }
   };
 
@@ -582,8 +601,8 @@ function EditingLineaCreaLineaGeneratore() {
           </div>
         </Container>
 
-        <ButtonEditing nome="linee"/>
-        <ButtonEditingLinee nome="generatore"/>
+        <ButtonEditing nome="linee" />
+        <ButtonEditingLinee nome="generatore" />
 
         <Paper className={classes.paper} elevation={2}>
           <CreaItem titolo="Crea Linea Generatore" />
@@ -759,7 +778,10 @@ function EditingLineaCreaLineaGeneratore() {
                         color="secondary"
                         startIcon={<RemoveIcon />}
                         size="small"
-                        disabled={functions.indexOf("linea.delete") === -1 || typeLineaId === 0}
+                        disabled={
+                          functions.indexOf("linea.delete") === -1 ||
+                          typeLineaId === 0
+                        }
                       >
                         TYPE
                       </Button>
@@ -771,7 +793,12 @@ function EditingLineaCreaLineaGeneratore() {
                         style={{ backgroundColor: "#ffc107" }}
                         startIcon={<EditIcon />}
                         size="small"
-                        disabled={functions.indexOf("linea.edit") === -1 || typeLineaId === 0 ? true : false}
+                        disabled={
+                          functions.indexOf("linea.edit") === -1 ||
+                          typeLineaId === 0
+                            ? true
+                            : false
+                        }
                       >
                         TYPE
                       </Button>
@@ -879,7 +906,9 @@ function EditingLineaCreaLineaGeneratore() {
                                                 <Button
                                                   variant="contained"
                                                   color="secondary"
-                                                  onClick={salva2}
+                                                  onClick={
+                                                    functionAggiungiTypeLinea
+                                                  }
                                                 >
                                                   Conferma
                                                 </Button>
@@ -1052,6 +1081,57 @@ function EditingLineaCreaLineaGeneratore() {
                           </div>
                         </Fade>
                       </Modal>
+                      {/*------------------MODALE ERRORE TYPE--------------- */}
+                      <Modal
+                        className={classes.modal}
+                        open={openWarning}
+                        onClose={handleOpenWarning}
+                        closeAfterTransition
+                        BackdropComponent={Backdrop}
+                        BackdropProps={{
+                          timeout: 500,
+                        }}
+                      >
+                        <Fade in={openWarning}>
+                          <div className={classes.paper2}>
+                            <Paper>
+                              <div>
+                                <ListItem>
+                                  <ListItemIcon>
+                                    <SettingsIcon className={classes.icon} />
+                                  </ListItemIcon>
+                                  <Typography
+                                    className={classes.intestazione}
+                                    variant="h5"
+                                  >
+                                    ERRORE{" "}
+                                  </Typography>
+                                </ListItem>
+                              </div>
+
+                              <div className={classes.paperBottom}>
+                                <Typography variant="h11">{warning}</Typography>
+
+                                <div className={classes.divider2}>
+                                  <Divider />
+                                </div>
+
+                                <div className={classes.bottoni}>
+                                  <div>
+                                    <Button
+                                      onClick={handleOpenWarning}
+                                      variant="contained"
+                                      color="primary"
+                                    >
+                                      OK
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </Paper>
+                          </div>
+                        </Fade>
+                      </Modal>
                     </div>
                     {/* ------------------------------FINE MODALI-------------------------------------- */}
                   </div>
@@ -1066,7 +1146,11 @@ function EditingLineaCreaLineaGeneratore() {
               size="medium"
               nome="Crea"
               onClick={salva}
-              disabled={functions.indexOf("lineagen.create") === -1 || functions.indexOf("linea.view") === -1 || nextDisabled}
+              disabled={
+                functions.indexOf("lineagen.create") === -1 ||
+                functions.indexOf("linea.view") === -1 ||
+                nextDisabled
+              }
             />
             <Button
               component={NavLink}

@@ -80,7 +80,7 @@ const TestSuiteConclusiTable = () => {
     },
     {
       title: "Call-Id",
-      field: "",
+      field: "callId",
     },
   ];
 

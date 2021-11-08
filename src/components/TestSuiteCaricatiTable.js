@@ -19,6 +19,7 @@ import BackupIcon from "@material-ui/icons/Backup";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
 import { Divider } from "@material-ui/core";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import acccessControl from "../service/url.js";
@@ -31,7 +32,7 @@ const TestSuiteCaricatiTable = () => {
   const [data, setData] = useState();
   const [dataSuite, setDataSuite] = useState();
   const [delay, setDelay] = useState();
-  const [orarioInizio, setOrarioInizio] = useState();
+  const [orarioInizio, setOrarioInizio] = useState("");
   const [idToRun, setIdToRun] = useState();
   const [idTestSuiteRun, setIdTestSuiteRun] = useState(0);
   const [dataInizio, setDataInizio] = useState();
@@ -75,7 +76,7 @@ const TestSuiteCaricatiTable = () => {
     },
     {
       title: "Call-Id",
-      field: "",
+      field: "callId",
     },
   ];
 
@@ -105,6 +106,15 @@ const TestSuiteCaricatiTable = () => {
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       padding: "3%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
+    },
+    paperModaleError: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
       height: "fit-content",
       width: 500,
       position: "relative",
@@ -140,6 +150,16 @@ const TestSuiteCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
+    },
+    intestazioneModaleError: {
+      color: "#ef5350",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    iconModaleError: {
+      marginRight: "4%",
+      transform: "scale(1.9)",
+      color: "#ef5350",
     },
     divIntestazione: {
       marginBottom: "2%",
@@ -392,38 +412,87 @@ const TestSuiteCaricatiTable = () => {
   };
 
   /*------------------ SCHEDULA TEST ------------------*/
+  const [openWarningSchedula, setOpenWarningSchedula] = useState(false);
+  const [warningSchedula, setWarningSchedula] = useState("");
+
+  const handleCloseWarningSchedula = () => {
+    setOpenWarningSchedula(false);
+  };
+
+  const today = new Date();
+  const todayDate =
+    today.getFullYear() +
+    "-" +
+    (today.getMonth() + 1) +
+    "-" +
+    ("0" + today.getDate()).slice(-2);
+
+  const todayHoursMinutes = today.getHours() + ":" + (today.getMinutes() + 1);
+  //Formatto l'ora di adesso
+  let timeToday = todayHoursMinutes.split(":");
+  let hourToday = timeToday[0];
+  if (hourToday == "00") {
+    hourToday = 24;
+  }
+
+  let minToday = timeToday[1];
+  let inputTimeToday = hourToday + "." + minToday;
+  console.log(inputTimeToday);
+
+  //Formatto l'ora dello scheduling
+  let time = orarioInizio.split(":");
+  console.log(time, "time");
+  let hour = time[0];
+  if (hour == "00") {
+    hour = 24;
+  }
+  let min = time[1];
+  let inputTime = hour + "." + min;
+  console.log(inputTime);
+
+  // Differenza tra l'ora di adesso e l'ora dello scheduling
+  var totalTime = inputTimeToday - inputTime;
+  console.log(totalTime, "differenza");
 
   const schedulaTestSuite = () => {
-    const invia = () => {
-      scheduleDateTime = dataInizio + "T" + orarioInizio;
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
+    if (inputTime !== inputTimeToday) {
+      setOpenWarningSchedula(true);
+    }
+    if (inputTime < inputTimeToday) {
+      setWarningSchedula("L'ora selezionata è antecedente a quella attuale!");
+    } else {
+      const invia = () => {
+        scheduleDateTime = dataInizio + "T" + orarioInizio;
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", bearer);
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+        myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      var raw = JSON.stringify({
-        id: id,
-        scheduleDateTime: scheduleDateTime,
-        delay: delay,
-      });
+        var raw = JSON.stringify({
+          id: id,
+          scheduleDateTime: scheduleDateTime,
+          delay: delay,
+        });
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch(`/api/testsuite/schedule`, requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            setDataSchedula(result.testSuiteCaricata);
+            handleCloseSchedula();
+          })
+          .catch((error) => console.log("error", error));
       };
-
-      fetch(`/api/testsuite/schedule`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          setDataSchedula(result.testSuiteCaricata);
-          handleCloseSchedula();
-        })
-        .catch((error) => console.log("error", error));
-    };
-    invia();
+      setOpenWarningSchedula(false);
+      invia();
+    }
   };
 
   /*--------------- FUNZIONE CARICA TEST SUITE -------------------*/
@@ -574,7 +643,6 @@ const TestSuiteCaricatiTable = () => {
           selection: true,
           filtering: true,
           pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
-
         }}
         actions={[
           {
@@ -753,13 +821,14 @@ const TestSuiteCaricatiTable = () => {
                   <Divider />
                   <div className={classes.divInput}>
                     <label for="start">Data Inizio:</label>
-                    <input
+                    <TextField
                       type="date"
                       id="start"
                       name="trip-start"
                       onChange={(e) => setDataInizio(e.target.value)}
-                      min=""
-                      max=""
+                      inputProps={{
+                        min: `${todayDate}`,
+                      }}
                     />
                   </div>
                 </Paper>
@@ -1036,6 +1105,62 @@ const TestSuiteCaricatiTable = () => {
                   <ButtonNotClickedGreen
                     onClick={handleCloseDeleteMultipli}
                     nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/*------------------MODALE ERRORE SCHEDULA--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarningSchedula}
+        onClose={handleCloseWarningSchedula}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarningSchedula}>
+          <div>
+            <Paper className={classes.paperModaleError} elevation={1}>
+              <div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "2%",
+                    marginBottom: "1%",
+                  }}
+                >
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warningSchedula}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarningSchedula}
+                    nome="OK"
                   />
                 </div>
               </div>

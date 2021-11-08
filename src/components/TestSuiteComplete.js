@@ -59,7 +59,7 @@ const TestSuiteComplete = () => {
     },
     {
       title: "Call-Id",
-      // field: "loadedBy",
+      field: "callId",
     },
     {
       title: "Trace",
@@ -130,7 +130,7 @@ const TestSuiteComplete = () => {
     },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      field: "callId",
     },
     // {
     //   title: "Action",

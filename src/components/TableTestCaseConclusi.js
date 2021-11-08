@@ -56,14 +56,12 @@ const TotalTestCaseConclusi = () => {
     },
     {
       title: "Call-Id",
-      // field: "loadedBy",
+      field: "callId",
     },
     {
       title: "Trace",
       field: "pathInstance",
-      render: () => (
-         <img className={classes.img} src={WhireShark} />
-      ),
+      render: () => <img className={classes.img} src={WhireShark} />,
     },
   ];
 

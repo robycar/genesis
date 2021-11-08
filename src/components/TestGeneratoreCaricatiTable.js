@@ -8,6 +8,7 @@ import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import PieChartOutlinedIcon from "@material-ui/icons/PieChartOutlined";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import "../styles/App.css";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { Fade, Paper, Typography } from "@material-ui/core";
 import Backdrop from "@material-ui/core/Backdrop";
 import BackupIcon from "@material-ui/icons/Backup";
@@ -19,6 +20,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { MenuItem } from "@material-ui/core";
 import { Divider } from "@material-ui/core";
 import acccessControl from "../service/url.js";
+import TextField from "@material-ui/core/TextField";
 import { tableIcons } from "../components/Icons";
 import SelectAutocompleteTestGeneratore from "../components/SelectAutocompleteTestGeneratore";
 
@@ -31,7 +33,7 @@ const TestGeneratoreCaricatiTable = () => {
   const [rate, setRate] = useState();
   const [durataTraffico, setDurataTraffico] = useState();
   const [dataInizio, setDataInizio] = useState();
-  const [orarioInizio, setOrarioInizio] = useState();
+  const [orarioInizio, setOrarioInizio] = useState("");
   const [delay, setDelay] = useState();
   const [dataGen, setDataGen] = useState();
   const [dataLoad, setDataLoad] = useState();
@@ -80,7 +82,7 @@ const TestGeneratoreCaricatiTable = () => {
     // },
     {
       title: "Call-Id",
-      field: "",
+      field: "callId",
     },
     // {
     //   title: "Report",
@@ -120,7 +122,29 @@ const TestGeneratoreCaricatiTable = () => {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      marginBottom: "1%"
+      marginBottom: "1%",
+    },
+    paperModaleSchedula: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "3%",
+      height: "fit-content",
+      width: 600,
+      position: "relative",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      marginBottom: "1%",
+    },
+    paperModaleError: {
+      backgroundColor: theme.palette.background.paper,
+      border: "2px solid #000",
+      boxShadow: theme.shadows[5],
+      padding: "5%",
+      height: "fit-content",
+      width: 500,
+      position: "relative",
     },
     paperBottom: {
       padding: "2%",
@@ -137,7 +161,6 @@ const TestGeneratoreCaricatiTable = () => {
       marginTop: "3%",
       marginBottom: "3%",
       alignItems: "center",
-      marginLeft: "18px",
     },
 
     divTextarea: {
@@ -148,6 +171,16 @@ const TestGeneratoreCaricatiTable = () => {
       display: "flex",
       flexDirection: "row",
       alignItems: "center",
+    },
+    intestazioneModaleError: {
+      color: "#ef5350",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    iconModaleError: {
+      marginRight: "4%",
+      transform: "scale(1.9)",
+      color: "#ef5350",
     },
     icon: {
       transform: "scale(1.8)",
@@ -196,6 +229,7 @@ const TestGeneratoreCaricatiTable = () => {
     divIntestazione: {
       marginBottom: "2%",
     },
+
     calendarPaper: {
       padding: "3%",
       width: "190px",
@@ -415,44 +449,87 @@ const TestGeneratoreCaricatiTable = () => {
 
   /*----------- SCHEDULA TEST GEN ---------------*/
 
+  const today = new Date();
+  const todayDate =
+    today.getFullYear() +
+    "-" +
+    (today.getMonth() + 1) +
+    "-" +
+    ("0" + today.getDate()).slice(-2);
+
+  const todayHoursMinutes = today.getHours() + ":" + (today.getMinutes() + 1);
+  //Formatto l'ora di adesso
+  let timeToday = todayHoursMinutes.split(":");
+  let hourToday = timeToday[0];
+  if (hourToday == "00") {
+    hourToday = 24;
+  }
+
+  let minToday = timeToday[1];
+  let inputTimeToday = hourToday + "." + minToday;
+  console.log(inputTimeToday);
+
+  //Formatto l'ora dello scheduling
+  let time = orarioInizio.split(":");
+  console.log(time, "time");
+  let hour = time[0];
+  if (hour == "00") {
+    hour = 24;
+  }
+  let min = time[1];
+  let inputTime = hour + "." + min;
+  console.log(inputTime);
+
+  // Differenza tra l'ora di adesso e l'ora dello scheduling
+  var totalTime = inputTimeToday - inputTime;
+  console.log(totalTime, "differenza");
+
   const schedulaTestGen = () => {
-    const invia = () => {
-      scheduleDateTime = dataInizio + "T" + orarioInizio;
-      console.log(scheduleDateTime, "schedule date time");
-      console.log(dataInizio, "data inizio");
-      console.log(orarioInizio, "orario");
+    if (inputTime !== inputTimeToday) {
+      setOpenWarning(true);
+    }
+    if (inputTime < inputTimeToday) {
+      setWarning("L'ora selezionata è antecedente a quella attuale!");
+    } else {
+      const invia = () => {
+        scheduleDateTime = dataInizio + "T" + orarioInizio;
+        console.log(scheduleDateTime, "schedule date time");
+        console.log(dataInizio, "data inizio");
+        console.log(orarioInizio, "orario");
 
-      var myHeaders = new Headers();
-      myHeaders.append("Authorization", bearer);
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Access-Control-Allow-Origin", acccessControl);
-      myHeaders.append("Access-Control-Allow-Credentials", "true");
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", bearer);
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Access-Control-Allow-Origin", acccessControl);
+        myHeaders.append("Access-Control-Allow-Credentials", "true");
 
-      var raw = JSON.stringify({
-        id: id,
-        scheduleDateTime: scheduleDateTime,
-        delay: delay,
-        durataTraffico: durataTraffico,
-        rate: rate,
-      });
+        var raw = JSON.stringify({
+          id: id,
+          scheduleDateTime: scheduleDateTime,
+          delay: delay,
+          durataTraffico: durataTraffico,
+          rate: rate,
+        });
 
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+
+        fetch(`/api/testgen/schedule`, requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            console.log(result);
+            setDataSchedula(result.testGeneratoreCaricato);
+            handleCloseSchedula();
+          })
+          .catch((error) => console.log("error", error));
       };
-
-      fetch(`/api/testgen/schedule`, requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          console.log(result);
-          setDataSchedula(result.testGeneratoreCaricato);
-          handleCloseSchedula();
-        })
-        .catch((error) => console.log("error", error));
-    };
-    invia();
+      setOpenWarning(false);
+      invia();
+    }
   };
 
   /*--------------- RUN TEST GEN -------------------*/
@@ -610,7 +687,6 @@ const TestGeneratoreCaricatiTable = () => {
           filtering: true,
           selection: true,
           pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
-
         }}
         actions={[
           {
@@ -774,7 +850,7 @@ const TestGeneratoreCaricatiTable = () => {
         <Fade in={openLoad}>
           <Paper className={classes.paperModale} elevation={1}>
             <div>
-              <ListItem button style={{ marginLeft: "12%" }}>
+              <ListItem>
                 <ListItemIcon>
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
@@ -904,9 +980,9 @@ const TestGeneratoreCaricatiTable = () => {
         }}
       >
         <Fade in={openSchedula}>
-          <Paper className={classes.paperModale} elevation={1}>
+          <Paper className={classes.paperModaleSchedula} elevation={1}>
             <div>
-              <ListItem button style={{ marginLeft: "12%" }}>
+              <ListItem>
                 <ListItemIcon>
                   <BackupIcon className={classes.icon} />
                 </ListItemIcon>
@@ -922,13 +998,14 @@ const TestGeneratoreCaricatiTable = () => {
                   <Divider />
                   <div className={classes.divInput}>
                     <label for="start">Data Inizio:</label>
-                    <input
+                    <TextField
                       type="date"
                       id="start"
                       name="trip-start"
                       onChange={(e) => setDataInizio(e.target.value)}
-                      min=""
-                      max=""
+                      inputProps={{
+                        min: `${todayDate}`,
+                      }}
                     />
                   </div>
                 </Paper>
@@ -1141,9 +1218,7 @@ const TestGeneratoreCaricatiTable = () => {
                 </ListItem>
                 <Divider className={classes.divider} />
 
-                <Typography
-                  className={classes.typography}
-                >
+                <Typography className={classes.typography}>
                   Vuoi eliminare il Test Caricato?
                 </Typography>
 
@@ -1196,15 +1271,11 @@ const TestGeneratoreCaricatiTable = () => {
                 <Divider className={classes.divider} />
 
                 {selectedRows?.length > 1 ? (
-                  <Typography
-                    className={classes.typography}
-                  >
+                  <Typography className={classes.typography}>
                     Vuoi eliminare i Test Caricati?
                   </Typography>
                 ) : (
-                  <Typography
-                    className={classes.typography}
-                  >
+                  <Typography className={classes.typography}>
                     Vuoi eliminare il Test Caricato?
                   </Typography>
                 )}
@@ -1222,6 +1293,62 @@ const TestGeneratoreCaricatiTable = () => {
                   <ButtonNotClickedGreen
                     onClick={handleCloseDeleteMultipli}
                     nome="Indietro"
+                  />
+                </div>
+              </div>
+            </Paper>
+          </div>
+        </Fade>
+      </Modal>
+
+      {/*------------------MODALE ERRORE--------------- */}
+      <Modal
+        className={classes.modal}
+        open={openWarning}
+        onClose={handleCloseWarning}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openWarning}>
+          <div>
+            <Paper className={classes.paperModaleError} elevation={1}>
+              <div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "2%",
+                    marginBottom: "1%",
+                  }}
+                >
+                  <SettingsIcon className={classes.iconModaleError} />
+                  <Typography
+                    className={classes.intestazioneModaleError}
+                    variant="h5"
+                  >
+                    ERRORE
+                  </Typography>
+                </div>
+                <Divider className={classes.divider} />
+
+                <Typography className={classes.typography}>
+                  {warning}
+                </Typography>
+
+                <Divider className={classes.divider} />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "3%",
+                  }}
+                >
+                  <ButtonNotClickedGreen
+                    onClick={handleCloseWarning}
+                    nome="OK"
                   />
                 </div>
               </div>

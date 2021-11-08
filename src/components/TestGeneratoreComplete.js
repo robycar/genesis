@@ -51,7 +51,7 @@ const TestGeneratoreComplete = () => {
     },
     {
       title: "Call-Id",
-      field: "loadedBy",
+      field: "callId",
     },
     {
       title: "Trace",

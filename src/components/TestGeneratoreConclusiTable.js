@@ -70,7 +70,7 @@ const TestGeneratoreConclusiTable = () => {
     },
     {
       title: "Call-Id",
-      field: "",
+      field: "callId",
     },
   ];
 
