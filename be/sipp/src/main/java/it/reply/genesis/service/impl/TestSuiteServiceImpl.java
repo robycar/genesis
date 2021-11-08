@@ -36,7 +36,7 @@ import it.reply.genesis.model.TestCaseVO;
 import it.reply.genesis.model.TestSuiteCaricataVO;
 import it.reply.genesis.model.TestSuiteVO;
 import it.reply.genesis.model.dao.ExecutionResultTestSuite;
-import it.reply.genesis.model.dao.StatoTestSuite;
+import it.reply.genesis.model.dao.TestStatus;
 import it.reply.genesis.model.dao.TestSuiteSelector;
 import it.reply.genesis.model.repository.IdProjection;
 import it.reply.genesis.model.repository.TestCaseRepository;
@@ -391,8 +391,8 @@ public class TestSuiteServiceImpl extends AbstractService implements TestSuiteSe
     long testOK = 0L;
     long testKO = 0L;
     
-    List<StatoTestSuite> records = testSuiteSelector.testSuiteCaricataExecutionStatus(fromDay, toDay);
-    for (StatoTestSuite record: records) {
+    List<TestStatus> records = testSuiteSelector.testSuiteCaricataExecutionStatus(fromDay, toDay);
+    for (TestStatus record: records) {
       switch (record.getStato()) {
       case COMPLETED:
         completate += record.getCount();

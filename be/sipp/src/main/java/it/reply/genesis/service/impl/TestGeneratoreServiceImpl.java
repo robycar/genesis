@@ -1,6 +1,7 @@
 package it.reply.genesis.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.reply.genesis.AppError;
 import it.reply.genesis.agent.internal.impl.SingleThreadSingleTestExecutor;
+import it.reply.genesis.api.dashboard.payload.RiepilogoNumericoTestGeneratoreDTO;
 import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.generic.service.AbstractService;
@@ -31,6 +33,8 @@ import it.reply.genesis.model.OutboundProxyVO;
 import it.reply.genesis.model.TemplateVO;
 import it.reply.genesis.model.TestGeneratoreCaricatoVO;
 import it.reply.genesis.model.TestGeneratoreVO;
+import it.reply.genesis.model.dao.TestGeneratoreSelector;
+import it.reply.genesis.model.dao.TestStatus;
 import it.reply.genesis.model.repository.TestGeneratoreCaricatoRepository;
 import it.reply.genesis.model.repository.TestGeneratoreRepository;
 import it.reply.genesis.service.FileSystemService;
@@ -65,6 +69,9 @@ public class TestGeneratoreServiceImpl extends AbstractService implements TestGe
   
   @Autowired
   private SingleThreadSingleTestExecutor testExecutor;
+  
+  @Autowired
+  private TestGeneratoreSelector testGeneratoreSelector;
   
   @Override
   public List<TestGeneratoreDTO> listTestGeneratore() throws ApplicationException {
@@ -347,6 +354,40 @@ public class TestGeneratoreServiceImpl extends AbstractService implements TestGe
       testGeneratoreCaricatoRepository.delete(vo);
       testGeneratoreCaricatoRepository.flush();
     }
+  }
+
+  @Override
+  public RiepilogoNumericoTestGeneratoreDTO riepilogoNumerico(LocalDate fromDay, LocalDate toDay)
+      throws ApplicationException {
+    List<TestStatus> records = testGeneratoreSelector.testGeneratoreCaricatiExecutionStatus(fromDay, toDay);
+    long completati = 0L;
+    long caricati = 0L;
+    long schedulati = 0L;
+    
+    for (TestStatus record: records) {
+      switch(record.getStato()) {
+      case COMPLETED:
+        completati += record.getCount();
+        break;
+      case SCHEDULED:
+        schedulati += record.getCount();
+        break;
+      case PAUSED:
+      case READY:
+      case RUNNING:
+        caricati += record.getCount();
+        break;
+      default:
+        logger.warn("Nel metodo riepilogoNumerico trovati {} test generatori che si trovano in uno stato non atteso: {}", record.getCount(), record.getStato());
+        break;
+      }
+    }
+    
+    RiepilogoNumericoTestGeneratoreDTO result = new RiepilogoNumericoTestGeneratoreDTO();
+    result.setCompletati(completati);
+    result.setCaricati(caricati);
+    result.setSchedulati(schedulati);
+    return result;
   }
 
 }

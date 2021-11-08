@@ -17,6 +17,8 @@ public class DashboardInfoRequest extends PayloadRequest {
   
   private boolean includeRiepilogoTestSuite;
   
+  private boolean includeRiepilogoTestGeneratore;
+  
   public DashboardInfoRequest() {
   }
 
@@ -27,6 +29,8 @@ public class DashboardInfoRequest extends PayloadRequest {
     writeField(sb, "includeTestGeneratoreOfType", includeTestGeneratoreOfType);
     writeField(sb, "includeRiepilogoTestCase", includeRiepilogoTestCase);
     writeField(sb, "includeRiepilogoTestSuite", includeRiepilogoTestSuite);
+    writeField(sb, "includeRiepilogoTestGeneratore", includeRiepilogoTestGeneratore);
+    
     super.writeFields(sb);
   }
 
@@ -68,6 +72,14 @@ public class DashboardInfoRequest extends PayloadRequest {
 
   public void setIncludeRiepilogoTestSuite(boolean includeRiepilogoTestSuite) {
     this.includeRiepilogoTestSuite = includeRiepilogoTestSuite;
+  }
+
+  public boolean isIncludeRiepilogoTestGeneratore() {
+    return includeRiepilogoTestGeneratore;
+  }
+
+  public void setIncludeRiepilogoTestGeneratore(boolean includeRiepilogoTestGeneratore) {
+    this.includeRiepilogoTestGeneratore = includeRiepilogoTestGeneratore;
   }
 
   

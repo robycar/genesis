@@ -25,6 +25,10 @@ public class DashboardInfoResponse extends PayloadResponse {
   
   private RiepilogoNumericoTestSuiteDTO riepilogoTestSuiteSettimana;
   
+  private RiepilogoNumericoTestGeneratoreDTO riepilogoTestGeneratoreGiorno;
+  
+  private RiepilogoNumericoTestGeneratoreDTO riepilogoTestGeneratoreSettimana;
+  
   public DashboardInfoResponse() {
   }
 
@@ -82,6 +86,22 @@ public class DashboardInfoResponse extends PayloadResponse {
 
   public void setRiepilogoTestSuiteSettimana(RiepilogoNumericoTestSuiteDTO riepilogoTestSuiteSettimana) {
     this.riepilogoTestSuiteSettimana = riepilogoTestSuiteSettimana;
+  }
+
+  public RiepilogoNumericoTestGeneratoreDTO getRiepilogoTestGeneratoreGiorno() {
+    return riepilogoTestGeneratoreGiorno;
+  }
+
+  public void setRiepilogoTestGeneratoreGiorno(RiepilogoNumericoTestGeneratoreDTO riepilogoTestGeneratoreGiorno) {
+    this.riepilogoTestGeneratoreGiorno = riepilogoTestGeneratoreGiorno;
+  }
+
+  public RiepilogoNumericoTestGeneratoreDTO getRiepilogoTestGeneratoreSettimana() {
+    return riepilogoTestGeneratoreSettimana;
+  }
+
+  public void setRiepilogoTestGeneratoreSettimana(RiepilogoNumericoTestGeneratoreDTO riepilogoTestGeneratoreSettimana) {
+    this.riepilogoTestGeneratoreSettimana = riepilogoTestGeneratoreSettimana;
   }
 
 }

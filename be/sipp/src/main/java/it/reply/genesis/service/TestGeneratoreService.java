@@ -1,9 +1,11 @@
 package it.reply.genesis.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import it.reply.genesis.api.dashboard.payload.RiepilogoNumericoTestGeneratoreDTO;
 import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.api.test.payload.TestGeneratoreCaricatoDTO;
 import it.reply.genesis.api.test.payload.TestGeneratoreDTO;
@@ -52,5 +54,7 @@ public interface TestGeneratoreService {
   TestGeneratoreCaricatoDTO updateTestGeneratoreCaricato(TestGeneratoreCaricatoDTO testDTO) throws ApplicationException;
 
   void removeCaricati(@Valid List<Long> ids) throws ApplicationException;
+
+  RiepilogoNumericoTestGeneratoreDTO riepilogoNumerico(LocalDate fromDay, LocalDate toDay) throws ApplicationException;
 
 }

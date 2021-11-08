@@ -7,16 +7,16 @@ import org.springframework.jdbc.core.RowMapper;
 
 import it.reply.genesis.model.LoadedEntityStatus;
 
-public class StatoTestSuite  {
+public class TestStatus  {
 
   private LoadedEntityStatus stato;
   
   private long count;
   
-  public StatoTestSuite() {
+  public TestStatus() {
   }
   
-  public StatoTestSuite(LoadedEntityStatus stato, long count) {
+  public TestStatus(LoadedEntityStatus stato, long count) {
     this.stato = stato;
     this.count = count;
   }
@@ -39,10 +39,10 @@ public class StatoTestSuite  {
 
   public static final StatoTestSuiteRowMapper MAPPER = new StatoTestSuiteRowMapper();
   
-  public static class StatoTestSuiteRowMapper implements RowMapper<StatoTestSuite> {
+  public static class StatoTestSuiteRowMapper implements RowMapper<TestStatus> {
     @Override
-    public StatoTestSuite mapRow(ResultSet rs, int rowNum) throws SQLException {
-      return new StatoTestSuite(LoadedEntityStatus.valueOf(rs.getString("STATO")), rs.getLong("NUM"));
+    public TestStatus mapRow(ResultSet rs, int rowNum) throws SQLException {
+      return new TestStatus(LoadedEntityStatus.valueOf(rs.getString("STATO")), rs.getLong("NUM"));
     }
     
   }

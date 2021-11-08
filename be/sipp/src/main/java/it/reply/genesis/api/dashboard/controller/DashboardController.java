@@ -72,6 +72,13 @@ public class DashboardController extends AbstractController {
         response.setRiepilogoTestSuiteGiorno(testSuiteService.riepilogoNumerico(oggi, oggi));
         response.setRiepilogoTestSuiteSettimana(testSuiteService.riepilogoNumerico(oggi.minus(Period.ofWeeks(1)), oggi));
       }
+      
+      if (request.isIncludeRiepilogoTestGeneratore()) {
+        LocalDate oggi = LocalDate.now();
+        response.setRiepilogoTestGeneratoreGiorno(testGeneratoreService.riepilogoNumerico(oggi,oggi));
+        response.setRiepilogoTestGeneratoreSettimana(testGeneratoreService.riepilogoNumerico(oggi.minus(Period.ofWeeks(1)), oggi));
+        
+      }
      
       return ResponseEntity.ok(response);
     } catch (ApplicationException e) {

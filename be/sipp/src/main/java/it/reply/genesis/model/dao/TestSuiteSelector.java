@@ -19,7 +19,7 @@ public class TestSuiteSelector extends AbstractDAO {
   }
 
   @Transactional
-  public List<StatoTestSuite> testSuiteCaricataExecutionStatus(LocalDate fromDay, LocalDate toDay) {
+  public List<TestStatus> testSuiteCaricataExecutionStatus(LocalDate fromDay, LocalDate toDay) {
     MapSqlParameterSource params = new MapSqlParameterSource()
         .addValue("fromDay", fromDay)
         .addValue("toDay", toDay);
@@ -32,7 +32,7 @@ public class TestSuiteSelector extends AbstractDAO {
     
     logger.debug(sql);
     
-    return getNamedParameterJdbcTemplate().query(sql, params, StatoTestSuite.MAPPER);
+    return getNamedParameterJdbcTemplate().query(sql, params, TestStatus.MAPPER);
     
   }
   
