@@ -178,6 +178,10 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
       vo.setDescrizione(dto.getDescrizione());
     }
     
+    if (dto.getNatura() != null) {
+      vo.setNatura(dto.getNatura());
+    }
+    
     vo.modifiedBy(currentUsername());
     
     vo = typeLineaRepository.saveAndFlush(vo);
@@ -323,6 +327,7 @@ public class LineaServiceImpl extends AbstractService implements LineaService {
     vo.init(currentUsername());
         
     vo.setDescrizione(dto.getDescrizione());
+    vo.setNatura(dto.getNatura());
     vo = typeLineaRepository.saveAndFlush(vo);
     
     return new TypeLineaDTO(vo);

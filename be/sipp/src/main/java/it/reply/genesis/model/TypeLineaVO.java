@@ -4,6 +4,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +28,10 @@ public class TypeLineaVO extends BaseEntity {
 
 	@Column(name = "DESCRIZIONE", length = DESCRIZIONE_LENGTH)
 	private String descrizione;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name="NATURA", nullable = false)
+	private NaturaLinea natura;
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "typeLinee")
 	private Set<OutboundProxyVO> proxies;
@@ -59,6 +65,14 @@ public class TypeLineaVO extends BaseEntity {
 
   public void setProxies(Set<OutboundProxyVO> proxies) {
     this.proxies = proxies;
+  }
+
+  public NaturaLinea getNatura() {
+    return natura;
+  }
+
+  public void setNatura(NaturaLinea natura) {
+    this.natura = natura;
   }
 
   @Override

@@ -3097,7 +3097,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"descrizione\": \"fibra\"\r\n}",
+							"raw": "{\r\n    \"descrizione\": \"fibra\",\r\n    \"natura\": \"REALE\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3114,7 +3114,7 @@
 								"typeLinea"
 							]
 						},
-						"description": "Recupera l'elenco dei TypeLinea.\r\nPermessi: linea.view"
+						"description": "Recupera l'elenco dei TypeLinea.  \nPermessi: linea.view\n\nPossibili valori per l'attributo natura:\n-   REALE\n-   SIMULATO"
 					},
 					"response": [
 						{
@@ -3487,7 +3487,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 3,\r\n    \"version\": 0,\r\n    \"descrizione\": \"descrizione type linea 3\"\r\n}",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"version\": 0,\r\n    \"descrizione\": \"descrizione type linea 2\",\r\n    \"natura\": \"REALE\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

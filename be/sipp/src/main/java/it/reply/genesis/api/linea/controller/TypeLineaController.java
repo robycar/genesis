@@ -67,6 +67,7 @@ public class TypeLineaController extends AbstractController {
       
       TypeLineaDTO typeLineaDTO = new TypeLineaDTO();
       typeLineaDTO.setDescrizione(request.getDescrizione());
+      typeLineaDTO.setNatura(request.getNatura());
       
       typeLineaDTO = lineaService.createTypeLinea(typeLineaDTO);
       
@@ -106,6 +107,7 @@ public class TypeLineaController extends AbstractController {
       TypeLineaDTO dto = new TypeLineaDTO();
       dto.setId(request.getId());
       dto.setDescrizione(request.getDescrizione());
+      dto.setNatura(request.getNatura());
       dto.setVersion(request.getVersion());
       
       dto = lineaService.updateTypeLinea(dto);

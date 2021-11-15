@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import it.reply.genesis.api.generic.payload.PayloadRequest;
+import it.reply.genesis.model.NaturaLinea;
 import it.reply.genesis.model.TypeLineaVO;
 
 public class TypeLineaUpdateRequest extends PayloadRequest {
@@ -15,6 +16,8 @@ public class TypeLineaUpdateRequest extends PayloadRequest {
   
   @Size(max = TypeLineaVO.DESCRIZIONE_LENGTH)
   private String descrizione;
+  
+  private NaturaLinea natura;
 
   @NotNull
   private Integer version;
@@ -25,9 +28,18 @@ public class TypeLineaUpdateRequest extends PayloadRequest {
   @Override
   protected void writeFields(StringBuilder sb) {
     writeField(sb, "id", id);
+    writeField(sb, "natura", natura);
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "version", version);
     super.writeFields(sb);
+  }
+
+  public NaturaLinea getNatura() {
+    return natura;
+  }
+
+  public void setNatura(NaturaLinea natura) {
+    this.natura = natura;
   }
 
   public String getDescrizione() {
