@@ -324,6 +324,7 @@ function EditingTemplateCreaTemplate() {
   };
   const handleChangeTipoTemplate = (e) => {
     setTipoTemplate(e.target.value);
+    console.log(e.target.value);
   };
 
   const handleChangeChiamato = (e) => {
@@ -332,7 +333,8 @@ function EditingTemplateCreaTemplate() {
 
   useEffect(() => {
     if (activeStep === 0) {
-      if (nome === "" || durata === 0 || tipoTemplate === "") {
+      if (nome === "" || durata === 0) {
+        // if (nome === "" || durata === 0 || tipoTemplate === "") {
         setNextDisabled(true);
       } else {
         setNextDisabled(false);
@@ -573,7 +575,7 @@ function EditingTemplateCreaTemplate() {
           </div>
         </Container>
 
-        <ButtonEditing nome="template"/>
+        <ButtonEditing nome="template" />
 
         {/* ----------------------------CREA TEST generatore---------------------------------------- */}
 
@@ -654,22 +656,40 @@ function EditingTemplateCreaTemplate() {
               </Paper>
               <Paper className={classes.divSelect} elevation={0}>
                 <Form.Group controlId="form.Nome" required>
-                  <Form.Label>Tipo template</Form.Label>
-                  <Form.Control
+                  <Form.Label>Tipo Template</Form.Label>
+                  <FormControl
+                    variant="outlined"
                     className={classes.formControl}
-                    type="text"
-                    placeholder="Inserisci Tipo template"
-                    onChange={(e) => {
-                      handleChangeTipoTemplate(e);
-                    }}
-                    required
-                  />
+                  >
+                    <Select
+                      id="selectTipoTemplate"
+                      value={tipoTemplate}
+                      onChange={handleChangeTipoTemplate}
+                      required
+                    >
+                      <MenuItem value={"Chiamata Base"}>Chiamata Base </MenuItem>
+                      <MenuItem value={"CFU-CFNR-CW-CFnoAV"}>CFU-CFNR-CW-CFnoAV </MenuItem>
+                      <MenuItem value={"CFB"}>CFB</MenuItem>
+                      <MenuItem value={"3PY"}>3PY</MenuItem>
+                      <MenuItem value={"Chiamante ACU-CDC-NNG"}>Chiamante ACU-CDC-NNG</MenuItem>
+                      <MenuItem value={"Manovra"}>Manovra</MenuItem>
+                      <MenuItem value={"Registrazione/Deregistrazione"}>Registrazione/Deregistrazione</MenuItem>
+
+                    </Select>
+                    <Alert
+                      severity="error"
+                      id="alertLinea"
+                      style={{ display: "none" }}
+                    >
+                      Selezionare il tipo template
+                    </Alert>
+                  </FormControl>
                   <Alert
                     severity="error"
                     id="alertNome"
                     style={{ display: "none" }}
                   >
-                    Nome è richiesto!
+                    Tipo Template è richiesto!
                   </Alert>
                 </Form.Group>
               </Paper>
@@ -766,6 +786,33 @@ function EditingTemplateCreaTemplate() {
                       </FormControl>
                     </Form.Group>
                   </Col>
+
+                  <Col>
+                    <Form.Group controlId="form.Numero">
+                      <Form.Label>Seleziona Tipo Template</Form.Label>
+                      <FormControl
+                        variant="outlined"
+                        className={classes.formControl}
+                      >
+                        <Select
+                          id="selectLinea"
+                          value={tipoTemplate}
+                          onChange={handleChangeTipoTemplate}
+                          required
+                        >
+                          <MenuItem value={"Reale"}>Reale </MenuItem>
+                          <MenuItem value={"Simulato"}>Simulato </MenuItem>
+                        </Select>
+                        <Alert
+                          severity="error"
+                          id="alertLinea"
+                          style={{ display: "none" }}
+                        >
+                          Selezionare il tipo template
+                        </Alert>
+                      </FormControl>
+                    </Form.Group>
+                  </Col>
                 </Row>
               </>
             </div>
@@ -843,6 +890,34 @@ function EditingTemplateCreaTemplate() {
                                   style={{ display: "none" }}
                                 >
                                   Selezionare la Linea
+                                </Alert>
+                              </FormControl>
+                            </Form.Group>
+                          </Col>
+                          <Col>
+                            <Form.Group controlId="form.Numero">
+                              <Form.Label>Seleziona Tipo Template</Form.Label>
+                              <FormControl
+                                variant="outlined"
+                                className={classes.formControl}
+                              >
+                                <Select
+                                  id="selectLinea"
+                                  value={tipoTemplate}
+                                  onChange={handleChangeTipoTemplate}
+                                  required
+                                >
+                                  <MenuItem value={"Reale"}>Reale </MenuItem>
+                                  <MenuItem value={"Simulato"}>
+                                    Simulato{" "}
+                                  </MenuItem>
+                                </Select>
+                                <Alert
+                                  severity="error"
+                                  id="alertLinea"
+                                  style={{ display: "none" }}
+                                >
+                                  Selezionare il tipo template
                                 </Alert>
                               </FormControl>
                             </Form.Group>

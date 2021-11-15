@@ -59,7 +59,7 @@ function FormCreaRuolo() {
     if (functions.indexOf("level.edit") !== -1) {
       //----AGGIUNGI GRUPPO------
       (async () => {
-        let result = await putGenerale('level', { nome: nome, desccrizione: descrizione });
+        let result = await putGenerale('level', { nome: nome, descrizione: descrizione });
         checkRichiesta(result);
       })();
     }

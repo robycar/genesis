@@ -49,8 +49,8 @@ function FormAddUtente() {
   const [azienda, setAzienda] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [level, setLevel] = useState(0);
-  const [email, setEmail] = useState(0);
+  const [level, setLevel] = useState("");
+  const [email, setEmail] = useState("");
 
   const [appearGroup, setAppearGroup] = useState([]);
   const [appearLevel, setAppearLevel] = useState([]);
@@ -306,7 +306,7 @@ function FormAddUtente() {
                     id="alertEmail"
                     style={{ display: "none" }}
                   >
-                    Email required!
+                    Email is required!
                   </Alert>
                 </Form.Group>
               </Form.Group>

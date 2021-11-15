@@ -175,7 +175,7 @@ const TestSuiteComplete = () => {
     paperContainer2: {
       flexDirection: "column",
       padding: "20px",
-      height: "800px",
+      height: "fit-content",
       // marginBottom: "10%",
       position: "relative",
       alignItems: "center",
@@ -248,7 +248,9 @@ const TestSuiteComplete = () => {
       justifyContent: "center",
       alignItems: "center",
       overflowX: "hidden",
-      height: "500px",
+      height: "fit-content",
+      overflowX: "hidden"
+
     },
     img: {
       width: "30px",

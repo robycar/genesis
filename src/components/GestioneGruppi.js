@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
+import AddIcon from "@material-ui/icons/Add";
 import { Button } from "@material-ui/core";
 import { Paper, Typography } from "@material-ui/core";
 import "../styles/App.css";
@@ -26,7 +27,6 @@ import { tableIcons } from "../components/Icons";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 const GestioneRuoli = () => {
-
   var functions = localStorage.getItem("funzioni").split(",");
 
   let history = useHistory();
@@ -36,8 +36,8 @@ const GestioneRuoli = () => {
   const [versione, setVersione] = useState(0);
   const [nome, setNome] = useState("");
   const [descrizione, setDescrizione] = useState("");
-  const [caricamento, setCaricamento] = useState(false)
-  const [scrittaTabella, setScrittaTabella] = useState("")
+  const [caricamento, setCaricamento] = useState(false);
+  const [scrittaTabella, setScrittaTabella] = useState("");
 
   /*---------- OPEN WARNING DELETE-----------*/
 
@@ -47,7 +47,6 @@ const GestioneRuoli = () => {
   const handleCloseWarning = () => {
     setOpenWarning(false);
   };
-
 
   const useStyles = makeStyles((theme) => ({
     paper: {
@@ -180,9 +179,14 @@ const GestioneRuoli = () => {
 
   const columns = [
     {
+      title: "Id",
+      field: "id",
+      defaultSort: "desc",
+      hidden: "true",
+    },
+    {
       title: "Nome",
       field: "nome",
-      defaultSort: "desc",
     },
     {
       title: "Descrizione",
@@ -192,49 +196,60 @@ const GestioneRuoli = () => {
 
   //-----------GET ----------------------
   const funzioneGetAll = () => {
-
     if (functions.indexOf("group.view") !== -1) {
       //----GET ALL USERS----
       (async () => {
-        setCaricamento(true)
-        setData((await getGenerale('group')).gruppi);
-        setCaricamento(false)
+        setCaricamento(true);
+        setData((await getGenerale("group")).gruppi);
+        setCaricamento(false);
       })();
 
-      setScrittaTabella("Non è presente alcun dato da mostrare")
-
+      setScrittaTabella("Non è presente alcun dato da mostrare");
     } else {
-      setScrittaTabella("Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella")
+      setScrittaTabella(
+        "Non si dispone delle autorizzazioni per visualizzare i dati di questa tabella"
+      );
     }
-  }
+  };
 
   const funzioneAggiornamento = () => {
     //----GET ALL USERS----
     if (functions.indexOf("group.edit") !== -1) {
       (async () => {
-        setData((await postGenerale('group', { id: id, version: versione, nome: nome, descrizione: descrizione })).gruppi);
+        setData(
+          (
+            await postGenerale("group", {
+              id: id,
+              version: versione,
+              nome: nome,
+              descrizione: descrizione,
+            })
+          ).gruppi
+        );
         setOpen(false);
         funzioneGetAll();
       })();
     }
-  }
+  };
 
   const funzioneDelete = (id) => {
     if (functions.indexOf("group.delete") !== -1) {
       (async () => {
-        setCaricamento(true)
-        let result = await deleteGenerale("group", id)
+        setCaricamento(true);
+        let result = await deleteGenerale("group", id);
         if (result.error !== null) {
           if (result.error.code === "ADMIN-0012") {
-            setCaricamento(false)
-            setWarning("Questo Gruppo non può essere eliminato perche uno o più utenti ne fanno parte.")
-            setOpenWarning(true)
+            setCaricamento(false);
+            setWarning(
+              "Questo Gruppo non può essere eliminato perche uno o più utenti ne fanno parte."
+            );
+            setOpenWarning(true);
           }
         }
         funzioneGetAll();
       })();
     }
-  }
+  };
 
   useEffect(() => {
     funzioneGetAll();
@@ -254,7 +269,6 @@ const GestioneRuoli = () => {
     setOpen(false);
   };
 
-
   return (
     <div>
       <MaterialTable
@@ -273,7 +287,6 @@ const GestioneRuoli = () => {
           filtering: true,
           sorting: true,
           pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
-
         }}
         actions={[
           {
@@ -285,7 +298,7 @@ const GestioneRuoli = () => {
             tooltip: "Visualizza",
             position: "row",
             onClick: (event, rowData) =>
-              (history.push("../amministrazione/viewgruppo?id=" + rowData.id)),
+              history.push("../amministrazione/viewgruppo?id=" + rowData.id),
           },
           {
             icon: () => (
@@ -296,19 +309,20 @@ const GestioneRuoli = () => {
                   activeClassName="button-green-active"
                   exact
                   to="/amministrazione/creagruppo"
+                  startIcon={<AddIcon />}
                 >
-                  CREA GRUPPO
+                  GRUPPO
                 </Button>
               </div>
             ),
             tooltip: "Crea Gruppo",
             isFreeAction: true,
           },
-          rowData => ({
-            icon: ()=> <DeleteIcon/>,
-            tooltip: 'Elimina Gruppo',
+          (rowData) => ({
+            icon: () => <DeleteIcon />,
+            tooltip: "Elimina Gruppo",
             onClick: (event, rowData) => funzioneDelete(rowData.id),
-            disabled: functions.indexOf("group.delete") === -1
+            disabled: functions.indexOf("group.delete") === -1,
           }),
           {
             icon: () => <EditIcon />,
@@ -323,9 +337,7 @@ const GestioneRuoli = () => {
             actions: "Azioni",
           },
           body: {
-            emptyDataSourceMessage: (
-              scrittaTabella
-            ),
+            emptyDataSourceMessage: scrittaTabella,
           },
         }}
       />
@@ -347,7 +359,7 @@ const GestioneRuoli = () => {
               <div>
                 <ListItem button>
                   <Typography className={classes.intestazione} variant="h4">
-                    Modifica Ruolo <b>{nome}</b>
+                    Modifica Gruppo <b>{nome}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -373,7 +385,9 @@ const GestioneRuoli = () => {
                         className={classes.textField}
                         value={descrizione}
                         onChange={(e) => {
-                          e.target.value === "" ? setDescrizione(" ") : setDescrizione(e.target.value)
+                          e.target.value === ""
+                            ? setDescrizione(" ")
+                            : setDescrizione(e.target.value);
                         }}
                         label="Descrizione"
                       />
@@ -450,7 +464,6 @@ const GestioneRuoli = () => {
           </div>
         </Fade>
       </Modal>
-
     </div>
   );
 };

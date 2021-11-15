@@ -52,7 +52,6 @@ function TestSuiteSelect() {
     arrayIdTestCase.push(element);
   }
 
-  console.log(arrayIdTestCase);
 
   let bearer = `Bearer ${localStorage.getItem("token").replace(/"/g, "")}`;
 

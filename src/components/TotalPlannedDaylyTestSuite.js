@@ -33,7 +33,7 @@ export default function TotalPlannedDaylyTestSuite() {
   const [dataGiorni, setDataGiorni] = useState([]);
   const [dataSettimana, setDataSettimana] = useState([]);
 
-  const objDashInfoTestCase = {
+  const objDashInfoTestSuite = {
     "includeRiepilogoTestCase": null,
     "includeRiepilogoTestSuite": true,
     "includeTestCaseOfType": null,
@@ -43,7 +43,7 @@ export default function TotalPlannedDaylyTestSuite() {
 
   const getDataForTestCase = () => {
     (async () => {
-      setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestSuiteGiorno);
+      setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestSuite)).riepilogoTestSuiteGiorno);
       //setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestCaseSettimana);
     })();
   }

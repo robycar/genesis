@@ -34,8 +34,9 @@ export default function TotalPlannedWeeKlyTestGen() {
   const [dataSettimana, setDataSettimana] = useState([]);
 
   const objDashInfoTestGen = {
-    "includeRiepilogoTestCase": null,
-    "includeRiepilogoTestSuite": true,
+    "includeRiepilogoTestCase": false,
+    "includeRiepilogoTestSuite": false,
+    "includeRiepilogoTestGeneratore": true,
     "includeTestCaseOfType": null,
     "includeTestSuiteOfType": null,
     "includeTestGeneratoreOfType": "COMPLETED"
@@ -44,7 +45,7 @@ export default function TotalPlannedWeeKlyTestGen() {
   const getDataForTestGen = () => {
     (async () => {
       //setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestCaseGiorni);
-      setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestGen)).riepilogoTestGenSettimana);
+      setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestGen)).riepilogoTestGeneratoreSettimana);
     })();
   }
 
@@ -66,7 +67,7 @@ export default function TotalPlannedWeeKlyTestGen() {
       >
         COMPLETATI
         <Typography>
-          <h5>{dataSettimana?.completate}</h5>
+          <h5>{dataSettimana?.completati}</h5>
         </Typography>
       </Typography>
       {/*<Typography

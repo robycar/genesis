@@ -22,6 +22,9 @@ import "../../styles/App.css";
 import Button from "@material-ui/core/Button";
 import { NavLink } from "react-router-dom";
 
+import ReportCardTestGenGeneral from "./ReportCardTestGenGeneral";
+
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -244,6 +247,12 @@ function ReportTestGeneratore() {
             </Button>
           </div>
             </Grid>
+
+            <Grid>
+            <ReportCardTestGenGeneral />
+          </Grid>
+
+
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <TestGeneratoreComplete />

@@ -33,7 +33,7 @@ export default function TotalPlannedWeeKlyTestSuite() {
   //const [dataGiorni, setDataGiorni] = useState([]);
   const [dataSettimana, setDataSettimana] = useState([]);
 
-  const objDashInfoTestCase = {
+  const objDashInfoTestSuite = {
     "includeRiepilogoTestCase": null,
     "includeRiepilogoTestSuite": true,
     "includeTestCaseOfType": null,
@@ -41,15 +41,15 @@ export default function TotalPlannedWeeKlyTestSuite() {
     "includeTestGeneratoreOfType": null
   };
 
-  const getDataForTestCase = () => {
+  const getDataForTestSuite = () => {
     (async () => {
       //setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestCaseGiorni);
-      setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestSuiteSettimana);
+      setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestSuite)).riepilogoTestSuiteSettimana);
     })();
   }
 
   useEffect(() => {
-    getDataForTestCase();
+    getDataForTestSuite();
   }, []);
 
 

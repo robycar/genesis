@@ -437,22 +437,18 @@ const TestSuiteCaricatiTable = () => {
 
   let minToday = timeToday[1];
   let inputTimeToday = hourToday + "." + minToday;
-  console.log(inputTimeToday);
 
   //Formatto l'ora dello scheduling
   let time = orarioInizio.split(":");
-  console.log(time, "time");
   let hour = time[0];
   if (hour == "00") {
     hour = 24;
   }
   let min = time[1];
   let inputTime = hour + "." + min;
-  console.log(inputTime);
 
   // Differenza tra l'ora di adesso e l'ora dello scheduling
   var totalTime = inputTimeToday - inputTime;
-  console.log(totalTime, "differenza");
 
   const schedulaTestSuite = () => {
     if (inputTime !== inputTimeToday) {
@@ -628,7 +624,6 @@ const TestSuiteCaricatiTable = () => {
         }}
         onSelectionChange={(rows) => {
           setSelectedRows(rows);
-          console.log(rows);
         }}
         icons={tableIcons}
         style={{ boxShadow: "none" }}

@@ -34,8 +34,9 @@ export default function TotalPlannedDaylyTestGen() {
   const [dataSettimana, setDataSettimana] = useState([]);
 
   const objDashInfoTestGen = {
-    "includeRiepilogoTestCase": null,
-    "includeRiepilogoTestSuite": true,
+    "includeRiepilogoTestCase": false,
+    "includeRiepilogoTestSuite": false,
+    "includeRiepilogoTestGeneratore": true,
     "includeTestCaseOfType": null,
     "includeTestSuiteOfType": null,
     "includeTestGeneratoreOfType": "COMPLETED"
@@ -43,7 +44,7 @@ export default function TotalPlannedDaylyTestGen() {
 
   const getDataForTestGen = () => {
     (async () => {
-      setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestGen)).riepilogoTestGenGiorno);
+      setDataGiorni((await postGenerale("dashboard/info", objDashInfoTestGen)).riepilogoTestGeneratoreGiorno);
       //setDataSettimana((await postGenerale("dashboard/info", objDashInfoTestCase)).riepilogoTestCaseSettimana);
     })();
   }
@@ -66,7 +67,7 @@ export default function TotalPlannedDaylyTestGen() {
       >
         COMPLETATI
         <Typography>
-          <h5>{dataGiorni?.completate}</h5>
+          <h5>{dataGiorni?.completati}</h5>
         </Typography>
       </Typography>
        {/*<Typography

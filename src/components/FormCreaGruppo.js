@@ -80,10 +80,10 @@ function FormCreaGruppo() {
         <Row md={2}>
           <Col>
             <Form.Group controlId="form.Ruolo">
-              <Form.Label>Gruppo</Form.Label>
+              <Form.Label>Nome</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Inserisci nome gruppo"
+                placeholder="Inserisci Nome Gruppo"
                 onChange={(e) => setNome(e.target.value)}
               />
               <Alert

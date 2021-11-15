@@ -144,8 +144,9 @@ function Navbar() {
       tempo.push(
         data.getFullYear() + "-" + (data.getMonth() + 1) + "-" + data.getDate()
       );
-      tempo.push(data.getHours());
+      tempo.push(data.getUTCHours());
       tempo.push(data.getMinutes());
+
       if (
         tempo[0] === dataExp[0] &&
         tempo[1] === dataExp[1] &&

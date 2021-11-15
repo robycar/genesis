@@ -171,7 +171,7 @@ const TotalTestSuiteConclusi = () => {
     paperContainer2: {
       flexDirection: "column",
       padding: "20px",
-      height: "800px",
+      height: "fit-content",
       // marginBottom: "10%",
       position: "relative",
       alignItems: "center",
@@ -539,6 +539,7 @@ const TotalTestSuiteConclusi = () => {
         data={data}
         columns={columns}
         options={{
+          height: "400px",
           actionsColumnIndex: -1,
           search: true,
           searchFieldVariant: "outlined",

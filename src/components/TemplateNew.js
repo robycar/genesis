@@ -6,7 +6,9 @@ import { NavLink } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
+import FormControl from "@material-ui/core/FormControl";
 import { Paper, Typography, Link } from "@material-ui/core";
+import Select from "@material-ui/core/Select";
 import Divider from "@material-ui/core/Divider";
 import { MenuItem } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
@@ -19,6 +21,7 @@ import TextField from "@material-ui/core/TextField";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import Alert from "@material-ui/lab/Alert";
 import SettingsIcon from "@material-ui/icons/Settings";
 import ButtonNotClickedGreen from "../components/ButtonNotClickedGreen";
 import ButtonClickedGreen from "../components/ButtonClickedGreen";
@@ -66,6 +69,7 @@ function Template() {
   const [visualizzaContenutoFile, setVisualizzaContenutoFile] = useState(false);
   const [modificaContenutoFile, setModificaContenutoFile] = useState(false);
   const [scrittaTabella, setScrittaTabella] = useState("");
+  const [tipoTemplate, setTipoTemplate] = useState("");
 
   const funzioneGetAll = () => {
     if (functions.indexOf("template.view") !== -1) {
@@ -232,6 +236,10 @@ function Template() {
         handleCloseModificaContenutoFile();
       })();
     }
+  };
+
+  const handleChangeTipoTemplate = (e) => {
+    setTipoTemplate(e.target.value);
   };
 
   useEffect(() => {
@@ -768,11 +776,15 @@ function Template() {
                       }}
                     />
                   </Col>
+
                   <Col className={classes.col}>
-                    <ButtonClickedGreen
-                      size="medium"
-                      nome={modifica === false ? "vedi file" : "modifica File"}
-                      onClick={handleOpenChiama}
+                    <TextField
+                      className={classes.textField}
+                      label="Tipo Template"
+                      defaultValue={typeTemplate}
+                      InputProps={{
+                        readOnly: true,
+                      }}
                     />
                   </Col>
                 </Row>
@@ -823,6 +835,20 @@ function Template() {
                       InputProps={{
                         readOnly: true,
                       }}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col className={classes.col}>
+                    <ButtonClickedGreen
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      size="medium"
+                      nome={modifica === false ? "vedi file" : "modifica File"}
+                      onClick={handleOpenChiama}
                     />
                   </Col>
                 </Row>
@@ -894,34 +920,57 @@ function Template() {
                   >
                     Chiamato
                   </Typography>
-                  <Col className={classes.col}>
-                    <TextField
-                      className={classes.textField}
-                      style={{ width: "300px" }}
-                      select
-                      label="Linea "
-                      value={chiamato}
-                      onChange={(e) => setChiamato(e.target.value)}
-                      InputProps={{
-                        readOnly: modifica === false ? true : false,
-                      }}
-                    >
-                      {appearFile?.map((file) => (
-                        <MenuItem
-                          disabled={
-                            chiamato === file.id ||
-                            chiamanti[0] === file.id ||
-                            chiamanti[1] === file.id ||
-                            chiamanti[2] === file.id
-                          }
-                          key={file.id}
-                          value={file.id}
-                        >
-                          {file.path}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Col>
+                  <Row>
+                    <Col className={classes.col}>
+                      <TextField
+                        className={classes.textField}
+                        style={{ width: "300px" }}
+                        select
+                        label="Linea "
+                        value={chiamato}
+                        onChange={(e) => setChiamato(e.target.value)}
+                        InputProps={{
+                          readOnly: modifica === false ? true : false,
+                        }}
+                      >
+                        {appearFile?.map((file) => (
+                          <MenuItem
+                            disabled={
+                              chiamato === file.id ||
+                              chiamanti[0] === file.id ||
+                              chiamanti[1] === file.id ||
+                              chiamanti[2] === file.id
+                            }
+                            key={file.id}
+                            value={file.id}
+                          >
+                            {file.path}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    </Col>
+                    <Col className={classes.col}>
+                      <TextField
+                        className={classes.textField}
+                        style={{ width: "300px" }}
+                        select
+                        id="selectTypeTemplate"
+                        value={typeTemplate}
+                        label="Template"
+                        onChange={handleChangeTipoTemplate}
+                      >
+                        <MenuItem value={"Reale"}>Reale </MenuItem>
+                        <MenuItem value={"Simulato"}>Simulato </MenuItem>
+                      </TextField>
+                      <Alert
+                        severity="error"
+                        id="alertLinea"
+                        style={{ display: "none" }}
+                      >
+                        Selezionare il tipo template
+                      </Alert>
+                    </Col>
+                  </Row>
 
                   {chiamanti.map((chiamante, index) => (
                     <div>
@@ -936,38 +985,61 @@ function Template() {
                       >
                         Chiamante <b>{index + 1}</b>
                       </Typography>
-                      <Col className={classes.col}>
-                        <TextField
-                          className={classes.textField}
-                          style={{ width: "300px" }}
-                          select
-                          label="File "
-                          value={chiamanti[index]}
-                          onChange={(e) => {
-                            var x = [...chiamanti];
-                            x[index] = e.target.value;
-                            setChiamanti(x);
-                          }}
-                          InputProps={{
-                            readOnly: modifica === false ? true : false,
-                          }}
-                        >
-                          {appearFile.map((file) => (
-                            <MenuItem
-                              disabled={
-                                chiamato === file.id ||
-                                chiamanti[0] === file.id ||
-                                chiamanti[1] === file.id ||
-                                chiamanti[2] === file.id
-                              }
-                              key={file.id}
-                              value={file.id}
-                            >
-                              {file.path}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Col>
+                      <Row>
+                        <Col className={classes.col}>
+                          <TextField
+                            className={classes.textField}
+                            style={{ width: "300px" }}
+                            select
+                            label="File "
+                            value={chiamanti[index]}
+                            onChange={(e) => {
+                              var x = [...chiamanti];
+                              x[index] = e.target.value;
+                              setChiamanti(x);
+                            }}
+                            InputProps={{
+                              readOnly: modifica === false ? true : false,
+                            }}
+                          >
+                            {appearFile.map((file) => (
+                              <MenuItem
+                                disabled={
+                                  chiamato === file.id ||
+                                  chiamanti[0] === file.id ||
+                                  chiamanti[1] === file.id ||
+                                  chiamanti[2] === file.id
+                                }
+                                key={file.id}
+                                value={file.id}
+                              >
+                                {file.path}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        </Col>
+                        <Col className={classes.col}>
+                          <TextField
+                            className={classes.textField}
+                            style={{ width: "300px" }}
+                            select
+                            id="selectTypeTemplate"
+                            value={typeTemplate}
+                            label="Template"
+                            onChange={handleChangeTipoTemplate}
+                          >
+                            <MenuItem value={"Reale"}>Reale </MenuItem>
+                            <MenuItem value={"Simulato"}>Simulato </MenuItem>
+                          </TextField>
+                          <Alert
+                            severity="error"
+                            id="alertLinea"
+                            style={{ display: "none" }}
+                          >
+                            Selezionare il tipo template
+                          </Alert>
+                        </Col>
+                      </Row>
                     </div>
                   ))}
                 </Form>
@@ -1034,8 +1106,12 @@ function Template() {
                     sorting: true,
                     actionsColumnIndex: -1,
                     search: false,
-                    pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
-
+                    pageSizeOptions: [
+                      5,
+                      10,
+                      20,
+                      { value: data?.length, label: "All" },
+                    ],
                   }}
                   actions={[
                     {
