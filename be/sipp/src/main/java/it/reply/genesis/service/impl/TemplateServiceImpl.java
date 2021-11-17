@@ -3,12 +3,13 @@ package it.reply.genesis.service.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,11 +33,13 @@ import it.reply.genesis.api.test.payload.TemplateFileDTO;
 import it.reply.genesis.api.test.payload.TemplateSearchRequest;
 import it.reply.genesis.model.FileSystemScope;
 import it.reply.genesis.model.FileSystemVO;
-import it.reply.genesis.model.TemplateFileCategory;
-import it.reply.genesis.model.TemplateFileVO;
+import it.reply.genesis.model.NaturaLinea;
+import it.reply.genesis.model.TemplateLineaChiamanteVO;
 import it.reply.genesis.model.TemplateVO;
+import it.reply.genesis.model.TipoTemplateVO;
 import it.reply.genesis.model.repository.FileSystemRepository;
 import it.reply.genesis.model.repository.TemplateRepository;
+import it.reply.genesis.model.repository.TipoTemplateRepository;
 import it.reply.genesis.service.FileSystemService;
 import it.reply.genesis.service.TemplateService;
 
@@ -50,6 +53,9 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
   @Autowired
   private FileSystemRepository fileSystemRepository;
   
+  @Autowired
+  private TipoTemplateRepository tipoTemplateRepository;
+  
   @Override
   public TemplateDTO createTemplate(TemplateDTO dto) throws ApplicationException {
     
@@ -60,11 +66,13 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
       throw makeError(HttpStatus.CONFLICT, AppError.TEMPLATE_NAME_ALRADY_EXISTS, dto.getNome());
     }
     
+    TipoTemplateVO tipoTemplate = readTipoTemplateVO(dto.getTypeTemplate());
+    
     TemplateVO vo = new TemplateVO();
     vo.init(currentUsername());
     vo.setDurata(dto.getDurata());
     vo.setNome(dto.getNome());
-    vo.setTypeTemplate(dto.getTypeTemplate());
+    vo.setTypeTemplate(tipoTemplate);
     vo.setDescrizione(dto.getDescrizione());
     vo.setGruppo(currentGroup());
     return new TemplateDTO(templateRepository.save(vo));
@@ -82,12 +90,13 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     if (existing.isPresent()) {
       throw makeError(HttpStatus.CONFLICT, AppError.TEMPLATE_NAME_ALRADY_EXISTS, dto.getNome());
     }
+    TipoTemplateVO tipoTemplate = readTipoTemplateVO(dto.getTypeTemplate());
 
     TemplateVO vo = new TemplateVO();
     vo.init(currentUsername());
     vo.setDurata(dto.getDurata());
     vo.setNome(dto.getNome());
-    vo.setTypeTemplate(dto.getTypeTemplate());
+    vo.setTypeTemplate(tipoTemplate);
     vo.setDescrizione(dto.getDescrizione());
     vo.setGruppo(currentGroup());
     
@@ -108,12 +117,14 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
       savedFiles.put(fileVO.getPath(), fileVO);
     }
     
-    if (vo.getFiles() == null) {
-      vo.setFiles(new ArrayList<>(4));
-    }
+    
+//    if (vo.getFiles() == null) {
+//      vo.setFiles(new ArrayList<>(4));
+//    }
     
     HashSet<String> usedFiles = new HashSet<>(4);
     
+    vo.setNaturaChiamato(dto.getNaturaChiamato());
     if (dto.getChiamato() != null) {
       FileSystemVO fileSystemVO = savedFiles.get(dto.getChiamato());
       if (fileSystemVO == null) {
@@ -122,20 +133,27 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
       }
       
       usedFiles.add(fileSystemVO.getPath());
-      
-      TemplateFileVO templateFileVO = new TemplateFileVO();
-      templateFileVO.setCategory(TemplateFileCategory.CHIAMATO);
-      templateFileVO.setFile(fileSystemVO);
-      templateFileVO.setOrder(1);
-      templateFileVO.setTemplate(vo);
-      
-      vo.getFiles().add(templateFileVO);
-
+      vo.setFileChiamato(fileSystemVO);
+      if (vo.getNaturaChiamato() == null) {
+        throw makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_NATURA_MISSING);
+      }
     }
     
     if (dto.getChiamanti() != null) {
-      int order=1;
-      for (String chiamante: dto.getChiamanti()) {
+      if (vo.getChiamanti() == null) {
+        vo.setChiamanti(new ArrayList<>(dto.getChiamanti().size()));
+      }
+      // verifica che la dimensione dei chiamanti e naturaChiamanti sia la stessa
+      int naturaSize = dto.getNaturaChiamanti() == null ? 0 : dto.getNaturaChiamanti().size();
+      if (naturaSize != dto.getChiamanti().size()) {
+        logger.error("Le liste dei chiamanti e delle nature dei chiamanti non hanno la stessa dimensione. Chiamanti: {}, Nature: {}", dto.getChiamanti().size(), naturaSize);
+        throw makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_NATURA_FILE_MISMATCH, dto.getChiamanti().size(), naturaSize);
+      }
+
+      for (int i=0; i < naturaSize; ++i) {
+      //for (String chiamante: dto.getChiamanti()) {
+        String chiamante = dto.getChiamanti().get(i);
+        NaturaLinea natura = dto.getNaturaChiamanti().get(i);
         FileSystemVO fileSystemVO = savedFiles.get(chiamante);
         if (fileSystemVO == null) {
           logger.error("Campo chiamante del template, in fase di creazione, fa riferimenti ad un file inesistente: {}" , chiamante);
@@ -147,17 +165,15 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
           throw makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_FILE_MULTIPLE_USE, fileSystemVO.getPath());
         }
         
-        TemplateFileVO templateFileVO = new TemplateFileVO();
-        templateFileVO.setCategory(TemplateFileCategory.CHIAMANTE);
-        templateFileVO.setFile(fileSystemVO);
-        templateFileVO.setOrder(order++);
-        templateFileVO.setTemplate(vo);
-        
-        vo.getFiles().add(templateFileVO);
+        TemplateLineaChiamanteVO lineaChiamanteVO = new TemplateLineaChiamanteVO();
+        lineaChiamanteVO.setTemplate(vo);
+        lineaChiamanteVO.setFile(fileSystemVO);
+        lineaChiamanteVO.setNatura(natura);
+        vo.getChiamanti().add(lineaChiamanteVO);
       }
     }
     
-    vo = templateRepository.save(vo);
+    vo = templateRepository.saveAndFlush(vo);
     
     TemplateDTO result = new TemplateDTO(vo);
     mapFileLinks(result, vo);
@@ -202,33 +218,74 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     }
     
     if (dto.getTypeTemplate() != null) {
-      vo.setTypeTemplate(dto.getTypeTemplate());
+      vo.setTypeTemplate(readTipoTemplateVO(dto.getTypeTemplate()));
     }
     
     if (dto.getDescrizione() != null) {
       vo.setDescrizione(dto.getDescrizione());
     }
     
-    if (dto.getFileLinks() != null) {
+    if (dto.getFileLinks() != null || dto.getChiamato() != null || dto.getChiamanti() != null) {
       List<FileSystemVO> templateFolder = fileSystemRepository.findByScopeAndIdRef(FileSystemScope.TEMPLATE, vo.getId());
-      for (Map.Entry<String, List<TemplateFileDTO>> flEntry : dto.getFileLinks().entrySet()) {
-        TemplateFileCategory category;
-        try {
-          category = TemplateFileCategory.valueOf(flEntry.getKey().toUpperCase());
-        } catch (IllegalArgumentException iae) {
-          throw makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_INVALID_FILE_CATEGORY_NAME, flEntry.getKey());
+      Map<Long, FileSystemVO> folderMap = templateFolder.stream().collect(Collectors.toMap(FileSystemVO::getId, Function.identity()));
+      TemplateFileDTO chiamatoDTO = null;
+      
+      if (dto.getChiamato() != null && dto.getChiamato().getId() != null) {
+        chiamatoDTO = dto.getChiamato();
+      } else {
+        List<TemplateFileDTO> listaChiamatoDTO = dto.getFileLinks().get("CHIAMATO");
+        if (listaChiamatoDTO != null && listaChiamatoDTO.size() > 0) {
+          chiamatoDTO = listaChiamatoDTO.get(0);
         }
-        
-        if (flEntry.getValue() != null) {
-          updateFileLinks(vo, templateFolder, category, vo.getFiles(), flEntry.getValue());
-        }
-        
       }
+      
+      if (chiamatoDTO != null) {
+        if (chiamatoDTO.getNatura() != null) {
+          vo.setNaturaChiamato(chiamatoDTO.getNatura());
+        }
+        if (chiamatoDTO.getId() != null) {
+          if (vo.getFileChiamato() == null || !Objects.equals(vo.getFileChiamato().getId(),chiamatoDTO.getId())) {
+            vo.setFileChiamato(resolveFile(vo, folderMap, vo.getFileChiamato().getId()));
+            if ( vo.getNaturaChiamato() == null ) {
+              throw makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_NATURA_MISSING);
+            }
+          }
+        }
+      }
+      
+      List<TemplateFileDTO> chiamanti = dto.getChiamanti();
+      if (chiamanti == null) {
+        chiamanti = dto.getFileLinks().get("CHIAMANTE");
+      }
+      if (chiamanti != null) {
+        updateFileLinks(vo, folderMap, vo.getChiamanti(), chiamanti);
+      }
+      
     }
+    
+//    if (dto.getFileLinks() != null) {
+//      List<FileSystemVO> templateFolder = fileSystemRepository.findByScopeAndIdRef(FileSystemScope.TEMPLATE, vo.getId());
+//      for (Map.Entry<String, List<TemplateFileDTO>> flEntry : dto.getFileLinks().entrySet()) {
+//        TemplateFileCategory category;
+//        try {
+//          category = TemplateFileCategory.valueOf(flEntry.getKey().toUpperCase());
+//        } catch (IllegalArgumentException iae) {
+//          throw makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_INVALID_FILE_CATEGORY_NAME, flEntry.getKey());
+//        }
+//        
+//        if (flEntry.getValue() != null) {
+//          updateFileLinks(vo, templateFolder, category, vo.getFiles(), flEntry.getValue());
+//        }
+//        
+//      }
+//    }
     
     //Verifico se tra chiamante e chiamato ci sia l'utilizzo dello stesso file
     HashSet<String> usedFiles = new HashSet<>(4);
-    for (TemplateFileVO tf : vo.getFiles()) {
+    if (vo.getFileChiamato() != null) {
+      usedFiles.add(vo.getFileChiamato().getPath());
+    }
+    for (TemplateLineaChiamanteVO tf : vo.getChiamanti()) {
       if (!usedFiles.add(tf.getFile().getPath())) {
         throw makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_FILE_MULTIPLE_USE, tf.getFile().getPath());
       }
@@ -241,50 +298,47 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     return result;
   }
 
-  private void updateFileLinks(TemplateVO templateVO, List<FileSystemVO> folder, TemplateFileCategory category, List<TemplateFileVO> originalLinks, List<TemplateFileDTO> newLinksDTO) throws ApplicationException {
-    int order = 1;
+  private void updateFileLinks(TemplateVO templateVO, Map<Long, FileSystemVO> folderMap, List<TemplateLineaChiamanteVO> originalLinks, List<TemplateFileDTO> newLinksDTO) throws ApplicationException {
     int i=0;
     
-    Map<Long, FileSystemVO> folderMap = folder.stream().collect(Collectors.toMap(FileSystemVO::getId, Function.identity()));
+    //Map<Long, FileSystemVO> folderMap = folder.stream().collect(Collectors.toMap(FileSystemVO::getId, Function.identity()));
     
-    logger.debug("Aggiorno i collegamenti per il template {} e categoria {}", templateVO.getId(), category);
+    logger.debug("Aggiorno i collegamenti per il template {} e categoria CHIAMANTE", templateVO.getId());
     
-    for (ListIterator<TemplateFileVO> it = originalLinks.listIterator(); it.hasNext();) {
-      TemplateFileVO tfileVO = it.next();
-      if (!category.equals(tfileVO.getCategory())) {
-        continue;
-      }
+    for (ListIterator<TemplateLineaChiamanteVO> it = originalLinks.listIterator(); it.hasNext();) {
+      TemplateLineaChiamanteVO tfileVO = it.next();
       if (i >= newLinksDTO.size()) {
         it.remove();
       } else {
         Long nuovoId = newLinksDTO.get(i).getId();
         if (nuovoId == null) {
-          logger.error("Nella lista dei link dei file per il template {}, category {}, il link {} ha id nullo",
-              templateVO.getId(), category, i);
+          logger.error("Nella lista dei chiamanti per il template {} il link {} ha id nullo",
+              templateVO.getId(), i);
           makeGenericError("Ricevuto link a file nullo");
         }
         
         if (!tfileVO.getFile().getId().equals(nuovoId)) {
           tfileVO.setFile(resolveFile(templateVO, folderMap, nuovoId));
         }
-        
-        tfileVO.setOrder(order++);
         ++i;
       }
     }
     while (i < newLinksDTO.size()) {
       Long nuovoId = newLinksDTO.get(i).getId();
       if (nuovoId == null) {
-        logger.error("Nella lista dei link dei file per il template {}, category {}, il link {} ha id nullo",
-            templateVO.getId(), category, i);
+        logger.error("Nella lista dei link dei file per il template {}, il link {} ha id nullo",
+            templateVO.getId(), i);
         makeGenericError("Ricevuto link a file nullo");
       }
       
-      TemplateFileVO tfileVO = new TemplateFileVO();
+      TemplateLineaChiamanteVO tfileVO = new TemplateLineaChiamanteVO();
       tfileVO.setFile(resolveFile(templateVO, folderMap, nuovoId));
       tfileVO.setTemplate(templateVO);
-      tfileVO.setCategory(category);
-      tfileVO.setOrder(order);
+      NaturaLinea natura = newLinksDTO.get(i).getNatura();
+      if (natura == null) {
+        makeError(HttpStatus.BAD_REQUEST, AppError.TEMPLATE_NATURA_MISSING);
+      }
+      tfileVO.setNatura(natura);
       
       originalLinks.add(tfileVO);
       
@@ -302,6 +356,12 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     return result;
   }
 
+  private TipoTemplateVO readTipoTemplateVO(String nome) throws ApplicationException {
+    Optional<TipoTemplateVO> result = tipoTemplateRepository.findById(nome);
+    return result.orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TIPO_TEMPLATE_NOT_FOUND, nome));
+    
+  }
+  
   @Override
   public TemplateVO readVO(long id) throws ApplicationException {
     Optional<TemplateVO> result = templateRepository.findById(id);
@@ -329,13 +389,23 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
   }
 
   private void mapFileLinks(TemplateDTO templateDTO, TemplateVO templateVO) {
-    if (templateVO.getFiles() != null) {
-      LinkedMultiValueMap<String, TemplateFileDTO> fileLinks = new LinkedMultiValueMap<>();
-      for (TemplateFileVO fileVO: templateVO.getFiles()) {
-        fileLinks.add(fileVO.getCategory().name(), new TemplateFileDTO(fileVO));
-      }
-      templateDTO.setFileLinks(fileLinks);
+    LinkedMultiValueMap<String, TemplateFileDTO> fileLinks = new LinkedMultiValueMap<>();
+    if (templateVO.getFileChiamato() != null) {
+      templateDTO.setChiamato(new TemplateFileDTO(templateVO.getFileChiamato(), templateVO.getNaturaChiamato()));
+      fileLinks.add("CHIAMATO", templateDTO.getChiamato() );
     }
+    
+    if (templateVO.getChiamanti() != null) {
+    //if (templateVO.getFiles() != null) {
+      templateDTO.setChiamanti(templateVO.getChiamanti()
+        .stream()
+        .map(TemplateFileDTO::new)
+        .collect(Collectors.toList()));
+      for (TemplateLineaChiamanteVO fileVO: templateVO.getChiamanti()) {
+        fileLinks.add("CHIAMANTE", new TemplateFileDTO(fileVO));
+      }
+    }
+    templateDTO.setFileLinks(fileLinks);
     
   }
 
@@ -351,13 +421,13 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
   }
 
 
-  private static Predicate<TemplateFileVO> isChiamante() {
-    return f -> f.getCategory().equals(TemplateFileCategory.CHIAMANTE);
-  }
-  
-  private static Predicate<TemplateFileVO> isChiamato() {
-    return f -> f.getCategory().equals(TemplateFileCategory.CHIAMATO);
-  }
+//  private static Predicate<TemplateFileVO> isChiamante() {
+//    return f -> f.getCategory().equals(TemplateFileCategory.CHIAMANTE);
+//  }
+//  
+//  private static Predicate<TemplateFileVO> isChiamato() {
+//    return f -> f.getCategory().equals(TemplateFileCategory.CHIAMATO);
+//  }
   
   @Override
   public List<TemplateDTO> search(TemplateSearchRequest dto) throws ApplicationException {
@@ -367,7 +437,12 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
     vo.setNome(dto.getNome());
     vo.setDurata(dto.getDurata());
     vo.setDescrizione(dto.getDescrizione());
-    vo.setTypeTemplate(dto.getTypeTemplate());
+    vo.setNaturaChiamato(dto.getNaturaChiamato());
+    
+    if (dto.getTypeTemplate() != null) {
+      vo.setTypeTemplate(tipoTemplateRepository.findById(dto.getTypeTemplate()).orElse(null));
+    }
+    
 
     List<TemplateVO> result = templateRepository.findAll(Example.of(vo, 
         ExampleMatcher.matchingAll()
@@ -376,23 +451,38 @@ public class TemplateServiceImpl extends AbstractService implements TemplateServ
 
     Stream<TemplateVO> sresult = result.stream();
 
-    //Restituisci solo i template che hanno il numero dei chiamanti indicati 
-    // nella condizionedi ricerca
-    if (dto.getNumChiamanti() != null) {
-      sresult = sresult.filter( s -> 
-        s.getFiles().stream().filter(isChiamante()).count() == dto.getNumChiamanti()
-      );
+//    //Restituisci solo i template che hanno il numero dei chiamanti indicati 
+      // e la stessa natura
+
+    if (dto.getNaturaChiamanti() != null) {
+      sresult = sresult.filter(s -> {
+        if (s.getChiamanti().size() != dto.getNaturaChiamanti().size()) {
+          return false;
+        }
+        Iterator<TemplateLineaChiamanteVO> itVO = s.getChiamanti().iterator();
+        Iterator<NaturaLinea> itDTO = dto.getNaturaChiamanti().iterator();
+        while (itVO.hasNext()) {
+          if (!itVO.next().getNatura().equals(itDTO.next())) {
+            return false;
+          }
+        }
+        return true;
+      });
+          
     }
     
-    if (dto.getNumChiamati() != null) {
-      sresult = sresult.filter(s ->
-        s.getFiles().stream().filter(isChiamato()).count() == dto.getNumChiamati()
-      );
-    }
-    
-    return sresult.map(s -> new TemplateDTO(s)).collect(Collectors.toList());
+    return sresult.map(TemplateDTO::new).collect(Collectors.toList());
   }
 
+
+  @Override
+  public List<String> typeList() throws ApplicationException {
+    logger.debug("enter typeList");
+    List<TipoTemplateVO> result = tipoTemplateRepository.findAll(Sort.by("nome"));
+    return result.stream()
+        .map(TipoTemplateVO::getNome)
+        .collect(Collectors.toList());
+  }
 
   
 }

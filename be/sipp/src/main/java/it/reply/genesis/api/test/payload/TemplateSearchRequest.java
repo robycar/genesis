@@ -1,10 +1,14 @@
 package it.reply.genesis.api.test.payload;
 
+import java.util.List;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import it.reply.genesis.api.generic.payload.PayloadRequest;
+import it.reply.genesis.model.NaturaLinea;
 import it.reply.genesis.model.TemplateVO;
+import it.reply.genesis.model.TipoTemplateVO;
 
 public class TemplateSearchRequest extends PayloadRequest {
 
@@ -18,15 +22,15 @@ public class TemplateSearchRequest extends PayloadRequest {
   @Min(value = 0)
   private Long durata;
   
-  @Size(max=TemplateVO.TYPE_TEMPLATE_LENGTH)
+  @Size(max=TipoTemplateVO.NOME_LENGTH)
   private String typeTemplate;
 
   @Size(max=TemplateVO.DESCRIZIONE_LENGTH)
   private String descrizione;
 
-  private Long numChiamanti;
+  private NaturaLinea naturaChiamato;
   
-  private Long numChiamati;
+  private List<NaturaLinea> naturaChiamanti;
   
   public TemplateSearchRequest() {
   }
@@ -38,8 +42,8 @@ public class TemplateSearchRequest extends PayloadRequest {
     writeField(sb, "durata", durata);
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "typeTemplate", typeTemplate);
-    writeField(sb, "numChiamanti", numChiamanti);
-    writeField(sb, "numChiamati", numChiamati);
+    writeField(sb, "naturaChiamato", naturaChiamato);
+    writeField(sb, "naturaChiamanti", naturaChiamanti);
     
     super.writeFields(sb);
   }
@@ -84,20 +88,20 @@ public class TemplateSearchRequest extends PayloadRequest {
     this.descrizione = descrizione;
   }
 
-  public Long getNumChiamanti() {
-    return numChiamanti;
+  public NaturaLinea getNaturaChiamato() {
+    return naturaChiamato;
   }
 
-  public void setNumChiamanti(Long numChiamanti) {
-    this.numChiamanti = numChiamanti;
+  public void setNaturaChiamato(NaturaLinea naturaChiamato) {
+    this.naturaChiamato = naturaChiamato;
   }
 
-  public Long getNumChiamati() {
-    return numChiamati;
+  public List<NaturaLinea> getNaturaChiamanti() {
+    return naturaChiamanti;
   }
 
-  public void setNumChiamati(Long numChiamati) {
-    this.numChiamati = numChiamati;
+  public void setNaturaChiamanti(List<NaturaLinea> naturaChiamanti) {
+    this.naturaChiamanti = naturaChiamanti;
   }
-
+  
 }

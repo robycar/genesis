@@ -31,6 +31,7 @@ import it.reply.genesis.api.test.payload.TemplateRemoveRequest;
 import it.reply.genesis.api.test.payload.TemplateRetrieveResponse;
 import it.reply.genesis.api.test.payload.TemplateSearchRequest;
 import it.reply.genesis.api.test.payload.TemplateSearchResponse;
+import it.reply.genesis.api.test.payload.TemplateTypeListResponse;
 import it.reply.genesis.api.test.payload.TemplateUpdateRequest;
 import it.reply.genesis.api.test.payload.TemplateUpdateResponse;
 import it.reply.genesis.service.TemplateService;
@@ -60,6 +61,22 @@ public class TemplateController extends AbstractController {
     }
     
   }
+  
+  @GetMapping("types")
+  @PreAuthorize("hasAuthority('FUN_template.view')")
+  public ResponseEntity<TemplateTypeListResponse> typeList() {
+    logger.info("enter typeList");
+    TemplateTypeListResponse response = new TemplateTypeListResponse();
+    try {
+      List<String> result = templateService.typeList();
+      response.setList(result);
+      return ResponseEntity.ok(response);
+    } catch (ApplicationException e) {
+      return handleException(e, response);
+    }
+    
+  }
+  
   @GetMapping("{id}")
   @PreAuthorize("hasAuthority('FUN_template.view')")
   public ResponseEntity<TemplateRetrieveResponse> retrieveTemplate(@PathVariable Long id) {
@@ -136,6 +153,8 @@ public class TemplateController extends AbstractController {
       templateDTO.setTypeTemplate(request.getTypeTemplate());
       templateDTO.setDescrizione(request.getDescrizione());
       templateDTO.setFileLinks(request.getFileLinks());
+      templateDTO.setChiamato(request.getChiamato());
+      templateDTO.setChiamanti(request.getChiamanti());
       
       templateDTO = templateService.updateTemplate(templateDTO);
       

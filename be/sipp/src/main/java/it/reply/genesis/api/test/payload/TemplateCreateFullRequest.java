@@ -3,13 +3,16 @@ package it.reply.genesis.api.test.payload;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import it.reply.genesis.api.generic.payload.PayloadRequest;
+import it.reply.genesis.model.NaturaLinea;
 import it.reply.genesis.model.TemplateVO;
+import it.reply.genesis.model.TipoTemplateVO;
 
 public class TemplateCreateFullRequest extends PayloadRequest {
 
@@ -22,7 +25,8 @@ public class TemplateCreateFullRequest extends PayloadRequest {
   @PositiveOrZero
   private Long durata;
   
-  @Size(max=TemplateVO.TYPE_TEMPLATE_LENGTH)
+  @NotNull
+  @Size(max=TipoTemplateVO.NOME_LENGTH)
   private String typeTemplate;
   
   @Size(max=TemplateVO.DESCRIZIONE_LENGTH)
@@ -32,7 +36,11 @@ public class TemplateCreateFullRequest extends PayloadRequest {
   
   private String chiamato;
   
+  private NaturaLinea naturaChiamato;
+  
   private List<String> chiamanti;
+  
+  private List<NaturaLinea> naturaChiamanti;
 
   @Override
   protected void writeFields(StringBuilder sb) {
@@ -42,7 +50,10 @@ public class TemplateCreateFullRequest extends PayloadRequest {
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "file", file == null ? 0 : file.size());
     writeField(sb, "chiamato", chiamato);
+    writeField(sb, "naturaChiamato", naturaChiamato);
     writeField(sb, "chiamanti", chiamanti);
+    writeField(sb, "naturaChiamanti", naturaChiamanti);
+    
     super.writeFields(sb);
   }
 
@@ -100,6 +111,22 @@ public class TemplateCreateFullRequest extends PayloadRequest {
 
   public void setFile(List<MultipartFile> file) {
     this.file = file;
+  }
+
+  public NaturaLinea getNaturaChiamato() {
+    return naturaChiamato;
+  }
+
+  public void setNaturaChiamato(NaturaLinea naturaChiamato) {
+    this.naturaChiamato = naturaChiamato;
+  }
+
+  public List<NaturaLinea> getNaturaChiamanti() {
+    return naturaChiamanti;
+  }
+
+  public void setNaturaChiamanti(List<NaturaLinea> naturaChiamanti) {
+    this.naturaChiamanti = naturaChiamanti;
   }
   
   

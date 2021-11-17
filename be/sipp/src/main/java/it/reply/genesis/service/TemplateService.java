@@ -17,6 +17,7 @@ public interface TemplateService {
    * @return il template creato
    * @throws ApplicationException in caso di errori
    */
+  @Deprecated(forRemoval = true)
   TemplateDTO createTemplate(TemplateDTO dto) throws ApplicationException;
 
   /**
@@ -63,6 +64,8 @@ public interface TemplateService {
   TemplateVO readVO(long id) throws ApplicationException;
 
   List<TemplateDTO> search(TemplateSearchRequest request) throws ApplicationException;
+
+  List<String> typeList() throws ApplicationException;
 
   
 

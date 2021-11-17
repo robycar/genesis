@@ -11,6 +11,7 @@ import it.reply.genesis.api.admin.payload.GruppoDTO;
 import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.payload.TrackedDTO;
 import it.reply.genesis.model.TemplateVO;
+import it.reply.genesis.model.TipoTemplateVO;
 
 public class TemplateDTO extends TrackedDTO {
 
@@ -23,7 +24,7 @@ public class TemplateDTO extends TrackedDTO {
   
   private Long durata;
   
-  @Size(max=TemplateVO.TYPE_TEMPLATE_LENGTH)
+  @Size(max=TipoTemplateVO.NOME_LENGTH)
   private String typeTemplate;
 
   @Size(max=TemplateVO.DESCRIZIONE_LENGTH)
@@ -31,7 +32,11 @@ public class TemplateDTO extends TrackedDTO {
 
   private GruppoDTO gruppo;
   
-  List<FileDTO> folder;
+  private List<FileDTO> folder;
+  
+  private TemplateFileDTO chiamato;
+  
+  private List<TemplateFileDTO> chiamanti;
   
   LinkedMultiValueMap<String, TemplateFileDTO> fileLinks;
   
@@ -43,13 +48,20 @@ public class TemplateDTO extends TrackedDTO {
   }
 
   public TemplateDTO(TemplateVO vo) {
+    this(vo, false);
+  }
+  
+  public TemplateDTO(TemplateVO vo, boolean includeLinee) {
     super(vo);
     this.id = vo.getId();
     this.nome = vo.getNome();
     this.durata = vo.getDurata();
-    this.typeTemplate = vo.getTypeTemplate();
+    this.typeTemplate = vo.getTypeTemplate() == null ? null : vo.getTypeTemplate().getNome();
     this.descrizione = vo.getDescrizione();
     this.gruppo = vo.getGruppo() == null ? null : new GruppoDTO(vo.getGruppo());
+    if (includeLinee) {
+      fileLinks = new LinkedMultiValueMap<>();
+    }
   }
 
   public Long getId() {
@@ -116,16 +128,35 @@ public class TemplateDTO extends TrackedDTO {
     this.gruppo = gruppo;
   }
 
+  public TemplateFileDTO getChiamato() {
+    return chiamato;
+  }
+
+  public void setChiamato(TemplateFileDTO chiamato) {
+    this.chiamato = chiamato;
+  }
+
+  public List<TemplateFileDTO> getChiamanti() {
+    return chiamanti;
+  }
+
+  public void setChiamanti(List<TemplateFileDTO> chiamanti) {
+    this.chiamanti = chiamanti;
+  }
+
   @Override
   protected void writeFields(StringBuilder sb) {
     writeField(sb, "id", id);
     writeField(sb, "nome", nome);
     writeField(sb, "durata", durata);
     writeField(sb, "typeTemplate", typeTemplate);
+    writeField(sb, "chiamato", chiamato);
+    writeField(sb, "chiamanti", chiamanti);
+
     writeField(sb, "folder", folder);
-    writeField(sb, "fileLinks", fileLinks);
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "gruppo", gruppo);
+    writeField(sb, "fileLinks", fileLinks);
     super.writeFields(sb);
   }
   

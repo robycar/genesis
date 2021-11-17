@@ -1,10 +1,12 @@
 package it.reply.genesis.api.test.payload;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import it.reply.genesis.api.generic.payload.PayloadRequest;
 import it.reply.genesis.model.TemplateVO;
+import it.reply.genesis.model.TipoTemplateVO;
 
 public class TemplateAddRequest extends PayloadRequest {
 
@@ -16,7 +18,8 @@ public class TemplateAddRequest extends PayloadRequest {
   
   private Long durata;
   
-  @Size(max=TemplateVO.TYPE_TEMPLATE_LENGTH)
+  @NotNull
+  @Size(max=TipoTemplateVO.NOME_LENGTH)
   private String typeTemplate;
   
   @Size(max=TemplateVO.DESCRIZIONE_LENGTH)

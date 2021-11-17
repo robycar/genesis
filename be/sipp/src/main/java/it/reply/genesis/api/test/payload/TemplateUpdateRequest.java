@@ -1,5 +1,7 @@
 package it.reply.genesis.api.test.payload;
 
+import java.util.List;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -8,6 +10,7 @@ import org.springframework.util.LinkedMultiValueMap;
 
 import it.reply.genesis.api.generic.payload.PayloadRequest;
 import it.reply.genesis.model.TemplateVO;
+import it.reply.genesis.model.TipoTemplateVO;
 
 public class TemplateUpdateRequest extends PayloadRequest {
 
@@ -22,7 +25,7 @@ public class TemplateUpdateRequest extends PayloadRequest {
   @Min(value = 0)
   private Long durata;
   
-  @Size(max=TemplateVO.TYPE_TEMPLATE_LENGTH)
+  @Size(max=TipoTemplateVO.NOME_LENGTH)
   private String typeTemplate;
 
   @NotNull
@@ -31,7 +34,11 @@ public class TemplateUpdateRequest extends PayloadRequest {
   @Size(max=TemplateVO.DESCRIZIONE_LENGTH)
   private String descrizione;
   
-  LinkedMultiValueMap<String, TemplateFileDTO> fileLinks;
+  private LinkedMultiValueMap<String, TemplateFileDTO> fileLinks;
+  
+  private TemplateFileDTO chiamato;
+  
+  private List<TemplateFileDTO> chiamanti;
 
   public TemplateUpdateRequest() {
   }
@@ -44,6 +51,9 @@ public class TemplateUpdateRequest extends PayloadRequest {
     writeField(sb, "typeTemplate", typeTemplate);
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "version", version);
+    writeField(sb, "chiamato", chiamato);
+    writeField(sb, "chiamanti", chiamanti);
+    writeField(sb, "fileLinks", fileLinks);
     
     super.writeFields(sb);
   }
@@ -106,6 +116,22 @@ public class TemplateUpdateRequest extends PayloadRequest {
 
   public void setFileLinks(LinkedMultiValueMap<String, TemplateFileDTO> fileLinks) {
     this.fileLinks = fileLinks;
+  }
+
+  public TemplateFileDTO getChiamato() {
+    return chiamato;
+  }
+
+  public void setChiamato(TemplateFileDTO chiamato) {
+    this.chiamato = chiamato;
+  }
+
+  public List<TemplateFileDTO> getChiamanti() {
+    return chiamanti;
+  }
+
+  public void setChiamanti(List<TemplateFileDTO> chiamanti) {
+    this.chiamanti = chiamanti;
   }
   
 }

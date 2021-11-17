@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -22,8 +24,6 @@ public class TemplateVO extends BaseEntity {
   private static final long serialVersionUID = -2956864279595278259L;
 
   public static final int NOME_LENGTH = 100;
-
-  public static final int TYPE_TEMPLATE_LENGTH = 25;
 
   public static final int DESCRIZIONE_LENGTH = 1000;
 
@@ -37,8 +37,9 @@ public class TemplateVO extends BaseEntity {
   
   private Long durata;
   
-  @Column(name="TYPE_TEMPLATE", length = TYPE_TEMPLATE_LENGTH)
-  private String typeTemplate;
+  @ManyToOne
+  @JoinColumn(name="TYPE_TEMPLATE")
+  private TipoTemplateVO typeTemplate;
   
   @Column(name="DESCRIZIONE", length = DESCRIZIONE_LENGTH)
   private String descrizione;
@@ -47,9 +48,21 @@ public class TemplateVO extends BaseEntity {
   @JoinColumn(name="ID_GRUPPO")
   private GruppoVO gruppo;
   
-  @OneToMany(mappedBy = "template", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @OrderBy("order")
-  private List<TemplateFileVO> files;
+  @ManyToOne
+  @JoinColumn(name="FILE_SYSTEM_ID_CHIAMATO")
+  private FileSystemVO fileChiamato;
+  
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "template")
+  @OrderColumn(name="ORDERING")
+  private List<TemplateLineaChiamanteVO> chiamanti;
+  
+  @Column(name="NATURA_CHIAMATO")
+  @Enumerated(EnumType.STRING)
+  private NaturaLinea naturaChiamato;
+  
+//  @OneToMany(mappedBy = "template", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//  @OrderBy("order")
+//  private List<TemplateFileVO> files;
   
   public TemplateVO() {
   }
@@ -78,21 +91,21 @@ public class TemplateVO extends BaseEntity {
     this.durata = durata;
   }
 
-  public String getTypeTemplate() {
+  public TipoTemplateVO getTypeTemplate() {
     return typeTemplate;
   }
 
-  public void setTypeTemplate(String typeTemplate) {
+  public void setTypeTemplate(TipoTemplateVO typeTemplate) {
     this.typeTemplate = typeTemplate;
   }
 
-  public List<TemplateFileVO> getFiles() {
-    return files;
-  }
-
-  public void setFiles(List<TemplateFileVO> files) {
-    this.files = files;
-  }
+//  public List<TemplateFileVO> getFiles() {
+//    return files;
+//  }
+//
+//  public void setFiles(List<TemplateFileVO> files) {
+//    this.files = files;
+//  }
 
   public String getDescrizione() {
     return descrizione;
@@ -108,6 +121,30 @@ public class TemplateVO extends BaseEntity {
 
   public void setGruppo(GruppoVO gruppo) {
     this.gruppo = gruppo;
+  }
+
+  public FileSystemVO getFileChiamato() {
+    return fileChiamato;
+  }
+
+  public void setFileChiamato(FileSystemVO fileChiamato) {
+    this.fileChiamato = fileChiamato;
+  }
+
+  public List<TemplateLineaChiamanteVO> getChiamanti() {
+    return chiamanti;
+  }
+
+  public void setChiamanti(List<TemplateLineaChiamanteVO> chiamanti) {
+    this.chiamanti = chiamanti;
+  }
+
+  public NaturaLinea getNaturaChiamato() {
+    return naturaChiamato;
+  }
+
+  public void setNaturaChiamato(NaturaLinea naturaChiamato) {
+    this.naturaChiamato = naturaChiamato;
   }
 
 }

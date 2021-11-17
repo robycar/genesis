@@ -7,17 +7,7 @@
 	"item": [
 		{
 			"name": "test",
-			"item": [
-				{
-					"name": "New Request",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": null
-					},
-					"response": []
-				}
-			],
+			"item": [],
 			"event": [
 				{
 					"listen": "prerequest",
@@ -2081,10 +2071,6 @@
 		{
 			"name": "api/level",
 			"item": [
-				{
-					"name": "New Folder",
-					"item": []
-				},
 				{
 					"name": "level_add",
 					"request": {
@@ -6914,7 +6900,7 @@
 					]
 				},
 				{
-					"name": "template_add",
+					"name": "deprecated_template_add",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -7127,7 +7113,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"version\": 22,\r\n    \"nome\": \"Template 1\",\r\n    \"durata\": 57,\r\n    \"typeTemplate\": \"?Type Template?\",\r\n    \"fileLinks\": {\r\n        \"CHIAMATO\": [{\"id\":1}],\r\n        \"CHIAMANTE\": [2,3,4]\r\n    }\r\n}",
+							"raw": "{\r\n    \"id\": 11,\r\n    \"version\": 2,\r\n    \"nome\": \"Template 11\",\r\n    \"durata\": 57,\r\n    \"typeTemplate\": \"Reale\",\r\n    \"fileLinks\": {\r\n        \"CHIAMATO\": [{\"id\":140}],\r\n        \"CHIAMANTE\": [142,141]\r\n    },\r\n    \"chiamato\": 140,\r\n    \"chiamanti\": [141,142]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -7430,7 +7416,89 @@
 						},
 						"description": "Recupera i dati relativi ad un template.\r\nPermessi: template.view"
 					},
-					"response": []
+					"response": [
+						{
+							"name": "template_get success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/template/1",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"template",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Nov 2021 18:06:20 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"template\": {\n        \"modifiedDate\": \"2021-11-15T11:21:53.000+00:00\",\n        \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n        \"modifiedBy\": \"test\",\n        \"createdBy\": \"test\",\n        \"version\": 1,\n        \"id\": 1,\n        \"nome\": \"Template 1\",\n        \"durata\": 57,\n        \"typeTemplate\": \"Manovra\",\n        \"descrizione\": \"Descrizione molto lunga per questo template\",\n        \"gruppo\": {\n            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"modifiedBy\": \"init\",\n            \"createdBy\": \"init\",\n            \"version\": 1,\n            \"id\": 1,\n            \"nome\": \"test\",\n            \"descrizione\": \"Gruppo di test\"\n        },\n        \"folder\": [\n            {\n                \"modifiedDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 3,\n                \"path\": \"main.py\",\n                \"url\": \"/api/fs/entityfolder/TEMPLATE/1/3\"\n            },\n            {\n                \"modifiedDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 2,\n                \"path\": \"package.json\",\n                \"url\": \"/api/fs/entityfolder/TEMPLATE/1/2\"\n            },\n            {\n                \"modifiedDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"creationDate\": \"2021-10-06T07:57:58.000+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 1,\n                \"path\": \"pom.xml\",\n                \"url\": \"/api/fs/entityfolder/TEMPLATE/1/1\"\n            }\n        ],\n        \"chiamato\": {\n            \"id\": 1,\n            \"path\": \"pom.xml\",\n            \"url\": \"/api/fs/TEMPLATE/1/1\",\n            \"natura\": \"REALE\"\n        },\n        \"chiamanti\": [\n            {\n                \"id\": 2,\n                \"path\": \"package.json\",\n                \"url\": \"/api/fs/TEMPLATE/1/2\",\n                \"natura\": \"REALE\"\n            }\n        ],\n        \"fileLinks\": {\n            \"CHIAMATO\": [\n                {\n                    \"id\": 1,\n                    \"path\": \"pom.xml\",\n                    \"url\": \"/api/fs/TEMPLATE/1/1\",\n                    \"natura\": \"REALE\"\n                }\n            ],\n            \"CHIAMANTE\": [\n                {\n                    \"id\": 2,\n                    \"path\": \"package.json\",\n                    \"url\": \"/api/fs/TEMPLATE/1/2\",\n                    \"natura\": \"REALE\"\n                }\n            ]\n        }\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "template_delete",
@@ -7551,7 +7619,7 @@
 					]
 				},
 				{
-					"name": "template_load_file",
+					"name": "deprecated_template_load_file",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -7592,7 +7660,7 @@
 							"formdata": [
 								{
 									"key": "nome",
-									"value": "MioTemplate",
+									"value": "MioTemplate 2 linee",
 									"description": "(string)nome del template",
 									"type": "text"
 								},
@@ -7621,16 +7689,32 @@
 									"type": "text"
 								},
 								{
+									"key": "naturaChiamato",
+									"value": "REALE",
+									"description": "Valori possibili: REALE, SIMULATO",
+									"type": "text"
+								},
+								{
 									"key": "chiamanti",
-									"value": "pom.xml",
+									"value": "main.py",
 									"description": "Nome del file per li primo chiamante",
-									"type": "text",
-									"disabled": true
+									"type": "text"
 								},
 								{
 									"key": "chiamanti",
 									"value": "package.json",
 									"description": "Nome del file per il secondo chiamante",
+									"type": "text"
+								},
+								{
+									"key": "naturaChiamanti",
+									"value": "SIMULATO",
+									"description": "Il numero di naturaChiamanti deve corrispondere al numero di chiamanti.\nPossibili valori: REALE, SIMULATO",
+									"type": "text"
+								},
+								{
+									"key": "naturaChiamanti",
+									"value": "REALE",
 									"type": "text"
 								},
 								{
@@ -7664,7 +7748,7 @@
 					},
 					"response": [
 						{
-							"name": "template_create_full success",
+							"name": "template_create_full fail: file utilizzato più volte",
 							"originalRequest": {
 								"method": "PUT",
 								"header": [],
@@ -7673,7 +7757,7 @@
 									"formdata": [
 										{
 											"key": "nome",
-											"value": "Template 2",
+											"value": "MioTemplate 2 linee",
 											"description": "(string)nome del template",
 											"type": "text"
 										},
@@ -7702,8 +7786,14 @@
 											"type": "text"
 										},
 										{
+											"key": "naturaChiamato",
+											"value": "REALE",
+											"description": "Valori possibili: REALE, SIMULATO",
+											"type": "text"
+										},
+										{
 											"key": "chiamanti",
-											"value": "pom.xml",
+											"value": "main.py",
 											"description": "Nome del file per li primo chiamante",
 											"type": "text"
 										},
@@ -7711,6 +7801,330 @@
 											"key": "chiamanti",
 											"value": "package.json",
 											"description": "Nome del file per il secondo chiamante",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamanti",
+											"value": "SIMULATO",
+											"description": "Il numero di naturaChiamanti deve corrispondere al numero di chiamanti.\nPossibili valori: REALE, SIMULATO",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamanti",
+											"value": "REALE",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/be/sipp/pom.xml"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/package.json"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/be/sipp/src/test/resources/scripts/main.py"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/template",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"template"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Nov 2021 18:24:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"TEST-0018\",\n        \"description\": \"Impossibile completare l'operazione. Si sta tentando di utilizzare il file pom.xml pi&ugrave; di una volta tra chiamato e chiamanti\"\n    },\n    \"template\": null\n}"
+						},
+						{
+							"name": "template_create_full fail: file e natura con differente dimensione",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "nome",
+											"value": "MioTemplate 2 linee",
+											"description": "(string)nome del template",
+											"type": "text"
+										},
+										{
+											"key": "durata",
+											"value": "5",
+											"description": "(long)durata in secondi",
+											"type": "text"
+										},
+										{
+											"key": "typeTemplate",
+											"value": "Reale",
+											"description": "(string)tipo di template",
+											"type": "text"
+										},
+										{
+											"key": "descrizione",
+											"value": "Descrizione molto lunga per questo template",
+											"description": "(multi line string)descrizione del template",
+											"type": "text"
+										},
+										{
+											"key": "chiamato",
+											"value": "pom.xml",
+											"description": "Nome del file per il chiamato",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamato",
+											"value": "REALE",
+											"description": "Valori possibili: REALE, SIMULATO",
+											"type": "text"
+										},
+										{
+											"key": "chiamanti",
+											"value": "main.py",
+											"description": "Nome del file per li primo chiamante",
+											"type": "text"
+										},
+										{
+											"key": "chiamanti",
+											"value": "package.json",
+											"description": "Nome del file per il secondo chiamante",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamanti",
+											"value": "SIMULATO",
+											"description": "Il numero di naturaChiamanti deve corrispondere al numero di chiamanti.\nPossibili valori: REALE, SIMULATO",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamanti",
+											"value": "REALE",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/be/sipp/pom.xml"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/package.json"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/be/sipp/src/test/resources/scripts/main.py"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/template",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"template"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Nov 2021 18:26:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"TEST-0030\",\n        \"description\": \"La dimensione dell'elenco dei file chiamante (2) non corrisponde a quella dell'elenco delle nature delle linee (1)\"\n    },\n    \"template\": null\n}"
+						},
+						{
+							"name": "template_create_full failed: natura chiamato missing",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "nome",
+											"value": "MioTemplate 2 linee",
+											"description": "(string)nome del template",
+											"type": "text"
+										},
+										{
+											"key": "durata",
+											"value": "5",
+											"description": "(long)durata in secondi",
+											"type": "text"
+										},
+										{
+											"key": "typeTemplate",
+											"value": "Reale",
+											"description": "(string)tipo di template",
+											"type": "text"
+										},
+										{
+											"key": "descrizione",
+											"value": "Descrizione molto lunga per questo template",
+											"description": "(multi line string)descrizione del template",
+											"type": "text"
+										},
+										{
+											"key": "chiamato",
+											"value": "pom.xml",
+											"description": "Nome del file per il chiamato",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamato",
+											"value": "REALE",
+											"description": "Valori possibili: REALE, SIMULATO",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "chiamanti",
+											"value": "main.py",
+											"description": "Nome del file per li primo chiamante",
+											"type": "text"
+										},
+										{
+											"key": "chiamanti",
+											"value": "package.json",
+											"description": "Nome del file per il secondo chiamante",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamanti",
+											"value": "SIMULATO",
+											"description": "Il numero di naturaChiamanti deve corrispondere al numero di chiamanti.\nPossibili valori: REALE, SIMULATO",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamanti",
+											"value": "REALE",
 											"type": "text"
 										},
 										{
@@ -7722,6 +8136,166 @@
 											"key": "file",
 											"type": "file",
 											"src": "/C:/tim/sippone2/repo/sipp/package.json"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/be/sipp/src/test/resources/scripts/main.py"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{contextUrl}}/api/template",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"template"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Nov 2021 18:29:04 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": {\n        \"code\": \"TEST-0031\",\n        \"description\": \"Impossibile configurare la linea per il template in quando non &egrave; stata specificata la natura della linea.\"\n    },\n    \"template\": null\n}"
+						},
+						{
+							"name": "template_create_full sucess",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "nome",
+											"value": "MioTemplate 2 linee",
+											"description": "(string)nome del template",
+											"type": "text"
+										},
+										{
+											"key": "durata",
+											"value": "5",
+											"description": "(long)durata in secondi",
+											"type": "text"
+										},
+										{
+											"key": "typeTemplate",
+											"value": "Reale",
+											"description": "(string)tipo di template",
+											"type": "text"
+										},
+										{
+											"key": "descrizione",
+											"value": "Descrizione molto lunga per questo template",
+											"description": "(multi line string)descrizione del template",
+											"type": "text"
+										},
+										{
+											"key": "chiamato",
+											"value": "pom.xml",
+											"description": "Nome del file per il chiamato",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamato",
+											"value": "REALE",
+											"description": "Valori possibili: REALE, SIMULATO",
+											"type": "text"
+										},
+										{
+											"key": "chiamanti",
+											"value": "main.py",
+											"description": "Nome del file per li primo chiamante",
+											"type": "text"
+										},
+										{
+											"key": "chiamanti",
+											"value": "package.json",
+											"description": "Nome del file per il secondo chiamante",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamanti",
+											"value": "SIMULATO",
+											"description": "Il numero di naturaChiamanti deve corrispondere al numero di chiamanti.\nPossibili valori: REALE, SIMULATO",
+											"type": "text"
+										},
+										{
+											"key": "naturaChiamanti",
+											"value": "REALE",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/be/sipp/pom.xml"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/package.json"
+										},
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/tim/sippone2/repo/sipp/be/sipp/src/test/resources/scripts/main.py"
 										}
 									]
 								},
@@ -7786,7 +8360,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Tue, 07 Sep 2021 14:05:51 GMT"
+									"value": "Wed, 17 Nov 2021 18:39:27 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -7798,7 +8372,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"error\": null,\n    \"template\": {\n        \"modifiedDate\": \"2021-09-07T14:03:07.352+00:00\",\n        \"creationDate\": \"2021-09-07T14:02:51.824+00:00\",\n        \"modifiedBy\": \"test\",\n        \"createdBy\": \"test\",\n        \"version\": 0,\n        \"id\": 2,\n        \"nome\": \"Template 2\",\n        \"durata\": 5,\n        \"typeTemplate\": \"Reale\",\n        \"descrizione\": \"Descrizione molto lunga per questo template\",\n        \"gruppo\": {\n            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"modifiedBy\": \"init\",\n            \"createdBy\": \"init\",\n            \"version\": 1,\n            \"id\": 1,\n            \"nome\": \"g1\",\n            \"descrizione\": \"g1\"\n        },\n        \"folder\": null,\n        \"fileLinks\": {\n            \"CHIAMATO\": [\n                {\n                    \"id\": 32,\n                    \"path\": \"pom.xml\",\n                    \"url\": \"/api/fs/TEMPLATE/2/32\"\n                }\n            ],\n            \"CHIAMANTE\": [\n                {\n                    \"id\": 32,\n                    \"path\": \"pom.xml\",\n                    \"url\": \"/api/fs/TEMPLATE/2/32\"\n                },\n                {\n                    \"id\": 33,\n                    \"path\": \"package.json\",\n                    \"url\": \"/api/fs/TEMPLATE/2/33\"\n                }\n            ]\n        }\n    }\n}"
+							"body": "{\n    \"error\": null,\n    \"template\": {\n        \"modifiedDate\": \"2021-11-17T18:39:07.089+00:00\",\n        \"creationDate\": \"2021-11-17T18:38:59.860+00:00\",\n        \"modifiedBy\": \"test\",\n        \"createdBy\": \"test\",\n        \"version\": 1,\n        \"id\": 11,\n        \"nome\": \"MioTemplate 2 linee\",\n        \"durata\": 5,\n        \"typeTemplate\": \"Reale\",\n        \"descrizione\": \"Descrizione molto lunga per questo template\",\n        \"gruppo\": {\n            \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n            \"modifiedBy\": \"init\",\n            \"createdBy\": \"init\",\n            \"version\": 1,\n            \"id\": 1,\n            \"nome\": \"test\",\n            \"descrizione\": \"Gruppo di test\"\n        },\n        \"folder\": [\n            {\n                \"modifiedDate\": \"2021-11-17T18:38:59.876+00:00\",\n                \"creationDate\": \"2021-11-17T18:38:59.875+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 140,\n                \"path\": \"pom.xml\",\n                \"url\": \"/api/fs/entityfolder/TEMPLATE/11/140\"\n            },\n            {\n                \"modifiedDate\": \"2021-11-17T18:38:59.886+00:00\",\n                \"creationDate\": \"2021-11-17T18:38:59.884+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 141,\n                \"path\": \"package.json\",\n                \"url\": \"/api/fs/entityfolder/TEMPLATE/11/141\"\n            },\n            {\n                \"modifiedDate\": \"2021-11-17T18:38:59.904+00:00\",\n                \"creationDate\": \"2021-11-17T18:38:59.903+00:00\",\n                \"modifiedBy\": \"test\",\n                \"createdBy\": \"test\",\n                \"version\": 0,\n                \"id\": 142,\n                \"path\": \"main.py\",\n                \"url\": \"/api/fs/entityfolder/TEMPLATE/11/142\"\n            }\n        ],\n        \"chiamato\": {\n            \"id\": 140,\n            \"path\": \"pom.xml\",\n            \"url\": \"/api/fs/TEMPLATE/11/140\",\n            \"natura\": \"REALE\"\n        },\n        \"chiamanti\": [\n            {\n                \"id\": 142,\n                \"path\": \"main.py\",\n                \"url\": \"/api/fs/TEMPLATE/11/142\",\n                \"natura\": \"SIMULATO\"\n            },\n            {\n                \"id\": 141,\n                \"path\": \"package.json\",\n                \"url\": \"/api/fs/TEMPLATE/11/141\",\n                \"natura\": \"REALE\"\n            }\n        ],\n        \"fileLinks\": {\n            \"CHIAMATO\": [\n                {\n                    \"id\": 140,\n                    \"path\": \"pom.xml\",\n                    \"url\": \"/api/fs/TEMPLATE/11/140\",\n                    \"natura\": \"REALE\"\n                }\n            ],\n            \"CHIAMANTE\": [\n                {\n                    \"id\": 142,\n                    \"path\": \"main.py\",\n                    \"url\": \"/api/fs/TEMPLATE/11/142\",\n                    \"natura\": \"SIMULATO\"\n                },\n                {\n                    \"id\": 141,\n                    \"path\": \"package.json\",\n                    \"url\": \"/api/fs/TEMPLATE/11/141\",\n                    \"natura\": \"REALE\"\n                }\n            ]\n        }\n    }\n}"
 						}
 					]
 				},
@@ -7809,7 +8383,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"nome\": \"Template 1\",\r\n    \"durata\": 57,\r\n    \"typeTemplate\": \"bohh\",\r\n    \"numChiamati\": 1,\r\n    \"numChiamanti\": 3\r\n\r\n}",
+							"raw": "{\r\n    \"id\": null,\r\n    \"nome\": null,\r\n    \"durata\": null,\r\n    \"typeTemplate\": null,\r\n    \"naturaChiamato\": \"REALE\",\r\n    \"naturaChiamanti\": [\"SIMULATO\", \"REALE\"]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -7837,7 +8411,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id\": 1,\r\n    \"nome\": \"Template 1\",\r\n    \"durata\": 57,\r\n    \"typeTemplate\": \"bohh\",\r\n    \"numChiamati\": 1,\r\n    \"numChiamanti\": 3\r\n\r\n}",
+									"raw": "{\r\n    \"id\": null,\r\n    \"nome\": null,\r\n    \"durata\": null,\r\n    \"typeTemplate\": null,\r\n    \"naturaChiamato\": \"REALE\",\r\n    \"naturaChiamanti\": [\"SIMULATO\", \"REALE\"]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -7906,7 +8480,7 @@
 								},
 								{
 									"key": "Date",
-									"value": "Thu, 09 Sep 2021 09:37:04 GMT"
+									"value": "Wed, 17 Nov 2021 19:05:57 GMT"
 								},
 								{
 									"key": "Keep-Alive",
@@ -7918,7 +8492,108 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"error\": null,\n    \"list\": [\n        {\n            \"modifiedDate\": \"2021-08-09T18:01:13.000+00:00\",\n            \"creationDate\": \"2021-08-06T16:41:30.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 21,\n            \"id\": 1,\n            \"nome\": \"Template 1\",\n            \"durata\": 57,\n            \"typeTemplate\": \"bohh\",\n            \"descrizione\": \"Descrizione molto lunga per il template 1\",\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"g1\",\n                \"descrizione\": \"g1\"\n            },\n            \"folder\": null,\n            \"fileLinks\": null\n        }\n    ]\n}"
+							"body": "{\n    \"error\": null,\n    \"list\": [\n        {\n            \"modifiedDate\": \"2021-11-17T18:52:00.000+00:00\",\n            \"creationDate\": \"2021-11-17T18:39:00.000+00:00\",\n            \"modifiedBy\": \"test\",\n            \"createdBy\": \"test\",\n            \"version\": 2,\n            \"id\": 11,\n            \"nome\": \"Template 11\",\n            \"durata\": 57,\n            \"typeTemplate\": \"Reale\",\n            \"descrizione\": \"Descrizione molto lunga per questo template\",\n            \"gruppo\": {\n                \"modifiedDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"creationDate\": \"2000-01-01T10:30:10.000+00:00\",\n                \"modifiedBy\": \"init\",\n                \"createdBy\": \"init\",\n                \"version\": 1,\n                \"id\": 1,\n                \"nome\": \"test\",\n                \"descrizione\": \"Gruppo di test\"\n            },\n            \"folder\": null,\n            \"chiamato\": null,\n            \"chiamanti\": null,\n            \"fileLinks\": null\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "template_listTypes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{contextUrl}}/api/template/types",
+							"host": [
+								"{{contextUrl}}"
+							],
+							"path": [
+								"api",
+								"template",
+								"types"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "template_listTypes success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{contextUrl}}/api/template/types",
+									"host": [
+										"{{contextUrl}}"
+									],
+									"path": [
+										"api",
+										"template",
+										"types"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 17 Nov 2021 18:17:36 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": null,\n    \"list\": [\n        \"3PY\",\n        \"CFB\",\n        \"CFU – CFNR – CW – CFnoAv\",\n        \"Chiamata Base\",\n        \"Chiamate ACU – CDC –NNG\",\n        \"Manovra\",\n        \"Reale\",\n        \"Registrazione/Deregistrazione\"\n    ]\n}"
 						}
 					]
 				}
@@ -7954,7 +8629,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nome\": \"{{$randomProductName}}\",\r\n    \"template\": 1,\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"expectedDuration\": null,\r\n    \"chiamato\": {\r\n        \"linea\": 1,\r\n        \"proxy\": 1\r\n    },\r\n    \"chiamanti\": [\r\n        {\r\n            \"linea\": 2,\r\n            \"proxy\": 2\r\n        }\r\n    ]\r\n\r\n}",
+							"raw": "{\r\n    \"nome\": \"{{$randomProductName}}\",\r\n    \"template\": 11,\r\n    \"descrizione\": \"Quos amet excepturi dignissimos. Non consequatur maiores. Odit ut in inventore provident.\",\r\n    \"expectedDuration\": null,\r\n    \"chiamato\": {\r\n        \"linea\": 1,\r\n        \"proxy\": 1\r\n    },\r\n    \"chiamanti\": [\r\n        {\r\n            \"linea\": 2,\r\n            \"proxy\": 2\r\n        },\r\n        {\r\n            \"linea\": 3,\r\n            \"proxy\": 2\r\n        }\r\n    ]\r\n\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

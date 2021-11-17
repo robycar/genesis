@@ -40,8 +40,7 @@ import it.reply.genesis.model.FileSystemVO;
 import it.reply.genesis.model.LineaVO;
 import it.reply.genesis.model.LoadedEntityStatus;
 import it.reply.genesis.model.OutboundProxyVO;
-import it.reply.genesis.model.TemplateFileCategory;
-import it.reply.genesis.model.TemplateFileVO;
+import it.reply.genesis.model.TemplateLineaChiamanteVO;
 import it.reply.genesis.model.TemplateVO;
 import it.reply.genesis.model.TestCaseCaricatoLineaChiamanteVO;
 import it.reply.genesis.model.TestCaseCaricatoPropertyVO;
@@ -120,7 +119,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
 //      throw makeError(HttpStatus.CONFLICT, AppError.TEST_CASE_ALRADY_EXISTS, dto.getNome());
 //    }
     
-    long numLinee = templateVO.getFiles().stream().filter(tvo -> tvo.getCategory().equals(TemplateFileCategory.CHIAMANTE)).count();
+    long numLinee = templateVO.getChiamanti().size();
     int numLineeDTO = dto.getChiamanti() == null ? 0 : dto.getChiamanti().size();
     if (numLineeDTO < numLinee) {
       throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_LINEA_CHIAMANTE_MISSING, numLineeDTO+1);
@@ -145,6 +144,11 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     TestCaseLineaDTO chiamatoDTO = dto.getChiamato();
     if (chiamatoDTO.getLinea() != null) {
       vo.setLineaChiamato(lineaService.readLineaVO(chiamatoDTO.getLinea().getId()));
+      if (!vo.getLineaChiamato().getTypeLinea().getNatura().equals(templateVO.getNaturaChiamato())) {
+        throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_WRONG_NATURA, 
+            vo.getLineaChiamato().getTypeLinea().getNatura(),
+            templateVO.getNaturaChiamato());
+      }
     }
     if (chiamatoDTO.getProxy() != null) {
       vo.setObpChiamato(oBPService.readProxyVO(chiamatoDTO.getProxy().getId()));
@@ -165,18 +169,13 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     
     List<TestCaseLineaChiamanteVO> chiamantiVO = new ArrayList<>(3);
     short numLinea = 1;
-    for (TemplateFileVO tfVO: templateVO.getFiles()) {
-      if (tfVO.getCategory().equals(TemplateFileCategory.CHIAMATO)) {
-        if ( vo.getFileChiamato() == null) {
-          vo.setFileChiamato(findCopiedFile(fileCopiati, tfVO, templateVO));
-        }
-      } else {
+    vo.setFileChiamato(findCopiedFile(fileCopiati, templateVO.getFileChiamato(), templateVO));
+    for (TemplateLineaChiamanteVO tfVO: templateVO.getChiamanti()) {
         TestCaseLineaChiamanteVO chiamanteVO = new TestCaseLineaChiamanteVO();
         chiamanteVO.setTestCase(vo);
         chiamanteVO.setNumLinea(numLinea++);
-        chiamanteVO.setFile(findCopiedFile(fileCopiati, tfVO, templateVO));
+        chiamanteVO.setFile(findCopiedFile(fileCopiati, tfVO.getFile(), templateVO));
         chiamantiVO.add(chiamanteVO);
-      }
     }
     
     if (dto.getChiamanti() != null) {
@@ -185,14 +184,20 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
         if (index >= chiamantiVO.size()) {
           throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_LINEA_CHIAMANTE_OVERFLOW, index, chiamantiVO.size());
         }
-        TestCaseLineaChiamanteVO chiamanteVO = chiamantiVO.get(index++);
+        TestCaseLineaChiamanteVO chiamanteVO = chiamantiVO.get(index);
         if (chiamanteDTO.getLinea() != null && chiamanteDTO.getLinea().getId() != null) {
           chiamanteVO.setLinea(lineaService.readLineaVO(chiamanteDTO.getLinea().getId()));
+          if (!chiamanteVO.getLinea().getTypeLinea().getNatura().equals(templateVO.getChiamanti().get(index).getNatura())) {
+            throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_WRONG_NATURA, 
+                chiamanteVO.getLinea().getTypeLinea().getNatura(),
+                templateVO.getChiamanti().get(index).getNatura());
+          }
         }
         if (chiamanteDTO.getProxy() != null && chiamanteDTO.getProxy().getId() != null) {
           chiamanteVO.setOutboundProxy(oBPService.readProxyVO(chiamanteDTO.getProxy().getId()));
         }
         chiamantiVO.add(chiamanteVO);
+        ++index;
       }
     }
     
@@ -211,15 +216,15 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     return new TestCaseDTO(vo, true);
   }
 
-  private FileSystemVO findCopiedFile(Map<Long, FileSystemVO> fileCopiati, TemplateFileVO file, TemplateVO templateVO) throws ApplicationException {
-    if (file == null || file.getFile() == null) {
+  private FileSystemVO findCopiedFile(Map<Long, FileSystemVO> fileCopiati, FileSystemVO fileSystemVO, TemplateVO templateVO) throws ApplicationException {
+    if (fileSystemVO == null) {
       return null;
     }
-    FileSystemVO targetFile = fileCopiati.get(file.getFile().getId());
+    FileSystemVO targetFile = fileCopiati.get(fileSystemVO.getId());
     if (targetFile == null) {
       logger.error("Impossibile trovare un riferimento al file del template {} con id {}", 
-          templateVO.getId(), file.getFile().getId());
-      throw makeError(HttpStatus.NOT_FOUND, AppError.FS_ENTITY_FILE_NOT_FOUND, templateVO.getId(), file.getFile().getId());
+          templateVO.getId(), fileSystemVO.getId());
+      throw makeError(HttpStatus.NOT_FOUND, AppError.FS_ENTITY_FILE_NOT_FOUND, templateVO.getId(), fileSystemVO.getId());
     }
     return targetFile;
   }

@@ -30,7 +30,7 @@ import it.reply.genesis.api.generic.service.AbstractService;
 import it.reply.genesis.model.BaseEntity;
 import it.reply.genesis.model.FileSystemScope;
 import it.reply.genesis.model.FileSystemVO;
-import it.reply.genesis.model.TemplateFileVO;
+import it.reply.genesis.model.TemplateLineaChiamanteVO;
 import it.reply.genesis.model.TemplateVO;
 import it.reply.genesis.model.repository.FileSystemRepository;
 import it.reply.genesis.model.repository.LineaGeneratoreRepository;
@@ -242,7 +242,10 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     switch(scope) {
     case TEMPLATE:
       TemplateVO template = (TemplateVO) entity;
-      for (TemplateFileVO templateFile : template.getFiles()) {
+      if (template.getFileChiamato() != null && template.getFileChiamato().equals(fileVO)) {
+        throw makeError(HttpStatus.BAD_REQUEST, AppError.FS_PREVENT_DELETE_USED_FILE);
+      }
+      for (TemplateLineaChiamanteVO templateFile : template.getChiamanti()) {
         if (templateFile.getFile().equals(fileVO)) {
           throw makeError(HttpStatus.BAD_REQUEST, AppError.FS_PREVENT_DELETE_USED_FILE);
         }
