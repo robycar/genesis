@@ -26,7 +26,7 @@ public interface TestCaseCaricatoRepository extends JpaRepository<TestCaseCarica
   Optional<TestCaseCaricatoVO> findByIdLocking(long id);
 
   //@Query(value = "SELECT tc.id, tc.stato, tc.result FROM TestCaseCaricatoVO tc WHERE tc.testSuite = :testSuite AND tc.scheduleDateTime IS NULL AND CAST(tc.loadedWhen AS LocalDate) BETWEEN :from AND :to")
-  @Query(value = "SELECT tc.ID, tc.STATO, tc.EXECUTION_RESULT FROM TEST_CASE_CARICATO tc WHERE tc.ID_TEST_SUITE_CARICATA IS NULL AND tc.SCHEDULE_DATETIME IS NULL AND DATE(tc.LOADED_WHEN) BETWEEN ?1 AND ?2", nativeQuery = true)
+  @Query(value = "SELECT tc.ID, tc.STATO, tc.EXECUTION_RESULT as RESULT FROM TEST_CASE_CARICATO tc WHERE tc.ID_TEST_SUITE_CARICATA IS NULL AND tc.SCHEDULE_DATETIME IS NULL AND DATE(tc.LOADED_WHEN) BETWEEN ?1 AND ?2", nativeQuery = true)
   //List<TestCaseCaricatoVO> findByLoadedWhenBetweenAndTestSuiteIsNullAndScheduleDateIsNull(TestSuiteCaricataVO testSuite, LocalDate from, LocalDate to);
   List<StatoTest> findByLoadedWhenBetweenAndTestSuiteIsNullAndScheduleDateIsNull(LocalDate from, LocalDate to);
   
