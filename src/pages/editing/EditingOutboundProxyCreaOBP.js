@@ -384,7 +384,7 @@ function EditingOutboundProxy() {
             <NavbarItemEdit fontSize="large" />
           </div>
 
-          <ButtonEditing nome="obp"/>
+          <ButtonEditing nome="obp" />
 
           <Paper className={classes.generalPaper}>
             <ListItem>
@@ -477,10 +477,10 @@ function EditingOutboundProxy() {
                         onChange={handleChange}
                         input={<Input />}
                       >
-                        {data.map((prova) => {
+                        {data.map((typeLinea) => {
                           return (
-                            <MenuItem key={prova.id} value={prova.id}>
-                              {prova.descrizione}
+                            <MenuItem key={typeLinea.id} value={typeLinea.id}>
+                              {typeLinea.descrizione + "-" + typeLinea.natura}
                             </MenuItem>
                           );
                         })}

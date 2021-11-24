@@ -37,8 +37,9 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useHistory } from "react-router-dom";
-import { creaTemplate } from "../../service/api";
+import { creaTemplate, getGenerale } from "../../service/api";
 import { ButtonEditing } from "../../components/ButtonBarraNavigazione";
+import { listItemSecondaryActionClasses } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -292,18 +293,28 @@ function EditingTemplateCreaTemplate() {
   const [nome, setNome] = useState("");
   const [durata, setDurata] = useState(0);
   const [descrizione, setDescrizione] = useState("");
-  const [tipoTemplate, setTipoTemplate] = useState("");
+  const [typeTemplate, setTypeTemplate] = useState("");
   const [selectedFile, setSelectedFile] = useState([]);
   const [nextDisabled, setNextDisabled] = useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const [chiamato, setChiamato] = useState("");
   const [qntChiamanti, setQntChiamanti] = useState([]);
+  const [qntNaturaChiamanti, setQntNaturaChiamanti] = useState([]);
+  const [nNaturaChiamanti, setNNaturaChiamanti] = useState(
+    qntNaturaChiamanti?.length
+  );
   const [nChiamanti, setNChiamanti] = useState(qntChiamanti.length);
+  const [naturaChiamante1, setNaturaChiamante1] = useState(false);
+  const [naturaChiamante2, setNaturaChiamante2] = useState(false);
+  const [naturaChiamante3, setNaturaChiamante3] = useState(false);
   const [chiamante1, setChiamante1] = useState(false);
   const [chiamante2, setChiamante2] = useState(false);
   const [chiamante3, setChiamante3] = useState(false);
+  const [naturaChiamato, setNaturaChiamato] = useState("");
+  const [naturaChiamanti, setNaturaChiamanti] = useState("");
 
   let arrAppoggio = qntChiamanti;
+  let arrAppoggioBis = qntNaturaChiamanti;
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files);
@@ -322,19 +333,28 @@ function EditingTemplateCreaTemplate() {
   const handleChangeDescrizione = (e) => {
     setDescrizione(e.target.value);
   };
-  const handleChangeTipoTemplate = (e) => {
-    setTipoTemplate(e.target.value);
-    console.log(e.target.value);
-  };
+  // const handleChangeTypeTemplate = (e) => {
+  //   setListType(e.target.value);
+  //   // setTypeTemplate(e.target.value);
+  //   console.log(e.target.value);
+  // };
 
   const handleChangeChiamato = (e) => {
     setChiamato(e.target.value);
   };
 
+  const handleChangeNaturaChiamato = (e) => {
+    setNaturaChiamato(e.target.value);
+  };
+
+  const handleChangeNaturaChiamanti = (e) => {
+    setNaturaChiamanti(e.target.value);
+  };
+
   useEffect(() => {
     if (activeStep === 0) {
-      if (nome === "" || durata === 0) {
-        // if (nome === "" || durata === 0 || tipoTemplate === "") {
+      if (nome === "" || durata === 0 || typeTemplate === "") {
+        // if (nome === "" || durata === 0 || typeTemplate === "") {
         setNextDisabled(true);
       } else {
         setNextDisabled(false);
@@ -350,7 +370,7 @@ function EditingTemplateCreaTemplate() {
     }
 
     if (activeStep === 2) {
-      if (chiamato === "") {
+      if (chiamato === "" || naturaChiamato === "") {
         setNextDisabled(true);
       } else {
         setNextDisabled(false);
@@ -358,7 +378,7 @@ function EditingTemplateCreaTemplate() {
     }
 
     if (activeStep === 3) {
-      if (nChiamanti === 0) {
+      if (nChiamanti === 0 || qntNaturaChiamanti.length === 1 ) {
         setNextDisabled(true);
       } else {
         setNextDisabled(false);
@@ -388,12 +408,13 @@ function EditingTemplateCreaTemplate() {
         setNextDisabled(true);
       } else {
         setNextDisabled(false);
+       
       }
     }
   }, [
     nome,
     durata,
-    tipoTemplate,
+    typeTemplate,
     arrayValue,
     chiamato,
     nChiamanti,
@@ -401,6 +422,29 @@ function EditingTemplateCreaTemplate() {
     chiamante2,
     chiamante3,
   ]);
+
+  /*---------- GET TEMPLATE LIST-TYPE ---------------*/
+  //Dati API
+  const [listType, setListType] = useState([]);
+  //Variabile per inteccettare l'option
+  // const [tipoTemplate, setTipoTemplate] = useState("");
+
+  const handleChangeTypeTemplate = (event) => {
+    setTypeTemplate(event.target.value);
+  };
+
+  const getListType = () => {
+    (async () => {
+      setListType((await getGenerale("template/types")).list);
+    })();
+  };
+
+  useEffect(() => {
+    getListType();
+  }, []);
+
+  /*---------- NATURA TIPO TEMPLATE ---------------*/
+  const [naturaTipoTemplate, setNaturaTipoTemplate] = useState("");
 
   /*----------- MODALE ERROR LOADING FILE ------------*/
   const [openWarning, setOpenWarning] = useState(false);
@@ -411,23 +455,37 @@ function EditingTemplateCreaTemplate() {
   };
 
   /*-------------- FUNZIONE ADD TEMPLATE --------------*/
+
   const funzioneCreaTemplate = () => {
     //----AGGIORNA CHIAMANTI----
     (async () => {
       let result = await creaTemplate(
         nome,
         durata,
-        tipoTemplate,
+        typeTemplate,
         descrizione,
         chiamato,
+        naturaChiamato,
         qntChiamanti,
-        arrayValue
+        arrayValue,
+        qntNaturaChiamanti
       );
       if (result.error !== null) {
         setOpenWarning(true);
         if (result.error.code === "TEST-0018") {
           setWarning(
             "Impossibile completare l'operazione. Si sta tentando di utilizzare il file più di una volta tra chiamato e chiamanti"
+          );
+        }
+      
+        if (result.error.code === "TEST-0031") {
+          setWarning(
+            "Impossibile configurare la linea per il template in quando non è stata specificata la natura della linea."
+          );
+        }
+        if (result.error.code === "TEST-0030") {
+          setWarning(
+            "La dimensione dell'elenco dei file chiamante (2) non corrisponde a quella dell'elenco delle nature delle linee (1)"
           );
         }
         if (result.error === "Internal Server Error") {
@@ -438,7 +496,7 @@ function EditingTemplateCreaTemplate() {
           setWarning(
             "Codice errore :" +
               result.error.code +
-              "Descrizione " +
+              " Descrizione " +
               result.error.description
           );
         }
@@ -451,15 +509,27 @@ function EditingTemplateCreaTemplate() {
 
   //-------------------------CHIAMANTI E CHIAMATO --------------------------
 
+  const arrayNaturaLinea = ["REALE", "SIMULATO"];
+
   const addArr = () => {
     arrAppoggio.push({ linea: 0, proxy: 0, index: arrAppoggio.length });
     setQntChiamanti(arrAppoggio);
     setNChiamanti(qntChiamanti.length);
+
+    arrAppoggioBis.push({
+      naturaLinea: "SIMULATO",
+      index: arrAppoggioBis.length,
+    });
+    setQntNaturaChiamanti(arrAppoggioBis);
+    setNNaturaChiamanti(qntNaturaChiamanti.length);
   };
 
   const removeArr = () => {
+    arrAppoggioBis.pop();
     arrAppoggio.pop();
     setQntChiamanti(arrAppoggio);
+    setNChiamanti(qntChiamanti.length);
+    setQntNaturaChiamanti(arrAppoggioBis);
     setNChiamanti(qntChiamanti.length);
 
     switch (qntChiamanti.length) {
@@ -650,7 +720,7 @@ function EditingTemplateCreaTemplate() {
                     id="alertDescrizione"
                     style={{ display: "none" }}
                   >
-                    Descizione è richiesta
+                    Descrizione è richiesta
                   </Alert>
                 </Form.Group>
               </Paper>
@@ -662,26 +732,24 @@ function EditingTemplateCreaTemplate() {
                     className={classes.formControl}
                   >
                     <Select
-                      id="selectTipoTemplate"
-                      value={tipoTemplate}
-                      onChange={handleChangeTipoTemplate}
-                      required
+                      value={typeTemplate}
+                      onChange={handleChangeTypeTemplate}
                     >
-                      <MenuItem value={"Chiamata Base"}>Chiamata Base </MenuItem>
-                      <MenuItem value={"CFU-CFNR-CW-CFnoAV"}>CFU-CFNR-CW-CFnoAV </MenuItem>
-                      <MenuItem value={"CFB"}>CFB</MenuItem>
-                      <MenuItem value={"3PY"}>3PY</MenuItem>
-                      <MenuItem value={"Chiamante ACU-CDC-NNG"}>Chiamante ACU-CDC-NNG</MenuItem>
-                      <MenuItem value={"Manovra"}>Manovra</MenuItem>
-                      <MenuItem value={"Registrazione/Deregistrazione"}>Registrazione/Deregistrazione</MenuItem>
-
+                      {listType?.map((option, index) => {
+                        return (
+                          <MenuItem key={index} value={option}>
+                            {option}
+                          </MenuItem>
+                        );
+                      })}
                     </Select>
+
                     <Alert
                       severity="error"
                       id="alertLinea"
                       style={{ display: "none" }}
                     >
-                      Selezionare il tipo template
+                      Selezionare la natura della linea
                     </Alert>
                   </FormControl>
                   <Alert
@@ -789,26 +857,26 @@ function EditingTemplateCreaTemplate() {
 
                   <Col>
                     <Form.Group controlId="form.Numero">
-                      <Form.Label>Seleziona Tipo Template</Form.Label>
+                      <Form.Label>Natura Linea</Form.Label>
                       <FormControl
                         variant="outlined"
                         className={classes.formControl}
                       >
                         <Select
-                          id="selectLinea"
-                          value={tipoTemplate}
-                          onChange={handleChangeTipoTemplate}
+                          id="selectNaturaChiamato"
+                          value={naturaChiamato}
+                          onChange={handleChangeNaturaChiamato}
                           required
                         >
-                          <MenuItem value={"Reale"}>Reale </MenuItem>
-                          <MenuItem value={"Simulato"}>Simulato </MenuItem>
+                          <MenuItem value={"REALE"}>Reale </MenuItem>
+                          <MenuItem value={"SIMULATO"}>Simulato </MenuItem>
                         </Select>
                         <Alert
                           severity="error"
                           id="alertLinea"
                           style={{ display: "none" }}
                         >
-                          Selezionare il tipo template
+                          Selezionare la natura della Linea
                         </Alert>
                       </FormControl>
                     </Form.Group>
@@ -819,6 +887,7 @@ function EditingTemplateCreaTemplate() {
           </div>
 
           {/* ------------------------STEP 4--------------------------------- */}
+
           <div
             className={classes.generalContainer}
             style={{
@@ -841,7 +910,7 @@ function EditingTemplateCreaTemplate() {
                           <Col className={classes.col}>
                             <Form.Group controlId="form.Numero">
                               <Form.Label>
-                                Seleziona il file del Chiamate{" "}
+                                Seleziona il file del Chiamante{" "}
                                 <b>{index + 1}</b>{" "}
                               </Form.Label>
                               <FormControl
@@ -896,29 +965,59 @@ function EditingTemplateCreaTemplate() {
                           </Col>
                           <Col>
                             <Form.Group controlId="form.Numero">
-                              <Form.Label>Seleziona Tipo Template</Form.Label>
+                              <Form.Label>Natura Linea</Form.Label>
                               <FormControl
                                 variant="outlined"
                                 className={classes.formControl}
                               >
                                 <Select
-                                  id="selectLinea"
-                                  value={tipoTemplate}
-                                  onChange={handleChangeTipoTemplate}
+                                  id="selectNaturaChiamanti"
+                                  defaultValue= {arrayNaturaLinea[0]}
+                                  value={qntNaturaChiamanti.index}
+                                  // onChange={handleChangeNaturaChiamanti}
+                                  onChange={(e) => {
+                                    arrAppoggioBis = [...qntNaturaChiamanti];
+                                    arrAppoggioBis[index].naturaLinea =
+                                      e.target.value;
+                                    setQntNaturaChiamanti(arrAppoggioBis);
+
+                                    index === 0
+                                      ? setNaturaChiamante1(true)
+                                      : index === 1
+                                      ? setNaturaChiamante2(true)
+                                      : index === 2
+                                      ? setNaturaChiamante3(true)
+                                      : setNaturaChiamante1(false);
+                                  }}
+                                  
                                   required
                                 >
-                                  <MenuItem value={"Reale"}>Reale </MenuItem>
+                                  {/* <MenuItem value={"Reale"}>Reale </MenuItem>
                                   <MenuItem value={"Simulato"}>
                                     Simulato{" "}
-                                  </MenuItem>
+                                  </MenuItem> */}
+                                  {arrayNaturaLinea.map(
+                                    (naturaLinea, index) => {
+                                      return (
+                                        <MenuItem
+                                          // disabled={
+                                          //   chiamato === file.name ||
+                                          //   qntChiamanti[0]?.linea ===
+                                          //     file.name ||
+                                          //   qntChiamanti[1]?.linea ===
+                                          //     file.name ||
+                                          //   qntChiamanti[2]?.linea === file.name
+                                          // }
+                                          key={index}
+                                          value={naturaLinea}
+                                          
+                                        >
+                                          {naturaLinea}
+                                        </MenuItem>
+                                      );
+                                    }
+                                  )}
                                 </Select>
-                                <Alert
-                                  severity="error"
-                                  id="alertLinea"
-                                  style={{ display: "none" }}
-                                >
-                                  Selezionare il tipo template
-                                </Alert>
                               </FormControl>
                             </Form.Group>
                           </Col>

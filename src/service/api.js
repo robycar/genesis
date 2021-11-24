@@ -69,7 +69,6 @@ export async function getByIdGenerale(indirizzo, id) {
   return result;
 }
 
-
 //------PUT------
 export async function putGenerale(indirizzo, object) {
   var myHeaders = new Headers();
@@ -163,12 +162,11 @@ export async function postAddFile(indirizzo, id, files) {
     redirect: "follow",
   };
 
-  let result = await fetch(`/api/${indirizzo}/${id}`, requestOptions)
+  let result = await fetch(`/api/${indirizzo}/${id}`, requestOptions);
 
   result = await result.json();
   return result;
-
-};
+}
 
 //---------Modifica Files--------
 export async function postModificaFiles(indirizzo, files) {
@@ -214,7 +212,18 @@ export async function deleteFiles(indirizzo, id, path) {
 
 //---------CREA TEMPLATE-----------
 //---------Crea Template------
-export async function creaTemplate(nome, durata, tipoTemplate, descrizione, chiamato, qntChiamanti, arrayValue) {
+
+export async function creaTemplate(
+  nome,
+  durata,
+  tipoTemplate,
+  descrizione,
+  chiamato,
+  naturaChiamato,
+  qntChiamanti,
+  arrayValue,
+  qntNaturaChiamanti
+) {
   var myHeaders = new Headers();
   myHeaders.append("Authorization", bearer);
   myHeaders.append("Access-Control-Allow-Origin", acccessControl);
@@ -226,17 +235,21 @@ export async function creaTemplate(nome, durata, tipoTemplate, descrizione, chia
   formdata.append("typeTemplate", tipoTemplate);
   formdata.append("descrizione", descrizione);
 
-  if (chiamato !== "") {
+  if (chiamato !== "" && naturaChiamato != "") {
     formdata.append("chiamato", chiamato);
+    formdata.append("naturaChiamato", naturaChiamato);
   }
-  if (qntChiamanti[0]?.linea) {
+  if (qntChiamanti[0]?.linea && qntNaturaChiamanti[0]?.naturaLinea) {
     formdata.append("chiamanti", qntChiamanti[0].linea);
+    formdata.append("naturaChiamanti", qntNaturaChiamanti[0].naturaLinea);
   }
-  if (qntChiamanti[1]?.linea) {
+  if (qntChiamanti[1]?.linea && qntNaturaChiamanti[1]?.naturaLinea) {
     formdata.append("chiamanti", qntChiamanti[1].linea);
+    formdata.append("naturaChiamanti", qntNaturaChiamanti[1].naturaLinea);
   }
-  if (qntChiamanti[2]?.linea) {
+  if (qntChiamanti[2]?.linea && qntNaturaChiamanti[2]?.naturaLinea) {
     formdata.append("chiamanti", qntChiamanti[2].linea);
+    formdata.append("naturaChiamanti", qntNaturaChiamanti[2].naturaLinea);
   }
   if (arrayValue[0]?.name) {
     formdata.append("file", arrayValue[0], arrayValue[0]?.name);
@@ -258,13 +271,11 @@ export async function creaTemplate(nome, durata, tipoTemplate, descrizione, chia
     redirect: "follow",
   };
 
-
   let result = await fetch(`/api/template`, requestOptions);
 
   result = await result.json();
   return result;
 }
-
 //--------------PUT SPECIFICO PER LINEA GENERATORE ------------------
 export async function putFileCsv(
   indirizzo,

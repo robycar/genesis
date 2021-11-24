@@ -118,7 +118,10 @@ function LineeGeneratore() {
     },
     {
       title: "Tipo Linea",
-      field: "typeLinea.descrizione",
+      field: "typeLinea",
+      render: (data) => {
+        return `${data.typeLinea.descrizione}-${data.typeLinea.natura}`;
+      },
     },
     {
       title: "Path Csv",
@@ -356,7 +359,7 @@ function LineeGeneratore() {
       <MaterialTable
         icons={tableIcons}
         style={{ boxShadow: "none" }}
-        title="Total Lines"
+        title="Linee Totali"
         data={data}
         isLoading={caricamento}
         columns={columns}
@@ -368,7 +371,6 @@ function LineeGeneratore() {
           searchFieldAlignment: "left",
           filtering: true,
           pageSizeOptions: [5, 10, 20, { value: data?.length, label: "All" }],
-
         }}
         actions={[
           {
@@ -476,7 +478,7 @@ function LineeGeneratore() {
                   >
                     {appearLine.map((typeLinea) => (
                       <MenuItem key={typeLinea.id} value={typeLinea.id}>
-                        {typeLinea.descrizione}
+                        {typeLinea.descrizione + "-" + typeLinea.natura}
                       </MenuItem>
                     ))}
                   </TextField>

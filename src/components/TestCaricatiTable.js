@@ -205,8 +205,11 @@ const TestCaricatiTable = () => {
       marginTop: "1%",
     },
 
-    divIntestazione: {
-      marginBottom: "2%",
+    divIntestazioneModaleError: {
+      display: "flex",
+      alignItems: "center",
+      padding: "2%",
+      marginBottom: "1%",
     },
     calendarPaper: {
       padding: "3%",
@@ -979,7 +982,7 @@ const TestCaricatiTable = () => {
           <div>
             <Paper className={classes.paperModaleDelete} elevation={1}>
               <div>
-                <div className={classes.divIntestazione}>
+                <div className={classes.divIntestazioneModaleError}>
                   <SettingsIcon className={classes.iconModaleError} />
                   <Typography
                     className={classes.intestazioneModaleError}

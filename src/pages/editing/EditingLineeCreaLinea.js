@@ -52,6 +52,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
+
+  rootForm: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+  },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
@@ -178,6 +185,11 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     width: "70px",
   },
+  formControlNature: {
+    margin: theme.spacing(1),
+    width: "204px",
+    height: "39px",
+  },
   divIp: {
     display: "flex",
     flexDirection: "row",
@@ -221,12 +233,12 @@ const useStyles = makeStyles((theme) => ({
 
   intestazione: {
     color: "#47B881",
-    marginTop: "5%",
+    // marginTop: "5%",
   },
   icon: {
     transform: "scale(1.8)",
     color: "#47B881",
-    marginTop: "8px",
+    // marginTop: "8px",
   },
   bottoni: {
     display: "flex",
@@ -252,6 +264,11 @@ function EditingLineaCreaLinea() {
   const [openDrawer, setOpenDrawer] = useState([]);
   const [openWarning, setOpenWarning] = useState(false);
   const [warning, setWarning] = useState("");
+  const [nature, setNature] = React.useState("");
+
+  const handleChangeNature = (event) => {
+    setNature(event.target.value);
+  };
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -316,6 +333,7 @@ function EditingLineaCreaLinea() {
           typeLineaDescrizione !== ""
             ? typeLineaDescrizione
             : typeLinea.descrizione,
+        natura: nature !== "" ? nature : typeLinea.natura,
       });
 
       funzioneGetAll();
@@ -333,6 +351,7 @@ function EditingLineaCreaLinea() {
     const funzioneAggiungiTypeLinea = () => {
       putGenerale("typeLinea", {
         descrizione: type,
+        natura: nature,
       })
         .then((result) => {
           if (result.error.code === null) {
@@ -518,6 +537,8 @@ function EditingLineaCreaLinea() {
   const [type, setType] = useState("");
 
   const handleOpen2 = () => {
+    setType("");
+    setNature("");
     setOpen2(true);
   };
 
@@ -723,7 +744,7 @@ function EditingLineaCreaLinea() {
                       {data.map((typeLinea) => {
                         return (
                           <MenuItem key={typeLinea.id} value={typeLinea}>
-                            {typeLinea.descrizione}
+                            {typeLinea.descrizione + "-" + typeLinea.natura}
                           </MenuItem>
                         );
                       })}
@@ -796,7 +817,13 @@ function EditingLineaCreaLinea() {
                         <Fade in={open}>
                           <div className={classes.paper2}>
                             <Paper>
-                              <div>
+                              <div
+                                style={{
+                                  alignItems: "center",
+                                  marginTop: "1%",
+                                  marginBottom: "1%",
+                                }}
+                              >
                                 <ListItem button>
                                   <ListItemIcon>
                                     <SettingsIcon className={classes.icon} />
@@ -805,10 +832,13 @@ function EditingLineaCreaLinea() {
                                     className={classes.intestazione}
                                     variant="h5"
                                   >
-                                    Add Tipo Linea{" "}
+                                    Aggiungi Tipo Linea{" "}
                                   </Typography>
                                 </ListItem>
                               </div>
+                              <Divider
+                                style={{ width: "270px", marginLeft: "15px" }}
+                              />
 
                               <div className={classes.paperBottom}>
                                 <Typography variant="h11">
@@ -842,7 +872,13 @@ function EditingLineaCreaLinea() {
                                       <Fade in={open2}>
                                         <div className={classes.paper2}>
                                           <Paper>
-                                            <div>
+                                            <div
+                                              style={{
+                                                alignItems: "center",
+                                                marginTop: "1%",
+                                                marginBottom: "1%",
+                                              }}
+                                            >
                                               <ListItem button>
                                                 <ListItemIcon>
                                                   <SettingsIcon
@@ -855,43 +891,98 @@ function EditingLineaCreaLinea() {
                                                   }
                                                   variant="h5"
                                                 >
-                                                  Add Tipo Linea{" "}
+                                                  Aggiungi Tipo Linea{" "}
                                                 </Typography>
                                               </ListItem>
                                             </div>
 
+                                            <Divider
+                                              style={{
+                                                width: "270px",
+                                                marginLeft: "15px",
+                                              }}
+                                            />
+
                                             <div
                                               className={classes.paperBottom}
                                             >
-                                              <form
-                                                className={classes.root}
+                                              <Form
+                                                className={classes.rootForm}
                                                 noValidate
                                                 autoComplete="off"
                                               >
                                                 <TextField
                                                   id="outlined-basic"
-                                                  label="New Type"
+                                                  label="Nome Tipo Linea"
                                                   variant="outlined"
                                                   onChange={(e) =>
                                                     setType(e.target.value)
                                                   }
                                                 />
-                                              </form>
+
+                                                <Form.Group
+                                                  controlId="form.Nome"
+                                                  required
+                                                >
+                                                  <FormControl
+                                                    variant="outlined"
+                                                    className={
+                                                      classes.formControlNature
+                                                    }
+                                                  >
+                                                    <TextField
+                                                      style={{
+                                                        width: "204.4px",
+                                                        height: "39px",
+                                                      }}
+                                                      id="outlined-basic"
+                                                      label="Natura Tipo Linea"
+                                                      value={nature}
+                                                      onChange={
+                                                        handleChangeNature
+                                                      }
+                                                      select
+                                                      variant="filled"
+                                                    >
+                                                      <MenuItem value="REALE">
+                                                        REALE
+                                                      </MenuItem>
+                                                      <MenuItem value="SIMULATO">
+                                                        SIMULATO
+                                                      </MenuItem>
+                                                    </TextField>
+                                                  </FormControl>
+                                                </Form.Group>
+                                              </Form>
 
                                               <div className={classes.divider2}>
                                                 <Divider />
                                               </div>
 
                                               <div className={classes.bottoni}>
-                                                <Button
-                                                  variant="contained"
-                                                  color="secondary"
-                                                  onClick={
-                                                    functionAggiungiTypeLinea
-                                                  }
-                                                >
-                                                  Conferma
-                                                </Button>
+                                                {type !== "" &&
+                                                nature !== "" ? (
+                                                  <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    onClick={
+                                                      functionAggiungiTypeLinea
+                                                    }
+                                                  >
+                                                    Conferma
+                                                  </Button>
+                                                ) : (
+                                                  <Button
+                                                    disabled
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    onClick={
+                                                      functionAggiungiTypeLinea
+                                                    }
+                                                  >
+                                                    Conferma
+                                                  </Button>
+                                                )}
 
                                                 <Button
                                                   variant="contained"
@@ -1013,26 +1104,53 @@ function EditingLineaCreaLinea() {
                                     className={classes.intestazione}
                                     variant="h5"
                                   >
-                                    Modifica TypeLinea
+                                    Modifica Tipo Linea
                                   </Typography>
                                 </ListItem>
                               </div>
 
                               <div className={classes.paperBottom}>
-                                <Form.Group controlId="form.Descrizione">
-                                  <Form.Control
-                                    type="text"
-                                    placeholder="Modifica descrizione"
-                                    defaultValue={
-                                      openEdit === true
-                                        ? typeLineaDescrizione
-                                        : ""
-                                    }
-                                    onChange={(e) =>
-                                      setTypeLineaDescrizione(e.target.value)
-                                    }
-                                  />
-                                </Form.Group>
+                                <Form
+                                  className={classes.rootForm}
+                                  noValidate
+                                  autoComplete="off"
+                                >
+                                  <Form.Group controlId="form.Descrizione">
+                                    <Form.Control
+                                      type="text"
+                                      placeholder="Modifica descrizione"
+                                      defaultValue={
+                                        openEdit === true
+                                          ? typeLineaDescrizione
+                                          : ""
+                                      }
+                                      onChange={(e) =>
+                                        setTypeLineaDescrizione(e.target.value)
+                                      }
+                                    />
+                                  </Form.Group>
+                                  <Form.Group controlId="form.Nome" required>
+                                    <FormControl
+                                      variant="outlined"
+                                      className={classes.formControlNature}
+                                    >
+                                      <TextField
+                                        id="outlined-basic"
+                                        label="Outlined"
+                                        label="Natura Tipo Linea"
+                                        value={nature}
+                                        onChange={handleChangeNature}
+                                        select
+                                        variant="filled"
+                                      >
+                                        <MenuItem value="REALE">REALE</MenuItem>
+                                        <MenuItem value="SIMULATO">
+                                          SIMULATO
+                                        </MenuItem>
+                                      </TextField>
+                                    </FormControl>
+                                  </Form.Group>
+                                </Form>
 
                                 <div className={classes.divider2}>
                                   <Divider />

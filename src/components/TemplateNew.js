@@ -62,14 +62,20 @@ function Template() {
   const [caricamento, setCaricamento] = useState(false);
   const [caricamentoDel, setCaricamentoDel] = useState(false);
   const [appearFile, setAppearFile] = useState([]);
+  const [appearFileNaturaChiamato, setAppearFileNaturaChiamato] = useState([]);
+  const [appearFileNaturaChiamanti, setAppearFileNaturaChiamanti] = useState(
+    []
+  );
   const [chiamato, setChiamato] = useState();
   const [chiamanti, setChiamanti] = useState([]);
+  const [chiamantiNatura, setChiamantiNatura] = useState([]);
   const [url, setUrl] = useState("");
   const [contenutoFile, setContenutoFile] = useState("");
   const [visualizzaContenutoFile, setVisualizzaContenutoFile] = useState(false);
   const [modificaContenutoFile, setModificaContenutoFile] = useState(false);
   const [scrittaTabella, setScrittaTabella] = useState("");
   const [tipoTemplate, setTipoTemplate] = useState("");
+  const [naturaTemplateChiamato, setNaturaTemplateChiamato] = useState("");
 
   const funzioneGetAll = () => {
     if (functions.indexOf("template.view") !== -1) {
@@ -106,6 +112,20 @@ function Template() {
           (await getByIdGenerale("fs/entityfolder/TEMPLATE", id)).list
         );
         setCaricamentoDel(false);
+      })();
+    }
+  };
+
+  const funzioneGetAppearFileByIdNatura = (id) => {
+    if (functions.indexOf("template.edit") !== -1) {
+      (async () => {
+        setCaricamentoDel(true);
+        setAppearFileNaturaChiamato(
+          (await getByIdGenerale("template", id)).template.fileLinks.CHIAMATO
+        );
+        setAppearFileNaturaChiamanti(
+          (await getByIdGenerale("template", id)).template.fileLinks.CHIAMANTE
+        );
       })();
     }
   };
@@ -336,6 +356,7 @@ function Template() {
     setModifiedDate(rowData.modifiedDate);
     setTypeTemplate(rowData.typeTemplate);
     funzioneGetAppearFileById(rowData.id);
+    funzioneGetAppearFileByIdNatura(rowData.id);
     funzioneLoadTemplateBYId(rowData.id);
     setUrl(rowData.url);
     setOpen(true);
@@ -665,7 +686,7 @@ function Template() {
                 </Button>
               </div>
             ),
-            tooltip: "Carica Template",
+            tooltip: "Crea Template",
             isFreeAction: true,
           },
           {
@@ -901,8 +922,8 @@ function Template() {
               <div>
                 <ListItem>
                   <Typography className={classes.intestazione} variant="h4">
-                    {modifica === false ? "Visualizza " : "Modifica "} Chiamanti{" "}
-                    <b>{nomeTitolo}</b>
+                    {modifica === false ? "Visualizza " : "Modifica "}{" "}
+                    Chiamato/Chiamanti <b>{nomeTitolo}</b>
                   </Typography>
                 </ListItem>
                 <Divider className={classes.divider} />
@@ -926,7 +947,7 @@ function Template() {
                         className={classes.textField}
                         style={{ width: "300px" }}
                         select
-                        label="Linea "
+                        label="File"
                         value={chiamato}
                         onChange={(e) => setChiamato(e.target.value)}
                         InputProps={{
@@ -949,26 +970,34 @@ function Template() {
                         ))}
                       </TextField>
                     </Col>
+
                     <Col className={classes.col}>
                       <TextField
                         className={classes.textField}
                         style={{ width: "300px" }}
                         select
-                        id="selectTypeTemplate"
-                        value={typeTemplate}
-                        label="Template"
-                        onChange={handleChangeTipoTemplate}
+                        label="Natura Chiamato"
+                        value={chiamato}
+                        onChange={(e) => setChiamato(e.target.value)}
+                        InputProps={{
+                          readOnly: modifica === false ? true : false,
+                        }}
                       >
-                        <MenuItem value={"Reale"}>Reale </MenuItem>
-                        <MenuItem value={"Simulato"}>Simulato </MenuItem>
+                        {appearFileNaturaChiamato?.map((file) => (
+                          <MenuItem
+                            disabled={
+                              chiamato === file.id ||
+                              chiamanti[0] === file.id ||
+                              chiamanti[1] === file.id ||
+                              chiamanti[2] === file.id
+                            }
+                            key={file.id}
+                            value={file.id}
+                          >
+                            {file.natura}
+                          </MenuItem>
+                        ))}
                       </TextField>
-                      <Alert
-                        severity="error"
-                        id="alertLinea"
-                        style={{ display: "none" }}
-                      >
-                        Selezionare il tipo template
-                      </Alert>
                     </Col>
                   </Row>
 
@@ -991,7 +1020,7 @@ function Template() {
                             className={classes.textField}
                             style={{ width: "300px" }}
                             select
-                            label="File "
+                            label="File"
                             value={chiamanti[index]}
                             onChange={(e) => {
                               var x = [...chiamanti];
@@ -1018,26 +1047,38 @@ function Template() {
                             ))}
                           </TextField>
                         </Col>
+
                         <Col className={classes.col}>
                           <TextField
                             className={classes.textField}
                             style={{ width: "300px" }}
                             select
-                            id="selectTypeTemplate"
-                            value={typeTemplate}
-                            label="Template"
-                            onChange={handleChangeTipoTemplate}
+                            label="Natura Chiamante "
+                            value={chiamanti[index]}
+                            onChange={(e) => {
+                              var x = [...chiamanti];
+                              x[index] = e.target.value;
+                              setChiamanti(x);
+                            }}
+                            InputProps={{
+                              readOnly: modifica === false ? true : false,
+                            }}
                           >
-                            <MenuItem value={"Reale"}>Reale </MenuItem>
-                            <MenuItem value={"Simulato"}>Simulato </MenuItem>
+                            {appearFileNaturaChiamanti.map((file) => (
+                              <MenuItem
+                                disabled={
+                                  chiamato === file.id ||
+                                  chiamanti[0] === file.id ||
+                                  chiamanti[1] === file.id ||
+                                  chiamanti[2] === file.id
+                                }
+                                key={file.id}
+                                value={file.id}
+                              >
+                                {file.natura}
+                              </MenuItem>
+                            ))}
                           </TextField>
-                          <Alert
-                            severity="error"
-                            id="alertLinea"
-                            style={{ display: "none" }}
-                          >
-                            Selezionare il tipo template
-                          </Alert>
                         </Col>
                       </Row>
                     </div>

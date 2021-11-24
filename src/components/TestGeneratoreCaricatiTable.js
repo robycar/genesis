@@ -548,7 +548,7 @@ const TestGeneratoreCaricatiTable = () => {
         if (result.error !== null) {
           setOpenWarning(true);
           if (result.error.code === "TEST-0027") {
-            setWarning("Il test selezionato è già stato lanciato");
+            setWarning("Il test selezionato è già stato lanciato!");
           } else {
             setWarning(
               "Codice errore: " +

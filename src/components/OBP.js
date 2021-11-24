@@ -142,7 +142,11 @@ function Obp() {
       render: (rowData) => {
         let prova = "!";
         for (let index = 0; index < rowData.typeLinee.length; index++) {
-          prova += ", " + rowData.typeLinee[index].descrizione;
+          prova +=
+            ", " +
+            rowData.typeLinee[index].descrizione +
+            "-" +
+            rowData.typeLinee[index].natura;
         }
         return prova.replace("!, ", "");
       },
@@ -644,7 +648,10 @@ function Obp() {
 
                 <Col className={classes.col}>
                   <TextField
-                    className={classes.select}
+                    SelectProps={{
+                      multiple: true,
+                      onChange: handleChange,
+                    }}
                     select
                     label="Tipo Linea"
                     value={appearLine?.id}
@@ -653,7 +660,7 @@ function Obp() {
                   >
                     {appearLine.map((typeLinea) => (
                       <MenuItem key={typeLinea.id} value={typeLinea.id}>
-                        {typeLinea.descrizione}
+                        {typeLinea.descrizione + "-" + typeLinea.natura}
                       </MenuItem>
                     ))}
                   </TextField>

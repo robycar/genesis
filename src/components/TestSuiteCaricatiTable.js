@@ -164,6 +164,12 @@ const TestSuiteCaricatiTable = () => {
     divIntestazione: {
       marginBottom: "2%",
     },
+    divIntestazioneModaleError : {
+      display: "flex",
+      alignItems: "center",
+      padding: "2%",
+      marginBottom: "1%",
+    },
     paperModaleDelete: {
       backgroundColor: theme.palette.background.paper,
       border: "2px solid #000",
@@ -537,7 +543,7 @@ const TestSuiteCaricatiTable = () => {
       .then((result) => {
         if (result.error !== null) {
           setOpenWarning(true);
-          if (result.error.code === "TEST-0020") {
+          if (result.error.code === "TEST-0022") {
             setWarning("Il test selezionato è già stato lanciato!");
           } else {
             setWarning(
@@ -957,7 +963,7 @@ const TestSuiteCaricatiTable = () => {
           <div>
             <Paper className={classes.paperModaleDelete} elevation={1}>
               <div>
-                <div className={classes.divIntestazione}>
+                <div className={classes.divIntestazioneModaleError}>
                   <SettingsIcon className={classes.iconModaleError} />
                   <Typography
                     className={classes.intestazioneModaleError}
