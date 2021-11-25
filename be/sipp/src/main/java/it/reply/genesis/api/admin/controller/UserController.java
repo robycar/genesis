@@ -49,6 +49,7 @@ public class UserController extends AbstractController {
 
 	/**
 	 * Elenco di utenti e relativi ruoli
+	 * @return response con l'elenco degli utenti recuperati.
 	 */
 	@GetMapping("")
 	public UtenteListResponse list() {

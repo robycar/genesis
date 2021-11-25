@@ -22,7 +22,7 @@ public interface TemplateService {
 
   /**
    * Crea un nuovo template e lo popola con i file contenuti nel dto di richiesta
-   * @param request il DTO di richiesta
+   * @param requestDTO il DTO di richiesta
    * 
    * @return il template creato
    * @throws ApplicationException in caso di errori

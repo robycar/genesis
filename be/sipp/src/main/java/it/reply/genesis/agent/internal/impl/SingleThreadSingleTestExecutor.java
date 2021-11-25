@@ -96,9 +96,9 @@ public class SingleThreadSingleTestExecutor implements DisposableBean, Runnable 
    * Avvia un TestCaseCaricato se non ci sono altri task in esecuzione.
    * Questo metodo lancia una {@link ApplicationException} nel caso in cui
    * sia presente qualche altro task in esecuzione.
-   * <strike>Il {@code testCaseVO} verrà modificato con la data di avvio impostata alla data
+   * &lt;strike&gt;Il {@code testCaseVO} verrà modificato con la data di avvio impostata alla data
    * di sistema corrente e lo stato a {@link LoadedEntityStatus#RUNNING}, prima 
-   * di verificare se sia effettivamente possibile avviare il test</strike>. Quindi in caso
+   * di verificare se sia effettivamente possibile avviare il test&lt;/strike&gt;. Quindi in caso
    * di errore, l'applicazione dovrà evitare di salvare l'entiy, eventualmente
    * effettuando una rollback sul db.
    * @param testCaseVO il test case da avviare

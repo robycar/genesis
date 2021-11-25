@@ -20,9 +20,9 @@ public class DTO implements Serializable {
 	/**
 	 * Write to sb the value of fieldName using the format fieldName=fieldValue.toString().
 	 * If fieldValue is null nothing in written
-	 * @param sb
-	 * @param fieldName
-	 * @param fieldValue
+	 * @param sb lo stringbuilder su cui scrivere
+	 * @param fieldName il nome del campo da scrivere
+	 * @param fieldValue il valore del campo da scrivere
 	 * @return sb
 	 */
 	protected StringBuilder writeField(StringBuilder sb, String fieldName, Object fieldValue) {

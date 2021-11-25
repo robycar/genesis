@@ -35,11 +35,11 @@ public interface FileSystemService {
 
   /**
    * Uso interno: Salva un file senza i controlli eseguito da upload
-   * @param scope
-   * @param idRef
-   * @param file
-   * @return
-   * @throws ApplicationException
+   * @param scope {@link FileSystemScope lo scope}
+   * @param idRef l'identificatore relativo allo scope
+   * @param file il file da caricare
+   * @return il VO relativo al file caricato
+   * @throws ApplicationException in caso di errori
    */
   FileSystemVO saveFile(FileSystemScope scope, long idRef, MultipartFile file) throws ApplicationException;
 
