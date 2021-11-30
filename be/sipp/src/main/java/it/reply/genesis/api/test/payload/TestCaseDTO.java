@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import it.reply.genesis.api.admin.payload.GruppoDTO;
-import it.reply.genesis.api.files.payload.FileDTO;
 import it.reply.genesis.api.generic.payload.TrackedDTO;
 import it.reply.genesis.api.linea.payload.LineaDTO;
 import it.reply.genesis.api.linea.payload.OutboundProxyDTO;
@@ -66,9 +65,9 @@ public class TestCaseDTO extends TrackedDTO {
       if (vo.getObpChiamato() != null) {
         this.chiamato.setProxy(new OutboundProxyDTO(vo.getObpChiamato()));
       }
-      if (vo.getFileChiamato() != null) {
-        this.chiamato.setFile(new FileDTO(vo.getFileChiamato()));
-      }
+//      if (vo.getFileChiamato() != null) {
+//        this.chiamato.setFile(new FileDTO(vo.getFileChiamato()));
+//      }
       
       if (vo.getLineeChiamanti() != null) {
         this.chiamanti = vo.getLineeChiamanti()

@@ -36,7 +36,6 @@ import it.reply.genesis.model.repository.FileSystemRepository;
 import it.reply.genesis.model.repository.LineaGeneratoreRepository;
 import it.reply.genesis.model.repository.TemplateRepository;
 import it.reply.genesis.model.repository.TestCaseCaricatoRepository;
-import it.reply.genesis.model.repository.TestCaseRepository;
 import it.reply.genesis.model.repository.TestGeneratoreCaricatoRepository;
 import it.reply.genesis.service.FileSystemService;
 
@@ -163,9 +162,6 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
   private LineaGeneratoreRepository lineaGeneratoreRepository;
   
   @Autowired
-  private TestCaseRepository testCaseRepository;
-  
-  @Autowired
   private TestCaseCaricatoRepository testCaseCaricatoRepository;
   
   @Autowired
@@ -179,8 +175,8 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
       return templateRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEMPLATE_NOT_FOUND, idRef));
     case LINEA_GENERATORE:
       return lineaGeneratoreRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.LINEA_GENERATORE_NOT_FOUND, idRef));
-    case TEST:
-      return testCaseRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_NOT_FOUND, idRef));
+//    case TEST:
+//      return testCaseRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_NOT_FOUND, idRef));
     case TEST_CARICATO:
       testCaseCaricatoRepository.findById(idRef).orElseThrow(() -> makeError(HttpStatus.NOT_FOUND, AppError.TEST_CASE_CARICATO_NOT_FOUND, idRef));
       break;
@@ -250,8 +246,6 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
           throw makeError(HttpStatus.BAD_REQUEST, AppError.FS_PREVENT_DELETE_USED_FILE);
         }
       }
-      break;
-    case TEST:
       break;
     default:
       throw makeError(HttpStatus.BAD_REQUEST, AppError.FS_PREVENT_DELETE_USED_FILE);

@@ -26,9 +26,9 @@ public class TestCaseLineaDTO extends DTO {
     if (vo.getOutboundProxy() != null) {
       this.proxy = new OutboundProxyDTO(vo.getOutboundProxy());
     }
-    if (vo.getFile() != null) {
-      this.file = new FileDTO(vo.getFile());
-    }
+//    if (vo.getFile() != null) {
+//      this.file = new FileDTO(vo.getFile());
+//    }
   }
 
   public LineaDTO getLinea() {

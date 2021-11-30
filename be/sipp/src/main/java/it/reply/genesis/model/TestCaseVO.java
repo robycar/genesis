@@ -52,9 +52,9 @@ public class TestCaseVO extends BaseEntity {
   @JoinColumn(name="ID_OBP_CHIAMATO")
   private OutboundProxyVO obpChiamato;
   
-  @ManyToOne(optional = true)
-  @JoinColumn(name="FILE_SYSTEM_ID_CHIAMATO")
-  private FileSystemVO fileChiamato;
+//  @ManyToOne(optional = true)
+//  @JoinColumn(name="FILE_SYSTEM_ID_CHIAMATO")
+//  private FileSystemVO fileChiamato;
   
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="ID_GRUPPO", nullable = false)
@@ -135,13 +135,13 @@ public class TestCaseVO extends BaseEntity {
     this.obpChiamato = obpChiamato;
   }
 
-  public FileSystemVO getFileChiamato() {
-    return fileChiamato;
-  }
-
-  public void setFileChiamato(FileSystemVO fileChiamato) {
-    this.fileChiamato = fileChiamato;
-  }
+//  public FileSystemVO getFileChiamato() {
+//    return fileChiamato;
+//  }
+//
+//  public void setFileChiamato(FileSystemVO fileChiamato) {
+//    this.fileChiamato = fileChiamato;
+//  }
 
   public List<TestCaseLineaChiamanteVO> getLineeChiamanti() {
     return lineeChiamanti;

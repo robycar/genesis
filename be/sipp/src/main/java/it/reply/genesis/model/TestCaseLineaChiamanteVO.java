@@ -34,9 +34,9 @@ public class TestCaseLineaChiamanteVO implements Serializable {
   @JoinColumn(name="ID_OBP")
   private OutboundProxyVO outboundProxy;
   
-  @ManyToOne
-  @JoinColumn(name="FILE_SYSTEM_ID")
-  private FileSystemVO file;
+//  @ManyToOne
+//  @JoinColumn(name="FILE_SYSTEM_ID")
+//  private FileSystemVO file;
   
   public TestCaseLineaChiamanteVO() {
   }
@@ -73,12 +73,12 @@ public class TestCaseLineaChiamanteVO implements Serializable {
     this.outboundProxy = outboundProxy;
   }
 
-  public FileSystemVO getFile() {
-    return file;
-  }
-
-  public void setFile(FileSystemVO file) {
-    this.file = file;
-  }
+//  public FileSystemVO getFile() {
+//    return file;
+//  }
+//
+//  public void setFile(FileSystemVO file) {
+//    this.file = file;
+//  }
 
 }

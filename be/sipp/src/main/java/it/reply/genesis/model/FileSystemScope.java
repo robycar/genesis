@@ -3,7 +3,7 @@ package it.reply.genesis.model;
 public enum FileSystemScope {
   
   TEMPLATE("template"),
-  TEST("test"),
+  //TEST("test"),
   TEST_CARICATO("test"),
   LINEA_GENERATORE("lineagen"),
   TESTGEN_CARICATO("testgen"),

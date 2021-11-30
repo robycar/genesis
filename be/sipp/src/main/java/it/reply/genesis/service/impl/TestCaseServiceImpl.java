@@ -158,33 +158,37 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     vo.setNome(dto.getNome() + "_" + vo.getId());
     //Copiare i file dal template
     
-    Map<Long, FileSystemVO> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEMPLATE, templateVO.getId(), FileSystemScope.TEST, vo.getId())
-    .stream().collect(Collectors.toMap(p -> p.getFirst().getId(), Pair::getSecond));
-    ;
-    logger.debug("Copiati {} file dal template {},{}", fileCopiati.size(), templateVO.getId(), templateVO.getNome());
+//    Map<Long, FileSystemVO> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEMPLATE, templateVO.getId(), FileSystemScope.TEST, vo.getId())
+//    .stream().collect(Collectors.toMap(p -> p.getFirst().getId(), Pair::getSecond));
+//    ;
+//    logger.debug("Copiati {} file dal template {},{}", fileCopiati.size(), templateVO.getId(), templateVO.getNome());
     
 //    if (chiamatoDTO.getFile() != null) {
 //      vo.setFileChiamato(findCopiedFile(fileCopiati, chiamatoDTO.getFile(), templateVO));
 //    }
     
     List<TestCaseLineaChiamanteVO> chiamantiVO = new ArrayList<>(3);
-    short numLinea = 1;
-    vo.setFileChiamato(findCopiedFile(fileCopiati, templateVO.getFileChiamato(), templateVO));
-    for (TemplateLineaChiamanteVO tfVO: templateVO.getChiamanti()) {
-        TestCaseLineaChiamanteVO chiamanteVO = new TestCaseLineaChiamanteVO();
-        chiamanteVO.setTestCase(vo);
-        chiamanteVO.setNumLinea(numLinea++);
-        chiamanteVO.setFile(findCopiedFile(fileCopiati, tfVO.getFile(), templateVO));
-        chiamantiVO.add(chiamanteVO);
-    }
-    
+    //short numLinea = 1;
+    //vo.setFileChiamato(findCopiedFile(fileCopiati, templateVO.getFileChiamato(), templateVO));
+//    for (TemplateLineaChiamanteVO tfVO: templateVO.getChiamanti()) {
+//        TestCaseLineaChiamanteVO chiamanteVO = new TestCaseLineaChiamanteVO();
+//        chiamanteVO.setTestCase(vo);
+//        chiamanteVO.setNumLinea(numLinea++);
+//        //chiamanteVO.setFile(findCopiedFile(fileCopiati, tfVO.getFile(), templateVO));
+//        chiamantiVO.add(chiamanteVO);
+//    }
+    int numChiamanti = templateVO.getChiamanti().size();
     if (dto.getChiamanti() != null) {
+      if (dto.getChiamanti().size() > numChiamanti) {
+        throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_LINEA_CHIAMANTE_OVERFLOW, dto.getChiamanti().size() - 1, numChiamanti);
+      }
       int index = 0;
       for (TestCaseLineaDTO chiamanteDTO: dto.getChiamanti()) {
-        if (index >= chiamantiVO.size()) {
-          throw makeError(HttpStatus.BAD_REQUEST, AppError.TEST_CASE_LINEA_CHIAMANTE_OVERFLOW, index, chiamantiVO.size());
-        }
-        TestCaseLineaChiamanteVO chiamanteVO = chiamantiVO.get(index);
+        TestCaseLineaChiamanteVO chiamanteVO = new TestCaseLineaChiamanteVO();
+        chiamanteVO.setTestCase(vo);
+        chiamanteVO.setNumLinea((short)(index + 1));
+        chiamantiVO.add(chiamanteVO);
+        
         if (chiamanteDTO.getLinea() != null && chiamanteDTO.getLinea().getId() != null) {
           chiamanteVO.setLinea(lineaService.readLineaVO(chiamanteDTO.getLinea().getId()));
           if (!chiamanteVO.getLinea().getTypeLinea().getNatura().equals(templateVO.getChiamanti().get(index).getNatura())) {
@@ -201,7 +205,6 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
       }
     }
     
-    
     if (chiamantiVO.size() > 0) {
       for (TestCaseLineaChiamanteVO chiamanteVO: chiamantiVO) {
         if (chiamanteVO.getLinea() == null) {
@@ -216,18 +219,18 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     return new TestCaseDTO(vo, true);
   }
 
-  private FileSystemVO findCopiedFile(Map<Long, FileSystemVO> fileCopiati, FileSystemVO fileSystemVO, TemplateVO templateVO) throws ApplicationException {
-    if (fileSystemVO == null) {
-      return null;
-    }
-    FileSystemVO targetFile = fileCopiati.get(fileSystemVO.getId());
-    if (targetFile == null) {
-      logger.error("Impossibile trovare un riferimento al file del template {} con id {}", 
-          templateVO.getId(), fileSystemVO.getId());
-      throw makeError(HttpStatus.NOT_FOUND, AppError.FS_ENTITY_FILE_NOT_FOUND, templateVO.getId(), fileSystemVO.getId());
-    }
-    return targetFile;
-  }
+//  private FileSystemVO findCopiedFile(Map<Long, FileSystemVO> fileCopiati, FileSystemVO fileSystemVO, TemplateVO templateVO) throws ApplicationException {
+//    if (fileSystemVO == null) {
+//      return null;
+//    }
+//    FileSystemVO targetFile = fileCopiati.get(fileSystemVO.getId());
+//    if (targetFile == null) {
+//      logger.error("Impossibile trovare un riferimento al file del template {} con id {}", 
+//          templateVO.getId(), fileSystemVO.getId());
+//      throw makeError(HttpStatus.NOT_FOUND, AppError.FS_ENTITY_FILE_NOT_FOUND, templateVO.getId(), fileSystemVO.getId());
+//    }
+//    return targetFile;
+//  }
   
   private FileSystemVO findCopiedFile(Map<Long, FileSystemVO> fileCopiati, FileSystemVO srcFileId, String folderName) throws ApplicationException {
     if (srcFileId == null) {
@@ -611,10 +614,11 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
     
     //Copia i file dal test case al test case caricato
     logger.debug("Copia dei file dal test case {} al test case caricato {}", tcvo.getId(), vo.getId());
-    Map<Long, FileSystemVO> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEST, tcvo.getId(), FileSystemScope.TEST_CARICATO, vo.getId())
+    Map<Long, FileSystemVO> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEMPLATE, tcvo.getTemplate().getId(), FileSystemScope.TEST_CARICATO, vo.getId())
     .stream().collect(Collectors.toMap(p -> p.getFirst().getId(), Pair::getSecond));
     
     String folderName = FileSystemScope.TEST_CARICATO.name() + "/" + vo.getId();
+    Iterator<TemplateLineaChiamanteVO> lineeTemplateIt = tcvo.getTemplate().getChiamanti().iterator();
     if (tcvo.getLineeChiamanti() != null) {
       ArrayList<TestCaseCaricatoLineaChiamanteVO> tccLineeChiamanti = new ArrayList<>(tcvo.getLineeChiamanti().size());
       for (TestCaseLineaChiamanteVO lc: tcvo.getLineeChiamanti()) {
@@ -623,7 +627,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
         tcclc.setNumLinea(lc.getNumLinea());
         tcclc.setLinea(lc.getLinea());
         tcclc.setOutboundProxy(lc.getOutboundProxy());
-        tcclc.setFile(findCopiedFile(fileCopiati, lc.getFile(), folderName));
+        tcclc.setFile(findCopiedFile(fileCopiati, lineeTemplateIt.next().getFile(), folderName));
         tccLineeChiamanti.add(tcclc);
       }
       if (!tccLineeChiamanti.isEmpty()) {
@@ -631,8 +635,9 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
       }
     }
     
-    if (tcvo.getFileChiamato() != null) {
-      vo.setFileChiamato(findCopiedFile(fileCopiati, tcvo.getFileChiamato(), folderName));
+    FileSystemVO fileChiamato = tcvo.getTemplate().getFileChiamato();
+    if (fileChiamato != null) {
+      vo.setFileChiamato(findCopiedFile(fileCopiati, fileChiamato, folderName));
     }
     
     if (outfileCopiati != null) {

@@ -100,14 +100,14 @@ public class TestGeneratoreServiceImpl extends AbstractService implements TestGe
     vo.setLineaChiamato(lineaService.readLineaGeneratoreVO(dto.getLineaChiamato().getId()));
     vo.setProxyChiamante(oBPService.readProxyVO(dto.getProxyChiamante().getId()));
     vo.setProxyChiamato(oBPService.readProxyVO(dto.getProxyChiamato().getId()));
-    vo.setTemplate(templateService.readVO(dto.getTemplate().getId()));
+    vo.setTemplate(templateVO);
     vo = testGeneratoreRepository.save(vo);
     
-    List<Pair<FileSystemVO, FileSystemVO>> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEMPLATE, templateVO.getId(), FileSystemScope.TEST, vo.getId());
-    logger.debug("Copiati {} file dal template {},{} al test generatore {},{}", 
-        fileCopiati.size(), 
-        templateVO.getId(), templateVO.getNome(),
-        vo.getId(), vo.getNome());
+//    List<Pair<FileSystemVO, FileSystemVO>> fileCopiati = fileSystemService.copyFilesThroughScope(FileSystemScope.TEMPLATE, templateVO.getId(), FileSystemScope.TEST, vo.getId());
+//    logger.debug("Copiati {} file dal template {},{} al test generatore {},{}", 
+//        fileCopiati.size(), 
+//        templateVO.getId(), templateVO.getNome(),
+//        vo.getId(), vo.getNome());
     
     testGeneratoreRepository.flush();
     
