@@ -105,6 +105,10 @@ public class FileSystemServiceImpl extends AbstractService implements FileSystem
     
     logger.debug("OriginalFileName: {}, ContentType: {}", file.getOriginalFilename(), file.getContentType());
     
+    if (StringUtils.isEmpty(file.getOriginalFilename())) {
+      throw makeError(HttpStatus.BAD_REQUEST, AppError.FS_FILENAME_MISSING);
+    }
+    
     Path path = root.resolve(file.getOriginalFilename());
     
     FileSystemVO fileVO = fileSystemRepository.findByScopeAndIdRefAndPath(scope, idRef, path.toString())

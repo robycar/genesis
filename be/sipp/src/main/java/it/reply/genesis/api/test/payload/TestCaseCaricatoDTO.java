@@ -186,6 +186,7 @@ public class TestCaseCaricatoDTO extends DTO {
     writeField(sb, "expectedDuration", expectedDuration);
     writeField(sb, "descrizione", descrizione);
     writeField(sb, "stato", stato);
+    writeField(sb, "result", result);
     writeField(sb, "pathInstance", pathInstance);
     writeField(sb, "gruppo", gruppo);
     writeField(sb, "chiamato", chiamato);

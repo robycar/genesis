@@ -13,6 +13,7 @@ import it.reply.genesis.service.TemplateService;
 import it.reply.genesis.service.TestCaseService;
 import it.reply.genesis.service.TestGeneratoreService;
 import it.reply.genesis.service.TestSuiteService;
+import it.reply.genesis.service.UserAuthenticationService;
 import it.reply.genesis.service.UserService;
 
 @Component
@@ -50,6 +51,9 @@ public class ServiceManagerImpl implements ServiceManager {
   
   @Autowired
   private Environment environment;
+  
+  @Autowired
+  private UserAuthenticationService userAuthenticationService;
   
   public ServiceManagerImpl() {
   }
@@ -106,6 +110,11 @@ public class ServiceManagerImpl implements ServiceManager {
 
   public Environment getEnvironment() {
     return environment;
+  }
+
+  @Override
+  public UserAuthenticationService getUserAutenticationService() {
+    return userAuthenticationService;
   }
 
 }

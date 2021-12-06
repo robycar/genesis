@@ -1,5 +1,6 @@
 package it.reply.genesis.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -9,14 +10,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.intercept.RunAsUserToken;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.reply.genesis.api.admin.payload.FunzioneDTO;
+import it.reply.genesis.api.generic.exception.ApplicationException;
 import it.reply.genesis.jwt.JWTComponent;
 import it.reply.genesis.jwt.TokenVerificationException;
 import it.reply.genesis.model.UserVO;
@@ -80,5 +86,27 @@ public class JWTAuthenticationService implements UserAuthenticationService {
 		logger.debug("exit listFunzioni");
 		return result;
 	}
+
+  @Override
+  public void impersonate(String username) throws ApplicationException {
+    if (logger.isDebugEnabled()) {
+      logger.debug("enter impersonate: " + username);
+    }
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String currentUsername = null;
+    if (auth != null) {
+      currentUsername = auth.getName();
+    }
+    if (currentUsername == null) {
+      auth = new RunAsUserToken(getClass().getName(), username, null, null, null);
+      SecurityContextHolder.getContext().setAuthentication(auth);
+      if (logger.isDebugEnabled()) {
+        logger.debug("Acting as user: " + username);
+      }
+    } else {
+      logger.warn("Forbidden request to impersonate with an alrady authenticated user: " + currentUsername);
+    }
+
+  }
 
 }

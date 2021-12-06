@@ -11,6 +11,7 @@ import it.reply.genesis.service.TemplateService;
 import it.reply.genesis.service.TestCaseService;
 import it.reply.genesis.service.TestGeneratoreService;
 import it.reply.genesis.service.TestSuiteService;
+import it.reply.genesis.service.UserAuthenticationService;
 import it.reply.genesis.service.UserService;
 
 public interface ServiceManager {
@@ -34,6 +35,8 @@ public interface ServiceManager {
   public TestSuiteService getTestSuiteService();
   
   public UserService getUserService();
+  
+  public UserAuthenticationService getUserAutenticationService();
   
   public Environment getEnvironment();
 }

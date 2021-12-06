@@ -19,4 +19,6 @@ public interface UserAuthenticationService {
 
 	List<FunzioneDTO> listFunzioni() throws ApplicationException;
 	
+	void impersonate(String username) throws ApplicationException;
+	
 }

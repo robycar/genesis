@@ -11,13 +11,18 @@ CREATE TABLE `TIPO_TEMPLATE` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO `TIPO_TEMPLATE` (`NOME`) VALUES
-('3PY'),
-('CFB'),
-('CFU – CFNR – CW – CFnoAv'),
 ('Chiamata Base'),
-('Chiamate ACU – CDC –NNG'),
-('Manovra'),
-('Registrazione/Deregistrazione');
+('Registrazione/Deregistrazione'),
+('Manovra attiva/disattiva'),
+('Chiamata CFU-CFNR-CFnoAv'),
+('Chiamata CFB'),
+('Chiamata 3PY'),
+('Chiamata ACU-NNG'),
+('Chiamata DND'),
+('Chiamata CW'),
+('Chiamata Busy');
+
+
 
 INSERT INTO `TIPO_TEMPLATE`
 SELECT DISTINCT TYPE_TEMPLATE FROM TEMPLATE WHERE TYPE_TEMPLATE NOT IN (SELECT NOME FROM TIPO_TEMPLATE)
@@ -65,11 +70,16 @@ UPDATE TEMPLATE SET NATURA_CHIAMATO='REALE' WHERE NATURA_CHIAMATO IS NULL
 
 -- rimozione file dai test case
 ALTER TABLE TEST_CASE 
-DROP CONSTRAINT `test_case_ibfk_6`,
+DROP FOREIGN KEY `test_case_ibfk_6`,
 DROP COLUMN FILE_SYSTEM_ID_CHIAMATO
 ;
 
 ALTER TABLE TEST_CASE_LINEA_CHIAMANTE
-DROP CONSTRAINT `test_case_linea_chiamante_ibfk_4`,
+DROP FOREIGN KEY `test_case_linea_chiamante_ibfk_4`,
 DROP COLUMN `FILE_SYSTEM_ID`
 ;
+
+DELETE FROM FILE_SYSTEM WHERE SCOPE='TEST'
+;
+
+COMMIT;

@@ -31,6 +31,8 @@ public class JythonSimpleTest {
   
   public static final String testFile2 = "scripts/t2.py";
   
+  public static final String testFile4 = "scripts/t4.py";
+  
   @Autowired
   private ServiceManager serviceManager;
   
@@ -38,6 +40,8 @@ public class JythonSimpleTest {
   
   public JythonSimpleTest() {
   }
+
+  
 
   //@Test
   public void testJythonGlobalInit() throws IOException {
@@ -60,7 +64,7 @@ public class JythonSimpleTest {
   }
   
   
-  @Test
+  //@Test
   public void testDirectoryResult() {
     logger.debug("enter testDirectoryResult");
     Path testDir = Paths.get("test-resources", "d1");
@@ -84,7 +88,7 @@ public class JythonSimpleTest {
   private JdbcTemplate jdbcTemplate;
   
   @Test
-  public void testSalvataggioEsitoTest() throws ApplicationException {
+  public void testSalvataggioEsitoTest() throws ApplicationException, IOException {
     logger.debug("enter testSalvataggioEsitoTest");
     Path testDir = Paths.get("test-resources", "d2");
     logger.info("Test dir: {}", testDir);
@@ -94,11 +98,17 @@ public class JythonSimpleTest {
 
     TestCaseCaricatoDTO testCaseCaricato = serviceManager.getTestCaseService().readCaricato(idTest, true, true);
     testCaseCaricato.setPathInstance(testDir.toAbsolutePath().toString());
+    URL scriptUrl = getClass().getClassLoader().getResource(testFile4);
+    assertNotNull(scriptUrl);
+    
     try (PythonInterpreter interpreter = new PythonInterpreter()) {
       interpreter.set("testCaseCaricato", testCaseCaricato);
-      interpreter.set("logger", "jython.d2.main_py");
+      interpreter.set("logger", LoggerFactory.getLogger("jython.t4_py"));
       interpreter.set("serviceManager", serviceManager);
-      interpreter.execfile(testDir.resolve("main.py").toString());
+      serviceManager.getUserAutenticationService().impersonate("agent-test");
+      try (InputStream is = scriptUrl.openStream()) {
+        interpreter.execfile(is, testFile4);
+      }
     }
     
   }

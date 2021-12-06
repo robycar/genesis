@@ -13,5 +13,10 @@
     "name": "genesis.agent.internal.workdir",
     "type": "java.lang.String",
     "description": "Directory di lavoro utilizzata dall'agent interno per gestire i file dei test"
+  },
+  {
+    "name": "genesis.agent.internal.dropfolder",
+    "type": "java.lang.String",
+    "description": "Directory dove trovare ulteriori file per l'esecuzione dei test"
   }
 ]}

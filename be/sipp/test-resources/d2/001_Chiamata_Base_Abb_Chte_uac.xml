@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?> 
+<scenario name="Chiamata Base abbatte il chiamante UAC">
+
+  <send retrans="500">
+    <![CDATA[
+      INVITE sip:[field1]@telecomitalia.it:[remote_port];transport=UDP;user=phone SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: "[field0]" <sip:[field0]@telecomitalia.it;user=phone>;tag=Chiamata_SIPP_SimulatorePVR_[field0]_[call_number]
+      To: <sip:[field1]@telecomitalia.it;user=phone>
+      Call-ID: [call_id]
+      CSeq: [cseq] INVITE
+      Max-Forwards: 70
+      Supported: replaces,100rel
+      X-Serialnumber: CP1250RAQ06
+      Contact: <sip:[field0]@[local_ip]:[local_port];transport=UDP;user=phone>;audio;+g.3gpp.icsi-ref="urn%3Aurn-7%3A3gpp-service.ims.icsi.mmtel"
+      Allow: INVITE, ACK, PRACK, CANCEL, BYE, OPTIONS, MESSAGE, NOTIFY, UPDATE, REGISTER, INFO, REFER, SUBSCRIBE
+      User-Agent: SimulatorePVR
+      P-Preferred-Identity: <sip:[field0]@telecomitalia.it>
+      Accept-Contact: *;audio;+g.3gpp.icsi-ref="urn%3Aurn-7%3A3gpp-service.ims.icsi.mmtel"
+      Accept: application/sdp, application/isup, application/xml, application/dtmf-relay
+      Content-Type: application/SDP
+      Content-Length: [len]
+
+      v=0
+      o=SIP-P 0 1 IN IP[local_ip_type] [local_ip]
+      s=SIP Call
+      c=IN IP[media_ip_type] [media_ip]
+      m=audio [media_port] RTP/AVP 8
+    ]]>
+  </send>
+
+  <recv response="100" optional="true" timeout="10000" ontimeout="8">
+    <action>
+        <ereg regexp=".*" search_in="hdr" header="To:"  assign_to="Toinvite"/>
+    </action>
+  </recv>
+
+  <recv response="500" optional="true" timeout="10000" ontimeout="8" next="9">
+    <action>
+        <ereg regexp="([0-9]+).*" search_in="hdr" header="CSeq:"  assign_to="all,CNum"/>
+        <ereg regexp="(.*);branch=(.*);(.*)" search_in="hdr" header="Via:"  assign_to="1,2,3,4"/>
+    </action>
+  </recv>
+  <Reference variables="1,2,4"/>
+
+  <recv response="183" optional="true" timeout="10000" ontimeout="8" next="3">
+    <action>
+        <ereg regexp=".*" search_in="hdr" header="RSeq:"  assign_to="RNum1"/>
+        <ereg regexp=".*" search_in="hdr" header="To:"  assign_to="ToTag1"/>
+        <ereg regexp=".*" search_in="hdr" header="From:"  assign_to="FromTag1"/>
+        <ereg regexp="([0-9]+).*" search_in="hdr" header="CSeq:"  assign_to="all,CNum"/>
+    </action>
+  </recv>
+
+  <recv response="180" timeout="10000" ontimeout="8" next="3">
+    <action>
+        <ereg regexp=".*" search_in="hdr" header="RSeq:"  assign_to="RNum1"/>
+        <ereg regexp=".*" search_in="hdr" header="To:"  assign_to="ToTag1"/>
+        <ereg regexp=".*" search_in="hdr" header="From:"  assign_to="FromTag1"/>
+        <ereg regexp="([0-9]+).*" search_in="hdr" header="CSeq:"  assign_to="all,CNum"/>
+    </action>
+  </recv>
+
+  <label id="3" />
+
+
+  <send retrans="500">
+    <![CDATA[
+      PRACK sip:[field1]@telecomitalia.it:[remote_port];transport=UDP;user=phone SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      [last_From:]
+      To: [$ToTag1]
+      [last_Call-ID:]
+      Allow: INVITE, ACK, PRACK, CANCEL, BYE, OPTIONS, MESSAGE, NOTIFY, UPDATE, REGISTER, INFO, REFER, SUBSCRIBE
+      CSeq: [cseq] PRACK
+      RAck: [$RNum1] [$CNum] INVITE
+      Max-Forwards: 70
+      Content-Length: 0
+    ]]>
+  </send>
+
+  <recv response="200">
+  </recv>
+
+
+  <recv response="200">
+  </recv>
+
+  <send>
+    <![CDATA[
+      ACK sip:[field1]@telecomitalia.it:[remote_port];transport=UDP;user=phone SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      [last_From:]
+      [last_To:]
+      [last_Call-ID:]
+      CSeq: [$CNum] ACK
+      Max-Forwards: 70
+      Allow: INVITE, ACK, PRACK, CANCEL, BYE, OPTIONS, MESSAGE, NOTIFY, UPDATE, REGISTER, INFO, REFER, SUBSCRIBE
+      Accept-Contact: *;audio
+      Contact: <sip:[field0]@[local_ip]:[local_port];transport=UDP;user=phone>
+      Content-Length: 0
+    ]]>
+  </send>
+
+  <pause milliseconds="30000"/>
+
+  <send retrans="500">
+    <![CDATA[
+      INFO sip:[field1]@telecomitalia.it SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      [last_From:]
+      [last_To:]
+      Max-Forwards: 70
+      [last_Call-ID:]
+      CSeq: [cseq] INFO
+      Content-Type: application/dtmf-relay
+      Content-Length: [len]
+
+      Signal=1
+      Duration=250
+    ]]>
+  </send>
+
+  <recv response="200" timeout="10000" ontimeout="1">
+    <action>
+      <ereg regexp=".*" search_in="hdr" header="From:"  assign_to="1"/>
+      <ereg regexp=".*" search_in="hdr" header="To:"  assign_to="2"/>
+     </action>
+  </recv>
+  <Reference variables="1,2"/>
+
+  <label id="1"/>
+
+
+  <recv request="INFO" timeout="15000" ontimeout="7">
+     <action>
+      <exec command="echo ---------- Test Canale Chiamato verso Chiamante #OK# -------- >> Esiti.log"/>
+     </action>
+  </recv>
+  
+  <send next="4">
+    <![CDATA[
+
+      SIP/2.0 200 OK
+      [last_Via:]
+      [last_From:]
+      [last_To:]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Content-Length: [len]
+    ]]>
+  </send>
+
+  <label id="7"/>
+
+  <nop>
+     <action>
+      <exec command="echo ---------- Test Canale Chiamato verso Chiamante #KO# -------- >> Esiti.log"/>
+     </action>
+  </nop>
+
+  <label id="4"/>
+
+  <nop>
+    <action>
+       <exec play_pcap_audio="/home/sippone/sipp-3.3/pcap/g711a.pcap"/>
+    </action>
+  </nop>
+
+  <pause milliseconds="8000"/>
+
+  <send retrans="500">
+    <![CDATA[
+      BYE sip:[field1]@telecomitalia.it:[remote_port];transport=UDP;user=phone SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+      From: [$FromTag1]
+      To:[$ToTag1]
+      [last_Call-ID:]
+      CSeq: [cseq] BYE
+      Max-Forwards: 70
+      Contact: <sip:[field0]@[local_ip]:[local_port];transport=UDP;user=phone>
+      Allow: INVITE, ACK, PRACK, CANCEL, BYE, OPTIONS, MESSAGE, NOTIFY, UPDATE, REGISTER, INFO, REFER, SUBSCRIBE
+      Accept-Contact: *;audio
+      Content-Length: [len]
+    ]]>
+  </send>
+
+  <recv response="200" crlf="true" timeout="10000" ontimeout="8" next="100">
+    <action>
+      <exec command="echo ---------- Test Terminato con esito positivo lato Client #OK# -------- >> Esiti.log"/>
+    </action>
+  </recv>
+
+  <label id="9"/>
+
+  <send>
+    <![CDATA[
+      ACK sip:[field1]@telecomitalia.it:[remote_port];transport=UDP;user=phone SIP/2.0
+      Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[$3]
+      [last_From:]
+      To:[$Toinvite]
+      [last_Call-ID:]
+      CSeq: [$CNum] ACK
+      Max-Forwards: 70
+      Allow: INVITE, ACK, PRACK, CANCEL, BYE, OPTIONS, MESSAGE, NOTIFY, UPDATE, REGISTER, INFO, REFER, SUBSCRIBE
+      Accept-Contact: *;audio
+      Contact: <sip:[field0]@[local_ip]:[local_port];transport=UDP;user=phone>
+      Content-Length: 0
+    ]]>
+  </send>
+
+  <label id="8"/>
+
+  <nop>
+    <action>
+      <exec command="echo ---------- Test Terminato con esito negativo lato Client #KO# -------- >> Esiti.log"/>
+    </action>
+  </nop>
+
+<!-- definition of the response time repartition table (unit is ms)   -->
+<ResponseTimeRepartition value="10, 20, 30, 40, 50, 100, 150, 200"/>
+
+<!-- definition of the call length repartition table (unit is ms)     -->
+<CallLengthRepartition value="10, 50, 100, 500, 1000, 5000, 10000"/>
+
+<label id="100"/>
+
+<pause milliseconds="25000"/>
+</scenario>

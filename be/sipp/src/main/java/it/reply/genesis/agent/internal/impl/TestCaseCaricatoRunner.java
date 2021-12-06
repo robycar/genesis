@@ -47,6 +47,8 @@ public class TestCaseCaricatoRunner implements TestRunner {
       // Cerca in testCaseCaricato un file chiamato main.py
       FileDTO mainScriptFile = findMainFile();
       
+      serviceManager.getUserAutenticationService().impersonate("agent");
+      
       FileSystemService fileSystemService = serviceManager.getFileSystemService();
 
       Environment env = serviceManager.getEnvironment();
