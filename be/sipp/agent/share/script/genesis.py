@@ -6,11 +6,10 @@ import os
 import mimetypes
 
 from it.reply.genesis.model import FileSystemScope
-from org.springframework.mock.web import MockMultipartFile
+from it.reply.genesis.agent.internal.impl import MultipartFileMock
 
 class Genesis(object):
   nome = 'genesis';
-  
   def __init__(self, serviceManager, logger, testCase):
     self.serviceManager = serviceManager;
     self.logger = logger
@@ -62,7 +61,7 @@ class Genesis(object):
     for p in path:
       mimeType = mimetypes.guess_type(p)[0]
       with open(p) as fileToUpload:
-        multipartFile = MockMultipartFile('file', os.path.basename(p), mimeType, fileToUpload)
+        multipartFile = MultipartFileMock('file', os.path.basename(p), mimeType, fileToUpload)
         uploadingFiles.append(multipartFile)
     
     fsService = self.serviceManager.fileSystemService
