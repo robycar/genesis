@@ -463,7 +463,7 @@ public class TestCaseServiceImpl extends AbstractService implements TestCaseServ
         .collect(Collectors.toMap(p -> p.getTestCaseCaricato().getId(), TestCaseCaricatoPropertyVO::getValue));
     
     return result.stream()
-        .map(TestCaseCaricatoDTO::new)
+        .map(vo -> new TestCaseCaricatoDTO(vo, false, true))
         .map(tc -> {
           tc.setProperties(new HashMap<>(2));
           String val = callIdMap.get(tc.getId());
