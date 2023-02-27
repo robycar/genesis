@@ -75,7 +75,7 @@ public class UserController extends AbstractController {
 	  
 	  try {
 	    List<UserDTO> result = userService.listUsers(request.getUser());
-	    logger.debug("Recuperati {} utenti per i criteria di ricerca forniti", result.size());
+	    logger.debug("Trovati {} utenti per i criteria di ricerca forniti", result.size());
 	    response.setUsers(result);
 	    return ResponseEntity.ok(response);
 	    
@@ -110,8 +110,8 @@ public class UserController extends AbstractController {
 
 		try {
 			UserVO userVO = new UserVO();
-			userVO.setGruppo(new GruppoVO(request.getGruppo().getId()));
 			userVO.setLevel(new LevelVO(request.getLevel().getId()));
+			userVO.setGruppo(new GruppoVO(request.getGruppo().getId()));
 			userVO.setAzienda(request.getAzienda());
 			userVO.setCognome(request.getCognome());
 			userVO.setNome(request.getNome());
@@ -127,21 +127,6 @@ public class UserController extends AbstractController {
 		}
 	}
 	
-	@PostMapping("")
-	public ResponseEntity<UpdateUserResponse> updateUser(@Valid @RequestBody(required=true) UpdateUserRequest request) {
-		logger.info("enter updateUser {}", request);
-		
-		UpdateUserResponse response = new UpdateUserResponse();
-		
-		try {
-			userService.updateUser(request.getUser(), request.getPassword());
-			return ResponseEntity.ok(response);
-						
-		} catch (ApplicationException e) {
-			return handleException(e, response);
-		}
-			
-	}
 	
 	@DeleteMapping("")
 	public ResponseEntity<PayloadResponse> removeUser(@Valid @RequestBody(required=true) UserRemoveRequest request) {
@@ -149,7 +134,7 @@ public class UserController extends AbstractController {
 	  PayloadResponse response = new PayloadResponse();
 	  try {
 	    userService.removeUser(request.getId());
-	    logger.info("Utente eliminato: {}", request.getId());
+	    logger.info("Utente cancellato: {}", request.getId());
 	    return ResponseEntity.ok(response);
 	  } catch (ApplicationException e) {
 	    return handleException(e, response);
