@@ -28,6 +28,7 @@ public class FunzioneController extends AbstractController {
 	@GetMapping("")
 	public ResponseEntity<FunzioneListResponse> list() {
 		
+		//Aggiunto commento
 		logger.info("enter list()");
 		
 		FunzioneListResponse response = new FunzioneListResponse();
