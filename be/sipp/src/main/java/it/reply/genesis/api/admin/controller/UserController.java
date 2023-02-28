@@ -134,7 +134,6 @@ public class UserController extends AbstractController {
 	  PayloadResponse response = new PayloadResponse();
 	  try {
 	    userService.removeUser(request.getId());
-	    logger.info("Utente cancellato: {}", request.getId());
 	    return ResponseEntity.ok(response);
 	  } catch (ApplicationException e) {
 	    return handleException(e, response);
