@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.python.antlr.PythonParser.return_stmt_return;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +76,7 @@ public class UserController extends AbstractController {
 	  
 	  try {
 	    List<UserDTO> result = userService.listUsers(request.getUser());
-	    logger.debug("Trovati {} utenti per i criteria di ricerca forniti", result.size());
+	    logger.debug("Trovati " + result.size() + " utenti per i criteria di ricerca forniti" );
 	    response.setUsers(result);
 	    return ResponseEntity.ok(response);
 	    
@@ -110,8 +111,13 @@ public class UserController extends AbstractController {
 
 		try {
 			UserVO userVO = new UserVO();
-			userVO.setLevel(new LevelVO(request.getLevel().getId()));
-			userVO.setGruppo(new GruppoVO(request.getGruppo().getId()));
+			if(request.getGruppo().getId()!=null && request.getLevel().getId()!= null) {
+				userVO.setGruppo(new GruppoVO(request.getGruppo().getId()));				
+				userVO.setLevel(new LevelVO(request.getLevel().getId()));
+			}else {
+				userVO.setGruppo(null);
+				userVO.setLevel(null);
+			}
 			userVO.setAzienda(request.getAzienda());
 			userVO.setCognome(request.getCognome());
 			userVO.setNome(request.getNome());
@@ -127,6 +133,24 @@ public class UserController extends AbstractController {
 		}
 	}
 	
+	@PostMapping("")
+	public ResponseEntity<UpdateUserResponse> updateUser(@Valid @RequestBody(required=true) UpdateUserRequest request) {
+		logger.info("enter updateUser {}", request);
+		
+		UpdateUserResponse response = new UpdateUserResponse();
+		
+		try {
+			userService.updateUser(request.getUser(), request.getPassword());
+			return ResponseEntity.ok(response);
+						
+		} catch (ApplicationException e) {
+			return handleException(e, response);
+		}
+		catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+			
+	}
 	
 	@DeleteMapping("")
 	public ResponseEntity<PayloadResponse> removeUser(@Valid @RequestBody(required=true) UserRemoveRequest request) {
@@ -134,7 +158,7 @@ public class UserController extends AbstractController {
 	  PayloadResponse response = new PayloadResponse();
 	  try {
 	    userService.removeUser(request.getId());
-	    logger.info("Utente cancellato: {}", request.getId());
+	    logger.info("Utente cancellato: " + request.getId());
 	    return ResponseEntity.ok(response);
 	  } catch (ApplicationException e) {
 	    return handleException(e, response);
