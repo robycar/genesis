@@ -75,7 +75,7 @@ public class UserController extends AbstractController {
 	  
 	  try {
 	    List<UserDTO> result = userService.listUsers(request.getUser());
-	    logger.debug("Recuperati {} utenti per i criteria di ricerca forniti", result.size());
+	    logger.debug("Recuperati " + result.size() + " utenti per i criteria di ricerca forniti");
 	    response.setUsers(result);
 	    return ResponseEntity.ok(response);
 	    
@@ -110,8 +110,12 @@ public class UserController extends AbstractController {
 
 		try {
 			UserVO userVO = new UserVO();
-			userVO.setGruppo(new GruppoVO(request.getGruppo().getId()));
-			userVO.setLevel(new LevelVO(request.getLevel().getId()));
+			if(request.getGruppo() != null) {
+				userVO.setGruppo(new GruppoVO(request.getGruppo().getId()));				
+			}
+			if(request.getLevel() != null) {
+				userVO.setLevel(new LevelVO(request.getLevel().getId()));				
+			}
 			userVO.setAzienda(request.getAzienda());
 			userVO.setCognome(request.getCognome());
 			userVO.setNome(request.getNome());
@@ -139,6 +143,9 @@ public class UserController extends AbstractController {
 						
 		} catch (ApplicationException e) {
 			return handleException(e, response);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
 		}
 			
 	}
@@ -149,7 +156,7 @@ public class UserController extends AbstractController {
 	  PayloadResponse response = new PayloadResponse();
 	  try {
 	    userService.removeUser(request.getId());
-	    logger.info("Utente eliminato: {}", request.getId());
+	    logger.info("Utente eliminato: " + request.getId());
 	    return ResponseEntity.ok(response);
 	  } catch (ApplicationException e) {
 	    return handleException(e, response);
